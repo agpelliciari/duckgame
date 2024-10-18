@@ -12,12 +12,14 @@ PlayerController::PlayerController(LobbyContainer& _lobbies, Socket& skt):
         lobbies(_lobbies), protocol(std::move(skt)) {}
 
 
-bool PlayerController::isopen() { return is_alive(); }
+bool PlayerController::isopen() { return isactive; }
 
 void PlayerController::init() {
     if (_is_alive) {
         throw GameError("Tried to init player notifier/controller when already inited.");
     }
+    isactive = true;
+    
     start();
 }
 
@@ -34,7 +36,7 @@ void PlayerController::playOn(Player& player, Match& match){
         }
         player.disconnect();  // Finalizo normalmente.
     } catch (const LibError& error) {
-        if (player.disconnect()) {  // Si desconecto. Hubo error aca.
+        if (player.disconnect() && isactive) {  // Si desconecto. Hubo error aca.
             std::cerr << "Controller lib error:" << error.what() << std::endl;
         }
     } catch (const GameError& error) {  // EOF, el notify se asume no genera exception.
@@ -72,6 +74,9 @@ void PlayerController::run() {
     } catch (const GameError& error) {  // .
         std::cerr << "Lobby game error:" << error.what() << std::endl;
     }
+    isactive = false;
+
+    
 }
 
 // Este metodo no hace acciones irreversibles
@@ -82,10 +87,14 @@ void PlayerController::finish() {
     if (!_keep_running) {
         return;
     }
+    if(isactive){
+        isactive = false;
+        // Cerra forzosamente
+        protocol.close();
+    }
+    
     stop();
     
-    // Cerra forzosamente
-    protocol.close();
 
     // Joins
     join();

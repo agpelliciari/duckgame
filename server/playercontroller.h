@@ -1,6 +1,8 @@
 #ifndef LIB_PlayerController_H
 #define LIB_PlayerController_H
 
+#include <atomic>
+
 #include "common/socket.h"
 #include "common/thread.h"
 #include "./lobbycontainer.h"
@@ -18,6 +20,7 @@ class PlayerController: private Thread {
 protected:
     LobbyContainer& lobbies;   // cppcheck-suppress unusedStructMember
     PlayerProtocol protocol;    
+    std::atomic<bool> isactive;    
     void playOn(Player& player, Match& match);
 public:
     // Crea el player con el ide pasado e inicia el protocolo

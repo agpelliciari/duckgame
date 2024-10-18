@@ -36,17 +36,33 @@ void Client::listenActions() {
     if (!(std::getline(std::cin, name2, '\n'))) {  // Could not read name.
         throw LibError(1, "Could not read second player name");
     }
-    if(name2.size() == 0){
-       std::cerr << "1 player: "<< name << std::endl;
-       protocol.createLobby(1);
-    } else{
+    
+    int countplayers = 1;
+    if(name2.size() > 0){
        std::cerr << "2 players: "<< name << " " << name2 << std::endl;
-       protocol.createLobby(2);
+       countplayers = 2;
+    } else{
+       std::cerr << "1 player: "<< name << std::endl;
+    }
+    
+    std::cerr << "new lobby?[y|n]: " << std::endl;
+    
+    std::string action;
+    if (!(std::cin >> action)) {  // Could not read if new lobby.
+        throw LibError(1, "Could not read if new lobby was desired!");
+    }
+    
+    if(action.size() != 1 || (*action.c_str() != 'y')){
+        std::cerr << "lobby id to join: " << std::endl;
+        uint8_t lobbyid = inputnum();  // Se valida en el server.
+        protocol.joinLobby(countplayers, lobbyid);
+    } else{
+        protocol.createLobby(countplayers);
     }
     
     
+    
 
-    std::string action;
 
     while (std::cin >> action) {
         if (action.compare(ACTION_EXIT) == 0) {
@@ -56,7 +72,7 @@ void Client::listenActions() {
             uint8_t indplayer = inputnum();  // Se valida en el server.
             uint8_t box = inputnum();  // Se valida en el server.
             
-            if(indplayer == 1){
+            if(indplayer == 1 &&  countplayers > 1){
                 std::cerr << "Picked up " << name2 <<" box: "<< (int)box << std::endl;
                 protocol.pickup(name2,1, box);
             } else{
