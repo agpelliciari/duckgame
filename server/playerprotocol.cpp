@@ -8,7 +8,7 @@
 #include "./gameerror.h"
 
 
-PlayerProtocol::PlayerProtocol(Socket&& skt): protocol(skt) {}
+PlayerProtocol::PlayerProtocol(Socket&& skt): protocol(skt), isactive(true) {}
 
 bool PlayerProtocol::recvplayercount(uint8_t* count){
     return protocol.tryrecvbyte(count);
@@ -53,4 +53,12 @@ void PlayerProtocol::notifypickup(const std::string& player, const uint8_t box) 
 }
 void PlayerProtocol::notifynewbox() { protocol.notifyevent(EventType::NEW_BOX); }
 
-void PlayerProtocol::close() { protocol.close(); }
+bool PlayerProtocol::isopen(){
+     return isactive.load();
+}
+
+void PlayerProtocol::close() { 
+    if(isactive.exchange(false)){
+       protocol.close();
+    }
+}

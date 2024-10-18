@@ -4,6 +4,7 @@
 #define BUFF_LEN_CLIENT 128
 #include <string>
 #include <utility>
+#include <atomic>
 
 #include "common/event.h"
 #include "common/dtos.h"
@@ -15,6 +16,8 @@ class PlayerProtocol {
 
 protected:
     Protocol protocol;  // Composicion con el protocolo base para la conexion
+    
+    std::atomic<bool> isactive; // Simple manejo de si ya se cerro o no.    
 
 public:
     // El default a partir de socket, te ahorras el move.
@@ -42,7 +45,9 @@ public:
 
     void notifypickup(const std::string& player, const uint8_t box);
     void notifynewbox();
-
+    
+    
+    bool isopen();
     void close();
       
 };

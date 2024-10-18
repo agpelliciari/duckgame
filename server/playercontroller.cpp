@@ -12,14 +12,12 @@ PlayerController::PlayerController(LobbyContainer& _lobbies, Socket& skt):
         lobbies(_lobbies), protocol(std::move(skt)) {}
 
 
-bool PlayerController::isopen() { return isactive; }
+bool PlayerController::isopen() { return protocol.isopen(); }
 
 void PlayerController::init() {
     if (_is_alive) {
         throw GameError("Tried to init player notifier/controller when already inited.");
-    }
-    isactive = true;
-    
+    }    
     start();
 }
 
@@ -37,14 +35,13 @@ void PlayerController::playOn(Player& player, Match& match){
         }
         player.disconnect();  // Finalizo normalmente.
     } catch (const LibError& error) {
-        if (player.disconnect() && isactive) {  // Si desconecto. Hubo error aca.
+        if (player.disconnect() && protocol.isopen()) {  // Si desconecto. Hubo error aca.
             std::cerr << "Controller lib error:" << error.what() << std::endl;
         }
     } catch (const GameError& error) {  // EOF, el notify se asume no genera exception.
         player.disconnect();
     } catch (const ClosedQueue& error) {  // EOF, el notify se asume no genera exception.
-        std::cerr << "Controller MATCH END?: " << error.what() << std::endl;
-        
+        std::cerr << "Controller MATCH END " << error.what() << std::endl;
         player.disconnect();
     }
     
@@ -86,7 +83,6 @@ void PlayerController::run() {
         uint8_t playercount; 
         if(!protocol.recvplayercount(&playercount)){
             std::cerr << "Player controller aborted" << std::endl;
-            isactive = false;
             return; // Permitamos que se desconecte inicialmente si no se manda el count.
         }
         lobby_info info =protocol.recvlobbyinfo();        
@@ -103,7 +99,6 @@ void PlayerController::run() {
     } catch (const GameError& error) {  // .
         std::cerr << "Lobby game error:" << error.what() << std::endl;
     }
-    isactive = false;
 }
 
 // Este metodo no hace acciones irreversibles
@@ -114,11 +109,9 @@ void PlayerController::finish() {
     if (!_keep_running) {
         return;
     }
-    if(isactive){
-        isactive = false;
-        // Cerra forzosamente
-        protocol.close();
-    }
+    
+    // Se encarga el protocol de verificar solo sea cerrado una vez.
+    protocol.close();
     
     stop();
     

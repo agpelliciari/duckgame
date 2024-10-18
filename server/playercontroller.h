@@ -1,7 +1,6 @@
 #ifndef LIB_PlayerController_H
 #define LIB_PlayerController_H
 
-#include <atomic>
 
 #include "common/socket.h"
 #include "common/thread.h"
@@ -20,7 +19,6 @@ class PlayerController: private Thread {
 protected:
     LobbyContainer& lobbies;   // cppcheck-suppress unusedStructMember
     PlayerProtocol protocol;    
-    std::atomic<bool> isactive;    
     void playOn(Player& player, Match& match);
     void handleNewLobby(const uint8_t countplayers);
 public:
