@@ -1,2 +1,9 @@
 build/
 tags.*
+
+CMakeCache.txt
+CMakeFiles/
+_deps/
+
+cmake_install.cmake
+
