@@ -22,6 +22,7 @@ protected:
     PlayerProtocol protocol;    
     std::atomic<bool> isactive;    
     void playOn(Player& player, Match& match);
+    void handleNewLobby(const uint8_t countplayers);
 public:
     // Crea el player con el ide pasado e inicia el protocolo
     explicit PlayerController(LobbyContainer& _lobbies, Socket& skt);
