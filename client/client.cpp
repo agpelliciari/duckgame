@@ -3,9 +3,9 @@
 #include <iostream>
 #include <string>
 
-#include "client_src/client.h"
-#include "common_src/liberror.h"
-#include "common_src/resolvererror.h"
+#include "./client.h"
+#include "common/liberror.h"
+#include "common/resolvererror.h"
 
 static const char* const KnifeValues[] = {"No", "Yes"};
 

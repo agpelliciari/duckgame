@@ -5,8 +5,8 @@
 #include <string>
 #include <utility>
 
-#include "../common_src/event.h"
-#include "../common_src/protocol.h"
+#include "common/event.h"
+#include "common/protocol.h"
 
 // Extension del protocolo base a usar.
 class ClientProtocol {

@@ -6,4 +6,4 @@ CMakeFiles/
 _deps/
 
 cmake_install.cmake
-
+*.a
