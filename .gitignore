@@ -7,3 +7,6 @@ _deps/
 
 cmake_install.cmake
 *.a
+
+taller_client
+taller_server
