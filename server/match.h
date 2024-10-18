@@ -35,7 +35,6 @@ public:
     // Metodos delegatorios
     void notifyAction(const MatchAction&& action);
     
-    void removePlayer(Player* player);
     // Para el thread y en general el loopeado
     void run() override;
 

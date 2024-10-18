@@ -6,6 +6,7 @@
 #include <utility>
 
 #include "common/event.h"
+#include "common/dtos.h"
 #include "common/protocol.h"
 #include "./matchaction.h"
 
@@ -29,6 +30,9 @@ public:
     PlayerProtocol(PlayerProtocol&&) = delete;
     PlayerProtocol& operator=(PlayerProtocol&&) = delete;
 
+    bool recvplayercount(uint8_t* count);
+    lobby_info recvlobbyinfo();
+
 
     // Attempts to receive pickup action.
     // If failed throws either LibError or GameError.
@@ -38,6 +42,7 @@ public:
     void notifynewbox();
 
     void close();
+      
 };
 
 #endif

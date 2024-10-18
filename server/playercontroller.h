@@ -6,7 +6,6 @@
 #include "./lobbycontainer.h"
 #include "./match.h"
 #include "./player.h"
-#include "./playernotifier.h"
 #include "./playerprotocol.h"
 
 // Player controller va a ser el thread recibidor de un protocol.
@@ -18,15 +17,11 @@ class PlayerController: private Thread {
 
 protected:
     LobbyContainer& lobbies;   // cppcheck-suppress unusedStructMember
-    Player player;  // cppcheck-suppress unusedStructMember
-    PlayerProtocol protocol;
-
-    PlayerNotifier notifier;
-    
-    void playOn(Match& match);
+    PlayerProtocol protocol;    
+    void playOn(Player& player, Match& match);
 public:
     // Crea el player con el ide pasado e inicia el protocolo
-    explicit PlayerController(player_id ide, LobbyContainer& _lobbies, Socket& skt);
+    explicit PlayerController(LobbyContainer& _lobbies, Socket& skt);
 
     // Por ahora tambien nos escapamos del move.
     PlayerController(PlayerController&&) = delete;

@@ -179,6 +179,14 @@ public:
         closed = true;
         is_not_empty.notify_all();
     }
+    
+    void reopen() {
+        std::unique_lock<std::mutex> lck(mtx);
+        // Aseguremosnos esta vacia la queue.
+        std::queue<T, C> new_q;
+        std::swap(q, new_q);
+        closed = false;
+    }
 
 private:
     Queue(const Queue&) = delete;

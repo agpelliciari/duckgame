@@ -10,6 +10,15 @@
 
 PlayerProtocol::PlayerProtocol(Socket&& skt): protocol(skt) {}
 
+bool PlayerProtocol::recvplayercount(uint8_t* count){
+    return protocol.tryrecvbyte(count);
+}
+
+lobby_info PlayerProtocol::recvlobbyinfo(){
+     lobby_info out;
+     protocol.recvbytes(&out, sizeof(out));
+     return out;
+}
 
 MatchAction PlayerProtocol::recvpickup() {
     if (!protocol.recvpickup()) {

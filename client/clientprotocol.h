@@ -28,6 +28,9 @@ public:
     ClientProtocol(ClientProtocol&&) = delete;
     ClientProtocol& operator=(ClientProtocol&&) = delete;
 
+    void joinLobby(const uint8_t playercount, const uint8_t id_match);
+    void createLobby(const uint8_t playercount);
+
     void pickup(const std::string& name, const uint8_t box);
     Event recvevent();
 };

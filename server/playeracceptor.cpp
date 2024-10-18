@@ -7,13 +7,13 @@
 
 
 PlayerAcceptor::PlayerAcceptor(const char* service, LobbyContainer& _lobbies):
-        sktacceptor(service), last_player(0), lobbies(_lobbies) {}
+        sktacceptor(service), lobbies(_lobbies) {}
 
 void PlayerAcceptor::newPlayer(Socket&& connection) {
 
     // El ide para logs basicamente. Si bien se usa para el equal operator. Tampoco es que el equal
     // operator se use.
-    PlayerController& controller = controllers.emplace_back(++last_player, lobbies, connection);
+    PlayerController& controller = controllers.emplace_back(lobbies, connection);
 
     // start del thread notifier y controller . Ademas joinea el match en si.
     controller.init();

@@ -20,12 +20,6 @@ private:
     // Se guarda el socket del server. Para ir generando los controllers.
     Socket sktacceptor;
 
-
-    // No es realmente necesario. Pero tambien ayuda a los logs.
-
-    player_id last_player;  // cppcheck-suppress unusedStructMember
-
-
     LobbyContainer& lobbies;                 // cppcheck-suppress unusedStructMember
     controller_list controllers;  // cppcheck-suppress unusedStructMember
 

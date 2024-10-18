@@ -11,10 +11,6 @@ Match::Match(PlayerContainer& _players): players(_players), state(players) {}
 // Metodos delegatorios.
 void Match::notifyAction(const MatchAction&& action) { actions.notify(action); }
 
-
-void Match::removePlayer(Player* player) { players.remove(player); }
-
-
 void Match::run() {
     while (_keep_running) {      // Mientras deba ejecutarse.
         state.step();            // non player logic.

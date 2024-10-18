@@ -31,7 +31,7 @@ void PlayerNotifier::run() {
     } catch (const LibError&
                      error) {       // No deberia pasara realmente, antes pasaria en el controller.
         if (player.disconnect()) {  // Si no estaba desconectado...
-            std::cerr << "player " << player.getid() << " notify error: " << error.what()
+            std::cerr << "player " << player.getid(0) << " notify error: " << error.what()
                       << std::endl;
         }
     }

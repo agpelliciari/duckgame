@@ -12,7 +12,6 @@ lobbyID Lobby::getID() const{
 }
 
 void Lobby::addPlayer(Player* player) { players.add(player); }
-void Lobby::removePlayer(Player* player) { players.remove(player); }
 
 Match& Lobby::waitStart(std::unique_lock<std::mutex>& lock){
      match_started.wait(lock);

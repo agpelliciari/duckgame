@@ -5,14 +5,14 @@
 
 #include "common/liberror.h"
 #include "./gameerror.h"
+#include "./playernotifier.h"
 
 
-PlayerController::PlayerController(player_id ide, LobbyContainer& _lobbies, Socket& skt):
-        lobbies(_lobbies), player(ide), protocol(std::move(skt)), notifier(player, protocol) {}
+PlayerController::PlayerController(LobbyContainer& _lobbies, Socket& skt):
+        lobbies(_lobbies), protocol(std::move(skt)) {}
 
 
-bool PlayerController::isopen() { return player.isopen(); }
-
+bool PlayerController::isopen() { return is_alive(); }
 
 void PlayerController::init() {
     if (_is_alive) {
@@ -21,13 +21,13 @@ void PlayerController::init() {
     start();
 }
 
-void PlayerController::playOn(Match& match){
+void PlayerController::playOn(Player& player, Match& match){
+    // Inicia notifier.
+    PlayerNotifier notifier(player, protocol);
+    notifier.start();
     try {
-        // Asegurado, en teoria, que tampoco esta empezado.
-        notifier.start();
-
-        // Se podria checkear que el player siga abierto tambien
-        // Pero no hace falta, en todo caso fallara el recvpickup
+        
+        // Loopeado de acciones
         while (_keep_running) {
             match.notifyAction(protocol.recvpickup());
         }
@@ -39,23 +39,28 @@ void PlayerController::playOn(Match& match){
     } catch (const GameError& error) {  // EOF, el notify se asume no genera exception.
         player.disconnect();
     }
-    // Sea por la razon que fuere. Notifica/remove el player.
-    match.removePlayer(&player);
+    
+    notifier.stop();
+    notifier.join();    
 
     // El log a cerr podria ser innecesario. Pero sirve para hacer cosas mas descriptivas.
-    std::cerr << ">closed Player " << player.getid() << std::endl;
-    
+    std::cerr << ">closed Player " << player.getid(0) << std::endl;
+    if(player.playercount() >1 ){
+        std::cerr << ">closed Player " << player.getid(1) << std::endl;
+    }
 }
 void PlayerController::run() {
     try{
+        //uint8_t count = protocol.recv
+        Player player;
+        player.setplayercount(1);
         lobbyID id = lobbies.newLobby(&player);
-        playOn(lobbies.startLobby(id));
+        playOn(player, lobbies.startLobby(id));
+        
     } catch (const LibError& error) {
-        std::cerr << "Lobby define lib error:" << error.what() << std::endl;
-        player.disconnect();
+        std::cerr << "Lobby lib error:" << error.what() << std::endl;
     } catch (const GameError& error) {  // .
-        std::cerr << "Lobby define game error:" << error.what() << std::endl;
-        player.disconnect();
+        std::cerr << "Lobby game error:" << error.what() << std::endl;
     }
 }
 
@@ -67,25 +72,15 @@ void PlayerController::finish() {
     if (!_keep_running) {
         return;
     }
+    stop();
+    
+    // Cerra forzosamente
+    protocol.close();
 
     // Joins
-    stop();
     join();
-    
-    notifier.stop();
-    notifier.join();
 }
 
 PlayerController::~PlayerController() {
-
-
-    // Esta logica esta fuera del finish en si
-    // Ya que la idea es que el finish no libere en si las cosas.
-    if (player.disconnect()) {
-        // Player estaba activo, cerra sin esperar a que terminen las acciones
-        // Como podria ser el read de una accion o el envio de un evento.
-        protocol.close();
-    }
-
     finish();
 }

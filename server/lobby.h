@@ -35,7 +35,6 @@ public:
   
     // En la lobby se agregan jugadores. Y podrian irse tambien.
     void addPlayer(Player* player);
-    void removePlayer(Player* player);
     
     Match& waitStart(std::unique_lock<std::mutex>& lock);
     // Inicia la partida.. y notifica a los que esperan.

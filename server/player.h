@@ -6,7 +6,6 @@
 
 #include "common/event.h"
 #include "common/queue.h"
-#include "./matchaction.h"
 
 typedef unsigned int player_id;
 typedef Queue<Event> player_events;
@@ -18,15 +17,20 @@ typedef Queue<Event> player_events;
 class Player {
 
 protected:
+
+    // Manejo de ids. Y cantidad de players para la queue de mensajes.
+    uint8_t count;         // cppcheck-suppress unusedStructMember
+    
+    player_id ids[2];      // cppcheck-suppress unusedStructMember
+    
     // For notifying actions and/or exit.
-    player_id id;          // cppcheck-suppress unusedStructMember
     player_events events;  // cppcheck-suppress unusedStructMember
 
     bool _is_open;  // cppcheck-suppress unusedStructMember
     std::mutex mtx;
 
 public:
-    explicit Player(player_id ide);
+    explicit Player();
 
     // Por ahora tambien nos escapamos del move.
     Player(Player&&) = delete;
@@ -37,11 +41,19 @@ public:
     Player(const Player&) = delete;
     Player& operator=(const Player&) = delete;
 
-    player_id getid() const;
-
-
     // No hace falta perse el operador se podria usar el getter de id.
     bool operator==(const Player& other) const;
+
+    void setplayercount(const uint8_t count);
+    uint8_t playercount() const ;
+    
+    // Seteado de id.
+    void setid(const int ind, player_id id);
+    player_id getid(const uint8_t ind) const;
+    
+    
+    // Abre el jugador, indicando esta activo en una partida.
+    bool open();
 
     // Desconecta/cierra el player. Si esta abierto.
     // Devuelve false si ya estaba cerrado.
@@ -50,16 +62,15 @@ public:
     // Checkea si el player sigue abierto, i.e no disconnected
     bool isopen();
 
-    // close libera/ cierra la queue, no se hace directamente en disconnect
-    // ya que traeria mas complejidad para sincronizar/lockear
-    void close();
 
     // recvevent es no bloqueante! Recibe el evento con try_push a la queue del player
     // Todo es "bloqueante" por posibles locks... pero bueno
-    void recvevent(const Event& event);
+    bool recvevent(const Event& event);
 
     // Pop event. Bloqueante. Si no hay eventos espera a uno.
     Event popevent();
+    
+    //~Player();
 };
 
 #endif

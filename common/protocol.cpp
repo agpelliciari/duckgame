@@ -105,6 +105,18 @@ void Protocol::sendbyte(const uint8_t num) {
     }
 }
 
+// Simplemente para no enviar multiples sendbyte. 
+// No es el envio de un mensaje. Que tiene el envio del len pre mensaje.
+// Sirve para mandar structs.
+void Protocol::sendbytes(const void* msg, const unsigned int count){
+    this->skt.sendall(msg, count);
+}
+
+void Protocol::recvbytes(void* buff, const unsigned int count){
+    this->skt.recvall(buff, count);
+}
+
+
 uint8_t Protocol::recvbyte() {
     uint8_t res;
     if (this->skt.recvsome(&res, 1) == 0) {
