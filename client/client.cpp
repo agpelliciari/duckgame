@@ -53,8 +53,16 @@ void Client::listenActions() {
             return;
         }
         if (action.compare(ACTION_PICKUP) == 0) {
+            uint8_t indplayer = inputnum();  // Se valida en el server.
             uint8_t box = inputnum();  // Se valida en el server.
-            protocol.pickup(name, box);
+            
+            if(indplayer == 1){
+                std::cerr << "Picked up " << name2 <<" box: "<< (int)box << std::endl;
+                protocol.pickup(name2,1, box);
+            } else{
+                std::cerr << "Picked up " << name <<" box: "<< (int)box << std::endl;
+                protocol.pickup(name,0, box);
+            }
             continue;
         }
 

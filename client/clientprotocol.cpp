@@ -12,8 +12,9 @@
 
 ClientProtocol::ClientProtocol(Socket skt): protocol(skt) {}
 
-void ClientProtocol::pickup(const std::string& name, const uint8_t box) {
+void ClientProtocol::pickup(const std::string& name, const uint8_t indplayer, const uint8_t box) {
     protocol.signalpickup();
+    protocol.sendbyte(indplayer);
     protocol.sendmsg(name);
     protocol.sendbyte(box);
 }

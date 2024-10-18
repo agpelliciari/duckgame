@@ -24,7 +24,10 @@ MatchAction PlayerProtocol::recvpickup() {
     if (!protocol.recvpickup()) {
         throw GameError("Could not receive pickup.");
     }
+    uint8_t indx = protocol.recvbyte();
     std::string name = protocol.recvmsgstr();
+    name.append(std::to_string(indx));
+    
     // -1 ya que el cliente va de caja 1 a 4.. En el server es de 0 a 3.
     return MatchAction(name, protocol.recvbyte() - 1);
 }
