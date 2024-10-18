@@ -12,6 +12,7 @@ class MatchObserver {
 public:
     // Por ahora un match observer solo encapsula un recibidor de eventos.
     virtual void receiveEvent(const Event&& event) = 0;
+    virtual ~MatchObserver(){}
 };
 
 #endif

@@ -9,7 +9,7 @@ bool Box::isAvailable() const { return remainingsteps == 0; }
 
 Reward Box::open(const RewardType& type) {
     if (!isAvailable()) {
-        throw GameError(1, "Tried to open not available box");
+        throw GameError("Tried to open not available box");
     }
     Reward res(type);
 

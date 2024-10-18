@@ -10,3 +10,4 @@ cmake_install.cmake
 
 taller_client
 taller_server
+taller_*

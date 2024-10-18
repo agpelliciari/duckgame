@@ -27,9 +27,9 @@ public:
      * if (ret == -1)
      *      throw GameError(errno, "The function %s has failed: ", "foo");
      *  */
-    GameError(int error_code, const char* fmt, ...) noexcept;
+    GameError(const char* fmt, ...) noexcept ;
 
-    virtual const char* what() const noexcept;
+    virtual const char* what() const noexcept override;
 
     virtual ~GameError();
 };

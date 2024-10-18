@@ -25,7 +25,7 @@
 
 #include <errno.h>
 
-GameError::GameError(int error_code, const char* fmt, ...) noexcept {
+GameError::GameError(const char* fmt, ...) noexcept {
     /* Aquí empieza la magia arcana proveniente de C.
      *
      * En C (y en C++) las funciones y métodos pueden recibir un número
@@ -94,24 +94,6 @@ GameError::GameError(int error_code, const char* fmt, ...) noexcept {
          * anteriormente simplemente ignorare el error.
          * */
     }
-
-    /*
-     * `strerror_r` toma el `error_code` y lo traduce a un mensaje entendible
-     * por el humano y lo escribe en el buffer. A diferencia de `strerror`,
-     * `strerror_r` es thread safe ya que usa un buffer local (`msg_error`)
-     * y no uno `static` (aka, global).
-     *
-     * Nótese como `msg_error+s` apunta justo al `\0` escrito por `vsnprintf`
-     * y es exactamente lo que queremos: queremos escribir a continuación
-     * de lo escrito por `vsnprintf` pisándole el `\0`.
-     * */
-    strerror_r(error_code, msg_error + s, sizeof(msg_error) - s);
-
-    /*
-     * `strerror_r` garantiza que el string termina siempre en un `\0`
-     * sin embargo permitime ser un poco paranoico y asegurarme que
-     * realmente hay un `\0` al final.
-     * */
     msg_error[sizeof(msg_error) - 1] = 0;
 }
 

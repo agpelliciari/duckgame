@@ -16,7 +16,7 @@ bool PlayerController::isopen() { return player.isopen(); }
 
 void PlayerController::init() {
     if (_is_alive) {
-        throw GameError(1, "Tried to init player notifier/controller when already inited.");
+        throw GameError("Tried to init player notifier/controller when already inited.");
     }
 
     // Join/add player to match.

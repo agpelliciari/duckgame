@@ -4,10 +4,10 @@
 
 #include <arpa/inet.h>
 
-#include "common_src/liberror.h"
-#include "common_src/resolvererror.h"
-#include "server_src/gameerror.h"
-#include "server_src/matchserver.h"
+#include "common/liberror.h"
+#include "common/resolvererror.h"
+#include "server/gameerror.h"
+#include "server/matchserver.h"
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {

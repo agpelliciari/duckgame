@@ -13,7 +13,7 @@ PlayerProtocol::PlayerProtocol(Socket&& skt): protocol(skt) {}
 
 MatchAction PlayerProtocol::recvpickup() {
     if (!protocol.recvpickup()) {
-        throw GameError(0, "Could not receive pickup.");
+        throw GameError("Could not receive pickup.");
     }
     std::string name = protocol.recvmsgstr();
     // -1 ya que el cliente va de caja 1 a 4.. En el server es de 0 a 3.
