@@ -54,9 +54,10 @@ bool Player::disconnect() {
     std::unique_lock<std::mutex> lck(mtx);
     if (_is_open) {
         _is_open = false;
+        events.close();
         return true;
     }
-    events.close();
+    
     return false;
 }
 

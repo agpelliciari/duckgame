@@ -22,6 +22,7 @@ void PlayerController::init() {
 }
 
 void PlayerController::playOn(Player& player, Match& match){
+    player.open();
     // Inicia notifier.
     PlayerNotifier notifier(player, protocol);
     notifier.start();
