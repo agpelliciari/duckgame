@@ -1,5 +1,5 @@
-#ifndef LIB_MatchAcceptor_H
-#define LIB_MatchAcceptor_H
+#ifndef LIB_PlayerAcceptor_H
+#define LIB_PlayerAcceptor_H
 
 #include <list>
 
@@ -12,7 +12,7 @@
 // Personalmente... no se considera que esta clase perse deba tener el ownership
 // del socket. Pero entiendo es lo que se queria. Dado esto. Este acceptor tambien hereda thread.
 // Definiendo el loopeado para recibir a los nuevos players.
-class MatchAcceptor: private Thread {
+class PlayerAcceptor: private Thread {
 public:
     typedef std::list<PlayerController> controller_list;
 
@@ -40,14 +40,14 @@ private:
     void disconnectAll();
 
 public:
-    explicit MatchAcceptor(const char* service, Match& _match);
+    explicit PlayerAcceptor(const char* service, Match& _match);
 
     // No copy nor mov.
-    MatchAcceptor(const MatchAcceptor&) = delete;
-    MatchAcceptor& operator=(const MatchAcceptor&) = delete;
+    PlayerAcceptor(const PlayerAcceptor&) = delete;
+    PlayerAcceptor& operator=(const PlayerAcceptor&) = delete;
 
-    MatchAcceptor(MatchAcceptor&&) = delete;
-    MatchAcceptor& operator=(MatchAcceptor&&) = delete;
+    PlayerAcceptor(PlayerAcceptor&&) = delete;
+    PlayerAcceptor& operator=(PlayerAcceptor&&) = delete;
 
 
     // Como pre condicion esta que el server siga abierto.
@@ -61,7 +61,7 @@ public:
     void init();
 
     void finish();
-    ~MatchAcceptor();
+    ~PlayerAcceptor();
 };
 
 #endif

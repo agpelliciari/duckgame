@@ -4,13 +4,13 @@
 #include <utility>
 
 #include "./match.h"
-#include "./matchacceptor.h"
+#include "./playeracceptor.h"
 
 
 class MatchServer {
 protected:
     Match match;
-    MatchAcceptor acceptor;
+    PlayerAcceptor acceptor;
 
 public:
     // Delega la creacion del socket al acceptor.

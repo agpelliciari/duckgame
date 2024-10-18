@@ -5,7 +5,7 @@ target_sources(taller_server
          player.cpp
          matchserver.cpp
          box.cpp
-         matchacceptor.cpp
+         playeracceptor.cpp
          matchaction.cpp
          match.cpp
          matchqueue.cpp
@@ -24,7 +24,7 @@ target_sources(taller_server
          match.h
          matchqueue.h
          matchobserver.h
-         matchacceptor.h
+         playeracceptor.h
          playernotifier.h
          matchstate.h
          playercontainer.h

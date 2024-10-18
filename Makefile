@@ -651,30 +651,6 @@ server/match.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/match.cpp.s
 .PHONY : server/match.cpp.s
 
-server/matchacceptor.o: server/matchacceptor.cpp.o
-.PHONY : server/matchacceptor.o
-
-# target to build an object file
-server/matchacceptor.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/matchacceptor.cpp.o
-.PHONY : server/matchacceptor.cpp.o
-
-server/matchacceptor.i: server/matchacceptor.cpp.i
-.PHONY : server/matchacceptor.i
-
-# target to preprocess a source file
-server/matchacceptor.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/matchacceptor.cpp.i
-.PHONY : server/matchacceptor.cpp.i
-
-server/matchacceptor.s: server/matchacceptor.cpp.s
-.PHONY : server/matchacceptor.s
-
-# target to generate assembly for a file
-server/matchacceptor.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/matchacceptor.cpp.s
-.PHONY : server/matchacceptor.cpp.s
-
 server/matchaction.o: server/matchaction.cpp.o
 .PHONY : server/matchaction.o
 
@@ -794,6 +770,30 @@ server/player.s: server/player.cpp.s
 server/player.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/player.cpp.s
 .PHONY : server/player.cpp.s
+
+server/playeracceptor.o: server/playeracceptor.cpp.o
+.PHONY : server/playeracceptor.o
+
+# target to build an object file
+server/playeracceptor.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/playeracceptor.cpp.o
+.PHONY : server/playeracceptor.cpp.o
+
+server/playeracceptor.i: server/playeracceptor.cpp.i
+.PHONY : server/playeracceptor.i
+
+# target to preprocess a source file
+server/playeracceptor.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/playeracceptor.cpp.i
+.PHONY : server/playeracceptor.cpp.i
+
+server/playeracceptor.s: server/playeracceptor.cpp.s
+.PHONY : server/playeracceptor.s
+
+# target to generate assembly for a file
+server/playeracceptor.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/playeracceptor.cpp.s
+.PHONY : server/playeracceptor.cpp.s
 
 server/playercontainer.o: server/playercontainer.cpp.o
 .PHONY : server/playercontainer.o
@@ -982,9 +982,6 @@ help:
 	@echo "... server/match.o"
 	@echo "... server/match.i"
 	@echo "... server/match.s"
-	@echo "... server/matchacceptor.o"
-	@echo "... server/matchacceptor.i"
-	@echo "... server/matchacceptor.s"
 	@echo "... server/matchaction.o"
 	@echo "... server/matchaction.i"
 	@echo "... server/matchaction.s"
@@ -1000,6 +997,9 @@ help:
 	@echo "... server/player.o"
 	@echo "... server/player.i"
 	@echo "... server/player.s"
+	@echo "... server/playeracceptor.o"
+	@echo "... server/playeracceptor.i"
+	@echo "... server/playeracceptor.s"
 	@echo "... server/playercontainer.o"
 	@echo "... server/playercontainer.i"
 	@echo "... server/playercontainer.s"
