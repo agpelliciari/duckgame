@@ -1,27 +1,31 @@
+#include <cstdint>
 #include <cstring>
 #include <iostream>
 #include <string>
 
-#include <arpa/inet.h>
-
+#include "client_src/client.h"
 #include "common_src/liberror.h"
 #include "common_src/resolvererror.h"
-#include "server_src/gameerror.h"
-#include "server_src/matchserver.h"
+
+static const char* const KnifeValues[] = {"No", "Yes"};
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
-        std::cerr << "No se paso por parametro el servicio/puerto para el servidor\n";
+        std::cerr << "No se paso los parametros el <host> <servicio> de con quien conectar\n";
         return 1;
     }
 
     try {
+        char* host = NULL;
+        char* service = argv[1];
+        if (argc > 2) {
+            host = argv[1];
+            service = argv[2];
+        }
 
-        MatchServer server(argv[1]);
+        Client client(host, service);
 
-        server.initmatch();  // Starts async.
-
-        server.waitclose();
+        client.listenActions();
 
         return 0;
     } catch (const LibError& error) {
@@ -31,7 +35,4 @@ int main(int argc, char* argv[]) {
         std::cerr << "Resolve: " << error.what() << std::endl;
         return 1;
     }
-
-
-    return 0;
 }
