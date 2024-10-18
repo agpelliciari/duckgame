@@ -27,7 +27,6 @@ void PlayerNotifier::run() {
 
     } catch (const ClosedQueue& error) {
         // Simplemente se cerro el notifier. Por ahora no se necesita mas.
-
     } catch (const LibError&
                      error) {       // No deberia pasara realmente, antes pasaria en el controller.
         if (player.disconnect()) {  // Si no estaba desconectado...

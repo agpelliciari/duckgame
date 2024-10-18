@@ -27,13 +27,13 @@ Lobby& LobbyContainer::findLobby(lobbyID id){
 // Unirse a la lobby y esperar a que empieze. Tira error si no existe.
 Match& LobbyContainer::joinLobby(Player* player, lobbyID id){
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on lobby.
-    Lobby& lobbie = findLobby(id);
-    if(lobbie.isrunning()){
+    Lobby& lobby = findLobby(id);
+    if(lobby.isrunning()){
           throw new GameError("Tried to join already started lobby %d", id);
     }
     
-    lobbie.addPlayer(player);
-    return lobbie.waitStart(lck);
+    lobby.addPlayer(player);
+    return lobby.waitStart(lck);
 }
 // Una vez empezada no se aceptan mas.
 Match& LobbyContainer::startLobby(lobbyID id){
@@ -45,10 +45,6 @@ Match& LobbyContainer::startLobby(lobbyID id){
 void LobbyContainer::stopLobby(lobbyID id){
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on lobby.
     Lobby& lobby = findLobby(id);
-    if(lobby.isrunning()){
-          lobby.finish();
-    }
-    
     lobbies.remove(lobby);
 }
 

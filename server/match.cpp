@@ -12,12 +12,15 @@ Match::Match(PlayerContainer& _players): players(_players), state(players) {}
 void Match::notifyAction(const MatchAction&& action) { actions.notify(action); }
 
 void Match::run() {
-    while (_keep_running) {      // Mientras deba ejecutarse.
+    //bool matchcontinues = true;
+    while (_keep_running) { 
+    //while (_keep_running && matchcontinues) {      // Mientras deba ejecutarse.
         state.step();            // non player logic.
         actions.applyOn(state);  // player logic
-
         usleep(SLEEP_TIME);
     }
+    // Checkea si el finish fue natural o forzado.
+    
 }
 
 void Match::init() { start(); }
@@ -28,8 +31,8 @@ void Match::finish() {
         return;
     }
     stop();
-    actions.close();
     players.removeAll();
+    actions.close();
 
     join();
 }

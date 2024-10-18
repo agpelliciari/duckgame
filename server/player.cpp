@@ -55,6 +55,7 @@ bool Player::disconnect() {
     if (_is_open) {
         _is_open = false;
         events.close();
+        //std::cout << "CLOSED EVENTS FOR "<< (int)getid(0)<< std::endl;
         return true;
     }
     

@@ -26,7 +26,7 @@ protected:
     std::atomic<bool> _is_alive;
 
 public:
-    Thread(): _keep_running(true), _is_alive(false) {}
+    Thread(): _keep_running(false), _is_alive(false) {}
 
     void start() override {
         _is_alive = true;

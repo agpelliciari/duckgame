@@ -42,6 +42,10 @@ void PlayerController::playOn(Player& player, Match& match){
         }
     } catch (const GameError& error) {  // EOF, el notify se asume no genera exception.
         player.disconnect();
+    } catch (const ClosedQueue& error) {  // EOF, el notify se asume no genera exception.
+        std::cerr << "Controller MATCH END?: " << error.what() << std::endl;
+        
+        player.disconnect();
     }
     
     notifier.stop();
@@ -63,6 +67,7 @@ void PlayerController::handleNewLobby(const uint8_t playercount){
         std::cerr << "New lobby id: "<< (int) id << std::endl;
         
         if(!protocol.recvsignalstart()){
+             std::cerr << "CANCELED LOBBY: "<< (int) id << std::endl;
              // Close lobby
              lobbies.stopLobby(id);
              return;

@@ -22,6 +22,10 @@ void PlayerContainer::add(Player* player) {
 // Pero siempre es bueno verificar.
 void PlayerContainer::removeAll() {
     for (auto playerit = players.begin(); playerit != players.end();) {
+        if((*playerit)->disconnect()){
+            std::cerr << "force disconnect " << (*playerit)->getid(0) << " from match"
+                      << std::endl;
+        }
         playerit = players.erase(playerit);
     }
 }

@@ -40,4 +40,4 @@ void Lobby::finish() {
     match.finish();
 }
 
-Lobby::~Lobby() { finish(); }
+Lobby::~Lobby() {  }
