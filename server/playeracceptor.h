@@ -5,7 +5,7 @@
 
 #include "common/socket.h"
 #include "common/thread.h"
-#include "./match.h"
+#include "./lobbycontainer.h"
 #include "./playercontroller.h"
 
 // Clase para guardar nuevos controllers, pertenecientes a un match.
@@ -26,7 +26,7 @@ private:
     player_id last_player;  // cppcheck-suppress unusedStructMember
 
 
-    Match& match;                 // cppcheck-suppress unusedStructMember
+    LobbyContainer& lobbies;                 // cppcheck-suppress unusedStructMember
     controller_list controllers;  // cppcheck-suppress unusedStructMember
 
     // No expone esta logica al exterior al tener ahora el ownership del skt
@@ -40,7 +40,7 @@ private:
     void disconnectAll();
 
 public:
-    explicit PlayerAcceptor(const char* service, Match& _match);
+    explicit PlayerAcceptor(const char* service, LobbyContainer& _lobbies);
 
     // No copy nor mov.
     PlayerAcceptor(const PlayerAcceptor&) = delete;
@@ -59,6 +59,7 @@ public:
 
     // Metodos sobre escritos para extender medianamente los del thread.
     void init();
+    bool isrunning();
 
     void finish();
     ~PlayerAcceptor();

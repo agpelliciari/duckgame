@@ -3,6 +3,7 @@
 
 #include "common/socket.h"
 #include "common/thread.h"
+#include "./lobbycontainer.h"
 #include "./match.h"
 #include "./player.h"
 #include "./playernotifier.h"
@@ -16,15 +17,16 @@
 class PlayerController: private Thread {
 
 protected:
-    Match& match;   // cppcheck-suppress unusedStructMember
+    LobbyContainer& lobbies;   // cppcheck-suppress unusedStructMember
     Player player;  // cppcheck-suppress unusedStructMember
     PlayerProtocol protocol;
 
     PlayerNotifier notifier;
-
+    
+    void playOn(Match& match);
 public:
     // Crea el player con el ide pasado e inicia el protocolo
-    explicit PlayerController(player_id ide, Match& _match, Socket& skt);
+    explicit PlayerController(player_id ide, LobbyContainer& _lobbies, Socket& skt);
 
     // Por ahora tambien nos escapamos del move.
     PlayerController(PlayerController&&) = delete;

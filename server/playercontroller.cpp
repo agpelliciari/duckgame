@@ -7,8 +7,8 @@
 #include "./gameerror.h"
 
 
-PlayerController::PlayerController(player_id ide, Match& _match, Socket& skt):
-        match(_match), player(ide), protocol(std::move(skt)), notifier(player, protocol) {}
+PlayerController::PlayerController(player_id ide, LobbyContainer& _lobbies, Socket& skt):
+        lobbies(_lobbies), player(ide), protocol(std::move(skt)), notifier(player, protocol) {}
 
 
 bool PlayerController::isopen() { return player.isopen(); }
@@ -18,17 +18,13 @@ void PlayerController::init() {
     if (_is_alive) {
         throw GameError("Tried to init player notifier/controller when already inited.");
     }
-
-    // Join/add player to match.
-    match.addPlayer(&player);
-
-    // Asegurado, en teoria, que tampoco esta empezado.
-    notifier.start();
     start();
 }
 
-void PlayerController::run() {
+void PlayerController::playOn(Match& match){
     try {
+        // Asegurado, en teoria, que tampoco esta empezado.
+        notifier.start();
 
         // Se podria checkear que el player siga abierto tambien
         // Pero no hace falta, en todo caso fallara el recvpickup
@@ -43,12 +39,24 @@ void PlayerController::run() {
     } catch (const GameError& error) {  // EOF, el notify se asume no genera exception.
         player.disconnect();
     }
-
     // Sea por la razon que fuere. Notifica/remove el player.
     match.removePlayer(&player);
 
     // El log a cerr podria ser innecesario. Pero sirve para hacer cosas mas descriptivas.
     std::cerr << ">closed Player " << player.getid() << std::endl;
+    
+}
+void PlayerController::run() {
+    try{
+        lobbyID id = lobbies.newLobby(&player);
+        playOn(lobbies.startLobby(id));
+    } catch (const LibError& error) {
+        std::cerr << "Lobby define lib error:" << error.what() << std::endl;
+        player.disconnect();
+    } catch (const GameError& error) {  // .
+        std::cerr << "Lobby define game error:" << error.what() << std::endl;
+        player.disconnect();
+    }
 }
 
 // Este metodo no hace acciones irreversibles
@@ -62,9 +70,9 @@ void PlayerController::finish() {
 
     // Joins
     stop();
-    notifier.stop();
-
     join();
+    
+    notifier.stop();
     notifier.join();
 }
 

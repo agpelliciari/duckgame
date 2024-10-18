@@ -6,14 +6,14 @@
 #include "common/liberror.h"
 
 
-PlayerAcceptor::PlayerAcceptor(const char* service, Match& _match):
-        sktacceptor(service), last_player(0), match(_match) {}
+PlayerAcceptor::PlayerAcceptor(const char* service, LobbyContainer& _lobbies):
+        sktacceptor(service), last_player(0), lobbies(_lobbies) {}
 
 void PlayerAcceptor::newPlayer(Socket&& connection) {
 
     // El ide para logs basicamente. Si bien se usa para el equal operator. Tampoco es que el equal
     // operator se use.
-    PlayerController& controller = controllers.emplace_back(++last_player, match, connection);
+    PlayerController& controller = controllers.emplace_back(++last_player, lobbies, connection);
 
     // start del thread notifier y controller . Ademas joinea el match en si.
     controller.init();
@@ -53,6 +53,9 @@ void PlayerAcceptor::run() {
 }
 void PlayerAcceptor::init() { start(); }
 
+bool PlayerAcceptor::isrunning(){
+     return is_alive();
+}
 
 void PlayerAcceptor::finish() {
     if (!_keep_running) {  // Evitemos cerrar dos veces.

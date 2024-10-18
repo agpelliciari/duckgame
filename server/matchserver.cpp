@@ -6,17 +6,17 @@ static const char EXIT_SIGN = 'q';
 
 // Se entiende es mas ajustado a lo que se pidio.
 // El match y acceptor son miembros para denotar que el service/socket es usable solo una vez.
-MatchServer::MatchServer(const char* service): match(), acceptor(service, match) {}
+MatchServer::MatchServer(const char* service): lobbies(), acceptor(service, lobbies) {}
 
 
 // Inicia el match y tambien el acceptor en si.
 void MatchServer::initmatch() {
     // Se inicia sin esperar a algun player.
-    match.init();
+    //match.init();
     acceptor.init();
 }
 
-bool MatchServer::isrunning() { return match.isrunning(); }
+bool MatchServer::isrunning() { return acceptor.isrunning(); }
 
 void MatchServer::waitclose() {
     std::string out;
@@ -33,6 +33,6 @@ void MatchServer::close() {
     // Mejor hacer las cosas explicitas.
     // Ya que podria haber problemas si el match se destruye primero y se invalida la referencia.
     acceptor.finish();
-    match.finish();
+    lobbies.finishAll();
 }
 MatchServer::~MatchServer() { close(); }

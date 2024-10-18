@@ -16,13 +16,13 @@
 // Delega el manejo del estado, notificado de eventos y recepcion de acciones
 class Match: private Thread {
 private:
-    PlayerContainer players;
+    PlayerContainer& players;
     MatchState state;    // cppcheck-suppress unusedStructMember
     MatchQueue actions;  // cppcheck-suppress unusedStructMember
 
 public:
     // Se tendra composicion con un unico observer de eventos al match.
-    Match();
+    Match(PlayerContainer& _players);
 
     // Asumamos por ahora que no se quiere permitir copias, ni mov.
     Match(const Match&) = delete;
@@ -34,10 +34,8 @@ public:
     // No hay precondiciones perse. Podria no haber empezado el match.
     // Metodos delegatorios
     void notifyAction(const MatchAction&& action);
-
-    void addPlayer(Player* player);
+    
     void removePlayer(Player* player);
-
     // Para el thread y en general el loopeado
     void run() override;
 

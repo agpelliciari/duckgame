@@ -3,13 +3,13 @@
 
 #include <utility>
 
-#include "./match.h"
+#include "./lobbycontainer.h"
 #include "./playeracceptor.h"
 
 
 class MatchServer {
 protected:
-    Match match;
+    LobbyContainer lobbies;
     PlayerAcceptor acceptor;
 
 public:

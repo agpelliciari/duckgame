@@ -6,13 +6,12 @@
 
 static const int SLEEP_TIME = 1000 * 200;  // 200ms
 
-Match::Match(): players(), state(players) {}
+Match::Match(PlayerContainer& _players): players(_players), state(players) {}
 
 // Metodos delegatorios.
 void Match::notifyAction(const MatchAction&& action) { actions.notify(action); }
 
 
-void Match::addPlayer(Player* player) { players.add(player); }
 void Match::removePlayer(Player* player) { players.remove(player); }
 
 

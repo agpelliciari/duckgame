@@ -1,6 +1,8 @@
 target_sources(taller_server
     PRIVATE
     # .cpp files
+         lobby.cpp
+         lobbycontainer.cpp
          playernotifier.cpp
          player.cpp
          matchserver.cpp
@@ -18,6 +20,8 @@ target_sources(taller_server
 
     PUBLIC
     # .h files
+         lobby.h
+         lobbycontainer.h
          playerprotocol.h
          matchaction.h
          player.h
