@@ -115,6 +115,12 @@ uint8_t Protocol::recvbyte() {
     return res;
 }
 
+bool Protocol::tryrecvbyte(uint8_t* out){
+    if (this->skt.recvsome(out, 1) == 0) {
+        return false;
+    }
+    return true;
+}
 
 const static uint8_t PICKUP_SIGN = 3;
 

@@ -37,9 +37,12 @@ public:
 
     void close();
 
-    // Num communicaiton!!
+    // Byte communicaiton!!
     void sendbyte(const uint8_t byte);
     uint8_t recvbyte();
+    
+    bool tryrecvbyte(uint8_t* out);    
+
 
     // Signal action send.
     // Tries receive pickup order. If EOF then returns false.

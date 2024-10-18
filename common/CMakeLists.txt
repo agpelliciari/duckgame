@@ -10,6 +10,7 @@ target_sources(taller_common
         protocol.cpp
     PUBLIC
     # .h files
+        dtos.h
         reward.h
         event.h
         resolver.h
