@@ -52,9 +52,18 @@ void PlayerController::playOn(Player& player, Match& match){
 }
 void PlayerController::run() {
     try{
-        //uint8_t count = protocol.recv
+    
+        uint8_t playercount; 
+        if(!protocol.recvplayercount(&playercount)){
+            std::cerr << "Player controller aborted" << std::endl;
+            return; // Permitamos que se desconecte inicialmente si no se manda el count.
+        }
+        
+        lobby_info info =protocol.recvlobbyinfo();
+        std::cerr << "Connected lobby info act " << (int) info.lobby_action << std::endl;
+        
         Player player;
-        player.setplayercount(1);
+        player.setplayercount(playercount);
         lobbyID id = lobbies.newLobby(&player);
         playOn(player, lobbies.startLobby(id));
         

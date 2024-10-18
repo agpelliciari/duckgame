@@ -29,6 +29,22 @@ void Client::listenActions() {
     if (!(std::getline(std::cin, name, '\n'))) {  // Could not read name.
         throw LibError(1, "Could not read player name");
     }
+    
+    std::string name2;
+
+    std::cerr << ASK_NAME << " segundo player" << std::endl;
+    if (!(std::getline(std::cin, name2, '\n'))) {  // Could not read name.
+        throw LibError(1, "Could not read second player name");
+    }
+    if(name2.size() == 0){
+       std::cerr << "1 player: "<< name << std::endl;
+       protocol.createLobby(1);
+    } else{
+       std::cerr << "2 players: "<< name << " " << name2 << std::endl;
+       protocol.createLobby(2);
+    }
+    
+    
 
     std::string action;
 
