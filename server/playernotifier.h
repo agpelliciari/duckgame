@@ -1,7 +1,7 @@
 #ifndef LIB_PlayerNotifier_H
 #define LIB_PlayerNotifier_H
 
-#include "../common_src/thread.h"
+#include "common/thread.h"
 #include "./player.h"
 #include "./playerprotocol.h"
 

@@ -1,7 +1,7 @@
 #ifndef LIB_MatchQueue_H
 #define LIB_MatchQueue_H
 
-#include "../common_src/queue.h"
+#include "common/queue.h"
 #include "./matchaction.h"
 #include "./matchstate.h"
 

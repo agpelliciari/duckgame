@@ -4,7 +4,7 @@
 #include <string>
 #include <utility>
 
-#include "../common_src/event.h"
+#include "common/event.h"
 #include "./gameerror.h"
 
 

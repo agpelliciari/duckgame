@@ -4,8 +4,8 @@
 #include <string>
 #include <utility>
 
-#include "../common_src/event.h"
-#include "../common_src/queue.h"
+#include "common/event.h"
+#include "common/queue.h"
 #include "./box.h"
 #include "./matchobserver.h"
 

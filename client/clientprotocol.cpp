@@ -4,9 +4,9 @@
 #include <string>
 #include <utility>
 
-#include "../common_src/event.h"
-#include "../common_src/liberror.h"
-#include "../common_src/reward.h"
+#include "common/event.h"
+#include "common/liberror.h"
+#include "common/reward.h"
 
 ClientProtocol::ClientProtocol(Socket skt): protocol(skt) {}
 

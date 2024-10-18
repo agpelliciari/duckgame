@@ -1,8 +1,8 @@
 #ifndef LIB_PlayerController_H
 #define LIB_PlayerController_H
 
-#include "../common_src/socket.h"
-#include "../common_src/thread.h"
+#include "common/socket.h"
+#include "common/thread.h"
 #include "./match.h"
 #include "./player.h"
 #include "./playernotifier.h"

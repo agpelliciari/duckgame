@@ -1,7 +1,7 @@
 #ifndef LIB_BOX_H
 #define LIB_BOX_H
 
-#include "../common_src/reward.h"
+#include "common/reward.h"
 
 class Box {
 private:

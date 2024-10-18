@@ -5,8 +5,8 @@
 #include <queue>
 #include <utility>
 
-#include "../common_src/event.h"
-#include "../common_src/thread.h"
+#include "common/event.h"
+#include "common/thread.h"
 #include "./matchaction.h"
 #include "./matchqueue.h"
 #include "./matchstate.h"

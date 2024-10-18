@@ -2,9 +2,9 @@
 
 #include <iostream>
 
-#include "../common_src/event.h"
-#include "../common_src/liberror.h"
-#include "../common_src/queue.h"
+#include "common/event.h"
+#include "common/liberror.h"
+#include "common/queue.h"
 
 PlayerNotifier::PlayerNotifier(Player& _player, PlayerProtocol& _protocol):
         player(_player), protocol(_protocol) {}

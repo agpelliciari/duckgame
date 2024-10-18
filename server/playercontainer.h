@@ -5,7 +5,7 @@
 #include <list>
 #include <mutex>
 
-#include "../common_src/event.h"
+#include "common/event.h"
 #include "./matchobserver.h"
 #include "./player.h"
 
