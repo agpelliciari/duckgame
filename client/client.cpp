@@ -58,12 +58,14 @@ void Client::listenActions() {
         protocol.joinLobby(countplayers, lobbyid);
     } else{
         protocol.createLobby(countplayers);
+        std::cerr << "press enter to start the match!" << std::endl;
+        if (!(std::cin >> action)) {  // Could not read if new lobby.
+            throw LibError(1, "Did not read match start!!");
+        }
+        
+        protocol.startlobby();
     }
     
-    
-    
-
-
     while (std::cin >> action) {
         if (action.compare(ACTION_EXIT) == 0) {
             return;

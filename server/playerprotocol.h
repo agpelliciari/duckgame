@@ -32,6 +32,8 @@ public:
 
     bool recvplayercount(uint8_t* count);
     lobby_info recvlobbyinfo();
+    
+    bool recvsignalstart();
 
 
     // Attempts to receive pickup action.

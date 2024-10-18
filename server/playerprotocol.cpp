@@ -14,6 +14,19 @@ bool PlayerProtocol::recvplayercount(uint8_t* count){
     return protocol.tryrecvbyte(count);
 }
 
+bool PlayerProtocol::recvsignalstart(){
+    uint8_t sign;
+    if(protocol.tryrecvbyte(&sign)){
+         return (LobbyActionType)(sign) == LobbyActionType::STARTED_LOBBY;
+    }
+    
+    return false;
+}
+
+
+
+
+
 lobby_info PlayerProtocol::recvlobbyinfo(){
      lobby_info out;
      protocol.recvbytes(&out, sizeof(out));

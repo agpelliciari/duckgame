@@ -32,6 +32,8 @@ public:
     
     lobbyID getID() const;
     
+    bool operator==(const Lobby& other) const;
+  
   
     // En la lobby se agregan jugadores. Y podrian irse tambien.
     void addPlayer(Player* player);

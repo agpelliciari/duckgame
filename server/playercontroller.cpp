@@ -62,12 +62,32 @@ void PlayerController::run() {
         }
         
         lobby_info info =protocol.recvlobbyinfo();
-        std::cerr << "Connected lobby info act " << (int) info.lobby_action << std::endl;
-        
         Player player;
         player.setplayercount(playercount);
-        lobbyID id = lobbies.newLobby(&player);
-        playOn(player, lobbies.startLobby(id));
+        
+        if(info.lobby_action == NEW_LOBBY){
+            lobbyID id = lobbies.newLobby(&player);
+            std::cerr << "New lobby id: "<< (int) id << std::endl;
+            
+            if(!protocol.recvsignalstart()){
+                 
+                 isactive = false;
+                 // Close lobby
+                 lobbies.stopLobby(id);
+                 return;
+            }
+            std::cerr << "Started lobby id: "<< (int) id << std::endl;
+            
+            playOn(player, lobbies.startLobby(id));
+            
+            // Close lobby
+            lobbies.stopLobby(id);
+            
+        } else{
+            std::cerr << "Connected lobby info join lobby "<< (int) info.attached_id << std::endl;
+            playOn(player, lobbies.joinLobby(&player, info.attached_id));
+        }
+        
         
     } catch (const LibError& error) {
         std::cerr << "Lobby lib error:" << error.what() << std::endl;

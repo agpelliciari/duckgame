@@ -31,6 +31,8 @@ public:
     void joinLobby(const uint8_t playercount, const uint8_t id_match);
     void createLobby(const uint8_t playercount);
 
+    void startlobby();
+
     void pickup(const std::string& name, const uint8_t indplayer, const uint8_t box);
     Event recvevent();
 };

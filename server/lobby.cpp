@@ -11,6 +11,12 @@ lobbyID Lobby::getID() const{
        return this->id;
 }
 
+bool Lobby::operator==(const Lobby& other) const{
+     return this->id == other.getID();
+}
+
+
+
 void Lobby::addPlayer(Player* player) { players.add(player); }
 
 Match& Lobby::waitStart(std::unique_lock<std::mutex>& lock){

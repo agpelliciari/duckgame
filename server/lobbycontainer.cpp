@@ -41,6 +41,17 @@ Match& LobbyContainer::startLobby(lobbyID id){
     return findLobby(id).start();
 }
 
+
+void LobbyContainer::stopLobby(lobbyID id){
+    std::unique_lock<std::mutex> lck(mtx);  // No other actions on lobby.
+    Lobby& lobby = findLobby(id);
+    if(lobby.isrunning()){
+          lobby.finish();
+    }
+    
+    lobbies.remove(lobby);
+}
+
 void LobbyContainer::finishAll(){
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on lobby.
     for (auto lobbyit = lobbies.begin(); lobbyit != lobbies.end();) {

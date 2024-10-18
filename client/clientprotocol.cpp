@@ -35,6 +35,11 @@ void ClientProtocol::createLobby(const uint8_t playercount){
     protocol.sendbytes(&info, sizeof(info));
 }
 
+void ClientProtocol::startlobby(){
+    protocol.sendbyte(LobbyActionType::STARTED_LOBBY);
+}
+
+
 
 Event ClientProtocol::recvevent() {
 
