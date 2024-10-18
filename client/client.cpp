@@ -88,7 +88,7 @@ void Client::listenActions() {
             int count = inputnum();
 
             while (count > 0) {
-                std::cout << protocol.recvevent().parseinfo() << std::endl;
+                std::cout << protocol.recvstate().parse() << std::endl;
                 count -= 1;
             }
             continue;

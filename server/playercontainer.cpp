@@ -29,13 +29,16 @@ void PlayerContainer::removeAll() {
         playerit = players.erase(playerit);
     }
 }
-std::vector<player_id> PlayerContainer::receiveEvent(const Event&& event) {    
+std::vector<player_id> PlayerContainer::updateState(const MatchState& state) {    
     std::vector<player_id> disconnected;
-    std::cout << event.parseinfo() << std::endl;  // Show what happened on server.
+    
+    MatchDto dto = state.getData();
+    
+    std::cout << dto.parse() << std::endl;  // Show what happened on server.
 
     for (auto playerit = players.begin(); playerit != players.end();) {
-        if((*playerit)->recvevent(event)){
-            std::cerr << "NOTIFIED "<< (*playerit)->getid(0) << std::endl;
+        if((*playerit)->recvstate(dto)){
+            //std::cerr << "NOTIFIED "<< (*playerit)->getid(0) << std::endl;
             ++playerit;
             continue;
         }
@@ -44,7 +47,7 @@ std::vector<player_id> PlayerContainer::receiveEvent(const Event&& event) {
         // Agrega/ notifica desconectados.
         int mx = (*playerit)->playercount();
         for(int ind = 0; ind < mx; ind++){
-            std::cerr << "DISCONNECTED FROM MATCH "<< (*playerit)->getid(ind) << std::endl;
+            //std::cerr << "DISCONNECTED FROM MATCH "<< (*playerit)->getid(ind) << std::endl;
             disconnected.push_back((*playerit)->getid(ind)); 
         }
         

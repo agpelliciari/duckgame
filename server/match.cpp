@@ -6,7 +6,7 @@
 
 static const int SLEEP_TIME = 1000 * 200;  // 200ms
 
-Match::Match(PlayerContainer& _players): players(_players), state(players) {}
+Match::Match(PlayerContainer& _players): players(_players), state() {}
 
 // Metodos delegatorios.
 void Match::notifyAction(const MatchAction&& action) { actions.notify(action); }
@@ -17,6 +17,9 @@ void Match::run() {
     //while (_keep_running && matchcontinues) {      // Mientras deba ejecutarse.
         state.step();            // non player logic.
         actions.applyOn(state);  // player logic
+        
+        players.updateState(state);
+        
         usleep(SLEEP_TIME);
     }
     // Checkea si el finish fue natural o forzado.

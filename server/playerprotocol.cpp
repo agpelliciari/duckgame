@@ -41,13 +41,14 @@ player_action_dto PlayerProtocol::recvaction() {
     return action;
 }
 
-void PlayerProtocol::notifypickup(const std::string& player, const uint8_t box) {
-    protocol.notifyevent(EventType::PICKUP);
-
-    protocol.sendmsg(player);
-    protocol.sendbyte(box);
+void PlayerProtocol::sendstate(const MatchDto&& state){
+     
+     // Primero envia general info
+     protocol.sendbytes(&state.info, sizeof(state.info));
+     
+     // Despues si es necesario envia los patos y asi.
 }
-void PlayerProtocol::notifynewbox() { protocol.notifyevent(EventType::NEW_BOX); }
+
 
 bool PlayerProtocol::isopen(){
      return isactive.load();

@@ -42,7 +42,7 @@ bool Player::open() {
         return false;
     }
     _is_open = true;
-    events.reopen();
+    snapshots.reopen();
     return true;
 }
 
@@ -54,7 +54,7 @@ bool Player::disconnect() {
     std::unique_lock<std::mutex> lck(mtx);
     if (_is_open) {
         _is_open = false;
-        events.close();
+        snapshots.close();
         //std::cout << "CLOSED EVENTS FOR "<< (int)getid(0)<< std::endl;
         return true;
     }
@@ -65,10 +65,10 @@ bool Player::disconnect() {
 // No hace falta sincronizar/lockear ya que si se llama a este metodo
 // La queue sigue abierta. Y no nos importa en todo caso mandar un evento extra o no.
 // O eso se dio a
-bool Player::recvevent(const Event& event) {
+bool Player::recvstate(const MatchDto& state) {
     std::unique_lock<std::mutex> lck(mtx);
     if (_is_open) {
-        events.try_push(event);
+        snapshots.try_push(state);
         return true;
     }
     
@@ -76,7 +76,7 @@ bool Player::recvevent(const Event& event) {
 }
 
 // Se podria hacer de forma polimorfica/delegatoria seguro.
-Event Player::popevent() { return events.pop(); }
+MatchDto Player::popstate() { return snapshots.pop(); }
 
 /// La verdad no deberia pasar no.
 //Player::~Player(){

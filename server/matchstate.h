@@ -6,8 +6,8 @@
 
 #include "common/event.h"
 #include "common/queue.h"
+#include "common/dtos.h"
 #include "./box.h"
-#include "./matchobserver.h"
 
 #define BOX_COUNT 4
 
@@ -16,8 +16,6 @@
 // Y que notifica los eventos.
 class MatchState {
 private:
-    MatchObserver& observer;  // cppcheck-suppress unusedStructMember
-
     // fixed quantity of boxes, no enum needed for indexing.
     Box boxes[BOX_COUNT];  // cppcheck-suppress unusedStructMember
 
@@ -26,7 +24,7 @@ protected:
     bool isBoxAvailable(int box) const;
 
 public:
-    explicit MatchState(MatchObserver& _observer): observer(_observer) {}
+    explicit MatchState() {}
 
     // Asumamos copy = default, move = default
     MatchState(const MatchState&) = delete;
@@ -40,6 +38,8 @@ public:
 
     // Intenta que el player abra la caja. Notifica el evento de ocurrir.
     void openBox(const std::string& player, const int box);
+    
+    MatchDto getData() const ;
 };
 
 #endif

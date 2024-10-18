@@ -6,9 +6,10 @@
 
 #include "common/event.h"
 #include "common/queue.h"
+#include "common/dtos.h"
 
 typedef unsigned int player_id;
-typedef Queue<Event> player_events;
+typedef Queue<MatchDto> player_events;
 
 
 // La entidad player es un la parte logica que el match conoce.
@@ -24,7 +25,7 @@ protected:
     player_id ids[2];      // cppcheck-suppress unusedStructMember
     
     // For notifying actions and/or exit.
-    player_events events;  // cppcheck-suppress unusedStructMember
+    player_events snapshots;  // cppcheck-suppress unusedStructMember
 
     bool _is_open;  // cppcheck-suppress unusedStructMember
     std::mutex mtx;
@@ -65,10 +66,10 @@ public:
 
     // recvevent es no bloqueante! Recibe el evento con try_push a la queue del player
     // Todo es "bloqueante" por posibles locks... pero bueno
-    bool recvevent(const Event& event);
+    bool recvstate(const MatchDto& dto);
 
     // Pop event. Bloqueante. Si no hay eventos espera a uno.
-    Event popevent();
+    MatchDto popstate();
     
     //~Player();
 };

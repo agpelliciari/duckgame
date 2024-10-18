@@ -11,12 +11,7 @@ void MatchState::step() {
 
     // Just step on everybox. And add events.
     for (int boxId = 0; boxId < BOX_COUNT; boxId++) {
-        if (boxes[boxId].step()) {  // Re aparecio
-
-            // Agrega el evento de forma no bloqueante..
-            // si se pierde se pierde. No deberia haber un maximo.
-            observer.receiveEvent(Event(boxId));
-        }
+        boxes[boxId].step();
     }
 }
 
@@ -31,8 +26,12 @@ void MatchState::openBox(const std::string& player, const int box) {
     if (!isBoxAvailable(box)) {
         return;
     }
+    std::cerr << "PICKUP FOR " << player << std::endl;
     // Ignoramos el valor del open.. Ya que ya lo sabemos....
     boxes[box].open(REWARDS[box]);
-
-    observer.receiveEvent(Event(player, REWARDS[box]));
 }
+
+MatchDto MatchState::getData() const {
+     return MatchDto(INICIADA, 1);
+}
+

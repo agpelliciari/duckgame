@@ -6,6 +6,7 @@
 #include <utility>
 
 #include "common/event.h"
+#include "common/dtos.h"
 #include "common/protocol.h"
 
 // Extension del protocolo base a usar.
@@ -34,7 +35,7 @@ public:
     void startlobby();
 
     void pickup(const uint8_t indplayer, const uint8_t box);
-    Event recvevent();
+    MatchDto recvstate();
 };
 
 #endif

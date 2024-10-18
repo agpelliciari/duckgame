@@ -5,12 +5,13 @@
 #include <list>
 
 #include "common/event.h"
-#include "./matchobserver.h"
 #include "./player.h"
+#include "./matchstate.h"
+#include "common/dtos.h"
 #include <vector>
 
 // Contenedor/monitor de los players activos en el match.
-class PlayerContainer: public MatchObserver {
+class PlayerContainer {
 public:
     typedef std::list<Player*> player_container;
     
@@ -34,7 +35,7 @@ public:
 
     // Push/notifica eventos a los players, de forma no bloqueante! No tiene precondiciones perse
     // Devuelve los players que se desconectaron. Podrian ser notificados directamente
-    std::vector<player_id> receiveEvent(const Event&& event) override;
+    std::vector<player_id> updateState(const MatchState& state);
 };
 
 #endif

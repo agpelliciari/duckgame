@@ -42,17 +42,12 @@ void ClientProtocol::startlobby(){
 
 
 
-Event ClientProtocol::recvevent() {
-
-    uint8_t type = protocol.recvnotification();
-    if (type == EventType::NEW_BOX) {
-        return Event();
-    }
-
-    if (type != EventType::PICKUP) {
-        throw LibError(1, "Received notification type is invalid %d ", (int)type);
-    }
-
-    std::string name = protocol.recvmsgstr();
-    return Event(name, (RewardType)protocol.recvbyte());
+MatchDto ClientProtocol::recvstate() {
+    // Primero recibi info general
+    match_info_dto out;
+    protocol.recvbytes(&out, sizeof(out));
+    
+    // Despues lee la cantidad necesaria de cosas.
+    
+    return MatchDto(out);
 }

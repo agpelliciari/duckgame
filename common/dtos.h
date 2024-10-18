@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <string>
+#include <sstream>
 
 enum LobbyActionType:uint8_t { 
     NEW_LOBBY = 0x16, 
@@ -68,12 +69,30 @@ enum MatchStateType:uint8_t {
     CANCELADA= 0x03, 
 };
 
-class MatchDto {
-public:
+struct match_info_dto{
     MatchStateType estado;
     uint8_t numronda;
+};
+
+class MatchDto {
+public:
+    match_info_dto info;
     
-    MatchDto(MatchStateType _estado, uint8_t _numronda): estado(_estado), numronda(_numronda){} 
+    MatchDto(MatchStateType _estado, uint8_t _numronda): info({_estado, _numronda}){} 
+    MatchDto(match_info_dto _info): info(_info){}
+    std::string parse() const {
+          std::stringstream result;
+          if(info.estado == INICIADA){
+               result << "INICIADA ";
+          } else if(info.estado == TERMINADA){
+               result << "TERMINADA ";
+          
+          } else if(info.estado == CANCELADA){
+               result << "CANCELADA ";
+          }
+          result << (int)info.numronda;
+          return result.str();
+    }
 };
 
 #endif

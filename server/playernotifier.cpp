@@ -9,20 +9,10 @@
 PlayerNotifier::PlayerNotifier(Player& _player, PlayerProtocol& _protocol):
         player(_player), protocol(_protocol) {}
 
-void PlayerNotifier::sendevent(const Event&& event) {
-    if (event.type() == NEW_BOX) {
-        protocol.notifynewbox();
-        return;
-    }
-
-    // Asegurado es PICK UP por ahora.
-    protocol.notifypickup(event.actor(), event.attachedID());
-}
-
 void PlayerNotifier::run() {
     try {
         while (_keep_running) {
-            sendevent(player.popevent());
+            protocol.sendstate(player.popstate());
         }
 
     } catch (const ClosedQueue& error) {

@@ -13,9 +13,6 @@ protected:
     Player& player;            // cppcheck-suppress unusedStructMember
     PlayerProtocol& protocol;  // cppcheck-suppress unusedStructMember
 
-    // Delega el envio dependendiendo del tipo, el if podria estar en protocol capaz.
-    void sendevent(const Event&& event);
-
 public:
     explicit PlayerNotifier(Player& _player, PlayerProtocol& protocol);
 
