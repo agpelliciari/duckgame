@@ -45,6 +45,7 @@ public:
     void sendbytes(const void* msg, const unsigned int count);
     void recvbytes(void* buff, const unsigned int count);
 
+    bool tryrecvbytes(void* buff, const unsigned int count);
     bool tryrecvbyte(uint8_t* out);    
 
 

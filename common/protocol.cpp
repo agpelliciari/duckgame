@@ -115,7 +115,9 @@ void Protocol::sendbytes(const void* msg, const unsigned int count){
 void Protocol::recvbytes(void* buff, const unsigned int count){
     this->skt.recvall(buff, count);
 }
-
+bool Protocol::tryrecvbytes(void* buff, const unsigned int count){
+    return this->skt.tryrecvall(buff, count) == count;
+}
 
 uint8_t Protocol::recvbyte() {
     uint8_t res;

@@ -76,10 +76,10 @@ void Client::listenActions() {
             
             if(indplayer == 1 &&  countplayers > 1){
                 std::cerr << "Picked up " << name2 <<" box: "<< (int)box << std::endl;
-                protocol.pickup(name2,1, box);
+                protocol.pickup(1, box);
             } else{
                 std::cerr << "Picked up " << name <<" box: "<< (int)box << std::endl;
-                protocol.pickup(name,0, box);
+                protocol.pickup(0, box);
             }
             continue;
         }

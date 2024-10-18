@@ -22,8 +22,9 @@ enum PlayerActionType:uint8_t {
 };
 
 struct player_action_dto {
-    uint8_t indice;
     PlayerActionType type;
+    uint8_t playerind;
+    uint8_t specific_info;
 } __attribute__((packed));
 
 

@@ -41,7 +41,7 @@ public:
 
     // Attempts to receive pickup action.
     // If failed throws either LibError or GameError.
-    MatchAction recvpickup();
+    player_action_dto recvaction();
 
     void notifypickup(const std::string& player, const uint8_t box);
     void notifynewbox();

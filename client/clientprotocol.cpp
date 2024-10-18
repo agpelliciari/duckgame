@@ -12,11 +12,12 @@
 
 ClientProtocol::ClientProtocol(Socket skt): protocol(skt) {}
 
-void ClientProtocol::pickup(const std::string& name, const uint8_t indplayer, const uint8_t box) {
-    protocol.signalpickup();
-    protocol.sendbyte(indplayer);
-    protocol.sendmsg(name);
-    protocol.sendbyte(box);
+void ClientProtocol::pickup(const uint8_t indplayer, const uint8_t box) {
+
+    uint8_t tosend = box-1;
+    // se le resta 1 a la box.
+    player_action_dto action = { PlayerActionType::PICK_UP, indplayer, tosend};
+    protocol.sendbytes(&action, sizeof(action));
 }
 
 void ClientProtocol::joinLobby(const uint8_t playercount, const uint8_t id_match){    

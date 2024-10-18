@@ -30,8 +30,20 @@ void PlayerController::playOn(Player& player, Match& match){
     try {
         
         // Loopeado de acciones
+        std::string name("Player ");
+        name.append(std::to_string(player.getid(0)));
         while (_keep_running) {
-            match.notifyAction(protocol.recvpickup());
+        
+            // Parseado que capaz no va aca..
+            
+            player_action_dto action = protocol.recvaction();
+            if(action.type != PICK_UP){
+                 std::cerr << "Invalid action!"<<std::endl;
+                 continue;
+            }
+            std::string actor = name+"_";
+            actor.append(std::to_string(action.playerind));            
+            match.notifyAction(MatchAction(actor, action.specific_info));
         }
         player.disconnect();  // Finalizo normalmente.
     } catch (const LibError& error) {

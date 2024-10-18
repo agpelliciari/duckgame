@@ -33,7 +33,7 @@ public:
 
     void startlobby();
 
-    void pickup(const std::string& name, const uint8_t indplayer, const uint8_t box);
+    void pickup(const uint8_t indplayer, const uint8_t box);
     Event recvevent();
 };
 
