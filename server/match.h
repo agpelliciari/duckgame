@@ -5,12 +5,12 @@
 #include <queue>
 #include <utility>
 
-#include "./matchaction.h"
-#include "./matchqueue.h"
-#include "./matchstate.h"
-#include "./playercontainer.h"
-#include "common/event.h"
+#include "common/dtosplayer.h"
 #include "common/thread.h"
+
+#include "server/logic_server/match_queue.h"
+#include "server/logic_server/match_state.h"
+#include "./playercontainer.h"
 
 class LobbyContainer;  // Se declara existe.
 
@@ -59,7 +59,7 @@ public:
     // Metodos publicos.. accesibles incluso a player controllers.
     // No hay precondiciones perse. Podria no haber empezado el match.
     // Metodos delegatorios
-    void notifyAction(const MatchAction&& action);
+    void notifyAction(const PlayerActionDTO& action);
     bool isrunning() const;
     ~Match();
 };

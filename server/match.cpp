@@ -6,8 +6,6 @@
 
 #include "unistd.h"
 
-static const int SLEEP_TIME = 1000 * 200;  // 200ms
-
 Match::Match(lobbyID _id): id(_id), players(), state() {}
 
 
@@ -48,16 +46,8 @@ void Match::notifyAction(const MatchAction&& action) {
 }
 
 void Match::run() {
-    // bool matchcontinues = true;
-    while (_keep_running) {
-        // while (_keep_running && matchcontinues) {      // Mientras deba ejecutarse.
-        state.step();            // non player logic.
-        actions.applyOn(state);  // player logic
 
-        players.updateState(state);
-
-        usleep(SLEEP_TIME);
-    }
+    state.loop(players, actions);
     // Checkea si el finish fue natural o forzado.
 }
 
