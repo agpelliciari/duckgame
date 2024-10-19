@@ -27,7 +27,6 @@ target_sources(taller_server
          player.h
          match.h
          matchqueue.h
-         matchobserver.h
          playeracceptor.h
          playernotifier.h
          matchstate.h
