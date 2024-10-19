@@ -1,13 +1,19 @@
-//
-// Created by alesc on 18/10/2024.
-//
+
 
 #ifndef ARMOR_H
 #define ARMOR_H
 
 
 
-class armor {
+class Armor {
+
+    private:
+        bool equipped;
+
+    public:
+        Armor();
+        void equipp();
+        void is_equipped(bool &equipped);
 
 };
 

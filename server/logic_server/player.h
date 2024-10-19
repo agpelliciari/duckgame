@@ -1,13 +1,37 @@
-//
-// Created by alesc on 18/10/2024.
-//
+#include "coordinates.h"
+#include "weapon.h"
+#include "armor.h"
+#include "action.h"
+#include "type_move_action.h"
+#include "type_weapon.h"
 
 #ifndef PLAYER_H
 #define PLAYER_H
 
 
 
-class player {
+class Player {
+
+    private:
+        int id;
+        bool is_alive;
+        Coordinates coordinates;
+        Weapon weapon;
+        Armor helmet;
+        Armor chest_armor;
+        Action move_action;
+
+    public:
+
+        Player(int id, int initial_x, int initial_y);
+
+        void get_data(int &id, int &x, int &y, TypeWeapon &weapon, bool &helmet_equipped,
+                      bool &chest_armor_equipped, TypeMoveAction &move_action);
+
+        void move_right();
+        void move_left();
+        void stay_down();
+        void jump();
 
 };
 

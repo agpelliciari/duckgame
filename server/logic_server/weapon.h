@@ -1,13 +1,18 @@
-//
-// Created by alesc on 18/10/2024.
-//
+#include "type_weapon.h"
 
 #ifndef WEAPON_H
 #define WEAPON_H
 
 
 
-class weapon {
+class Weapon {
+
+    private:
+        TypeWeapon type;
+
+    public:
+        Weapon();
+        void get_weapon(TypeWeapon &type)
 
 };
 

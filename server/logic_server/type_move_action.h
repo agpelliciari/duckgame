@@ -1,14 +1,15 @@
 
-#ifndef TYPE_ACTION_H
-#define TYPE_ACTION_H
+#ifndef TYPE_MOVE_ACTION_H
+#define TYPE_MOVE_ACTION_H
 
-enum class TypeAction {
+enum class TypeMoveAction {
+    NONE,
     MOVE_LEFT,
     MOVE_RIGHT,
     STAY_DOWN,
     JUMP,
-    FLAP,
-}
+    FLAP
+};
 
 
-#endif //TYPE_ACTION_H
+#endif //TYPE_MOVE_ACTION_H

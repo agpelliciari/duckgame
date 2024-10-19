@@ -1,13 +1,33 @@
-//
-// Created by alesc on 18/10/2024.
-//
+#include "player.h"
+#include "weapon.h"
+#include "box"
+#include <list>
 
 #ifndef MATCH_STATE_H
 #define MATCH_STATE_H
 
 
 
-class match_state {
+class MatchState {
+
+    private:
+
+        bool play;
+        std::list<Player> players;
+        std::list<Box> boxes;
+
+
+
+    public:
+
+        MatchState();
+
+
+
+
+        ~MatchState();
+
+
 
 };
 
