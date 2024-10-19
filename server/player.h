@@ -19,6 +19,8 @@ class Player {
 
 protected:
 
+    bool _is_open;  // cppcheck-suppress unusedStructMember
+    
     // Manejo de ids. Y cantidad de players para la queue de mensajes.
     uint8_t count;         // cppcheck-suppress unusedStructMember
     
@@ -27,7 +29,6 @@ protected:
     // For notifying actions and/or exit.
     player_events snapshots;  // cppcheck-suppress unusedStructMember
 
-    bool _is_open;  // cppcheck-suppress unusedStructMember
     std::mutex mtx;
 
 public:

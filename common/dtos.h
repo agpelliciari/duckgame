@@ -78,8 +78,8 @@ class MatchDto {
 public:
     match_info_dto info;
     
-    MatchDto(MatchStateType _estado, uint8_t _numronda): info({_estado, _numronda}){} 
-    MatchDto(match_info_dto _info): info(_info){}
+    explicit MatchDto(MatchStateType _estado, uint8_t _numronda): info({_estado, _numronda}){} 
+    explicit MatchDto(match_info_dto _info): info(_info){}
     std::string parse() const {
           std::stringstream result;
           if(info.estado == INICIADA){

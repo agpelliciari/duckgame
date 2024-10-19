@@ -106,7 +106,7 @@ LibError::LibError(int error_code, const char* fmt, ...) noexcept {
      * de lo escrito por `vsnprintf` pisándole el `\0`.
      * */
     //strerror_r(error_code, msg_error + s, sizeof(msg_error) - s);
-    char * vl = strerror(error_code);
+    const char * vl = strerror(error_code);
     int len = strlen(vl);
     int start = sizeof(msg_error)- len+1;
     if(s < start){

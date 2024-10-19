@@ -6,7 +6,7 @@
 #include <utility>
 
 
-Player::Player() :_is_open(false) {}
+Player::Player() :_is_open(false), count(0), ids() {}
 
 bool Player::operator==(const Player& other) const { return this->ids[0] == other.ids[0] && this->ids[1] == other.ids[1]; }
 
@@ -14,7 +14,7 @@ bool Player::operator==(const Player& other) const { return this->ids[0] == othe
 
 // Sincronico, al inicio se modifica.
 void Player::setplayercount(const uint8_t count){
-     if(count > 2 || count <=0){
+     if(count > 2 || count ==0){
           throw new GameError("Invalid player count %d ", count);
      }
      this->count = count;

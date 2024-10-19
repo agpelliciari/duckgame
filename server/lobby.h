@@ -15,13 +15,13 @@ typedef unsigned int lobbyID;
 // Delega el manejo del estado, notificado de eventos y recepcion de acciones
 class Lobby{
 private:
-    lobbyID id;
+    lobbyID id; // cppcheck-suppress unusedStructMember
     PlayerContainer players;
     Match match;
     std::condition_variable match_started;
 public:
     // Se tendra composicion con un unico observer de eventos al match.
-    Lobby(lobbyID _id);
+    explicit Lobby(lobbyID _id);
 
     // Asumamos por ahora que no se quiere permitir copias, ni mov.
     Lobby(const Lobby&) = delete;

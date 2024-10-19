@@ -17,7 +17,7 @@ public:
     
 private:
     player_container players;  // cppcheck-suppress unusedStructMember
-    player_id last_id;
+    player_id last_id;// cppcheck-suppress unusedStructMember
 public:
     // Default constructor
     PlayerContainer();

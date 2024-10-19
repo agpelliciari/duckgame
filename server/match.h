@@ -22,7 +22,7 @@ private:
 
 public:
     // Se tendra composicion con un unico observer de eventos al match.
-    Match(PlayerContainer& _players);
+    explicit Match(PlayerContainer& _players);
 
     // Asumamos por ahora que no se quiere permitir copias, ni mov.
     Match(const Match&) = delete;

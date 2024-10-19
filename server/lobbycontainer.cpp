@@ -44,7 +44,7 @@ Match& LobbyContainer::startLobby(lobbyID id){
 
 void LobbyContainer::stopLobby(lobbyID id){
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on lobby.
-    Lobby& lobby = findLobby(id);
+    const Lobby& lobby = findLobby(id);
     lobbies.remove(lobby);
 }
 
