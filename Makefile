@@ -603,30 +603,6 @@ server/gameerror.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/gameerror.cpp.s
 .PHONY : server/gameerror.cpp.s
 
-server/lobby.o: server/lobby.cpp.o
-.PHONY : server/lobby.o
-
-# target to build an object file
-server/lobby.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/lobby.cpp.o
-.PHONY : server/lobby.cpp.o
-
-server/lobby.i: server/lobby.cpp.i
-.PHONY : server/lobby.i
-
-# target to preprocess a source file
-server/lobby.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/lobby.cpp.i
-.PHONY : server/lobby.cpp.i
-
-server/lobby.s: server/lobby.cpp.s
-.PHONY : server/lobby.s
-
-# target to generate assembly for a file
-server/lobby.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/lobby.cpp.s
-.PHONY : server/lobby.cpp.s
-
 server/lobbycontainer.o: server/lobbycontainer.cpp.o
 .PHONY : server/lobbycontainer.o
 
@@ -1024,9 +1000,6 @@ help:
 	@echo "... server/gameerror.o"
 	@echo "... server/gameerror.i"
 	@echo "... server/gameerror.s"
-	@echo "... server/lobby.o"
-	@echo "... server/lobby.i"
-	@echo "... server/lobby.s"
 	@echo "... server/lobbycontainer.o"
 	@echo "... server/lobbycontainer.i"
 	@echo "... server/lobbycontainer.s"

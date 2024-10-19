@@ -1,61 +1,59 @@
 #include "./lobbycontainer.h"
-#include "./gameerror.h"
 
 #include <iostream>
 
+#include "./gameerror.h"
+
 LobbyContainer::LobbyContainer(): lastLobbyId(0) {}
 
-lobbyID LobbyContainer::newLobby(Player* player) {
+Match& LobbyContainer::newLobby(Player* player) {
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on lobby.
-    Lobby& lobbie = lobbies.emplace_back(++lastLobbyId);
-    lobbie.addPlayer(player);
-    
-    return lastLobbyId;
+    Match& lobby = lobbies.emplace_back(++lastLobbyId);
+    lobby.addPlayer(player);
+
+    return lobby;
 }
 
-Lobby& LobbyContainer::findLobby(lobbyID id){
+Match& LobbyContainer::findLobby(lobbyID id) {
     for (auto lobbyit = lobbies.begin(); lobbyit != lobbies.end();) {
-        if(lobbyit->getID() == id){
-             return *lobbyit;
+        if (lobbyit->getID() == id) {
+            return *lobbyit;
         }
         ++lobbyit;
     }
-    
-    throw new GameError("Not found lobby %d", id);
+
+    throw GameError("Not found lobby %d", id);
 }
 
 // Unirse a la lobby y esperar a que empieze. Tira error si no existe.
-Match& LobbyContainer::joinLobby(Player* player, lobbyID id){
-    std::unique_lock<std::mutex> lck(mtx);  // No other actions on lobby.
-    Lobby& lobby = findLobby(id);
-    if(lobby.isrunning()){
-          throw new GameError("Tried to join already started lobby %d", id);
+Match& LobbyContainer::joinLobby(Player* player, lobbyID id) {
+    std::unique_lock<std::mutex> lck(mtx);  // No other actions on container.
+    Match& lobby = findLobby(id);
+    if (lobby.isrunning()) {
+        throw GameError("Tried to join already started lobby %d", id);
     }
-    
+
     lobby.addPlayer(player);
-    return lobby.waitStart(lck);
+    return lobby;
 }
 // Una vez empezada no se aceptan mas.
-Match& LobbyContainer::startLobby(lobbyID id){
-    std::unique_lock<std::mutex> lck(mtx);  // No other actions on lobby.
-    return findLobby(id).start();
+void LobbyContainer::startLobby(Match& lobby) {
+    std::unique_lock<std::mutex> lck(mtx);  // No other actions on container.
+    return lobby.init();
+    // return findLobby(id).start();
 }
 
 
-void LobbyContainer::stopLobby(lobbyID id){
-    std::unique_lock<std::mutex> lck(mtx);  // No other actions on lobby.
-    const Lobby& lobby = findLobby(id);
-    lobbies.remove(lobby);
+void LobbyContainer::stopLobby(const Match& lobby) {
+    std::unique_lock<std::mutex> lck(mtx);  // No other actions on container.
+    lobbies.remove(lobby);                  // el destructor hace el finish.
 }
 
-void LobbyContainer::finishAll(){
+void LobbyContainer::finishAll() {
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on lobby.
     for (auto lobbyit = lobbies.begin(); lobbyit != lobbies.end();) {
         lobbyit->finish();
         ++lobbyit;
     }
 }
-LobbyContainer::~LobbyContainer(){
-     finishAll();
-}
-
+LobbyContainer::~LobbyContainer() { finishAll(); }

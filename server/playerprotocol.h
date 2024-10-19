@@ -2,22 +2,22 @@
 #define LIB_PlayerProtocol_H
 
 #define BUFF_LEN_CLIENT 128
+#include <atomic>
 #include <string>
 #include <utility>
-#include <atomic>
 
-#include "common/event.h"
-#include "common/dtos.h"
-#include "common/protocol.h"
 #include "./matchaction.h"
+#include "common/dtos.h"
+#include "common/event.h"
+#include "common/protocol.h"
 
 // Extension del protocolo base a usar.
 class PlayerProtocol {
 
 protected:
     Protocol protocol;  // Composicion con el protocolo base para la conexion
-    
-    std::atomic<bool> isactive; // Simple manejo de si ya se cerro o no.    
+
+    std::atomic<bool> isactive;  // Simple manejo de si ya se cerro o no.
 
 public:
     // El default a partir de socket, te ahorras el move.
@@ -34,20 +34,19 @@ public:
     PlayerProtocol& operator=(PlayerProtocol&&) = delete;
 
     bool recvplayercount(uint8_t* count);
-    lobby_info recvlobbyinfo();
-    
+    lobby_action recvlobbyaction();
+
     bool recvsignalstart();
 
 
     // Attempts to receive pickup action.
     // If failed throws either LibError or GameError.
     player_action_dto recvaction();
-    
+
     void sendstate(const MatchDto&& state);
-    
+
     bool isopen();
     void close();
-      
 };
 
 #endif

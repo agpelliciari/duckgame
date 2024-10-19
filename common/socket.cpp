@@ -272,11 +272,9 @@ Socket Socket::accept() {
     return Socket(peer_skt);
 }
 
-void Socket::shutdown(int how) {
+int Socket::shutdown(int how) {
     chk_skt_or_fail();
-    if (::shutdown(this->skt, how) == -1) {
-        throw LibError(errno, "socket shutdown failed");
-    }
+    return ::shutdown(this->skt, how);
 }
 
 int Socket::close() {
