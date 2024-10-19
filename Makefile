@@ -459,30 +459,6 @@ common/resolvererror.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/resolvererror.cpp.s
 .PHONY : common/resolvererror.cpp.s
 
-common/reward.o: common/reward.cpp.o
-.PHONY : common/reward.o
-
-# target to build an object file
-common/reward.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/reward.cpp.o
-.PHONY : common/reward.cpp.o
-
-common/reward.i: common/reward.cpp.i
-.PHONY : common/reward.i
-
-# target to preprocess a source file
-common/reward.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/reward.cpp.i
-.PHONY : common/reward.cpp.i
-
-common/reward.s: common/reward.cpp.s
-.PHONY : common/reward.s
-
-# target to generate assembly for a file
-common/reward.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/reward.cpp.s
-.PHONY : common/reward.cpp.s
-
 common/socket.o: common/socket.cpp.o
 .PHONY : common/socket.o
 
@@ -1107,6 +1083,30 @@ server/simple_logic/simplequeue.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/simple_logic/simplequeue.cpp.s
 .PHONY : server/simple_logic/simplequeue.cpp.s
 
+server/simple_logic/simplereward.o: server/simple_logic/simplereward.cpp.o
+.PHONY : server/simple_logic/simplereward.o
+
+# target to build an object file
+server/simple_logic/simplereward.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/simple_logic/simplereward.cpp.o
+.PHONY : server/simple_logic/simplereward.cpp.o
+
+server/simple_logic/simplereward.i: server/simple_logic/simplereward.cpp.i
+.PHONY : server/simple_logic/simplereward.i
+
+# target to preprocess a source file
+server/simple_logic/simplereward.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/simple_logic/simplereward.cpp.i
+.PHONY : server/simple_logic/simplereward.cpp.i
+
+server/simple_logic/simplereward.s: server/simple_logic/simplereward.cpp.s
+.PHONY : server/simple_logic/simplereward.s
+
+# target to generate assembly for a file
+server/simple_logic/simplereward.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/simple_logic/simplereward.cpp.s
+.PHONY : server/simple_logic/simplereward.cpp.s
+
 server/simple_logic/simplestate.o: server/simple_logic/simplestate.cpp.o
 .PHONY : server/simple_logic/simplestate.o
 
@@ -1198,9 +1198,6 @@ help:
 	@echo "... common/resolvererror.o"
 	@echo "... common/resolvererror.i"
 	@echo "... common/resolvererror.s"
-	@echo "... common/reward.o"
-	@echo "... common/reward.i"
-	@echo "... common/reward.s"
 	@echo "... common/socket.o"
 	@echo "... common/socket.i"
 	@echo "... common/socket.s"
@@ -1279,6 +1276,9 @@ help:
 	@echo "... server/simple_logic/simplequeue.o"
 	@echo "... server/simple_logic/simplequeue.i"
 	@echo "... server/simple_logic/simplequeue.s"
+	@echo "... server/simple_logic/simplereward.o"
+	@echo "... server/simple_logic/simplereward.i"
+	@echo "... server/simple_logic/simplereward.s"
 	@echo "... server/simple_logic/simplestate.o"
 	@echo "... server/simple_logic/simplestate.i"
 	@echo "... server/simple_logic/simplestate.s"

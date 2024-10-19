@@ -1,7 +1,6 @@
 target_sources(taller_common
     PRIVATE
     # .cpp files
-        reward.cpp
         resolver.cpp
         socket.cpp
         liberror.cpp
@@ -11,7 +10,6 @@ target_sources(taller_common
     # .h files
         dtos.h
         dtosplayer.h
-        reward.h
         resolver.h
         socket.h
         liberror.h

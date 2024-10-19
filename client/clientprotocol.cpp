@@ -6,7 +6,6 @@
 
 #include "common/dtos.h"
 #include "common/liberror.h"
-#include "common/reward.h"
 
 ClientProtocol::ClientProtocol(Socket skt): protocol(skt) {}
 

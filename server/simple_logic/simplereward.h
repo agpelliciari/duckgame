@@ -6,12 +6,12 @@
 
 enum RewardType { BAZOOKA = 0x10, CHAINSAW = 0x11, DEATHRAY = 0x12, SHOTGUN = 0x13 };
 
-class Reward {
+class SimpleReward {
 private:
     RewardType type;
 
 public:
-    explicit Reward(RewardType _type): type(_type) {}
+    explicit SimpleReward(RewardType _type): type(_type) {}
 
     const char* cname() const;
     std::string name() const;

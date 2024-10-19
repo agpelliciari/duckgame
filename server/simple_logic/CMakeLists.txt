@@ -4,6 +4,7 @@ target_sources(taller_server
               simplequeue.cpp
               simpleaction.cpp
               simplebox.cpp
+              simplereward.cpp
               simplestate.cpp
               simpleloop.cpp
 
@@ -12,6 +13,7 @@ target_sources(taller_server
               simplequeue.h
               simpleaction.h
               simplebox.h
+              simplereward.h
               simplestate.h
               simpleloop.h
 
