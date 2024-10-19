@@ -1,5 +1,5 @@
-#ifndef LIB_MatchServer_H
-#define LIB_MatchServer_H
+#ifndef LIB_Server_H
+#define LIB_Server_H
 
 #include <utility>
 
@@ -7,21 +7,21 @@
 #include "./playeracceptor.h"
 
 
-class MatchServer {
+class Server {
 protected:
     LobbyContainer lobbies;
     PlayerAcceptor acceptor;
 
 public:
     // Delega la creacion del socket al acceptor.
-    explicit MatchServer(const char* service);
+    explicit Server(const char* service);
 
     // Asumamos por ahora que no se quiere permitir copias, ni mov.
-    MatchServer(const MatchServer&) = delete;
-    MatchServer& operator=(const MatchServer&) = delete;
+    Server(const Server&) = delete;
+    Server& operator=(const Server&) = delete;
 
-    MatchServer(MatchServer&&) = delete;
-    MatchServer& operator=(MatchServer&&) = delete;
+    Server(Server&&) = delete;
+    Server& operator=(Server&&) = delete;
 
     // Inicia el match y el acceptor. Cada uno en su thread.
     void initmatch();
@@ -35,7 +35,7 @@ public:
     // Espera a que se mande la 'q'
     void waitclose();
 
-    ~MatchServer();
+    ~Server();
 };
 
 #endif

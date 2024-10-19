@@ -4,14 +4,14 @@ add_subdirectory(simple_logic/)
 target_sources(taller_server
     PRIVATE
     # .cpp files
-        playeracceptor.cpp
-        matchserver.cpp
+        server.cpp
+        main.cpp
+        gameerror.cpp
         lobbycontainer.cpp
         match.cpp
-        gameerror.cpp
+        playeracceptor.cpp
         playerprotocol.cpp
         playercontainer.cpp
-        main.cpp
         controlledplayer.cpp
         controlreceiver.cpp
         controlnotifier.cpp
@@ -19,13 +19,13 @@ target_sources(taller_server
 
     PUBLIC
     # .h files
-        playerprotocol.h
-        match.h
-        playeracceptor.h
-        lobbycontainer.h
-        playercontainer.h
+        server.h
         gameerror.h
-        matchserver.h
+        match.h
+        lobbycontainer.h
+        playerprotocol.h
+        playeracceptor.h
+        playercontainer.h
         controlreceiver.h
         controlledplayer.h
         controlnotifier.h

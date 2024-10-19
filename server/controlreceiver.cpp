@@ -1,9 +1,9 @@
 #include "./controlreceiver.h"
-#include "./controlnotifier.h"
 
 #include <iostream>
 #include <utility>
 
+#include "./controlnotifier.h"
 #include "./gameerror.h"
 #include "common/liberror.h"
 
