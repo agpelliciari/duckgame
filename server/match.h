@@ -14,11 +14,9 @@
 //#include "server/logic_server/match_state.h"
 
 // Logica sencilla del tp de threads
-#include "server/simple_logic/simplequeue.h"
-#include "server/simple_logic/simpleloop.h"
-
-
 #include "./playercontainer.h"
+#include "server/simple_logic/simpleloop.h"
+#include "server/simple_logic/simplequeue.h"
 
 class LobbyContainer;  // Se declara existe.
 

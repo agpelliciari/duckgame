@@ -9,9 +9,9 @@ target_sources(taller_server
         matchserver.cpp
         lobbycontainer.cpp
         match.cpp
-        playercontroller.cpp
         gameerror.cpp
         controlledplayer.cpp
+        controlreceiver.cpp
         playerprotocol.cpp
         playercontainer.cpp
         main.cpp
@@ -23,10 +23,10 @@ target_sources(taller_server
         match.h
         playeracceptor.h
         lobbycontainer.h
-        controlledplayer.h
         playernotifier.h
         playercontainer.h
         gameerror.h
         matchserver.h
-        playercontroller.h 
+        controlreceiver.h
+        controlledplayer.h
     )
