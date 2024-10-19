@@ -14,3 +14,6 @@ void MatchState::add_player(Player player) {
     match_logic.add_player(player);
 }
 
+MatchState::~MatchState(){
+
+}
