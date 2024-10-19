@@ -411,6 +411,30 @@ common/liberror.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/liberror.cpp.s
 .PHONY : common/liberror.cpp.s
 
+common/messenger.o: common/messenger.cpp.o
+.PHONY : common/messenger.o
+
+# target to build an object file
+common/messenger.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/messenger.cpp.o
+.PHONY : common/messenger.cpp.o
+
+common/messenger.i: common/messenger.cpp.i
+.PHONY : common/messenger.i
+
+# target to preprocess a source file
+common/messenger.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/messenger.cpp.i
+.PHONY : common/messenger.cpp.i
+
+common/messenger.s: common/messenger.cpp.s
+.PHONY : common/messenger.s
+
+# target to generate assembly for a file
+common/messenger.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/messenger.cpp.s
+.PHONY : common/messenger.cpp.s
+
 common/protocol.o: common/protocol.cpp.o
 .PHONY : common/protocol.o
 
@@ -915,29 +939,29 @@ server/playerprotocol.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/playerprotocol.cpp.s
 .PHONY : server/playerprotocol.cpp.s
 
-tests/foo.o: tests/foo.cpp.o
-.PHONY : tests/foo.o
+tests/baseprotocol.o: tests/baseprotocol.cpp.o
+.PHONY : tests/baseprotocol.o
 
 # target to build an object file
-tests/foo.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_tests.dir/build.make CMakeFiles/taller_tests.dir/tests/foo.cpp.o
-.PHONY : tests/foo.cpp.o
+tests/baseprotocol.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_tests.dir/build.make CMakeFiles/taller_tests.dir/tests/baseprotocol.cpp.o
+.PHONY : tests/baseprotocol.cpp.o
 
-tests/foo.i: tests/foo.cpp.i
-.PHONY : tests/foo.i
+tests/baseprotocol.i: tests/baseprotocol.cpp.i
+.PHONY : tests/baseprotocol.i
 
 # target to preprocess a source file
-tests/foo.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_tests.dir/build.make CMakeFiles/taller_tests.dir/tests/foo.cpp.i
-.PHONY : tests/foo.cpp.i
+tests/baseprotocol.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_tests.dir/build.make CMakeFiles/taller_tests.dir/tests/baseprotocol.cpp.i
+.PHONY : tests/baseprotocol.cpp.i
 
-tests/foo.s: tests/foo.cpp.s
-.PHONY : tests/foo.s
+tests/baseprotocol.s: tests/baseprotocol.cpp.s
+.PHONY : tests/baseprotocol.s
 
 # target to generate assembly for a file
-tests/foo.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_tests.dir/build.make CMakeFiles/taller_tests.dir/tests/foo.cpp.s
-.PHONY : tests/foo.cpp.s
+tests/baseprotocol.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_tests.dir/build.make CMakeFiles/taller_tests.dir/tests/baseprotocol.cpp.s
+.PHONY : tests/baseprotocol.cpp.s
 
 # Help Target
 help:
@@ -976,6 +1000,9 @@ help:
 	@echo "... common/liberror.o"
 	@echo "... common/liberror.i"
 	@echo "... common/liberror.s"
+	@echo "... common/messenger.o"
+	@echo "... common/messenger.i"
+	@echo "... common/messenger.s"
 	@echo "... common/protocol.o"
 	@echo "... common/protocol.i"
 	@echo "... common/protocol.s"
@@ -1039,9 +1066,9 @@ help:
 	@echo "... server/playerprotocol.o"
 	@echo "... server/playerprotocol.i"
 	@echo "... server/playerprotocol.s"
-	@echo "... tests/foo.o"
-	@echo "... tests/foo.i"
-	@echo "... tests/foo.s"
+	@echo "... tests/baseprotocol.o"
+	@echo "... tests/baseprotocol.i"
+	@echo "... tests/baseprotocol.s"
 .PHONY : help
 
 
