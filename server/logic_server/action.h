@@ -1,5 +1,5 @@
 
-#include "type_move_action.h"
+#include "player_types.h"
 
 #ifndef ACTION_H
 #define ACTION_H
@@ -18,7 +18,6 @@ class Action {
         void move_left();
         void jump();
         void stay_down();
-
 };
 
 

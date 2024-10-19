@@ -1,6 +1,6 @@
 
-#ifndef TYPE_WEAPON_H
-#define TYPE_WEAPON_H
+#ifndef PLAYER_TYPES_H
+#define PLAYER_TYPES_H
 
 enum class TypeWeapon {
     NONE,
@@ -16,4 +16,13 @@ enum class TypeWeapon {
     SNIPER
 };
 
-#endif //TYPE_WEAPON_H
+enum class TypeMoveAction {
+    NONE,
+    MOVE_LEFT,
+    MOVE_RIGHT,
+    STAY_DOWN,
+    JUMP,
+    FLAP
+};
+
+#endif //PLAYER_TYPES_H

@@ -2,8 +2,7 @@
 #include "weapon.h"
 #include "armor.h"
 #include "action.h"
-#include "type_move_action.h"
-#include "type_weapon.h"
+#include "player_types.h"
 
 #ifndef PLAYER_H
 #define PLAYER_H
@@ -24,6 +23,8 @@ class Player {
     public:
 
         Player(int id, int initial_x, int initial_y);
+
+        bool same_id(int id);
 
         void get_data(int &id, int &x, int &y, TypeWeapon &weapon, bool &helmet_equipped,
                       bool &chest_armor_equipped, TypeMoveAction &move_action);

@@ -15,6 +15,10 @@ void Player::get_data(int &id, int &x, int &y, TypeWeapon &weapon, bool &helmet_
 
 }
 
+bool Player::same_id(int id){
+    return this->id == id;
+}
+
 void Player::move_right(){
     coordinates.move_right();
     move_action.move_right();

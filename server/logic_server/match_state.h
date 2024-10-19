@@ -1,36 +1,26 @@
 #include "player.h"
-#include "weapon.h"
+#include "match_logic.h"
+#include "match_queue.h"
 #include "box"
 #include <list>
 
 #ifndef MATCH_STATE_H
 #define MATCH_STATE_H
 
-
-
 class MatchState {
 
     private:
-
-        bool play;
-        std::list<Player> players;
-        std::list<Box> boxes;
-
-
+        MatchLogic match_logic;
+        MatchQueue &match_queue;
 
     public:
+        MatchState(MatchQueue &match_queue);
 
-        MatchState();
+        void add_player(Player player);
 
-
-
+        void init();
 
         ~MatchState();
-
-
-
 };
-
-
 
 #endif //MATCH_STATE_H

@@ -1,4 +1,4 @@
-#include "type_weapon.h"
+#include "player_types.h"
 
 #ifndef WEAPON_H
 #define WEAPON_H
