@@ -98,8 +98,8 @@ void PlayerController::run() {
             std::cerr << "Player controller aborted" << std::endl;
             return;  // Permitamos que se desconecte inicialmente si no se manda el count.
         }
-        lobby_info info = protocol.recvlobbyinfo();
-        if (info.lobby_action == NEW_LOBBY) {
+        lobby_action info = protocol.recvlobbyaction();
+        if (info.action == NEW_LOBBY) {
             handleNewLobby(playercount);
         } else {  // Handle de join lobby.
             Player player;

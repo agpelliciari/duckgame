@@ -22,8 +22,8 @@ bool PlayerProtocol::recvsignalstart() {
 }
 
 
-lobby_info PlayerProtocol::recvlobbyinfo() {
-    lobby_info out;
+lobby_action PlayerProtocol::recvlobbyaction() {
+    lobby_action out;
     protocol.recvbytes(&out, sizeof(out));
     return out;
 }
