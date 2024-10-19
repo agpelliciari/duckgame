@@ -57,8 +57,8 @@ public:
     // Acepta una conexión entrante y retorna un nuevo socket, si falla tira excepcion.
     Socket accept();
 
-    // Cierra parcial o completamente. Lease el manpage shutdown.
-    void shutdown(int how);
+    // Cierra parcial o completamente. Es no except. Devuelve -1 si fallo.
+    int shutdown(int how);
 
     // Cierra el socket. Aunque no necesariamente haria el shutdown.
     int close();
