@@ -2,7 +2,6 @@ target_sources(taller_common
     PRIVATE
     # .cpp files
         reward.cpp
-        event.cpp
         resolver.cpp
         socket.cpp
         liberror.cpp
@@ -13,7 +12,6 @@ target_sources(taller_common
         dtos.h
         dtosplayer.h
         reward.h
-        event.h
         resolver.h
         socket.h
         liberror.h

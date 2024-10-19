@@ -5,7 +5,6 @@
 #include <utility>
 
 #include "common/dtos.h"
-#include "common/event.h"
 #include "common/queue.h"
 
 typedef unsigned int player_id;

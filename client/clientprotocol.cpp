@@ -5,7 +5,6 @@
 #include <utility>
 
 #include "common/dtos.h"
-#include "common/event.h"
 #include "common/liberror.h"
 #include "common/reward.h"
 

@@ -1,10 +1,10 @@
 #include "./controlreceiver.h"
+#include "./controlnotifier.h"
 
 #include <iostream>
 #include <utility>
 
 #include "./gameerror.h"
-#include "./playernotifier.h"
 #include "common/liberror.h"
 
 
@@ -25,7 +25,7 @@ void ControlReceiver::playOn(ControlledPlayer& player, Match& match) {
     player.open();
 
     // Inicia notifier.
-    PlayerNotifier notifier(player, protocol);
+    ControlNotifier notifier(player, protocol);
     notifier.start();
     try {
 
