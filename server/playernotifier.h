@@ -1,16 +1,16 @@
 #ifndef LIB_PlayerNotifier_H
 #define LIB_PlayerNotifier_H
 
-#include "common/thread.h"
 #include "./controlledplayer.h"
 #include "./playerprotocol.h"
+#include "common/thread.h"
 
 
 // El thread que basicamente notifica de eventos al protocolo/client.
 class PlayerNotifier: public Thread {
 
 protected:
-    ControlledPlayer& player;            // cppcheck-suppress unusedStructMember
+    ControlledPlayer& player;  // cppcheck-suppress unusedStructMember
     PlayerProtocol& protocol;  // cppcheck-suppress unusedStructMember
 
 public:

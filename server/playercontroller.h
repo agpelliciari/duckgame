@@ -2,12 +2,12 @@
 #define LIB_PlayerController_H
 
 
-#include "common/socket.h"
-#include "common/thread.h"
+#include "./controlledplayer.h"
 #include "./lobbycontainer.h"
 #include "./match.h"
-#include "./controlledplayer.h"
 #include "./playerprotocol.h"
+#include "common/socket.h"
+#include "common/thread.h"
 
 // ControlledPlayer controller va a ser el thread recibidor de un protocol.
 // Va a pertenecer a un match. Y va a tener el ownership la entidad en el juego. El player.
@@ -17,10 +17,11 @@
 class PlayerController: private Thread {
 
 protected:
-    LobbyContainer& lobbies;   // cppcheck-suppress unusedStructMember
-    PlayerProtocol protocol;    
+    LobbyContainer& lobbies;  // cppcheck-suppress unusedStructMember
+    PlayerProtocol protocol;
     void playOn(ControlledPlayer& player, Match& match);
     void handleNewLobby(const uint8_t countplayers);
+
 public:
     // Crea el player con el ide pasado e inicia el protocolo
     explicit PlayerController(LobbyContainer& _lobbies, Socket& skt);

@@ -12,7 +12,7 @@ MatchServer::MatchServer(const char* service): lobbies(), acceptor(service, lobb
 // Inicia el match y tambien el acceptor en si.
 void MatchServer::initmatch() {
     // Se inicia sin esperar a algun player.
-    //match.init();
+    // match.init();
     acceptor.init();
 }
 

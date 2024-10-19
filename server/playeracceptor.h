@@ -3,10 +3,10 @@
 
 #include <list>
 
-#include "common/socket.h"
-#include "common/thread.h"
 #include "./lobbycontainer.h"
 #include "./playercontroller.h"
+#include "common/socket.h"
+#include "common/thread.h"
 
 // Clase para guardar nuevos controllers, pertenecientes a un match.
 // Personalmente... no se considera que esta clase perse deba tener el ownership
@@ -20,7 +20,7 @@ private:
     // Se guarda el socket del server. Para ir generando los controllers.
     Socket sktacceptor;
 
-    LobbyContainer& lobbies;                 // cppcheck-suppress unusedStructMember
+    LobbyContainer& lobbies;      // cppcheck-suppress unusedStructMember
     controller_list controllers;  // cppcheck-suppress unusedStructMember
 
     // No expone esta logica al exterior al tener ahora el ownership del skt

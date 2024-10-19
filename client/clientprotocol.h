@@ -5,8 +5,8 @@
 #include <string>
 #include <utility>
 
-#include "common/event.h"
 #include "common/dtos.h"
+#include "common/event.h"
 #include "common/protocol.h"
 
 // Extension del protocolo base a usar.

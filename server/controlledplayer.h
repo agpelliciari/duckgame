@@ -4,9 +4,9 @@
 #include <mutex>
 #include <utility>
 
+#include "common/dtos.h"
 #include "common/event.h"
 #include "common/queue.h"
-#include "common/dtos.h"
 
 typedef unsigned int player_id;
 typedef Queue<MatchDto> player_events;
@@ -18,21 +18,20 @@ typedef Queue<MatchDto> player_events;
 class ControlledPlayer {
 
 protected:
-
     bool _is_open;  // cppcheck-suppress unusedStructMember
-    
+
     // Manejo de ids. Y cantidad de players para la queue de mensajes.
-    uint8_t count;         // cppcheck-suppress unusedStructMember
-    
-    player_id ids[2];      // cppcheck-suppress unusedStructMember
-    
+    uint8_t count;  // cppcheck-suppress unusedStructMember
+
+    player_id ids[2];  // cppcheck-suppress unusedStructMember
+
     // For notifying actions and/or exit.
     player_events snapshots;  // cppcheck-suppress unusedStructMember
 
     std::mutex mtx;
 
 public:
-    explicit ControlledPlayer();
+    ControlledPlayer();
 
     // Por ahora tambien nos escapamos del move.
     ControlledPlayer(ControlledPlayer&&) = delete;
@@ -47,13 +46,13 @@ public:
     bool operator==(const ControlledPlayer& other) const;
 
     void setplayercount(const uint8_t count);
-    uint8_t playercount() const ;
-    
+    uint8_t playercount() const;
+
     // Seteado de id.
     void setid(const int ind, player_id id);
     player_id getid(const uint8_t ind) const;
-    
-    
+
+
     // Abre el jugador, indicando esta activo en una partida.
     bool open();
 
@@ -71,7 +70,7 @@ public:
 
     // Pop event. Bloqueante. Si no hay eventos espera a uno.
     MatchDto popstate();
-    
+
     //~ControlledPlayer();
 };
 

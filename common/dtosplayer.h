@@ -3,8 +3,8 @@
 
 #include <cstdint>
 
-enum PlayerActionType :uint8_t { 
-    PICK_UP = 3, 
+enum PlayerActionType : uint8_t {
+    PICK_UP = 3,
 };
 
 struct PlayerActionDTO {
@@ -12,8 +12,6 @@ struct PlayerActionDTO {
     uint8_t playerind;
     uint8_t specific_info;
 } __attribute__((packed));
-
-
 
 
 enum class TypeWeapon {
@@ -30,16 +28,9 @@ enum class TypeWeapon {
     SNIPER
 };
 
-enum class TypeMoveAction {
-    NONE,
-    MOVE_LEFT,
-    MOVE_RIGHT,
-    STAY_DOWN,
-    JUMP,
-    FLAP
-};
+enum class TypeMoveAction { NONE, MOVE_LEFT, MOVE_RIGHT, STAY_DOWN, JUMP, FLAP };
 
-struct PlayerDTO{
+struct PlayerDTO {
     int id;
     bool is_alive;
     int coord_x;
@@ -49,9 +40,17 @@ struct PlayerDTO{
     bool chest_armor;
     TypeMoveAction move_action;
 
-    PlayerDTO(int id_, bool alive, int x, int y, TypeWeapon w, bool h, bool armor, TypeMoveAction action)
-        : id(id_), is_alive(alive), coord_x(x), coord_y(y), weapon(w), helmet(h), chest_armor(armor), move_action(action) {}
+    PlayerDTO(int id_, bool alive, int x, int y, TypeWeapon w, bool h, bool armor,
+              TypeMoveAction action):
+            id(id_),
+            is_alive(alive),
+            coord_x(x),
+            coord_y(y),
+            weapon(w),
+            helmet(h),
+            chest_armor(armor),
+            move_action(action) {}
 
-};//__attribute__((packed));
+};  //__attribute__((packed));
 
 #endif

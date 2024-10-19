@@ -5,9 +5,9 @@
 #include <utility>
 
 #include "common/dtos.h"
+#include "server/playercontainer.h"
 #include "server/simple_logic/simplequeue.h"
 #include "server/simple_logic/simplestate.h"
-#include "server/playercontainer.h"
 
 #define BOX_COUNT 4
 
@@ -16,7 +16,8 @@
 // Y que notifica los eventos.
 class SimpleLoop {
 private:
-      SimpleState state;
+    SimpleState state;
+
 public:
     SimpleLoop() {}
 

@@ -105,16 +105,16 @@ LibError::LibError(int error_code, const char* fmt, ...) noexcept {
      * y es exactamente lo que queremos: queremos escribir a continuación
      * de lo escrito por `vsnprintf` pisándole el `\0`.
      * */
-    //strerror_r(error_code, msg_error + s, sizeof(msg_error) - s);
-    const char * vl = strerror(error_code);
+    // strerror_r(error_code, msg_error + s, sizeof(msg_error) - s);
+    const char* vl = strerror(error_code);
     int len = strlen(vl);
-    int start = sizeof(msg_error)- len+1;
-    if(s < start){
-         start = s;
+    int start = sizeof(msg_error) - len + 1;
+    if (s < start) {
+        start = s;
     }
-    
-    strncpy(&msg_error[start], vl , len);
-    
+
+    strncpy(&msg_error[start], vl, len);
+
     /*
      * `strerror_r` garantiza que el string termina siempre en un `\0`
      * sin embargo permitime ser un poco paranoico y asegurarme que

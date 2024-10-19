@@ -4,10 +4,10 @@
 #include <string>
 #include <utility>
 
+#include "./simplebox.h"
+#include "common/dtos.h"
 #include "common/event.h"
 #include "common/queue.h"
-#include "common/dtos.h"
-#include "./simplebox.h"
 
 #define BOX_COUNT 4
 
@@ -24,7 +24,7 @@ protected:
     bool isBoxAvailable(int box) const;
 
 public:
-    explicit SimpleState() {}
+    SimpleState() {}
 
     // Asumamos copy = default, move = default
     SimpleState(const SimpleState&) = delete;
@@ -38,8 +38,8 @@ public:
 
     // Intenta que el player abra la caja. Notifica el evento de ocurrir.
     void openBox(const std::string& player, const int box);
-    
-    MatchDto getData() const ;
+
+    MatchDto getData() const;
 };
 
 #endif

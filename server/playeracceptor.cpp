@@ -53,9 +53,7 @@ void PlayerAcceptor::run() {
 }
 void PlayerAcceptor::init() { start(); }
 
-bool PlayerAcceptor::isrunning(){
-     return is_alive();
-}
+bool PlayerAcceptor::isrunning() { return is_alive(); }
 
 void PlayerAcceptor::finish() {
     if (!_keep_running) {  // Evitemos cerrar dos veces.

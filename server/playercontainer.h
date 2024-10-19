@@ -3,19 +3,19 @@
 
 
 #include <list>
-
-#include "common/dtos.h"
-#include "./controlledplayer.h"
 #include <vector>
+
+#include "./controlledplayer.h"
+#include "common/dtos.h"
 
 // Contenedor/monitor de los players activos en el match.
 class PlayerContainer {
 public:
     typedef std::list<ControlledPlayer*> player_container;
-    
+
 private:
     player_container players;  // cppcheck-suppress unusedStructMember
-    player_id last_id;// cppcheck-suppress unusedStructMember
+    player_id last_id;         // cppcheck-suppress unusedStructMember
 public:
     // Default constructor
     PlayerContainer();
@@ -27,7 +27,7 @@ public:
 
     // Es necesrio trabajar con punteros al ser una coleccion
     void add(ControlledPlayer* player);
-    
+
     // Remueve todos los restantes. Normalmente no deberia haber, ya se deberian haber desconectado.
     void removeAll();
 

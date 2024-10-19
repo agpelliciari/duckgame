@@ -30,8 +30,4 @@ void SimpleState::openBox(const std::string& player, const int box) {
     boxes[box].open(REWARDS[box]);
 }
 
-MatchDto SimpleState::getData() const {
-     return MatchDto(INICIADA, 1);
-}
-
-
+MatchDto SimpleState::getData() const { return MatchDto(INICIADA, 1); }

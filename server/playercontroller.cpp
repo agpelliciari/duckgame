@@ -30,9 +30,9 @@ void PlayerController::playOn(ControlledPlayer& player, Match& match) {
     try {
 
         // Loopeado de acciones
-        
-        
-        while (_keep_running) {            
+
+
+        while (_keep_running) {
             match.notifyAction(protocol.recvaction());
         }
         player.disconnect();  // Finalizo normalmente.
@@ -124,9 +124,3 @@ void PlayerController::finish() {
 }
 
 PlayerController::~PlayerController() { finish(); }
-
-
-
-
-
-

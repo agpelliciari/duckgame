@@ -1,10 +1,10 @@
 #ifndef LIB_SIMPLE_QUEUE_H
 #define LIB_SIMPLE_QUEUE_H
 
-#include "common/queue.h"
-#include "common/dtosplayer.h"
-#include "./simplestate.h"
 #include "./simpleaction.h"
+#include "./simplestate.h"
+#include "common/dtosplayer.h"
+#include "common/queue.h"
 
 
 // Una clase media innecesaria capaz.
@@ -20,7 +20,7 @@ public:
     // Ademas de capaz poder usar el pop/ try_pop.
     // Como critical section no se deberia poder cerrar mientras se este iterando
     void applyOn(SimpleState& state);
-    bool isopen() ;
+    bool isopen();
 
     void close();
 };
