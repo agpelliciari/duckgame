@@ -15,6 +15,10 @@ void SimpleQueue::notify(const PlayerActionDTO& action) {
 
 void SimpleQueue::close() { actions.close(); }
 
+bool SimpleQueue::isopen() {
+     return !actions.isclosed();
+}
+
 void SimpleQueue::applyOn(SimpleState& state) {
     // Popea todas las acciones a ejecutar. Se podria poner un limite al batch size.
     try {

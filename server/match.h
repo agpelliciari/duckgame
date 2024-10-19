@@ -8,8 +8,16 @@
 #include "common/dtosplayer.h"
 #include "common/thread.h"
 
-#include "server/logic_server/match_queue.h"
-#include "server/logic_server/match_state.h"
+
+//Descomentar si ya son usables.
+//#include "server/logic_server/match_queue.h"
+//#include "server/logic_server/match_state.h"
+
+// Logica sencilla del tp de threads
+#include "server/simple_logic/simplequeue.h"
+#include "server/simple_logic/simpleloop.h"
+
+
 #include "./playercontainer.h"
 
 class LobbyContainer;  // Se declara existe.
@@ -22,8 +30,8 @@ class Match: private Thread {
 private:
     lobbyID id;               // cppcheck-suppress unusedStructMember
     PlayerContainer players;  // cppcheck-suppress unusedStructMember
-    MatchState state;         // cppcheck-suppress unusedStructMember
-    MatchQueue actions;       // cppcheck-suppress unusedStructMember
+    SimpleLoop looper;         // cppcheck-suppress unusedStructMember
+    SimpleQueue actions;       // cppcheck-suppress unusedStructMember
 
     // Para el thread y en general el loopeado
     void run() override;

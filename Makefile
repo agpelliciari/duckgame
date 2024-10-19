@@ -1083,6 +1083,30 @@ server/simple_logic/simplebox.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/simple_logic/simplebox.cpp.s
 .PHONY : server/simple_logic/simplebox.cpp.s
 
+server/simple_logic/simpleloop.o: server/simple_logic/simpleloop.cpp.o
+.PHONY : server/simple_logic/simpleloop.o
+
+# target to build an object file
+server/simple_logic/simpleloop.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/simple_logic/simpleloop.cpp.o
+.PHONY : server/simple_logic/simpleloop.cpp.o
+
+server/simple_logic/simpleloop.i: server/simple_logic/simpleloop.cpp.i
+.PHONY : server/simple_logic/simpleloop.i
+
+# target to preprocess a source file
+server/simple_logic/simpleloop.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/simple_logic/simpleloop.cpp.i
+.PHONY : server/simple_logic/simpleloop.cpp.i
+
+server/simple_logic/simpleloop.s: server/simple_logic/simpleloop.cpp.s
+.PHONY : server/simple_logic/simpleloop.s
+
+# target to generate assembly for a file
+server/simple_logic/simpleloop.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/simple_logic/simpleloop.cpp.s
+.PHONY : server/simple_logic/simpleloop.cpp.s
+
 server/simple_logic/simplequeue.o: server/simple_logic/simplequeue.cpp.o
 .PHONY : server/simple_logic/simplequeue.o
 
@@ -1276,6 +1300,9 @@ help:
 	@echo "... server/simple_logic/simplebox.o"
 	@echo "... server/simple_logic/simplebox.i"
 	@echo "... server/simple_logic/simplebox.s"
+	@echo "... server/simple_logic/simpleloop.o"
+	@echo "... server/simple_logic/simpleloop.i"
+	@echo "... server/simple_logic/simpleloop.s"
 	@echo "... server/simple_logic/simplequeue.o"
 	@echo "... server/simple_logic/simplequeue.i"
 	@echo "... server/simple_logic/simplequeue.s"

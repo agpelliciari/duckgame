@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <string>
 
-#include "./simplestate.h"
+#include "server/simple_logic/simplestate.h"
 
 // Encapsulador de logica de una accion de un player.
 // Por ahora solo un pickup.

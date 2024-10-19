@@ -1,7 +1,6 @@
 #include "./simplestate.h"
 
 #include <iostream>
-
 // Define para cada box que reward tiene.
 // Podria ser random ! pero no seria posible de testear.
 static const RewardType REWARDS[]{BAZOOKA, CHAINSAW, DEATHRAY, SHOTGUN};
@@ -34,4 +33,5 @@ void SimpleState::openBox(const std::string& player, const int box) {
 MatchDto SimpleState::getData() const {
      return MatchDto(INICIADA, 1);
 }
+
 

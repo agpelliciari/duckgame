@@ -4,9 +4,7 @@
 
 #include "./gameerror.h"
 
-#include "unistd.h"
-
-Match::Match(lobbyID _id): id(_id), players(), state() {}
+Match::Match(lobbyID _id): id(_id), players(), looper() {}
 
 
 // Protected// friend accessed methods
@@ -47,7 +45,7 @@ void Match::notifyAction(const PlayerActionDTO&& action) {
 
 void Match::run() {
 
-    state.loop(players, actions);
+    looper.loop(players, actions);
     // Checkea si el finish fue natural o forzado.
 }
 

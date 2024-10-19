@@ -1,5 +1,5 @@
-#ifndef LIB_BOX_H
-#define LIB_BOX_H
+#ifndef LIB_SIMPLE_BOX_H
+#define LIB_SIMPLE_BOX_H
 
 #include "common/reward.h"
 

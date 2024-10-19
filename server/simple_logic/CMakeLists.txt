@@ -5,6 +5,7 @@ target_sources(taller_server
               simpleaction.cpp
               simplebox.cpp
               simplestate.cpp
+              simpleloop.cpp
 
     PUBLIC
     # .h files
@@ -12,6 +13,7 @@ target_sources(taller_server
               simpleaction.h
               simplebox.h
               simplestate.h
+              simpleloop.h
 
 
     )

@@ -180,6 +180,11 @@ public:
         is_not_empty.notify_all();
     }
     
+    bool isclosed(){
+        std::unique_lock<std::mutex> lck(mtx);
+        return closed;
+    }
+    
     void reopen() {
         std::unique_lock<std::mutex> lck(mtx);
         // Aseguremosnos esta vacia la queue.

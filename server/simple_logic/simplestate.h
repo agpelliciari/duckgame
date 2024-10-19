@@ -1,5 +1,5 @@
-#ifndef LIB_MATCH_STATE_H
-#define LIB_MATCH_STATE_H
+#ifndef LIB_SIMPLE_STATE_H
+#define LIB_SIMPLE_STATE_H
 
 #include <string>
 #include <utility>

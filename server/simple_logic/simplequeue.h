@@ -1,5 +1,5 @@
-#ifndef LIB_SimpleQueue_H
-#define LIB_SimpleQueue_H
+#ifndef LIB_SIMPLE_QUEUE_H
+#define LIB_SIMPLE_QUEUE_H
 
 #include "common/queue.h"
 #include "common/dtosplayer.h"
@@ -20,6 +20,7 @@ public:
     // Ademas de capaz poder usar el pop/ try_pop.
     // Como critical section no se deberia poder cerrar mientras se este iterando
     void applyOn(SimpleState& state);
+    bool isopen() ;
 
     void close();
 };
