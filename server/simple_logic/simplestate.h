@@ -7,30 +7,30 @@
 #include "common/event.h"
 #include "common/queue.h"
 #include "common/dtos.h"
-#include "./box.h"
+#include "./simplebox.h"
 
 #define BOX_COUNT 4
 
 
 // Clase encargada de la logica del match en si.
 // Y que notifica los eventos.
-class MatchState {
+class SimpleState {
 private:
     // fixed quantity of boxes, no enum needed for indexing.
-    Box boxes[BOX_COUNT];  // cppcheck-suppress unusedStructMember
+    SimpleBox boxes[BOX_COUNT];  // cppcheck-suppress unusedStructMember
 
 protected:
     // Verify if box is available.
     bool isBoxAvailable(int box) const;
 
 public:
-    explicit MatchState() {}
+    explicit SimpleState() {}
 
     // Asumamos copy = default, move = default
-    MatchState(const MatchState&) = delete;
-    MatchState& operator=(const MatchState&) = delete;
-    MatchState(MatchState&&) = delete;
-    MatchState& operator=(MatchState&&) = delete;
+    SimpleState(const SimpleState&) = delete;
+    SimpleState& operator=(const SimpleState&) = delete;
+    SimpleState(SimpleState&&) = delete;
+    SimpleState& operator=(SimpleState&&) = delete;
 
     // Avanza un paso de tiempo, notifica al observer los eventos ocurridos.
     // Aca en teoria ocurririan los non player events.

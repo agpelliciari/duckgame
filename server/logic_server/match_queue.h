@@ -7,6 +7,7 @@
 class MatchQueue {
 public:
     void notify(const PlayerActionDTO& action);
+    void close();
 };
 
 

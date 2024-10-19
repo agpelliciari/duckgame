@@ -10,7 +10,7 @@ Match::Match(lobbyID _id): id(_id), players(), state() {}
 
 
 // Protected// friend accessed methods
-void Match::addPlayer(Player* player) { players.add(player); }
+void Match::addPlayer(ControlledPlayer* player) { players.add(player); }
 
 void Match::init() {
     if (is_alive()) {
@@ -39,7 +39,7 @@ bool Match::operator==(const Match& other) const { return this->id == other.id; 
 lobbyID Match::getID() const { return this->id; }
 
 // Metodos delegatorios.
-void Match::notifyAction(const MatchAction&& action) {
+void Match::notifyAction(const PlayerActionDTO&& action) {
     if (_keep_running) {
         actions.notify(action);
     }

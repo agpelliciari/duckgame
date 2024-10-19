@@ -2,7 +2,7 @@
 #define LIB_PlayerNotifier_H
 
 #include "common/thread.h"
-#include "./player.h"
+#include "./controlledplayer.h"
 #include "./playerprotocol.h"
 
 
@@ -10,11 +10,11 @@
 class PlayerNotifier: public Thread {
 
 protected:
-    Player& player;            // cppcheck-suppress unusedStructMember
+    ControlledPlayer& player;            // cppcheck-suppress unusedStructMember
     PlayerProtocol& protocol;  // cppcheck-suppress unusedStructMember
 
 public:
-    explicit PlayerNotifier(Player& _player, PlayerProtocol& protocol);
+    explicit PlayerNotifier(ControlledPlayer& _player, PlayerProtocol& protocol);
 
     // Asumamos por ahora que no se quiere permitir copias, ni mov.
     PlayerNotifier(const PlayerNotifier&) = delete;

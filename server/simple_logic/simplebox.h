@@ -3,13 +3,13 @@
 
 #include "common/reward.h"
 
-class Box {
+class SimpleBox {
 private:
     // Steps restantes hasta la reaparicion
     int remainingsteps;  // cppcheck-suppress unusedStructMember
 
 public:
-    Box(): remainingsteps(0) {}
+    SimpleBox(): remainingsteps(0) {}
 
     bool isAvailable() const;
 

@@ -555,29 +555,29 @@ editor/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_editor.dir/build.make CMakeFiles/taller_editor.dir/editor/main.cpp.s
 .PHONY : editor/main.cpp.s
 
-server/box.o: server/box.cpp.o
-.PHONY : server/box.o
+server/controlledplayer.o: server/controlledplayer.cpp.o
+.PHONY : server/controlledplayer.o
 
 # target to build an object file
-server/box.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/box.cpp.o
-.PHONY : server/box.cpp.o
+server/controlledplayer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/controlledplayer.cpp.o
+.PHONY : server/controlledplayer.cpp.o
 
-server/box.i: server/box.cpp.i
-.PHONY : server/box.i
+server/controlledplayer.i: server/controlledplayer.cpp.i
+.PHONY : server/controlledplayer.i
 
 # target to preprocess a source file
-server/box.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/box.cpp.i
-.PHONY : server/box.cpp.i
+server/controlledplayer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/controlledplayer.cpp.i
+.PHONY : server/controlledplayer.cpp.i
 
-server/box.s: server/box.cpp.s
-.PHONY : server/box.s
+server/controlledplayer.s: server/controlledplayer.cpp.s
+.PHONY : server/controlledplayer.s
 
 # target to generate assembly for a file
-server/box.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/box.cpp.s
-.PHONY : server/box.cpp.s
+server/controlledplayer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/controlledplayer.cpp.s
+.PHONY : server/controlledplayer.cpp.s
 
 server/gameerror.o: server/gameerror.cpp.o
 .PHONY : server/gameerror.o
@@ -891,54 +891,6 @@ server/match.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/match.cpp.s
 .PHONY : server/match.cpp.s
 
-server/matchaction.o: server/matchaction.cpp.o
-.PHONY : server/matchaction.o
-
-# target to build an object file
-server/matchaction.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/matchaction.cpp.o
-.PHONY : server/matchaction.cpp.o
-
-server/matchaction.i: server/matchaction.cpp.i
-.PHONY : server/matchaction.i
-
-# target to preprocess a source file
-server/matchaction.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/matchaction.cpp.i
-.PHONY : server/matchaction.cpp.i
-
-server/matchaction.s: server/matchaction.cpp.s
-.PHONY : server/matchaction.s
-
-# target to generate assembly for a file
-server/matchaction.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/matchaction.cpp.s
-.PHONY : server/matchaction.cpp.s
-
-server/matchqueue.o: server/matchqueue.cpp.o
-.PHONY : server/matchqueue.o
-
-# target to build an object file
-server/matchqueue.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/matchqueue.cpp.o
-.PHONY : server/matchqueue.cpp.o
-
-server/matchqueue.i: server/matchqueue.cpp.i
-.PHONY : server/matchqueue.i
-
-# target to preprocess a source file
-server/matchqueue.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/matchqueue.cpp.i
-.PHONY : server/matchqueue.cpp.i
-
-server/matchqueue.s: server/matchqueue.cpp.s
-.PHONY : server/matchqueue.s
-
-# target to generate assembly for a file
-server/matchqueue.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/matchqueue.cpp.s
-.PHONY : server/matchqueue.cpp.s
-
 server/matchserver.o: server/matchserver.cpp.o
 .PHONY : server/matchserver.o
 
@@ -962,54 +914,6 @@ server/matchserver.s: server/matchserver.cpp.s
 server/matchserver.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/matchserver.cpp.s
 .PHONY : server/matchserver.cpp.s
-
-server/matchstate.o: server/matchstate.cpp.o
-.PHONY : server/matchstate.o
-
-# target to build an object file
-server/matchstate.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/matchstate.cpp.o
-.PHONY : server/matchstate.cpp.o
-
-server/matchstate.i: server/matchstate.cpp.i
-.PHONY : server/matchstate.i
-
-# target to preprocess a source file
-server/matchstate.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/matchstate.cpp.i
-.PHONY : server/matchstate.cpp.i
-
-server/matchstate.s: server/matchstate.cpp.s
-.PHONY : server/matchstate.s
-
-# target to generate assembly for a file
-server/matchstate.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/matchstate.cpp.s
-.PHONY : server/matchstate.cpp.s
-
-server/player.o: server/player.cpp.o
-.PHONY : server/player.o
-
-# target to build an object file
-server/player.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/player.cpp.o
-.PHONY : server/player.cpp.o
-
-server/player.i: server/player.cpp.i
-.PHONY : server/player.i
-
-# target to preprocess a source file
-server/player.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/player.cpp.i
-.PHONY : server/player.cpp.i
-
-server/player.s: server/player.cpp.s
-.PHONY : server/player.s
-
-# target to generate assembly for a file
-server/player.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/player.cpp.s
-.PHONY : server/player.cpp.s
 
 server/playeracceptor.o: server/playeracceptor.cpp.o
 .PHONY : server/playeracceptor.o
@@ -1131,6 +1035,102 @@ server/playerprotocol.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/playerprotocol.cpp.s
 .PHONY : server/playerprotocol.cpp.s
 
+server/simple_logic/simpleaction.o: server/simple_logic/simpleaction.cpp.o
+.PHONY : server/simple_logic/simpleaction.o
+
+# target to build an object file
+server/simple_logic/simpleaction.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/simple_logic/simpleaction.cpp.o
+.PHONY : server/simple_logic/simpleaction.cpp.o
+
+server/simple_logic/simpleaction.i: server/simple_logic/simpleaction.cpp.i
+.PHONY : server/simple_logic/simpleaction.i
+
+# target to preprocess a source file
+server/simple_logic/simpleaction.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/simple_logic/simpleaction.cpp.i
+.PHONY : server/simple_logic/simpleaction.cpp.i
+
+server/simple_logic/simpleaction.s: server/simple_logic/simpleaction.cpp.s
+.PHONY : server/simple_logic/simpleaction.s
+
+# target to generate assembly for a file
+server/simple_logic/simpleaction.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/simple_logic/simpleaction.cpp.s
+.PHONY : server/simple_logic/simpleaction.cpp.s
+
+server/simple_logic/simplebox.o: server/simple_logic/simplebox.cpp.o
+.PHONY : server/simple_logic/simplebox.o
+
+# target to build an object file
+server/simple_logic/simplebox.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/simple_logic/simplebox.cpp.o
+.PHONY : server/simple_logic/simplebox.cpp.o
+
+server/simple_logic/simplebox.i: server/simple_logic/simplebox.cpp.i
+.PHONY : server/simple_logic/simplebox.i
+
+# target to preprocess a source file
+server/simple_logic/simplebox.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/simple_logic/simplebox.cpp.i
+.PHONY : server/simple_logic/simplebox.cpp.i
+
+server/simple_logic/simplebox.s: server/simple_logic/simplebox.cpp.s
+.PHONY : server/simple_logic/simplebox.s
+
+# target to generate assembly for a file
+server/simple_logic/simplebox.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/simple_logic/simplebox.cpp.s
+.PHONY : server/simple_logic/simplebox.cpp.s
+
+server/simple_logic/simplequeue.o: server/simple_logic/simplequeue.cpp.o
+.PHONY : server/simple_logic/simplequeue.o
+
+# target to build an object file
+server/simple_logic/simplequeue.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/simple_logic/simplequeue.cpp.o
+.PHONY : server/simple_logic/simplequeue.cpp.o
+
+server/simple_logic/simplequeue.i: server/simple_logic/simplequeue.cpp.i
+.PHONY : server/simple_logic/simplequeue.i
+
+# target to preprocess a source file
+server/simple_logic/simplequeue.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/simple_logic/simplequeue.cpp.i
+.PHONY : server/simple_logic/simplequeue.cpp.i
+
+server/simple_logic/simplequeue.s: server/simple_logic/simplequeue.cpp.s
+.PHONY : server/simple_logic/simplequeue.s
+
+# target to generate assembly for a file
+server/simple_logic/simplequeue.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/simple_logic/simplequeue.cpp.s
+.PHONY : server/simple_logic/simplequeue.cpp.s
+
+server/simple_logic/simplestate.o: server/simple_logic/simplestate.cpp.o
+.PHONY : server/simple_logic/simplestate.o
+
+# target to build an object file
+server/simple_logic/simplestate.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/simple_logic/simplestate.cpp.o
+.PHONY : server/simple_logic/simplestate.cpp.o
+
+server/simple_logic/simplestate.i: server/simple_logic/simplestate.cpp.i
+.PHONY : server/simple_logic/simplestate.i
+
+# target to preprocess a source file
+server/simple_logic/simplestate.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/simple_logic/simplestate.cpp.i
+.PHONY : server/simple_logic/simplestate.cpp.i
+
+server/simple_logic/simplestate.s: server/simple_logic/simplestate.cpp.s
+.PHONY : server/simple_logic/simplestate.s
+
+# target to generate assembly for a file
+server/simple_logic/simplestate.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/simple_logic/simplestate.cpp.s
+.PHONY : server/simple_logic/simplestate.cpp.s
+
 tests/foo.o: tests/foo.cpp.o
 .PHONY : tests/foo.o
 
@@ -1210,9 +1210,9 @@ help:
 	@echo "... editor/main.o"
 	@echo "... editor/main.i"
 	@echo "... editor/main.s"
-	@echo "... server/box.o"
-	@echo "... server/box.i"
-	@echo "... server/box.s"
+	@echo "... server/controlledplayer.o"
+	@echo "... server/controlledplayer.i"
+	@echo "... server/controlledplayer.s"
 	@echo "... server/gameerror.o"
 	@echo "... server/gameerror.i"
 	@echo "... server/gameerror.s"
@@ -1252,21 +1252,9 @@ help:
 	@echo "... server/match.o"
 	@echo "... server/match.i"
 	@echo "... server/match.s"
-	@echo "... server/matchaction.o"
-	@echo "... server/matchaction.i"
-	@echo "... server/matchaction.s"
-	@echo "... server/matchqueue.o"
-	@echo "... server/matchqueue.i"
-	@echo "... server/matchqueue.s"
 	@echo "... server/matchserver.o"
 	@echo "... server/matchserver.i"
 	@echo "... server/matchserver.s"
-	@echo "... server/matchstate.o"
-	@echo "... server/matchstate.i"
-	@echo "... server/matchstate.s"
-	@echo "... server/player.o"
-	@echo "... server/player.i"
-	@echo "... server/player.s"
 	@echo "... server/playeracceptor.o"
 	@echo "... server/playeracceptor.i"
 	@echo "... server/playeracceptor.s"
@@ -1282,6 +1270,18 @@ help:
 	@echo "... server/playerprotocol.o"
 	@echo "... server/playerprotocol.i"
 	@echo "... server/playerprotocol.s"
+	@echo "... server/simple_logic/simpleaction.o"
+	@echo "... server/simple_logic/simpleaction.i"
+	@echo "... server/simple_logic/simpleaction.s"
+	@echo "... server/simple_logic/simplebox.o"
+	@echo "... server/simple_logic/simplebox.i"
+	@echo "... server/simple_logic/simplebox.s"
+	@echo "... server/simple_logic/simplequeue.o"
+	@echo "... server/simple_logic/simplequeue.i"
+	@echo "... server/simple_logic/simplequeue.s"
+	@echo "... server/simple_logic/simplestate.o"
+	@echo "... server/simple_logic/simplestate.i"
+	@echo "... server/simple_logic/simplestate.s"
 	@echo "... tests/foo.o"
 	@echo "... tests/foo.i"
 	@echo "... tests/foo.s"

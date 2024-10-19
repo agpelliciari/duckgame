@@ -1,4 +1,4 @@
-#include "./matchstate.h"
+#include "./simplestate.h"
 
 #include <iostream>
 
@@ -7,7 +7,7 @@
 static const RewardType REWARDS[]{BAZOOKA, CHAINSAW, DEATHRAY, SHOTGUN};
 
 // Step.. advance time by one/iterate logic.
-void MatchState::step() {
+void SimpleState::step() {
 
     // Just step on everybox. And add events.
     for (int boxId = 0; boxId < BOX_COUNT; boxId++) {
@@ -16,13 +16,13 @@ void MatchState::step() {
 }
 
 // Verify if box is available.
-bool MatchState::isBoxAvailable(const int box) const {
+bool SimpleState::isBoxAvailable(const int box) const {
     return box < BOX_COUNT && box >= 0 && boxes[box].isAvailable();
 }
 
 // Intenta hacer que el player abra la caja.
 // Si la caja no esta disponible, o a futuro si el player no pudiese. No hara nada.
-void MatchState::openBox(const std::string& player, const int box) {
+void SimpleState::openBox(const std::string& player, const int box) {
     if (!isBoxAvailable(box)) {
         return;
     }
@@ -31,7 +31,7 @@ void MatchState::openBox(const std::string& player, const int box) {
     boxes[box].open(REWARDS[box]);
 }
 
-MatchDto MatchState::getData() const {
+MatchDto SimpleState::getData() const {
      return MatchDto(INICIADA, 1);
 }
 

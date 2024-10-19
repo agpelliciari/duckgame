@@ -6,10 +6,10 @@
 #include "common/thread.h"
 #include "./lobbycontainer.h"
 #include "./match.h"
-#include "./player.h"
+#include "./controlledplayer.h"
 #include "./playerprotocol.h"
 
-// Player controller va a ser el thread recibidor de un protocol.
+// ControlledPlayer controller va a ser el thread recibidor de un protocol.
 // Va a pertenecer a un match. Y va a tener el ownership la entidad en el juego. El player.
 // El player controller tiene el ownership del player, entidad del juego.
 // Aun asi es preferible que el monitor de players se encarge perse de cerrarlos(las queues). Asi es
@@ -19,7 +19,7 @@ class PlayerController: private Thread {
 protected:
     LobbyContainer& lobbies;   // cppcheck-suppress unusedStructMember
     PlayerProtocol protocol;    
-    void playOn(Player& player, Match& match);
+    void playOn(ControlledPlayer& player, Match& match);
     void handleNewLobby(const uint8_t countplayers);
 public:
     // Crea el player con el ide pasado e inicia el protocolo

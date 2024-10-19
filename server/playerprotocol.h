@@ -6,7 +6,6 @@
 #include <string>
 #include <utility>
 
-#include "./matchaction.h"
 #include "common/dtos.h"
 #include "common/dtosplayer.h"
 #include "common/event.h"

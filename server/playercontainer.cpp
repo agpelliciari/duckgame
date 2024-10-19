@@ -6,7 +6,7 @@ PlayerContainer::PlayerContainer():last_id(0) {}
 
 
 // Todo esto no hace falta sincronizar ya que es sincronico!
-void PlayerContainer::add(Player* player) {
+void PlayerContainer::add(ControlledPlayer* player) {
     // Setea los ids.
     int mx = player->playercount();
     for(int ind = 0; ind < mx; ind++){
@@ -29,15 +29,13 @@ void PlayerContainer::removeAll() {
         playerit = players.erase(playerit);
     }
 }
-std::vector<player_id> PlayerContainer::updateState(const MatchState& state) {    
+std::vector<player_id> PlayerContainer::updateState(const MatchDto& matchdto) {    
     std::vector<player_id> disconnected;
-    
-    MatchDto dto = state.getData();
-    
-    std::cout << dto.parse() << std::endl;  // Show what happened on server.
+        
+    std::cout << matchdto.parse() << std::endl;  // Show what happened on server.
 
     for (auto playerit = players.begin(); playerit != players.end();) {
-        if((*playerit)->recvstate(dto)){
+        if((*playerit)->recvstate(matchdto)){
             //std::cerr << "NOTIFIED "<< (*playerit)->getid(0) << std::endl;
             ++playerit;
             continue;

@@ -13,7 +13,7 @@ class MatchState {
     private:
         MatchLogic match_logic;
     public:
-        MatchState(MatchQueue &match_queue);
+        MatchState();
 
         void add_player(Player player);
 

@@ -29,10 +29,10 @@ public:
     LobbyContainer& operator=(LobbyContainer&&) = delete;
 
     // Es necesrio trabajar con punteros al ser una coleccion
-    Match& newLobby(Player* anfitrion);
+    Match& newLobby(ControlledPlayer* anfitrion);
 
     // Unirse a la lobby/match tira error si no existe. No espera a que se empieze.
-    Match& joinLobby(Player* player, lobbyID id);
+    Match& joinLobby(ControlledPlayer* player, lobbyID id);
 
     // Una vez empezada no se aceptan mas.
     void startLobby(Match& match);

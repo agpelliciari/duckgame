@@ -21,7 +21,7 @@ void PlayerController::init() {
     start();
 }
 
-void PlayerController::playOn(Player& player, Match& match) {
+void PlayerController::playOn(ControlledPlayer& player, Match& match) {
     player.open();
 
     // Inicia notifier.
@@ -30,20 +30,10 @@ void PlayerController::playOn(Player& player, Match& match) {
     try {
 
         // Loopeado de acciones
-        std::string name("Player ");
-        name.append(std::to_string(player.getid(0)));
-        while (_keep_running) {
-
-            // Parseado que capaz no va aca..
-
-            PlayerActionDTO action = protocol.recvaction();
-            if (action.type != PICK_UP) {
-                std::cerr << "Invalid action!" << std::endl;
-                continue;
-            }
-            std::string actor = name + "_";
-            actor.append(std::to_string(action.playerind));
-            match.notifyAction(MatchAction(actor, action.specific_info));
+        
+        
+        while (_keep_running) {            
+            match.notifyAction(protocol.recvaction());
         }
         player.disconnect();  // Finalizo normalmente.
     } catch (const LibError& error) {
@@ -69,7 +59,7 @@ void PlayerController::playOn(Player& player, Match& match) {
 
 
 void PlayerController::handleNewLobby(const uint8_t playercount) {
-    Player player;
+    ControlledPlayer player;
     player.setplayercount(playercount);
 
     Match& match = lobbies.newLobby(&player);
@@ -102,7 +92,7 @@ void PlayerController::run() {
         if (info.action == NEW_LOBBY) {
             handleNewLobby(playercount);
         } else {  // Handle de join lobby.
-            Player player;
+            ControlledPlayer player;
             player.setplayercount(playercount);
             std::cerr << "Connected lobby info join lobby " << (int)info.attached_id << std::endl;
             playOn(player, lobbies.joinLobby(&player, info.attached_id));
@@ -134,3 +124,9 @@ void PlayerController::finish() {
 }
 
 PlayerController::~PlayerController() { finish(); }
+
+
+
+
+
+

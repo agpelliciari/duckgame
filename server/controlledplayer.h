@@ -1,5 +1,5 @@
-#ifndef LIB_Player_H
-#define LIB_Player_H
+#ifndef LIB_ControlledPlayer_H
+#define LIB_ControlledPlayer_H
 
 #include <mutex>
 #include <utility>
@@ -15,7 +15,7 @@ typedef Queue<MatchDto> player_events;
 // La entidad player es un la parte logica que el match conoce.
 // Tiene su id. Y sus eventos que se les notifico.
 // Ademas de eso. Se considero pertinente poner un monitor/control del estado. Si esta abierto o no.
-class Player {
+class ControlledPlayer {
 
 protected:
 
@@ -32,19 +32,19 @@ protected:
     std::mutex mtx;
 
 public:
-    explicit Player();
+    explicit ControlledPlayer();
 
     // Por ahora tambien nos escapamos del move.
-    Player(Player&&) = delete;
+    ControlledPlayer(ControlledPlayer&&) = delete;
 
-    Player& operator=(Player&&) = delete;
+    ControlledPlayer& operator=(ControlledPlayer&&) = delete;
 
     // Asumamos por ahora que no se quiere permitir copias
-    Player(const Player&) = delete;
-    Player& operator=(const Player&) = delete;
+    ControlledPlayer(const ControlledPlayer&) = delete;
+    ControlledPlayer& operator=(const ControlledPlayer&) = delete;
 
     // No hace falta perse el operador se podria usar el getter de id.
-    bool operator==(const Player& other) const;
+    bool operator==(const ControlledPlayer& other) const;
 
     void setplayercount(const uint8_t count);
     uint8_t playercount() const ;
@@ -72,7 +72,7 @@ public:
     // Pop event. Bloqueante. Si no hay eventos espera a uno.
     MatchDto popstate();
     
-    //~Player();
+    //~ControlledPlayer();
 };
 
 #endif

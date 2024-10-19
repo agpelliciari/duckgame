@@ -1,11 +1,13 @@
 
 
-#include "match_state.h"
+#include "./match_state.h"
 
-MatchState::MatchState(MatchQueue &match_queue_):match_logic(), match_queue(match_queue_){}
+MatchState::MatchState():match_logic(){}
 
-void MatchState::init() {
-
+void MatchState::loop(PlayerContainer& observer, MatchQueue& acciones) {
+     PlayerActionDTO act = {PlayerActionType::PICK_UP, 0 ,0}; 
+     acciones.notify(act);
+     observer.updateState(MatchDto(MatchStateType::INICIADA, 2));
 }
 
 void MatchState::add_player(Player player) {

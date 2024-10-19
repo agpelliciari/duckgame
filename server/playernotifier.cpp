@@ -6,7 +6,7 @@
 #include "common/liberror.h"
 #include "common/queue.h"
 
-PlayerNotifier::PlayerNotifier(Player& _player, PlayerProtocol& _protocol):
+PlayerNotifier::PlayerNotifier(ControlledPlayer& _player, PlayerProtocol& _protocol):
         player(_player), protocol(_protocol) {}
 
 void PlayerNotifier::run() {

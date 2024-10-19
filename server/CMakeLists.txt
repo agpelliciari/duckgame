@@ -1,39 +1,32 @@
 add_subdirectory(logic_server/)
+add_subdirectory(simple_logic/)
 
 target_sources(taller_server
     PRIVATE
     # .cpp files
-         lobbycontainer.cpp
-         playernotifier.cpp
-         player.cpp
-         matchserver.cpp
-         box.cpp
-         playeracceptor.cpp
-         matchaction.cpp
-         match.cpp
-         matchqueue.cpp
-         playercontroller.cpp
-         gameerror.cpp
-         playerprotocol.cpp
-         playercontainer.cpp
-         main.cpp
-         matchstate.cpp
+        playernotifier.cpp
+        playeracceptor.cpp
+        matchserver.cpp
+        lobbycontainer.cpp
+        match.cpp
+        playercontroller.cpp
+        gameerror.cpp
+        controlledplayer.cpp
+        playerprotocol.cpp
+        playercontainer.cpp
+        main.cpp
+         
 
     PUBLIC
     # .h files
-         lobbycontainer.h
-         playerprotocol.h
-         matchaction.h
-         player.h
-         match.h
-         matchqueue.h
-         playeracceptor.h
-         playernotifier.h
-         matchstate.h
-         playercontainer.h
-         gameerror.h
-         matchserver.h
-         playercontroller.h
-         box.h
-
+        playerprotocol.h
+        match.h
+        playeracceptor.h
+        lobbycontainer.h
+        controlledplayer.h
+        playernotifier.h
+        playercontainer.h
+        gameerror.h
+        matchserver.h
+        playercontroller.h 
     )

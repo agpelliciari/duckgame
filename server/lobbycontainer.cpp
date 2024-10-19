@@ -6,7 +6,7 @@
 
 LobbyContainer::LobbyContainer(): lastLobbyId(0) {}
 
-Match& LobbyContainer::newLobby(Player* player) {
+Match& LobbyContainer::newLobby(ControlledPlayer* player) {
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on lobby.
     Match& lobby = lobbies.emplace_back(++lastLobbyId);
     lobby.addPlayer(player);
@@ -26,7 +26,7 @@ Match& LobbyContainer::findLobby(lobbyID id) {
 }
 
 // Unirse a la lobby y esperar a que empieze. Tira error si no existe.
-Match& LobbyContainer::joinLobby(Player* player, lobbyID id) {
+Match& LobbyContainer::joinLobby(ControlledPlayer* player, lobbyID id) {
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on container.
     Match& lobby = findLobby(id);
     if (lobby.isrunning()) {
