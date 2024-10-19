@@ -1,4 +1,4 @@
-#include "player_types.h"
+#include "common/dtosplayer.h"
 
 #ifndef WEAPON_H
 #define WEAPON_H
@@ -12,7 +12,7 @@ class Weapon {
 
     public:
         Weapon();
-        void get_weapon(TypeWeapon &type)
+        void get_weapon(TypeWeapon &type);
 
 };
 

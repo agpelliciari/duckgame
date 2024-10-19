@@ -2,7 +2,7 @@
 #include "weapon.h"
 #include "armor.h"
 #include "action.h"
-#include "player_types.h"
+#include "common/dtosplayer.h"
 
 #ifndef PLAYER_H
 #define PLAYER_H

@@ -1,7 +1,9 @@
-#ifndef LIB_DTOS_H
-#define LIB_DTOS_H
+#ifndef LIB_DTOS_PLAYER_H
+#define LIB_DTOS_PLAYER_H
 
-enum PlayerActionType:uint8_t { 
+#include <cstdint>
+
+enum PlayerActionType :uint8_t { 
     PICK_UP = 3, 
 };
 
@@ -28,7 +30,7 @@ enum class TypeWeapon {
     SNIPER
 };
 
-enum class TypeStatePlayer {
+enum class TypeMoveAction {
     NONE,
     MOVE_LEFT,
     MOVE_RIGHT,
@@ -45,9 +47,11 @@ struct PlayerDTO{
     TypeWeapon weapon;
     bool helmet;
     bool chest_armor;
-    TypeStatePlayer state;
+    TypeMoveAction move_action;
 
     PlayerDTO(int id_, bool alive, int x, int y, TypeWeapon w, bool h, bool armor, TypeMoveAction action)
         : id(id_), is_alive(alive), coord_x(x), coord_y(y), weapon(w), helmet(h), chest_armor(armor), move_action(action) {}
 
-}__attribute__((packed));
+};//__attribute__((packed));
+
+#endif

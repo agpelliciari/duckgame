@@ -1,7 +1,7 @@
 #include "player.h"
-#include "match_logic.h"
-#include "match_queue.h"
-#include "box"
+#include "./match_logic.h"
+#include "./match_queue.h"
+#include "./box.h"
 #include <list>
 
 #ifndef MATCH_STATE_H

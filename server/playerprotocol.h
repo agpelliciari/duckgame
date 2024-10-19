@@ -8,6 +8,7 @@
 
 #include "./matchaction.h"
 #include "common/dtos.h"
+#include "common/dtosplayer.h"
 #include "common/event.h"
 #include "common/protocol.h"
 
@@ -41,7 +42,7 @@ public:
 
     // Attempts to receive pickup action.
     // If failed throws either LibError or GameError.
-    player_action_dto recvaction();
+    PlayerActionDTO recvaction();
 
     void sendstate(const MatchDto&& state);
 

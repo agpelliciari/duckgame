@@ -1,3 +1,5 @@
+add_subdirectory(logic_server/)
+
 target_sources(taller_server
     PRIVATE
     # .cpp files

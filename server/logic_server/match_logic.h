@@ -1,5 +1,5 @@
 #include "player.h"
-#include "player_DTO.h"
+#include "common/dtosplayer.h"
 #include <vector>
 #include <list>
 

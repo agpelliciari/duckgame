@@ -5,7 +5,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
-#include "common/dtosplayer.h"
+#include "./dtosplayer.h"
 
 enum LobbyActionType:uint8_t { 
     NEW_LOBBY = 0x16, 

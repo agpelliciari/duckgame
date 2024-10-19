@@ -11,6 +11,7 @@ target_sources(taller_common
     PUBLIC
     # .h files
         dtos.h
+        dtosplayer.h
         reward.h
         event.h
         resolver.h

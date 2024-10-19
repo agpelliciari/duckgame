@@ -36,7 +36,7 @@ void PlayerController::playOn(Player& player, Match& match) {
 
             // Parseado que capaz no va aca..
 
-            player_action_dto action = protocol.recvaction();
+            PlayerActionDTO action = protocol.recvaction();
             if (action.type != PICK_UP) {
                 std::cerr << "Invalid action!" << std::endl;
                 continue;
