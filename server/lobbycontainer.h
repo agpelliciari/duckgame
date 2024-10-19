@@ -4,19 +4,21 @@
 
 #include <list>
 #include <mutex>
-#include "./lobby.h"
+
+#include "./match.h"
 
 // Contenedor/monitor de los players activos en el match.
 class LobbyContainer {
 public:
-    typedef std::list<Lobby> lobby_container;
+    typedef std::list<Match> lobby_container;
 
 private:
-    lobbyID lastLobbyId;  // cppcheck-suppress unusedStructMember
+    lobbyID lastLobbyId;      // cppcheck-suppress unusedStructMember
     lobby_container lobbies;  // cppcheck-suppress unusedStructMember
     std::mutex mtx;
-    
-    Lobby& findLobby(lobbyID id);
+
+    Match& findLobby(lobbyID id);
+
 public:
     // Default constructor
     LobbyContainer();
@@ -27,20 +29,19 @@ public:
     LobbyContainer& operator=(LobbyContainer&&) = delete;
 
     // Es necesrio trabajar con punteros al ser una coleccion
-    lobbyID newLobby(Player* anfitrion);
-    
-    // Unirse a la lobby y esperar a que empieze la partida. Tira error si no existe.
+    Match& newLobby(Player* anfitrion);
+
+    // Unirse a la lobby/match tira error si no existe. No espera a que se empieze.
     Match& joinLobby(Player* player, lobbyID id);
-    
+
     // Una vez empezada no se aceptan mas.
-    Match& startLobby(lobbyID id);
-    
-    void stopLobby(lobbyID id);
+    void startLobby(Match& match);
+
+    void stopLobby(const Match& match);
 
     // Remueve todos los restantes. Normalmente no deberia haber, ya se deberian haber desconectado.
     void finishAll();
     ~LobbyContainer();
-
 };
 
 #endif

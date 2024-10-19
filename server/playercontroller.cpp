@@ -3,9 +3,9 @@
 #include <iostream>
 #include <utility>
 
-#include "common/liberror.h"
 #include "./gameerror.h"
 #include "./playernotifier.h"
+#include "common/liberror.h"
 
 
 PlayerController::PlayerController(LobbyContainer& _lobbies, Socket& skt):
@@ -17,32 +17,32 @@ bool PlayerController::isopen() { return protocol.isopen(); }
 void PlayerController::init() {
     if (_is_alive) {
         throw GameError("Tried to init player notifier/controller when already inited.");
-    }    
+    }
     start();
 }
 
-void PlayerController::playOn(Player& player, Match& match){
+void PlayerController::playOn(Player& player, Match& match) {
     player.open();
-    
+
     // Inicia notifier.
     PlayerNotifier notifier(player, protocol);
     notifier.start();
     try {
-        
+
         // Loopeado de acciones
         std::string name("Player ");
         name.append(std::to_string(player.getid(0)));
         while (_keep_running) {
-        
+
             // Parseado que capaz no va aca..
-            
+
             player_action_dto action = protocol.recvaction();
-            if(action.type != PICK_UP){
-                 std::cerr << "Invalid action!"<<std::endl;
-                 continue;
+            if (action.type != PICK_UP) {
+                std::cerr << "Invalid action!" << std::endl;
+                continue;
             }
-            std::string actor = name+"_";
-            actor.append(std::to_string(action.playerind));            
+            std::string actor = name + "_";
+            actor.append(std::to_string(action.playerind));
             match.notifyAction(MatchAction(actor, action.specific_info));
         }
         player.disconnect();  // Finalizo normalmente.
@@ -56,54 +56,55 @@ void PlayerController::playOn(Player& player, Match& match){
         std::cerr << "Controller MATCH END " << error.what() << std::endl;
         player.disconnect();
     }
-    
+
     notifier.stop();
-    notifier.join();    
+    notifier.join();
 
     // El log a cerr podria ser innecesario. Pero sirve para hacer cosas mas descriptivas.
     std::cerr << ">closed Player " << player.getid(0) << std::endl;
-    if(player.playercount() >1 ){
+    if (player.playercount() > 1) {
         std::cerr << ">closed Player " << player.getid(1) << std::endl;
     }
 }
 
 
-void PlayerController::handleNewLobby(const uint8_t playercount){
-        Player player;
-        player.setplayercount(playercount);
+void PlayerController::handleNewLobby(const uint8_t playercount) {
+    Player player;
+    player.setplayercount(playercount);
 
-        lobbyID id = lobbies.newLobby(&player);
-        std::cerr << "New lobby id: "<< (int) id << std::endl;
-        
-        if(!protocol.recvsignalstart()){
-             std::cerr << "CANCELED LOBBY: "<< (int) id << std::endl;
-             // Close lobby
-             lobbies.stopLobby(id);
-             return;
-        }
-        std::cerr << "Started lobby id: "<< (int) id << std::endl;
-        
-        // Es no except.
-        playOn(player, lobbies.startLobby(id));
-        
+    Match& match = lobbies.newLobby(&player);
+    std::cerr << "New lobby id: " << (int)match.getID() << std::endl;
+
+    if (!protocol.recvsignalstart()) {
+        std::cerr << "CANCELED LOBBY: " << (int)match.getID() << std::endl;
         // Close lobby
-        lobbies.stopLobby(id);
+        lobbies.stopLobby(match);
+        return;
+    }
+    std::cerr << "Started lobby id: " << (int)match.getID() << std::endl;
+    lobbies.startLobby(match);
+
+    // Es no except.
+    playOn(player, match);
+
+    // Close lobby on exit of anfitrion?
+    lobbies.stopLobby(match);
 }
 
 void PlayerController::run() {
-    try{
-        uint8_t playercount; 
-        if(!protocol.recvplayercount(&playercount)){
+    try {
+        uint8_t playercount;
+        if (!protocol.recvplayercount(&playercount)) {
             std::cerr << "Player controller aborted" << std::endl;
-            return; // Permitamos que se desconecte inicialmente si no se manda el count.
+            return;  // Permitamos que se desconecte inicialmente si no se manda el count.
         }
-        lobby_info info =protocol.recvlobbyinfo();        
-        if(info.lobby_action == NEW_LOBBY){
+        lobby_info info = protocol.recvlobbyinfo();
+        if (info.lobby_action == NEW_LOBBY) {
             handleNewLobby(playercount);
-        } else{ // Handle de join lobby.
+        } else {  // Handle de join lobby.
             Player player;
             player.setplayercount(playercount);
-            std::cerr << "Connected lobby info join lobby "<< (int) info.attached_id << std::endl;
+            std::cerr << "Connected lobby info join lobby " << (int)info.attached_id << std::endl;
             playOn(player, lobbies.joinLobby(&player, info.attached_id));
         }
     } catch (const LibError& error) {
@@ -121,17 +122,15 @@ void PlayerController::finish() {
     if (!_keep_running) {
         return;
     }
-    
+
     // Se encarga el protocol de verificar solo sea cerrado una vez.
     protocol.close();
-    
+
     stop();
-    
+
 
     // Joins
     join();
 }
 
-PlayerController::~PlayerController() {
-    finish();
-}
+PlayerController::~PlayerController() { finish(); }
