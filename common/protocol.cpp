@@ -13,14 +13,14 @@
 
 #define MARK_NOTIF 0x06
 
-// Por ahora esto es posible y util hacerlo en el preprocesado.
-#define PROTOCOL_INIT "What arya buying?"
-#define INIT_LENGTH sizeof(PROTOCOL_INIT) - 1
-// -1... incluye el /0 del final.
-
 // La unica forma de quitar el ownership del socket es creando otro socket que le quite el ownership
 // al original. Suena ineficiente.
 Protocol::Protocol(Protocol&& other): skt(std::move(other.skt)) {}
+
+Protocol::Protocol(Socket& _skt):
+        skt(std::move(_skt)) {}  // Para permitir pasaje desde una variable?
+Protocol::Protocol(Socket&& _skt): skt(std::move(_skt)) {}  // Para permitir desde expresiones.
+
 
 Protocol& Protocol::operator=(Protocol&& other) {
     if (this == &other) {

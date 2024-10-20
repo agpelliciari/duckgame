@@ -12,9 +12,12 @@ using ::testing::AtLeast;
 using ::testing::HasSubstr;
 using ::testing::ThrowsMessage;
 
-TEST(BaseProtocolTest, Check) {
-    // MockSocket messen;
-    // EXPECT_CALL(messen, close()).Times(AtLeast(1));
+TEST(BaseProtocolTest, Check) { EXPECT_EQ(9, (int)(4 + 5)); }
 
-    EXPECT_EQ(9, (int)(4 + 5));
+TEST(BaseProtocolTest, MockSocketBase) {
+    MockSocket messen;
+    EXPECT_CALL(messen, close()).Times(AtLeast(1));
+    messen.close();
+
+    EXPECT_EQ(11, (int)(4 + 6));
 }

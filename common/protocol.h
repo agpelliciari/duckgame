@@ -22,10 +22,8 @@ protected:
     Socket skt;
 
 public:
-    explicit Protocol(Socket& _skt):
-            skt(std::move(_skt)) {}  // Para permitir pasaje desde una variable?
-
-    explicit Protocol(Socket&& _skt): skt(std::move(_skt)) {}  // Para permitir desde expresiones.
+    explicit Protocol(Socket& _skt);
+    explicit Protocol(Socket&& _skt);
 
     // Asumamos por ahora que no se quiere permitir copias..
     Protocol(const Protocol&) = delete;
