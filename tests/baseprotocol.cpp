@@ -10,6 +10,7 @@
 
 using ::testing::AllOf;
 using ::testing::AtLeast;
+using ::testing::Eq;
 using ::testing::Ge;
 using ::testing::HasSubstr;
 using ::testing::NotNull;
@@ -21,7 +22,7 @@ TEST(BaseProtocolTest, Check) { EXPECT_EQ(9, (int)(4 + 5)); }
 TEST(BaseProtocolTest, MockSocketBase) {
     MockSocket messen;
     EXPECT_CALL(messen, close()).Times(AtLeast(1));
-    EXPECT_CALL(messen, sendsome(NotNull(), Ge(10))).Times(AtLeast(1));
+    EXPECT_CALL(messen, sendsome(NotNull(), Eq(10))).Times(AtLeast(1));
 
 
     char buff[10];
@@ -32,11 +33,10 @@ TEST(BaseProtocolTest, MockSocketBase) {
 }
 
 TEST(BaseProtocolTest, ProtocolClosedSocket) {
-    MockSocket messen;
-    EXPECT_CALL(messen, close()).Times(AtLeast(1));
+    MockSocket* messen = new MockSocket();
+    EXPECT_CALL(*messen, close()).Times(1);
+    EXPECT_CALL(*messen, shutdown(Eq(2))).Times(1);
+    Protocol protocol(messen);
 
-    EXPECT_EQ(10, (int)(4 + 6));
-    // Protocol protocol(messen);
-
-    // protocol.close();
+    protocol.close();
 }
