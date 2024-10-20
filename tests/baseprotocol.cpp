@@ -13,8 +13,8 @@ using ::testing::HasSubstr;
 using ::testing::ThrowsMessage;
 
 TEST(BaseProtocolTest, Check) {
-    //MockSocket messen;
-    //EXPECT_CALL(messen, close()).Times(AtLeast(1));
+    // MockSocket messen;
+    // EXPECT_CALL(messen, close()).Times(AtLeast(1));
 
     EXPECT_EQ(9, (int)(4 + 5));
 }
