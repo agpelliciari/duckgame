@@ -8,6 +8,7 @@ target_sources(taller_common
         protocol.cpp
     PUBLIC
     # .h files
+        messenger.h
         dtos.h
         dtosplayer.h
         resolver.h
