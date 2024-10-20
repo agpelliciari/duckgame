@@ -2,11 +2,12 @@
 
 #include "./mocksocket.h"
 #include "client/clientprotocol.h"
-//#include "common/messenger.h"
+#include "common/liberror.h"
 #include "common/protocol.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "server/playerprotocol.h"
+
 
 using ::testing::AllOf;
 using ::testing::AtLeast;
@@ -15,28 +16,60 @@ using ::testing::Ge;
 using ::testing::HasSubstr;
 using ::testing::NotNull;
 using ::testing::Pointee;
+using ::testing::Return;
 using ::testing::ThrowsMessage;
 
-TEST(BaseProtocolTest, Check) { EXPECT_EQ(9, (int)(4 + 5)); }
+//#include <arpa/inet.h>
 
-TEST(BaseProtocolTest, MockSocketBase) {
-    MockSocket messen;
-    EXPECT_CALL(messen, close()).Times(AtLeast(1));
-    EXPECT_CALL(messen, sendsome(NotNull(), Eq(10))).Times(AtLeast(1));
+static const char SIMPLE_MSG[] = "UN MENSAJE";
+
+static void expectStrSend(MockSocket* messen, const std::string& msg) {
+    uint16_t size = msg.length();
+    EXPECT_CALL(*messen, trysendall(NotNull(), Eq(2))).Times(1);
+    ON_CALL(*messen, trysendall(NotNull(), Eq(2))).WillByDefault(Return(2));
+
+    EXPECT_CALL(*messen, sendall(Eq(msg.c_str()), Eq(size))).Times(1);
+}
+
+static void expectStrSendFail(MockSocket* messen, const std::string& msg) {
+    uint16_t size = msg.length();
+    EXPECT_CALL(*messen, trysendall(NotNull(), Eq(2))).Times(1);
+    ON_CALL(*messen, trysendall(NotNull(), Eq(2))).WillByDefault(Return(1));
+
+    EXPECT_CALL(*messen, sendall(Eq(msg.c_str()), Eq(size))).Times(0);
+}
 
 
-    char buff[10];
-    messen.sendsome(&buff[0], 10);
-
-    messen.close();
-    // EXPECT_EQ(10, (int)(4 + 6));
+static void expectClose(MockSocket* messen) {
+    EXPECT_CALL(*messen, close()).Times(1);
+    EXPECT_CALL(*messen, shutdown(Eq(2))).Times(1);
 }
 
 TEST(BaseProtocolTest, ProtocolClosedSocket) {
     MockSocket* messen = new MockSocket();
-    EXPECT_CALL(*messen, close()).Times(1);
-    EXPECT_CALL(*messen, shutdown(Eq(2))).Times(1);
+    expectClose(messen);
+
     Protocol protocol(messen);
 
     protocol.close();
+}
+
+
+TEST(BaseProtocolTest, ProtocolSendsSimpleMsgString) {
+    MockSocket* messen = new MockSocket();
+    std::string msg(SIMPLE_MSG);
+    expectStrSend(messen, msg);
+
+    Protocol protocol(messen);
+    protocol.sendmsg(msg);
+}
+
+
+TEST(BaseProtocolTest, ProtocolSendsSimpleMsgStringFail) {
+    MockSocket* messen = new MockSocket();
+    std::string msg(SIMPLE_MSG);
+    expectStrSendFail(messen, msg);
+
+    Protocol protocol(messen);
+    EXPECT_THROW(protocol.sendmsg(msg), LibError);
 }
