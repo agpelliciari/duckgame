@@ -140,7 +140,7 @@ if(TALLER_TESTS)
 
     # HEY!! TODO XXX: I'm assuming that the code under testing is in taller_common
     # Change this if you have to.
-    add_dependencies(taller_tests taller_common)
+    add_dependencies(taller_tests taller_common taller_server taller_client)
 
     # Say where to find the xoz headers
     # HEY!! TODO XXX: add more subfolders here
@@ -164,6 +164,9 @@ if(TALLER_TESTS)
     # Change this if you have to.
     target_link_libraries(taller_tests
         taller_common
-        GTest::gtest_main
+        GTest::gtest_main gmock_main
     )
+    
+    #include(GoogleTest)
+    #gtest_discover_tests(taller_tests)
 endif()
