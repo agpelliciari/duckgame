@@ -5,9 +5,7 @@
 #include <utility>
 
 #include "common/dtos.h"
-#include "common/event.h"
 #include "common/liberror.h"
-#include "common/reward.h"
 
 ClientProtocol::ClientProtocol(Socket skt): protocol(skt) {}
 
@@ -15,7 +13,7 @@ void ClientProtocol::pickup(const uint8_t indplayer, const uint8_t box) {
 
     uint8_t tosend = box - 1;
     // se le resta 1 a la box.
-    player_action_dto action = {PlayerActionType::PICK_UP, indplayer, tosend};
+    PlayerActionDTO action = {PlayerActionType::PICK_UP, indplayer, tosend};
     protocol.sendbytes(&action, sizeof(action));
 }
 

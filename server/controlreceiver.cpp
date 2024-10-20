@@ -1,49 +1,39 @@
-#include "./playercontroller.h"
+#include "./controlreceiver.h"
 
 #include <iostream>
 #include <utility>
 
+#include "./controlnotifier.h"
 #include "./gameerror.h"
-#include "./playernotifier.h"
 #include "common/liberror.h"
 
 
-PlayerController::PlayerController(LobbyContainer& _lobbies, Socket& skt):
+ControlReceiver::ControlReceiver(LobbyContainer& _lobbies, Socket& skt):
         lobbies(_lobbies), protocol(std::move(skt)) {}
 
 
-bool PlayerController::isopen() { return protocol.isopen(); }
+bool ControlReceiver::isopen() { return protocol.isopen(); }
 
-void PlayerController::init() {
+void ControlReceiver::init() {
     if (_is_alive) {
         throw GameError("Tried to init player notifier/controller when already inited.");
     }
     start();
 }
 
-void PlayerController::playOn(Player& player, Match& match) {
+void ControlReceiver::playOn(ControlledPlayer& player, Match& match) {
     player.open();
 
     // Inicia notifier.
-    PlayerNotifier notifier(player, protocol);
+    ControlNotifier notifier(player, protocol);
     notifier.start();
     try {
 
         // Loopeado de acciones
-        std::string name("Player ");
-        name.append(std::to_string(player.getid(0)));
+
+
         while (_keep_running) {
-
-            // Parseado que capaz no va aca..
-
-            player_action_dto action = protocol.recvaction();
-            if (action.type != PICK_UP) {
-                std::cerr << "Invalid action!" << std::endl;
-                continue;
-            }
-            std::string actor = name + "_";
-            actor.append(std::to_string(action.playerind));
-            match.notifyAction(MatchAction(actor, action.specific_info));
+            match.notifyAction(protocol.recvaction());
         }
         player.disconnect();  // Finalizo normalmente.
     } catch (const LibError& error) {
@@ -68,8 +58,8 @@ void PlayerController::playOn(Player& player, Match& match) {
 }
 
 
-void PlayerController::handleNewLobby(const uint8_t playercount) {
-    Player player;
+void ControlReceiver::handleNewLobby(const uint8_t playercount) {
+    ControlledPlayer player;
     player.setplayercount(playercount);
 
     Match& match = lobbies.newLobby(&player);
@@ -91,7 +81,7 @@ void PlayerController::handleNewLobby(const uint8_t playercount) {
     lobbies.stopLobby(match);
 }
 
-void PlayerController::run() {
+void ControlReceiver::run() {
     try {
         uint8_t playercount;
         if (!protocol.recvplayercount(&playercount)) {
@@ -102,7 +92,7 @@ void PlayerController::run() {
         if (info.action == NEW_LOBBY) {
             handleNewLobby(playercount);
         } else {  // Handle de join lobby.
-            Player player;
+            ControlledPlayer player;
             player.setplayercount(playercount);
             std::cerr << "Connected lobby info join lobby " << (int)info.attached_id << std::endl;
             playOn(player, lobbies.joinLobby(&player, info.attached_id));
@@ -116,7 +106,7 @@ void PlayerController::run() {
 
 // Este metodo no hace acciones irreversibles
 // Tal que vos podrias re empezar los threads devuelta. Reconectar.
-void PlayerController::finish() {
+void ControlReceiver::finish() {
     // Como solo el controller modifica el keep running/llama a stop sirve
     // para saber si todavia no se termino
     if (!_keep_running) {
@@ -133,4 +123,4 @@ void PlayerController::finish() {
     join();
 }
 
-PlayerController::~PlayerController() { finish(); }
+ControlReceiver::~ControlReceiver() { finish(); }

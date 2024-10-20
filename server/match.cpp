@@ -4,15 +4,11 @@
 
 #include "./gameerror.h"
 
-#include "unistd.h"
-
-static const int SLEEP_TIME = 1000 * 200;  // 200ms
-
-Match::Match(lobbyID _id): id(_id), players(), state() {}
+Match::Match(lobbyID _id): id(_id), players(), looper() {}
 
 
 // Protected// friend accessed methods
-void Match::addPlayer(Player* player) { players.add(player); }
+void Match::addPlayer(ControlledPlayer* player) { players.add(player); }
 
 void Match::init() {
     if (is_alive()) {
@@ -41,23 +37,15 @@ bool Match::operator==(const Match& other) const { return this->id == other.id; 
 lobbyID Match::getID() const { return this->id; }
 
 // Metodos delegatorios.
-void Match::notifyAction(const MatchAction&& action) {
+void Match::notifyAction(const PlayerActionDTO&& action) {
     if (_keep_running) {
         actions.notify(action);
     }
 }
 
 void Match::run() {
-    // bool matchcontinues = true;
-    while (_keep_running) {
-        // while (_keep_running && matchcontinues) {      // Mientras deba ejecutarse.
-        state.step();            // non player logic.
-        actions.applyOn(state);  // player logic
 
-        players.updateState(state);
-
-        usleep(SLEEP_TIME);
-    }
+    looper.loop(players, actions);
     // Checkea si el finish fue natural o forzado.
 }
 

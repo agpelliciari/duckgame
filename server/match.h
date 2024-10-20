@@ -5,12 +5,18 @@
 #include <queue>
 #include <utility>
 
-#include "./matchaction.h"
-#include "./matchqueue.h"
-#include "./matchstate.h"
-#include "./playercontainer.h"
-#include "common/event.h"
+#include "common/dtosplayer.h"
 #include "common/thread.h"
+
+
+// Descomentar si ya son usables.
+//#include "server/logic_server/match_queue.h"
+//#include "server/logic_server/match_state.h"
+
+// Logica sencilla del tp de threads
+#include "./playercontainer.h"
+#include "server/simple_logic/simpleloop.h"
+#include "server/simple_logic/simplequeue.h"
 
 class LobbyContainer;  // Se declara existe.
 
@@ -22,15 +28,15 @@ class Match: private Thread {
 private:
     lobbyID id;               // cppcheck-suppress unusedStructMember
     PlayerContainer players;  // cppcheck-suppress unusedStructMember
-    MatchState state;         // cppcheck-suppress unusedStructMember
-    MatchQueue actions;       // cppcheck-suppress unusedStructMember
+    SimpleLoop looper;        // cppcheck-suppress unusedStructMember
+    SimpleQueue actions;      // cppcheck-suppress unusedStructMember
 
     // Para el thread y en general el loopeado
     void run() override;
 
 protected:
     friend class LobbyContainer;
-    void addPlayer(Player* player);
+    void addPlayer(ControlledPlayer* player);
 
     // Metodos analogos a los de thread. expuestos a friend nada mas.
     void init();
@@ -59,7 +65,7 @@ public:
     // Metodos publicos.. accesibles incluso a player controllers.
     // No hay precondiciones perse. Podria no haber empezado el match.
     // Metodos delegatorios
-    void notifyAction(const MatchAction&& action);
+    void notifyAction(const PlayerActionDTO&& action);
     bool isrunning() const;
     ~Match();
 };

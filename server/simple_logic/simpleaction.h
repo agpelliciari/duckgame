@@ -1,31 +1,31 @@
-#ifndef LIB_MATCH_ACTION_H
-#define LIB_MATCH_ACTION_H
+#ifndef LIB_SIMPLE_ACTION_H
+#define LIB_SIMPLE_ACTION_H
 
 #include <cstdint>
 #include <string>
 
-#include "./matchstate.h"
+#include "server/simple_logic/simplestate.h"
 
 // Encapsulador de logica de una accion de un player.
 // Por ahora solo un pickup.
-class MatchAction {
+class SimpleAction {
 private:
     std::string player;  // cppcheck-suppress unusedStructMember
     int boxpicked;       // cppcheck-suppress unusedStructMember
 
 public:
     // Para abstraer el socket se tiene solo un constructor que construye el socket internamente.
-    explicit MatchAction(const std::string& name, const uint8_t boxpicked);
-    MatchAction();
+    explicit SimpleAction(const std::string& name, const uint8_t boxpicked);
+    SimpleAction();
 
     // Asumamos copy = default, move = default
-    MatchAction(const MatchAction&) = default;
-    MatchAction& operator=(const MatchAction&) = default;
-    MatchAction(MatchAction&&) = default;
-    MatchAction& operator=(MatchAction&&) = default;
+    SimpleAction(const SimpleAction&) = default;
+    SimpleAction& operator=(const SimpleAction&) = default;
+    SimpleAction(SimpleAction&&) = default;
+    SimpleAction& operator=(SimpleAction&&) = default;
 
     // Decide y delega que accion aplicar al state del match.
-    void applyOn(MatchState& state);
+    void applyOn(SimpleState& state);
 };
 
 #endif

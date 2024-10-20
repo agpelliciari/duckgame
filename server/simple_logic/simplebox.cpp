@@ -1,23 +1,23 @@
-#include "./box.h"
+#include "./simplebox.h"
 
 #include <iostream>
 #include <string>
 
-#include "./gameerror.h"
+#include "server/gameerror.h"
 
-bool Box::isAvailable() const { return remainingsteps == 0; }
+bool SimpleBox::isAvailable() const { return remainingsteps == 0; }
 
-Reward Box::open(const RewardType& type) {
+SimpleReward SimpleBox::open(const RewardType& type) {
     if (!isAvailable()) {
         throw GameError("Tried to open not available box");
     }
-    Reward res(type);
+    SimpleReward res(type);
 
     remainingsteps = res.respawntime();
     return res;
 }
 
-bool Box::step() {
+bool SimpleBox::step() {
     if (!isAvailable()) {
         remainingsteps -= 1;
         return isAvailable();

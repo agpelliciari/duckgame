@@ -13,7 +13,7 @@ void PlayerAcceptor::newPlayer(Socket&& connection) {
 
     // El ide para logs basicamente. Si bien se usa para el equal operator. Tampoco es que el equal
     // operator se use.
-    PlayerController& controller = controllers.emplace_back(lobbies, connection);
+    ControlReceiver& controller = controllers.emplace_back(lobbies, connection);
 
     // start del thread notifier y controller . Ademas joinea el match en si.
     controller.init();
@@ -53,9 +53,7 @@ void PlayerAcceptor::run() {
 }
 void PlayerAcceptor::init() { start(); }
 
-bool PlayerAcceptor::isrunning(){
-     return is_alive();
-}
+bool PlayerAcceptor::isrunning() { return is_alive(); }
 
 void PlayerAcceptor::finish() {
     if (!_keep_running) {  // Evitemos cerrar dos veces.

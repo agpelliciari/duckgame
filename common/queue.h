@@ -7,6 +7,7 @@
 #include <mutex>
 #include <queue>
 #include <stdexcept>
+#include <utility>
 #include <vector>
 
 struct ClosedQueue: public std::runtime_error {
@@ -179,7 +180,12 @@ public:
         closed = true;
         is_not_empty.notify_all();
     }
-    
+
+    bool isclosed() {
+        std::unique_lock<std::mutex> lck(mtx);
+        return closed;
+    }
+
     void reopen() {
         std::unique_lock<std::mutex> lck(mtx);
         // Aseguremosnos esta vacia la queue.

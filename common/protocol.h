@@ -41,12 +41,12 @@ public:
     void sendbyte(const uint8_t byte);
     uint8_t recvbyte();
 
-    // para mandar structs.. o similes 
+    // para mandar structs.. o similes
     void sendbytes(const void* msg, const unsigned int count);
     void recvbytes(void* buff, const unsigned int count);
 
     bool tryrecvbytes(void* buff, const unsigned int count);
-    bool tryrecvbyte(uint8_t* out);    
+    bool tryrecvbyte(uint8_t* out);
 
 
     // Signal action send.

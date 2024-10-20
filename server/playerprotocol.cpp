@@ -5,7 +5,6 @@
 #include <utility>
 
 #include "./gameerror.h"
-#include "common/event.h"
 
 
 PlayerProtocol::PlayerProtocol(Socket&& skt): protocol(skt), isactive(true) {}
@@ -28,8 +27,8 @@ lobby_action PlayerProtocol::recvlobbyaction() {
     return out;
 }
 
-player_action_dto PlayerProtocol::recvaction() {
-    player_action_dto action;
+PlayerActionDTO PlayerProtocol::recvaction() {
+    PlayerActionDTO action;
     if (!protocol.tryrecvbytes(&action, sizeof(action))) {
         isactive = false;
         throw GameError("Did not receive action!");
