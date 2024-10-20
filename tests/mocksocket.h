@@ -1,6 +1,5 @@
 #include "common/messenger.h"
 #include "gmock/gmock.h"
-//#include "common/socket.h"
 
 class MockSocket: public Messenger {
 public:

@@ -13,48 +13,55 @@
 
 #define MARK_NOTIF 0x06
 
-// La unica forma de quitar el ownership del socket es creando otro socket que le quite el ownership
-// al original. Suena ineficiente.
+Protocol::Protocol(Socket* _skt): skt(_skt) {}
+Protocol::Protocol(std::unique_ptr<Socket>& _skt): skt(std::move(_skt)) {}
+
+// Para asegurarse del scope de la variable hay que pasarlo al heap.
+Protocol::Protocol(Socket& _skt): skt(new Socket(std::move(_skt))) {}
+
+
+// El unique ptr le quita el ownership.
 Protocol::Protocol(Protocol&& other): skt(std::move(other.skt)) {}
-
-Protocol::Protocol(Socket& _skt):
-        skt(std::move(_skt)) {}  // Para permitir pasaje desde una variable?
-Protocol::Protocol(Socket&& _skt): skt(std::move(_skt)) {}  // Para permitir desde expresiones.
-
 
 Protocol& Protocol::operator=(Protocol&& other) {
     if (this == &other) {
         return *this;
     }
 
-
-    this->skt = std::move(other.skt);  // Quitar owner ship al otro y cerrar el anterior. Mov.
+    this->skt = std::move(other.skt);  // El ptr le quita owner ship al otro
 
     return *this;
 }
 
 
-// Este metodo perse no deberia ser parte del protocolo. Ya que no se plantea la necesidad.
-// Pero se lo encapsula para tenerlo por si es necesario re usarlo.
-static uint16_t readlen(Socket& skt) {
-    uint16_t res;
-    if (skt.tryrecvall(&res, 2) != 2) {  // Intenta leer los 2 bytes.
-        throw LibError(1, "Read of message length failed read less than 2 byte");
+uint16_t Protocol::recvshort() {
+    uint16_t num;
+    if (this->skt->tryrecvall(&num, 2) != 2) {  // Intenta leer los 2 bytes.
+        throw LibError(1, "Read of length failed read less than 2 byte");
     }
 
-    return ntohs(res);  // castea a host endiannes.
+    return ntohs(num);  // castea a host endiannes.
+}
+
+void Protocol::sendshort(const uint16_t num) {
+    uint16_t size = htons(num);  // Aserveramos big endian.
+    // Envio del size del mensaje a mandar
+    if (this->skt->trysendall(&size, 2) != 2) {
+        throw LibError(1, "Failed to send of short.");
+    }
 }
 
 
 // Lee todo el mensaje aseguradamente. Y le pone un 0 al final. Para hacer facil la conversion a
 // string.
 std::vector<char> Protocol::recvmsg() {
-    uint16_t recvlen = readlen(this->skt);
+    uint16_t recvlen = recvshort();
+
     std::vector<char> res(recvlen + 1, 0);
 
     // Puede ser empty string, que no deberia perse pero no es para nosotros decir es error.
     if (recvlen > 0) {
-        this->skt.recvall(res.data(), recvlen);
+        this->skt->recvall(res.data(), recvlen);
     }
 
     return res;
@@ -62,11 +69,8 @@ std::vector<char> Protocol::recvmsg() {
 
 std::string Protocol::recvmsgstr() { return std::string(recvmsg().data()); }
 
-
-// Intenta leer el mensaje, si el mensaje a recibir es mas grande que lo
-// permitido. tira excepcion.
 uint16_t Protocol::recvmsg(char* buff, unsigned int max) {
-    uint16_t recvlen = readlen(this->skt);
+    uint16_t recvlen = recvshort();
     if (recvlen == 0) {
         return 0;  // Algun empty string, que no deberia perse pero no es para nosotros decir es
                    // error.
@@ -77,7 +81,7 @@ uint16_t Protocol::recvmsg(char* buff, unsigned int max) {
                        recvlen);
     }
 
-    if (this->skt.tryrecvall(buff, recvlen) < recvlen) {  // Fallo al leer todo el mensaje!
+    if (this->skt->tryrecvall(buff, recvlen) < recvlen) {  // Fallo al leer todo el mensaje!
         throw LibError(1, "Expected to receive %d but eof reached or read failed", recvlen);
     }
 
@@ -85,13 +89,8 @@ uint16_t Protocol::recvmsg(char* buff, unsigned int max) {
 }
 
 void Protocol::sendmsg(const char* buff, const uint16_t len) {
-    uint16_t size = htons(len);  // Aserveramos big endian.
-    // Envio del size del mensaje a mandar
-    if (this->skt.trysendall(&size, 2) != 2) {
-        throw LibError(1, "Failed to send length of message.");
-    }
-
-    this->skt.sendall(buff, len);  // Envio del mensaje en si
+    sendshort(len);
+    this->skt->sendall(buff, len);  // Envio del mensaje en si
 }
 void Protocol::sendmsg(const std::string& message) {
     this->sendmsg(message.c_str(), message.length());
@@ -99,7 +98,7 @@ void Protocol::sendmsg(const std::string& message) {
 
 
 void Protocol::sendbyte(const uint8_t num) {
-    if (this->skt.sendsome(&num, 1) == 0) {
+    if (this->skt->sendsome(&num, 1) == 0) {
         throw LibError(1,  // default para errores
                        "Failed to send u8 number to connection");
     }
@@ -109,17 +108,17 @@ void Protocol::sendbyte(const uint8_t num) {
 // No es el envio de un mensaje. Que tiene el envio del len pre mensaje.
 // Sirve para mandar structs.
 void Protocol::sendbytes(const void* msg, const unsigned int count) {
-    this->skt.sendall(msg, count);
+    this->skt->sendall(msg, count);
 }
 
-void Protocol::recvbytes(void* buff, const unsigned int count) { this->skt.recvall(buff, count); }
+void Protocol::recvbytes(void* buff, const unsigned int count) { this->skt->recvall(buff, count); }
 bool Protocol::tryrecvbytes(void* buff, const unsigned int count) {
-    return this->skt.tryrecvall(buff, count) == count;
+    return this->skt->tryrecvall(buff, count) == count;
 }
 
 uint8_t Protocol::recvbyte() {
     uint8_t res;
-    if (this->skt.recvsome(&res, 1) == 0) {
+    if (this->skt->recvsome(&res, 1) == 0) {
         throw LibError(1,  // default para errores
                        "Failed to recv u8 number from connection");
     }
@@ -128,7 +127,7 @@ uint8_t Protocol::recvbyte() {
 }
 
 bool Protocol::tryrecvbyte(uint8_t* out) {
-    if (this->skt.recvsome(out, 1) == 0) {
+    if (this->skt->recvsome(out, 1) == 0) {
         return false;
     }
     return true;
@@ -141,7 +140,7 @@ const static uint8_t PICKUP_SIGN = 3;
 // Pero si tira si es invalido.
 bool Protocol::recvpickup() {
     uint8_t sign;
-    if (this->skt.recvsome(&sign, 1) == 0) {
+    if (this->skt->recvsome(&sign, 1) == 0) {
         return false;
     }
 
@@ -158,7 +157,7 @@ void Protocol::signalpickup() { sendbyte(PICKUP_SIGN); }
 
 uint8_t Protocol::recvnotification() {
     uint8_t id[2];
-    skt.recvall(&id[0], 2);
+    skt->recvall(&id[0], 2);
 
     if (id[0] != MARK_NOTIF) {
         throw LibError(1, "Received notification id is invalid");
@@ -171,10 +170,10 @@ uint8_t Protocol::recvnotification() {
 // Envia los bytes de identificacion para una notificacion de pickup
 void Protocol::notifyevent(uint8_t type) {
     uint8_t toSend[2] = {MARK_NOTIF, type};
-    skt.sendall(&toSend[0], 2);
+    skt->sendall(&toSend[0], 2);
 }
 
 void Protocol::close() {
-    skt.shutdown(2);
-    skt.close();
+    skt->shutdown(2);
+    skt->close();
 }

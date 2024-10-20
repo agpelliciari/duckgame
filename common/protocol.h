@@ -3,11 +3,10 @@
 
 #include <cstdint>
 #include <cstring>
+#include <memory>
 #include <string>
 #include <utility>
 #include <vector>
-
-#include <arpa/inet.h>
 
 #include "./socket.h"
 
@@ -19,11 +18,15 @@
 // A menos que sea el recvsignal. Que el eof seria en si una.
 class Protocol {
 protected:
-    Socket skt;
+    // Para poder aplicar polimorfismo...
+    std::unique_ptr<Socket> skt;
+
+    // Socket skt;
 
 public:
     explicit Protocol(Socket& _skt);
-    explicit Protocol(Socket&& _skt);
+    explicit Protocol(Socket* _skt);
+    explicit Protocol(std::unique_ptr<Socket>& _skt);
 
     // Asumamos por ahora que no se quiere permitir copias..
     Protocol(const Protocol&) = delete;
@@ -38,6 +41,11 @@ public:
     // Byte communicaiton!!
     void sendbyte(const uint8_t byte);
     uint8_t recvbyte();
+
+    // Short communication!!
+    uint16_t recvshort();
+    void sendshort(const uint16_t num);
+
 
     // para mandar structs.. o similes
     void sendbytes(const void* msg, const unsigned int count);
