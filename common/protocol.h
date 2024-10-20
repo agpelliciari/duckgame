@@ -8,6 +8,9 @@
 #include <utility>
 #include <vector>
 
+#include "./messenger.h"
+
+// Se incluye socket. Para abstraer si es una copia en el heap o no.
 #include "./socket.h"
 
 // Clase protocol, interfaz directa con el socket. Y proporciona los acciones base
@@ -19,14 +22,14 @@
 class Protocol {
 protected:
     // Para poder aplicar polimorfismo...
-    std::unique_ptr<Socket> skt;
-
-    // Socket skt;
+    std::unique_ptr<Messenger> messenger;
 
 public:
+    explicit Protocol(Messenger* _messenger);
+    explicit Protocol(std::unique_ptr<Messenger>& _messenger);
+
+    // Para abstraer que hace con el socket en si.
     explicit Protocol(Socket& _skt);
-    explicit Protocol(Socket* _skt);
-    explicit Protocol(std::unique_ptr<Socket>& _skt);
 
     // Asumamos por ahora que no se quiere permitir copias..
     Protocol(const Protocol&) = delete;

@@ -1,6 +1,10 @@
 #ifndef MESSENGER_H
 #define MESSENGER_H
 
+
+// Clase/interfaz base para hacer las cosas testeables/mockeables
+// Y no solo eso capaz permitir hacer el juego en base a otros tipos
+// de comunicacion/sockets.
 class Messenger {
 public:
     // Enviar la cantidad especificada, pero puede que mande/reciba menos.
