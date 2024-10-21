@@ -4,8 +4,7 @@
 
 #include "./gameerror.h"
 
-Match::Match(lobbyID _id): id(_id), players(), looper(),
-    actions(logic) {}
+Match::Match(lobbyID _id): id(_id), players(), looper() {}
 
 
 // Protected// friend accessed methods
