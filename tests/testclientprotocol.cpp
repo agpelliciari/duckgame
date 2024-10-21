@@ -3,7 +3,6 @@
 #include "./mocksocket.h"
 #include "common/clientprotocol.h"
 #include "common/core/liberror.h"
-#include "common/protocol.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 

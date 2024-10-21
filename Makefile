@@ -387,6 +387,30 @@ common/core/liberror.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/core/liberror.cpp.s
 .PHONY : common/core/liberror.cpp.s
 
+common/core/protocol.o: common/core/protocol.cpp.o
+.PHONY : common/core/protocol.o
+
+# target to build an object file
+common/core/protocol.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/core/protocol.cpp.o
+.PHONY : common/core/protocol.cpp.o
+
+common/core/protocol.i: common/core/protocol.cpp.i
+.PHONY : common/core/protocol.i
+
+# target to preprocess a source file
+common/core/protocol.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/core/protocol.cpp.i
+.PHONY : common/core/protocol.cpp.i
+
+common/core/protocol.s: common/core/protocol.cpp.s
+.PHONY : common/core/protocol.s
+
+# target to generate assembly for a file
+common/core/protocol.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/core/protocol.cpp.s
+.PHONY : common/core/protocol.cpp.s
+
 common/core/resolver.o: common/core/resolver.cpp.o
 .PHONY : common/core/resolver.o
 
@@ -482,30 +506,6 @@ common/playerprotocol.s: common/playerprotocol.cpp.s
 common/playerprotocol.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/playerprotocol.cpp.s
 .PHONY : common/playerprotocol.cpp.s
-
-common/protocol.o: common/protocol.cpp.o
-.PHONY : common/protocol.o
-
-# target to build an object file
-common/protocol.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/protocol.cpp.o
-.PHONY : common/protocol.cpp.o
-
-common/protocol.i: common/protocol.cpp.i
-.PHONY : common/protocol.i
-
-# target to preprocess a source file
-common/protocol.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/protocol.cpp.i
-.PHONY : common/protocol.cpp.i
-
-common/protocol.s: common/protocol.cpp.s
-.PHONY : common/protocol.s
-
-# target to generate assembly for a file
-common/protocol.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/protocol.cpp.s
-.PHONY : common/protocol.cpp.s
 
 common/protocolerror.o: common/protocolerror.cpp.o
 .PHONY : common/protocolerror.o
@@ -1045,6 +1045,9 @@ help:
 	@echo "... common/core/liberror.o"
 	@echo "... common/core/liberror.i"
 	@echo "... common/core/liberror.s"
+	@echo "... common/core/protocol.o"
+	@echo "... common/core/protocol.i"
+	@echo "... common/core/protocol.s"
 	@echo "... common/core/resolver.o"
 	@echo "... common/core/resolver.i"
 	@echo "... common/core/resolver.s"
@@ -1057,9 +1060,6 @@ help:
 	@echo "... common/playerprotocol.o"
 	@echo "... common/playerprotocol.i"
 	@echo "... common/playerprotocol.s"
-	@echo "... common/protocol.o"
-	@echo "... common/protocol.i"
-	@echo "... common/protocol.s"
 	@echo "... common/protocolerror.o"
 	@echo "... common/protocolerror.i"
 	@echo "... common/protocolerror.s"

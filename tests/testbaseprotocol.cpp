@@ -2,7 +2,7 @@
 
 #include "./mocksocket.h"
 #include "common/core/liberror.h"
-#include "common/protocol.h"
+#include "common/core/protocol.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 

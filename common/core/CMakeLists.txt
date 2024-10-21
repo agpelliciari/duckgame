@@ -5,6 +5,7 @@ target_sources(taller_common
         socket.cpp
         liberror.cpp
         resolvererror.cpp
+        protocol.cpp
     PUBLIC
     # .h files
         messenger.h
@@ -12,5 +13,6 @@ target_sources(taller_common
         socket.h
         liberror.h
         resolvererror.h
+        protocol.h
 
     )

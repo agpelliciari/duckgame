@@ -5,8 +5,8 @@
 #include <string>
 #include <utility>
 
+#include "common/core/protocol.h"
 #include "common/dtos.h"
-#include "common/protocol.h"
 
 // Extension del protocolo base a usar.
 class ClientProtocol {

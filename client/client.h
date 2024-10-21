@@ -6,7 +6,6 @@
 
 #include "common/clientprotocol.h"
 #include "common/core/socket.h"
-#include "common/protocol.h"
 
 // Clase que encapsula al protocol y mantendria el estado del juego
 // Proporcionado una interfaz para acciones del usuario.
