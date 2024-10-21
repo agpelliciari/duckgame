@@ -12,7 +12,5 @@ target_sources(taller_common
         socket.h
         liberror.h
         resolvererror.h
-        thread.h
-        queue.h
 
     )

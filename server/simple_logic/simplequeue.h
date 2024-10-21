@@ -3,8 +3,8 @@
 
 #include "./simpleaction.h"
 #include "./simplestate.h"
-#include "common/core/queue.h"
 #include "common/dtosplayer.h"
+#include "common/queue.h"
 
 
 // Una clase media innecesaria capaz.

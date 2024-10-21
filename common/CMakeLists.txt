@@ -15,4 +15,7 @@ target_sources(taller_common
         protocol.h
         dtos.h
         dtosplayer.h
+        thread.h
+        queue.h
+        
     )

@@ -6,7 +6,7 @@
 #include "./controlreceiver.h"
 #include "./lobbycontainer.h"
 #include "common/core/socket.h"
-#include "common/core/thread.h"
+#include "common/thread.h"
 
 // Clase para guardar nuevos controllers, pertenecientes a un match.
 // Personalmente... no se considera que esta clase perse deba tener el ownership

@@ -5,8 +5,8 @@
 #include <queue>
 #include <utility>
 
-#include "common/core/thread.h"
 #include "common/dtosplayer.h"
+#include "common/thread.h"
 
 
 // Descomentar si ya son usables.
