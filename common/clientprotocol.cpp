@@ -13,7 +13,7 @@ ClientProtocol::ClientProtocol(Socket&& conn): protocol(conn) {}
 
 ClientProtocol::ClientProtocol(Protocol&& prot): protocol(std::move(prot)) {}
 
-void ClientProtocol::sendaction(PlayerActionDTO& action){
+void ClientProtocol::sendaction(PlayerActionDTO& action) {
     protocol.sendbytes(&action, sizeof(action));
 }
 

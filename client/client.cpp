@@ -20,9 +20,7 @@ unsigned int Client::inputnum() {
     return res;
 }
 
-void Client::sendMove(char action){
-     std::cout << "MOVE " << action << std::endl;
-}
+void Client::sendMove(char action) { std::cout << "MOVE " << action << std::endl; }
 
 void Client::listenActions() {
     // Un buffer lo suficientemente grande. Que esta en el stack.
@@ -85,11 +83,11 @@ void Client::listenActions() {
             continue;
         }
         std::cout << "MOVE " << action << std::endl;
-        char * act = action.data();
+        char* act = action.data();
         int left = action.length();
         int ind = 0;
-        while(ind < left){
-            sendMove(*(act+ind));
+        while (ind < left) {
+            sendMove(*(act + ind));
             ind++;
         }
     }

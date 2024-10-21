@@ -13,8 +13,9 @@ class Client {
 protected:
     ClientProtocol protocol;
     unsigned int inputnum();
-    
+
     void sendMove(char action);
+
 public:
     // Los default sin pasar por socket/protocol.
     explicit Client(const char* host, const char* service): protocol(Socket(host, service)) {}

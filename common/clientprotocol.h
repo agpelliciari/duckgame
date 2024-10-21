@@ -34,9 +34,9 @@ public:
     void createLobby(const uint8_t playercount);
 
     void startlobby();
-    
+
     void sendaction(PlayerActionDTO& action);
-    
+
     MatchDto recvstate();
 
     void close();
