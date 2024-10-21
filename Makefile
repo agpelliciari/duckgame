@@ -939,6 +939,30 @@ server/simple_logic/simplestate.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/simple_logic/simplestate.cpp.s
 .PHONY : server/simple_logic/simplestate.cpp.s
 
+tests/mocksocket.o: tests/mocksocket.cpp.o
+.PHONY : tests/mocksocket.o
+
+# target to build an object file
+tests/mocksocket.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_tests.dir/build.make CMakeFiles/taller_tests.dir/tests/mocksocket.cpp.o
+.PHONY : tests/mocksocket.cpp.o
+
+tests/mocksocket.i: tests/mocksocket.cpp.i
+.PHONY : tests/mocksocket.i
+
+# target to preprocess a source file
+tests/mocksocket.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_tests.dir/build.make CMakeFiles/taller_tests.dir/tests/mocksocket.cpp.i
+.PHONY : tests/mocksocket.cpp.i
+
+tests/mocksocket.s: tests/mocksocket.cpp.s
+.PHONY : tests/mocksocket.s
+
+# target to generate assembly for a file
+tests/mocksocket.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_tests.dir/build.make CMakeFiles/taller_tests.dir/tests/mocksocket.cpp.s
+.PHONY : tests/mocksocket.cpp.s
+
 tests/testbaseprotocol.o: tests/testbaseprotocol.cpp.o
 .PHONY : tests/testbaseprotocol.o
 
@@ -1114,6 +1138,9 @@ help:
 	@echo "... server/simple_logic/simplestate.o"
 	@echo "... server/simple_logic/simplestate.i"
 	@echo "... server/simple_logic/simplestate.s"
+	@echo "... tests/mocksocket.o"
+	@echo "... tests/mocksocket.i"
+	@echo "... tests/mocksocket.s"
 	@echo "... tests/testbaseprotocol.o"
 	@echo "... tests/testbaseprotocol.i"
 	@echo "... tests/testbaseprotocol.s"
