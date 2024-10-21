@@ -18,10 +18,10 @@
 class MatchState {
 
 private:
-    std::atomic<bool> running;  // cppcheck-suppress unusedStructMember
-    MatchLogic match_logic;     // cppcheck-suppress unusedStructMember
-    MatchQueue acciones;        // cppcheck-suppress unusedStructMember
-    std::vector<ActionCommand> commands;// cppcheck-suppress unusedStructMember
+    std::atomic<bool> running;            // cppcheck-suppress unusedStructMember
+    MatchLogic match_logic;               // cppcheck-suppress unusedStructMember
+    MatchQueue acciones;                  // cppcheck-suppress unusedStructMember
+    std::vector<ActionCommand> commands;  // cppcheck-suppress unusedStructMember
 public:
     MatchState();
     void pushAction(const PlayerActionDTO& action);

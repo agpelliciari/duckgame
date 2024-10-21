@@ -23,7 +23,7 @@ void Match::finish() {
     }
     stop();
     players.removeAll();
-    //actions.close();
+    // actions.close();
 
     join();
 }
