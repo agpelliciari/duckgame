@@ -1,12 +1,8 @@
 
 #include "armor.h"
 
-Armor::Armor():equipped(false){}
+Armor::Armor(): equipped(false) {}
 
-void Armor::equipp(){
-    this->equipped = true;
-}
+void Armor::equipp() { this->equipped = true; }
 
-void Armor::is_equipped(bool &equipped_){
-    this->equipped = equipped_;
-}
+void Armor::is_equipped(const bool& equipped_) { this->equipped = equipped_; }

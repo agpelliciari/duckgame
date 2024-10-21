@@ -4,11 +4,7 @@
 #define BOX_H
 
 
-
-class Box {
-
-};
+class Box {};
 
 
-
-#endif //BOX_H
+#endif  // BOX_H

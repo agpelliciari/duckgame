@@ -7,8 +7,6 @@
 
 #include "common/dtosplayer.h"
 #include "common/queue.h"
-
-#include "common/dtosplayer.h"
 #include "common/thread.h"
 
 
@@ -50,7 +48,7 @@ protected:
 
 public:
     // Se tendra composicion con un unico observer de eventos al match.
-    Match(lobbyID _id);
+    explicit Match(lobbyID _id);
 
     // Asumamos por ahora que no se quiere permitir copias, ni mov.
     Match(const Match&) = delete;

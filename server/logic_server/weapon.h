@@ -4,18 +4,15 @@
 #define WEAPON_H
 
 
-
 class Weapon {
 
-    private:
-        TypeWeapon type;
+private:
+    TypeWeapon type;
 
-    public:
-        Weapon();
-        void get_weapon(TypeWeapon &type);
-
+public:
+    Weapon();
+    void get_weapon(const TypeWeapon& type);
 };
 
 
-
-#endif //WEAPON_H
+#endif  // WEAPON_H

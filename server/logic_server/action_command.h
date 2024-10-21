@@ -1,29 +1,29 @@
-#include "command.h"
-#include "match_logic.h"
-#include "common/dtosplayer.h"
 #include <functional>
 #include <map>
+
+#include "common/dtosplayer.h"
+
+#include "command.h"
+#include "match_logic.h"
 
 
 #ifndef ACTION_COMMAND_H
 #define ACTION_COMMAND_H
 
 
+class ActionCommand: public Command {
 
-class ActionCommand : public Command {
+private:
+    PlayerActionDTO action;                            // cppcheck-suppress unusedStructMember
+    MatchLogic* match_logic;                           // cppcheck-suppress unusedStructMember
+    std::map<int, std::function<void()>> command_map;  // cppcheck-suppress unusedStructMember
 
-    private:
-        PlayerActionDTO action;
-        MatchLogic *match_logic;
-        std::map<int, std::function<void()>> command_map;
+public:
+    ActionCommand(PlayerActionDTO action, MatchLogic* match_logic);
 
-    public:
-        ActionCommand(PlayerActionDTO action, MatchLogic *match_logic);
-
-        void execute() override;
-        virtual ~ActionCommand() {}
+    void execute() override;
+    virtual ~ActionCommand() {}
 };
 
 
-
-#endif //ACTION_COMMAND_H
+#endif  // ACTION_COMMAND_H

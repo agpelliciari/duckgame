@@ -4,19 +4,16 @@
 #define ARMOR_H
 
 
-
 class Armor {
 
-    private:
-        bool equipped;
+private:
+    bool equipped;  // cppcheck-suppress unusedStructMember
 
-    public:
-        Armor();
-        void equipp();
-        void is_equipped(bool &equipped);
-
+public:
+    Armor();
+    void equipp();
+    void is_equipped(const bool& equipped);
 };
 
 
-
-#endif //ARMOR_H
+#endif  // ARMOR_H
