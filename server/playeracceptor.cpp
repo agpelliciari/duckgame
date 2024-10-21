@@ -3,7 +3,7 @@
 #include <iostream>
 #include <utility>
 
-#include "common/liberror.h"
+#include "common/core/liberror.h"
 
 
 PlayerAcceptor::PlayerAcceptor(const char* service, LobbyContainer& _lobbies):

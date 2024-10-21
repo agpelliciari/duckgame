@@ -5,9 +5,9 @@
 #include "./controlledplayer.h"
 #include "./lobbycontainer.h"
 #include "./match.h"
-#include "./playerprotocol.h"
-#include "common/socket.h"
-#include "common/thread.h"
+#include "common/core/socket.h"
+#include "common/core/thread.h"
+#include "common/playerprotocol.h"
 
 // ControlledPlayer controller va a ser el thread recibidor de un protocol.
 // Va a pertenecer a un match. Y va a tener el ownership la entidad en el juego. El player.

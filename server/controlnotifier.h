@@ -2,8 +2,8 @@
 #define LIB_ControlNotifier_H
 
 #include "./controlledplayer.h"
-#include "./playerprotocol.h"
-#include "common/thread.h"
+#include "common/core/thread.h"
+#include "common/playerprotocol.h"
 
 
 // El thread que basicamente notifica de eventos al protocolo/client.

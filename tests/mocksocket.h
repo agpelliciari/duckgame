@@ -1,4 +1,4 @@
-#include "common/messenger.h"
+#include "common/core/messenger.h"
 #include "gmock/gmock.h"
 
 class MockSocket: public Messenger {

@@ -19,11 +19,12 @@ protected:
     std::atomic<bool> isactive;  // Simple manejo de si ya se cerro o no.
 
 public:
-    // El default a partir de socket, te ahorras el move.
-    explicit PlayerProtocol(Socket&& connection);
+    // El default a partir de la abstraccion de socket..
+    explicit PlayerProtocol(Socket& messenger);
+    explicit PlayerProtocol(Messenger* messenger);
 
     // Permitamos el mov para mayor flexibilidad
-    explicit PlayerProtocol(Protocol&& prot): protocol(std::move(prot)) {}
+    explicit PlayerProtocol(Protocol&& prot);
 
     // Asumamos por ahora que no se quiere permitir copias, ni mov.
     PlayerProtocol(const PlayerProtocol&) = delete;

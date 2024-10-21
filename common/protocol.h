@@ -8,10 +8,10 @@
 #include <utility>
 #include <vector>
 
-#include "./messenger.h"
+#include "common/core/messenger.h"
 
 // Se incluye socket. Para abstraer si es una copia en el heap o no.
-#include "./socket.h"
+#include "common/core/socket.h"
 
 // Clase protocol, interfaz directa con el socket. Y proporciona los acciones base
 // como lo es mandar un mensaje, numero o string.

@@ -5,7 +5,9 @@
 target_sources(taller_tests
     PRIVATE
     # .cpp files
-    baseprotocol.cpp
+    testbaseprotocol.cpp
+    testclientprotocol.cpp
+    testserverprotocol.cpp
     PUBLIC
     # .h files
     mocksocket.h

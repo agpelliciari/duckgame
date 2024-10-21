@@ -4,10 +4,14 @@
 #include <string>
 #include <utility>
 
-#include "./gameerror.h"
+//#include "./gameerror.h"
+#include "common/protocolerror.h"
 
 
-PlayerProtocol::PlayerProtocol(Socket&& skt): protocol(skt), isactive(true) {}
+PlayerProtocol::PlayerProtocol(Socket& messenger): protocol(messenger), isactive(true) {}
+PlayerProtocol::PlayerProtocol(Messenger* messenger): protocol(messenger), isactive(true) {}
+PlayerProtocol::PlayerProtocol(Protocol&& prot): protocol(std::move(prot)), isactive(true) {}
+
 
 bool PlayerProtocol::recvplayercount(uint8_t* count) { return protocol.tryrecvbyte(count); }
 
@@ -31,7 +35,7 @@ PlayerActionDTO PlayerProtocol::recvaction() {
     PlayerActionDTO action;
     if (!protocol.tryrecvbytes(&action, sizeof(action))) {
         isactive = false;
-        throw GameError("Did not receive action!");
+        throw ProtocolError("Did not receive action!");
     }
     return action;
 }

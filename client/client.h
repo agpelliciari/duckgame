@@ -4,9 +4,9 @@
 #include <string>
 #include <utility>
 
-#include "client/clientprotocol.h"
+#include "common/clientprotocol.h"
+#include "common/core/socket.h"
 #include "common/protocol.h"
-#include "common/socket.h"
 
 // Clase que encapsula al protocol y mantendria el estado del juego
 // Proporcionado una interfaz para acciones del usuario.

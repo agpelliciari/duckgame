@@ -1,12 +1,10 @@
 #include <iostream>
 
 #include "./mocksocket.h"
-#include "client/clientprotocol.h"
-#include "common/liberror.h"
+#include "common/core/liberror.h"
 #include "common/protocol.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include "server/playerprotocol.h"
 
 
 using ::testing::AllOf;

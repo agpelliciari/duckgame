@@ -4,8 +4,8 @@
 #include <mutex>
 #include <utility>
 
+#include "common/core/queue.h"
 #include "common/dtos.h"
-#include "common/queue.h"
 
 typedef unsigned int player_id;
 typedef Queue<MatchDto> player_events;

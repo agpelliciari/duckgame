@@ -5,8 +5,8 @@
 #include <utility>
 
 #include "./simplebox.h"
+#include "common/core/queue.h"
 #include "common/dtos.h"
-#include "common/queue.h"
 
 #define BOX_COUNT 4
 

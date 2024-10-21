@@ -4,8 +4,8 @@
 #include <string>
 
 #include "client/client.h"
-#include "common/liberror.h"
-#include "common/resolvererror.h"
+#include "common/core/liberror.h"
+#include "common/core/resolvererror.h"
 
 static const char* const KnifeValues[] = {"No", "Yes"};
 
