@@ -62,6 +62,7 @@ struct PlayerDTO {
             chest_armor(armor),
             move_action(action) {}
 
-};  //__attribute__((packed));
+    PlayerDTO() {}  // Para read.
+};                  //__attribute__((packed));
 
 #endif
