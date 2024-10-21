@@ -5,8 +5,8 @@
 #include <string>
 #include <utility>
 
+#include "common/core/protocol.h"
 #include "common/dtos.h"
-#include "common/protocol.h"
 
 // Extension del protocolo base a usar.
 class ClientProtocol {
@@ -15,11 +15,13 @@ protected:
     Protocol protocol;  // Composicion con el protocolo base para la conexion
 
 public:
-    // El default a partir de socket, te ahorras el move del protocol en si.
-    explicit ClientProtocol(Socket connection);
+    // El default a partir de la abstraccion de socket
+    explicit ClientProtocol(Messenger* connection);
+    explicit ClientProtocol(Socket& connection);
+    explicit ClientProtocol(Socket&& connection);
 
     // Permitamos el mov para mayor flexibilidad
-    explicit ClientProtocol(Protocol&& prot): protocol(std::move(prot)) {}
+    explicit ClientProtocol(Protocol&& prot);
 
     // Asumamos por ahora que no se quiere permitir copias, ni mov.
     ClientProtocol(const ClientProtocol&) = delete;
@@ -35,6 +37,8 @@ public:
 
     void pickup(const uint8_t indplayer, const uint8_t box);
     MatchDto recvstate();
+
+    void close();
 };
 
 #endif

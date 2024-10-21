@@ -1,21 +1,19 @@
+add_subdirectory(core/)
+
 target_sources(taller_common
     PRIVATE
     # .cpp files
-        resolver.cpp
-        socket.cpp
-        liberror.cpp
-        resolvererror.cpp
-        protocol.cpp
+        clientprotocol.cpp
+        serverprotocol.cpp
+        protocolerror.cpp
     PUBLIC
     # .h files
+        clientprotocol.h
+        serverprotocol.h
+        protocolerror.h
         dtos.h
         dtosplayer.h
-        resolver.h
-        socket.h
-        liberror.h
-        protocol.h
-        resolvererror.h
         thread.h
         queue.h
-
+        
     )

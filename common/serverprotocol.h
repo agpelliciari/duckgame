@@ -1,17 +1,17 @@
-#ifndef LIB_PlayerProtocol_H
-#define LIB_PlayerProtocol_H
+#ifndef LIB_ServerProtocol_H
+#define LIB_ServerProtocol_H
 
 #define BUFF_LEN_CLIENT 128
 #include <atomic>
 #include <string>
 #include <utility>
 
+#include "common/core/protocol.h"
 #include "common/dtos.h"
 #include "common/dtosplayer.h"
-#include "common/protocol.h"
 
 // Extension del protocolo base a usar.
-class PlayerProtocol {
+class ServerProtocol {
 
 protected:
     Protocol protocol;  // Composicion con el protocolo base para la conexion
@@ -19,18 +19,19 @@ protected:
     std::atomic<bool> isactive;  // Simple manejo de si ya se cerro o no.
 
 public:
-    // El default a partir de socket, te ahorras el move.
-    explicit PlayerProtocol(Socket&& connection);
+    // El default a partir de la abstraccion de socket..
+    explicit ServerProtocol(Socket& messenger);
+    explicit ServerProtocol(Messenger* messenger);
 
     // Permitamos el mov para mayor flexibilidad
-    explicit PlayerProtocol(Protocol&& prot): protocol(std::move(prot)) {}
+    explicit ServerProtocol(Protocol&& prot);
 
     // Asumamos por ahora que no se quiere permitir copias, ni mov.
-    PlayerProtocol(const PlayerProtocol&) = delete;
-    PlayerProtocol& operator=(const PlayerProtocol&) = delete;
+    ServerProtocol(const ServerProtocol&) = delete;
+    ServerProtocol& operator=(const ServerProtocol&) = delete;
 
-    PlayerProtocol(PlayerProtocol&&) = delete;
-    PlayerProtocol& operator=(PlayerProtocol&&) = delete;
+    ServerProtocol(ServerProtocol&&) = delete;
+    ServerProtocol& operator=(ServerProtocol&&) = delete;
 
     bool recvplayercount(uint8_t* count);
     lobby_action recvlobbyaction();

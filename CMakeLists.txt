@@ -165,5 +165,9 @@ if(TALLER_TESTS)
     target_link_libraries(taller_tests
         taller_common
         GTest::gtest_main
+        gmock_main
     )
+    
+    #include(GoogleTest)
+    #gtest_discover_tests(taller_tests)
 endif()

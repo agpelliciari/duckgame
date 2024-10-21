@@ -4,8 +4,8 @@
 
 #include <arpa/inet.h>
 
-#include "common/liberror.h"
-#include "common/resolvererror.h"
+#include "common/core/liberror.h"
+#include "common/core/resolvererror.h"
 #include "server/gameerror.h"
 #include "server/server.h"
 

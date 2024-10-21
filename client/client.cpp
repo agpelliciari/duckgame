@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 
-#include "common/liberror.h"
+#include "common/core/liberror.h"
 
 #define ASK_NAME "What is your name?"
 #define ACTION_EXIT "Exit"

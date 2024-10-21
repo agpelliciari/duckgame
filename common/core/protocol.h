@@ -3,13 +3,15 @@
 
 #include <cstdint>
 #include <cstring>
+#include <memory>
 #include <string>
 #include <utility>
 #include <vector>
 
-#include <arpa/inet.h>
+#include "common/core/messenger.h"
 
-#include "./socket.h"
+// Se incluye socket. Para abstraer si es una copia en el heap o no.
+#include "common/core/socket.h"
 
 // Clase protocol, interfaz directa con el socket. Y proporciona los acciones base
 // como lo es mandar un mensaje, numero o string.
@@ -19,13 +21,15 @@
 // A menos que sea el recvsignal. Que el eof seria en si una.
 class Protocol {
 protected:
-    Socket skt;
+    // Para poder aplicar polimorfismo...
+    std::unique_ptr<Messenger> messenger;
 
 public:
-    explicit Protocol(Socket& _skt):
-            skt(std::move(_skt)) {}  // Para permitir pasaje desde una variable?
+    explicit Protocol(Messenger* _messenger);
+    explicit Protocol(std::unique_ptr<Messenger>& _messenger);
 
-    explicit Protocol(Socket&& _skt): skt(std::move(_skt)) {}  // Para permitir desde expresiones.
+    // Para abstraer que hace con el socket en si.
+    explicit Protocol(Socket& _skt);
 
     // Asumamos por ahora que no se quiere permitir copias..
     Protocol(const Protocol&) = delete;
@@ -40,6 +44,11 @@ public:
     // Byte communicaiton!!
     void sendbyte(const uint8_t byte);
     uint8_t recvbyte();
+
+    // Short communication!!
+    uint16_t recvshort();
+    void sendshort(const uint16_t num);
+
 
     // para mandar structs.. o similes
     void sendbytes(const void* msg, const unsigned int count);

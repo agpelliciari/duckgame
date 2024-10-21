@@ -1,4 +1,5 @@
-add_subdirectory(logic_server/)
+#Se removio mientras no ese usable
+#add_subdirectory(logic_server/)
 add_subdirectory(simple_logic/)
 
 target_sources(taller_server
@@ -10,7 +11,6 @@ target_sources(taller_server
         lobbycontainer.cpp
         match.cpp
         playeracceptor.cpp
-        playerprotocol.cpp
         playercontainer.cpp
         controlledplayer.cpp
         controlreceiver.cpp
@@ -23,7 +23,6 @@ target_sources(taller_server
         gameerror.h
         match.h
         lobbycontainer.h
-        playerprotocol.h
         playeracceptor.h
         playercontainer.h
         controlreceiver.h

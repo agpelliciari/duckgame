@@ -5,11 +5,12 @@
 
 #include "./controlnotifier.h"
 #include "./gameerror.h"
-#include "common/liberror.h"
+#include "common/core/liberror.h"
+#include "common/protocolerror.h"
 
 
 ControlReceiver::ControlReceiver(LobbyContainer& _lobbies, Socket& skt):
-        lobbies(_lobbies), protocol(std::move(skt)) {}
+        lobbies(_lobbies), protocol(skt) {}
 
 
 bool ControlReceiver::isopen() { return protocol.isopen(); }
@@ -40,9 +41,9 @@ void ControlReceiver::playOn(ControlledPlayer& player, Match& match) {
         if (player.disconnect() && protocol.isopen()) {  // Si desconecto. Hubo error aca.
             std::cerr << "Controller lib error:" << error.what() << std::endl;
         }
-    } catch (const GameError& error) {  // EOF, el notify se asume no genera exception.
+    } catch (const ProtocolError& error) {  // EOF, el notify se asume no genera exception.
         player.disconnect();
-    } catch (const ClosedQueue& error) {  // EOF, el notify se asume no genera exception.
+    } catch (const ClosedQueue& error) {
         std::cerr << "Controller MATCH END " << error.what() << std::endl;
         player.disconnect();
     }

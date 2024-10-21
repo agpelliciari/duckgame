@@ -315,30 +315,6 @@ client/client.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_client.dir/build.make CMakeFiles/taller_client.dir/client/client.cpp.s
 .PHONY : client/client.cpp.s
 
-client/clientprotocol.o: client/clientprotocol.cpp.o
-.PHONY : client/clientprotocol.o
-
-# target to build an object file
-client/clientprotocol.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_client.dir/build.make CMakeFiles/taller_client.dir/client/clientprotocol.cpp.o
-.PHONY : client/clientprotocol.cpp.o
-
-client/clientprotocol.i: client/clientprotocol.cpp.i
-.PHONY : client/clientprotocol.i
-
-# target to preprocess a source file
-client/clientprotocol.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_client.dir/build.make CMakeFiles/taller_client.dir/client/clientprotocol.cpp.i
-.PHONY : client/clientprotocol.cpp.i
-
-client/clientprotocol.s: client/clientprotocol.cpp.s
-.PHONY : client/clientprotocol.s
-
-# target to generate assembly for a file
-client/clientprotocol.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_client.dir/build.make CMakeFiles/taller_client.dir/client/clientprotocol.cpp.s
-.PHONY : client/clientprotocol.cpp.s
-
 client/main.o: client/main.cpp.o
 .PHONY : client/main.o
 
@@ -363,125 +339,197 @@ client/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_client.dir/build.make CMakeFiles/taller_client.dir/client/main.cpp.s
 .PHONY : client/main.cpp.s
 
-common/liberror.o: common/liberror.cpp.o
-.PHONY : common/liberror.o
+common/clientprotocol.o: common/clientprotocol.cpp.o
+.PHONY : common/clientprotocol.o
 
 # target to build an object file
-common/liberror.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/liberror.cpp.o
-.PHONY : common/liberror.cpp.o
+common/clientprotocol.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/clientprotocol.cpp.o
+.PHONY : common/clientprotocol.cpp.o
 
-common/liberror.i: common/liberror.cpp.i
-.PHONY : common/liberror.i
+common/clientprotocol.i: common/clientprotocol.cpp.i
+.PHONY : common/clientprotocol.i
 
 # target to preprocess a source file
-common/liberror.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/liberror.cpp.i
-.PHONY : common/liberror.cpp.i
+common/clientprotocol.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/clientprotocol.cpp.i
+.PHONY : common/clientprotocol.cpp.i
 
-common/liberror.s: common/liberror.cpp.s
-.PHONY : common/liberror.s
+common/clientprotocol.s: common/clientprotocol.cpp.s
+.PHONY : common/clientprotocol.s
 
 # target to generate assembly for a file
-common/liberror.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/liberror.cpp.s
-.PHONY : common/liberror.cpp.s
+common/clientprotocol.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/clientprotocol.cpp.s
+.PHONY : common/clientprotocol.cpp.s
 
-common/protocol.o: common/protocol.cpp.o
-.PHONY : common/protocol.o
+common/core/liberror.o: common/core/liberror.cpp.o
+.PHONY : common/core/liberror.o
 
 # target to build an object file
-common/protocol.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/protocol.cpp.o
-.PHONY : common/protocol.cpp.o
+common/core/liberror.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/core/liberror.cpp.o
+.PHONY : common/core/liberror.cpp.o
 
-common/protocol.i: common/protocol.cpp.i
-.PHONY : common/protocol.i
+common/core/liberror.i: common/core/liberror.cpp.i
+.PHONY : common/core/liberror.i
 
 # target to preprocess a source file
-common/protocol.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/protocol.cpp.i
-.PHONY : common/protocol.cpp.i
+common/core/liberror.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/core/liberror.cpp.i
+.PHONY : common/core/liberror.cpp.i
 
-common/protocol.s: common/protocol.cpp.s
-.PHONY : common/protocol.s
+common/core/liberror.s: common/core/liberror.cpp.s
+.PHONY : common/core/liberror.s
 
 # target to generate assembly for a file
-common/protocol.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/protocol.cpp.s
-.PHONY : common/protocol.cpp.s
+common/core/liberror.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/core/liberror.cpp.s
+.PHONY : common/core/liberror.cpp.s
 
-common/resolver.o: common/resolver.cpp.o
-.PHONY : common/resolver.o
+common/core/protocol.o: common/core/protocol.cpp.o
+.PHONY : common/core/protocol.o
 
 # target to build an object file
-common/resolver.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/resolver.cpp.o
-.PHONY : common/resolver.cpp.o
+common/core/protocol.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/core/protocol.cpp.o
+.PHONY : common/core/protocol.cpp.o
 
-common/resolver.i: common/resolver.cpp.i
-.PHONY : common/resolver.i
+common/core/protocol.i: common/core/protocol.cpp.i
+.PHONY : common/core/protocol.i
 
 # target to preprocess a source file
-common/resolver.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/resolver.cpp.i
-.PHONY : common/resolver.cpp.i
+common/core/protocol.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/core/protocol.cpp.i
+.PHONY : common/core/protocol.cpp.i
 
-common/resolver.s: common/resolver.cpp.s
-.PHONY : common/resolver.s
+common/core/protocol.s: common/core/protocol.cpp.s
+.PHONY : common/core/protocol.s
 
 # target to generate assembly for a file
-common/resolver.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/resolver.cpp.s
-.PHONY : common/resolver.cpp.s
+common/core/protocol.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/core/protocol.cpp.s
+.PHONY : common/core/protocol.cpp.s
 
-common/resolvererror.o: common/resolvererror.cpp.o
-.PHONY : common/resolvererror.o
+common/core/resolver.o: common/core/resolver.cpp.o
+.PHONY : common/core/resolver.o
 
 # target to build an object file
-common/resolvererror.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/resolvererror.cpp.o
-.PHONY : common/resolvererror.cpp.o
+common/core/resolver.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/core/resolver.cpp.o
+.PHONY : common/core/resolver.cpp.o
 
-common/resolvererror.i: common/resolvererror.cpp.i
-.PHONY : common/resolvererror.i
+common/core/resolver.i: common/core/resolver.cpp.i
+.PHONY : common/core/resolver.i
 
 # target to preprocess a source file
-common/resolvererror.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/resolvererror.cpp.i
-.PHONY : common/resolvererror.cpp.i
+common/core/resolver.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/core/resolver.cpp.i
+.PHONY : common/core/resolver.cpp.i
 
-common/resolvererror.s: common/resolvererror.cpp.s
-.PHONY : common/resolvererror.s
+common/core/resolver.s: common/core/resolver.cpp.s
+.PHONY : common/core/resolver.s
 
 # target to generate assembly for a file
-common/resolvererror.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/resolvererror.cpp.s
-.PHONY : common/resolvererror.cpp.s
+common/core/resolver.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/core/resolver.cpp.s
+.PHONY : common/core/resolver.cpp.s
 
-common/socket.o: common/socket.cpp.o
-.PHONY : common/socket.o
+common/core/resolvererror.o: common/core/resolvererror.cpp.o
+.PHONY : common/core/resolvererror.o
 
 # target to build an object file
-common/socket.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/socket.cpp.o
-.PHONY : common/socket.cpp.o
+common/core/resolvererror.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/core/resolvererror.cpp.o
+.PHONY : common/core/resolvererror.cpp.o
 
-common/socket.i: common/socket.cpp.i
-.PHONY : common/socket.i
+common/core/resolvererror.i: common/core/resolvererror.cpp.i
+.PHONY : common/core/resolvererror.i
 
 # target to preprocess a source file
-common/socket.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/socket.cpp.i
-.PHONY : common/socket.cpp.i
+common/core/resolvererror.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/core/resolvererror.cpp.i
+.PHONY : common/core/resolvererror.cpp.i
 
-common/socket.s: common/socket.cpp.s
-.PHONY : common/socket.s
+common/core/resolvererror.s: common/core/resolvererror.cpp.s
+.PHONY : common/core/resolvererror.s
 
 # target to generate assembly for a file
-common/socket.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/socket.cpp.s
-.PHONY : common/socket.cpp.s
+common/core/resolvererror.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/core/resolvererror.cpp.s
+.PHONY : common/core/resolvererror.cpp.s
+
+common/core/socket.o: common/core/socket.cpp.o
+.PHONY : common/core/socket.o
+
+# target to build an object file
+common/core/socket.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/core/socket.cpp.o
+.PHONY : common/core/socket.cpp.o
+
+common/core/socket.i: common/core/socket.cpp.i
+.PHONY : common/core/socket.i
+
+# target to preprocess a source file
+common/core/socket.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/core/socket.cpp.i
+.PHONY : common/core/socket.cpp.i
+
+common/core/socket.s: common/core/socket.cpp.s
+.PHONY : common/core/socket.s
+
+# target to generate assembly for a file
+common/core/socket.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/core/socket.cpp.s
+.PHONY : common/core/socket.cpp.s
+
+common/protocolerror.o: common/protocolerror.cpp.o
+.PHONY : common/protocolerror.o
+
+# target to build an object file
+common/protocolerror.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/protocolerror.cpp.o
+.PHONY : common/protocolerror.cpp.o
+
+common/protocolerror.i: common/protocolerror.cpp.i
+.PHONY : common/protocolerror.i
+
+# target to preprocess a source file
+common/protocolerror.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/protocolerror.cpp.i
+.PHONY : common/protocolerror.cpp.i
+
+common/protocolerror.s: common/protocolerror.cpp.s
+.PHONY : common/protocolerror.s
+
+# target to generate assembly for a file
+common/protocolerror.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/protocolerror.cpp.s
+.PHONY : common/protocolerror.cpp.s
+
+common/serverprotocol.o: common/serverprotocol.cpp.o
+.PHONY : common/serverprotocol.o
+
+# target to build an object file
+common/serverprotocol.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/serverprotocol.cpp.o
+.PHONY : common/serverprotocol.cpp.o
+
+common/serverprotocol.i: common/serverprotocol.cpp.i
+.PHONY : common/serverprotocol.i
+
+# target to preprocess a source file
+common/serverprotocol.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/serverprotocol.cpp.i
+.PHONY : common/serverprotocol.cpp.i
+
+common/serverprotocol.s: common/serverprotocol.cpp.s
+.PHONY : common/serverprotocol.s
+
+# target to generate assembly for a file
+common/serverprotocol.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/serverprotocol.cpp.s
+.PHONY : common/serverprotocol.cpp.s
 
 editor/main.o: editor/main.cpp.o
 .PHONY : editor/main.o
@@ -627,222 +675,6 @@ server/lobbycontainer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/lobbycontainer.cpp.s
 .PHONY : server/lobbycontainer.cpp.s
 
-server/logic_server/action.o: server/logic_server/action.cpp.o
-.PHONY : server/logic_server/action.o
-
-# target to build an object file
-server/logic_server/action.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/logic_server/action.cpp.o
-.PHONY : server/logic_server/action.cpp.o
-
-server/logic_server/action.i: server/logic_server/action.cpp.i
-.PHONY : server/logic_server/action.i
-
-# target to preprocess a source file
-server/logic_server/action.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/logic_server/action.cpp.i
-.PHONY : server/logic_server/action.cpp.i
-
-server/logic_server/action.s: server/logic_server/action.cpp.s
-.PHONY : server/logic_server/action.s
-
-# target to generate assembly for a file
-server/logic_server/action.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/logic_server/action.cpp.s
-.PHONY : server/logic_server/action.cpp.s
-
-server/logic_server/armor.o: server/logic_server/armor.cpp.o
-.PHONY : server/logic_server/armor.o
-
-# target to build an object file
-server/logic_server/armor.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/logic_server/armor.cpp.o
-.PHONY : server/logic_server/armor.cpp.o
-
-server/logic_server/armor.i: server/logic_server/armor.cpp.i
-.PHONY : server/logic_server/armor.i
-
-# target to preprocess a source file
-server/logic_server/armor.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/logic_server/armor.cpp.i
-.PHONY : server/logic_server/armor.cpp.i
-
-server/logic_server/armor.s: server/logic_server/armor.cpp.s
-.PHONY : server/logic_server/armor.s
-
-# target to generate assembly for a file
-server/logic_server/armor.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/logic_server/armor.cpp.s
-.PHONY : server/logic_server/armor.cpp.s
-
-server/logic_server/box.o: server/logic_server/box.cpp.o
-.PHONY : server/logic_server/box.o
-
-# target to build an object file
-server/logic_server/box.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/logic_server/box.cpp.o
-.PHONY : server/logic_server/box.cpp.o
-
-server/logic_server/box.i: server/logic_server/box.cpp.i
-.PHONY : server/logic_server/box.i
-
-# target to preprocess a source file
-server/logic_server/box.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/logic_server/box.cpp.i
-.PHONY : server/logic_server/box.cpp.i
-
-server/logic_server/box.s: server/logic_server/box.cpp.s
-.PHONY : server/logic_server/box.s
-
-# target to generate assembly for a file
-server/logic_server/box.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/logic_server/box.cpp.s
-.PHONY : server/logic_server/box.cpp.s
-
-server/logic_server/coordinates.o: server/logic_server/coordinates.cpp.o
-.PHONY : server/logic_server/coordinates.o
-
-# target to build an object file
-server/logic_server/coordinates.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/logic_server/coordinates.cpp.o
-.PHONY : server/logic_server/coordinates.cpp.o
-
-server/logic_server/coordinates.i: server/logic_server/coordinates.cpp.i
-.PHONY : server/logic_server/coordinates.i
-
-# target to preprocess a source file
-server/logic_server/coordinates.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/logic_server/coordinates.cpp.i
-.PHONY : server/logic_server/coordinates.cpp.i
-
-server/logic_server/coordinates.s: server/logic_server/coordinates.cpp.s
-.PHONY : server/logic_server/coordinates.s
-
-# target to generate assembly for a file
-server/logic_server/coordinates.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/logic_server/coordinates.cpp.s
-.PHONY : server/logic_server/coordinates.cpp.s
-
-server/logic_server/match_logic.o: server/logic_server/match_logic.cpp.o
-.PHONY : server/logic_server/match_logic.o
-
-# target to build an object file
-server/logic_server/match_logic.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/logic_server/match_logic.cpp.o
-.PHONY : server/logic_server/match_logic.cpp.o
-
-server/logic_server/match_logic.i: server/logic_server/match_logic.cpp.i
-.PHONY : server/logic_server/match_logic.i
-
-# target to preprocess a source file
-server/logic_server/match_logic.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/logic_server/match_logic.cpp.i
-.PHONY : server/logic_server/match_logic.cpp.i
-
-server/logic_server/match_logic.s: server/logic_server/match_logic.cpp.s
-.PHONY : server/logic_server/match_logic.s
-
-# target to generate assembly for a file
-server/logic_server/match_logic.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/logic_server/match_logic.cpp.s
-.PHONY : server/logic_server/match_logic.cpp.s
-
-server/logic_server/match_queue.o: server/logic_server/match_queue.cpp.o
-.PHONY : server/logic_server/match_queue.o
-
-# target to build an object file
-server/logic_server/match_queue.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/logic_server/match_queue.cpp.o
-.PHONY : server/logic_server/match_queue.cpp.o
-
-server/logic_server/match_queue.i: server/logic_server/match_queue.cpp.i
-.PHONY : server/logic_server/match_queue.i
-
-# target to preprocess a source file
-server/logic_server/match_queue.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/logic_server/match_queue.cpp.i
-.PHONY : server/logic_server/match_queue.cpp.i
-
-server/logic_server/match_queue.s: server/logic_server/match_queue.cpp.s
-.PHONY : server/logic_server/match_queue.s
-
-# target to generate assembly for a file
-server/logic_server/match_queue.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/logic_server/match_queue.cpp.s
-.PHONY : server/logic_server/match_queue.cpp.s
-
-server/logic_server/match_state.o: server/logic_server/match_state.cpp.o
-.PHONY : server/logic_server/match_state.o
-
-# target to build an object file
-server/logic_server/match_state.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/logic_server/match_state.cpp.o
-.PHONY : server/logic_server/match_state.cpp.o
-
-server/logic_server/match_state.i: server/logic_server/match_state.cpp.i
-.PHONY : server/logic_server/match_state.i
-
-# target to preprocess a source file
-server/logic_server/match_state.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/logic_server/match_state.cpp.i
-.PHONY : server/logic_server/match_state.cpp.i
-
-server/logic_server/match_state.s: server/logic_server/match_state.cpp.s
-.PHONY : server/logic_server/match_state.s
-
-# target to generate assembly for a file
-server/logic_server/match_state.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/logic_server/match_state.cpp.s
-.PHONY : server/logic_server/match_state.cpp.s
-
-server/logic_server/player.o: server/logic_server/player.cpp.o
-.PHONY : server/logic_server/player.o
-
-# target to build an object file
-server/logic_server/player.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/logic_server/player.cpp.o
-.PHONY : server/logic_server/player.cpp.o
-
-server/logic_server/player.i: server/logic_server/player.cpp.i
-.PHONY : server/logic_server/player.i
-
-# target to preprocess a source file
-server/logic_server/player.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/logic_server/player.cpp.i
-.PHONY : server/logic_server/player.cpp.i
-
-server/logic_server/player.s: server/logic_server/player.cpp.s
-.PHONY : server/logic_server/player.s
-
-# target to generate assembly for a file
-server/logic_server/player.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/logic_server/player.cpp.s
-.PHONY : server/logic_server/player.cpp.s
-
-server/logic_server/weapon.o: server/logic_server/weapon.cpp.o
-.PHONY : server/logic_server/weapon.o
-
-# target to build an object file
-server/logic_server/weapon.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/logic_server/weapon.cpp.o
-.PHONY : server/logic_server/weapon.cpp.o
-
-server/logic_server/weapon.i: server/logic_server/weapon.cpp.i
-.PHONY : server/logic_server/weapon.i
-
-# target to preprocess a source file
-server/logic_server/weapon.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/logic_server/weapon.cpp.i
-.PHONY : server/logic_server/weapon.cpp.i
-
-server/logic_server/weapon.s: server/logic_server/weapon.cpp.s
-.PHONY : server/logic_server/weapon.s
-
-# target to generate assembly for a file
-server/logic_server/weapon.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/logic_server/weapon.cpp.s
-.PHONY : server/logic_server/weapon.cpp.s
-
 server/main.o: server/main.cpp.o
 .PHONY : server/main.o
 
@@ -938,30 +770,6 @@ server/playercontainer.s: server/playercontainer.cpp.s
 server/playercontainer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/playercontainer.cpp.s
 .PHONY : server/playercontainer.cpp.s
-
-server/playerprotocol.o: server/playerprotocol.cpp.o
-.PHONY : server/playerprotocol.o
-
-# target to build an object file
-server/playerprotocol.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/playerprotocol.cpp.o
-.PHONY : server/playerprotocol.cpp.o
-
-server/playerprotocol.i: server/playerprotocol.cpp.i
-.PHONY : server/playerprotocol.i
-
-# target to preprocess a source file
-server/playerprotocol.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/playerprotocol.cpp.i
-.PHONY : server/playerprotocol.cpp.i
-
-server/playerprotocol.s: server/playerprotocol.cpp.s
-.PHONY : server/playerprotocol.s
-
-# target to generate assembly for a file
-server/playerprotocol.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/playerprotocol.cpp.s
-.PHONY : server/playerprotocol.cpp.s
 
 server/server.o: server/server.cpp.o
 .PHONY : server/server.o
@@ -1131,29 +939,101 @@ server/simple_logic/simplestate.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/simple_logic/simplestate.cpp.s
 .PHONY : server/simple_logic/simplestate.cpp.s
 
-tests/foo.o: tests/foo.cpp.o
-.PHONY : tests/foo.o
+tests/mocksocket.o: tests/mocksocket.cpp.o
+.PHONY : tests/mocksocket.o
 
 # target to build an object file
-tests/foo.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_tests.dir/build.make CMakeFiles/taller_tests.dir/tests/foo.cpp.o
-.PHONY : tests/foo.cpp.o
+tests/mocksocket.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_tests.dir/build.make CMakeFiles/taller_tests.dir/tests/mocksocket.cpp.o
+.PHONY : tests/mocksocket.cpp.o
 
-tests/foo.i: tests/foo.cpp.i
-.PHONY : tests/foo.i
+tests/mocksocket.i: tests/mocksocket.cpp.i
+.PHONY : tests/mocksocket.i
 
 # target to preprocess a source file
-tests/foo.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_tests.dir/build.make CMakeFiles/taller_tests.dir/tests/foo.cpp.i
-.PHONY : tests/foo.cpp.i
+tests/mocksocket.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_tests.dir/build.make CMakeFiles/taller_tests.dir/tests/mocksocket.cpp.i
+.PHONY : tests/mocksocket.cpp.i
 
-tests/foo.s: tests/foo.cpp.s
-.PHONY : tests/foo.s
+tests/mocksocket.s: tests/mocksocket.cpp.s
+.PHONY : tests/mocksocket.s
 
 # target to generate assembly for a file
-tests/foo.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_tests.dir/build.make CMakeFiles/taller_tests.dir/tests/foo.cpp.s
-.PHONY : tests/foo.cpp.s
+tests/mocksocket.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_tests.dir/build.make CMakeFiles/taller_tests.dir/tests/mocksocket.cpp.s
+.PHONY : tests/mocksocket.cpp.s
+
+tests/testbaseprotocol.o: tests/testbaseprotocol.cpp.o
+.PHONY : tests/testbaseprotocol.o
+
+# target to build an object file
+tests/testbaseprotocol.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_tests.dir/build.make CMakeFiles/taller_tests.dir/tests/testbaseprotocol.cpp.o
+.PHONY : tests/testbaseprotocol.cpp.o
+
+tests/testbaseprotocol.i: tests/testbaseprotocol.cpp.i
+.PHONY : tests/testbaseprotocol.i
+
+# target to preprocess a source file
+tests/testbaseprotocol.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_tests.dir/build.make CMakeFiles/taller_tests.dir/tests/testbaseprotocol.cpp.i
+.PHONY : tests/testbaseprotocol.cpp.i
+
+tests/testbaseprotocol.s: tests/testbaseprotocol.cpp.s
+.PHONY : tests/testbaseprotocol.s
+
+# target to generate assembly for a file
+tests/testbaseprotocol.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_tests.dir/build.make CMakeFiles/taller_tests.dir/tests/testbaseprotocol.cpp.s
+.PHONY : tests/testbaseprotocol.cpp.s
+
+tests/testclientprotocol.o: tests/testclientprotocol.cpp.o
+.PHONY : tests/testclientprotocol.o
+
+# target to build an object file
+tests/testclientprotocol.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_tests.dir/build.make CMakeFiles/taller_tests.dir/tests/testclientprotocol.cpp.o
+.PHONY : tests/testclientprotocol.cpp.o
+
+tests/testclientprotocol.i: tests/testclientprotocol.cpp.i
+.PHONY : tests/testclientprotocol.i
+
+# target to preprocess a source file
+tests/testclientprotocol.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_tests.dir/build.make CMakeFiles/taller_tests.dir/tests/testclientprotocol.cpp.i
+.PHONY : tests/testclientprotocol.cpp.i
+
+tests/testclientprotocol.s: tests/testclientprotocol.cpp.s
+.PHONY : tests/testclientprotocol.s
+
+# target to generate assembly for a file
+tests/testclientprotocol.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_tests.dir/build.make CMakeFiles/taller_tests.dir/tests/testclientprotocol.cpp.s
+.PHONY : tests/testclientprotocol.cpp.s
+
+tests/testserverprotocol.o: tests/testserverprotocol.cpp.o
+.PHONY : tests/testserverprotocol.o
+
+# target to build an object file
+tests/testserverprotocol.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_tests.dir/build.make CMakeFiles/taller_tests.dir/tests/testserverprotocol.cpp.o
+.PHONY : tests/testserverprotocol.cpp.o
+
+tests/testserverprotocol.i: tests/testserverprotocol.cpp.i
+.PHONY : tests/testserverprotocol.i
+
+# target to preprocess a source file
+tests/testserverprotocol.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_tests.dir/build.make CMakeFiles/taller_tests.dir/tests/testserverprotocol.cpp.i
+.PHONY : tests/testserverprotocol.cpp.i
+
+tests/testserverprotocol.s: tests/testserverprotocol.cpp.s
+.PHONY : tests/testserverprotocol.s
+
+# target to generate assembly for a file
+tests/testserverprotocol.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_tests.dir/build.make CMakeFiles/taller_tests.dir/tests/testserverprotocol.cpp.s
+.PHONY : tests/testserverprotocol.cpp.s
 
 # Help Target
 help:
@@ -1180,27 +1060,33 @@ help:
 	@echo "... client/client.o"
 	@echo "... client/client.i"
 	@echo "... client/client.s"
-	@echo "... client/clientprotocol.o"
-	@echo "... client/clientprotocol.i"
-	@echo "... client/clientprotocol.s"
 	@echo "... client/main.o"
 	@echo "... client/main.i"
 	@echo "... client/main.s"
-	@echo "... common/liberror.o"
-	@echo "... common/liberror.i"
-	@echo "... common/liberror.s"
-	@echo "... common/protocol.o"
-	@echo "... common/protocol.i"
-	@echo "... common/protocol.s"
-	@echo "... common/resolver.o"
-	@echo "... common/resolver.i"
-	@echo "... common/resolver.s"
-	@echo "... common/resolvererror.o"
-	@echo "... common/resolvererror.i"
-	@echo "... common/resolvererror.s"
-	@echo "... common/socket.o"
-	@echo "... common/socket.i"
-	@echo "... common/socket.s"
+	@echo "... common/clientprotocol.o"
+	@echo "... common/clientprotocol.i"
+	@echo "... common/clientprotocol.s"
+	@echo "... common/core/liberror.o"
+	@echo "... common/core/liberror.i"
+	@echo "... common/core/liberror.s"
+	@echo "... common/core/protocol.o"
+	@echo "... common/core/protocol.i"
+	@echo "... common/core/protocol.s"
+	@echo "... common/core/resolver.o"
+	@echo "... common/core/resolver.i"
+	@echo "... common/core/resolver.s"
+	@echo "... common/core/resolvererror.o"
+	@echo "... common/core/resolvererror.i"
+	@echo "... common/core/resolvererror.s"
+	@echo "... common/core/socket.o"
+	@echo "... common/core/socket.i"
+	@echo "... common/core/socket.s"
+	@echo "... common/protocolerror.o"
+	@echo "... common/protocolerror.i"
+	@echo "... common/protocolerror.s"
+	@echo "... common/serverprotocol.o"
+	@echo "... common/serverprotocol.i"
+	@echo "... common/serverprotocol.s"
 	@echo "... editor/main.o"
 	@echo "... editor/main.i"
 	@echo "... editor/main.s"
@@ -1219,33 +1105,6 @@ help:
 	@echo "... server/lobbycontainer.o"
 	@echo "... server/lobbycontainer.i"
 	@echo "... server/lobbycontainer.s"
-	@echo "... server/logic_server/action.o"
-	@echo "... server/logic_server/action.i"
-	@echo "... server/logic_server/action.s"
-	@echo "... server/logic_server/armor.o"
-	@echo "... server/logic_server/armor.i"
-	@echo "... server/logic_server/armor.s"
-	@echo "... server/logic_server/box.o"
-	@echo "... server/logic_server/box.i"
-	@echo "... server/logic_server/box.s"
-	@echo "... server/logic_server/coordinates.o"
-	@echo "... server/logic_server/coordinates.i"
-	@echo "... server/logic_server/coordinates.s"
-	@echo "... server/logic_server/match_logic.o"
-	@echo "... server/logic_server/match_logic.i"
-	@echo "... server/logic_server/match_logic.s"
-	@echo "... server/logic_server/match_queue.o"
-	@echo "... server/logic_server/match_queue.i"
-	@echo "... server/logic_server/match_queue.s"
-	@echo "... server/logic_server/match_state.o"
-	@echo "... server/logic_server/match_state.i"
-	@echo "... server/logic_server/match_state.s"
-	@echo "... server/logic_server/player.o"
-	@echo "... server/logic_server/player.i"
-	@echo "... server/logic_server/player.s"
-	@echo "... server/logic_server/weapon.o"
-	@echo "... server/logic_server/weapon.i"
-	@echo "... server/logic_server/weapon.s"
 	@echo "... server/main.o"
 	@echo "... server/main.i"
 	@echo "... server/main.s"
@@ -1258,9 +1117,6 @@ help:
 	@echo "... server/playercontainer.o"
 	@echo "... server/playercontainer.i"
 	@echo "... server/playercontainer.s"
-	@echo "... server/playerprotocol.o"
-	@echo "... server/playerprotocol.i"
-	@echo "... server/playerprotocol.s"
 	@echo "... server/server.o"
 	@echo "... server/server.i"
 	@echo "... server/server.s"
@@ -1282,9 +1138,18 @@ help:
 	@echo "... server/simple_logic/simplestate.o"
 	@echo "... server/simple_logic/simplestate.i"
 	@echo "... server/simple_logic/simplestate.s"
-	@echo "... tests/foo.o"
-	@echo "... tests/foo.i"
-	@echo "... tests/foo.s"
+	@echo "... tests/mocksocket.o"
+	@echo "... tests/mocksocket.i"
+	@echo "... tests/mocksocket.s"
+	@echo "... tests/testbaseprotocol.o"
+	@echo "... tests/testbaseprotocol.i"
+	@echo "... tests/testbaseprotocol.s"
+	@echo "... tests/testclientprotocol.o"
+	@echo "... tests/testclientprotocol.i"
+	@echo "... tests/testclientprotocol.s"
+	@echo "... tests/testserverprotocol.o"
+	@echo "... tests/testserverprotocol.i"
+	@echo "... tests/testserverprotocol.s"
 .PHONY : help
 
 

@@ -2,10 +2,9 @@
 
 #include <iostream>
 
-#include "common/liberror.h"
-#include "common/queue.h"
+#include "common/core/liberror.h"
 
-ControlNotifier::ControlNotifier(ControlledPlayer& _player, PlayerProtocol& _protocol):
+ControlNotifier::ControlNotifier(ControlledPlayer& _player, ServerProtocol& _protocol):
         player(_player), protocol(_protocol) {}
 
 void ControlNotifier::run() {

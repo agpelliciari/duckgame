@@ -1,13 +1,18 @@
-#include "client/clientprotocol.h"
+#include "./clientprotocol.h"
 
 #include <iostream>
 #include <string>
 #include <utility>
 
+#include "common/core/liberror.h"
 #include "common/dtos.h"
-#include "common/liberror.h"
 
-ClientProtocol::ClientProtocol(Socket skt): protocol(skt) {}
+ClientProtocol::ClientProtocol(Messenger* conn): protocol(conn) {}
+ClientProtocol::ClientProtocol(Socket& conn): protocol(conn) {}
+ClientProtocol::ClientProtocol(Socket&& conn): protocol(conn) {}
+
+ClientProtocol::ClientProtocol(Protocol&& prot): protocol(std::move(prot)) {}
+
 
 void ClientProtocol::pickup(const uint8_t indplayer, const uint8_t box) {
 
@@ -45,3 +50,5 @@ MatchDto ClientProtocol::recvstate() {
 
     return MatchDto(out);
 }
+
+void ClientProtocol::close() { protocol.close(); }
