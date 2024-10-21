@@ -27,6 +27,22 @@ void PlayerContainer::removeAll() {
         playerit = players.erase(playerit);
     }
 }
+
+
+std::vector<player_id> PlayerContainer::getPlayers() {
+    std::vector<player_id> connected;
+    for (auto playerit = players.begin(); playerit != players.end();) {
+        int mx = (*playerit)->playercount();
+        for (int ind = 0; ind < mx; ind++) {
+            connected.push_back((*playerit)->getid(ind));
+        }
+
+        ++playerit;
+    }
+
+    return connected;
+}
+
 std::vector<player_id> PlayerContainer::updateState(const MatchDto& matchdto) {
     std::vector<player_id> disconnected;
 

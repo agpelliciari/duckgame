@@ -1,11 +1,13 @@
 
 #include "./match_state.h"
 
+#include <iostream>
 MatchState::MatchState(): running(false), match_logic(), acciones(match_logic) {}
 
 void MatchState::pushAction(const PlayerActionDTO& action) { acciones.push_command(action); }
 
 void MatchState::loop(PlayerContainer& observer) {
+    std::cout << (int)observer.getPlayers()[0] << std::endl;
     running = true;
     while (running) {
         this->receive_commands(acciones);
