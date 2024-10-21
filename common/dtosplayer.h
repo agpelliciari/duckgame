@@ -16,6 +16,10 @@ struct PlayerActionDTO {
     PlayerActionType type;
     uint8_t playerind;
     uint8_t specific_info;
+
+    PlayerActionDTO(PlayerActionType& _type,uint8_t _playerind):type(_type), playerind(_playerind), specific_info(0) {}
+    PlayerActionDTO(PlayerActionType& _type,uint8_t _playerind,uint8_t _info):type(_type), playerind(_playerind), specific_info(_info) {}
+    PlayerActionDTO():type(NONE), playerind(0), specific_info(0) {}
 } __attribute__((packed));
 
 

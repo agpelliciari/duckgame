@@ -34,8 +34,9 @@ public:
     void createLobby(const uint8_t playercount);
 
     void startlobby();
-
-    void pickup(const uint8_t indplayer, const uint8_t box);
+    
+    void sendaction(PlayerActionDTO& action);
+    
     MatchDto recvstate();
 
     void close();

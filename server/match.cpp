@@ -22,8 +22,8 @@ void Match::finish() {
         return;
     }
     stop();
+    looper.stop();
     players.removeAll();
-    // actions.close();
 
     join();
 }

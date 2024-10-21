@@ -13,12 +13,7 @@ ClientProtocol::ClientProtocol(Socket&& conn): protocol(conn) {}
 
 ClientProtocol::ClientProtocol(Protocol&& prot): protocol(std::move(prot)) {}
 
-
-void ClientProtocol::pickup(const uint8_t indplayer, const uint8_t box) {
-
-    uint8_t tosend = box - 1;
-    // se le resta 1 a la box.
-    PlayerActionDTO action = {PlayerActionType::PICK_UP, indplayer, tosend};
+void ClientProtocol::sendaction(PlayerActionDTO& action){
     protocol.sendbytes(&action, sizeof(action));
 }
 

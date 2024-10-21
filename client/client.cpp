@@ -20,6 +20,10 @@ unsigned int Client::inputnum() {
     return res;
 }
 
+void Client::sendMove(char action){
+     std::cout << "MOVE " << action << std::endl;
+}
+
 void Client::listenActions() {
     // Un buffer lo suficientemente grande. Que esta en el stack.
 
@@ -70,19 +74,6 @@ void Client::listenActions() {
         if (action.compare(ACTION_EXIT) == 0) {
             return;
         }
-        if (action.compare(ACTION_PICKUP) == 0) {
-            uint8_t indplayer = inputnum();  // Se valida en el server.
-            uint8_t box = inputnum();        // Se valida en el server.
-
-            if (indplayer == 1 && countplayers > 1) {
-                std::cerr << "Picked up " << name2 << " box: " << (int)box << std::endl;
-                protocol.pickup(1, box);
-            } else {
-                std::cerr << "Picked up " << name << " box: " << (int)box << std::endl;
-                protocol.pickup(0, box);
-            }
-            continue;
-        }
 
         if (action.compare(ACTION_READ) == 0) {
             int count = inputnum();
@@ -93,7 +84,13 @@ void Client::listenActions() {
             }
             continue;
         }
-
-        std::cerr << "NOT RECOGNIZED: " << action << std::endl;
+        std::cout << "MOVE " << action << std::endl;
+        char * act = action.data();
+        int left = action.length();
+        int ind = 0;
+        while(ind < left){
+            sendMove(*(act+ind));
+            ind++;
+        }
     }
 }
