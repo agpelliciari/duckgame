@@ -12,11 +12,12 @@ class MatchQueue {
 
     private:
         std::mutex mutex;
-        Queue<class ActionCommand> &queue;
+        Queue<class ActionCommand> queue;
         MatchLogic &match_logic;
 
+
     public:
-        MatchQueue(Queue<class ActionCommand> &queue, MatchLogic &match_logic);
+        MatchQueue(MatchLogic &match_logic);
         void push_command(const PlayerActionDTO& action);
         bool pop_command(ActionCommand& action);
         void close();

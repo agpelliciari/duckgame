@@ -2,8 +2,7 @@
 #include "match_queue.h"
 #include <iostream>
 
-MatchQueue::MatchQueue(Queue<class ActionCommand> &queue_, MatchLogic &match_logic_):
-         queue(queue_), match_logic(match_logic_){}
+MatchQueue::MatchQueue(MatchLogic &match_logic_): queue(), match_logic(match_logic_){}
 
 void MatchQueue::push_command(const PlayerActionDTO& action){
     std::unique_lock<std::mutex> lock(mutex);

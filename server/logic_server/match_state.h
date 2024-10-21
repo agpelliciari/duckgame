@@ -16,17 +16,18 @@ class MatchState {
 
     private:
         bool running;
-        MatchLogic &match_logic;
+        MatchLogic match_logic;
         std::vector <ActionCommand> commands;
-
+        MatchQueue acciones;
 
     public:
-        MatchState(MatchLogic &match_logic);
+        MatchState();
+        void pushAction(const PlayerActionDTO& action);
         //void add_player(Player player);
         void receive_commands(MatchQueue& acciones);
         void execute_commands();
         void send_results();
-        void loop(/*PlayerContainer& observer, */MatchQueue& acciones);
+        void loop(PlayerContainer& observer);
         ~MatchState();
 
 };

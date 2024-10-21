@@ -1,14 +1,19 @@
 
 #include "./match_state.h"
 
-MatchState::MatchState(MatchLogic &match_logic_):running(true), match_logic(match_logic_){}
+MatchState::MatchState():running(true), match_logic(){}
 
-void MatchState::loop(/*PlayerContainer& observer, */MatchQueue& acciones) {
+void MatchState::pushAction(const PlayerActionDTO& action){
+     acciones.push_command(action);
+}
+
+void MatchState::loop(PlayerContainer& observer) {
     while (running){
         this->receive_commands(acciones);
         this->execute_commands();
         this->send_results();
     }
+    observer.updateState(MatchDto(INICIADA, 1));
 }
 
 void MatchState::receive_commands(MatchQueue& acciones){
