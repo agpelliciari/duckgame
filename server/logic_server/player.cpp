@@ -10,7 +10,7 @@ Player::Player(int id, int initial_x, int initial_y):
         chest_armor(),
         move_action() {}
 
-void Player::get_data(const int& id, const int& x, const int& y, const TypeWeapon& weapon,
+void Player::get_data(int& id, int& x, int& y, const TypeWeapon& weapon,
                       const bool& helmet_equipped, const bool& chest_armor_equipped,
                       const TypeMoveAction& move_action) {
     id = this->id;

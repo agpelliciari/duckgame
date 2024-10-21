@@ -1,7 +1,7 @@
 
 #include "./match_state.h"
 
-MatchState::MatchState(): running(false), match_logic() {}
+MatchState::MatchState(): running(false), match_logic(),acciones(match_logic) {}
 
 void MatchState::pushAction(const PlayerActionDTO& action) { acciones.push_command(action); }
 
