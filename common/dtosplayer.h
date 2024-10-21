@@ -4,7 +4,12 @@
 #include <cstdint>
 
 enum PlayerActionType : uint8_t {
-    PICK_UP = 3,
+    PICK_UP = 5,
+    NONE = 0,
+    MOVE_LEFT = 1,
+    MOVE_RIGHT = 2,
+    STAY_DOWN = 3,
+    JUMP = 4,
 };
 
 struct PlayerActionDTO {

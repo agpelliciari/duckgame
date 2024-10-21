@@ -2,9 +2,20 @@
 #include "match_queue.h"
 #include <iostream>
 
-void MatchQueue::notify(const PlayerActionDTO& action){
-    std::cerr << "NOT IMPL " << action.playerind << "\n";
+MatchQueue::MatchQueue(Queue<class ActionCommand> &queue_, MatchLogic &match_logic_):
+         queue(queue_), match_logic(match_logic_){}
+
+void MatchQueue::push_command(const PlayerActionDTO& action){
+    std::unique_lock<std::mutex> lock(mutex);
+    queue.try_push(ActionCommand(action, &this->match_logic));
 }
+
+bool MatchQueue::pop_command(ActionCommand& action){
+    std::unique_lock<std::mutex> lock(mutex);
+    return queue.try_pop(action);
+}
+
+
 void MatchQueue::close(){
 
 }

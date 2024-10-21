@@ -10,7 +10,8 @@ target_sources(taller_server
             match_queue.cpp
             match_state.cpp
             box.cpp
- 
+            action_command.cpp
+
 
     PUBLIC
     # .h files
@@ -23,5 +24,8 @@ target_sources(taller_server
             coordinates.h
             box.h
             armor.h
+            command.h
+            action_command.h
+
 
     )

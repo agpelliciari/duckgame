@@ -6,12 +6,16 @@
 #include <utility>
 
 #include "common/dtosplayer.h"
+#include "common/queue.h"
+
+#include "common/dtosplayer.h"
 #include "common/thread.h"
 
 
 // Descomentar si ya son usables.
 #include "server/logic_server/match_queue.h"
 #include "server/logic_server/match_state.h"
+#include "server/logic_server/match_logic.h"
 
 // Logica sencilla del tp de threads
 //#include "server/simple_logic/simplequeue.h"
@@ -30,8 +34,10 @@ class Match: private Thread {
 private:
     lobbyID id;               // cppcheck-suppress unusedStructMember
     PlayerContainer players;  // cppcheck-suppress unusedStructMember
+    MatchLogic logic;      // cppcheck-suppress unusedStructMember
     MatchState looper;        // cppcheck-suppress unusedStructMember
     MatchQueue actions;      // cppcheck-suppress unusedStructMember
+
 
     // Para el thread y en general el loopeado
     void run() override;
@@ -51,7 +57,7 @@ protected:
 
 public:
     // Se tendra composicion con un unico observer de eventos al match.
-    explicit Match(lobbyID _id);
+    Match(lobbyID _id, Queue<class ActionCommand> &queue);
 
     // Asumamos por ahora que no se quiere permitir copias, ni mov.
     Match(const Match&) = delete;

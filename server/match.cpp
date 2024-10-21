@@ -4,7 +4,8 @@
 
 #include "./gameerror.h"
 
-Match::Match(lobbyID _id): id(_id), players(), looper() {}
+Match::Match(lobbyID _id, Queue<class ActionCommand> &queue): id(_id), players(), logic(), looper(this->logic),
+    actions(queue, logic){}
 
 
 // Protected// friend accessed methods
@@ -39,13 +40,13 @@ lobbyID Match::getID() const { return this->id; }
 // Metodos delegatorios.
 void Match::notifyAction(const PlayerActionDTO&& action) {
     if (_keep_running) {
-        actions.notify(action);
+        actions.push_command(action);
     }
 }
 
 void Match::run() {
 
-    looper.loop(players, actions);
+    looper.loop(/*players, */actions);
     // Checkea si el finish fue natural o forzado.
 }
 

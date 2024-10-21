@@ -8,6 +8,10 @@ void Action::get_move_action(TypeMoveAction& _move_action){
     this->move_action = _move_action;
 }
 
+void Action::still(){
+    this->move_action = TypeMoveAction::NONE;
+}
+
 void Action::move_right(){
     this->move_action = TypeMoveAction::MOVE_RIGHT;
 }

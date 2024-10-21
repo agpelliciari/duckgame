@@ -7,6 +7,14 @@ void MatchLogic::add_player(Player player){
     players.push_back(player);
 }
 
+void MatchLogic::still_player(int id){
+    for (Player player :players){
+        if (player.same_id(id)){
+            player.still();
+        }
+    }
+}
+
 void MatchLogic::move_player_left(int id){
     for (Player player :players){
         if (player.same_id(id)){

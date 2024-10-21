@@ -19,6 +19,10 @@ bool Player::same_id(int id){
     return this->id == id;
 }
 
+void Player::still(){
+    move_action.still();
+}
+
 void Player::move_right(){
     coordinates.move_right();
     move_action.move_right();

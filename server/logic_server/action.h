@@ -14,6 +14,7 @@ class Action {
     public:
         Action();
         void get_move_action(TypeMoveAction& _move_action);
+        void still();
         void move_right();
         void move_left();
         void jump();

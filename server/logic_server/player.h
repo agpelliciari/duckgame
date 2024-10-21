@@ -29,6 +29,7 @@ class Player {
         void get_data(int &id, int &x, int &y, TypeWeapon &weapon, bool &helmet_equipped,
                       bool &chest_armor_equipped, TypeMoveAction &move_action);
 
+        void still();
         void move_right();
         void move_left();
         void stay_down();
