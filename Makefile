@@ -483,30 +483,6 @@ common/core/socket.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/core/socket.cpp.s
 .PHONY : common/core/socket.cpp.s
 
-common/playerprotocol.o: common/playerprotocol.cpp.o
-.PHONY : common/playerprotocol.o
-
-# target to build an object file
-common/playerprotocol.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/playerprotocol.cpp.o
-.PHONY : common/playerprotocol.cpp.o
-
-common/playerprotocol.i: common/playerprotocol.cpp.i
-.PHONY : common/playerprotocol.i
-
-# target to preprocess a source file
-common/playerprotocol.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/playerprotocol.cpp.i
-.PHONY : common/playerprotocol.cpp.i
-
-common/playerprotocol.s: common/playerprotocol.cpp.s
-.PHONY : common/playerprotocol.s
-
-# target to generate assembly for a file
-common/playerprotocol.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/playerprotocol.cpp.s
-.PHONY : common/playerprotocol.cpp.s
-
 common/protocolerror.o: common/protocolerror.cpp.o
 .PHONY : common/protocolerror.o
 
@@ -530,6 +506,30 @@ common/protocolerror.s: common/protocolerror.cpp.s
 common/protocolerror.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/protocolerror.cpp.s
 .PHONY : common/protocolerror.cpp.s
+
+common/serverprotocol.o: common/serverprotocol.cpp.o
+.PHONY : common/serverprotocol.o
+
+# target to build an object file
+common/serverprotocol.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/serverprotocol.cpp.o
+.PHONY : common/serverprotocol.cpp.o
+
+common/serverprotocol.i: common/serverprotocol.cpp.i
+.PHONY : common/serverprotocol.i
+
+# target to preprocess a source file
+common/serverprotocol.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/serverprotocol.cpp.i
+.PHONY : common/serverprotocol.cpp.i
+
+common/serverprotocol.s: common/serverprotocol.cpp.s
+.PHONY : common/serverprotocol.s
+
+# target to generate assembly for a file
+common/serverprotocol.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/serverprotocol.cpp.s
+.PHONY : common/serverprotocol.cpp.s
 
 editor/main.o: editor/main.cpp.o
 .PHONY : editor/main.o
@@ -1057,12 +1057,12 @@ help:
 	@echo "... common/core/socket.o"
 	@echo "... common/core/socket.i"
 	@echo "... common/core/socket.s"
-	@echo "... common/playerprotocol.o"
-	@echo "... common/playerprotocol.i"
-	@echo "... common/playerprotocol.s"
 	@echo "... common/protocolerror.o"
 	@echo "... common/protocolerror.i"
 	@echo "... common/protocolerror.s"
+	@echo "... common/serverprotocol.o"
+	@echo "... common/serverprotocol.i"
+	@echo "... common/serverprotocol.s"
 	@echo "... editor/main.o"
 	@echo "... editor/main.i"
 	@echo "... editor/main.s"

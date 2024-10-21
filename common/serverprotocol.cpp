@@ -1,4 +1,4 @@
-#include "./playerprotocol.h"
+#include "./serverprotocol.h"
 
 #include <iostream>
 #include <string>
@@ -8,14 +8,14 @@
 #include "common/protocolerror.h"
 
 
-PlayerProtocol::PlayerProtocol(Socket& messenger): protocol(messenger), isactive(true) {}
-PlayerProtocol::PlayerProtocol(Messenger* messenger): protocol(messenger), isactive(true) {}
-PlayerProtocol::PlayerProtocol(Protocol&& prot): protocol(std::move(prot)), isactive(true) {}
+ServerProtocol::ServerProtocol(Socket& messenger): protocol(messenger), isactive(true) {}
+ServerProtocol::ServerProtocol(Messenger* messenger): protocol(messenger), isactive(true) {}
+ServerProtocol::ServerProtocol(Protocol&& prot): protocol(std::move(prot)), isactive(true) {}
 
 
-bool PlayerProtocol::recvplayercount(uint8_t* count) { return protocol.tryrecvbyte(count); }
+bool ServerProtocol::recvplayercount(uint8_t* count) { return protocol.tryrecvbyte(count); }
 
-bool PlayerProtocol::recvsignalstart() {
+bool ServerProtocol::recvsignalstart() {
     uint8_t sign;
     if (protocol.tryrecvbyte(&sign)) {
         return (LobbyActionType)(sign) == LobbyActionType::STARTED_LOBBY;
@@ -25,13 +25,13 @@ bool PlayerProtocol::recvsignalstart() {
 }
 
 
-lobby_action PlayerProtocol::recvlobbyaction() {
+lobby_action ServerProtocol::recvlobbyaction() {
     lobby_action out;
     protocol.recvbytes(&out, sizeof(out));
     return out;
 }
 
-PlayerActionDTO PlayerProtocol::recvaction() {
+PlayerActionDTO ServerProtocol::recvaction() {
     PlayerActionDTO action;
     if (!protocol.tryrecvbytes(&action, sizeof(action))) {
         isactive = false;
@@ -40,7 +40,7 @@ PlayerActionDTO PlayerProtocol::recvaction() {
     return action;
 }
 
-void PlayerProtocol::sendstate(const MatchDto&& state) {
+void ServerProtocol::sendstate(const MatchDto&& state) {
 
     // Primero envia general info
     protocol.sendbytes(&state.info, sizeof(state.info));
@@ -49,9 +49,9 @@ void PlayerProtocol::sendstate(const MatchDto&& state) {
 }
 
 
-bool PlayerProtocol::isopen() { return isactive.load(); }
+bool ServerProtocol::isopen() { return isactive.load(); }
 
-void PlayerProtocol::close() {
+void ServerProtocol::close() {
     if (isactive.exchange(false)) {
         protocol.close();
     }

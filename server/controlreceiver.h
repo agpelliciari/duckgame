@@ -6,7 +6,7 @@
 #include "./lobbycontainer.h"
 #include "./match.h"
 #include "common/core/socket.h"
-#include "common/playerprotocol.h"
+#include "common/serverprotocol.h"
 #include "common/thread.h"
 
 // ControlledPlayer controller va a ser el thread recibidor de un protocol.
@@ -18,7 +18,7 @@ class ControlReceiver: private Thread {
 
 protected:
     LobbyContainer& lobbies;  // cppcheck-suppress unusedStructMember
-    PlayerProtocol protocol;
+    ServerProtocol protocol;
     void playOn(ControlledPlayer& player, Match& match);
     void handleNewLobby(const uint8_t countplayers);
 
