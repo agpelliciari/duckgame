@@ -44,8 +44,14 @@ void ServerProtocol::sendstate(const MatchDto&& state) {
 
     // Primero envia general info
     protocol.sendbytes(&state.info, sizeof(state.info));
+    std::cout << "----> SEND PLAYER COUNT" << state.players.size() << std::endl;
 
-    // Despues si es necesario envia los patos y asi.
+    for (auto playerit = state.players.begin(); playerit != state.players.end();) {
+        PlayerDTO player = *playerit;
+        std::cout << "SEND PLAYER: " << player.id << "at:" << player.coord_x << ","
+                  << player.coord_y << std::endl;
+        ++playerit;
+    }
 }
 
 

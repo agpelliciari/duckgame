@@ -37,7 +37,7 @@ bool Match::operator==(const Match& other) const { return this->id == other.id; 
 lobbyID Match::getID() const { return this->id; }
 
 // Metodos delegatorios.
-void Match::notifyAction(const PlayerActionDTO&& action) {
+void Match::notifyAction(const PlayerActionDTO& action) {
     if (_keep_running) {
         looper.pushAction(action);
     }

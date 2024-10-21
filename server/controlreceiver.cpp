@@ -34,7 +34,15 @@ void ControlReceiver::playOn(ControlledPlayer& player, Match& match) {
 
 
         while (_keep_running) {
-            match.notifyAction(protocol.recvaction());
+            PlayerActionDTO action = protocol.recvaction();
+            if (player.playercount() <= action.playerind) {
+                std::cerr << "Invalid action from client!!\n";
+                continue;
+            }
+            action.playerind = player.getid(action.playerind);
+            std::cout << "Action from player:" << (int)action.playerind
+                      << " type: " << (int)action.type << std::endl;
+            match.notifyAction(action);
         }
         player.disconnect();  // Finalizo normalmente.
     } catch (const LibError& error) {

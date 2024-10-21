@@ -20,7 +20,28 @@ unsigned int Client::inputnum() {
     return res;
 }
 
-void Client::sendMove(char action) { std::cout << "MOVE " << action << std::endl; }
+void Client::sendMove(char action) {
+
+    PlayerActionDTO dto;
+    if (action == 'a') {
+        dto.playerind = 0;
+        dto.type = MOVE_LEFT;
+    } else if (action == 'd') {
+        dto.playerind = 0;
+        dto.type = MOVE_RIGHT;
+    } else if (action == 'j') {
+        dto.playerind = 1;
+        dto.type = MOVE_LEFT;
+    } else if (action == 'l') {
+        dto.playerind = 1;
+        dto.type = MOVE_RIGHT;
+    } else {
+        return;
+    }
+    std::cout << "MOVE " << (int)dto.playerind << " DIR " << (int)dto.type << std::endl;
+
+    protocol.sendaction(dto);
+}
 
 void Client::listenActions() {
     // Un buffer lo suficientemente grande. Que esta en el stack.

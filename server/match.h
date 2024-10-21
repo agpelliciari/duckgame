@@ -65,7 +65,7 @@ public:
     // Metodos publicos.. accesibles incluso a player controllers.
     // No hay precondiciones perse. Podria no haber empezado el match.
     // Metodos delegatorios
-    void notifyAction(const PlayerActionDTO&& action);
+    void notifyAction(const PlayerActionDTO& action);
     bool isrunning() const;
     ~Match();
 };
