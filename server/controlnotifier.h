@@ -1,5 +1,5 @@
-#ifndef LIB_PlayerNotifier_H
-#define LIB_PlayerNotifier_H
+#ifndef LIB_ControlNotifier_H
+#define LIB_ControlNotifier_H
 
 #include "./controlledplayer.h"
 #include "./playerprotocol.h"
@@ -7,21 +7,21 @@
 
 
 // El thread que basicamente notifica de eventos al protocolo/client.
-class PlayerNotifier: public Thread {
+class ControlNotifier: public Thread {
 
 protected:
     ControlledPlayer& player;  // cppcheck-suppress unusedStructMember
     PlayerProtocol& protocol;  // cppcheck-suppress unusedStructMember
 
 public:
-    explicit PlayerNotifier(ControlledPlayer& _player, PlayerProtocol& protocol);
+    explicit ControlNotifier(ControlledPlayer& _player, PlayerProtocol& protocol);
 
     // Asumamos por ahora que no se quiere permitir copias, ni mov.
-    PlayerNotifier(const PlayerNotifier&) = delete;
-    PlayerNotifier& operator=(const PlayerNotifier&) = delete;
+    ControlNotifier(const ControlNotifier&) = delete;
+    ControlNotifier& operator=(const ControlNotifier&) = delete;
 
-    PlayerNotifier(PlayerNotifier&&) = delete;
-    PlayerNotifier& operator=(PlayerNotifier&&) = delete;
+    ControlNotifier(ControlNotifier&&) = delete;
+    ControlNotifier& operator=(ControlNotifier&&) = delete;
 
     // Run para el thread corra cuando empieze.
     // Simplemente espera, en envia el evento

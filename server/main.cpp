@@ -7,7 +7,7 @@
 #include "common/liberror.h"
 #include "common/resolvererror.h"
 #include "server/gameerror.h"
-#include "server/matchserver.h"
+#include "server/server.h"
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
 
     try {
 
-        MatchServer server(argv[1]);
+        Server server(argv[1]);
 
         server.initmatch();  // Starts async.
 

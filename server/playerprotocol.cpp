@@ -5,7 +5,6 @@
 #include <utility>
 
 #include "./gameerror.h"
-#include "common/event.h"
 
 
 PlayerProtocol::PlayerProtocol(Socket&& skt): protocol(skt), isactive(true) {}

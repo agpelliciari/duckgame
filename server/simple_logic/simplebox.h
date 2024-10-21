@@ -1,7 +1,7 @@
 #ifndef LIB_SIMPLE_BOX_H
 #define LIB_SIMPLE_BOX_H
 
-#include "common/reward.h"
+#include "./simplereward.h"
 
 class SimpleBox {
 private:
@@ -18,7 +18,7 @@ public:
 
     // Abre, de ser posible.
     // dado el tipo pasado. Bien podria ser random generado adentro.
-    Reward open(const RewardType& tipo);
+    SimpleReward open(const RewardType& tipo);
 };
 
 #endif

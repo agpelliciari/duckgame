@@ -363,30 +363,6 @@ client/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_client.dir/build.make CMakeFiles/taller_client.dir/client/main.cpp.s
 .PHONY : client/main.cpp.s
 
-common/event.o: common/event.cpp.o
-.PHONY : common/event.o
-
-# target to build an object file
-common/event.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/event.cpp.o
-.PHONY : common/event.cpp.o
-
-common/event.i: common/event.cpp.i
-.PHONY : common/event.i
-
-# target to preprocess a source file
-common/event.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/event.cpp.i
-.PHONY : common/event.cpp.i
-
-common/event.s: common/event.cpp.s
-.PHONY : common/event.s
-
-# target to generate assembly for a file
-common/event.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/event.cpp.s
-.PHONY : common/event.cpp.s
-
 common/liberror.o: common/liberror.cpp.o
 .PHONY : common/liberror.o
 
@@ -483,30 +459,6 @@ common/resolvererror.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/resolvererror.cpp.s
 .PHONY : common/resolvererror.cpp.s
 
-common/reward.o: common/reward.cpp.o
-.PHONY : common/reward.o
-
-# target to build an object file
-common/reward.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/reward.cpp.o
-.PHONY : common/reward.cpp.o
-
-common/reward.i: common/reward.cpp.i
-.PHONY : common/reward.i
-
-# target to preprocess a source file
-common/reward.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/reward.cpp.i
-.PHONY : common/reward.cpp.i
-
-common/reward.s: common/reward.cpp.s
-.PHONY : common/reward.s
-
-# target to generate assembly for a file
-common/reward.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_common.dir/build.make CMakeFiles/taller_common.dir/common/reward.cpp.s
-.PHONY : common/reward.cpp.s
-
 common/socket.o: common/socket.cpp.o
 .PHONY : common/socket.o
 
@@ -578,6 +530,54 @@ server/controlledplayer.s: server/controlledplayer.cpp.s
 server/controlledplayer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/controlledplayer.cpp.s
 .PHONY : server/controlledplayer.cpp.s
+
+server/controlnotifier.o: server/controlnotifier.cpp.o
+.PHONY : server/controlnotifier.o
+
+# target to build an object file
+server/controlnotifier.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/controlnotifier.cpp.o
+.PHONY : server/controlnotifier.cpp.o
+
+server/controlnotifier.i: server/controlnotifier.cpp.i
+.PHONY : server/controlnotifier.i
+
+# target to preprocess a source file
+server/controlnotifier.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/controlnotifier.cpp.i
+.PHONY : server/controlnotifier.cpp.i
+
+server/controlnotifier.s: server/controlnotifier.cpp.s
+.PHONY : server/controlnotifier.s
+
+# target to generate assembly for a file
+server/controlnotifier.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/controlnotifier.cpp.s
+.PHONY : server/controlnotifier.cpp.s
+
+server/controlreceiver.o: server/controlreceiver.cpp.o
+.PHONY : server/controlreceiver.o
+
+# target to build an object file
+server/controlreceiver.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/controlreceiver.cpp.o
+.PHONY : server/controlreceiver.cpp.o
+
+server/controlreceiver.i: server/controlreceiver.cpp.i
+.PHONY : server/controlreceiver.i
+
+# target to preprocess a source file
+server/controlreceiver.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/controlreceiver.cpp.i
+.PHONY : server/controlreceiver.cpp.i
+
+server/controlreceiver.s: server/controlreceiver.cpp.s
+.PHONY : server/controlreceiver.s
+
+# target to generate assembly for a file
+server/controlreceiver.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/controlreceiver.cpp.s
+.PHONY : server/controlreceiver.cpp.s
 
 server/gameerror.o: server/gameerror.cpp.o
 .PHONY : server/gameerror.o
@@ -891,30 +891,6 @@ server/match.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/match.cpp.s
 .PHONY : server/match.cpp.s
 
-server/matchserver.o: server/matchserver.cpp.o
-.PHONY : server/matchserver.o
-
-# target to build an object file
-server/matchserver.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/matchserver.cpp.o
-.PHONY : server/matchserver.cpp.o
-
-server/matchserver.i: server/matchserver.cpp.i
-.PHONY : server/matchserver.i
-
-# target to preprocess a source file
-server/matchserver.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/matchserver.cpp.i
-.PHONY : server/matchserver.cpp.i
-
-server/matchserver.s: server/matchserver.cpp.s
-.PHONY : server/matchserver.s
-
-# target to generate assembly for a file
-server/matchserver.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/matchserver.cpp.s
-.PHONY : server/matchserver.cpp.s
-
 server/playeracceptor.o: server/playeracceptor.cpp.o
 .PHONY : server/playeracceptor.o
 
@@ -963,54 +939,6 @@ server/playercontainer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/playercontainer.cpp.s
 .PHONY : server/playercontainer.cpp.s
 
-server/playercontroller.o: server/playercontroller.cpp.o
-.PHONY : server/playercontroller.o
-
-# target to build an object file
-server/playercontroller.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/playercontroller.cpp.o
-.PHONY : server/playercontroller.cpp.o
-
-server/playercontroller.i: server/playercontroller.cpp.i
-.PHONY : server/playercontroller.i
-
-# target to preprocess a source file
-server/playercontroller.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/playercontroller.cpp.i
-.PHONY : server/playercontroller.cpp.i
-
-server/playercontroller.s: server/playercontroller.cpp.s
-.PHONY : server/playercontroller.s
-
-# target to generate assembly for a file
-server/playercontroller.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/playercontroller.cpp.s
-.PHONY : server/playercontroller.cpp.s
-
-server/playernotifier.o: server/playernotifier.cpp.o
-.PHONY : server/playernotifier.o
-
-# target to build an object file
-server/playernotifier.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/playernotifier.cpp.o
-.PHONY : server/playernotifier.cpp.o
-
-server/playernotifier.i: server/playernotifier.cpp.i
-.PHONY : server/playernotifier.i
-
-# target to preprocess a source file
-server/playernotifier.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/playernotifier.cpp.i
-.PHONY : server/playernotifier.cpp.i
-
-server/playernotifier.s: server/playernotifier.cpp.s
-.PHONY : server/playernotifier.s
-
-# target to generate assembly for a file
-server/playernotifier.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/playernotifier.cpp.s
-.PHONY : server/playernotifier.cpp.s
-
 server/playerprotocol.o: server/playerprotocol.cpp.o
 .PHONY : server/playerprotocol.o
 
@@ -1034,6 +962,30 @@ server/playerprotocol.s: server/playerprotocol.cpp.s
 server/playerprotocol.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/playerprotocol.cpp.s
 .PHONY : server/playerprotocol.cpp.s
+
+server/server.o: server/server.cpp.o
+.PHONY : server/server.o
+
+# target to build an object file
+server/server.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/server.cpp.o
+.PHONY : server/server.cpp.o
+
+server/server.i: server/server.cpp.i
+.PHONY : server/server.i
+
+# target to preprocess a source file
+server/server.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/server.cpp.i
+.PHONY : server/server.cpp.i
+
+server/server.s: server/server.cpp.s
+.PHONY : server/server.s
+
+# target to generate assembly for a file
+server/server.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/server.cpp.s
+.PHONY : server/server.cpp.s
 
 server/simple_logic/simpleaction.o: server/simple_logic/simpleaction.cpp.o
 .PHONY : server/simple_logic/simpleaction.o
@@ -1131,6 +1083,30 @@ server/simple_logic/simplequeue.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/simple_logic/simplequeue.cpp.s
 .PHONY : server/simple_logic/simplequeue.cpp.s
 
+server/simple_logic/simplereward.o: server/simple_logic/simplereward.cpp.o
+.PHONY : server/simple_logic/simplereward.o
+
+# target to build an object file
+server/simple_logic/simplereward.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/simple_logic/simplereward.cpp.o
+.PHONY : server/simple_logic/simplereward.cpp.o
+
+server/simple_logic/simplereward.i: server/simple_logic/simplereward.cpp.i
+.PHONY : server/simple_logic/simplereward.i
+
+# target to preprocess a source file
+server/simple_logic/simplereward.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/simple_logic/simplereward.cpp.i
+.PHONY : server/simple_logic/simplereward.cpp.i
+
+server/simple_logic/simplereward.s: server/simple_logic/simplereward.cpp.s
+.PHONY : server/simple_logic/simplereward.s
+
+# target to generate assembly for a file
+server/simple_logic/simplereward.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/taller_server.dir/build.make CMakeFiles/taller_server.dir/server/simple_logic/simplereward.cpp.s
+.PHONY : server/simple_logic/simplereward.cpp.s
+
 server/simple_logic/simplestate.o: server/simple_logic/simplestate.cpp.o
 .PHONY : server/simple_logic/simplestate.o
 
@@ -1210,9 +1186,6 @@ help:
 	@echo "... client/main.o"
 	@echo "... client/main.i"
 	@echo "... client/main.s"
-	@echo "... common/event.o"
-	@echo "... common/event.i"
-	@echo "... common/event.s"
 	@echo "... common/liberror.o"
 	@echo "... common/liberror.i"
 	@echo "... common/liberror.s"
@@ -1225,9 +1198,6 @@ help:
 	@echo "... common/resolvererror.o"
 	@echo "... common/resolvererror.i"
 	@echo "... common/resolvererror.s"
-	@echo "... common/reward.o"
-	@echo "... common/reward.i"
-	@echo "... common/reward.s"
 	@echo "... common/socket.o"
 	@echo "... common/socket.i"
 	@echo "... common/socket.s"
@@ -1237,6 +1207,12 @@ help:
 	@echo "... server/controlledplayer.o"
 	@echo "... server/controlledplayer.i"
 	@echo "... server/controlledplayer.s"
+	@echo "... server/controlnotifier.o"
+	@echo "... server/controlnotifier.i"
+	@echo "... server/controlnotifier.s"
+	@echo "... server/controlreceiver.o"
+	@echo "... server/controlreceiver.i"
+	@echo "... server/controlreceiver.s"
 	@echo "... server/gameerror.o"
 	@echo "... server/gameerror.i"
 	@echo "... server/gameerror.s"
@@ -1276,24 +1252,18 @@ help:
 	@echo "... server/match.o"
 	@echo "... server/match.i"
 	@echo "... server/match.s"
-	@echo "... server/matchserver.o"
-	@echo "... server/matchserver.i"
-	@echo "... server/matchserver.s"
 	@echo "... server/playeracceptor.o"
 	@echo "... server/playeracceptor.i"
 	@echo "... server/playeracceptor.s"
 	@echo "... server/playercontainer.o"
 	@echo "... server/playercontainer.i"
 	@echo "... server/playercontainer.s"
-	@echo "... server/playercontroller.o"
-	@echo "... server/playercontroller.i"
-	@echo "... server/playercontroller.s"
-	@echo "... server/playernotifier.o"
-	@echo "... server/playernotifier.i"
-	@echo "... server/playernotifier.s"
 	@echo "... server/playerprotocol.o"
 	@echo "... server/playerprotocol.i"
 	@echo "... server/playerprotocol.s"
+	@echo "... server/server.o"
+	@echo "... server/server.i"
+	@echo "... server/server.s"
 	@echo "... server/simple_logic/simpleaction.o"
 	@echo "... server/simple_logic/simpleaction.i"
 	@echo "... server/simple_logic/simpleaction.s"
@@ -1306,6 +1276,9 @@ help:
 	@echo "... server/simple_logic/simplequeue.o"
 	@echo "... server/simple_logic/simplequeue.i"
 	@echo "... server/simple_logic/simplequeue.s"
+	@echo "... server/simple_logic/simplereward.o"
+	@echo "... server/simple_logic/simplereward.i"
+	@echo "... server/simple_logic/simplereward.s"
 	@echo "... server/simple_logic/simplestate.o"
 	@echo "... server/simple_logic/simplestate.i"
 	@echo "... server/simple_logic/simplestate.s"

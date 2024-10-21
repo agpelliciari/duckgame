@@ -6,7 +6,6 @@
 
 #include "./simplebox.h"
 #include "common/dtos.h"
-#include "common/event.h"
 #include "common/queue.h"
 
 #define BOX_COUNT 4

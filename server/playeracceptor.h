@@ -3,8 +3,8 @@
 
 #include <list>
 
+#include "./controlreceiver.h"
 #include "./lobbycontainer.h"
-#include "./playercontroller.h"
 #include "common/socket.h"
 #include "common/thread.h"
 
@@ -14,7 +14,7 @@
 // Definiendo el loopeado para recibir a los nuevos players.
 class PlayerAcceptor: private Thread {
 public:
-    typedef std::list<PlayerController> controller_list;
+    typedef std::list<ControlReceiver> controller_list;
 
 private:
     // Se guarda el socket del server. Para ir generando los controllers.
