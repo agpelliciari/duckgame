@@ -33,7 +33,40 @@ void MockSocket::expectStrSendFail(MockSocket* messen, const std::string& msg) {
 }
 
 
+void MockSocket::expectSendAll(MockSocket* messen, const void* data, const int count) {
+    EXPECT_CALL(*messen, sendall(Eq(data), Eq(count))).Times(1);
+}
+
+void MockSocket::expectRecvAll(MockSocket* messen, const void* data, const int count) {
+    EXPECT_CALL(*messen, recvall(Eq(data), Eq(count))).Times(1);
+}
+
+void MockSocket::expectTryRecvAll(MockSocket* messen, const void* data, const int count) {
+    EXPECT_CALL(*messen, tryrecvall(Eq(data), Eq(count))).Times(1);
+    ON_CALL(*messen, tryrecvall(Eq(data), Eq(count))).WillByDefault(Return(count));
+}
+
+void MockSocket::expectTryRecvFail(MockSocket* messen, const void* data, const int count) {
+    EXPECT_CALL(*messen, tryrecvall(Eq(data), Eq(count))).Times(1);
+    ON_CALL(*messen, tryrecvall(Eq(data), Eq(count))).WillByDefault(Return(count - 1));
+}
+
+
 void MockSocket::expectClose(MockSocket* messen) {
     EXPECT_CALL(*messen, close()).Times(1);
     EXPECT_CALL(*messen, shutdown(Eq(2))).Times(1);
+}
+
+
+struct some_data getSomeData(uint8_t sub1, uint8_t sub2, SomeType type1, SomeType type2) {
+    struct some_data res;
+
+    res.sub1.subnum = sub1;
+    res.sub1.tipo = type1;
+    res.sub2.subnum = sub2;
+    res.sub2.tipo = type2;
+
+    res.primerid = 0;
+    res.segundoid = 0;
+    return res;
 }

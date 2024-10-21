@@ -1,3 +1,4 @@
+#include <cstring>
 #include <iostream>
 
 #include "./mocksocket.h"
@@ -38,4 +39,42 @@ TEST(BaseProtocolTest, ProtocolSendsSimpleMsgStringFail) {
 
     Protocol protocol(messen);
     EXPECT_THROW(protocol.sendmsg(msg), LibError);
+}
+
+
+TEST(BaseProtocolTest, ProtocolSendsBytesSimple) {
+    MockSocket* messen = new MockSocket();
+    int count = strlen(SIMPLE_MSG);
+    MockSocket::expectSendAll(messen, SIMPLE_MSG, count);
+
+    Protocol protocol(messen);
+    protocol.sendbytes(SIMPLE_MSG, count);
+}
+
+TEST(BaseProtocolTest, ProtocolSendsBytesStruct) {
+    MockSocket* messen = new MockSocket();
+
+    struct some_data data = getSomeData(12, 32, SOME1, SOME32);
+    data.primerid = 23;
+
+    MockSocket::expectSendAll(messen, &data, sizeof(data));
+
+    Protocol protocol(messen);
+    protocol.sendbytes(&data, sizeof(data));
+}
+
+
+TEST(BaseProtocolTest, ProtocolRecvsBytesStruct) {
+    MockSocket* messen = new MockSocket();
+
+    struct some_data data = getSomeData(12, 32, SOME1, SOME32);
+    data.primerid = 23;
+
+    MockSocket::expectTryRecvAll(messen, &data, sizeof(data));
+
+    Protocol protocol(messen);
+
+    bool done = protocol.tryrecvbytes(&data, sizeof(data));
+
+    EXPECT_TRUE(done) << "Se esperaba que se notifique recibio el struct";
 }
