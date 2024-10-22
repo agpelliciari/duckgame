@@ -1,2 +1,17 @@
 build/
 tags.*
+
+CMakeCache.txt
+CMakeFiles/
+_deps/
+
+cmake_install.cmake
+*.a
+
+taller_client
+taller_server
+taller_*
+
+manualtest/
+
+.vscode/
