@@ -1,12 +1,12 @@
 target_sources(taller_client
     PRIVATE
     # .cpp files
-    menu/mainwindow.cpp
+    mainwindow.cpp
     
     PUBLIC
     # .h files
-    menu/mainwindow.h
+    mainwindow.h
     
     # .ui files
-    menu/mainwindow.ui
+    mainwindow.ui
     )

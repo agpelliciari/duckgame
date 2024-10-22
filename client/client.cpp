@@ -2,6 +2,7 @@
 
 #include <cstring>
 #include <iostream>
+#include <utility>
 #include <string>
 
 #include "common/core/liberror.h"
@@ -11,6 +12,13 @@
 #define ACTION_PICKUP "Pickup"
 #define ACTION_READ "Read"
 
+Client::Client(const char* host, const char* service): protocol(Socket(host, service)) {}
+Client::Client(const char* service): Client(NULL, service) {}
+
+// Permitamos el mov desde uno existente para mayor flexibilidad?
+Client::Client(Protocol&& prot): protocol(std::move(prot)) {}
+
+
 unsigned int Client::inputnum() {
     unsigned int res;
     if (!(std::cin >> res)) {
@@ -18,6 +26,39 @@ unsigned int Client::inputnum() {
     }
 
     return res;
+}
+
+
+bool Client::isrunning(){
+     return _is_alive;
+}
+
+
+JoinLobbyMode& Client::startJoinLobby(uint8_t playercount, unsigned int idlobby){
+    if (_is_alive) {// already running!!
+        throw LibError(1, "Already running client!! finish it first!");
+    }
+
+    JoinLobbyMode* res = new JoinLobbyMode(playercount, idlobby);
+    
+    std::unique_ptr<LobbyMode> newmode(res);
+    this->mode.swap(newmode);
+    
+    return *res;
+}
+
+LobbyCreateMode& Client::startCreateLobby(uint8_t playercount){
+    if (_is_alive) {// already running!!
+        throw LibError(1, "Already running client!! finish it first!");
+    }
+    
+    LobbyCreateMode* res = new LobbyCreateMode(playercount);
+    
+    std::unique_ptr<LobbyMode> newmode(res);
+    this->mode.swap(newmode);
+    
+    return *res;
+
 }
 
 void Client::sendMove(char action) {
@@ -43,53 +84,12 @@ void Client::sendMove(char action) {
     protocol.sendaction(dto);
 }
 
-void Client::listenActions() {
-    // Un buffer lo suficientemente grande. Que esta en el stack.
-
-    std::cout << ASK_NAME << std::endl;
-
-    std::string name;
-    if (!(std::getline(std::cin, name, '\n'))) {  // Could not read name.
-        throw LibError(1, "Could not read player name");
-    }
-
-    std::string name2;
-
-    std::cerr << ASK_NAME << " segundo player" << std::endl;
-    if (!(std::getline(std::cin, name2, '\n'))) {  // Could not read name.
-        throw LibError(1, "Could not read second player name");
-    }
-
-    int countplayers = 1;
-    if (name2.size() > 0) {
-        std::cerr << "2 players: " << name << " " << name2 << std::endl;
-        countplayers = 2;
-    } else {
-        std::cerr << "1 player: " << name << std::endl;
-    }
-
-    std::cerr << "new lobby?[y|n]: " << std::endl;
-
+void Client::run() {
+    mode->exec(protocol); // exec lobby mode.
+    
     std::string action;
-    if (!(std::cin >> action)) {  // Could not read if new lobby.
-        throw LibError(1, "Could not read if new lobby was desired!");
-    }
-
-    if (action.size() != 1 || (*action.c_str() != 'y')) {
-        std::cerr << "lobby id to join: " << std::endl;
-        uint8_t lobbyid = inputnum();  // Se valida en el server.
-        protocol.joinLobby(countplayers, lobbyid);
-    } else {
-        protocol.createLobby(countplayers);
-        std::cerr << "press enter to start the match!" << std::endl;
-        if (!(std::cin >> action)) {  // Could not read if new lobby.
-            throw LibError(1, "Did not read match start!!");
-        }
-
-        protocol.startlobby();
-    }
-
-    while (std::cin >> action) {
+    // Simple listen de acciones.
+    while (_keep_running && std::cin >> action) {
         if (action.compare(ACTION_EXIT) == 0) {
             return;
         }
@@ -111,5 +111,39 @@ void Client::listenActions() {
             sendMove(*(act + ind));
             ind++;
         }
+    }
+}
+
+
+int Client::getcount(){
+    std::cout << ASK_NAME << std::endl;
+
+    std::string name;
+    if (!(std::getline(std::cin, name, '\n'))) {  // Could not read name.
+        throw LibError(1, "Could not read player name");
+    }
+
+    std::string name2;
+
+    std::cerr << ASK_NAME << " segundo player" << std::endl;
+    if (!(std::getline(std::cin, name2, '\n'))) {  // Could not read name.
+        throw LibError(1, "Could not read second player name");
+    }
+
+    if (name2.size() > 0) {
+        std::cerr << "2 players: " << name << " " << name2 << std::endl;
+        return 2;
+    }
+    std::cerr << "1 player: " << name << std::endl;
+    return 1;
+}
+
+
+
+Client::~Client() {
+    if(_is_alive){
+       stop();
+       
+       join();
     }
 }
