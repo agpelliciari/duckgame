@@ -21,7 +21,7 @@ TEST(ServerProtocolTest, ServerProtocolClosedSocket) {
 }
 
 
-TEST(ServerProtocolTest, SendStateSendsMatchInfo) {
+TEST(ServerProtocolTest, SendStateSendsMatchInfoNoPlayers) {
     MockSocket* messen = new MockSocket();
 
     MatchDto match(INICIADA, 1);
@@ -32,4 +32,17 @@ TEST(ServerProtocolTest, SendStateSendsMatchInfo) {
     ServerProtocol protocol(messen);
 
     protocol.sendstate(match);
+}
+
+TEST(ServerProtocolTest, SendStateSendsMatchInfoFail) {
+    MockSocket* messen = new MockSocket();
+
+    MatchDto match(INICIADA, 4);
+    // match.players.push_back(PlayerDTO());
+
+    MockSocket::expectSendAll(messen, &(match.info), sizeof(match.info));
+    MockSocket::expectSendByteFail(messen, 0);
+
+    ServerProtocol protocol(messen);
+    EXPECT_THROW(protocol.sendstate(match), LibError);
 }
