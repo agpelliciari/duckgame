@@ -12,8 +12,26 @@
 
 using ::testing::Eq;
 using ::testing::Ge;
+using ::testing::MatcherCast;
+using ::testing::Pointee;
+using ::testing::WhenDynamicCastTo;
+
 using ::testing::NotNull;
 using ::testing::Return;
+
+#define VoidPoint(type, data) MatcherCast<void*>(MatcherCast<type*>(Pointee(Eq(data))))
+#define ConstVoidPoint(type, data) \
+    MatcherCast<const void*>(MatcherCast<const type*>(Pointee(Eq(data))))
+
+void MockSocket::expectSendByte(MockSocket* messen, const uint8_t byte) {
+    EXPECT_CALL(*messen, sendsome(ConstVoidPoint(uint8_t, byte), Eq(1))).Times(1);
+    ON_CALL(*messen, sendsome(ConstVoidPoint(uint8_t, byte), Eq(1))).WillByDefault(Return(1));
+}
+
+void MockSocket::expectSendByteFail(MockSocket* messen, const uint8_t byte) {
+    EXPECT_CALL(*messen, sendsome(ConstVoidPoint(uint8_t, byte), Eq(1))).Times(1);
+    ON_CALL(*messen, sendsome(ConstVoidPoint(uint8_t, byte), Eq(1))).WillByDefault(Return(0));
+}
 
 
 void MockSocket::expectStrSend(MockSocket* messen, const std::string& msg) {

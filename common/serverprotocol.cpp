@@ -39,8 +39,9 @@ PlayerActionDTO ServerProtocol::recvaction() {
     }
     return action;
 }
+void ServerProtocol::sendstate(const MatchDto&& state) { sendstate(state); }
 
-void ServerProtocol::sendstate(const MatchDto&& state) {
+void ServerProtocol::sendstate(const MatchDto& state) {
 
     // Primero envia general info
     protocol.sendbytes(&state.info, sizeof(state.info));

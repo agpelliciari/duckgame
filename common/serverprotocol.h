@@ -44,6 +44,7 @@ public:
     PlayerActionDTO recvaction();
 
     void sendstate(const MatchDto&& state);
+    void sendstate(const MatchDto& state);
 
     bool isopen();
     void close();

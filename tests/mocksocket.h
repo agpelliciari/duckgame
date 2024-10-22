@@ -29,6 +29,9 @@ struct some_data getSomeData(uint8_t sub1, uint8_t sub2, SomeType type1, SomeTyp
 
 class MockSocket: public Messenger {
 public:
+    static void expectSendByte(MockSocket* messen, const uint8_t num);
+    static void expectSendByteFail(MockSocket* messen, const uint8_t num);
+
     static void expectStrSend(MockSocket* messen, const std::string& msg);
     static void expectStrSendFail(MockSocket* messen, const std::string& msg);
     static void expectClose(MockSocket* messen);
