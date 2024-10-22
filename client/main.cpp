@@ -1,4 +1,4 @@
-#include "common/foo.h"
+#include "ui_loop.h"
 
 #include <iostream>
 #include <exception>
@@ -9,28 +9,15 @@
 using namespace SDL2pp;
 
 int main() try {
-	// Initialize SDL library
-	SDL sdl(SDL_INIT_VIDEO);
 
-	// Create main window: 640x480 dimensions, resizable, "SDL2pp demo" title
-	Window window("SDL2pp demo",
-			SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-			640, 480,
-			SDL_WINDOW_RESIZABLE);
+	UILoop uiLoop;
 
-	// Create accelerated video renderer with default driver
-	Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
-
-	// Clear screen
-	renderer.Clear();
-
-	// Show rendered frame
-	renderer.Present();
-
-	// 5 second delay
-	SDL_Delay(5000);
-
-	// Here all resources are automatically released and library deinitialized
+	while (uiLoop.isRunning()) {
+		uiLoop.handleEvent();
+		uiLoop.update();
+		uiLoop.draw();
+	}
+	
 	return 0;
 } catch (std::exception& e) {
 	// If case of error, print it and exit with error
