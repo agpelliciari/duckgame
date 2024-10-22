@@ -57,6 +57,13 @@ if(TALLER_CLIENT OR TALLER_EDITOR)
     FetchContent_MakeAvailable(libSDL2pp)
 endif()
 
+set(SDL2PP_WITH_IMAGE ON) # if you need SDL_image support
+set(SDL2PP_WITH_MIXER ON) # if you need SDL_mixer support
+set(SDL2PP_WITH_TTF ON) # if you need SDL_ttf support
+find_package(SDL2pp REQUIRED)
+
+add_definitions(-DDATA_PATH="${PROJECT_SOURCE_DIR}/client")
+
 # Program section
 # ---------------
 if(TALLER_CLIENT)

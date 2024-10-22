@@ -2,7 +2,10 @@ target_sources(taller_client
     PRIVATE
     # .cpp files
     main.cpp
-    duck_movement.cpp
+    ui_loop.cpp
+    animation.cpp
     PUBLIC
     # .h files
+    ui_loop.h
+    animation.h
     )
