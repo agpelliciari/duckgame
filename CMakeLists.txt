@@ -55,6 +55,15 @@ if(TALLER_CLIENT OR TALLER_EDITOR)
     )
 
     FetchContent_MakeAvailable(libSDL2pp)
+
+    # Activa la generación automática de archivos de encabezado a partir de archivos .ui
+    set(CMAKE_AUTOUIC ON)
+    # Activa la generación automática de código de metaobjetos (MOC) para las clases que utilizan señales y slots en Qt
+    set(CMAKE_AUTOMOC ON)
+    # Permite la generación automática de archivos de encabezado a partir de archivos .qrc
+    set(CMAKE_AUTORCC ON)
+    find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
+    find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 endif()
 
 # Program section
@@ -76,7 +85,10 @@ if(TALLER_CLIENT)
     target_include_directories(taller_client PRIVATE ${libSDL2pp_SOURCE_DIR})
 
     # Link the taller_common lib target
-    target_link_libraries(taller_client taller_common SDL2pp::SDL2pp)
+    target_link_libraries(taller_client taller_common
+        SDL2pp::SDL2pp
+        Qt${QT_VERSION_MAJOR}::Widgets
+    )
 endif()
 
 if(TALLER_SERVER)
