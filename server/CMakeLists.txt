@@ -13,6 +13,7 @@ target_sources(taller_server
         playercontainer.cpp
         controlledplayer.cpp
         controlreceiver.cpp
+        lobbyprotocol.cpp
         controlnotifier.cpp
          
 
@@ -25,6 +26,7 @@ target_sources(taller_server
         playeracceptor.h
         playercontainer.h
         controlreceiver.h
+        lobbyprotocol.h
         controlledplayer.h
         controlnotifier.h
     )

@@ -21,96 +21,40 @@ void ControlReceiver::init() {
     }
     start();
 }
+void ControlReceiver::playOn(LobbyProtocol& lobby) {
+    try {
+        // Loopeado de acciones
+        while (_keep_running) {
+            lobby.doaction(protocol);
+        }
+    } catch (const ProtocolError& error) {
+        // EOF of player. No muestres nada.
+    } catch (const LibError& error) {
 
-void ControlReceiver::playOn(ControlledPlayer& player, Match& match) {
-    player.open();
+        if (protocol.isopen()) {  // Si debiera estar activo. Error interno del protocol.
+            std::cerr << "Controller lib error:" << error.what() << std::endl;
+        }
+
+    } catch (const ClosedQueue& error) {  // Para evitar llege a el catch the Thread::main
+        std::cerr << "Received MATCH END " << error.what() << std::endl;
+        // Envia end de la partida?
+    }
+}
+void ControlReceiver::run() {
+    ControlledPlayer player;
+    LobbyProtocol lobbyprot(lobbies, player, protocol);
+
+    if (!lobbyprot.start(protocol)) {
+        std::cerr << "Could not start lobby" << std::endl;
+        return;
+    }
 
     // Inicia notifier.
     ControlNotifier notifier(player, protocol);
     notifier.start();
-    try {
+    playOn(lobbyprot);
 
-        // Loopeado de acciones
-
-
-        while (_keep_running) {
-            PlayerActionDTO action = protocol.recvaction();
-            if (player.playercount() <= action.playerind) {
-                std::cerr << "Invalid action from client!!\n";
-                continue;
-            }
-            action.playerind = player.getid(action.playerind);
-            std::cout << "Action from player:" << (int)action.playerind
-                      << " type: " << (int)action.type << std::endl;
-            match.notifyAction(action);
-        }
-        player.disconnect();  // Finalizo normalmente.
-    } catch (const LibError& error) {
-        if (player.disconnect() && protocol.isopen()) {  // Si desconecto. Hubo error aca.
-            std::cerr << "Controller lib error:" << error.what() << std::endl;
-        }
-    } catch (const ProtocolError& error) {  // EOF, el notify se asume no genera exception.
-        player.disconnect();
-    } catch (const ClosedQueue& error) {
-        std::cerr << "Controller MATCH END " << error.what() << std::endl;
-        player.disconnect();
-    }
-
-    notifier.stop();
-    notifier.join();
-
-    // El log a cerr podria ser innecesario. Pero sirve para hacer cosas mas descriptivas.
-    std::cerr << ">closed Player " << player.getid(0) << std::endl;
-    if (player.playercount() > 1) {
-        std::cerr << ">closed Player " << player.getid(1) << std::endl;
-    }
-}
-
-
-void ControlReceiver::handleNewLobby(const uint8_t playercount) {
-    ControlledPlayer player;
-    player.setplayercount(playercount);
-
-    Match& match = lobbies.newLobby(&player);
-    std::cerr << "New lobby id: " << (int)match.getID() << std::endl;
-
-    if (!protocol.recvsignalstart()) {
-        std::cerr << "CANCELED LOBBY: " << (int)match.getID() << std::endl;
-        // Close lobby
-        lobbies.stopLobby(match);
-        return;
-    }
-    std::cerr << "Started lobby id: " << (int)match.getID() << std::endl;
-    lobbies.startLobby(match);
-
-    // Es no except.
-    playOn(player, match);
-
-    // Close lobby on exit of anfitrion?
-    lobbies.stopLobby(match);
-}
-
-void ControlReceiver::run() {
-    try {
-        uint8_t playercount;
-        if (!protocol.recvplayercount(&playercount)) {
-            std::cerr << "Player controller aborted" << std::endl;
-            return;  // Permitamos que se desconecte inicialmente si no se manda el count.
-        }
-        lobby_action info = protocol.recvlobbyaction();
-        if (info.action == NEW_LOBBY) {
-            handleNewLobby(playercount);
-        } else {  // Handle de join lobby.
-            ControlledPlayer player;
-            player.setplayercount(playercount);
-            std::cerr << "Connected lobby info join lobby " << (int)info.attached_id << std::endl;
-            playOn(player, lobbies.joinLobby(&player, info.attached_id));
-        }
-    } catch (const LibError& error) {
-        std::cerr << "Lobby lib error:" << error.what() << std::endl;
-    } catch (const GameError& error) {  // .
-        std::cerr << "Lobby game error:" << error.what() << std::endl;
-    }
+    // El destructor de notifier hace join.
 }
 
 // Este metodo no hace acciones irreversibles

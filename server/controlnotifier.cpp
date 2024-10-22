@@ -14,13 +14,20 @@ void ControlNotifier::run() {
         }
 
     } catch (const ClosedQueue& error) {
-        // Simplemente se cerro el notifier. Por ahora no se necesita mas.
         protocol.close();  // Si no esta cerrado, cerralo, asi se sale el controller tambien.
     } catch (const LibError&
-                     error) {       // No deberia pasara realmente, antes pasaria en el controller.
-        if (player.disconnect()) {  // Si no estaba desconectado...
+                     error) {     // No deberia pasara realmente, antes pasaria en el controller.
+        if (protocol.isopen()) {  // Si en teoria esta abierto...
             std::cerr << "player " << player.getid(0) << " notify error: " << error.what()
                       << std::endl;
+
+            // El cerrar no deberia estar aca capaz. Si fallo el send otro fallara tmbn
         }
     }
+}
+
+ControlNotifier::~ControlNotifier() {
+    stop();
+    player.disconnect();  // Por si no se cerro, cerra la queue.
+    join();
 }

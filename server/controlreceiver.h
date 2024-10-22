@@ -4,6 +4,7 @@
 
 #include "./controlledplayer.h"
 #include "./lobbycontainer.h"
+#include "./lobbyprotocol.h"
 #include "./match.h"
 #include "common/core/socket.h"
 #include "common/serverprotocol.h"
@@ -19,8 +20,8 @@ class ControlReceiver: private Thread {
 protected:
     LobbyContainer& lobbies;  // cppcheck-suppress unusedStructMember
     ServerProtocol protocol;
-    void playOn(ControlledPlayer& player, Match& match);
-    void handleNewLobby(const uint8_t countplayers);
+
+    void playOn(LobbyProtocol& lobby);
 
 public:
     // Crea el player con el ide pasado e inicia el protocolo

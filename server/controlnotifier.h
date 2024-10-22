@@ -26,6 +26,8 @@ public:
     // Run para el thread corra cuando empieze.
     // Simplemente espera, en envia el evento
     void run() override;
+
+    ~ControlNotifier();
 };
 
 #endif
