@@ -1,55 +1,36 @@
-#ifndef LIB_Client_H
-#define LIB_Client_H
+#ifndef CLIENT_H
+#define CLIENT_H
+
+#include "menu/mainwindow.h"
+#include "game_loop.h"
 
 #include <string>
-#include <memory>
+#include <QApplication>
+#include <QStyleFactory>
 
-#include "common/clientprotocol.h"
-#include "common/core/socket.h"
-#include "common/thread.h"
+class Client {
+private:
+    int argc;
+    char** argv;
 
+    std::string hostname = "";
+    std::string port = "";
 
-#include "./lobbymode.h"
-#include "./joinlobbymode.h"
-#include "./lobbycreatemode.h"
-
-// Clase que encapsula al protocol y mantendria el estado del juego
-// Proporcionado una interfaz para acciones del usuario.
-class Client : private Thread{
-protected:
-    ClientProtocol protocol;
-    bool isJoining;
-    std::unique_ptr<LobbyMode> mode;    
-    
-    unsigned int inputnum();
-
-    void sendMove(char action);
 public:
-    // Los default sin pasar por socket/protocol.
-    explicit Client(const char* host, const char* service);
-    explicit Client(const char* service);
-    // Permitamos el mov desde uno existente para mayor flexibilidad?
-    explicit Client(Protocol&& prot);
+    explicit Client(int argc, char* argv[]);
 
-    // Asumamos por ahora que no se quiere permitir copias, ni mov.
+    int exec();
+
     Client(const Client&) = delete;
     Client& operator=(const Client&) = delete;
 
     Client(Client&&) = delete;
     Client& operator=(Client&&) = delete;
-    
-    
-    bool isrunning();
-    
-    JoinLobbyMode& startJoinLobby(uint8_t playercount, unsigned int idlobby);
-    LobbyCreateMode& startCreateLobby(uint8_t playercount);
-    
-    void run() override;
-    
-    
-    int getcount();
+
     ~Client();
 
+private:
+    void setHostnameAndPort(const std::string& newHostname, const std::string& newPort);
 };
 
 #endif

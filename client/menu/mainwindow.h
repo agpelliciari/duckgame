@@ -2,7 +2,12 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "client/client.h"
+#include <functional>
+
+struct menuHandler {
+    std::function<void(uint8_t playercount)> onClickCreateLobby;
+    std::function<void(uint8_t playercount, unsigned int idlobby)> onClickJoinLobby;
+};
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -12,12 +17,13 @@ QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
+
 private:
-    Client& client;
     Ui::MainWindow *ui;
+    menuHandler handler;
 
 public:
-    MainWindow(Client& _client, QWidget *parent = nullptr);
+    MainWindow(menuHandler handler);
 
     ~MainWindow();
 

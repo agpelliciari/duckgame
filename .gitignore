@@ -13,6 +13,4 @@ taller_client
 taller_server
 taller_*
 
-Makefile
-
 manualtest/
