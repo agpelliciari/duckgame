@@ -30,6 +30,7 @@ public:
     void execute_commands();
     void send_results();
     void loop(PlayerContainer& observer);
+    void stop();
     ~MatchState();
 };
 
