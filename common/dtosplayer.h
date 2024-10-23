@@ -4,12 +4,12 @@
 #include <cstdint>
 
 enum PlayerActionType : uint8_t {
-    PICK_UP = 5,
     NONE = 0,
     MOVE_LEFT = 1,
     MOVE_RIGHT = 2,
     STAY_DOWN = 3,
     JUMP = 4,
+    PICK_UP = 5,
 };
 
 struct PlayerActionDTO {
@@ -17,9 +17,9 @@ struct PlayerActionDTO {
     uint8_t playerind;
     uint8_t specific_info;
 
-    PlayerActionDTO(PlayerActionType& _type, uint8_t _playerind):
+    PlayerActionDTO(const PlayerActionType& _type, uint8_t _playerind):
             type(_type), playerind(_playerind), specific_info(0) {}
-    PlayerActionDTO(PlayerActionType& _type, uint8_t _playerind, uint8_t _info):
+    PlayerActionDTO(const PlayerActionType& _type, uint8_t _playerind, uint8_t _info):
             type(_type), playerind(_playerind), specific_info(_info) {}
     PlayerActionDTO(): type(NONE), playerind(0), specific_info(0) {}
 } __attribute__((packed));

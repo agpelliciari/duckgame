@@ -31,6 +31,10 @@ void MatchState::execute_commands() {
     commands.clear();
 }
 
+void MatchState::stop(){
+    running = false;
+}
+
 void MatchState::send_results() {}
 
 MatchState::~MatchState() {}
