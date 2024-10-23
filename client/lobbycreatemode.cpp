@@ -6,6 +6,10 @@ LobbyCreateMode::LobbyCreateMode(uint8_t _count) : playercount(_count){
 
 }
 
+void LobbyCreateMode::startLobby(){
+     std::cerr<< "NOT IMPLEMENTED START LOBBY BY UI YET!\n";
+}
+
 void LobbyCreateMode::exec(ClientProtocol& protocol){
       protocol.createLobby(playercount);
       std::cerr << "press enter to start the match!" << std::endl;

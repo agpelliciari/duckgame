@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
 		darkTheme.setColor(QPalette::HighlightedText, Qt::black);
 		application.setPalette(darkTheme);
 		//------
-		MainWindow window;
+		MainWindow window(client);
 		window.show();
 		return application.exec();
     } catch (const std::exception& err) {

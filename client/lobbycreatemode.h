@@ -19,6 +19,8 @@ public:
     LobbyCreateMode(LobbyCreateMode&&) = delete;
     LobbyCreateMode& operator=(LobbyCreateMode&&) = delete;
         
+        
+    void startLobby();
     void exec(ClientProtocol& protocol) override;
 };
 

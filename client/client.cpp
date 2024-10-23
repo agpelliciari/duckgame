@@ -43,7 +43,7 @@ JoinLobbyMode& Client::startJoinLobby(uint8_t playercount, unsigned int idlobby)
     
     std::unique_ptr<LobbyMode> newmode(res);
     this->mode.swap(newmode);
-    
+    start();
     return *res;
 }
 
@@ -56,6 +56,7 @@ LobbyCreateMode& Client::startCreateLobby(uint8_t playercount){
     
     std::unique_ptr<LobbyMode> newmode(res);
     this->mode.swap(newmode);
+    start();
     
     return *res;
 
