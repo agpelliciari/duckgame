@@ -1,25 +1,32 @@
 
 #include "./match_state.h"
-#include <utility>
+
 #include <iostream>
+#include <utility>
 MatchState::MatchState(): running(false), match_logic(), acciones(match_logic) {}
 
 void MatchState::pushAction(const PlayerActionDTO& action) { acciones.push_command(action); }
 
 void MatchState::loop(PlayerContainer& observer) {
-
-    for (unsigned int i = 1; i <= observer.getPlayers()[0]; i++) {
-        match_logic.add_player(i);
-        std::cout << "New player added with id: "<< i << std::endl;
+    std::vector<unsigned int> ids = observer.getPlayers();
+    for (auto id = ids.begin(); id != ids.end();) {
+        match_logic.add_player(*id);
+        std::cout << "New player added with id: " << *id << std::endl;
+        ++id;
     }
     running = true;
     while (running) {
         this->receive_commands();
-        //this->execute_commands();
-        //this->send_results();
+        // this->execute_commands();
+        // this->send_results();
+        MatchDto dto = MatchDto(INICIADA, 1);
+
+        // AGREGA JUGADORES!!
+        match_logic.get_dtos(dto.players);
+
+        observer.updateState(dto);
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
     }
-    observer.updateState(MatchDto(INICIADA, 1));
 }
 
 void MatchState::receive_commands() {
@@ -36,9 +43,7 @@ void MatchState::execute_commands() {
     commands.clear();
 }
 
-void MatchState::stop(){
-    running = false;
-}
+void MatchState::stop() { running = false; }
 
 void MatchState::send_results() {}
 

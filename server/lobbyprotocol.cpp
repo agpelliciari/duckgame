@@ -23,8 +23,6 @@ void LobbyProtocol::doaction(ServerProtocol& protocol) {
     }
 
     action.playerind = player.getid(action.playerind);
-    std::cout << "Action from player:" << (int)action.playerind << " type: " << (int)action.type
-              << std::endl;
     match->notifyAction(action);
 }
 
