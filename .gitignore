@@ -14,3 +14,5 @@ taller_server
 taller_*
 
 manualtest/
+
+Makefile
