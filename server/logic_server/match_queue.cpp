@@ -1,6 +1,5 @@
 
 #include "match_queue.h"
-
 #include <iostream>
 
 MatchQueue::MatchQueue(MatchLogic& match_logic_): queue(), match_logic(match_logic_) {}

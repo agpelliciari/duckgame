@@ -26,7 +26,7 @@ public:
     MatchState();
     void pushAction(const PlayerActionDTO& action);
     // void add_player(Player player);
-    void receive_commands(MatchQueue& acciones);
+    void receive_commands();
     void execute_commands();
     void send_results();
     void loop(PlayerContainer& observer);

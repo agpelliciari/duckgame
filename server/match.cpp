@@ -38,6 +38,9 @@ lobbyID Match::getID() const { return this->id; }
 
 // Metodos delegatorios.
 void Match::notifyAction(const PlayerActionDTO& action) {
+    std::cout << "action:" << std::endl;
+    std::cout << (int)action.type << std::endl;
+    std::cout << (int)action.playerind << std::endl;
     if (_keep_running) {
         looper.pushAction(action);
     }

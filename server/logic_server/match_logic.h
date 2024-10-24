@@ -17,7 +17,7 @@ private:
 public:
     MatchLogic();
 
-    void add_player(Player player);
+    void add_player(int id);
     void still_player(int id_player);
     void move_player_left(int id_player);
     void move_player_right(int id_player);

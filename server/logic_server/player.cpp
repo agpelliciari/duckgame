@@ -1,10 +1,10 @@
-
+#include <iostream>
 #include "player.h"
 
-Player::Player(int id, int initial_x, int initial_y):
-        id(id),
-        is_alive(true),
+Player::Player(unsigned int id_, int initial_x, int initial_y):
+        id(id_),
         coordinates(initial_x, initial_y),
+        is_alive(true),
         weapon(),
         helmet(),
         chest_armor(),
@@ -21,7 +21,9 @@ void Player::get_data(int& id, int& x, int& y, const TypeWeapon& weapon,
     this->move_action.get_move_action(move_action);
 }
 
-bool Player::same_id(int id) { return this->id == id; }
+bool Player::same_id(unsigned int id_) {
+    return id == id_;
+}
 
 void Player::still() { move_action.still(); }
 
