@@ -1,17 +1,18 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
-#include "menu/mainwindow.h"
-#include "game_loop.h"
-
-#include <string>
 #include <QApplication>
 #include <QStyleFactory>
+#include <string>
+
+#include "menu/mainwindow.h"
+
+#include "game_loop.h"
 
 class Client {
 private:
-    int argc;
-    char** argv;
+    int argc;     // cppcheck-suppress unusedStructMember
+    char** argv;  // cppcheck-suppress unusedStructMember
 
     std::string hostname = "";
     std::string port = "";

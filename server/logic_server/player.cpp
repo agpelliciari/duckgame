@@ -1,5 +1,6 @@
-#include <iostream>
 #include "player.h"
+
+#include <iostream>
 
 Player::Player(unsigned int id_, int initial_x, int initial_y):
         id(id_),
@@ -21,9 +22,7 @@ void Player::get_data(int& id, int& x, int& y, const TypeWeapon& weapon,
     this->move_action.get_move_action(move_action);
 }
 
-bool Player::same_id(unsigned int id_) {
-    return id == id_;
-}
+bool Player::same_id(unsigned int id_) { return id == id_; }
 
 void Player::still() { move_action.still(); }
 

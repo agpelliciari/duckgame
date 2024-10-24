@@ -11,19 +11,19 @@ struct menuHandler {
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
-    class MainWindow;
+class MainWindow;
 }
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow {
+class MainWindow: public QMainWindow {
     Q_OBJECT
 
 private:
-    Ui::MainWindow *ui;
-    menuHandler handler;
+    Ui::MainWindow* ui;   // cppcheck-suppress unusedStructMember
+    menuHandler handler;  // cppcheck-suppress unusedStructMember
 
 public:
-    MainWindow(menuHandler handler);
+    explicit MainWindow(menuHandler handler);
 
     ~MainWindow();
 

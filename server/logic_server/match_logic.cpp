@@ -1,5 +1,6 @@
-#include <iostream>
 #include "match_logic.h"
+
+#include <iostream>
 
 MatchLogic::MatchLogic() {}
 

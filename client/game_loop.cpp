@@ -2,8 +2,8 @@
 
 #include <cstring>
 #include <iostream>
-#include <utility>
 #include <string>
+#include <utility>
 
 #include "common/core/liberror.h"
 
@@ -29,17 +29,15 @@ unsigned int GameLoop::inputnum() {
 }
 
 
-bool GameLoop::isrunning(){
-     return _is_alive;
-}
+bool GameLoop::isrunning() { return _is_alive; }
 
-void GameLoop::startCreateLobby(uint8_t playercount){
-    if (_is_alive) {// already running!!
+void GameLoop::startCreateLobby(uint8_t playercount) {
+    if (_is_alive) {  // already running!!
         throw LibError(1, "Already running client!! finish it first!");
     }
-    
+
     LobbyCreateMode* res = new LobbyCreateMode(playercount);
-    
+
     std::unique_ptr<LobbyMode> newmode(res);
     this->mode.swap(newmode);
     start();
@@ -47,13 +45,13 @@ void GameLoop::startCreateLobby(uint8_t playercount){
     res->startLobby();
 }
 
-void GameLoop::startJoinLobby(uint8_t playercount, unsigned int idlobby){
-    if (_is_alive) {// already running!!
+void GameLoop::startJoinLobby(uint8_t playercount, unsigned int idlobby) {
+    if (_is_alive) {  // already running!!
         throw LibError(1, "Already running client!! finish it first!");
     }
 
     JoinLobbyMode* res = new JoinLobbyMode(playercount, idlobby);
-    
+
     std::unique_ptr<LobbyMode> newmode(res);
     this->mode.swap(newmode);
     start();
@@ -83,8 +81,8 @@ void GameLoop::sendMove(char action) {
 }
 
 void GameLoop::run() {
-    mode->exec(protocol); // exec lobby mode.
-    
+    mode->exec(protocol);  // exec lobby mode.
+
     std::string action;
     // Simple listen de acciones.
     while (_keep_running && std::cin >> action) {
@@ -113,7 +111,7 @@ void GameLoop::run() {
 }
 
 
-int GameLoop::getcount(){
+int GameLoop::getcount() {
     std::cout << ASK_NAME << std::endl;
 
     std::string name;
@@ -137,11 +135,10 @@ int GameLoop::getcount(){
 }
 
 
-
 GameLoop::~GameLoop() {
-    if(_is_alive){
-       stop();
-       
-       join();
+    if (_is_alive) {
+        stop();
+
+        join();
     }
 }

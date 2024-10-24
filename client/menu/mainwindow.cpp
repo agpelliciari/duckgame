@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(menuHandler handler): ui(new Ui::MainWindow), handler(handler) {
@@ -8,9 +9,7 @@ MainWindow::MainWindow(menuHandler handler): ui(new Ui::MainWindow), handler(han
     connect(ui->buttonQuit, &QPushButton::clicked, this, &MainWindow::onClickQuit);
 }
 
-MainWindow::~MainWindow() {
-    delete ui;
-}
+MainWindow::~MainWindow() { delete ui; }
 
 void MainWindow::onClickCreateLobby() {
     if (handler.onClickCreateLobby)
@@ -22,6 +21,4 @@ void MainWindow::onClickJoinLobby() {
         handler.onClickJoinLobby(1, 1);
 }
 
-void MainWindow::onClickQuit() {
-    this->close();
-}
+void MainWindow::onClickQuit() { this->close(); }

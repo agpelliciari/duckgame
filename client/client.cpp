@@ -7,13 +7,10 @@ Client::Client(int argc, char* argv[]): argc(argc), argv(argv) {
 int Client::exec() {
     GameLoop gameLoop(hostname.c_str(), port.c_str());
     menuHandler menuHandler = {
-        [&gameLoop](uint8_t playercount) {
-            gameLoop.startCreateLobby(playercount);
-        },
-        [&gameLoop](uint8_t playercount, unsigned int idlobby) {
-            gameLoop.startJoinLobby(playercount, idlobby);
-        }
-    };
+            [&gameLoop](uint8_t playercount) { gameLoop.startCreateLobby(playercount); },
+            [&gameLoop](uint8_t playercount, unsigned int idlobby) {
+                gameLoop.startJoinLobby(playercount, idlobby);
+            }};
 
     QApplication application(argc, argv);
     //-------
@@ -38,9 +35,7 @@ int Client::exec() {
     return application.exec();
 }
 
-Client::~Client() {
-
-}
+Client::~Client() {}
 
 void Client::setHostnameAndPort(const std::string& newHostname, const std::string& newPort) {
     hostname = newHostname;
