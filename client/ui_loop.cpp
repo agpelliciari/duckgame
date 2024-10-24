@@ -2,12 +2,13 @@
 
 UILoop::UILoop(): 
     sdlLib(SDL_INIT_VIDEO), 
-    window("UILOOP demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_RESIZABLE),
+    window("UILOOP demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE),
     renderer(window, -1, SDL_RENDERER_ACCELERATED),
-    sprites(renderer, DATA_PATH "/grey_duck.png"),
-    vcenter(renderer.GetOutputHeight() / 2),
+    sprites(renderer, DATA_PATH "/yellow_duck.png"),
     is_running_(true),
     animation() {}
+
+bool UILoop::isRunning() const { return is_running_; }
 
 void UILoop::handleEvent() {
     SDL_Event event;
@@ -18,38 +19,57 @@ void UILoop::handleEvent() {
         } else if (event.type == SDL_KEYDOWN) {
             switch (event.key.keysym.sym) {
                 case SDLK_RIGHT:
-                    animation.setState(STATE_RUNNING_RIGHT);
-                    animation.flip(false);
+                    animation.rightCommandFlags();
                     break;
                 case SDLK_LEFT:
-                    animation.setState(STATE_RUNNING_LEFT);
-                    animation.flip(true);
+                    animation.leftCommandFlags();
+                    break;
+                case SDLK_DOWN:
+                    animation.downCommandFlags();
+                    break;
+                case SDLK_SPACE:
+                    animation.spaceCommandFlags();
                     break;
                 case SDLK_ESCAPE: case SDLK_q:
                     is_running_ = false;
                     break;
-            }
+                }
         } else if (event.type == SDL_KEYUP) {
-            animation.setState(STATE_STANDING);
+            switch (event.key.keysym.sym) {
+                case SDLK_RIGHT:
+                    animation.stopRightCommand();
+                    break;
+                case SDLK_LEFT:
+                    animation.stopLeftCommand();
+                    break;
+                case SDLK_DOWN:
+                    animation.stopDownCommand();
+                    break;
+                case SDLK_SPACE:
+                    animation.stopSpaceCommand();
+                    break;
+            }
         }
     }
 }
 
 void UILoop::update() {
+
     animation.updateFrame();
 
     animation.updatePosition();
-
-	if (animation.getPosition() > renderer.GetOutputWidth()) animation.setPosition(-50);
-
-	if (animation.getPosition() < -50) animation.setPosition(renderer.GetOutputWidth());
 
     animation.updateSprite();
 }
 
 void UILoop::draw() {
     // Clear screen
-	renderer.Clear();
+    renderer.SetDrawColor(255, 255, 255, 255); // White background
+    renderer.Clear();
+
+    // Draw ground
+    renderer.SetDrawColor(0, 0, 0, 255); // Black color
+    renderer.DrawLine(0, GROUND_Y, SCREEN_WIDTH, GROUND_Y);
 
     // Determine the flip mode based on the last direction
     SDL_RendererFlip flip = animation.isFacingLeft() ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
@@ -57,8 +77,8 @@ void UILoop::draw() {
     // Draw player sprite
 	renderer.Copy(
 			sprites,
-			Rect(animation.getSpriteX(), animation.getSpriteY(), 32, 32),
-			Rect((int)animation.getPosition(), vcenter - 50, 50, 50),
+			Rect(animation.getSpriteX(), animation.getSpriteY(), SPRITE_WIDTH, SPRITE_HEIGHT),
+			Rect(static_cast<int>(animation.getPositionX()) - 25, static_cast<int>(animation.getPositionY()) - 44, 50, 50), // Nuevo rectangulo, se expande event sprite
 			0.0,
 			Point(0, 0),
 			flip
@@ -66,11 +86,15 @@ void UILoop::draw() {
 
 	// Show rendered frame
 	renderer.Present();
-
-	// Frame limiter: sleep for a little bit to not eat 100% of CPU
-	SDL_Delay(1);
 }
 
-bool UILoop::isRunning() const { return is_running_; }
+void UILoop::frameDelay(unsigned int frameStart) {
+    unsigned int frameTime = SDL_GetTicks() - frameStart;
+    if (FRAME_DELAY > frameTime) {
+        SDL_Delay(FRAME_DELAY - frameTime);
+    }
+}
+
+
 
 UILoop::~UILoop() = default;

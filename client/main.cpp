@@ -13,9 +13,15 @@ int main() try {
 	UILoop uiLoop;
 
 	while (uiLoop.isRunning()) {
+        unsigned int frameStart = SDL_GetTicks();
+
 		uiLoop.handleEvent();
+
 		uiLoop.update();
+
 		uiLoop.draw();
+
+        uiLoop.frameDelay(frameStart);
 	}
 	
 	return 0;

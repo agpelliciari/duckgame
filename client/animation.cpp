@@ -1,53 +1,136 @@
 #include "animation.h"
 
 Animation::Animation() : 
-    prevTicks(SDL_GetTicks()), 
-    frameTicks(0), 
-    frameDelta(0),
-    runPhase(0),
-    position(0.0),
-    facingLeft(false),
-    state(STATE_STANDING),
+    positionX(INITIAL_POSITION_X),
+    positionY(INITIAL_POSITION_Y),
+    speedX(INITIAL_SPEED_X),
+    speedY(INITIAL_SPEED_Y),
     spriteX(1),
-    spriteY(10) {}
+    spriteY(10),
+    frameTicks(0), 
+    runPhase(0),
+    moveRight(false),
+    moveLeft(false),
+    facingLeft(false),
+    onGround(true),
+    layingDown(false),
+    spacePressed(false),
+    flying(false) {}
 
 void Animation::updateFrame() {
     frameTicks = SDL_GetTicks();
-	frameDelta = frameTicks - prevTicks;
-	prevTicks = frameTicks;
 }
 
 void Animation::updatePosition() {
-    if (state == STATE_RUNNING_RIGHT) {
-        position += frameDelta * 0.2;
-        runPhase = (frameTicks / 100) % 6;
-    } else if (state == STATE_RUNNING_LEFT) {
-        position -= frameDelta * 0.2;
-        runPhase = (frameTicks / 100) % 6;
-    } else {
-        runPhase = 0;
+    if (!layingDown) {
+        // Apply gravity
+        if (flying) {
+            speedY += GRAVITY * 0.5; // Reduced gravity effect when flying
+        } else {
+            speedY += GRAVITY;
+        }
+        positionY += speedY;
+
+        // Horizontal movement
+        if (moveRight) {
+            positionX += speedX;
+            runPhase = (frameTicks / 100) % 6;
+        }
+        if (moveLeft) {
+            positionX -= speedX;
+            runPhase = (frameTicks / 100) % 6;
+        }
+
+        // Ground collision
+        if (positionY >= GROUND) {
+            positionY = GROUND;
+            speedY = 0.0;
+            onGround = true;
+            flying = false;
+        } else {
+            onGround = false;
+            runPhase = (frameTicks / 600) % 5;
+        }
+
+        // Screen wrapping
+        if (positionX < 0) {
+            positionX = SCREEN_WIDTH;
+        }
+        if (positionX > SCREEN_WIDTH) {
+            positionX = 0;
+        }
     }
 }
 
 void Animation::updateSprite() {
-    spriteX = 1;
-    if (state == STATE_RUNNING_RIGHT || state == STATE_RUNNING_LEFT) {
-        spriteX = 1 + 32 * runPhase;
-        spriteY = 10;
+    // Set sprite coordinates based on the character's state
+    if (layingDown) {
+        spriteY = 72; // Laying down sprite row
+        spriteX = 1;  // Assuming a single frame for laying down
+    } else if (onGround) {
+        spriteY = 10; // Standing or running sprite row
+        if (moveRight || moveLeft) {
+            spriteX = 1 + 32 * runPhase; // Running animation
+        } else {
+            spriteX = 1; // Standing still
+        }
+    } else {
+        if (flying) {
+            spriteY = 72; // flying sprite row
+            spriteX = 1 + 32 *2;  // Assuming a single frame for flying
+        } else {
+            spriteY = 41; // Jumping sprite row
+            spriteX = 1 + 32 * runPhase; // Assuming a single frame for jumping
+        }
     }
 }
 
-unsigned int Animation::getFrameDelta() const { return frameDelta; }
+void Animation::rightCommandFlags() {
+    moveRight = true;
+    moveLeft = false;
+    facingLeft = false;
+}
 
-unsigned int Animation::getFrameTicks() const { return frameTicks; }
+void Animation::stopRightCommand() { moveRight = false; }
 
-float Animation::getPosition() const { return position; }
+void Animation::leftCommandFlags() {
+    moveLeft = true;
+    moveRight = false;
+    facingLeft = true;
+}
 
-void Animation::setPosition(float newPosition) { position = newPosition; }
+void Animation::stopLeftCommand() { moveLeft = false; }
 
-void Animation::setState(AnimationState newState) { state = newState; }
+void Animation::downCommandFlags() {
+    if (onGround) { // Only allow laying down if on the ground
+        layingDown = true;
+    }
+}
 
-void Animation::flip(bool flip) { facingLeft = flip; }
+void Animation::stopDownCommand() { layingDown = false; }
+
+void Animation::spaceCommandFlags() {
+    if (onGround) { // StartJump()
+        speedY = -12.0;
+        onGround = false;
+        spriteX = 1; // Reset spriteX to start the jump animation
+    } else if (!spacePressed) { // Reduce gravity effect if jump button is pressed again while in the air
+        speedY -= GRAVITY * 0.5;
+        flying = true;
+    }
+    spacePressed = true;
+}
+
+void Animation::stopSpaceCommand() {
+    spacePressed = false;
+    if (speedY < -6.0) { // EndJump()
+        speedY = -6.0;
+    }
+}
+
+float Animation::getPositionX() const { return positionX; }
+
+float Animation::getPositionY() const { return positionY; }
 
 bool Animation::isFacingLeft() const { return facingLeft; }
 

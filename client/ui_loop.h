@@ -6,6 +6,12 @@
 
 #include "animation.h"
 
+#define SCREEN_HEIGHT 480
+#define SPRITE_WIDTH 32
+#define SPRITE_HEIGHT 32
+#define FRAME_DELAY 33
+#define GROUND_Y 400  
+
 using namespace SDL2pp;
 
 class UILoop {
@@ -18,8 +24,6 @@ private:
 
     Texture sprites;
 
-    int vcenter;
-
     bool is_running_;
 
     Animation animation;
@@ -27,6 +31,7 @@ private:
 public:
     UILoop();
 
+    bool isRunning() const;
     // Event processing: //TODO: Maquina de estados finita
 		// - If window is closed, or Q or Escape buttons are pressed, quit the application
 		// - If Right key is pressed, character would run
@@ -47,7 +52,7 @@ public:
     //This method will be responsible for drawing everything, including the games UI.
     void draw();
 
-    bool isRunning() const;
+    void frameDelay(unsigned int frameStart);
     
     ~UILoop();
 };
