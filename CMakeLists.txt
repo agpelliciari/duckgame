@@ -54,15 +54,16 @@ if(TALLER_CLIENT OR TALLER_EDITOR)
         URL https://github.com/libSDL2pp/libSDL2pp/archive/cc198c9a5657048bee67ece82de620b2d5661084.zip
     )
 
+    set(SDL2PP_WITH_IMAGE ON) # if you need SDL_image support
+    set(SDL2PP_WITH_MIXER ON) # if you need SDL_mixer support
+    set(SDL2PP_WITH_TTF ON) # if you need SDL_ttf support
+    find_package(SDL2pp REQUIRED)
+    
+    add_definitions(-DDATA_PATH="${PROJECT_SOURCE_DIR}/client")
+    
     FetchContent_MakeAvailable(libSDL2pp)
 endif()
 
-set(SDL2PP_WITH_IMAGE ON) # if you need SDL_image support
-set(SDL2PP_WITH_MIXER ON) # if you need SDL_mixer support
-set(SDL2PP_WITH_TTF ON) # if you need SDL_ttf support
-find_package(SDL2pp REQUIRED)
-
-add_definitions(-DDATA_PATH="${PROJECT_SOURCE_DIR}/client")
 
 # Program section
 # ---------------
