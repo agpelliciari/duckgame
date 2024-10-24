@@ -13,12 +13,12 @@ MainWindow::~MainWindow() { delete ui; }
 
 void MainWindow::onClickCreateLobby() {
     if (handler.onClickCreateLobby)
-        handler.onClickCreateLobby(1);
+        handler.onClickCreateLobby(2);
 }
 
 void MainWindow::onClickJoinLobby() {
     if (handler.onClickJoinLobby)
-        handler.onClickJoinLobby(1, 1);
+        handler.onClickJoinLobby(2, 1);
 }
 
 void MainWindow::onClickQuit() { this->close(); }
