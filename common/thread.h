@@ -25,6 +25,8 @@ protected:
     std::atomic<bool> _keep_running;
     std::atomic<bool> _is_alive;
 
+    std::thread::id get_id() { return thread.get_id(); }
+
 public:
     Thread(): _keep_running(false), _is_alive(false) {}
 
@@ -40,11 +42,10 @@ public:
         try {
             this->run();
         } catch (const std::exception& err) {
-            std::cerr << "Unexpected exception: " << err.what() << "\n";
+            std::cerr << "thread " << get_id() << " exception: " << err.what() << "\n";
         } catch (...) {
-            std::cerr << "Unexpected exception: <unknown>\n";
+            std::cerr << "thread " << get_id() << " exception: <unknown>\n";
         }
-
         _is_alive = false;
     }
 
