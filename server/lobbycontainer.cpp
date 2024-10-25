@@ -6,15 +6,13 @@
 
 LobbyContainer::LobbyContainer(): lastLobbyId(0) {}
 
-Match& LobbyContainer::newLobby(ControlledPlayer* player) {
+Match& LobbyContainer::newLobby() {
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on lobby.
-    Match& lobby = lobbies.emplace_back(++lastLobbyId);
-    lobby.addPlayer(player);
-
-    return lobby;
+    return lobbies.emplace_back(++lastLobbyId);
 }
 
 Match& LobbyContainer::findLobby(lobbyID id) {
+    std::unique_lock<std::mutex> lck(mtx);  // No other actions on container.
     for (auto lobbyit = lobbies.begin(); lobbyit != lobbies.end();) {
         if (lobbyit->getID() == id) {
             return *lobbyit;
@@ -26,23 +24,21 @@ Match& LobbyContainer::findLobby(lobbyID id) {
 }
 
 // Unirse a la lobby y esperar a que empieze. Tira error si no existe.
-Match& LobbyContainer::joinLobby(ControlledPlayer* player, lobbyID id) {
+ControlledPlayer& LobbyContainer::joinLobby(uint8_t count, Match& lobby) {
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on container.
-    Match& lobby = findLobby(id);
     if (lobby.isrunning()) {
-        throw GameError("Tried to join already started lobby %d", id);
+        throw GameError("Tried to join already started lobby %d", lobby.getID());
     }
 
-    lobby.addPlayer(player);
-    return lobby;
+    return lobby.addPlayers(count);
 }
+
 // Una vez empezada no se aceptan mas.
 void LobbyContainer::startLobby(Match& lobby) {
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on container.
     return lobby.init();
     // return findLobby(id).start();
 }
-
 
 void LobbyContainer::stopLobby(const Match& lobby) {
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on container.

@@ -33,8 +33,8 @@ public:
     ServerProtocol(ServerProtocol&&) = delete;
     ServerProtocol& operator=(ServerProtocol&&) = delete;
 
-    bool recvplayercount(uint8_t* count);
-    lobby_action recvlobbyaction();
+    uint8_t recvplayercount();
+    bool recvlobbyinfo(lobby_info& out);
 
     bool recvsignalstart();
 
