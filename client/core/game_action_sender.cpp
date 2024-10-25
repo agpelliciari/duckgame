@@ -39,57 +39,12 @@ GameActionSender& GameActionSender::operator=(GameActionSender&& other) {
 }
 
 void GameActionSender::disconnect() { std::cout << "SHOULD SEND DISCCONNECT!" << std::endl; }
-void GameActionSender::doaction(const PlayerActionDTO& action) {
-    std::cout << "SEND Player ACTION? " << &action << std::endl;
-}
+void GameActionSender::doaction(const PlayerActionDTO& action) { actions.try_push(action); }
 
 bool GameActionSender::isrunning() { return _is_alive; }
 
-void GameActionSender::begin() {
-    std::cout << "GOT TO BEGIN GAME SENDER?! " << protocol << std::endl;
-    _keep_running = true;
-    run();
-    /*
-    if(is_alive()){
-        std::cerr << "ALREADY STARTED SENDER!\n";
-        return;
-    }
-    //Something?
-    start();
-    */
-}
-void GameActionSender::end() {
-    if (_keep_running) {
-        stop();
-        join();
-    }
-}
-
-
-void GameActionSender::sendMove(char action) {
-
-    PlayerActionDTO dto;
-    if (action == 'a') {
-        dto.playerind = 0;
-        dto.type = MOVE_LEFT;
-    } else if (action == 'd') {
-        dto.playerind = 0;
-        dto.type = MOVE_RIGHT;
-    } else if (action == 'j') {
-        dto.playerind = 1;
-        dto.type = MOVE_LEFT;
-    } else if (action == 'l') {
-        dto.playerind = 1;
-        dto.type = MOVE_RIGHT;
-    } else {
-        return;
-    }
-    std::cout << "MOVE " << (int)dto.playerind << " DIR " << (int)dto.type << std::endl;
-
-    protocol->sendaction(dto);
-}
-
-void GameActionSender::run() {
+void GameActionSender::listenStdin() {
+    // Por ahora alguna especie de mock en envio de acciones.
     std::string action;
     // Simple listen de acciones.
     std::cout << "LISTEN STDIN " << std::endl;
@@ -117,6 +72,54 @@ void GameActionSender::run() {
             sendMove(*(act + ind));
             ind++;
         }
+    }
+}
+void GameActionSender::begin() {
+    if (is_alive()) {
+        std::cerr << "ALREADY STARTED SENDER!\n";
+        return;
+    }
+    std::cout << "GOT TO BEGIN GAME SENDER?! " << protocol << std::endl;
+    start();
+}
+
+void GameActionSender::end() {
+    std::cout << "ENDING GAME SENDER!!\n";
+    if (_keep_running) {
+        stop();
+        actions.close();
+        join();
+    }
+}
+
+
+void GameActionSender::sendMove(char action) {
+
+    PlayerActionDTO dto;
+    if (action == 'a') {
+        dto.playerind = 0;
+        dto.type = MOVE_LEFT;
+    } else if (action == 'd') {
+        dto.playerind = 0;
+        dto.type = MOVE_RIGHT;
+    } else if (action == 'j') {
+        dto.playerind = 1;
+        dto.type = MOVE_LEFT;
+    } else if (action == 'l') {
+        dto.playerind = 1;
+        dto.type = MOVE_RIGHT;
+    } else {
+        return;
+    }
+    doaction(dto);
+}
+
+void GameActionSender::run() {
+    while (_keep_running) {
+        PlayerActionDTO dto = actions.pop();
+        std::cout << "POP.. SEND Player ACTION? " << (int)dto.type << " " << (int)dto.playerind
+                  << std::endl;
+        protocol->sendaction(dto);
     }
 }
 

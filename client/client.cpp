@@ -55,6 +55,7 @@ int Client::execGame(GameLoop& gameloop) {
     GameActionSender actionListener(gameloop.initGame(listener));
     actionListener.begin();
 
+    actionListener.listenStdin();
 
     return 0;
 }
