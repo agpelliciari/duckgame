@@ -4,10 +4,7 @@
 #include <QMainWindow>
 #include <functional>
 
-struct menuHandler {
-    std::function<void(uint8_t playercount)> onClickCreateLobby;
-    std::function<void(uint8_t playercount, unsigned int idlobby)> onClickJoinLobby;
-};
+#include "client/menuhandler.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -19,11 +16,11 @@ class MainWindow: public QMainWindow {
     Q_OBJECT
 
 private:
-    Ui::MainWindow* ui;   // cppcheck-suppress unusedStructMember
-    menuHandler handler;  // cppcheck-suppress unusedStructMember
+    Ui::MainWindow* ui;    // cppcheck-suppress unusedStructMember
+    MenuHandler& handler;  // cppcheck-suppress unusedStructMember
 
 public:
-    explicit MainWindow(menuHandler handler);
+    explicit MainWindow(MenuHandler& handler);
 
     ~MainWindow();
 

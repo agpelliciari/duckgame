@@ -17,10 +17,14 @@ private:
     std::string hostname = "";
     std::string port = "";
 
+    int execMenu(GameLoop& gameloop);
+    int execGame(GameLoop& gameloop);
+
 public:
     explicit Client(int argc, char* argv[]);
 
     int exec();
+
 
     Client(const Client&) = delete;
     Client& operator=(const Client&) = delete;
