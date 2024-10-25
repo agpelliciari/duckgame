@@ -2,6 +2,7 @@
 #define LIB_ControlledPlayer_H
 
 #include <mutex>
+#include <string>
 #include <utility>
 
 #include "common/dtos.h"
@@ -70,6 +71,8 @@ public:
     // Pop event. Bloqueante. Si no hay eventos espera a uno.
     MatchDto popstate();
 
+
+    std::string toString();
     //~ControlledPlayer();
 };
 

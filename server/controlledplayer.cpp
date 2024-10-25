@@ -1,6 +1,7 @@
 #include "./controlledplayer.h"
 
 #include <iostream>
+#include <sstream>
 #include <utility>
 
 #include "./gameerror.h"
@@ -76,6 +77,18 @@ bool ControlledPlayer::recvstate(const MatchDto& state) {
 
 // Se podria hacer de forma polimorfica/delegatoria seguro.
 MatchDto ControlledPlayer::popstate() { return snapshots.pop(); }
+
+
+std::string ControlledPlayer::toString() {
+    std::stringstream result;
+    if (count == 1) {
+        result << "Player " << (int)ids[0];
+    } else {
+        result << "Players " << (int)ids[0] << " and " << (int)ids[1];
+    }
+
+    return result.str();
+}
 
 /// La verdad no deberia pasar no.
 // ControlledPlayer::~ControlledPlayer(){

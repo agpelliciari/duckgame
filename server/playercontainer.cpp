@@ -10,7 +10,6 @@ void PlayerContainer::add(ControlledPlayer* player) {
     // Setea los ids.
     int mx = player->playercount();
     for (int ind = 0; ind < mx; ind++) {
-        std::cout << "ADDED IND " << ind << " IS " << last_id + 1 << std::endl;
         player->setid(ind, ++last_id);
     }
     players.push_back(player);

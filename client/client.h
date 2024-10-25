@@ -5,9 +5,8 @@
 #include <QStyleFactory>
 #include <string>
 
+#include "client/core/game_loop.h"
 #include "menu/mainwindow.h"
-
-#include "game_loop.h"
 
 class Client {
 private:

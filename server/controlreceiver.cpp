@@ -5,6 +5,7 @@
 
 #include "./controlnotifier.h"
 #include "./gameerror.h"
+#include "./lobbycontrol.h"
 #include "common/core/liberror.h"
 #include "common/protocolerror.h"
 
@@ -21,39 +22,48 @@ void ControlReceiver::init() {
     }
     start();
 }
-void ControlReceiver::playOn(LobbyProtocol& lobby) {
+void ControlReceiver::playOn(const ControlledPlayer& player, Match& match) {
     try {
         // Loopeado de acciones
         while (_keep_running) {
-            lobby.doaction(protocol);
+            PlayerActionDTO action = protocol.recvaction();
+            if (player.playercount() <= action.playerind) {
+                std::cerr << "Invalid action from client!!\n";
+                return;
+            }
+            action.playerind = player.getid(action.playerind);
+            match.notifyAction(action);
         }
     } catch (const ProtocolError& error) {
         // EOF of player. No muestres nada.
     } catch (const LibError& error) {
-
         if (protocol.isopen()) {  // Si debiera estar activo. Error interno del protocol.
             std::cerr << "Controller lib error:" << error.what() << std::endl;
         }
-
-    } catch (const ClosedQueue& error) {  // Para evitar llege a el catch the Thread::main
-        std::cerr << "Received MATCH END " << error.what() << std::endl;
-        // Envia end de la partida?
+    } catch (const std::exception& err) {
+        std::cerr << "excep : " << err.what() << " Ending control receiver.\n";
+    } catch (...) {
+        std::cerr << "excep <unknown> Ending control receiver.\n";
     }
 }
 void ControlReceiver::run() {
     ControlledPlayer player;
-    LobbyProtocol lobbyprot(lobbies, player, protocol);
-
-    if (!lobbyprot.start(protocol)) {
-        std::cerr << "Could not start lobby" << std::endl;
-        return;
-    }
+    bool isanfitrion;
+    Match& match = LobbyControl(lobbies).handleNewClient(player, protocol, &isanfitrion);
 
     // Inicia notifier.
     ControlNotifier notifier(player, protocol);
     notifier.start();
-    playOn(lobbyprot);
 
+    playOn(player, match);  // Es no except.
+
+    player.disconnect();
+    if (isanfitrion) {
+        lobbies.stopLobby(match);
+    }
+
+    // El log a cerr podria ser innecesario. Pero sirve para hacer cosas mas descriptivas.
+    std::cerr << ">closed " << player.toString() << std::endl;
     // El destructor de notifier hace join.
 }
 

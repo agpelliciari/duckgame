@@ -20,7 +20,6 @@ GameLoop::GameLoop(Protocol&& prot): protocol(std::move(prot)) {}
 
 LobbyClientSender GameLoop::initMenuHandler() { return LobbyClientSender(protocol); }
 GameActionSender GameLoop::initGame(EventListener& listener) {
-    std::cout << "LISTENER AT" << &listener << std::endl;
-    return GameActionSender(protocol);
+    return GameActionSender(protocol, listener);
 }
 GameLoop::~GameLoop() {}

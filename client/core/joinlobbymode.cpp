@@ -1,4 +1,4 @@
-#include "client/joinlobbymode.h"
+#include "./joinlobbymode.h"
 
 #include <iostream>
 JoinLobbyMode::JoinLobbyMode(uint8_t _count, uint8_t id): playercount(_count), idlobby(id) {}

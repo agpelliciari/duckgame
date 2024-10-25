@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-#include "client/lobbymode.h"
+#include "./lobbymode.h"
 
 // Clase que encapsula al protocol y mantendria el estado del juego
 // Proporcionado una interfaz para acciones del usuario.
