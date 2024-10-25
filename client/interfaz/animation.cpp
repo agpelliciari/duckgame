@@ -1,4 +1,4 @@
-#include "client/animation.h"
+#include "./animation.h"
 
 Animation::Animation():
         positionX(INITIAL_POSITION_X),

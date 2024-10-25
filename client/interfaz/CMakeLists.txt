@@ -2,10 +2,10 @@ target_sources(taller_client
     PRIVATE
     # .cpp files
     animation.cpp
-    ui_loop.cpp
+    loop_ui.cpp
     
     PUBLIC
     # .h files
     animation.h
-    ui_loop.h
+    loop_ui.h
     )

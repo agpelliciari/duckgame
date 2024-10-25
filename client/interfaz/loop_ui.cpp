@@ -1,4 +1,4 @@
-#include "ui_loop.h"
+#include "loop_ui.h"
 
 UILoop::UILoop():
         sdlLib(SDL_INIT_VIDEO),
