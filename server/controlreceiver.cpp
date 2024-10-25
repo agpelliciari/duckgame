@@ -21,7 +21,7 @@ void ControlReceiver::init() {
     }
     start();
 }
-void ControlReceiver::playOn(LobbyProtocol& lobby) {
+void ControlReceiver::playOn(LobbyControl& lobby) {
     try {
         // Loopeado de acciones
         while (_keep_running) {
@@ -42,9 +42,9 @@ void ControlReceiver::playOn(LobbyProtocol& lobby) {
 }
 void ControlReceiver::run() {
     ControlledPlayer player;
-    LobbyProtocol lobbyprot(lobbies, player, protocol);
+    LobbyControl lobbycontrol(lobbies, player, protocol);
 
-    if (!lobbyprot.start(protocol)) {
+    if (!lobbycontrol.start(protocol)) {
         std::cerr << "Could not start lobby" << std::endl;
         return;
     }
@@ -52,7 +52,7 @@ void ControlReceiver::run() {
     // Inicia notifier.
     ControlNotifier notifier(player, protocol);
     notifier.start();
-    playOn(lobbyprot);
+    playOn(lobbycontrol);
 
     // El destructor de notifier hace join.
 }

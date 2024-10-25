@@ -1,12 +1,12 @@
-#include "./lobbyprotocol.h"
+#include "./lobbycontrol.h"
 
 #include <iostream>
 #include <utility>
 
 #include "common/protocolerror.h"
 
-LobbyProtocol::LobbyProtocol(LobbyContainer& _lobbies, ControlledPlayer& _player,
-                             ServerProtocol& protocol):
+LobbyControl::LobbyControl(LobbyContainer& _lobbies, ControlledPlayer& _player,
+                           ServerProtocol& protocol):
         lobbies(_lobbies), player(_player), isanfitrion(false), match(NULL) {
 
     if (handleNewClient(protocol)) {
@@ -14,7 +14,7 @@ LobbyProtocol::LobbyProtocol(LobbyContainer& _lobbies, ControlledPlayer& _player
     }
 }
 
-void LobbyProtocol::doaction(ServerProtocol& protocol) {
+void LobbyControl::doaction(ServerProtocol& protocol) {
     PlayerActionDTO action = protocol.recvaction();
 
     if (player.playercount() <= action.playerind) {
@@ -26,7 +26,7 @@ void LobbyProtocol::doaction(ServerProtocol& protocol) {
     match->notifyAction(action);
 }
 
-bool LobbyProtocol::handleNewClient(ServerProtocol& protocol) {
+bool LobbyControl::handleNewClient(ServerProtocol& protocol) {
     uint8_t playercount;
     if (!protocol.recvplayercount(&playercount)) {
         // std::cerr << "Player controller aborted" << std::endl;
@@ -51,7 +51,7 @@ bool LobbyProtocol::handleNewClient(ServerProtocol& protocol) {
     return false;
 }
 
-bool LobbyProtocol::start(ServerProtocol& protocol) {
+bool LobbyControl::start(ServerProtocol& protocol) {
     if (!isanfitrion) {
         return true;
     }
@@ -67,7 +67,7 @@ bool LobbyProtocol::start(ServerProtocol& protocol) {
 }
 
 
-LobbyProtocol::~LobbyProtocol() {
+LobbyControl::~LobbyControl() {
     player.disconnect();
 
     // El log a cerr podria ser innecesario. Pero sirve para hacer cosas mas descriptivas.

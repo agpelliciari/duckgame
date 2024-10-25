@@ -1,5 +1,5 @@
-#ifndef LIB_LobbyProtocol_H
-#define LIB_LobbyProtocol_H
+#ifndef LIB_LobbyControl_H
+#define LIB_LobbyControl_H
 
 
 #include "./controlledplayer.h"
@@ -7,8 +7,8 @@
 #include "./match.h"
 #include "common/serverprotocol.h"
 
-class LobbyProtocol {
-    // typedef void (LobbyProtocol::* lobby_proc)();
+class LobbyControl {
+    // typedef void (LobbyControl::* lobby_proc)();
 protected:
     LobbyContainer& lobbies;   // cppcheck-suppress unusedStructMember
     ControlledPlayer& player;  // cppcheck-suppress unusedStructMember
@@ -25,24 +25,24 @@ protected:
 
 public:
     // Crea el player con el ide pasado e inicia el protocolo
-    // explicit LobbyProtocol(LobbyContainer& _lobbies, ControlledPlayer& _player);
-    explicit LobbyProtocol(LobbyContainer& _lobbies, ControlledPlayer& _player,
-                           ServerProtocol& protocol);
+    // explicit LobbyControl(LobbyContainer& _lobbies, ControlledPlayer& _player);
+    explicit LobbyControl(LobbyContainer& _lobbies, ControlledPlayer& _player,
+                          ServerProtocol& protocol);
 
     // Por ahora tambien nos escapamos del move.
-    LobbyProtocol(LobbyProtocol&&) = delete;
-    LobbyProtocol& operator=(LobbyProtocol&&) = delete;
+    LobbyControl(LobbyControl&&) = delete;
+    LobbyControl& operator=(LobbyControl&&) = delete;
 
     // Asumamos por ahora que no se quiere permitir copias
-    LobbyProtocol(const LobbyProtocol&) = delete;
-    LobbyProtocol& operator=(const LobbyProtocol&) = delete;
+    LobbyControl(const LobbyControl&) = delete;
+    LobbyControl& operator=(const LobbyControl&) = delete;
 
 
     void doaction(ServerProtocol& protocol);
     bool start(ServerProtocol& protocol);
 
 
-    ~LobbyProtocol();
+    ~LobbyControl();
 };
 
 #endif
