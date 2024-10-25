@@ -10,24 +10,16 @@
 class LobbyControl {
     // typedef void (LobbyControl::* lobby_proc)();
 protected:
-    LobbyContainer& lobbies;   // cppcheck-suppress unusedStructMember
-    ControlledPlayer& player;  // cppcheck-suppress unusedStructMember
+    LobbyContainer& lobbies;  // cppcheck-suppress unusedStructMember
 
-    // Podria encapsularse en una clase y usar heap...
-    // o usar los punteros a funcion... pero vale la pena?!
-    bool isanfitrion;  // cppcheck-suppress unusedStructMember
 
-    // Que sea un puntero para evitar problemas con constructores.
-    Match* match;  // cppcheck-suppress unusedStructMember
-
-    bool handleNewClient(ServerProtocol& protocol);
-
+    Match& handleNewLobby(ControlledPlayer& player, ServerProtocol& protocol);
+    Match& handleJoinLobby(unsigned int id,
+                           ControlledPlayer& player);  //, ServerProtocol& protocol);
 
 public:
     // Crea el player con el ide pasado e inicia el protocolo
-    // explicit LobbyControl(LobbyContainer& _lobbies, ControlledPlayer& _player);
-    explicit LobbyControl(LobbyContainer& _lobbies, ControlledPlayer& _player,
-                          ServerProtocol& protocol);
+    explicit LobbyControl(LobbyContainer& _lobbies);
 
     // Por ahora tambien nos escapamos del move.
     LobbyControl(LobbyControl&&) = delete;
@@ -37,12 +29,7 @@ public:
     LobbyControl(const LobbyControl&) = delete;
     LobbyControl& operator=(const LobbyControl&) = delete;
 
-
-    void doaction(ServerProtocol& protocol);
-    bool start(ServerProtocol& protocol);
-
-
-    ~LobbyControl();
+    Match& handleNewClient(ControlledPlayer& player, ServerProtocol& protocol, bool* isanfitrion);
 };
 
 #endif

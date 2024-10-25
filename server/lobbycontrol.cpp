@@ -5,32 +5,13 @@
 
 #include "common/protocolerror.h"
 
-LobbyControl::LobbyControl(LobbyContainer& _lobbies, ControlledPlayer& _player,
-                           ServerProtocol& protocol):
-        lobbies(_lobbies), player(_player), isanfitrion(false), match(NULL) {
+LobbyControl::LobbyControl(LobbyContainer& _lobbies): lobbies(_lobbies) {}
 
-    if (handleNewClient(protocol)) {
-        throw ProtocolError("Protocol aborted in middle of handshake");
-    }
-}
-
-void LobbyControl::doaction(ServerProtocol& protocol) {
-    PlayerActionDTO action = protocol.recvaction();
-
-    if (player.playercount() <= action.playerind) {
-        std::cerr << "Invalid action from client!!\n";
-        return;
-    }
-
-    action.playerind = player.getid(action.playerind);
-    match->notifyAction(action);
-}
-
-bool LobbyControl::handleNewClient(ServerProtocol& protocol) {
+Match& LobbyControl::handleNewClient(ControlledPlayer& player, ServerProtocol& protocol,
+                                     bool* isanfitrion) {
     uint8_t playercount;
     if (!protocol.recvplayercount(&playercount)) {
-        // std::cerr << "Player controller aborted" << std::endl;
-        return true;  // Permitamos que se desconecte inicialmente si no se manda el count.
+        throw ProtocolError("Did not receive player count for controller!");
     }
     player.setplayercount(playercount);
     player.open();
@@ -38,45 +19,33 @@ bool LobbyControl::handleNewClient(ServerProtocol& protocol) {
     lobby_action info = protocol.recvlobbyaction();
 
     if (info.action == NEW_LOBBY) {
-        isanfitrion = true;
-        match = &lobbies.newLobby(&player);
-        std::cerr << "New lobby id: " << (int)match->getID() << std::endl;
-        return false;
+        *isanfitrion = true;
+        return handleNewLobby(player, protocol);
     }
-    isanfitrion = false;
-    match = &lobbies.joinLobby(&player, info.attached_id);
-
-    std::cerr << "Connected lobby info join lobby " << (int)match->getID() << std::endl;
-
-    return false;
+    *isanfitrion = false;
+    return handleJoinLobby(info.attached_id, player);  //, protocol);
 }
 
-bool LobbyControl::start(ServerProtocol& protocol) {
-    if (!isanfitrion) {
-        return true;
-    }
+Match& LobbyControl::handleNewLobby(ControlledPlayer& player, ServerProtocol& protocol) {
+    Match& newlobby = lobbies.newLobby(&player);
+    std::cerr << player.toString() << " created lobby id: " << (int)newlobby.getID() << std::endl;
 
+    // Send back lobby id.
+
+    // And wait..
     if (protocol.recvsignalstart()) {
-        std::cerr << "Started lobby id: " << (int)match->getID() << std::endl;
-        lobbies.startLobby(*match);
-        return true;
+        lobbies.startLobby(newlobby);
+        std::cerr << "Started lobby id: " << (int)newlobby.getID() << std::endl;
+        return newlobby;
     }
 
-    // std::cerr << "CANCELED LOBBY: " << (int)match->getID() << std::endl;
-    return false;
+    throw ProtocolError("Did not receive new lobby start match signal");
 }
 
+Match& LobbyControl::handleJoinLobby(unsigned int id,
+                                     ControlledPlayer& player) {  //, ServerProtocol& protocol) {
+    Match& joinedlobby = lobbies.joinLobby(&player, id);
 
-LobbyControl::~LobbyControl() {
-    player.disconnect();
-
-    // El log a cerr podria ser innecesario. Pero sirve para hacer cosas mas descriptivas.
-    std::cerr << ">closed Player " << player.getid(0) << std::endl;
-    if (player.playercount() > 1) {
-        std::cerr << ">closed Player " << player.getid(1) << std::endl;
-    }
-
-    if (isanfitrion) {
-        lobbies.stopLobby(*match);
-    }
+    std::cerr << player.toString() << " joined lobby " << (int)joinedlobby.getID() << std::endl;
+    return joinedlobby;
 }
