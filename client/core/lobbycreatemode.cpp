@@ -1,4 +1,4 @@
-#include "client/lobbycreatemode.h"
+#include "./lobbycreatemode.h"
 
 #include <iostream>
 #include <string>
