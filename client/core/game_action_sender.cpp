@@ -45,6 +45,26 @@ void GameActionSender::doaction(const PlayerActionDTO& action) {
 
 bool GameActionSender::isrunning() { return _is_alive; }
 
+void GameActionSender::begin() {
+    std::cout << "GOT TO BEGIN GAME SENDER?! " << protocol << std::endl;
+    _keep_running = true;
+    run();
+    /*
+    if(is_alive()){
+        std::cerr << "ALREADY STARTED SENDER!\n";
+        return;
+    }
+    //Something?
+    start();
+    */
+}
+void GameActionSender::end() {
+    if (_keep_running) {
+        stop();
+        join();
+    }
+}
+
 
 void GameActionSender::sendMove(char action) {
 
@@ -72,12 +92,15 @@ void GameActionSender::sendMove(char action) {
 void GameActionSender::run() {
     std::string action;
     // Simple listen de acciones.
+    std::cout << "LISTEN STDIN " << std::endl;
     while (_keep_running && std::cin >> action) {
         if (action.compare(ACTION_EXIT) == 0) {
+            std::cout << "EXIT " << action << std::endl;
             return;
         }
 
         if (action.compare(ACTION_READ) == 0) {
+            std::cout << "READ " << action << std::endl;
             int count = inputnum();
 
             while (count > 0) {
@@ -97,7 +120,4 @@ void GameActionSender::run() {
     }
 }
 
-GameActionSender::~GameActionSender() {
-    stop();
-    join();
-}
+GameActionSender::~GameActionSender() { end(); }

@@ -32,6 +32,9 @@ public:
     GameActionSender& operator=(const GameActionSender&) = delete;
 
 
+    void begin();
+    void end();
+
     bool isrunning();
 
     // void startJoinLobby(uint8_t playercount, unsigned int idlobby);

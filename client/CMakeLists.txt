@@ -6,6 +6,7 @@ target_sources(taller_client
     # .cpp files
           client.cpp
           main.cpp
+          simpleeventlistener.cpp
 
     PUBLIC
     # .h files
@@ -13,4 +14,5 @@ target_sources(taller_client
           menuhandler.h
           client.h
           eventlistener.h
+          simpleeventlistener.h
     )

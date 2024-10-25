@@ -1,6 +1,7 @@
 #include "client.h"
 
 #include "./menuhandler.h"
+#include "./simpleeventlistener.h"
 
 Client::Client(int argc, char* argv[]): argc(argc), argv(argv) {
     setHostnameAndPort("127.0.0.1", "2048");
@@ -49,6 +50,12 @@ int Client::exec() {
 int Client::execGame(GameLoop& gameloop) {
     // Crear event queue iniciar action listener y exec del uiloop!
     std::cout << "FROM POINTER " << &gameloop << std::endl;
+    SimpleEventListener listener;
+
+    GameActionSender actionListener(gameloop.initGame(listener));
+    actionListener.begin();
+
+
     return 0;
 }
 
