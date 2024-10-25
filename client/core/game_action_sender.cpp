@@ -5,6 +5,7 @@
 #include <string>
 #include <utility>
 
+#include "./game_state_recv.h"
 #include "common/core/liberror.h"
 
 #define ASK_NAME "What is your name?"
@@ -22,9 +23,11 @@ static unsigned int inputnum() {
 }
 
 
-GameActionSender::GameActionSender(ClientProtocol& _protocol): protocol(&_protocol) {}
+GameActionSender::GameActionSender(ClientProtocol& _protocol, EventListener& _listener):
+        protocol(&_protocol), listener(_listener) {}
 
-GameActionSender::GameActionSender(GameActionSender&& other): protocol(other.protocol) {
+GameActionSender::GameActionSender(GameActionSender&& other):
+        protocol(other.protocol), listener(other.listener) {
     other.protocol = NULL;
 }
 GameActionSender& GameActionSender::operator=(GameActionSender&& other) {
@@ -34,6 +37,8 @@ GameActionSender& GameActionSender::operator=(GameActionSender&& other) {
 
     this->protocol = other.protocol;
     other.protocol = NULL;
+
+    this->listener = other.listener;
 
     return *this;
 }
@@ -115,11 +120,23 @@ void GameActionSender::sendMove(char action) {
 }
 
 void GameActionSender::run() {
-    while (_keep_running) {
-        PlayerActionDTO dto = actions.pop();
-        std::cout << "POP.. SEND Player ACTION? " << (int)dto.type << " " << (int)dto.playerind
-                  << std::endl;
-        protocol->sendaction(dto);
+
+    try {
+        GameStateRecv receiver(*protocol, listener);
+        receiver.start();
+
+        while (_keep_running) {
+            PlayerActionDTO dto = actions.pop();
+            std::cout << "POP.. SEND Player ACTION? " << (int)dto.type << " " << (int)dto.playerind
+                      << std::endl;
+            protocol->sendaction(dto);
+        }
+    } catch (const ClosedQueue& error) {
+        std::cerr << "Game action sender closed!" << std::endl;
+        // protocol.close();  // Si no esta cerrado, cerralo, asi se sale el controller tambien.
+    } catch (const LibError&
+                     error) {  // No deberia pasara realmente, antes pasaria en el controller.
+        std::cerr << "sender error: " << error.what() << std::endl;
     }
 }
 

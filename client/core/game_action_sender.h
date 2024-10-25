@@ -5,6 +5,7 @@
 #include <string>
 
 #include "client/actionlistener.h"
+#include "client/eventlistener.h"
 #include "common/clientprotocol.h"
 #include "common/dtos.h"
 #include "common/queue.h"
@@ -15,6 +16,8 @@
 class GameActionSender: private Thread, public ActionListener {
 protected:
     ClientProtocol* protocol;  // cppcheck-suppress unusedStructMember
+    EventListener& listener;
+
     Queue<PlayerActionDTO> actions;
 
     void sendMove(char action);
@@ -24,7 +27,7 @@ public:
     void disconnect() override;
 
     // Los default sin pasar por socket/protocol.
-    explicit GameActionSender(ClientProtocol& _protocol);
+    explicit GameActionSender(ClientProtocol& _protocol, EventListener& _listener);
 
     GameActionSender(GameActionSender&&);
     GameActionSender& operator=(GameActionSender&&);
