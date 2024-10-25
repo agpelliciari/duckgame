@@ -54,6 +54,13 @@ if(TALLER_CLIENT OR TALLER_EDITOR)
         URL https://github.com/libSDL2pp/libSDL2pp/archive/cc198c9a5657048bee67ece82de620b2d5661084.zip
     )
 
+    set(SDL2PP_WITH_IMAGE ON) # if you need SDL_image support
+    set(SDL2PP_WITH_MIXER ON) # if you need SDL_mixer support
+    set(SDL2PP_WITH_TTF ON) # if you need SDL_ttf support
+    find_package(SDL2pp REQUIRED)
+    
+    add_definitions(-DDATA_PATH="${PROJECT_SOURCE_DIR}/client/images")
+    
     FetchContent_MakeAvailable(libSDL2pp)
 
     # Activa la generación automática de archivos de encabezado a partir de archivos .ui
@@ -65,6 +72,7 @@ if(TALLER_CLIENT OR TALLER_EDITOR)
     find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
     find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 endif()
+
 
 # Program section
 # ---------------
