@@ -1,14 +1,9 @@
-#ifndef ANIMATION_H
-#define ANIMATION_H
+#ifndef CLIENT_ANIMATION_H_
+#define CLIENT_ANIMATION_H_
 
-#include <SDL2pp/SDL2pp.hh>
 #include <SDL2/SDL.h>
+#include <SDL2pp/SDL2pp.hh>
 
-enum AnimationState {
-    STATE_STANDING,
-    STATE_RUNNING_RIGHT,
-    STATE_RUNNING_LEFT,
-};
 // also used in UILoop
 #define SCREEN_WIDTH 640
 #define GROUND 400
@@ -22,50 +17,51 @@ enum AnimationState {
 class Animation {
 private:
     // Timing variables
+    float positionX;  // cppcheck-suppress unusedStructMember
 
-    float positionX;
+    float positionY;  // cppcheck-suppress unusedStructMember
 
-    float positionY;
+    float speedX;  // cppcheck-suppress unusedStructMember
 
-    float speedX;
-
-    float speedY;
+    float speedY;  // cppcheck-suppress unusedStructMember
 
     // Drawing flags
 
-    int spriteX;
+    int spriteX;  // cppcheck-suppress unusedStructMember
 
-    int spriteY;
+    int spriteY;  // cppcheck-suppress unusedStructMember
 
-    unsigned int frameTicks;
+    unsigned int frameTicks;  // cppcheck-suppress unusedStructMember
 
-    int runPhase;
+    int runPhase;  // cppcheck-suppress unusedStructMember
 
     // Movement flags
 
-    bool moveRight;
+    bool moveRight;  // cppcheck-suppress unusedStructMember
 
-    bool moveLeft;
+    bool moveLeft;  // cppcheck-suppress unusedStructMember
 
-    bool facingLeft;
+    bool facingLeft;  // cppcheck-suppress unusedStructMember
 
-    bool onGround;
+    bool onGround;  // cppcheck-suppress unusedStructMember
 
-    bool layingDown;
+    bool layingDown;  // cppcheck-suppress unusedStructMember
 
-    bool spacePressed;
+    bool spacePressed;  // cppcheck-suppress unusedStructMember
 
-    bool flying;
+    bool flying;  // cppcheck-suppress unusedStructMember
+
 public:
     Animation();
 
-    // Timing: calculate difference between this and previous frame in milliseconds
+    // Timing: calculate difference between this and previous frame in
+    // milliseconds
     void updateFrame();
 
     // Update game state for this frame
     void updatePosition();
 
-    // Pick sprite from sprite atlas based on whether player is running and run animation phase
+    // Set sprite coordinates based on the character's state
     void updateSprite();
 
     void rightCommandFlags();
@@ -97,4 +93,4 @@ public:
     ~Animation();
 };
 
-#endif
+#endif  // CLIENT_ANIMATION_H_

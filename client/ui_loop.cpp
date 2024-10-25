@@ -1,14 +1,27 @@
 #include "ui_loop.h"
 
-UILoop::UILoop(): 
-    sdlLib(SDL_INIT_VIDEO), 
-    window("UILOOP demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE),
-    renderer(window, -1, SDL_RENDERER_ACCELERATED),
-    sprites(renderer, DATA_PATH "/yellow_duck.png"),
-    is_running_(true),
-    animation() {}
+UILoop::UILoop():
+        sdlLib(SDL_INIT_VIDEO),
+        window("UILOOP demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
+               SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE),
+        renderer(window, -1, SDL_RENDERER_ACCELERATED),
+        sprites(renderer, DATA_PATH "/yellow_duck.png"),
+        is_running_(true),
+        animation() {}
 
-bool UILoop::isRunning() const { return is_running_; }
+void UILoop::exec() {
+    while (is_running_) {
+        unsigned int frameStart = SDL_GetTicks();
+
+        handleEvent();
+
+        update();
+
+        draw();
+
+        frameDelay(frameStart);
+    }
+}
 
 void UILoop::handleEvent() {
     SDL_Event event;
@@ -30,10 +43,11 @@ void UILoop::handleEvent() {
                 case SDLK_SPACE:
                     animation.spaceCommandFlags();
                     break;
-                case SDLK_ESCAPE: case SDLK_q:
+                case SDLK_ESCAPE:
+                case SDLK_q:
                     is_running_ = false;
                     break;
-                }
+            }
         } else if (event.type == SDL_KEYUP) {
             switch (event.key.keysym.sym) {
                 case SDLK_RIGHT:
@@ -64,28 +78,27 @@ void UILoop::update() {
 
 void UILoop::draw() {
     // Clear screen
-    renderer.SetDrawColor(255, 255, 255, 255); // White background
+    renderer.SetDrawColor(255, 255, 255, 255);  // White background
     renderer.Clear();
 
     // Draw ground
-    renderer.SetDrawColor(0, 0, 0, 255); // Black color
+    renderer.SetDrawColor(0, 0, 0, 255);  // Black color
     renderer.DrawLine(0, GROUND_Y, SCREEN_WIDTH, GROUND_Y);
 
     // Determine the flip mode based on the last direction
     SDL_RendererFlip flip = animation.isFacingLeft() ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
     // Draw player sprite
-	renderer.Copy(
-			sprites,
-			Rect(animation.getSpriteX(), animation.getSpriteY(), SPRITE_WIDTH, SPRITE_HEIGHT),
-			Rect(static_cast<int>(animation.getPositionX()) - 25, static_cast<int>(animation.getPositionY()) - 44, 50, 50), // Nuevo rectangulo, se expande event sprite
-			0.0,
-			Point(0, 0),
-			flip
-		);
+    renderer.Copy(sprites,
+                  SDL2pp::Rect(animation.getSpriteX(), animation.getSpriteY(), SPRITE_WIDTH,
+                               SPRITE_HEIGHT),
+                  SDL2pp::Rect(static_cast<int>(animation.getPositionX()) - 25,
+                               static_cast<int>(animation.getPositionY()) - 44, 50,
+                               50),  // Nuevo rectangulo, se expande event sprite
+                  0.0, SDL2pp::Point(0, 0), flip);
 
-	// Show rendered frame
-	renderer.Present();
+    // Show rendered frame
+    renderer.Present();
 }
 
 void UILoop::frameDelay(unsigned int frameStart) {
@@ -94,7 +107,5 @@ void UILoop::frameDelay(unsigned int frameStart) {
         SDL_Delay(FRAME_DELAY - frameTime);
     }
 }
-
-
 
 UILoop::~UILoop() = default;
