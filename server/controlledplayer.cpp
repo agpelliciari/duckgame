@@ -7,22 +7,18 @@
 #include "./gameerror.h"
 
 
-ControlledPlayer::ControlledPlayer(): _is_open(false), count(0), ids() {}
-
-bool ControlledPlayer::operator==(const ControlledPlayer& other) const {
-    return this->ids[0] == other.ids[0] && this->ids[1] == other.ids[1];
-}
-
-
-// Sincronico, al inicio se modifica.
-void ControlledPlayer::setplayercount(const uint8_t count) {
+ControlledPlayer::ControlledPlayer(uint8_t count): _is_open(false), count(0), ids() {
     if (count > 2 || count == 0) {
         throw new GameError("Invalid player count %d ", count);
     }
     this->count = count;
 }
-uint8_t ControlledPlayer::playercount() const { return this->count; }
 
+bool ControlledPlayer::operator==(const ControlledPlayer& other) const {
+    return this->ids[0] == other.ids[0] && this->ids[1] == other.ids[1];
+}
+
+uint8_t ControlledPlayer::playercount() const { return this->count; }
 
 // Se sabe is sincronico, solo se modifican mientras no esta abierto.
 // Una vez empezado solo se lee.

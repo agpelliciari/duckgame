@@ -12,23 +12,30 @@ ServerProtocol::ServerProtocol(Socket& messenger): protocol(messenger), isactive
 ServerProtocol::ServerProtocol(Messenger* messenger): protocol(messenger), isactive(true) {}
 ServerProtocol::ServerProtocol(Protocol&& prot): protocol(std::move(prot)), isactive(true) {}
 
-
-bool ServerProtocol::recvplayercount(uint8_t* count) { return protocol.tryrecvbyte(count); }
+uint8_t ServerProtocol::recvplayercount() { return protocol.recvbyte(); }
 
 bool ServerProtocol::recvsignalstart() {
     uint8_t sign;
-    if (protocol.tryrecvbyte(&sign)) {
-        return (LobbyActionType)(sign) == LobbyActionType::STARTED_LOBBY;
-    }
-
-    return false;
+    return protocol.tryrecvbyte(&sign) && sign == ((uint8_t)LobbyActionType::STARTED_LOBBY);
 }
 
+bool ServerProtocol::recvlobbyinfo(lobby_info& out) {
+    uint8_t sign;
+    if (!protocol.tryrecvbyte(&sign)) {
+        return false;
+    }
+    if (LobbyActionType::CREATE_LOBBY == sign) {
+        out.action = CREATE_LOBBY;
+        return true;
+    }
 
-lobby_action ServerProtocol::recvlobbyaction() {
-    lobby_action out;
-    protocol.recvbytes(&out, sizeof(out));
-    return out;
+    if (LobbyActionType::JOIN_LOBBY == sign) {
+        out.action = JOIN_LOBBY;
+        out.attached_id = protocol.recvbyte();
+        return true;
+    }
+
+    throw ProtocolError("Invalid lobby info action!");
 }
 
 PlayerActionDTO ServerProtocol::recvaction() {

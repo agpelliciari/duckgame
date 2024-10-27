@@ -17,8 +17,6 @@ private:
     lobby_container lobbies;  // cppcheck-suppress unusedStructMember
     std::mutex mtx;
 
-    Match& findLobby(lobbyID id);
-
 public:
     // Default constructor
     LobbyContainer();
@@ -29,10 +27,12 @@ public:
     LobbyContainer& operator=(LobbyContainer&&) = delete;
 
     // Es necesrio trabajar con punteros al ser una coleccion
-    Match& newLobby(ControlledPlayer* anfitrion);
+    Match& newLobby();
 
     // Unirse a la lobby/match tira error si no existe. No espera a que se empieze.
-    Match& joinLobby(ControlledPlayer* player, lobbyID id);
+    Match& findLobby(lobbyID id);
+
+    ControlledPlayer& joinLobby(uint8_t count, Match& match);
 
     // Una vez empezada no se aceptan mas.
     void startLobby(Match& match);
