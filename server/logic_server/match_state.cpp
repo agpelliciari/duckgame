@@ -18,13 +18,7 @@ void MatchState::loop(PlayerContainer& observer) {
     while (running) {
         this->receive_commands();
         // this->execute_commands();
-        // this->send_results();
-        MatchDto dto = MatchDto(INICIADA, 1);
-
-        // AGREGA JUGADORES!!
-        match_logic.get_dtos(dto.players);
-
-        observer.updateState(dto);
+        this->send_results(observer);
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
     }
 }
@@ -45,6 +39,10 @@ void MatchState::execute_commands() {
 
 void MatchState::stop() { running = false; }
 
-void MatchState::send_results() {}
+void MatchState::send_results(PlayerContainer& observer) {
+    MatchDto dto = MatchDto(INICIADA, 1);
+    match_logic.get_dtos(dto.players);
+    observer.updateState(dto);
+}
 
 MatchState::~MatchState() {}
