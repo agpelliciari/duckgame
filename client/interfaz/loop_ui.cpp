@@ -1,6 +1,6 @@
 #include "loop_ui.h"
 
-UILoop::UILoop(ActionListener& dtoSender, SimpleEventListener& _events):
+UILoop::UILoop(ActionListener& dtoSender, SimpleEventListener& _events, bool twoPlayersFlag):
         sdlLib(SDL_INIT_VIDEO),
         window("UILOOP demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
                SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE),
@@ -9,10 +9,11 @@ UILoop::UILoop(ActionListener& dtoSender, SimpleEventListener& _events):
         animation(),
         sender(dtoSender),
         dto_events(_events),
-        is_running_(true) {}
+        isRunning_(true),
+        twoPlayers_(twoPlayersFlag) {}
 
 void UILoop::exec() {
-    while (is_running_) {
+    while (isRunning_) {
         unsigned int frameStart = SDL_GetTicks();
 
         handleEvent();
@@ -31,7 +32,7 @@ void UILoop::handleEvent() {
 
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
-            is_running_ = false;
+            isRunning_ = false;
             return;
         } else if (event.type == SDL_KEYDOWN) {
             switch (event.key.keysym.sym) {
@@ -49,13 +50,36 @@ void UILoop::handleEvent() {
                     break;
                 case SDLK_ESCAPE:
                 case SDLK_q:
-                    is_running_ = false;
+                    isRunning_ = false;
                     return;
+
+                    if (twoPlayers_) {
+                        case SDLK_d:
+                            action.type = MOVE_RIGHT;
+                            action.playerind = 1;
+                            break;
+                        case SDLK_a:
+                            action.type = MOVE_LEFT;
+                            action.playerind = 1;
+                            break;
+                        case SDLK_s:
+                            action.type = STAY_DOWN;
+                            action.playerind = 1;
+                            break;
+                        case SDLK_w:
+                            action.type = JUMP;
+                            action.playerind = 1;
+                            break;
+                    }
             }
         } else if (event.type == SDL_KEYUP) {
-            action.type = NONE;  //? Verificar flags del salto
+            action.type = NONE;
+            action.playerind = (event.key.keysym.sym == SDLK_d || event.key.keysym.sym == SDLK_a ||
+                                event.key.keysym.sym == SDLK_s || event.key.keysym.sym == SDLK_w) ?
+                                       1 :
+                                       0;
         }
-        sender.doaction(action);  //? Como obtengo el id del jugador
+        sender.doaction(action);
     }
 }
 

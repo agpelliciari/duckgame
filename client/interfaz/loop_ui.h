@@ -10,11 +10,13 @@
 
 #include "animation.h"
 #include "texture_container.h"
+
 #define SCREEN_HEIGHT 480
 #define SPRITE_WIDTH 32
 #define SPRITE_HEIGHT 32
 #define FRAME_DELAY 33
 #define GROUND_Y 400
+#define TWO_PLAYERS true
 
 class UILoop {
 private:
@@ -29,9 +31,12 @@ private:
     Animation animation;
 
     ActionListener& sender;
+
     SimpleEventListener& dto_events;
 
-    bool is_running_;  // cppcheck-suppress unusedStructMember
+    bool isRunning_;  // cppcheck-suppress unusedStructMember
+
+    bool twoPlayers_;  // cppcheck-suppress unusedStructMember
 
     // Event processing:
     // - If window is closed, or Q or Escape buttons are pressed, quit the
@@ -54,7 +59,7 @@ private:
     void frameDelay(unsigned int frameStart);
 
 public:
-    explicit UILoop(ActionListener& dtoSender, SimpleEventListener& _events);
+    UILoop(ActionListener& dtoSender, SimpleEventListener& _events, bool twoPlayersFlag);
 
     void exec();
 
