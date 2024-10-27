@@ -1,5 +1,6 @@
 add_subdirectory(menu/)
 add_subdirectory(core/)
+add_subdirectory(interfaz/)
 
 target_sources(taller_client
     PRIVATE
