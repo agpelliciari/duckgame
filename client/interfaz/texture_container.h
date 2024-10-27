@@ -13,7 +13,7 @@
 
 class TextureContainer {
 private:
-    std::vector<std::unique_ptr<SDL2pp::Texture>> textures;  // cppcheck-suppress unusedStructMember
+    std::vector<SDL2pp::Texture> textures;  // cppcheck-suppress unusedStructMember
 
 public:
     explicit TextureContainer(SDL2pp::Renderer& renderer);
