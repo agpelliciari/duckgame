@@ -33,7 +33,7 @@ void MatchLogic::move_player_left(int id) {
 
 void MatchLogic::move_player_right(int id) {
 
-    for (Player player: players) {
+    for (Player& player: players) {
         if (player.same_id(id)) {
             player.move_right();
         }
@@ -43,7 +43,7 @@ void MatchLogic::move_player_right(int id) {
 
 void MatchLogic::move_player_jump(int id) {
 
-    for (Player player: players) {
+    for (Player& player: players) {
         if (player.same_id(id)) {
             player.jump();
         }
@@ -53,7 +53,7 @@ void MatchLogic::move_player_jump(int id) {
 
 void MatchLogic::move_player_stay_down(int id) {
 
-    for (Player player: players) {
+    for (Player& player: players) {
         if (player.same_id(id)) {
             player.stay_down();
         }
@@ -66,6 +66,8 @@ void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos) {
         PlayerDTO dto = {0, false, 0, 0, TypeWeapon::NONE, false, false, TypeMoveAction::NONE};
         player.get_data(dto.id, dto.coord_x, dto.coord_y, dto.weapon, dto.helmet, dto.chest_armor,
                         dto.move_action);
+
+        std::cout << "DTO Player - id: " << dto.id << " - coordenadas x: " << dto.coord_x << std::endl;
         dtos.push_back(dto);
     }
 }
