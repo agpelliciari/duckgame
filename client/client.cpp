@@ -1,16 +1,14 @@
 #include "client.h"
 
+#include "./menuhandler.h"
+#include "./simpleeventlistener.h"
+
 Client::Client(int argc, char* argv[]): argc(argc), argv(argv) {
     setHostnameAndPort("127.0.0.1", "2048");
 }
 
-int Client::exec() {
-    GameLoop gameLoop(hostname.c_str(), port.c_str());
-    menuHandler menuHandler = {
-            [&gameLoop](uint8_t playercount) { gameLoop.startCreateLobby(playercount); },
-            [&gameLoop](uint8_t playercount, unsigned int idlobby) {
-                gameLoop.startJoinLobby(playercount, idlobby);
-            }};
+int Client::execMenu(GameLoop& gameLoop) {
+    LobbyClientSender menuHandler(gameLoop.initMenuHandler());
 
     QApplication application(argc, argv);
     //-------
@@ -33,6 +31,33 @@ int Client::exec() {
     MainWindow window(menuHandler);
     window.show();
     return application.exec();
+}
+int Client::exec() {
+    GameLoop gameLoop(hostname.c_str(), port.c_str());
+    if (execMenu(gameLoop) != 0) {
+        return 1;
+    }
+
+
+    // if (execGame(gameLoop) != 0) {
+    //     return 1;
+    // }
+
+    return execGame(gameLoop);
+}
+
+
+int Client::execGame(GameLoop& gameloop) {
+    // Crear event queue iniciar action listener y exec del uiloop!
+    SimpleEventListener listener;
+
+    GameActionSender actionListener(gameloop.initGame(listener));
+    actionListener.begin();
+
+    UILoop uiLoop(actionListener, listener);
+    uiLoop.exec();
+
+    return 0;
 }
 
 Client::~Client() {}

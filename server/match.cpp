@@ -8,7 +8,7 @@ Match::Match(lobbyID _id): id(_id), players(), looper() {}
 
 
 // Protected// friend accessed methods
-void Match::addPlayer(ControlledPlayer* player) { players.add(player); }
+ControlledPlayer& Match::addPlayers(uint8_t count) { return players.add(count); }
 
 void Match::init() {
     if (is_alive()) {
@@ -23,9 +23,11 @@ void Match::finish() {
     }
     stop();
     looper.stop();
-    players.removeAll();
-
     join();
+
+    // libera los players/listeners.
+    // Despues de joinear para asegurar no le removes nada en el medio.
+    players.removeAll();
 }
 
 

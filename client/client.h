@@ -5,9 +5,9 @@
 #include <QStyleFactory>
 #include <string>
 
+#include "client/core/game_loop.h"
+#include "interfaz/loop_ui.h"
 #include "menu/mainwindow.h"
-
-#include "game_loop.h"
 
 class Client {
 private:
@@ -17,10 +17,14 @@ private:
     std::string hostname = "";
     std::string port = "";
 
+    int execMenu(GameLoop& gameloop);
+    int execGame(GameLoop& gameloop);
+
 public:
     explicit Client(int argc, char* argv[]);
 
     int exec();
+
 
     Client(const Client&) = delete;
     Client& operator=(const Client&) = delete;
