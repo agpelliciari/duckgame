@@ -47,7 +47,7 @@ std::vector<player_id> PlayerContainer::getPlayers() {
 std::vector<player_id> PlayerContainer::updateState(const MatchDto& matchdto) {
     std::vector<player_id> disconnected;
 
-    std::cout << matchdto.parse() << std::endl;  // Show what happened on server.
+    // std::cout << matchdto.parse() << std::endl;  // Show what happened on server.
 
     for (auto playerit = players.begin(); playerit != players.end();) {
         if ((*playerit).recvstate(matchdto)) {
