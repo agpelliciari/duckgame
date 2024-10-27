@@ -41,15 +41,15 @@ MatchDto ClientProtocol::recvstate() {
     MatchDto res = MatchDto(out);
 
     int playercount = (int)protocol.recvbyte();
-    std::cout << "----> RECV PLAYER COUNT" << playercount << std::endl;
+    // std::cout << "----> RECV PLAYER COUNT" << playercount << std::endl;
 
     while (playercount > 0) {
         PlayerDTO player;
 
         protocol.recvbytes(&player, sizeof(player));
 
-        std::cout << "RECV PLAYER: " << player.id << "at:" << player.coord_x << ","
-                  << player.coord_y << std::endl;
+        // std::cout << "RECV PLAYER: " << player.id << "at:" << player.coord_x << ","
+        //           << player.coord_y << std::endl;
 
         res.players.push_back(player);
         playercount--;
