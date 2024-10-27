@@ -5,10 +5,20 @@
 SimpleEventListener::SimpleEventListener() {}
 
 void SimpleEventListener::matchUpdated(const MatchDto& state) {
-    std::cout << "MATCH STATE " << &state << std::endl;
+    updates.push(state);
+    std::cout << "NEW UPDATE MATCH STATE " << std::endl;
 }
 void SimpleEventListener::matchFinished(const MatchDto& final_info) {
-    std::cout << "MATCH FINISHED " << &final_info << std::endl;
+    updates.push(final_info);
+    updates.close();
+    // std::cout << "MATCH FINISHED " << &final_info << std::endl;
 }
 
-SimpleEventListener::~SimpleEventListener() {}
+bool SimpleEventListener::try_update(MatchDto& last_update) { return updates.try_pop(last_update); }
+bool SimpleEventListener::isclosed() { return updates.isclosed(); }
+void SimpleEventListener::disconnect() { updates.close(); }
+
+
+SimpleEventListener::~SimpleEventListener() {
+    // updates.close();
+}

@@ -49,13 +49,12 @@ int Client::exec() {
 
 int Client::execGame(GameLoop& gameloop) {
     // Crear event queue iniciar action listener y exec del uiloop!
-    std::cout << "FROM POINTER " << &gameloop << std::endl;
     SimpleEventListener listener;
 
     GameActionSender actionListener(gameloop.initGame(listener));
     actionListener.begin();
 
-    UILoop uiLoop(actionListener);
+    UILoop uiLoop(actionListener, listener);
     uiLoop.exec();
 
     return 0;

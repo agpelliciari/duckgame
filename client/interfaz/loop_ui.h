@@ -4,12 +4,12 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
-#include "../../common/dtosplayer.h"
-#include "../core/game_action_sender.h"
+#include "client/actionlistener.h"
+#include "client/simpleeventlistener.h"
+#include "common/dtosplayer.h"
 
 #include "animation.h"
 #include "texture_container.h"
-
 #define SCREEN_HEIGHT 480
 #define SPRITE_WIDTH 32
 #define SPRITE_HEIGHT 32
@@ -29,6 +29,7 @@ private:
     Animation animation;
 
     ActionListener& sender;
+    SimpleEventListener& dto_events;
 
     bool is_running_;  // cppcheck-suppress unusedStructMember
 
@@ -53,7 +54,7 @@ private:
     void frameDelay(unsigned int frameStart);
 
 public:
-    explicit UILoop(ActionListener& dtoSender);
+    explicit UILoop(ActionListener& dtoSender, SimpleEventListener& _events);
 
     void exec();
 

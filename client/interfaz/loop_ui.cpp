@@ -1,6 +1,6 @@
 #include "loop_ui.h"
 
-UILoop::UILoop(ActionListener& dtoSender):
+UILoop::UILoop(ActionListener& dtoSender, SimpleEventListener& _events):
         sdlLib(SDL_INIT_VIDEO),
         window("UILOOP demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
                SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE),
@@ -8,6 +8,7 @@ UILoop::UILoop(ActionListener& dtoSender):
         textures(renderer),
         animation(),
         sender(dtoSender),
+        dto_events(_events),
         is_running_(true) {}
 
 void UILoop::exec() {
