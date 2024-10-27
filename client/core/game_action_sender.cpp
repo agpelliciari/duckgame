@@ -130,6 +130,7 @@ void GameActionSender::run() {
             std::cout << "POP.. SEND Player ACTION? " << (int)dto.type << " " << (int)dto.playerind
                       << std::endl;
             protocol->sendaction(dto);
+            // std::cout << "ALO SEND ACTION?" << std::endl;
         }
     } catch (const ClosedQueue& error) {
         std::cerr << "Game action sender closed!" << std::endl;

@@ -11,7 +11,7 @@ void SimpleEventListener::matchUpdated(const MatchDto& state) {
 void SimpleEventListener::matchFinished(const MatchDto& final_info) {
     updates.push(final_info);
     updates.close();
-    // std::cout << "MATCH FINISHED " << &final_info << std::endl;
+    std::cout << "MATCH FINISHED " << std::endl;
 }
 
 bool SimpleEventListener::try_update(MatchDto& last_update) { return updates.try_pop(last_update); }
