@@ -17,7 +17,7 @@ void MatchState::loop(PlayerContainer& observer) {
     running = true;
     while (running) {
         this->receive_commands();
-        // this->execute_commands();
+        this->execute_commands();
         this->send_results(observer);
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
     }
@@ -25,8 +25,8 @@ void MatchState::loop(PlayerContainer& observer) {
 
 void MatchState::receive_commands() {
     ActionCommand command({PlayerActionType::NONE, 0, 0}, &this->match_logic);
-    if (acciones.pop_command(command)) {
-        command.execute();
+    while (acciones.pop_command(command)) {
+        commands.push_back(command);
     }
 }
 
