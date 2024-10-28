@@ -1,6 +1,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "createJoinWidget/createJoinWidget.h"
+#include "setLobbyIdWidget/setLobbyIdWidget.h"
+
 #include <QMainWindow>
 #include <functional>
 
@@ -28,10 +31,10 @@ public:
     ~MainWindow();
 
 private:
-    void onClickCreateLobby();
+    void mountCreateJoin();
 
-    void onClickJoinLobby();
+    void mountSetLobbyId();
 
-    void onClickQuit();
+    void unMountWidget();
 };
 #endif
