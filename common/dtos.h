@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 
+#include "./dtosobject.h"
 #include "./dtosplayer.h"
 
 enum LobbyActionType : uint8_t {
@@ -45,7 +46,8 @@ struct match_info_dto {
 class MatchDto {
 public:
     match_info_dto info;
-    std::vector<PlayerDTO> players;  // cppcheck-suppress unusedStructMember
+    std::vector<PlayerDTO> players;      // cppcheck-suppress unusedStructMember
+    std::vector<DynamicObjDTO> objects;  // cppcheck-suppress unusedStructMember
 
     explicit MatchDto(MatchStateType _estado, uint8_t _numronda): info({_estado, _numronda}) {}
     explicit MatchDto(match_info_dto _info): info(_info) {}
@@ -65,5 +67,22 @@ public:
         return result.str();
     }
 };
+
+struct PlayerStatDto {
+    uint8_t id;    // cppcheck-suppress unusedStructMember
+    uint8_t wins;  // cppcheck-suppress unusedStructMember
+};
+
+// Info estadisticas
+class StatInfoDto {
+public:
+    MatchStateType estado;
+    uint8_t numronda;
+    std::vector<PlayerStatDto> stats;  // cppcheck-suppress unusedStructMember
+
+    explicit StatInfoDto(MatchStateType _estado, uint8_t _numronda):
+            estado(_estado), numronda(_numronda) {}
+};
+
 
 #endif

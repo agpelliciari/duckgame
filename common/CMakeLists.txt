@@ -13,6 +13,7 @@ target_sources(taller_common
         protocolerror.h
         dtos.h
         dtosplayer.h
+        dtosobject.h
         thread.h
         queue.h
         
