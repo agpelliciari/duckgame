@@ -25,7 +25,7 @@ struct PlayerActionDTO {
 } __attribute__((packed));
 
 
-enum class TypeWeapon {
+enum class TypeWeapon : uint8_t {
     NONE,
     GRANADA,
     BANANA,
@@ -39,28 +39,39 @@ enum class TypeWeapon {
     SNIPER
 };
 
-enum class TypeMoveAction { NONE, MOVE_LEFT, MOVE_RIGHT, STAY_DOWN, JUMP, FLAP };
+enum class TypeMoveAction : uint8_t { NONE, MOVE_LEFT, MOVE_RIGHT, STAY_DOWN, JUMP, FLAP };
+
+enum class TypeDoingAction : uint8_t {
+    NOTHING,
+    SHOOTING,
+    FLAPPING
+};  // Capaz podria estar aca el flapping?
 
 struct PlayerDTO {
     int id;
-    bool is_alive;
     int coord_x;
     int coord_y;
     TypeWeapon weapon;
+    TypeMoveAction move_action;
+    TypeDoingAction doing_action;
+
+    bool is_alive;
     bool helmet;
     bool chest_armor;
-    TypeMoveAction move_action;
+    bool aiming_up;
 
     PlayerDTO(int id_, bool alive, int x, int y, TypeWeapon w, bool h, bool armor,
               TypeMoveAction action):
             id(id_),
-            is_alive(alive),
             coord_x(x),
             coord_y(y),
             weapon(w),
+            move_action(action),
+            doing_action(TypeDoingAction::NOTHING),
+            is_alive(alive),
             helmet(h),
             chest_armor(armor),
-            move_action(action) {}
+            aiming_up(false) {}
 
     PlayerDTO() {}  // Para read.
 };                  //__attribute__((packed));
