@@ -13,9 +13,11 @@
 #define ACTION_READ "Read"
 
 
-LobbyClientSender::LobbyClientSender(ClientProtocol& _protocol): protocol(&_protocol) {}
+LobbyClientSender::LobbyClientSender(ClientProtocol& _protocol, GameContext& _context):
+        protocol(&_protocol), context(_context) {}
 
-LobbyClientSender::LobbyClientSender(LobbyClientSender&& other): protocol(other.protocol) {
+LobbyClientSender::LobbyClientSender(LobbyClientSender&& other):
+        protocol(other.protocol), context(other.context) {
     other.protocol = NULL;
 }
 LobbyClientSender& LobbyClientSender::operator=(LobbyClientSender&& other) {
@@ -24,6 +26,7 @@ LobbyClientSender& LobbyClientSender::operator=(LobbyClientSender&& other) {
     }
 
     this->protocol = other.protocol;
+    this->context = other.context;
     other.protocol = NULL;
 
     return *this;

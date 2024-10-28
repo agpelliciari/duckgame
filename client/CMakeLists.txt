@@ -16,4 +16,5 @@ target_sources(taller_client
           client.h
           eventlistener.h
           simpleeventlistener.h
+          gamecontext.h
     )
