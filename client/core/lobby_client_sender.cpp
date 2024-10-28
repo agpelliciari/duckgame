@@ -19,6 +19,7 @@ LobbyClientSender::LobbyClientSender(ClientProtocol& _protocol, GameContext& _co
 LobbyClientSender::LobbyClientSender(LobbyClientSender&& other):
         protocol(other.protocol), context(other.context) {
     other.protocol = NULL;
+    std::cout << "MOVED CLIENT SENDER OWN " << protocol << std::endl;
 }
 LobbyClientSender& LobbyClientSender::operator=(LobbyClientSender&& other) {
     if (protocol == other.protocol) {
@@ -95,6 +96,8 @@ int LobbyClientSender::getcount() {
 
 
 LobbyClientSender::~LobbyClientSender() {
-    stop();
-    join();
+    if (_keep_running) {
+        stop();
+        join();
+    }
 }
