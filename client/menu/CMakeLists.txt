@@ -1,5 +1,6 @@
 add_subdirectory(createJoinWidget/)
 add_subdirectory(setLobbyIdWidget/)
+add_subdirectory(setSoloDuoWidget/)
 
 target_sources(taller_client
     PRIVATE

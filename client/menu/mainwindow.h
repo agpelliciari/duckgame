@@ -3,6 +3,7 @@
 
 #include "createJoinWidget/createJoinWidget.h"
 #include "setLobbyIdWidget/setLobbyIdWidget.h"
+#include "setSoloDuoWidget/setSoloDuoWidget.h"
 
 #include <QMainWindow>
 #include <functional>
@@ -34,6 +35,8 @@ private:
     void mountCreateJoin();
 
     void mountSetLobbyId();
+
+    void mountSetSoloDuo();
 
     void unMountWidget();
 };

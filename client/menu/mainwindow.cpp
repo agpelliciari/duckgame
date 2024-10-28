@@ -14,7 +14,9 @@ void MainWindow::mountCreateJoin() {
     QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
 
     CreateJoinHandler handler;
-    handler.onClickCreateGame = []() {
+    handler.onClickCreateGame = [this]() {
+        unMountWidget();
+        mountSetSoloDuo();
     };
 
     handler.onClickJoinGame = [this]() {
@@ -45,6 +47,26 @@ void MainWindow::mountSetLobbyId() {
 
     SetLobbyIdWidget* setLobbyIdWidget = new SetLobbyIdWidget(handler, ui->centralwidget);
     layout->insertWidget(0, setLobbyIdWidget);
+}
+
+void MainWindow::mountSetSoloDuo() {
+    QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
+
+    SetSoloDuoHandler handler;
+
+    handler.onClickSolo = []() {
+    };
+
+    handler.onClickDuo = []() {
+    };
+
+    handler.onClickCancel = [this]() {
+        unMountWidget();
+        mountCreateJoin();
+    };
+
+    SetSoloDuoWidget* setSoloDuoWidget = new SetSoloDuoWidget(handler, ui->centralwidget);
+    layout->insertWidget(0, setSoloDuoWidget);
 }
 
 void MainWindow::unMountWidget() {
