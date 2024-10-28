@@ -20,6 +20,7 @@ Match& LobbyControl::resolveMatch(bool* isanfitrion) {
         Match& newlobby = lobbies.newLobby();
         std::cerr << " created lobby id: " << (int)newlobby.getID() << std::endl;
         // Send back id...
+        protocol.notifyid(newlobby.getID());
 
         return newlobby;
     }
@@ -32,6 +33,11 @@ ControlledPlayer& LobbyControl::waitStart(Match& match) {
     uint8_t playercount = protocol.recvplayercount();
 
     ControlledPlayer& player = lobbies.joinLobby(playercount, match);
+    protocol.notifyid(player.getid(0));
+    if (player.playercount() == 2) {
+        protocol.notifyid(player.getid(1));
+    }
+
     std::cerr << "joined " << player.toString() << " to lobby " << (int)match.getID() << std::endl;
 
     player.open();
@@ -41,9 +47,14 @@ ControlledPlayer& LobbyControl::start(Match& match) {
     uint8_t playercount = protocol.recvplayercount();
 
     ControlledPlayer& player = lobbies.joinLobby(playercount, match);
+    protocol.notifyid(player.getid(0));
+    if (player.playercount() == 2) {
+        protocol.notifyid(player.getid(1));
+    }
 
     std::cerr << "joined " << player.toString() << " anfitrion of lobby " << (int)match.getID()
               << std::endl;
+
 
     // And wait..
     if (!protocol.recvsignalstart()) {

@@ -4,27 +4,30 @@
 #include <memory>
 #include <string>
 
-#include "./joinlobbymode.h"
-#include "./lobbycreatemode.h"
-#include "./lobbymode.h"
 #include "client/gamecontext.h"
-#include "client/menuhandler.h"
 #include "common/clientprotocol.h"
 #include "common/core/socket.h"
 #include "common/thread.h"
 
 // Clase que encapsula al protocol y mantendria el estado del juego
 // Proporcionado una interfaz para acciones del usuario.
-class LobbyClientSender: private Thread, public MenuHandler {
+class LobbyClientSender: private Thread {
+    // typedef std::unique_ptr<LobbyMode> lobby_mode;
+    typedef void (LobbyClientSender::*lobby_runnable)();
+
 protected:
-    ClientProtocol* protocol;         // cppcheck-suppress unusedStructMember
-    std::unique_ptr<LobbyMode> mode;  // cppcheck-suppress unusedStructMember
-    GameContext& context;             // cppcheck-suppress unusedStructMember
+    ClientProtocol* protocol;  // cppcheck-suppress unusedStructMember
+    lobby_runnable mode;       // cppcheck-suppress unusedStructMember
+    GameContext& context;      // cppcheck-suppress unusedStructMember
+
+    void handleJoin();
+    void handleCreate();
+
 public:
-    void joinLobby(uint8_t playercount, unsigned int idlobby) override;
-    void createLobby(uint8_t playercount) override;
-    void cancel() override;
-    void doaction(const lobby_action& action) override;
+    void joinLobby(bool dualplay, unsigned int idlobby);
+    void createLobby(bool dualplay);
+    void cancel();
+    void doaction(const lobby_action& action);
 
     // Los default sin pasar por socket/protocol.
     explicit LobbyClientSender(ClientProtocol& _protocol, GameContext& _context);

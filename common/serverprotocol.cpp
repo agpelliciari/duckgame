@@ -38,6 +38,9 @@ bool ServerProtocol::recvlobbyinfo(lobby_info& out) {
     throw ProtocolError("Invalid lobby info action!");
 }
 
+void ServerProtocol::notifyid(uint8_t id) { protocol.sendbyte(id); }
+
+
 PlayerActionDTO ServerProtocol::recvaction() {
     PlayerActionDTO action;
     if (!protocol.tryrecvbytes(&action, sizeof(action))) {

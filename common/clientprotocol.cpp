@@ -17,21 +17,30 @@ void ClientProtocol::sendaction(PlayerActionDTO& action) {
     protocol.sendbytes(&action, sizeof(action));
 }
 
-void ClientProtocol::joinLobby(const uint8_t playercount, const uint8_t id_match) {
-    // Primero la info sobre que lobby..
-    uint8_t info[3] = {LobbyActionType::JOIN_LOBBY, id_match, 0};
-
-    info[2] = playercount;  // Despues el playercount.
-    protocol.sendbytes(&info, 3);
-}
-void ClientProtocol::createLobby(const uint8_t playercount) {
-
-    uint8_t info[2] = {LobbyActionType::CREATE_LOBBY, playercount};
+void ClientProtocol::joinLobby(const uint8_t id_match) {
+    uint8_t info[2] = {LobbyActionType::JOIN_LOBBY, id_match};
     protocol.sendbytes(&info, 2);
 }
+uint8_t ClientProtocol::createLobby() {
+    protocol.sendbyte(LobbyActionType::CREATE_LOBBY);
+    return protocol.recvbyte();
+}
+
+uint8_t ClientProtocol::setsingleplay() {
+    protocol.sendbyte(1);        // Send del playercount == 1
+    return protocol.recvbyte();  // id player 1
+}
+
+uint8_t ClientProtocol::setdualplay(uint8_t* player1) {
+
+    protocol.sendbyte(2);  // Send del playercount == 2
+    *player1 = protocol.recvbyte();
+
+    return protocol.recvbyte();
+}
+
 
 void ClientProtocol::startlobby() { protocol.sendbyte(LobbyActionType::STARTED_LOBBY); }
-
 
 MatchDto ClientProtocol::recvstate() {
     // Primero recibi info general
@@ -41,7 +50,6 @@ MatchDto ClientProtocol::recvstate() {
     MatchDto res = MatchDto(out);
 
     int playercount = (int)protocol.recvbyte();
-    // std::cout << "----> RECV PLAYER COUNT" << playercount << std::endl;
 
     while (playercount > 0) {
         PlayerDTO player;

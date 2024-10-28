@@ -6,6 +6,7 @@ target_sources(taller_client
     PRIVATE
     # .cpp files
           client.cpp
+          menuhandler.cpp
           main.cpp
           simpleeventlistener.cpp
 

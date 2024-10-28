@@ -8,7 +8,7 @@ Client::Client(int argc, char* argv[]): argc(argc), argv(argv) {
 }
 
 int Client::execMenu(GameLoop& gameLoop, GameContext& context) {
-    LobbyClientSender menuHandler(gameLoop.initLobbyClient(context));
+    MenuHandler menuHandler(gameLoop.initLobbyClient(context));
 
     QApplication application(argc, argv);
     //-------
@@ -55,12 +55,12 @@ int Client::execGame(GameLoop& gameloop, const GameContext& context) {
     GameActionSender actionListener(gameloop.initGame(listener));
     actionListener.begin();
 
-    if (context.second_player == NOT_DEFINED_FLAG) {
-        // Solo un jugador
-        std::cout << "Un solo jugador!!!\n %d" << context.first_player << std::endl;
+    if (context.dualplay) {
+        std::cout << "Dos jugadores!!! " << (int)context.first_player << " y "
+                  << (int)context.second_player << std::endl;
     } else {
-        std::cout << "Dos jugadores!!!\n %d" << context.first_player << " " << context.second_player
-                  << std::endl;
+        // Solo un jugador
+        std::cout << "Un solo jugador!!! " << (int)context.first_player << std::endl;
     }
 
     UILoop uiLoop(actionListener, listener);
