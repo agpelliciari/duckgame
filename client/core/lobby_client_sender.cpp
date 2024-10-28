@@ -15,10 +15,10 @@
 
 
 LobbyClientSender::LobbyClientSender(ClientProtocol& _protocol, GameContext& _context):
-        protocol(&_protocol), mode(NULL), context(_context), playercount(0) {}
+        protocol(&_protocol), mode(NULL), context(_context) {}
 
 LobbyClientSender::LobbyClientSender(LobbyClientSender&& other):
-        protocol(other.protocol), mode(NULL), context(other.context), playercount(0) {
+        protocol(other.protocol), mode(NULL), context(other.context) {
     other.protocol = NULL;
     std::cout << "MOVED CLIENT SENDER OWN " << protocol << std::endl;
 }
@@ -29,7 +29,6 @@ LobbyClientSender& LobbyClientSender::operator=(LobbyClientSender&& other) {
 
     this->protocol = other.protocol;
     this->mode = other.mode;
-    this->playercount = other.playercount;
     this->context = other.context;
     other.protocol = NULL;
 
@@ -43,13 +42,27 @@ void LobbyClientSender::doaction(const lobby_action& action) {
 
 void LobbyClientSender::handleJoin() {
     std::cerr << "lobby id to join: " << (int)context.id_lobby << std::endl;
-    protocol->joinLobby(playercount, context.id_lobby);
+    protocol->joinLobby(context.id_lobby);
+
+    if (context.dualplay) {
+        context.second_player = protocol->setdualplay(&context.first_player);
+    } else {
+        context.first_player = protocol->setsingleplay();
+        context.second_player = 0;
+    }
 }
 
 void LobbyClientSender::handleCreate() {
-    protocol->createLobby(playercount);
+    uint8_t id_lobby = protocol->createLobby();
 
-    std::cerr << "press enter to start the match!" << std::endl;
+    if (context.dualplay) {
+        context.second_player = protocol->setdualplay(&context.first_player);
+    } else {
+        context.first_player = protocol->setsingleplay();
+        context.second_player = 0;
+    }
+
+    std::cerr << "press enter to start the match! lobby id: " << (int)id_lobby << std::endl;
 
     std::string action;
     if (!(std::cin >> action)) {  // Could not read if new lobby.
@@ -59,21 +72,21 @@ void LobbyClientSender::handleCreate() {
     protocol->startlobby();
 }
 
-void LobbyClientSender::createLobby(uint8_t playercount) {
+void LobbyClientSender::createLobby(bool dualplay) {
     if (_is_alive) {  // already running!!
         throw LibError(1, "Already running client!! finish it first!");
     }
-    this->playercount = playercount;
+    context.dualplay = dualplay;
     mode = &LobbyClientSender::handleCreate;
     start();
 }
 
-void LobbyClientSender::joinLobby(uint8_t playercount, unsigned int idlobby) {
+void LobbyClientSender::joinLobby(bool dualplay, unsigned int idlobby) {
     if (_is_alive) {  // already running!!
         throw LibError(1, "Already running client!! finish it first!");
     }
 
-    this->playercount = playercount;
+    context.dualplay = dualplay;
 
     context.id_lobby = idlobby;
     mode = &LobbyClientSender::handleJoin;

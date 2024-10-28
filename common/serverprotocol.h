@@ -34,7 +34,9 @@ public:
     ServerProtocol& operator=(ServerProtocol&&) = delete;
 
     uint8_t recvplayercount();
+
     bool recvlobbyinfo(lobby_info& out);
+    void notifyid(uint8_t id);
 
     bool recvsignalstart();
 

@@ -1,7 +1,7 @@
 #ifndef GAME_CONTEXT_H
 #define GAME_CONTEXT_H
 
-#define NOT_DEFINED_FLAG -1
+#include <cstdint>
 #include <vector>
 
 #include "common/dtosobject.h"
@@ -9,8 +9,9 @@
 struct GameContext {
     unsigned int id_lobby;  // cppcheck-suppress unusedStructMember
 
-    int first_player;   // cppcheck-suppress unusedStructMember
-    int second_player;  // cppcheck-suppress unusedStructMember
+    bool dualplay;          // cppcheck-suppress unusedStructMember
+    uint8_t first_player;   // cppcheck-suppress unusedStructMember
+    uint8_t second_player;  // cppcheck-suppress unusedStructMember
 
     int map_size_x;                // cppcheck-suppress unusedStructMember
     int map_size_y;                // cppcheck-suppress unusedStructMember
@@ -19,8 +20,9 @@ struct GameContext {
     // uint8_t cantidadjugadores; // No hace falta? El dto match lo dira
     GameContext():
             id_lobby(0),
-            first_player(NOT_DEFINED_FLAG),
-            second_player(NOT_DEFINED_FLAG),
+            dualplay(true),
+            first_player(0),
+            second_player(0),
             map_size_x(50),
             map_size_y(20) {}
 };

@@ -6,9 +6,9 @@ MenuHandler::MenuHandler(LobbyClientSender&& _sender): sender(std::move(_sender)
 
 // Seguro se separe el player count a futuro !! en otro metodo setplayercount!
 void MenuHandler::joinLobby(uint8_t playercount, unsigned int idlobby) {
-    sender.joinLobby(playercount, idlobby);
+    sender.joinLobby(playercount == 2, idlobby);
 }
-void MenuHandler::createLobby(uint8_t playercount) { sender.createLobby(playercount); }
+void MenuHandler::createLobby(uint8_t playercount) { sender.createLobby(playercount == 2); }
 
 void MenuHandler::cancel() {
     sender.cancel();  // Seguro innecesario?! o bue depende

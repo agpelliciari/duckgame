@@ -19,14 +19,13 @@ protected:
     ClientProtocol* protocol;  // cppcheck-suppress unusedStructMember
     lobby_runnable mode;       // cppcheck-suppress unusedStructMember
     GameContext& context;      // cppcheck-suppress unusedStructMember
-    uint8_t playercount;       // cppcheck-suppress unusedStructMember
 
     void handleJoin();
     void handleCreate();
 
 public:
-    void joinLobby(uint8_t playercount, unsigned int idlobby);
-    void createLobby(uint8_t playercount);
+    void joinLobby(bool dualplay, unsigned int idlobby);
+    void createLobby(bool dualplay);
     void cancel();
     void doaction(const lobby_action& action);
 

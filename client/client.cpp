@@ -55,12 +55,12 @@ int Client::execGame(GameLoop& gameloop, const GameContext& context) {
     GameActionSender actionListener(gameloop.initGame(listener));
     actionListener.begin();
 
-    if (context.second_player == NOT_DEFINED_FLAG) {
-        // Solo un jugador
-        std::cout << "Un solo jugador!!! " << context.first_player << std::endl;
+    if (context.dualplay) {
+        std::cout << "Dos jugadores!!! " << (int)context.first_player << " y "
+                  << (int)context.second_player << std::endl;
     } else {
-        std::cout << "Dos jugadores!!! " << context.first_player << " y " << context.second_player
-                  << std::endl;
+        // Solo un jugador
+        std::cout << "Un solo jugador!!! " << (int)context.first_player << std::endl;
     }
 
     UILoop uiLoop(actionListener, listener);
