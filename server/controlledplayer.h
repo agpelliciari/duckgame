@@ -31,7 +31,7 @@ protected:
     std::mutex mtx;
 
 public:
-    ControlledPlayer();
+    explicit ControlledPlayer(uint8_t _count);
 
     // Por ahora tambien nos escapamos del move.
     ControlledPlayer(ControlledPlayer&&) = delete;
@@ -45,7 +45,6 @@ public:
     // No hace falta perse el operador se podria usar el getter de id.
     bool operator==(const ControlledPlayer& other) const;
 
-    void setplayercount(const uint8_t count);
     uint8_t playercount() const;
 
     // Seteado de id.

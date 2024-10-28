@@ -18,7 +18,9 @@ GameLoop::GameLoop(const char* service): GameLoop(NULL, service) {}
 // Permitamos el mov desde uno existente para mayor flexibilidad?
 GameLoop::GameLoop(Protocol&& prot): protocol(std::move(prot)) {}
 
-LobbyClientSender GameLoop::initMenuHandler() { return LobbyClientSender(protocol); }
+LobbyClientSender GameLoop::initLobbyClient(GameContext& context) {
+    return LobbyClientSender(protocol, context);
+}
 GameActionSender GameLoop::initGame(EventListener& listener) {
     return GameActionSender(protocol, listener);
 }

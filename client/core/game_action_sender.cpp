@@ -127,8 +127,9 @@ void GameActionSender::run() {
 
         while (_keep_running) {
             PlayerActionDTO dto = actions.pop();
-            std::cout << "POP.. SEND Player ACTION? " << (int)dto.type << " " << (int)dto.playerind
-                      << std::endl;
+            // std::cout << "POP.. SEND Player ACTION? " << (int)dto.type << " " <<
+            // (int)dto.playerind
+            //           << std::endl;
             protocol->sendaction(dto);
             // std::cout << "ALO SEND ACTION?" << std::endl;
         }

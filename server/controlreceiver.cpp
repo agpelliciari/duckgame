@@ -47,9 +47,11 @@ void ControlReceiver::playOn(const ControlledPlayer& player, Match& match) {
     }
 }
 void ControlReceiver::run() {
-    ControlledPlayer player;
+    LobbyControl lobby(lobbies, protocol);
+
     bool isanfitrion;
-    Match& match = LobbyControl(lobbies).handleNewClient(player, protocol, &isanfitrion);
+    Match& match = lobby.resolveMatch(&isanfitrion);
+    ControlledPlayer& player = isanfitrion ? lobby.start(match) : lobby.waitStart(match);
 
     // Inicia notifier.
     ControlNotifier notifier(player, protocol);

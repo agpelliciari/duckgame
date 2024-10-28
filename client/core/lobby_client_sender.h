@@ -7,6 +7,7 @@
 #include "./joinlobbymode.h"
 #include "./lobbycreatemode.h"
 #include "./lobbymode.h"
+#include "client/gamecontext.h"
 #include "client/menuhandler.h"
 #include "common/clientprotocol.h"
 #include "common/core/socket.h"
@@ -18,7 +19,7 @@ class LobbyClientSender: private Thread, public MenuHandler {
 protected:
     ClientProtocol* protocol;         // cppcheck-suppress unusedStructMember
     std::unique_ptr<LobbyMode> mode;  // cppcheck-suppress unusedStructMember
-
+    GameContext& context;             // cppcheck-suppress unusedStructMember
 public:
     void joinLobby(uint8_t playercount, unsigned int idlobby) override;
     void createLobby(uint8_t playercount) override;
@@ -26,7 +27,7 @@ public:
     void doaction(const lobby_action& action) override;
 
     // Los default sin pasar por socket/protocol.
-    explicit LobbyClientSender(ClientProtocol& _protocol);
+    explicit LobbyClientSender(ClientProtocol& _protocol, GameContext& _context);
 
     LobbyClientSender(LobbyClientSender&&);
     LobbyClientSender& operator=(LobbyClientSender&&);

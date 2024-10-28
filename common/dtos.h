@@ -6,18 +6,28 @@
 #include <string>
 #include <vector>
 
+#include "./dtosobject.h"
 #include "./dtosplayer.h"
 
 enum LobbyActionType : uint8_t {
-    NEW_LOBBY = 0x16,
+    // Tipos acciones para unirse/salir ademas
+    CREATE_LOBBY = 0x16,
     JOIN_LOBBY = 0x17,
+    LEAVE_LOBBY = 0x20,
+    // Para empezar/cancelar
     STARTED_LOBBY = 0x18,
-    // CANCELED_LOBBY = 0x19
+    CANCEL_LOBBY = 0x19
+    // Tipos de acciones de configuracion?
 };
 
-struct lobby_action {
+struct lobby_info {
     LobbyActionType action;
     uint8_t attached_id;  // Podria ser el del lobby o uno para seleccionar el mapa.
+} __attribute__((packed));
+
+struct lobby_action {
+    LobbyActionType type;
+    uint8_t info;  // Podria ser el del lobby o uno para seleccionar el mapa.
 } __attribute__((packed));
 
 
@@ -36,7 +46,8 @@ struct match_info_dto {
 class MatchDto {
 public:
     match_info_dto info;
-    std::vector<PlayerDTO> players;  // cppcheck-suppress unusedStructMember
+    std::vector<PlayerDTO> players;      // cppcheck-suppress unusedStructMember
+    std::vector<DynamicObjDTO> objects;  // cppcheck-suppress unusedStructMember
 
     explicit MatchDto(MatchStateType _estado, uint8_t _numronda): info({_estado, _numronda}) {}
     explicit MatchDto(match_info_dto _info): info(_info) {}
@@ -56,5 +67,22 @@ public:
         return result.str();
     }
 };
+
+struct PlayerStatDto {
+    uint8_t id;    // cppcheck-suppress unusedStructMember
+    uint8_t wins;  // cppcheck-suppress unusedStructMember
+};
+
+// Info estadisticas
+class StatInfoDto {
+public:
+    MatchStateType estado;
+    uint8_t numronda;
+    std::vector<PlayerStatDto> stats;  // cppcheck-suppress unusedStructMember
+
+    explicit StatInfoDto(MatchStateType _estado, uint8_t _numronda):
+            estado(_estado), numronda(_numronda) {}
+};
+
 
 #endif

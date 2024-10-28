@@ -10,13 +10,11 @@
 //#include "./lobbymode.h"
 //#include "common/thread.h"
 
-#include "common/clientprotocol.h"
-
-//#include "client/menumanager.h"
-//#include "client/actionlistener.h"
 #include "./game_action_sender.h"
 #include "./lobby_client_sender.h"
 #include "client/eventlistener.h"
+#include "client/gamecontext.h"
+#include "common/clientprotocol.h"
 
 // Clase que encapsula al protocol y mantendria el estado del juego
 // Proporcionado una interfaz para acciones del usuario.
@@ -37,7 +35,7 @@ public:
     GameLoop(GameLoop&&) = delete;
     GameLoop& operator=(GameLoop&&) = delete;
 
-    LobbyClientSender initMenuHandler();
+    LobbyClientSender initLobbyClient(GameContext& context);
     GameActionSender initGame(EventListener& listener);
     ~GameLoop();
 };

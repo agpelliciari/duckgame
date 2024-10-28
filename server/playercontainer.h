@@ -11,7 +11,7 @@
 // Contenedor/monitor de los players activos en el match.
 class PlayerContainer {
 public:
-    typedef std::list<ControlledPlayer*> player_container;
+    typedef std::list<ControlledPlayer> player_container;
 
 private:
     player_container players;  // cppcheck-suppress unusedStructMember
@@ -26,7 +26,7 @@ public:
     PlayerContainer& operator=(PlayerContainer&&) = delete;
 
     // Es necesrio trabajar con punteros al ser una coleccion
-    void add(ControlledPlayer* player);
+    ControlledPlayer& add(uint8_t countplayers);
 
     // Remueve todos los restantes. Normalmente no deberia haber, ya se deberian haber desconectado.
     void removeAll();

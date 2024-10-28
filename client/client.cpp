@@ -7,8 +7,8 @@ Client::Client(int argc, char* argv[]): argc(argc), argv(argv) {
     setHostnameAndPort("127.0.0.1", "2048");
 }
 
-int Client::execMenu(GameLoop& gameLoop) {
-    LobbyClientSender menuHandler(gameLoop.initMenuHandler());
+int Client::execMenu(GameLoop& gameLoop, GameContext& context) {
+    LobbyClientSender menuHandler(gameLoop.initLobbyClient(context));
 
     QApplication application(argc, argv);
     //-------
@@ -33,8 +33,9 @@ int Client::execMenu(GameLoop& gameLoop) {
     return application.exec();
 }
 int Client::exec() {
+    GameContext context;
     GameLoop gameLoop(hostname.c_str(), port.c_str());
-    if (execMenu(gameLoop) != 0) {
+    if (execMenu(gameLoop, context) != 0) {
         return 1;
     }
 
@@ -43,18 +44,26 @@ int Client::exec() {
     //     return 1;
     // }
 
-    return execGame(gameLoop);
+    return execGame(gameLoop, context);
 }
 
 
-int Client::execGame(GameLoop& gameloop) {
+int Client::execGame(GameLoop& gameloop, const GameContext& context) {
     // Crear event queue iniciar action listener y exec del uiloop!
     SimpleEventListener listener;
 
     GameActionSender actionListener(gameloop.initGame(listener));
     actionListener.begin();
 
-    UILoop uiLoop(actionListener, listener, TWO_PLAYERS);
+    if (context.second_player == NOT_DEFINED_FLAG) {
+        // Solo un jugador
+        std::cout << "Un solo jugador!!!\n %d" << context.first_player << std::endl;
+    } else {
+        std::cout << "Dos jugadores!!!\n %d" << context.first_player << " " << context.second_player
+                  << std::endl;
+    }
+
+    UILoop uiLoop(actionListener, listener);
     uiLoop.exec();
 
     return 0;
