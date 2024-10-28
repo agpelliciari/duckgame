@@ -9,15 +9,24 @@
 #include "./dtosplayer.h"
 
 enum LobbyActionType : uint8_t {
-    NEW_LOBBY = 0x16,
+    // Tipos acciones para unirse/salir ademas
+    CREATE_LOBBY = 0x16,
     JOIN_LOBBY = 0x17,
+    LEAVE_LOBBY = 0x20,
+    // Para empezar/cancelar
     STARTED_LOBBY = 0x18,
-    // CANCELED_LOBBY = 0x19
+    CANCEL_LOBBY = 0x19
+    // Tipos de acciones de configuracion?
 };
 
-struct lobby_action {
+struct lobby_info {
     LobbyActionType action;
     uint8_t attached_id;  // Podria ser el del lobby o uno para seleccionar el mapa.
+} __attribute__((packed));
+
+struct lobby_action {
+    LobbyActionType type;
+    uint8_t info;  // Podria ser el del lobby o uno para seleccionar el mapa.
 } __attribute__((packed));
 
 

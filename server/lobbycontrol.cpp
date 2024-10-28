@@ -5,47 +5,54 @@
 
 #include "common/protocolerror.h"
 
-LobbyControl::LobbyControl(LobbyContainer& _lobbies): lobbies(_lobbies) {}
+LobbyControl::LobbyControl(LobbyContainer& _lobbies, ServerProtocol& _protocol):
+        lobbies(_lobbies), protocol(_protocol) {}
 
-Match& LobbyControl::handleNewClient(ControlledPlayer& player, ServerProtocol& protocol,
-                                     bool* isanfitrion) {
-    uint8_t playercount;
-    if (!protocol.recvplayercount(&playercount)) {
-        throw ProtocolError("Did not receive player count for controller!");
+Match& LobbyControl::resolveMatch(bool* isanfitrion) {
+    lobby_info info;
+    if (!protocol.recvlobbyinfo(info)) {
+        throw ProtocolError("Client aborted before sending lobby info");
     }
-    player.setplayercount(playercount);
-    player.open();
 
-    lobby_action info = protocol.recvlobbyaction();
-
-    if (info.action == NEW_LOBBY) {
+    if (info.action == CREATE_LOBBY) {
         *isanfitrion = true;
-        return handleNewLobby(player, protocol);
-    }
-    *isanfitrion = false;
-    return handleJoinLobby(info.attached_id, player);  //, protocol);
-}
 
-Match& LobbyControl::handleNewLobby(ControlledPlayer& player, ServerProtocol& protocol) {
-    Match& newlobby = lobbies.newLobby(&player);
-    std::cerr << player.toString() << " created lobby id: " << (int)newlobby.getID() << std::endl;
+        Match& newlobby = lobbies.newLobby();
+        std::cerr << " created lobby id: " << (int)newlobby.getID() << std::endl;
+        // Send back id...
 
-    // Send back lobby id.
-
-    // And wait..
-    if (protocol.recvsignalstart()) {
-        lobbies.startLobby(newlobby);
-        std::cerr << "Started lobby id: " << (int)newlobby.getID() << std::endl;
         return newlobby;
     }
-
-    throw ProtocolError("Did not receive new lobby start match signal");
+    *isanfitrion = false;
+    std::cerr << " JOIN lobby id: " << (int)info.attached_id << std::endl;
+    return lobbies.findLobby(info.attached_id);
 }
 
-Match& LobbyControl::handleJoinLobby(unsigned int id,
-                                     ControlledPlayer& player) {  //, ServerProtocol& protocol) {
-    Match& joinedlobby = lobbies.joinLobby(&player, id);
+ControlledPlayer& LobbyControl::waitStart(Match& match) {
+    uint8_t playercount = protocol.recvplayercount();
 
-    std::cerr << player.toString() << " joined lobby " << (int)joinedlobby.getID() << std::endl;
-    return joinedlobby;
+    ControlledPlayer& player = lobbies.joinLobby(playercount, match);
+    std::cerr << "joined " << player.toString() << " to lobby " << (int)match.getID() << std::endl;
+
+    player.open();
+    return player;
+}
+ControlledPlayer& LobbyControl::start(Match& match) {
+    uint8_t playercount = protocol.recvplayercount();
+
+    ControlledPlayer& player = lobbies.joinLobby(playercount, match);
+
+    std::cerr << "joined " << player.toString() << " anfitrion of lobby " << (int)match.getID()
+              << std::endl;
+
+    // And wait..
+    if (!protocol.recvsignalstart()) {
+        throw ProtocolError("Did not receive new lobby start match signal");
+    }
+
+    player.open();
+    lobbies.startLobby(match);
+    std::cerr << "Started MATCH id: " << (int)match.getID() << std::endl;
+
+    return player;
 }

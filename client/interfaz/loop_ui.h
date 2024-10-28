@@ -4,8 +4,12 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
-#include "animation.h"
+#include "client/actionlistener.h"
+#include "client/simpleeventlistener.h"
+#include "common/dtosplayer.h"
 
+#include "animation.h"
+#include "texture_container.h"
 #define SCREEN_HEIGHT 480
 #define SPRITE_WIDTH 32
 #define SPRITE_HEIGHT 32
@@ -20,11 +24,14 @@ private:
 
     SDL2pp::Renderer renderer;
 
-    SDL2pp::Texture sprites;
-
-    bool is_running_;  // cppcheck-suppress unusedStructMember
+    TextureContainer textures;  // Procesado de todas las imagenes del juego
 
     Animation animation;
+
+    ActionListener& sender;
+    SimpleEventListener& dto_events;
+
+    bool is_running_;  // cppcheck-suppress unusedStructMember
 
     // Event processing:
     // - If window is closed, or Q or Escape buttons are pressed, quit the
@@ -47,7 +54,7 @@ private:
     void frameDelay(unsigned int frameStart);
 
 public:
-    UILoop();
+    explicit UILoop(ActionListener& dtoSender, SimpleEventListener& _events);
 
     void exec();
 

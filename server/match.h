@@ -36,7 +36,8 @@ private:
 
 protected:
     friend class LobbyContainer;
-    void addPlayer(ControlledPlayer* player);
+
+    ControlledPlayer& addPlayers(uint8_t countplayers);
 
     // Metodos analogos a los de thread. expuestos a friend nada mas.
     void init();

@@ -18,19 +18,16 @@ void ClientProtocol::sendaction(PlayerActionDTO& action) {
 }
 
 void ClientProtocol::joinLobby(const uint8_t playercount, const uint8_t id_match) {
+    // Primero la info sobre que lobby..
+    uint8_t info[3] = {LobbyActionType::JOIN_LOBBY, id_match, 0};
 
-    protocol.sendbyte(playercount);  // Primero se envia el player count.
-
-    // Despues info de la lobby.
-    lobby_action info = {LobbyActionType::JOIN_LOBBY, id_match};
-    protocol.sendbytes(&info, sizeof(info));
+    info[2] = playercount;  // Despues el playercount.
+    protocol.sendbytes(&info, 3);
 }
 void ClientProtocol::createLobby(const uint8_t playercount) {
-    protocol.sendbyte(playercount);
 
-    // Default 0 como mapa... que es reservado para que sea al azar.
-    lobby_action info = {LobbyActionType::NEW_LOBBY, 0};
-    protocol.sendbytes(&info, sizeof(info));
+    uint8_t info[2] = {LobbyActionType::CREATE_LOBBY, playercount};
+    protocol.sendbytes(&info, 2);
 }
 
 void ClientProtocol::startlobby() { protocol.sendbyte(LobbyActionType::STARTED_LOBBY); }
@@ -44,15 +41,15 @@ MatchDto ClientProtocol::recvstate() {
     MatchDto res = MatchDto(out);
 
     int playercount = (int)protocol.recvbyte();
-    std::cout << "----> RECV PLAYER COUNT" << playercount << std::endl;
+    // std::cout << "----> RECV PLAYER COUNT" << playercount << std::endl;
 
     while (playercount > 0) {
         PlayerDTO player;
 
         protocol.recvbytes(&player, sizeof(player));
 
-        std::cout << "RECV PLAYER: " << player.id << "at:" << player.coord_x << ","
-                  << player.coord_y << std::endl;
+        // std::cout << "RECV PLAYER: " << player.id << "at:" << player.coord_x << ","
+        //           << player.coord_y << std::endl;
 
         res.players.push_back(player);
         playercount--;

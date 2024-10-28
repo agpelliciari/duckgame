@@ -13,6 +13,13 @@ void GameStateRecv::run() {
             // Capaz termino?
             // Por ahora solo recibe matchdtos..
             MatchDto state = protocol.recvstate();
+            std::cerr << "-----GOT UPDATE\n" << state.parse() << std::endl;
+            for (auto playerit = state.players.begin(); playerit != state.players.end();) {
+                PlayerDTO player = *playerit;
+                std::cerr << "-->" << (int)player.id << " at " << player.coord_x << ","
+                          << player.coord_y << std::endl;
+                ++playerit;
+            }
 
             listener.matchUpdated(state);
         }

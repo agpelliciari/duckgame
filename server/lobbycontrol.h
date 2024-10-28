@@ -8,18 +8,12 @@
 #include "common/serverprotocol.h"
 
 class LobbyControl {
-    // typedef void (LobbyControl::* lobby_proc)();
 protected:
-    LobbyContainer& lobbies;  // cppcheck-suppress unusedStructMember
-
-
-    Match& handleNewLobby(ControlledPlayer& player, ServerProtocol& protocol);
-    Match& handleJoinLobby(unsigned int id,
-                           ControlledPlayer& player);  //, ServerProtocol& protocol);
-
+    LobbyContainer& lobbies;   // cppcheck-suppress unusedStructMember
+    ServerProtocol& protocol;  // cppcheck-suppress unusedStructMember
 public:
     // Crea el player con el ide pasado e inicia el protocolo
-    explicit LobbyControl(LobbyContainer& _lobbies);
+    explicit LobbyControl(LobbyContainer& _lobbies, ServerProtocol& _protocol);
 
     // Por ahora tambien nos escapamos del move.
     LobbyControl(LobbyControl&&) = delete;
@@ -29,7 +23,10 @@ public:
     LobbyControl(const LobbyControl&) = delete;
     LobbyControl& operator=(const LobbyControl&) = delete;
 
-    Match& handleNewClient(ControlledPlayer& player, ServerProtocol& protocol, bool* isanfitrion);
+    Match& resolveMatch(bool* isanfitrion);
+
+    ControlledPlayer& start(Match& match);
+    ControlledPlayer& waitStart(Match& match);
 };
 
 #endif
