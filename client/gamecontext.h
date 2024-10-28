@@ -7,6 +7,8 @@
 #include "common/dtosobject.h"
 
 struct GameContext {
+    unsigned int id_lobby;  // cppcheck-suppress unusedStructMember
+
     int first_player;   // cppcheck-suppress unusedStructMember
     int second_player;  // cppcheck-suppress unusedStructMember
 
@@ -16,6 +18,7 @@ struct GameContext {
 
     // uint8_t cantidadjugadores; // No hace falta? El dto match lo dira
     GameContext():
+            id_lobby(0),
             first_player(NOT_DEFINED_FLAG),
             second_player(NOT_DEFINED_FLAG),
             map_size_x(50),

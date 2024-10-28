@@ -6,6 +6,7 @@
 #include <utility>
 
 #include "common/core/liberror.h"
+#include "common/protocolerror.h"
 
 #define ASK_NAME "What is your name?"
 #define ACTION_EXIT "Exit"
@@ -14,10 +15,10 @@
 
 
 LobbyClientSender::LobbyClientSender(ClientProtocol& _protocol, GameContext& _context):
-        protocol(&_protocol), context(_context) {}
+        protocol(&_protocol), mode(NULL), context(_context), playercount(0) {}
 
 LobbyClientSender::LobbyClientSender(LobbyClientSender&& other):
-        protocol(other.protocol), context(other.context) {
+        protocol(other.protocol), mode(NULL), context(other.context), playercount(0) {
     other.protocol = NULL;
     std::cout << "MOVED CLIENT SENDER OWN " << protocol << std::endl;
 }
@@ -27,6 +28,8 @@ LobbyClientSender& LobbyClientSender::operator=(LobbyClientSender&& other) {
     }
 
     this->protocol = other.protocol;
+    this->mode = other.mode;
+    this->playercount = other.playercount;
     this->context = other.context;
     other.protocol = NULL;
 
@@ -38,18 +41,31 @@ void LobbyClientSender::doaction(const lobby_action& action) {
     std::cout << "SEND ACTION? " << &action << std::endl;
 }
 
+void LobbyClientSender::handleJoin() {
+    std::cerr << "lobby id to join: " << (int)context.id_lobby << std::endl;
+    protocol->joinLobby(playercount, context.id_lobby);
+}
+
+void LobbyClientSender::handleCreate() {
+    protocol->createLobby(playercount);
+
+    std::cerr << "press enter to start the match!" << std::endl;
+
+    std::string action;
+    if (!(std::cin >> action)) {  // Could not read if new lobby.
+        throw ProtocolError("Did not read match start!!");
+    }
+
+    protocol->startlobby();
+}
+
 void LobbyClientSender::createLobby(uint8_t playercount) {
     if (_is_alive) {  // already running!!
         throw LibError(1, "Already running client!! finish it first!");
     }
-
-    LobbyCreateMode* res = new LobbyCreateMode(playercount);
-
-    std::unique_ptr<LobbyMode> newmode(res);
-    this->mode.swap(newmode);
+    this->playercount = playercount;
+    mode = &LobbyClientSender::handleCreate;
     start();
-
-    // res->startLobby();
 }
 
 void LobbyClientSender::joinLobby(uint8_t playercount, unsigned int idlobby) {
@@ -57,17 +73,17 @@ void LobbyClientSender::joinLobby(uint8_t playercount, unsigned int idlobby) {
         throw LibError(1, "Already running client!! finish it first!");
     }
 
-    JoinLobbyMode* res = new JoinLobbyMode(playercount, idlobby);
+    this->playercount = playercount;
 
-    std::unique_ptr<LobbyMode> newmode(res);
-    this->mode.swap(newmode);
+    context.id_lobby = idlobby;
+    mode = &LobbyClientSender::handleJoin;
     start();
 }
 
 
 bool LobbyClientSender::isrunning() { return _is_alive; }
 void LobbyClientSender::run() {
-    mode->exec(*protocol);  // exec lobby mode.
+    (this->*mode)();  // exec lobby mode.
 }
 
 
