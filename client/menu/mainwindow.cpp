@@ -9,13 +9,15 @@ MainWindow::MainWindow(menuHandler handler): ui(new Ui::MainWindow), handler(han
 
 void MainWindow::updateIdDisplayedInLobby(int id) {
     QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
-    if (layout && layout->count() > 0) {
-        QWidget* widget = layout->itemAt(0)->widget();
-        if (auto* lobbyHostWidget = qobject_cast<LobbyHostWidget*>(widget)) {
-            lobbyHostWidget->updateIdDisplayedInLobby(id);
-        } else if (auto* lobbyGuestWidget = qobject_cast<LobbyGuestWidget*>(widget)) {
-            lobbyGuestWidget->updateIdDisplayedInLobby(id);
-        }
+
+    if (layout->count() == 0)
+        throw std::runtime_error("There is no widget mounted");
+
+    QWidget* widget = layout->itemAt(0)->widget();
+    if (auto* lobbyHostWidget = qobject_cast<LobbyHostWidget*>(widget)) {
+        lobbyHostWidget->updateIdDisplayedInLobby(id);
+    } else if (auto* lobbyGuestWidget = qobject_cast<LobbyGuestWidget*>(widget)) {
+        lobbyGuestWidget->updateIdDisplayedInLobby(id);
     }
 }
 
@@ -28,10 +30,8 @@ void MainWindow::mountSetHostnamePort() {
         .onClickContinue = [this] { unMountWidget(); mountCreateJoin(); },
         .onClickQuit = [this] { this->close(); },
     };
-
-    QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
     SetHostnamePortWidget* setHostnamePortWidget = new SetHostnamePortWidget(handler, ui->centralwidget);
-    layout->insertWidget(0, setHostnamePortWidget);
+    mountWidget(setHostnamePortWidget);
 }
 
 void MainWindow::mountCreateJoin() {
@@ -40,10 +40,8 @@ void MainWindow::mountCreateJoin() {
         .onClickJoinGame = [this] { unMountWidget(); mountSetLobbyId(); },
         .onClickQuit = [this] { this->close(); },
     };
-
-    QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
     CreateJoinWidget* createJoinWidget = new CreateJoinWidget(handler, ui->centralwidget);
-    layout->insertWidget(0, createJoinWidget);
+    mountWidget(createJoinWidget);
 }
 
 void MainWindow::mountSetLobbyId() {
@@ -51,10 +49,8 @@ void MainWindow::mountSetLobbyId() {
         .onClickJoin = [this] { unMountWidget(); mountSetSoloDuoGuest(); },
         .onClickCancel = [this] { unMountWidget(); mountCreateJoin(); }
     };
-
-    QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
     SetLobbyIdWidget* setLobbyIdWidget = new SetLobbyIdWidget(handler, ui->centralwidget);
-    layout->insertWidget(0, setLobbyIdWidget);
+    mountWidget(setLobbyIdWidget);
 }
 
 void MainWindow::mountSetSoloDuoHost() {
@@ -76,9 +72,8 @@ void MainWindow::mountSetSoloDuoGuest() {
 }
 
 void MainWindow::mountSetSoloDuo(SetSoloDuoHandler handler) {
-    QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
     SetSoloDuoWidget* setSoloDuoWidget = new SetSoloDuoWidget(handler, ui->centralwidget);
-    layout->insertWidget(0, setSoloDuoWidget);
+    mountWidget(setSoloDuoWidget);
 }
 
 void MainWindow::mountLobbyHost() {
@@ -86,29 +81,34 @@ void MainWindow::mountLobbyHost() {
         .onClickStart = [this] {},
         .onClickCancel = [this] { unMountWidget(); mountSetSoloDuoHost(); }
     };
-
-    QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
     LobbyHostWidget* lobbyHostWidget = new LobbyHostWidget(handler, ui->centralwidget);
-    layout->insertWidget(0, lobbyHostWidget);
+    mountWidget(lobbyHostWidget);
 }
 
 void MainWindow::mountLobbyGuest() {
     LobbyGuestHandler handler {
         .onClickCancel = [this] { unMountWidget(); mountSetSoloDuoGuest(); }
     };
-
-    QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
     LobbyGuestWidget* lobbyGuestWidget = new LobbyGuestWidget(handler, ui->centralwidget);
-    layout->insertWidget(0, lobbyGuestWidget);
+    mountWidget(lobbyGuestWidget);
+}
+
+void MainWindow::mountWidget(QWidget* widget) {
+    QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
+
+    if (layout->count() > 0)
+        throw std::runtime_error("A widget is already mounted");
+
+    layout->insertWidget(0, widget);
 }
 
 void MainWindow::unMountWidget() {
     QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
-    if (layout && layout->count() > 0) {
-        QWidget* widget = layout->itemAt(0)->widget();
-        if (widget) {
-            layout->removeWidget(widget);
-            delete widget;
-        }
-    }
+
+    if (layout->count() == 0)
+        throw std::runtime_error("There is no widget to unmount");
+
+    QWidget* widget = layout->itemAt(0)->widget();
+    layout->removeWidget(widget);
+    delete widget;
 }

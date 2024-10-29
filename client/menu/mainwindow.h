@@ -53,6 +53,8 @@ private:
 
     void mountLobbyGuest();
 
+    void mountWidget(QWidget* widget);
+
     void unMountWidget();
 };
 #endif
