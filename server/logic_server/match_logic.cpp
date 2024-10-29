@@ -6,8 +6,8 @@ MatchLogic::MatchLogic() {
     this->command_map[0] = [this](int index) { this->still_player(index); };
     this->command_map[1] = [this](int index) { this->move_player_left(index); };
     this->command_map[2] = [this](int index) { this->move_player_right(index); };
-    this->command_map[3] = [this](int index) { this->move_player_jump(index); };
-    this->command_map[4] = [this](int index) { this->move_player_stay_down(index); };
+    this->command_map[3] = [this](int index) { this->move_player_stay_down(index); };
+    this->command_map[4] = [this](int index) { this->move_player_jump(index); };
 }
 
 void MatchLogic::add_player(int id) { players.push_back(Player(id, 0, 0)); }

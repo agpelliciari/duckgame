@@ -26,7 +26,7 @@ public:
     bool same_id(unsigned int id);
 
     void get_data(int& id, int& x, int& y, const TypeWeapon& weapon, const bool& helmet_equipped,
-                  const bool& chest_armor_equipped, const TypeMoveAction& move_action);
+                  const bool& chest_armor_equipped, TypeMoveAction& move_action);
 
     void still();
     void move_right();

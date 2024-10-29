@@ -30,6 +30,7 @@ private:
     lobbyID id;               // cppcheck-suppress unusedStructMember
     PlayerContainer players;  // cppcheck-suppress unusedStructMember
     MatchState looper;        // cppcheck-suppress unusedStructMember
+    int connectedplayers;     // cppcheck-suppress unusedStructMember
 
     // Para el thread y en general el loopeado
     void run() override;
@@ -38,6 +39,8 @@ protected:
     friend class LobbyContainer;
 
     ControlledPlayer& addPlayers(uint8_t countplayers);
+
+    bool notifyDisconnect(ControlledPlayer& player);
 
     // Metodos analogos a los de thread. expuestos a friend nada mas.
     void init();

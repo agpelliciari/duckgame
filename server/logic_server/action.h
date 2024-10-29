@@ -12,7 +12,7 @@ private:
 
 public:
     Action();
-    void get_move_action(const TypeMoveAction& _move_action);
+    void get_move_action(TypeMoveAction& _move_action);
     void still();
     void move_right();
     void move_left();

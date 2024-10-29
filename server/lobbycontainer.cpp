@@ -40,9 +40,15 @@ void LobbyContainer::startLobby(Match& lobby) {
     // return findLobby(id).start();
 }
 
-void LobbyContainer::stopLobby(const Match& lobby) {
+void LobbyContainer::disconnectFrom(Match& lobby, ControlledPlayer& player) {
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on container.
-    lobbies.remove(lobby);                  // el destructor hace el finish.
+
+    std::cerr << ">disconnecting " << player.toString() << std::endl;
+
+    if (lobby.notifyDisconnect(player)) {  // Habria que liberar. No hay mas players.
+        std::cerr << ">removing lobby " << lobby.getID() << std::endl;
+        lobbies.remove(lobby);  // el destructor hace el finish.
+    }
 }
 
 void LobbyContainer::finishAll() {

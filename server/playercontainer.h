@@ -15,7 +15,10 @@ public:
 
 private:
     player_container players;  // cppcheck-suppress unusedStructMember
-    player_id last_id;         // cppcheck-suppress unusedStructMember
+
+    int totalplayers;  // cppcheck-suppress unusedStructMember
+    // Por ahora player last id es la cantidad de total_players+1 basicamente.
+    player_id last_id;  // cppcheck-suppress unusedStructMember
 public:
     // Default constructor
     PlayerContainer();
@@ -30,6 +33,8 @@ public:
 
     // Remueve todos los restantes. Normalmente no deberia haber, ya se deberian haber desconectado.
     void removeAll();
+
+    int playercount() const;
 
     std::vector<player_id> getPlayers();
 
