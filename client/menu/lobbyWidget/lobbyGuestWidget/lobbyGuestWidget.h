@@ -1,6 +1,8 @@
 #ifndef LOBBYGUESTWIDGET_H
 #define LOBBYGUESTWIDGET_H
 
+#include "../playerWidget/playerWidget.h"
+
 #include <QWidget>
 
 struct LobbyGuestHandler {
@@ -22,6 +24,8 @@ public:
     explicit LobbyGuestWidget(const LobbyGuestHandler& handler, QWidget *parent = nullptr);
 
     void updateIdDisplayedInLobby(int id);
+
+    void addPlayerToLobby(int n);
 
     ~LobbyGuestWidget();
 

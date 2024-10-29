@@ -11,6 +11,12 @@ void LobbyGuestWidget::updateIdDisplayedInLobby(int id) {
     ui->lobbyIDLabel->setText(QString("Lobby ID: %1").arg(id));
 }
 
+void LobbyGuestWidget::addPlayerToLobby(int n) {
+    QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->players->layout());
+    PlayerWidget* player = new PlayerWidget(n, ui->players);
+    layout->addWidget(player);
+}
+
 LobbyGuestWidget::~LobbyGuestWidget() {
     delete ui;
 }

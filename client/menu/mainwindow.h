@@ -34,6 +34,8 @@ public:
 
     void updateIdDisplayedInLobby(int id);
 
+    void addPlayerToLobby(int n);
+
     ~MainWindow();
 
 private:

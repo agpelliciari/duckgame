@@ -21,6 +21,20 @@ void MainWindow::updateIdDisplayedInLobby(int id) {
     }
 }
 
+void MainWindow::addPlayerToLobby(int n) {
+    QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
+
+    if (layout->count() == 0)
+        throw std::runtime_error("There is no widget mounted");
+
+    QWidget* widget = layout->itemAt(0)->widget();
+    if (auto* lobbyHostWidget = qobject_cast<LobbyHostWidget*>(widget)) {
+        lobbyHostWidget->addPlayerToLobby(n);
+    } else if (auto* lobbyGuestWidget = qobject_cast<LobbyGuestWidget*>(widget)) {
+        lobbyGuestWidget->addPlayerToLobby(n);
+    }
+}
+
 MainWindow::~MainWindow() {
     delete ui;
 }
@@ -55,8 +69,17 @@ void MainWindow::mountSetLobbyId() {
 
 void MainWindow::mountSetSoloDuoHost() {
     SetSoloDuoHandler handler {
-        .onClickSolo = [this] { unMountWidget(); mountLobbyHost(); },
-        .onClickDuo = [this] { unMountWidget(); mountLobbyHost(); },
+        .onClickSolo = [this] {
+            unMountWidget();
+            mountLobbyHost();
+            addPlayerToLobby(1);
+        },
+        .onClickDuo = [this] {
+            unMountWidget();
+            mountLobbyHost();
+            addPlayerToLobby(1);
+            addPlayerToLobby(2);
+        },
         .onClickCancel = [this] { unMountWidget(); mountCreateJoin(); }
     };
     mountSetSoloDuo(handler);
@@ -64,8 +87,21 @@ void MainWindow::mountSetSoloDuoHost() {
 
 void MainWindow::mountSetSoloDuoGuest() {
     SetSoloDuoHandler handler {
-        .onClickSolo = [this] { unMountWidget(); mountLobbyGuest(); },
-        .onClickDuo = [this] { unMountWidget(); mountLobbyGuest(); },
+        .onClickSolo = [this] {
+            unMountWidget();
+            mountLobbyGuest();
+            addPlayerToLobby(1);
+            addPlayerToLobby(2);
+            addPlayerToLobby(3);
+        },
+        .onClickDuo = [this] {
+            unMountWidget();
+            mountLobbyGuest();
+            addPlayerToLobby(1);
+            addPlayerToLobby(2);
+            addPlayerToLobby(3);
+            addPlayerToLobby(4);
+        },
         .onClickCancel = [this] { unMountWidget(); mountSetLobbyId(); }
     };
     mountSetSoloDuo(handler);
@@ -110,5 +146,5 @@ void MainWindow::unMountWidget() {
 
     QWidget* widget = layout->itemAt(0)->widget();
     layout->removeWidget(widget);
-    delete widget;
+    widget->deleteLater();
 }

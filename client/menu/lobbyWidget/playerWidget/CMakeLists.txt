@@ -6,7 +6,4 @@ target_sources(taller_client
     PUBLIC
     # .h files
     playerWidget.h
-    
-    # .ui files
-    playerWidget.ui
     )
