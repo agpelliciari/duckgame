@@ -59,14 +59,7 @@ void ControlReceiver::run() {
 
     playOn(player, match);  // Es no except.
 
-    player.disconnect();
-    if (isanfitrion) {
-        lobbies.stopLobby(match);
-    }
-
-    // El log a cerr podria ser innecesario. Pero sirve para hacer cosas mas descriptivas.
-    std::cerr << ">closed " << player.toString() << std::endl;
-    // El destructor de notifier hace join.
+    lobbies.disconnectFrom(match, player);
 }
 
 // Este metodo no hace acciones irreversibles

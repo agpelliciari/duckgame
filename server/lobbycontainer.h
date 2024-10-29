@@ -37,7 +37,7 @@ public:
     // Una vez empezada no se aceptan mas.
     void startLobby(Match& match);
 
-    void stopLobby(const Match& match);
+    void disconnectFrom(Match& match, ControlledPlayer& player);
 
     // Remueve todos los restantes. Normalmente no deberia haber, ya se deberian haber desconectado.
     void finishAll();

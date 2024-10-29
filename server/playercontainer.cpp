@@ -2,11 +2,18 @@
 
 #include <iostream>
 
-PlayerContainer::PlayerContainer(): last_id(0) {}
+PlayerContainer::PlayerContainer(): totalplayers(0), last_id(0) {}
 
 
 // Todo esto no hace falta sincronizar ya que es sincronico!
 ControlledPlayer& PlayerContainer::add(uint8_t countplayers) {
+
+    // totalplayers no es perse el id para el player
+    // conceptualmente es distinto.
+    // Por ahora pareceria es lo mismo que el id.
+    // Pero a la hora de remove. No parece correcto. Si bien por ahora no se necesita se puedan
+    // conectar.
+    totalplayers += countplayers;
 
     ControlledPlayer& player = players.emplace_back(countplayers);
     for (uint8_t ind = 0; ind < countplayers; ind++) {
@@ -66,6 +73,9 @@ std::vector<player_id> PlayerContainer::updateState(const MatchDto& matchdto) {
 
         playerit = players.erase(playerit);
     }
+    totalplayers -= disconnected.size();
 
     return disconnected;
 }
+
+int PlayerContainer::playercount() const { return totalplayers; }

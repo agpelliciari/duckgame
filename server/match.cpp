@@ -4,11 +4,22 @@
 
 #include "./gameerror.h"
 
-Match::Match(lobbyID _id): id(_id), players(), looper() {}
+Match::Match(lobbyID _id): id(_id), players(), looper(), connectedplayers(0) {}
 
 
 // Protected// friend accessed methods
-ControlledPlayer& Match::addPlayers(uint8_t count) { return players.add(count); }
+ControlledPlayer& Match::addPlayers(uint8_t count) {
+    connectedplayers++;  // Solo importa la cantidad de conectados
+    return players.add(count);
+}
+
+bool Match::notifyDisconnect(ControlledPlayer& player) {
+    connectedplayers--;  // Solo importa la cantidad de conectados
+
+    player.disconnect();
+
+    return connectedplayers == 0;  // Deberia liberar?
+}
 
 void Match::init() {
     if (is_alive()) {
@@ -24,10 +35,6 @@ void Match::finish() {
     stop();
     looper.stop();
     join();
-
-    // libera los players/listeners.
-    // Despues de joinear para asegurar no le removes nada en el medio.
-    players.removeAll();
 }
 
 
@@ -49,6 +56,9 @@ void Match::run() {
 
     looper.loop(players);
     // Checkea si el finish fue natural o forzado.
+
+    // notifica los playeres.
+    players.removeAll();
 }
 
 bool Match::isrunning() const { return _is_alive; }
