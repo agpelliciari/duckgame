@@ -32,6 +32,8 @@ private:
 public:
     MainWindow(menuHandler handler);
 
+    void updateIdDisplayedInLobby(int id);
+
     ~MainWindow();
 
 private:

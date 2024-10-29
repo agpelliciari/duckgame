@@ -22,6 +22,8 @@ private:
 public:
     explicit LobbyHostWidget(const LobbyHostHandler& handler, QWidget *parent = nullptr);
 
+    void updateIdDisplayedInLobby(int id);
+
     ~LobbyHostWidget();
 
 private:

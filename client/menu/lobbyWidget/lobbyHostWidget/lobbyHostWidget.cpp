@@ -8,6 +8,10 @@ LobbyHostWidget::LobbyHostWidget(const LobbyHostHandler &handler, QWidget *paren
     connect(ui->cancelButton, &QPushButton::clicked, this, &LobbyHostWidget::onClickCancel);
 }
 
+void LobbyHostWidget::updateIdDisplayedInLobby(int id) {
+    ui->lobbyIDLabel->setText(QString("Lobby ID: %1").arg(id));
+}
+
 LobbyHostWidget::~LobbyHostWidget() {
     delete ui;
 }

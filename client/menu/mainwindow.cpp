@@ -7,6 +7,18 @@ MainWindow::MainWindow(menuHandler handler): ui(new Ui::MainWindow), handler(han
     ui->centralwidget->setFocus();
 }
 
+void MainWindow::updateIdDisplayedInLobby(int id) {
+    QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
+    if (layout && layout->count() > 0) {
+        QWidget* widget = layout->itemAt(0)->widget();
+        if (auto* lobbyHostWidget = qobject_cast<LobbyHostWidget*>(widget)) {
+            lobbyHostWidget->updateIdDisplayedInLobby(id);
+        } else if (auto* lobbyGuestWidget = qobject_cast<LobbyGuestWidget*>(widget)) {
+            lobbyGuestWidget->updateIdDisplayedInLobby(id);
+        }
+    }
+}
+
 MainWindow::~MainWindow() {
     delete ui;
 }
