@@ -1,25 +1,15 @@
-#include "./animation.h"
+#include "animation.h"
 
-Animation::Animation():
-        positionX(INITIAL_POSITION_X),
-        positionY(INITIAL_POSITION_Y),
-        speedX(INITIAL_SPEED_X),
-        speedY(INITIAL_SPEED_Y),
-        spriteX(1),
-        spriteY(10),
-        frameTicks(0),
-        runPhase(0),
-        moveRight(false),
-        moveLeft(false),
-        facingLeft(false),
-        onGround(true),
-        layingDown(false),
-        spacePressed(false),
-        flying(false) {}
+Animation::Animation(const GameContext& context): animationBuilders(), frameTicks(0) {
+    animationBuilders.emplace(context.first_player, AnimationBuilder());
+    if (context.dualplay) {
+        animationBuilders.emplace(context.second_player, AnimationBuilder());
+    }
+}
 
 void Animation::updateFrame() { frameTicks = SDL_GetTicks(); }
 
-void Animation::updatePosition() {
+/*void Animation::updatePosition() {
     if (!layingDown) {
         // Apply gravity
         if (flying) {
@@ -59,31 +49,81 @@ void Animation::updatePosition() {
             positionX = 0;
         }
     }
-}
+}*/
 
-void Animation::updateSprite() {
-    if (layingDown) {
-        spriteY = 72;
-        spriteX = 1;
-    } else if (onGround) {
-        spriteY = 10;
-        if (moveRight || moveLeft) {
-            spriteX = 1 + 32 * runPhase;
-        } else {
-            spriteX = 1;
-        }
-    } else {
-        if (flying) {
-            spriteY = 72;
-            spriteX = 1 + 32 * 2;
-        } else {
-            spriteY = 41;
-            spriteX = 1 + 32 * runPhase;
+void Animation::updateSprite(MatchDto& matchDto) {
+    for (PlayerDTO& player: matchDto.players) {  // por cada jugador
+        auto builder = animationBuilders.find(
+                player.id);  // busco el id del jugador en mi dict de animaciones
+
+        if (builder != animationBuilders.end()) {  // si lo encuentro
+            switch (player.move_action) {
+                case TypeMoveAction::MOVE_RIGHT:
+                    builder->second.facingLeft = false;
+                    builder->second.spriteX =
+                            STARTING_SPRITE_X +
+                            SPRITE_SIZE * ((frameTicks / RUNNING_ANIMATION_SPEED) %
+                                           RUNNING_ANIMATION_FRAMES);
+                    builder->second.spriteY = STARTING_SPRITE_Y;
+                    break;
+                case TypeMoveAction::MOVE_LEFT:
+                    builder->second.facingLeft = true;
+                    builder->second.spriteX =
+                            STARTING_SPRITE_X +
+                            SPRITE_SIZE * ((frameTicks / RUNNING_ANIMATION_SPEED) %
+                                           RUNNING_ANIMATION_FRAMES);
+                    builder->second.spriteY = STARTING_SPRITE_Y;
+                    break;
+                case TypeMoveAction::JUMP:
+                    builder->second.spriteX =
+                            STARTING_SPRITE_X +
+                            SPRITE_SIZE * ((frameTicks / JUMPING_ANIMATION_SPEED) %
+                                           JUMPING_ANIMATION_FRAMES);
+                    builder->second.spriteY = JUMPING_SPRITE_Y;
+                    break;
+                case TypeMoveAction::FLAP:
+                    builder->second.spriteX =
+                            STARTING_SPRITE_X + SPRITE_SIZE * FLAPPING_SPRITE_X_OFFSET;
+                    builder->second.spriteY = FLAPPING_SPRITE_Y;
+                    break;
+                case TypeMoveAction::STAY_DOWN:
+                    builder->second.spriteX = STARTING_SPRITE_X;
+                    builder->second.spriteY = LAY_DOWN_SPRITE_Y;
+                    break;
+                case TypeMoveAction::NONE:
+                    builder->second.spriteX = STARTING_SPRITE_X;
+                    builder->second.spriteY = STARTING_SPRITE_Y;
+                    break;
+            }
         }
     }
 }
 
-void Animation::rightCommandFlags() {
+bool Animation::isFacingLeft(int playerId) const {
+    auto builder = animationBuilders.find(playerId);
+    if (builder != animationBuilders.end()) {
+        return builder->second.facingLeft;
+    }
+    return false;
+}
+
+int Animation::getSpriteX(int playerId) const {
+    auto builder = animationBuilders.find(playerId);
+    if (builder != animationBuilders.end()) {
+        return builder->second.spriteX;
+    }
+    return 0;
+}
+
+int Animation::getSpriteY(int playerId) const {
+    auto builder = animationBuilders.find(playerId);
+    if (builder != animationBuilders.end()) {
+        return builder->second.spriteY;
+    }
+    return 0;
+}
+
+/*void Animation::rightCommandFlags() {
     moveRight = true;
     moveLeft = false;
     facingLeft = false;
@@ -128,12 +168,6 @@ void Animation::stopSpaceCommand() {
 
 float Animation::getPositionX() const { return positionX; }
 
-float Animation::getPositionY() const { return positionY; }
-
-bool Animation::isFacingLeft() const { return facingLeft; }
-
-int Animation::getSpriteX() const { return spriteX; }
-
-int Animation::getSpriteY() const { return spriteY; }
+float Animation::getPositionY() const { return positionY; }*/
 
 Animation::~Animation() = default;
