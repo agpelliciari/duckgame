@@ -63,7 +63,8 @@ int Client::execGame(GameLoop& gameloop, const GameContext& context) {
         std::cout << "Un solo jugador!!! " << (int)context.first_player << std::endl;
     }
 
-    UILoop uiLoop(actionListener, listener);
+    UILoop uiLoop(actionListener, listener, context);
+
     uiLoop.exec();
 
     return 0;

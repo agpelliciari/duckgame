@@ -5,7 +5,9 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "client/actionlistener.h"
+#include "client/gamecontext.h"
 #include "client/simpleeventlistener.h"
+#include "common/dtos.h"
 #include "common/dtosplayer.h"
 
 #include "animation.h"
@@ -14,7 +16,7 @@
 #define SCREEN_HEIGHT 480
 #define SPRITE_WIDTH 32
 #define SPRITE_HEIGHT 32
-#define FRAME_DELAY 33
+#define FRAME_DELAY 16
 #define GROUND_Y 400
 #define TWO_PLAYERS true
 
@@ -32,11 +34,13 @@ private:
 
     ActionListener& sender;
 
-    SimpleEventListener& dto_events;
+    SimpleEventListener& matchDtoQueue;
+
+    MatchDto lastUpdate;
+
+    const GameContext& context;
 
     bool isRunning_;  // cppcheck-suppress unusedStructMember
-
-    bool twoPlayers_;  // cppcheck-suppress unusedStructMember
 
     // Event processing:
     // - If window is closed, or Q or Escape buttons are pressed, quit the
@@ -56,10 +60,12 @@ private:
     // UI.
     void draw();
 
+    void drawPlayer(const PlayerDTO& player);
+
     void frameDelay(unsigned int frameStart);
 
 public:
-    UILoop(ActionListener& dtoSender, SimpleEventListener& _events, bool twoPlayersFlag);
+    UILoop(ActionListener& dtoSender, SimpleEventListener& _events, const GameContext& gameContext);
 
     void exec();
 

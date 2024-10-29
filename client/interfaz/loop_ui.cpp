@@ -1,28 +1,38 @@
 #include "loop_ui.h"
 
-UILoop::UILoop(ActionListener& dtoSender, SimpleEventListener& _events, bool twoPlayersFlag):
+UILoop::UILoop(ActionListener& dtoSender, SimpleEventListener& _events,
+               const GameContext& gameContext):
         sdlLib(SDL_INIT_VIDEO),
         window("UILOOP demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
                SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE),
         renderer(window, -1, SDL_RENDERER_ACCELERATED),
         textures(renderer),
-        animation(),
+        animation(gameContext),
         sender(dtoSender),
-        dto_events(_events),
-        isRunning_(true),
-        twoPlayers_(twoPlayersFlag) {}
+        matchDtoQueue(_events),
+        lastUpdate(),
+        context(gameContext),
+        isRunning_(true) {}
 
 void UILoop::exec() {
-    while (isRunning_) {
-        unsigned int frameStart = SDL_GetTicks();
+    try {
+        while (isRunning_) {
+            unsigned int frameStart = SDL_GetTicks();
 
-        handleEvent();
+            handleEvent();
 
-        update();
+            update();
 
-        draw();
+            draw();
 
-        frameDelay(frameStart);
+            frameDelay(frameStart);
+        }
+    } catch (const std::exception& e) {
+        std::cerr << "Exception caught in UILoop::exec: " << e.what() << std::endl;
+        isRunning_ = false;
+    } catch (...) {
+        std::cerr << "Unknown exception caught in UILoop::exec" << std::endl;
+        isRunning_ = false;
     }
 }
 
@@ -53,7 +63,7 @@ void UILoop::handleEvent() {
                     isRunning_ = false;
                     return;
 
-                    if (twoPlayers_) {
+                    if (context.dualplay) {
                         case SDLK_d:
                             action.type = MOVE_RIGHT;
                             action.playerind = 1;
@@ -72,24 +82,33 @@ void UILoop::handleEvent() {
                             break;
                     }
             }
-        } else if (event.type == SDL_KEYUP) {
-            action.type = NONE;
-            action.playerind = (event.key.keysym.sym == SDLK_d || event.key.keysym.sym == SDLK_a ||
-                                event.key.keysym.sym == SDLK_s || event.key.keysym.sym == SDLK_w) ?
-                                       1 :
-                                       0;
-        }
+        }  // else if (event.type == SDL_KEYUP) {   //! chequear desp si es necesario
+           // action.type = NONE;
+           // action.playerind = (event.key.keysym.sym == SDLK_d || event.key.keysym.sym == SDLK_a
+           // ||
+           //                   event.key.keysym.sym == SDLK_s || event.key.keysym.sym == SDLK_w) ?
+           //                        1 :
+           //                      0;
+        //}
+
         sender.doaction(action);
     }
 }
 
 void UILoop::update() {
 
+    MatchDto matchUpdate;
+
+    if (matchDtoQueue.try_update(matchUpdate)) {
+        lastUpdate = matchUpdate;
+        if (matchUpdate.info.estado == TERMINADA) {
+            isRunning_ = false;
+        }
+    }
+
     animation.updateFrame();
 
-    animation.updatePosition();
-
-    animation.updateSprite();
+    animation.updateSprite(matchUpdate);
 }
 
 void UILoop::draw() {
@@ -101,20 +120,24 @@ void UILoop::draw() {
     renderer.SetDrawColor(0, 0, 0, 255);  // Black color
     renderer.DrawLine(0, GROUND_Y, SCREEN_WIDTH, GROUND_Y);
 
-    // Determine the flip mode based on the last direction
-    SDL_RendererFlip flip = animation.isFacingLeft() ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-
-    // Draw player sprite
-    renderer.Copy(textures.getTexture(YELLOW_DUCK_SPRITE),
-                  SDL2pp::Rect(animation.getSpriteX(), animation.getSpriteY(), SPRITE_WIDTH,
-                               SPRITE_HEIGHT),
-                  SDL2pp::Rect(static_cast<int>(animation.getPositionX()) - 25,
-                               static_cast<int>(animation.getPositionY()) - 44, 50,
-                               50),  // Nuevo rectangulo, se expande event sprite
-                  0.0, SDL2pp::Point(0, 0), flip);
+    for (const PlayerDTO& player: lastUpdate.players) {
+        drawPlayer(player);
+    }
 
     // Show rendered frame
     renderer.Present();
+}
+
+void UILoop::drawPlayer(const PlayerDTO& player) {
+    // Determine the flip mode based on the last direction
+    SDL_RendererFlip flip = animation.isFacingLeft(player.id) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+
+    // Draw player sprite
+    renderer.Copy(textures.getTexture(player.id - 1),
+                  SDL2pp::Rect(animation.getSpriteY(player.id), animation.getSpriteX(player.id),
+                               SPRITE_WIDTH, SPRITE_HEIGHT),
+                  SDL2pp::Rect(player.coord_x, player.coord_y, 50, 50), 0.0, SDL2pp::Point(0, 0),
+                  flip);
 }
 
 void UILoop::frameDelay(unsigned int frameStart) {
