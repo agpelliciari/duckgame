@@ -17,14 +17,16 @@ struct GameContext {
     int map_size_y;                // cppcheck-suppress unusedStructMember
     std::vector<BlockDTO> blocks;  // cppcheck-suppress unusedStructMember
 
-    // uint8_t cantidadjugadores; // No hace falta? El dto match lo dira
+    uint8_t cantidadjugadores;  // No hace falta? El dto match lo dira
+
     GameContext():
             id_lobby(0),
             dualplay(true),
-            first_player(0),
-            second_player(0),
+            first_player(1),
+            second_player(2),
             map_size_x(50),
-            map_size_y(20) {}
+            map_size_y(20),
+            cantidadjugadores(2) {}
 };
 
 #endif
