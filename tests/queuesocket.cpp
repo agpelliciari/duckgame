@@ -39,6 +39,7 @@ int QueueSocket::sendsome(const void* data, unsigned int sz) {
 
     // cppcheck-suppress cstyleCast
     std::memcpy(buffer.data() + offsetWrite, (const char*)data, canSend);
+
     offsetWrite += canSend;
     return canSend;
 }
@@ -53,7 +54,9 @@ unsigned int QueueSocket::recvsome(void* data, unsigned int sz) {
 
     // cppcheck-suppress cstyleCast
     std::memcpy((char*)data, (buffer.data() + offsetRead), canRecv);
+
     offsetRead += canRecv;
+
     return canRecv;
 }
 
@@ -62,10 +65,15 @@ unsigned int QueueSocket::trysendall(const void* data, unsigned int sz) {
     chktOpen();
 
     int overflow = sz - (size - offsetWrite);
-    std::cout << "SENDING ON QUEUE SOCKET " << (int)sz << " OVERFLOW " << overflow << std::endl;
     if (overflow > 0 && canexpand) {
+        // No se puede usar ni resize ni reserve... ya que tiran la data actual...
+        // Por lo que no queda otra, que crear uno nuevo, copiar lo existente y swapear.
+
+        std::vector<char> newone;
+        newone.reserve(size + overflow);  // Expand buffer.
+        std::memcpy(newone.data(), buffer.data(), size);
         size += overflow;
-        buffer.reserve(size);  // Expand buffer.
+        std::swap(buffer, newone);
     }
 
     return sendsome(data, sz);
@@ -80,7 +88,6 @@ void QueueSocket::sendall(const void* data, unsigned int sz) {
 // Intenta leer lo maximo que pueda, a lo sumo sz. Retorna la cantidad leida.
 unsigned int QueueSocket::tryrecvall(void* data, unsigned int sz) {
     chktOpen();
-    std::cout << "RECV ON QUEUE SOCKET " << (int)sz << std::endl;
     return recvsome(data, sz);  // No hay logica para 'esperar' a que llege mas data.
 }
 
