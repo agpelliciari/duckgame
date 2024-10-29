@@ -59,6 +59,9 @@ void ServerProtocol::sendstate(const MatchDto& state) {
 
     for (auto playerit = state.players.begin(); playerit != state.players.end();) {
         PlayerDTO player = *playerit;
+
+        // std::cout << "EL PLAYER "<< player.id<< " SENDED ESTA EN STATE: " <<
+        // (int)player.move_action << std::endl;
         protocol.sendbytes(&player, sizeof(player));
         ++playerit;
     }
