@@ -5,6 +5,8 @@
 #include "createJoinWidget/createJoinWidget.h"
 #include "setLobbyIdWidget/setLobbyIdWidget.h"
 #include "setSoloDuoWidget/setSoloDuoWidget.h"
+#include "lobbyWidget/lobbyHostWidget/lobbyHostWidget.h"
+#include "lobbyWidget/lobbyGuestWidget/lobbyGuestWidget.h"
 
 #include <QMainWindow>
 #include <functional>
@@ -39,7 +41,15 @@ private:
 
     void mountSetLobbyId();
 
-    void mountSetSoloDuo();
+    void mountSetSoloDuoHost();
+
+    void mountSetSoloDuoGuest();
+
+    void mountSetSoloDuo(SetSoloDuoHandler handler);
+
+    void mountLobbyHost();
+
+    void mountLobbyGuest();
 
     void unMountWidget();
 };
