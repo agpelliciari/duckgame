@@ -134,7 +134,7 @@ void UILoop::drawPlayer(const PlayerDTO& player) {
 
     // Draw player sprite
     renderer.Copy(textures.getTexture(player.id - 1),
-                  SDL2pp::Rect(animation.getSpriteY(player.id), animation.getSpriteX(player.id),
+                  SDL2pp::Rect(animation.getSpriteX(player.id), animation.getSpriteY(player.id),
                                SPRITE_WIDTH, SPRITE_HEIGHT),
                   SDL2pp::Rect(player.coord_x, player.coord_y, 50, 50), 0.0, SDL2pp::Point(0, 0),
                   flip);

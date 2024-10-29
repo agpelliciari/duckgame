@@ -24,21 +24,30 @@ void Player::get_data(int& id, int& x, int& y, const TypeWeapon& weapon,
 
 bool Player::same_id(unsigned int id_) { return id == id_; }
 
-void Player::still() { move_action.still(); }
+void Player::still() {
+    move_action.still();
+    coordinates.update_position_y();
+}
 
 void Player::move_right() {
     coordinates.move_right();
     move_action.move_right();
+    coordinates.update_position_y();
 }
 
 void Player::move_left() {
     coordinates.move_left();
     move_action.move_left();
+    coordinates.update_position_y();
 }
 
-void Player::stay_down() { move_action.stay_down(); }
+void Player::stay_down() {
+    move_action.stay_down();
+    coordinates.update_position_y();
+}
 
 void Player::jump() {
     move_action.jump();
     coordinates.jump();
+    //coordinates.update_position_y();
 }
