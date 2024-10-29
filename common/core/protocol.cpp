@@ -39,7 +39,6 @@ uint16_t Protocol::recvshort() {
     if (this->messenger->tryrecvall(&num, 2) != 2) {  // Intenta leer los 2 bytes.
         throw LibError(1, "Read of length failed read less than 2 byte");
     }
-
     return ntohs(num);  // castea a host endiannes.
 }
 
@@ -98,7 +97,7 @@ void Protocol::sendmsg(const std::string& message) {
 
 
 void Protocol::sendbyte(const uint8_t num) {
-    if (this->messenger->sendsome(&num, 1) == 0) {
+    if (this->messenger->trysendall(&num, 1) == 0) {
         throw LibError(1,  // default para errores
                        "Failed to send u8 number to connection");
     }
@@ -120,7 +119,7 @@ bool Protocol::tryrecvbytes(void* buff, const unsigned int count) {
 
 uint8_t Protocol::recvbyte() {
     uint8_t res;
-    if (this->messenger->recvsome(&res, 1) == 0) {
+    if (this->messenger->tryrecvall(&res, 1) == 0) {
         throw LibError(1,  // default para errores
                        "Failed to recv u8 number from connection");
     }
@@ -129,7 +128,7 @@ uint8_t Protocol::recvbyte() {
 }
 
 bool Protocol::tryrecvbyte(uint8_t* out) {
-    if (this->messenger->recvsome(out, 1) == 0) {
+    if (this->messenger->tryrecvall(out, 1) == 0) {
         return false;
     }
     return true;
@@ -142,7 +141,7 @@ const static uint8_t PICKUP_SIGN = 3;
 // Pero si tira si es invalido.
 bool Protocol::recvpickup() {
     uint8_t sign;
-    if (this->messenger->recvsome(&sign, 1) == 0) {
+    if (this->messenger->tryrecvall(&sign, 1) == 0) {
         return false;
     }
 

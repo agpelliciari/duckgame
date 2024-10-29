@@ -8,8 +8,8 @@
 class Messenger {
 public:
     // Enviar la cantidad especificada, pero puede que mande/reciba menos.
-    virtual int sendsome(const void* data, unsigned int sz) = 0;
-    virtual unsigned int recvsome(void* data, unsigned int sz) = 0;
+    // virtual int sendsome(const void* data, unsigned int sz) = 0;
+    // virtual unsigned int recvsome(void* data, unsigned int sz) = 0;
 
 
     // Intenta enviar todo y devuelve lo que envio/ tira excepcion

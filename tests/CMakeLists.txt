@@ -8,8 +8,8 @@ target_sources(taller_tests
     testbaseprotocol.cpp
     testclientprotocol.cpp
     testserverprotocol.cpp
-    mocksocket.cpp
+    queuesocket.cpp
     PUBLIC
     # .h files
-    mocksocket.h
+    queuesocket.h
     )

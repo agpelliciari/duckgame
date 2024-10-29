@@ -211,7 +211,9 @@ unsigned int Socket::tryrecvall(void* data, unsigned int sz) {
 }
 
 void Socket::recvall(void* data, unsigned int sz) {
-    if (tryrecvall(data, sz) < sz) {  // No se leyo todo.
+    unsigned int read = tryrecvall(data, sz);
+
+    if (read < sz) {  // No se leyo todo.
         throw LibError(EPIPE, "socket received only %d of %d bytes", read, sz);
     }
 }
