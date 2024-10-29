@@ -51,6 +51,7 @@ public:
 
     explicit MatchDto(MatchStateType _estado, uint8_t _numronda): info({_estado, _numronda}) {}
     explicit MatchDto(match_info_dto _info): info(_info) {}
+    MatchDto(): info({INICIADA, 0}) {}
 
 
     std::string parse() const {
