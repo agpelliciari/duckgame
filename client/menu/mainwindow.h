@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "setHostnamePortWidget/setHostnamePortWidget.h"
 #include "createJoinWidget/createJoinWidget.h"
 #include "setLobbyIdWidget/setLobbyIdWidget.h"
 #include "setSoloDuoWidget/setSoloDuoWidget.h"
@@ -32,6 +33,8 @@ public:
     ~MainWindow();
 
 private:
+    void mountSetHostnamePort();
+
     void mountCreateJoin();
 
     void mountSetLobbyId();

@@ -1,3 +1,4 @@
+add_subdirectory(setHostnamePortWidget/)
 add_subdirectory(createJoinWidget/)
 add_subdirectory(setLobbyIdWidget/)
 add_subdirectory(setSoloDuoWidget/)

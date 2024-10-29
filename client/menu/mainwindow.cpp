@@ -3,11 +3,29 @@
 
 MainWindow::MainWindow(menuHandler handler): ui(new Ui::MainWindow), handler(handler) {
     ui->setupUi(this);
-    mountCreateJoin();
+    mountSetHostnamePort();
+    ui->centralwidget->setFocus();
 }
 
 MainWindow::~MainWindow() {
     delete ui;
+}
+
+void MainWindow::mountSetHostnamePort() {
+    QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
+
+    SetHostnamePortHandler handler;
+    handler.onClickContinue = [this]() {
+        unMountWidget();
+        mountCreateJoin();
+    };
+
+    handler.onClickQuit = [this]() {
+        this->close();
+    };
+
+    SetHostnamePortWidget* setHostnamePortWidget = new SetHostnamePortWidget(handler, ui->centralwidget);
+    layout->insertWidget(0, setHostnamePortWidget);
 }
 
 void MainWindow::mountCreateJoin() {
