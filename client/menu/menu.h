@@ -11,7 +11,7 @@
 #include <QMainWindow>
 #include <functional>
 
-#include "client/menuhandler.h"
+#include "./menuhandler.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {

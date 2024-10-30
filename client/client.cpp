@@ -1,6 +1,5 @@
 #include "client.h"
 
-#include "./menuhandler.h"
 #include "./simpleeventlistener.h"
 
 Client::Client(int argc, char* argv[]): argc(argc), argv(argv) {

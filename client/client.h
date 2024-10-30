@@ -9,6 +9,7 @@
 #include "client/core/game_loop.h"
 #include "interfaz/loop_ui.h"
 #include "menu/menu.h"
+#include "menu/menuhandler.h"
 
 class Client {
 private:
