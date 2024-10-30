@@ -13,7 +13,11 @@ SetHostnamePortWidget::~SetHostnamePortWidget() {
 }
 
 void SetHostnamePortWidget::onClickContinue() {
-    if (handler.onClickContinue) handler.onClickContinue();
+    QString hostname = ui->hostnameTextInput->text();
+    QString port = ui->portTextInput->text();
+    // TODO: validar
+    if (handler.onClickContinue)
+        handler.onClickContinue(hostname.toStdString(), port.toStdString());
 }
 
 void SetHostnamePortWidget::onClickQuit() {

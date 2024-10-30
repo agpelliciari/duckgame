@@ -40,7 +40,11 @@ Menu::~Menu() { delete ui; }
 
 void Menu::mountSetHostnamePort() {
     SetHostnamePortHandler handler {
-        .onClickContinue = [this] { unMountWidget(); mountCreateJoin(); },
+        .onClickContinue = [this](std::string hostname, std::string port) {
+            this->handler.setHostnamePort(hostname, port);
+            unMountWidget();
+            mountCreateJoin();
+        },
         .onClickQuit = [this] { this->close(); },
     };
     SetHostnamePortWidget* setHostnamePortWidget = new SetHostnamePortWidget(handler, ui->centralwidget);

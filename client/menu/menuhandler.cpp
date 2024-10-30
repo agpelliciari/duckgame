@@ -4,10 +4,8 @@
 
 MenuHandler::MenuHandler(LobbyClientSender&& _sender): sender(std::move(_sender)) {}
 
-void MenuHandler::setHostnamePort(std::string hostaname, std::string port) {
-    (void)hostaname;
-    (void)port;
-    std::cout << "Aca se cambia el hostname y port" << std::endl;
+void MenuHandler::setHostnamePort(std::string hostname, std::string port) {
+    std::cout << "Aca se cambia el hostname y port: " << hostname << " : " << port << std::endl;
 }
 
 void MenuHandler::createSoloLobby() {
@@ -19,18 +17,15 @@ void MenuHandler::createDuoLobby() {
 }
 
 void MenuHandler::joinSoloLobby(int lobbyId) {
-    (void)lobbyId;
-    std::cout << "Aca se envia que el cliente quiere unirse a la lobby con esa id y va a jugar 1 jugador" << std::endl;
+    std::cout << "Aca se envia que el cliente quiere unirse a la lobby con id: " << lobbyId << " y va a jugar 1 jugador" << std::endl;
 }
 
 void MenuHandler::joinDuoLobby(int lobbyId) {
-    (void)lobbyId;
-    std::cout << "Aca se envia que el cliente quiere unirse a la lobby con esa id y van a jugar 2 jugadores" << std::endl;
+    std::cout << "Aca se envia que el cliente quiere unirse a la lobby con id: " << lobbyId << " y van a jugar 2 jugadores" << std::endl;
 }
 
 void MenuHandler::startLobby(std::string map) {
-    (void)map;
-    std::cout << "Aca se envia que el dueño de la sala quiere empezar el juego con ese map" << std::endl;
+    std::cout << "Aca se envia que el dueño de la sala quiere empezar el juego con el mapa: " << map << std::endl;
 }
 
 MenuHandler::~MenuHandler() {}

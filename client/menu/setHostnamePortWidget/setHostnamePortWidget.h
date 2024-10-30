@@ -4,7 +4,7 @@
 #include <QWidget>
 
 struct SetHostnamePortHandler {
-    std::function<void()> onClickContinue;
+    std::function<void(std::string, std::string)> onClickContinue;
     std::function<void()> onClickQuit;
 };
 
