@@ -62,8 +62,15 @@ void MatchLogic::move_player_stay_down(int id) {
     std::cout << "player " << id << " stay down" << std::endl;
 }
 
+void MatchLogic::update_player_positions(){
+    for (Player& player: players) {
+        player.update_position_y();
+    }
+}
+
 void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos) {
     for (Player player: players) {
+
         PlayerDTO dto = {0, false, 0, 0, TypeWeapon::NONE, false, false, TypeMoveAction::NONE};
         player.get_data(dto.id, dto.coord_x, dto.coord_y, dto.weapon, dto.helmet, dto.chest_armor,
                         dto.move_action);
