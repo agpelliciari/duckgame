@@ -41,6 +41,9 @@ public:
     bool recvsignalstart();
 
 
+    void notifyaction(const LobbyActionType action);
+    void notifyinfo(const LobbyActionType action, const uint8_t attached_id);
+
     // Attempts to receive pickup action.
     // If failed throws either LibError or GameError.
     PlayerActionDTO recvaction();

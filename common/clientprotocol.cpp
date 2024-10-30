@@ -23,14 +23,24 @@ ClientProtocol& ClientProtocol::operator=(ClientProtocol&& other) {
     return *this;
 }
 
+void ClientProtocol::recvlobbyinfo(lobby_info& out) {
+    // Podria tirar cast error.
+    out.action = (LobbyActionType)protocol.recvbyte();
+    out.attached_id = protocol.recvbyte();
+    // throw ProtocolError("Invalid lobby info action!");
+}
+
 
 void ClientProtocol::sendaction(PlayerActionDTO& action) {
     protocol.sendbytes(&action, sizeof(action));
 }
 
-void ClientProtocol::joinLobby(const uint8_t id_match) {
+bool ClientProtocol::joinLobby(const uint8_t id_match) {
     uint8_t info[2] = {LobbyActionType::JOIN_LOBBY, id_match};
     protocol.sendbytes(&info, 2);
+
+    // Recibir true si fallo, false si fue exito.
+    return protocol.recvbyte() != (LobbyActionType::JOIN_LOBBY);
 }
 uint8_t ClientProtocol::createLobby() {
     protocol.sendbyte(LobbyActionType::CREATE_LOBBY);

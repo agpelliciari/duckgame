@@ -9,6 +9,8 @@
 #include "./dtosobject.h"
 #include "./dtosplayer.h"
 
+enum LobbyCancelType : uint8_t { UNKNOWN = 0, ANFITRION_LEFT = 1, GAME_ERROR = 2 };
+
 enum LobbyActionType : uint8_t {
     // Tipos acciones para unirse/salir ademas
     CREATE_LOBBY = 0x16,
@@ -22,7 +24,10 @@ enum LobbyActionType : uint8_t {
 
 struct lobby_info {
     LobbyActionType action;
-    uint8_t attached_id;  // Podria ser el del lobby o uno para seleccionar el mapa.
+    uint8_t attached_id;  // Un numero. Que muchas veces es necesario
+
+    lobby_info(LobbyActionType _action, uint8_t num): action(_action), attached_id(num) {}
+    lobby_info(): action(CANCEL_LOBBY), attached_id(0) {}
 } __attribute__((packed));
 
 struct lobby_action {

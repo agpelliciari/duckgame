@@ -21,7 +21,6 @@ protected:
 
     Queue<PlayerActionDTO> actions;
 
-    void sendMove(char action);
 
 public:
     void doaction(const PlayerActionDTO& action) override;
@@ -39,7 +38,6 @@ public:
 
 
     void begin();
-    void listenStdin();
 
     void end();
 

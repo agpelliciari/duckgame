@@ -38,7 +38,10 @@ void LobbyClientSender::doaction(const lobby_action& action) {
 
 void LobbyClientSender::handleJoin() {
     std::cerr << "lobby id to join: " << (int)context.id_lobby << std::endl;
-    protocol.joinLobby(context.id_lobby);
+    if (protocol.joinLobby(context.id_lobby)) {
+        std::cerr << "failed join to lobby: " << (int)context.id_lobby << std::endl;
+        return;
+    }
 
     if (context.dualplay) {
         context.second_player = protocol.setdualplay(&context.first_player);
@@ -46,7 +49,18 @@ void LobbyClientSender::handleJoin() {
         context.first_player = protocol.setsingleplay();
         context.second_player = 0;
     }
-    context.started = true;
+    lobby_info success;
+    protocol.recvlobbyinfo(success);
+    if (success.action == LobbyActionType::STARTED_LOBBY) {
+        std::cout << "Joined Lobby id " << (int)context.id_lobby
+                  << " INICIADA CON count: " << (int)success.attached_id << std::endl;
+        context.started = true;
+        context.cantidadjugadores = success.attached_id;
+    } else {
+        std::cout << "Join Lobby id " << (int)context.id_lobby
+                  << " FALLO CODE: " << (int)success.attached_id << std::endl;
+        context.started = false;
+    }
 }
 
 void LobbyClientSender::waitStart() {
@@ -62,12 +76,22 @@ void LobbyClientSender::handleCreate() {
         context.first_player = protocol.setsingleplay();
         context.second_player = 0;
     }
-    std::cout << "Lobby creada con id " << id_lobby << std::endl;
+    std::cout << "Lobby creada con id " << (int)id_lobby << std::endl;
     waitStart();
 
     if (started_match) {
-        context.started = true;
         protocol.startlobby();
+        lobby_info success;
+        protocol.recvlobbyinfo(success);
+        if (success.action == LobbyActionType::STARTED_LOBBY) {
+            std::cout << "Lobby id " << (int)id_lobby
+                      << " INICIADA CON count: " << (int)success.attached_id << std::endl;
+            context.started = true;
+            context.cantidadjugadores = success.attached_id;
+        } else {
+            std::cout << "Lobby id " << (int)id_lobby << " FALLO EL EMPEZAR" << std::endl;
+            context.started = false;
+        }
     }
 }
 

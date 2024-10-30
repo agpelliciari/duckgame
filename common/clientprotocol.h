@@ -36,13 +36,14 @@ public:
     ClientProtocol(const ClientProtocol&) = delete;
     ClientProtocol& operator=(const ClientProtocol&) = delete;
 
-    void joinLobby(const uint8_t id_match);
+    bool joinLobby(const uint8_t id_match);
     uint8_t createLobby();
 
     // Para setear playercount == 1 o == 2
     uint8_t setsingleplay();
     uint8_t setdualplay(uint8_t* player1);
 
+    void recvlobbyinfo(lobby_info& out);
 
     void startlobby();
 

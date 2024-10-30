@@ -1,6 +1,7 @@
 #ifndef LIB_MATCH_H
 #define LIB_MATCH_H
 
+#include <condition_variable>
 #include <mutex>
 #include <queue>
 #include <utility>
@@ -32,8 +33,12 @@ private:
     MatchState looper;        // cppcheck-suppress unusedStructMember
     int connectedplayers;     // cppcheck-suppress unusedStructMember
 
+    std::mutex mtx;
+    std::condition_variable match_start;
+
     // Para el thread y en general el loopeado
     void run() override;
+
 
 protected:
     friend class LobbyContainer;
@@ -44,6 +49,7 @@ protected:
 
     // Metodos analogos a los de thread. expuestos a friend nada mas.
     void init();
+    void cancel();
 
     // Libera, bien podria prescindirse y usar un destructor.
     // Pero mejor explicitar. Reemplaza el stop.. que no se quiere permitir hacerlo sin hacer el
@@ -65,6 +71,9 @@ public:
     bool operator==(const Match& other) const;
 
     lobbyID getID() const;
+
+    void waitStart();
+    int playercount() const;
 
     // Metodos publicos.. accesibles incluso a player controllers.
     // No hay precondiciones perse. Podria no haber empezado el match.
