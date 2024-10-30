@@ -82,14 +82,13 @@ void UILoop::handleEvent() {
                             break;
                     }
             }
-        }  // else if (event.type == SDL_KEYUP) {   //! chequear desp si es necesario
-           // action.type = NONE;
-           // action.playerind = (event.key.keysym.sym == SDLK_d || event.key.keysym.sym == SDLK_a
-           // ||
-           //                   event.key.keysym.sym == SDLK_s || event.key.keysym.sym == SDLK_w) ?
-           //                        1 :
-           //                      0;
-        //}
+        } else if (event.type == SDL_KEYUP) {
+            action.type = NONE;
+            if ((event.key.keysym.sym == SDLK_a) || (event.key.keysym.sym == SDLK_d) ||
+                (event.key.keysym.sym == SDLK_w) || (event.key.keysym.sym == SDLK_s)) {
+                action.playerind = 1;
+            }
+        }
 
         sender.doaction(action);
     }
@@ -133,7 +132,7 @@ void UILoop::drawPlayer(const PlayerDTO& player) {
     SDL_RendererFlip flip = animation.isFacingLeft(player.id) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
     // Draw player sprite
-    renderer.Copy(textures.getTexture(player.id - 1),
+    renderer.Copy(textures.getTexture(player.id),
                   SDL2pp::Rect(animation.getSpriteX(player.id), animation.getSpriteY(player.id),
                                SPRITE_WIDTH, SPRITE_HEIGHT),
                   SDL2pp::Rect(player.coord_x, player.coord_y, 50, 50), 0.0, SDL2pp::Point(0, 0),

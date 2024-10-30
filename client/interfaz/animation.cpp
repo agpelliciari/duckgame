@@ -1,9 +1,8 @@
 #include "animation.h"
 
 Animation::Animation(const GameContext& context): animationBuilders(), frameTicks(0) {
-    animationBuilders.emplace(context.first_player, AnimationBuilder());
-    if (context.dualplay) {
-        animationBuilders.emplace(context.second_player, AnimationBuilder());
+    for (int i = 1; i <= static_cast<int>(context.cantidadjugadores); i++) {
+        animationBuilders.emplace(i, AnimationBuilder());
     }
 }
 
