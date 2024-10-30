@@ -73,7 +73,8 @@ void Menu::mountCreateJoin() {
 
 void Menu::mountSetLobbyId() {
     SetLobbyIdHandler setLobbyIdHandler{.onClickJoin =
-                                                [this] {
+                                                [this](int lobbyId) {
+                                                    handler.joinSoloLobby(lobbyId);
                                                     unMountWidget();
                                                     mountSetSoloDuoGuest();
                                                 },
@@ -113,7 +114,6 @@ void Menu::mountSetSoloDuoHost() {
 void Menu::mountSetSoloDuoGuest() {
     SetSoloDuoHandler setSoloDuoHandler{.onClickSolo =
                                                 [this] {
-                                                    handler.joinSoloLobby(1234);
                                                     unMountWidget();
                                                     mountLobbyGuest();
                                                     addPlayerToLobby(1);
@@ -122,7 +122,6 @@ void Menu::mountSetSoloDuoGuest() {
                                                 },
                                         .onClickDuo =
                                                 [this] {
-                                                    handler.joinSoloLobby(5678);
                                                     unMountWidget();
                                                     mountLobbyGuest();
                                                     addPlayerToLobby(1);
