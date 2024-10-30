@@ -4,7 +4,7 @@
 #include <QWidget>
 
 struct SetLobbyIdHandler {
-    std::function<void()> onClickJoin;
+    std::function<void(int)> onClickJoin;
     std::function<void()> onClickCancel;
 };
 

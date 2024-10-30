@@ -1,5 +1,7 @@
 #include "setLobbyIdWidget.h"
 
+#include <iostream>  // TODO remove
+
 #include "ui_setLobbyIdWidget.h"
 
 SetLobbyIdWidget::SetLobbyIdWidget(const SetLobbyIdHandler& handler, QWidget* parent):
@@ -13,8 +15,18 @@ SetLobbyIdWidget::SetLobbyIdWidget(const SetLobbyIdHandler& handler, QWidget* pa
 SetLobbyIdWidget::~SetLobbyIdWidget() { delete ui; }
 
 void SetLobbyIdWidget::onClickJoin() {
+    QString lobbyIdInputText = ui->lobbyIdInput->text();
+
+    bool ok;
+    int lobbyId = lobbyIdInputText.toInt(&ok);
+
+    if (!ok) {
+        std::cout << "El ID de lobby ingresado no es un numero valido" << std::endl;  // TODO remove
+        return;
+    }
+
     if (handler.onClickJoin)
-        handler.onClickJoin();
+        handler.onClickJoin(lobbyId);
 }
 
 void SetLobbyIdWidget::onClickCancel() {
