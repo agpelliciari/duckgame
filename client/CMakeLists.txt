@@ -6,14 +6,12 @@ target_sources(taller_client
     PRIVATE
     # .cpp files
           client.cpp
-          menuhandler.cpp
           main.cpp
           simpleeventlistener.cpp
 
     PUBLIC
     # .h files
           actionlistener.h
-          menuhandler.h
           client.h
           eventlistener.h
           simpleeventlistener.h

@@ -1,6 +1,5 @@
 #include "client.h"
 
-#include "./menuhandler.h"
 #include "./simpleeventlistener.h"
 
 Client::Client(int argc, char* argv[]): argc(argc), argv(argv) {
@@ -28,8 +27,8 @@ int Client::execMenu(GameLoop& gameLoop, GameContext& context) {
     darkTheme.setColor(QPalette::HighlightedText, Qt::black);
     application.setPalette(darkTheme);
     //------
-    MainWindow window(menuHandler);
-    window.show();
+    Menu menu(menuHandler);
+    menu.show();
     return application.exec();
 }
 int Client::exec() {
