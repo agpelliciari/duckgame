@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 
+#include "./lobby_state.h"
 #include "client/actionlistener.h"
 #include "client/eventlistener.h"
 #include "common/clientprotocol.h"
@@ -13,7 +14,7 @@
 
 // Clase que encapsula al protocol y mantendria el estado del juego
 // Proporcionado una interfaz para acciones del usuario.
-class GameActionSender: private Thread, public ActionListener {
+class GameActionSender: private Thread, public ActionListener, public LobbyState {
 protected:
     ClientProtocol* protocol;  // cppcheck-suppress unusedStructMember
     EventListener& listener;
@@ -50,6 +51,9 @@ public:
     void run() override;
 
     int getcount();
+
+    bool endstate() override;
+
     ~GameActionSender();
 };
 

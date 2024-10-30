@@ -142,4 +142,7 @@ void GameActionSender::run() {
     }
 }
 
+
+bool GameActionSender::endstate() { return true; }
+
 GameActionSender::~GameActionSender() { end(); }

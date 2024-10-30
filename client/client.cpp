@@ -4,8 +4,8 @@
 
 Client::Client(int argc, char* argv[]): argc(argc), argv(argv) {}
 
-int Client::execMenu(GameLoop& gameLoop, GameContext& context) {
-    MenuHandler menuHandler(gameLoop, context);
+int Client::execMenu(LobbyConnector& connector) {
+    MenuHandler menuHandler(connector);
 
     QApplication application(argc, argv);
     //-------
@@ -31,8 +31,8 @@ int Client::execMenu(GameLoop& gameLoop, GameContext& context) {
 }
 int Client::exec() {
     GameContext context;
-    GameLoop gameLoop;
-    if (execMenu(gameLoop, context) != 0) {
+    LobbyConnector connector(context);
+    if (execMenu(connector) != 0) {
         return 1;
     }
 
@@ -41,15 +41,15 @@ int Client::exec() {
     //     return 1;
     // }
 
-    return execGame(gameLoop, context);
+    return execGame(connector, context);
 }
 
 
-int Client::execGame(GameLoop& gameloop, const GameContext& context) {
+int Client::execGame(LobbyConnector& connector, const GameContext& context) {
     // Crear event queue iniciar action listener y exec del uiloop!
     SimpleEventListener listener;
 
-    GameActionSender actionListener(gameloop.initGame(listener));
+    GameActionSender& actionListener(*connector.initGame(listener));
     actionListener.begin();
 
     if (context.dualplay) {

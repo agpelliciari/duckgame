@@ -6,6 +6,7 @@
 #include <mutex>
 #include <string>
 
+#include "./lobby_state.h"
 #include "client/gamecontext.h"
 #include "common/clientprotocol.h"
 #include "common/core/socket.h"
@@ -13,12 +14,12 @@
 
 // Clase que encapsula al protocol y mantendria el estado del juego
 // Proporcionado una interfaz para acciones del usuario.
-class LobbyClientSender: private Thread {
+class LobbyClientSender: private Thread, public LobbyState {
     // typedef std::unique_ptr<LobbyMode> lobby_mode;
     typedef void (LobbyClientSender::*lobby_runnable)();
 
 protected:
-    ClientProtocol* protocol;  // cppcheck-suppress unusedStructMember
+    ClientProtocol& protocol;  // cppcheck-suppress unusedStructMember
     lobby_runnable mode;       // cppcheck-suppress unusedStructMember
     GameContext& context;      // cppcheck-suppress unusedStructMember
 
@@ -38,7 +39,6 @@ public:
 
     // Los default sin pasar por socket/protocol.
     explicit LobbyClientSender(ClientProtocol& _protocol, GameContext& _context);
-    explicit LobbyClientSender(ClientProtocol* _protocol, GameContext& _context);
 
     LobbyClientSender(LobbyClientSender&&);
     LobbyClientSender& operator=(LobbyClientSender&&);
@@ -47,8 +47,6 @@ public:
     LobbyClientSender(const LobbyClientSender&) = delete;
     LobbyClientSender& operator=(const LobbyClientSender&) = delete;
 
-
-    void swapProtocol(ClientProtocol* _protocol);
 
     void notifyStart();
     bool isrunning();
@@ -59,6 +57,10 @@ public:
     void run() override;
 
     int getcount();
+
+    // Lobby state
+    bool endstate() override;
+
     ~LobbyClientSender();
 };
 

@@ -6,18 +6,20 @@
 #include <string>
 
 #include "./gamecontext.h"
-#include "client/core/game_loop.h"
+#include "client/core/lobby_connector.h"
 #include "interfaz/loop_ui.h"
 #include "menu/menu.h"
 #include "menu/menuhandler.h"
+//#include "client/core/game_action_sender.h"
+
 
 class Client {
 private:
     int argc;     // cppcheck-suppress unusedStructMember
     char** argv;  // cppcheck-suppress unusedStructMember
 
-    int execMenu(GameLoop& gameloop, GameContext& context);
-    int execGame(GameLoop& gameloop, const GameContext& context);
+    int execMenu(LobbyConnector& connector);
+    int execGame(LobbyConnector& connector, const GameContext& context);
 
 public:
     explicit Client(int argc, char* argv[]);

@@ -15,36 +15,8 @@
 
 
 LobbyClientSender::LobbyClientSender(ClientProtocol& _protocol, GameContext& _context):
-        protocol(&_protocol), mode(NULL), context(_context) {}
-
-LobbyClientSender::LobbyClientSender(ClientProtocol* _protocol, GameContext& _context):
         protocol(_protocol), mode(NULL), context(_context) {}
 
-LobbyClientSender::LobbyClientSender(LobbyClientSender&& other):
-        protocol(other.protocol), mode(NULL), context(other.context) {
-    other.protocol = NULL;
-    std::cout << "MOVED CLIENT SENDER OWN " << protocol << std::endl;
-}
-LobbyClientSender& LobbyClientSender::operator=(LobbyClientSender&& other) {
-    if (protocol == other.protocol) {
-        return *this;
-    }
-
-    this->protocol = other.protocol;
-    this->mode = other.mode;
-    this->context = other.context;
-    other.protocol = NULL;
-
-    return *this;
-}
-
-void LobbyClientSender::swapProtocol(ClientProtocol* _protocol) {
-    if (_keep_running) {
-        throw ProtocolError("Already running sender, cannot change, finish first.");
-    }
-
-    this->protocol = _protocol;
-}
 
 void LobbyClientSender::notifyStart() {
     std::unique_lock<std::mutex> lck(mtx);
@@ -59,12 +31,12 @@ void LobbyClientSender::doaction(const lobby_action& action) {
 
 void LobbyClientSender::handleJoin() {
     std::cerr << "lobby id to join: " << (int)context.id_lobby << std::endl;
-    protocol->joinLobby(context.id_lobby);
+    protocol.joinLobby(context.id_lobby);
 
     if (context.dualplay) {
-        context.second_player = protocol->setdualplay(&context.first_player);
+        context.second_player = protocol.setdualplay(&context.first_player);
     } else {
-        context.first_player = protocol->setsingleplay();
+        context.first_player = protocol.setsingleplay();
         context.second_player = 0;
     }
 }
@@ -74,18 +46,18 @@ void LobbyClientSender::waitStart() {
     started_lobby.wait(lck);
 }
 void LobbyClientSender::handleCreate() {
-    uint8_t id_lobby = protocol->createLobby();
+    uint8_t id_lobby = protocol.createLobby();
 
     if (context.dualplay) {
-        context.second_player = protocol->setdualplay(&context.first_player);
+        context.second_player = protocol.setdualplay(&context.first_player);
     } else {
-        context.first_player = protocol->setsingleplay();
+        context.first_player = protocol.setsingleplay();
         context.second_player = 0;
     }
     std::cout << "Lobby creada con id " << id_lobby << std::endl;
     waitStart();
 
-    protocol->startlobby();
+    protocol.startlobby();
 }
 
 void LobbyClientSender::createLobby(bool dualplay) {
@@ -139,6 +111,7 @@ int LobbyClientSender::getcount() {
     return 1;
 }
 
+bool LobbyClientSender::endstate() { return true; }
 
 LobbyClientSender::~LobbyClientSender() {
     if (_keep_running) {

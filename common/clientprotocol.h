@@ -2,6 +2,9 @@
 #define LIB_ClientProtocol_H
 
 #define BUFF_LEN_CLIENT 128
+
+
+#include <atomic>
 #include <string>
 #include <utility>
 
@@ -13,6 +16,7 @@ class ClientProtocol {
 
 protected:
     Protocol protocol;  // Composicion con el protocolo base para la conexion
+    std::atomic<bool> isactive;
 
 public:
     // El default a partir de la abstraccion de socket
@@ -20,15 +24,17 @@ public:
     explicit ClientProtocol(Socket& connection);
     explicit ClientProtocol(Socket&& connection);
 
-    // Permitamos el mov para mayor flexibilidad
-    explicit ClientProtocol(Protocol&& prot);
+    // Un client protocol, inicialmente cerrado.
+    ClientProtocol();
 
-    // Asumamos por ahora que no se quiere permitir copias, ni mov.
+    // Para mayor facilidad... el move del client protocol permite mas facil
+    // reiniciar una conexion.
+    ClientProtocol(ClientProtocol&&);
+    ClientProtocol& operator=(ClientProtocol&&);
+
+    // Asumamos por ahora que no se quiere permitir copias
     ClientProtocol(const ClientProtocol&) = delete;
     ClientProtocol& operator=(const ClientProtocol&) = delete;
-
-    ClientProtocol(ClientProtocol&&) = delete;
-    ClientProtocol& operator=(ClientProtocol&&) = delete;
 
     void joinLobby(const uint8_t id_match);
     uint8_t createLobby();
@@ -44,6 +50,8 @@ public:
 
     MatchDto recvstate();
 
+
+    bool isopen();
     void close();
 };
 
