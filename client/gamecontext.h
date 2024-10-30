@@ -9,6 +9,8 @@
 struct GameContext {
     unsigned int id_lobby;  // cppcheck-suppress unusedStructMember
 
+    bool started;
+
     bool dualplay;          // cppcheck-suppress unusedStructMember
     uint8_t first_player;   // cppcheck-suppress unusedStructMember
     uint8_t second_player;  // cppcheck-suppress unusedStructMember
@@ -21,6 +23,7 @@ struct GameContext {
 
     GameContext():
             id_lobby(0),
+            started(false),
             dualplay(true),
             first_player(1),
             second_player(2),

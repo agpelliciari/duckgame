@@ -36,6 +36,11 @@ int Client::exec() {
         return 1;
     }
 
+    // Si no esta empezada la partida no muestres el sdl, sali.
+    if (!context.started) {
+        std::cerr << "Did not start a match, exiting..." << std::endl;
+        return 1;
+    }
 
     // if (execGame(gameLoop) != 0) {
     //     return 1;

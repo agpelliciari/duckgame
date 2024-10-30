@@ -36,15 +36,8 @@ void LobbyConnector::reset() {
     // Reemplazo del protocolo.
     protocol = ClientProtocol(Socket(hostname.c_str(), service.c_str()));
 }
-/*
-bool LobbyConnector::gonext(){
-     if(state.get() != NULL && state.endstate()){
-          return true;
-     }
 
-     return false;
-}
-*/
+bool LobbyConnector::cangonext() { return state.get() != NULL && state->endstate(); }
 
 
 // Setea el estado para el manejo de lobby
@@ -68,4 +61,8 @@ GameActionSender* LobbyConnector::initGame(EventListener& listener) {
     return game;
 }
 
-LobbyConnector::~LobbyConnector() {}
+LobbyConnector::~LobbyConnector() {
+    protocol.close();
+
+    state.reset(NULL);  // Libera el state si hay. El pointer lo haria igual.
+}

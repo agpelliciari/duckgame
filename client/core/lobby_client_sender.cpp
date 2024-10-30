@@ -15,12 +15,19 @@
 
 
 LobbyClientSender::LobbyClientSender(ClientProtocol& _protocol, GameContext& _context):
-        protocol(_protocol), mode(NULL), context(_context) {}
+        protocol(_protocol), mode(NULL), context(_context), started_match(false) {}
 
 
 void LobbyClientSender::notifyStart() {
     std::unique_lock<std::mutex> lck(mtx);
-    started_lobby.notify_all();
+    started_match = true;
+    match_start.notify_all();
+}
+
+void LobbyClientSender::notifyCancel() {
+    std::unique_lock<std::mutex> lck(mtx);
+    started_match = false;
+    match_start.notify_all();
 }
 
 
@@ -39,11 +46,12 @@ void LobbyClientSender::handleJoin() {
         context.first_player = protocol.setsingleplay();
         context.second_player = 0;
     }
+    context.started = true;
 }
 
 void LobbyClientSender::waitStart() {
     std::unique_lock<std::mutex> lck(mtx);
-    started_lobby.wait(lck);
+    match_start.wait(lck);
 }
 void LobbyClientSender::handleCreate() {
     uint8_t id_lobby = protocol.createLobby();
@@ -57,7 +65,10 @@ void LobbyClientSender::handleCreate() {
     std::cout << "Lobby creada con id " << id_lobby << std::endl;
     waitStart();
 
-    protocol.startlobby();
+    if (started_match) {
+        context.started = true;
+        protocol.startlobby();
+    }
 }
 
 void LobbyClientSender::createLobby(bool dualplay) {
@@ -111,11 +122,18 @@ int LobbyClientSender::getcount() {
     return 1;
 }
 
-bool LobbyClientSender::endstate() { return true; }
+bool LobbyClientSender::endstate() {
+    if (started_match) {
+        return true;
+    }
+    notifyCancel();
+    return false;
+}
 
 LobbyClientSender::~LobbyClientSender() {
     if (_keep_running) {
         stop();
+        notifyCancel();
         join();
     }
 }

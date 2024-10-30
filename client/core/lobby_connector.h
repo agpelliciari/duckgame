@@ -38,9 +38,9 @@ public:
     // Resetea el estado al inicial.
     void reset();
 
-    // Termina el estado actual. Y va al siguiente.
-    // De ser posible. Sino retorna false.
-    // bool gonext();
+    // Verifica dado el estado actual, si deberia exitear.
+    // O se podria ir a un siguiente estado.
+    bool cangonext();
 
     // Setea el estado para el manejo de lobby
     LobbyClientSender* setLobbyCreator();

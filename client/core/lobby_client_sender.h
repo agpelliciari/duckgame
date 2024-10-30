@@ -22,9 +22,10 @@ protected:
     ClientProtocol& protocol;  // cppcheck-suppress unusedStructMember
     lobby_runnable mode;       // cppcheck-suppress unusedStructMember
     GameContext& context;      // cppcheck-suppress unusedStructMember
+    bool started_match;        // cppcheck-suppress unusedStructMember
 
     std::mutex mtx;
-    std::condition_variable started_lobby;
+    std::condition_variable match_start;
 
     void handleJoin();
     void handleCreate();
@@ -49,6 +50,7 @@ public:
 
 
     void notifyStart();
+    void notifyCancel();
     bool isrunning();
 
     // void startJoinLobby(uint8_t playercount, unsigned int idlobby);
