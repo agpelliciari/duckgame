@@ -9,12 +9,12 @@ add_subdirectory(lobbyWidget/playerWidget/)
 target_sources(taller_client
     PRIVATE
     # .cpp files
-    mainwindow.cpp
+    menu.cpp
     
     PUBLIC
     # .h files
-    mainwindow.h
+    menu.h
     
     # .ui files
-    mainwindow.ui
+    menu.ui
     )

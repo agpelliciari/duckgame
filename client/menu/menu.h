@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef MENU_H
+#define MENU_H
 
 #include "setHostnamePortWidget/setHostnamePortWidget.h"
 #include "createJoinWidget/createJoinWidget.h"
@@ -15,25 +15,25 @@
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
-class MainWindow;
+class Menu;
 }
 QT_END_NAMESPACE
 
-class MainWindow: public QMainWindow {
+class Menu: public QMainWindow {
     Q_OBJECT
 
 private:
-    Ui::MainWindow* ui;    // cppcheck-suppress unusedStructMember
+    Ui::Menu* ui;    // cppcheck-suppress unusedStructMember
     MenuHandler& handler;  // cppcheck-suppress unusedStructMember
 
 public:
-    explicit MainWindow(MenuHandler& handler);
+    explicit Menu(MenuHandler& handler);
 
     void updateIdDisplayedInLobby(int id);
 
     void addPlayerToLobby(int n);
 
-    ~MainWindow();
+    ~Menu();
 
 private:
     void mountSetHostnamePort();

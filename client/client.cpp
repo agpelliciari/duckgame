@@ -28,8 +28,8 @@ int Client::execMenu(GameLoop& gameLoop, GameContext& context) {
     darkTheme.setColor(QPalette::HighlightedText, Qt::black);
     application.setPalette(darkTheme);
     //------
-    MainWindow window(menuHandler);
-    window.show();
+    Menu menu(menuHandler);
+    menu.show();
     return application.exec();
 }
 int Client::exec() {
