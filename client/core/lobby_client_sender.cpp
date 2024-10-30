@@ -46,6 +46,11 @@ void LobbyClientSender::swapProtocol(ClientProtocol* _protocol) {
     this->protocol = _protocol;
 }
 
+void LobbyClientSender::notifyStart() {
+    std::unique_lock<std::mutex> lck(mtx);
+    started_lobby.notify_all();
+}
+
 
 void LobbyClientSender::cancel() {}
 void LobbyClientSender::doaction(const lobby_action& action) {
@@ -64,6 +69,10 @@ void LobbyClientSender::handleJoin() {
     }
 }
 
+void LobbyClientSender::waitStart() {
+    std::unique_lock<std::mutex> lck(mtx);
+    started_lobby.wait(lck);
+}
 void LobbyClientSender::handleCreate() {
     uint8_t id_lobby = protocol->createLobby();
 
@@ -73,13 +82,8 @@ void LobbyClientSender::handleCreate() {
         context.first_player = protocol->setsingleplay();
         context.second_player = 0;
     }
-
-    std::cerr << "press enter to start the match! lobby id: " << (int)id_lobby << std::endl;
-
-    std::string action;
-    if (!(std::cin >> action)) {  // Could not read if new lobby.
-        throw ProtocolError("Did not read match start!!");
-    }
+    std::cout << "Lobby creada con id " << id_lobby << std::endl;
+    waitStart();
 
     protocol->startlobby();
 }

@@ -43,8 +43,8 @@ void MenuHandler::joinDuoLobby(int lobbyId) {
 }
 
 void MenuHandler::startLobby(const std::string& map) {
-    std::cout << "Aca se envia que el dueño de la sala quiere empezar el juego con el mapa: " << map
-              << std::endl;
+    std::cout << "Empeza con el mapa: " << map << std::endl;
+    sender.notifyStart();
 }
 
 MenuHandler::~MenuHandler() {}

@@ -1,7 +1,9 @@
 #ifndef LOBBY_CLIENT_SENDER_H
 #define LOBBY_CLIENT_SENDER_H
 
+#include <condition_variable>
 #include <memory>
+#include <mutex>
 #include <string>
 
 #include "client/gamecontext.h"
@@ -20,8 +22,13 @@ protected:
     lobby_runnable mode;       // cppcheck-suppress unusedStructMember
     GameContext& context;      // cppcheck-suppress unusedStructMember
 
+    std::mutex mtx;
+    std::condition_variable started_lobby;
+
     void handleJoin();
     void handleCreate();
+
+    void waitStart();
 
 public:
     void joinLobby(bool dualplay, unsigned int idlobby);
@@ -43,6 +50,7 @@ public:
 
     void swapProtocol(ClientProtocol* _protocol);
 
+    void notifyStart();
     bool isrunning();
 
     // void startJoinLobby(uint8_t playercount, unsigned int idlobby);
