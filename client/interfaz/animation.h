@@ -1,8 +1,14 @@
 #ifndef CLIENT_ANIMATION_H_
 #define CLIENT_ANIMATION_H_
 
+#include <unordered_map>
+
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
+
+#include "client/gamecontext.h"
+#include "common/dtos.h"
+#include "common/dtosplayer.h"
 
 // also used in UILoop
 #define SCREEN_WIDTH 640
@@ -14,57 +20,61 @@
 #define INITIAL_SPEED_Y 0.0
 #define GRAVITY 0.5
 
-class Animation {
-private:
-    // Timing variables
-    float positionX;  // cppcheck-suppress unusedStructMember
+#define SPRITE_SIZE 32
 
-    float positionY;  // cppcheck-suppress unusedStructMember
+#define RUNNING_ANIMATION_FRAMES 6
+#define RUNNING_ANIMATION_SPEED 50
+#define JUMPING_ANIMATION_FRAMES 5
+#define JUMPING_ANIMATION_SPEED 300
 
-    float speedX;  // cppcheck-suppress unusedStructMember
+#define STARTING_SPRITE_X 1
+#define STARTING_SPRITE_Y 10
 
-    float speedY;  // cppcheck-suppress unusedStructMember
+#define JUMPING_SPRITE_Y 41
 
-    // Drawing flags
+#define LAY_DOWN_SPRITE_Y 72
 
+#define FLAPPING_SPRITE_X_OFFSET 2
+#define FLAPPING_SPRITE_Y 72
+
+
+struct AnimationBuilder {
     int spriteX;  // cppcheck-suppress unusedStructMember
 
     int spriteY;  // cppcheck-suppress unusedStructMember
 
-    unsigned int frameTicks;  // cppcheck-suppress unusedStructMember
-
-    int runPhase;  // cppcheck-suppress unusedStructMember
-
-    // Movement flags
-
-    bool moveRight;  // cppcheck-suppress unusedStructMember
-
-    bool moveLeft;  // cppcheck-suppress unusedStructMember
-
     bool facingLeft;  // cppcheck-suppress unusedStructMember
 
-    bool onGround;  // cppcheck-suppress unusedStructMember
+    AnimationBuilder() {
+        spriteX = STARTING_SPRITE_X;
 
-    bool layingDown;  // cppcheck-suppress unusedStructMember
+        spriteY = STARTING_SPRITE_Y;
 
-    bool spacePressed;  // cppcheck-suppress unusedStructMember
+        facingLeft = false;
+    }
+};
 
-    bool flying;  // cppcheck-suppress unusedStructMember
+class Animation {
+private:
+    // Drawing flags
+    std::unordered_map<int, AnimationBuilder>
+            animationBuilders;  // cppcheck-suppress unusedStructMember
 
+    unsigned int frameTicks;  // cppcheck-suppress unusedStructMember
 public:
-    Animation();
+    explicit Animation(const GameContext& context);
 
     // Timing: calculate difference between this and previous frame in
     // milliseconds
     void updateFrame();
 
     // Update game state for this frame
-    void updatePosition();
+    // void updatePosition();
 
     // Set sprite coordinates based on the character's state
-    void updateSprite();
+    void updateSprite(MatchDto& matchDto);
 
-    void rightCommandFlags();
+    /*void rightCommandFlags();
 
     void stopRightCommand();
 
@@ -82,13 +92,13 @@ public:
 
     float getPositionX() const;
 
-    float getPositionY() const;
+    float getPositionY() const;*/
 
-    bool isFacingLeft() const;
+    bool isFacingLeft(int playerId) const;
 
-    int getSpriteX() const;
+    int getSpriteX(int playerId) const;
 
-    int getSpriteY() const;
+    int getSpriteY(int playerId) const;
 
     ~Animation();
 };

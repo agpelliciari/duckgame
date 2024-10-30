@@ -6,10 +6,11 @@ target_sources(taller_tests
     PRIVATE
     # .cpp files
     testbaseprotocol.cpp
-    testclientprotocol.cpp
-    testserverprotocol.cpp
-    mocksocket.cpp
+    testprotocolintegration.cpp
+    queuesocket.cpp
+    sharedsocket.cpp
     PUBLIC
     # .h files
-    mocksocket.h
+    queuesocket.h
+    sharedsocket.h
     )

@@ -1,80 +1,64 @@
 #include <cstring>
 #include <iostream>
 
-#include "./mocksocket.h"
+//#include "./mocksocket.h"
+#include "./queuesocket.h"
 #include "common/core/liberror.h"
 #include "common/core/protocol.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
+using ::testing::Eq;
 using ::testing::ThrowsMessage;
 
 static const char SIMPLE_MSG[] = "UN MENSAJE";
 
 
 TEST(BaseProtocolTest, ProtocolClosedSocket) {
-    MockSocket* messen = new MockSocket();
-    MockSocket::expectClose(messen);
-
-    Protocol protocol(messen);
+    std::string msg(SIMPLE_MSG);
+    QueueSocket* messen = new QueueSocket(msg.length(), false);
+    Protocol protocol(messen);  // El protocol deberia liberar el queue socket.
 
     protocol.close();
+
+    // Closed protocol.
+    EXPECT_THROW(protocol.sendmsg(msg), std::exception);
 }
 
 
 TEST(BaseProtocolTest, ProtocolSendsSimpleMsgString) {
-    MockSocket* messen = new MockSocket();
     std::string msg(SIMPLE_MSG);
-    MockSocket::expectStrSend(messen, msg);
+    QueueSocket* messen = new QueueSocket(msg.length(), true);
+
 
     Protocol protocol(messen);
     protocol.sendmsg(msg);
+
+    std::string received(protocol.recvmsgstr());
+
+    ASSERT_THAT(received, Eq(msg));
 }
 
-
-TEST(BaseProtocolTest, ProtocolSendsSimpleMsgStringFail) {
-    MockSocket* messen = new MockSocket();
-    std::string msg(SIMPLE_MSG);
-    MockSocket::expectStrSendFail(messen, msg);
-
-    Protocol protocol(messen);
-    EXPECT_THROW(protocol.sendmsg(msg), LibError);
-}
-
-
-TEST(BaseProtocolTest, ProtocolSendsBytesSimple) {
-    MockSocket* messen = new MockSocket();
+TEST(BaseProtocolTest, ProtocolSendsSimpleMsgBuffered) {
     int count = strlen(SIMPLE_MSG);
-    MockSocket::expectSendAll(messen, SIMPLE_MSG, count);
+    QueueSocket* messen = new QueueSocket(count, true);
+
 
     Protocol protocol(messen);
-    protocol.sendbytes(SIMPLE_MSG, count);
-}
+    protocol.sendmsg(SIMPLE_MSG, count);
 
-TEST(BaseProtocolTest, ProtocolSendsBytesStruct) {
-    MockSocket* messen = new MockSocket();
+    std::string received(protocol.recvmsgstr());
 
-    struct some_data data = getSomeData(12, 32, SOME1, SOME32);
-    data.primerid = 23;
-
-    MockSocket::expectSendAll(messen, &data, sizeof(data));
-
-    Protocol protocol(messen);
-    protocol.sendbytes(&data, sizeof(data));
+    std::string msg(SIMPLE_MSG);
+    ASSERT_THAT(received, Eq(msg));
 }
 
 
-TEST(BaseProtocolTest, ProtocolRecvsBytesStruct) {
-    MockSocket* messen = new MockSocket();
-
-    struct some_data data = getSomeData(12, 32, SOME1, SOME32);
-    data.primerid = 23;
-
-    MockSocket::expectTryRecvAll(messen, &data, sizeof(data));
-
+TEST(BaseProtocolTest, ProtocolRecvsSimpleMsgStringFail) {
+    int count = strlen(SIMPLE_MSG);
+    QueueSocket* messen = new QueueSocket(count - 1, false);
     Protocol protocol(messen);
 
-    bool done = protocol.tryrecvbytes(&data, sizeof(data));
-
-    EXPECT_TRUE(done) << "Se esperaba que se notifique recibio el struct";
+    EXPECT_THROW(protocol.sendmsg(SIMPLE_MSG, count), LibError);
+    EXPECT_THROW(protocol.recvmsgstr(), LibError);
 }
