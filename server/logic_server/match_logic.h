@@ -29,7 +29,7 @@ public:
     void move_player_jump(int id_player);
     void move_player_stay_down(int id_player);
     void get_dtos(std::vector<PlayerDTO>& dtos);
-
+    void update_player_positions();
     ~MatchLogic();
 };
 

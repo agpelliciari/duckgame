@@ -4,8 +4,8 @@
 
 Action::Action(): move_action(TypeMoveAction::NONE) {}
 
-void Action::get_move_action(TypeMoveAction& _move_action) {
-    _move_action = this->move_action;
+void Action::get_move_action(const TypeMoveAction& _move_action) {
+    this->move_action = _move_action;
 }
 
 void Action::still() { this->move_action = TypeMoveAction::NONE; }
