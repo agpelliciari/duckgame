@@ -2,6 +2,7 @@
 #define SETHOSTNAMEPORTWIDGET_H
 
 #include <QWidget>
+#include <string>
 
 struct SetHostnamePortHandler {
     std::function<void(std::string, std::string)> onClickContinue;
@@ -12,15 +13,16 @@ namespace Ui {
 class SetHostnamePortWidget;
 }
 
-class SetHostnamePortWidget : public QWidget {
+class SetHostnamePortWidget: public QWidget {
     Q_OBJECT
 
 private:
-    Ui::SetHostnamePortWidget *ui;
-    const SetHostnamePortHandler handler;
+    Ui::SetHostnamePortWidget* ui;         // cppcheck-suppress unusedStructMember
+    const SetHostnamePortHandler handler;  // cppcheck-suppress unusedStructMember
 
 public:
-    explicit SetHostnamePortWidget(const SetHostnamePortHandler& handler, QWidget *parent = nullptr);
+    explicit SetHostnamePortWidget(const SetHostnamePortHandler& handler,
+                                   QWidget* parent = nullptr);
 
     ~SetHostnamePortWidget();
 

@@ -39,96 +39,123 @@ void Menu::addPlayerToLobby(int n) {
 Menu::~Menu() { delete ui; }
 
 void Menu::mountSetHostnamePort() {
-    SetHostnamePortHandler handler {
-        .onClickContinue = [this](std::string hostname, std::string port) {
-            this->handler.setHostnamePort(hostname, port);
-            unMountWidget();
-            mountCreateJoin();
-        },
-        .onClickQuit = [this] { this->close(); },
+    SetHostnamePortHandler setHostnamePortHandler{
+            .onClickContinue =
+                    [this](const std::string& hostname, const std::string& port) {
+                        this->handler.setHostnamePort(hostname, port);
+                        unMountWidget();
+                        mountCreateJoin();
+                    },
+            .onClickQuit = [this] { this->close(); },
     };
-    SetHostnamePortWidget* setHostnamePortWidget = new SetHostnamePortWidget(handler, ui->centralwidget);
+    SetHostnamePortWidget* setHostnamePortWidget =
+            new SetHostnamePortWidget(setHostnamePortHandler, ui->centralwidget);
     mountWidget(setHostnamePortWidget);
 }
 
 void Menu::mountCreateJoin() {
-    CreateJoinHandler handler {
-        .onClickCreateGame = [this] { unMountWidget(); mountSetSoloDuoHost(); },
-        .onClickJoinGame = [this] { unMountWidget(); mountSetLobbyId(); },
-        .onClickQuit = [this] { this->close(); },
+    CreateJoinHandler createJoinHandler{
+            .onClickCreateGame =
+                    [this] {
+                        unMountWidget();
+                        mountSetSoloDuoHost();
+                    },
+            .onClickJoinGame =
+                    [this] {
+                        unMountWidget();
+                        mountSetLobbyId();
+                    },
+            .onClickQuit = [this] { this->close(); },
     };
-    CreateJoinWidget* createJoinWidget = new CreateJoinWidget(handler, ui->centralwidget);
+    CreateJoinWidget* createJoinWidget = new CreateJoinWidget(createJoinHandler, ui->centralwidget);
     mountWidget(createJoinWidget);
 }
 
 void Menu::mountSetLobbyId() {
-    SetLobbyIdHandler handler {
-        .onClickJoin = [this] { unMountWidget(); mountSetSoloDuoGuest(); },
-        .onClickCancel = [this] { unMountWidget(); mountCreateJoin(); }
-    };
-    SetLobbyIdWidget* setLobbyIdWidget = new SetLobbyIdWidget(handler, ui->centralwidget);
+    SetLobbyIdHandler setLobbyIdHandler{.onClickJoin =
+                                                [this] {
+                                                    unMountWidget();
+                                                    mountSetSoloDuoGuest();
+                                                },
+                                        .onClickCancel =
+                                                [this] {
+                                                    unMountWidget();
+                                                    mountCreateJoin();
+                                                }};
+    SetLobbyIdWidget* setLobbyIdWidget = new SetLobbyIdWidget(setLobbyIdHandler, ui->centralwidget);
     mountWidget(setLobbyIdWidget);
 }
 
 void Menu::mountSetSoloDuoHost() {
-    SetSoloDuoHandler handler {
-        .onClickSolo = [this] {
-            unMountWidget();
-            mountLobbyHost();
-            addPlayerToLobby(1);
-        },
-        .onClickDuo = [this] {
-            unMountWidget();
-            mountLobbyHost();
-            addPlayerToLobby(1);
-            addPlayerToLobby(2);
-        },
-        .onClickCancel = [this] { unMountWidget(); mountCreateJoin(); }
-    };
-    mountSetSoloDuo(handler);
+    SetSoloDuoHandler setSoloDuoHandler{.onClickSolo =
+                                                [this] {
+                                                    unMountWidget();
+                                                    mountLobbyHost();
+                                                    addPlayerToLobby(1);
+                                                },
+                                        .onClickDuo =
+                                                [this] {
+                                                    unMountWidget();
+                                                    mountLobbyHost();
+                                                    addPlayerToLobby(1);
+                                                    addPlayerToLobby(2);
+                                                },
+                                        .onClickCancel =
+                                                [this] {
+                                                    unMountWidget();
+                                                    mountCreateJoin();
+                                                }};
+    mountSetSoloDuo(setSoloDuoHandler);
 }
 
 void Menu::mountSetSoloDuoGuest() {
-    SetSoloDuoHandler handler {
-        .onClickSolo = [this] {
-            unMountWidget();
-            mountLobbyGuest();
-            addPlayerToLobby(1);
-            addPlayerToLobby(2);
-            addPlayerToLobby(3);
-        },
-        .onClickDuo = [this] {
-            unMountWidget();
-            mountLobbyGuest();
-            addPlayerToLobby(1);
-            addPlayerToLobby(2);
-            addPlayerToLobby(3);
-            addPlayerToLobby(4);
-        },
-        .onClickCancel = [this] { unMountWidget(); mountSetLobbyId(); }
-    };
-    mountSetSoloDuo(handler);
+    SetSoloDuoHandler setSoloDuoHandler{.onClickSolo =
+                                                [this] {
+                                                    unMountWidget();
+                                                    mountLobbyGuest();
+                                                    addPlayerToLobby(1);
+                                                    addPlayerToLobby(2);
+                                                    addPlayerToLobby(3);
+                                                },
+                                        .onClickDuo =
+                                                [this] {
+                                                    unMountWidget();
+                                                    mountLobbyGuest();
+                                                    addPlayerToLobby(1);
+                                                    addPlayerToLobby(2);
+                                                    addPlayerToLobby(3);
+                                                    addPlayerToLobby(4);
+                                                },
+                                        .onClickCancel =
+                                                [this] {
+                                                    unMountWidget();
+                                                    mountSetLobbyId();
+                                                }};
+    mountSetSoloDuo(setSoloDuoHandler);
 }
 
-void Menu::mountSetSoloDuo(SetSoloDuoHandler handler) {
-    SetSoloDuoWidget* setSoloDuoWidget = new SetSoloDuoWidget(handler, ui->centralwidget);
+void Menu::mountSetSoloDuo(SetSoloDuoHandler setSoloDuoHandler) {
+    SetSoloDuoWidget* setSoloDuoWidget = new SetSoloDuoWidget(setSoloDuoHandler, ui->centralwidget);
     mountWidget(setSoloDuoWidget);
 }
 
 void Menu::mountLobbyHost() {
-    LobbyHostHandler handler {
-        .onClickStart = [this] {},
-        .onClickCancel = [this] { unMountWidget(); mountSetSoloDuoHost(); }
-    };
-    LobbyHostWidget* lobbyHostWidget = new LobbyHostWidget(handler, ui->centralwidget);
+    LobbyHostHandler lobbyHostHandler{.onClickStart = [this] {},
+                                      .onClickCancel =
+                                              [this] {
+                                                  unMountWidget();
+                                                  mountSetSoloDuoHost();
+                                              }};
+    LobbyHostWidget* lobbyHostWidget = new LobbyHostWidget(lobbyHostHandler, ui->centralwidget);
     mountWidget(lobbyHostWidget);
 }
 
 void Menu::mountLobbyGuest() {
-    LobbyGuestHandler handler {
-        .onClickCancel = [this] { unMountWidget(); mountSetSoloDuoGuest(); }
-    };
-    LobbyGuestWidget* lobbyGuestWidget = new LobbyGuestWidget(handler, ui->centralwidget);
+    LobbyGuestHandler lobbyGuestHandler{.onClickCancel = [this] {
+        unMountWidget();
+        mountSetSoloDuoGuest();
+    }};
+    LobbyGuestWidget* lobbyGuestWidget = new LobbyGuestWidget(lobbyGuestHandler, ui->centralwidget);
     mountWidget(lobbyGuestWidget);
 }
 

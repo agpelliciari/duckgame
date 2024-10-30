@@ -1,9 +1,9 @@
 #ifndef LOBBYHOSTWIDGET_H
 #define LOBBYHOSTWIDGET_H
 
-#include "../playerWidget/playerWidget.h"
-
 #include <QWidget>
+
+#include "../playerWidget/playerWidget.h"
 
 struct LobbyHostHandler {
     std::function<void()> onClickStart;
@@ -14,15 +14,15 @@ namespace Ui {
 class LobbyHostWidget;
 }
 
-class LobbyHostWidget : public QWidget {
+class LobbyHostWidget: public QWidget {
     Q_OBJECT
 
 private:
-    Ui::LobbyHostWidget *ui;
-    const LobbyHostHandler handler;
+    Ui::LobbyHostWidget* ui;         // cppcheck-suppress unusedStructMember
+    const LobbyHostHandler handler;  // cppcheck-suppress unusedStructMember
 
 public:
-    explicit LobbyHostWidget(const LobbyHostHandler& handler, QWidget *parent = nullptr);
+    explicit LobbyHostWidget(const LobbyHostHandler& handler, QWidget* parent = nullptr);
 
     void updateIdDisplayedInLobby(int id);
 

@@ -13,15 +13,15 @@ namespace Ui {
 class SetSoloDuoWidget;
 }
 
-class SetSoloDuoWidget : public QWidget {
+class SetSoloDuoWidget: public QWidget {
     Q_OBJECT
 
 private:
-    Ui::SetSoloDuoWidget *ui;
-    const SetSoloDuoHandler handler;
+    Ui::SetSoloDuoWidget* ui;         // cppcheck-suppress unusedStructMember
+    const SetSoloDuoHandler handler;  // cppcheck-suppress unusedStructMember
 
 public:
-    explicit SetSoloDuoWidget(const SetSoloDuoHandler& handler, QWidget *parent = nullptr);
+    explicit SetSoloDuoWidget(const SetSoloDuoHandler& handler, QWidget* parent = nullptr);
 
     ~SetSoloDuoWidget();
 

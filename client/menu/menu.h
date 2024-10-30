@@ -1,17 +1,17 @@
 #ifndef MENU_H
 #define MENU_H
 
-#include "setHostnamePortWidget/setHostnamePortWidget.h"
-#include "createJoinWidget/createJoinWidget.h"
-#include "setLobbyIdWidget/setLobbyIdWidget.h"
-#include "setSoloDuoWidget/setSoloDuoWidget.h"
-#include "lobbyWidget/lobbyHostWidget/lobbyHostWidget.h"
-#include "lobbyWidget/lobbyGuestWidget/lobbyGuestWidget.h"
-
 #include <QMainWindow>
 #include <functional>
+#include <string>
 
 #include "./menuhandler.h"
+#include "createJoinWidget/createJoinWidget.h"
+#include "lobbyWidget/lobbyGuestWidget/lobbyGuestWidget.h"
+#include "lobbyWidget/lobbyHostWidget/lobbyHostWidget.h"
+#include "setHostnamePortWidget/setHostnamePortWidget.h"
+#include "setLobbyIdWidget/setLobbyIdWidget.h"
+#include "setSoloDuoWidget/setSoloDuoWidget.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -23,7 +23,7 @@ class Menu: public QMainWindow {
     Q_OBJECT
 
 private:
-    Ui::Menu* ui;    // cppcheck-suppress unusedStructMember
+    Ui::Menu* ui;          // cppcheck-suppress unusedStructMember
     MenuHandler& handler;  // cppcheck-suppress unusedStructMember
 
 public:
@@ -46,7 +46,7 @@ private:
 
     void mountSetSoloDuoGuest();
 
-    void mountSetSoloDuo(SetSoloDuoHandler handler);
+    void mountSetSoloDuo(SetSoloDuoHandler setSoloDuoHandler);
 
     void mountLobbyHost();
 

@@ -1,9 +1,9 @@
 #ifndef LOBBYGUESTWIDGET_H
 #define LOBBYGUESTWIDGET_H
 
-#include "../playerWidget/playerWidget.h"
-
 #include <QWidget>
+
+#include "../playerWidget/playerWidget.h"
 
 struct LobbyGuestHandler {
     std::function<void()> onClickCancel;
@@ -13,15 +13,15 @@ namespace Ui {
 class LobbyGuestWidget;
 }
 
-class LobbyGuestWidget : public QWidget {
+class LobbyGuestWidget: public QWidget {
     Q_OBJECT
 
 private:
-    Ui::LobbyGuestWidget *ui;
-    const LobbyGuestHandler handler;
+    Ui::LobbyGuestWidget* ui;         // cppcheck-suppress unusedStructMember
+    const LobbyGuestHandler handler;  // cppcheck-suppress unusedStructMember
 
 public:
-    explicit LobbyGuestWidget(const LobbyGuestHandler& handler, QWidget *parent = nullptr);
+    explicit LobbyGuestWidget(const LobbyGuestHandler& handler, QWidget* parent = nullptr);
 
     void updateIdDisplayedInLobby(int id);
 

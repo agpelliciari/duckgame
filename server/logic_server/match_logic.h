@@ -1,8 +1,7 @@
-#include <list>
-#include <vector>
-#include <map>
 #include <functional>
-
+#include <list>
+#include <map>
+#include <vector>
 
 #include "common/dtosplayer.h"
 
@@ -15,13 +14,13 @@
 class MatchLogic {
 
 private:
-    std::list<Player> players;  // cppcheck-suppress unusedStructMember
-	std::map<int, std::function<void(int)>> command_map;  // cppcheck-suppress unusedStructMember
+    std::list<Player> players;                            // cppcheck-suppress unusedStructMember
+    std::map<int, std::function<void(int)>> command_map;  // cppcheck-suppress unusedStructMember
 
 public:
     MatchLogic();
 
-   	void execute_move_command(int action_type, int index);
+    void execute_move_command(int action_type, int index);
     void add_player(int id);
     void still_player(int id_player);
     void move_player_left(int id_player);

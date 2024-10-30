@@ -13,15 +13,15 @@ namespace Ui {
 class CreateJoinWidget;
 }
 
-class CreateJoinWidget : public QWidget {
+class CreateJoinWidget: public QWidget {
     Q_OBJECT
 
 private:
-    Ui::CreateJoinWidget *ui;
-    const CreateJoinHandler handler;
+    Ui::CreateJoinWidget* ui;         // cppcheck-suppress unusedStructMember
+    const CreateJoinHandler handler;  // cppcheck-suppress unusedStructMember
 
 public:
-    explicit CreateJoinWidget(const CreateJoinHandler& handler, QWidget *parent = nullptr);
+    explicit CreateJoinWidget(const CreateJoinHandler& handler, QWidget* parent = nullptr);
 
     ~CreateJoinWidget();
 
