@@ -2,12 +2,10 @@
 
 #include "./simpleeventlistener.h"
 
-Client::Client(int argc, char* argv[]): argc(argc), argv(argv) {
-    setHostnameAndPort("127.0.0.1", "2048");
-}
+Client::Client(int argc, char* argv[]): argc(argc), argv(argv) {}
 
 int Client::execMenu(GameLoop& gameLoop, GameContext& context) {
-    MenuHandler menuHandler(gameLoop.initLobbyClient(context));
+    MenuHandler menuHandler(gameLoop, context);
 
     QApplication application(argc, argv);
     //-------
@@ -33,7 +31,7 @@ int Client::execMenu(GameLoop& gameLoop, GameContext& context) {
 }
 int Client::exec() {
     GameContext context;
-    GameLoop gameLoop(hostname.c_str(), port.c_str());
+    GameLoop gameLoop;
     if (execMenu(gameLoop, context) != 0) {
         return 1;
     }
@@ -70,8 +68,3 @@ int Client::execGame(GameLoop& gameloop, const GameContext& context) {
 }
 
 Client::~Client() {}
-
-void Client::setHostnameAndPort(const std::string& newHostname, const std::string& newPort) {
-    hostname = newHostname;
-    port = newPort;
-}

@@ -31,15 +31,17 @@ public:
 
     // Los default sin pasar por socket/protocol.
     explicit LobbyClientSender(ClientProtocol& _protocol, GameContext& _context);
+    explicit LobbyClientSender(ClientProtocol* _protocol, GameContext& _context);
 
     LobbyClientSender(LobbyClientSender&&);
     LobbyClientSender& operator=(LobbyClientSender&&);
-
 
     // Asumamos por ahora que no se quiere permitir copias, ni mov.
     LobbyClientSender(const LobbyClientSender&) = delete;
     LobbyClientSender& operator=(const LobbyClientSender&) = delete;
 
+
+    void swapProtocol(ClientProtocol* _protocol);
 
     bool isrunning();
 

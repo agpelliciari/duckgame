@@ -16,9 +16,6 @@ private:
     int argc;     // cppcheck-suppress unusedStructMember
     char** argv;  // cppcheck-suppress unusedStructMember
 
-    std::string hostname = "";
-    std::string port = "";
-
     int execMenu(GameLoop& gameloop, GameContext& context);
     int execGame(GameLoop& gameloop, const GameContext& context);
 
@@ -35,9 +32,6 @@ public:
     Client& operator=(Client&&) = delete;
 
     ~Client();
-
-private:
-    void setHostnameAndPort(const std::string& newHostname, const std::string& newPort);
 };
 
 #endif

@@ -17,6 +17,9 @@
 LobbyClientSender::LobbyClientSender(ClientProtocol& _protocol, GameContext& _context):
         protocol(&_protocol), mode(NULL), context(_context) {}
 
+LobbyClientSender::LobbyClientSender(ClientProtocol* _protocol, GameContext& _context):
+        protocol(_protocol), mode(NULL), context(_context) {}
+
 LobbyClientSender::LobbyClientSender(LobbyClientSender&& other):
         protocol(other.protocol), mode(NULL), context(other.context) {
     other.protocol = NULL;
@@ -34,6 +37,15 @@ LobbyClientSender& LobbyClientSender::operator=(LobbyClientSender&& other) {
 
     return *this;
 }
+
+void LobbyClientSender::swapProtocol(ClientProtocol* _protocol) {
+    if (_keep_running) {
+        throw ProtocolError("Already running sender, cannot change, finish first.");
+    }
+
+    this->protocol = _protocol;
+}
+
 
 void LobbyClientSender::cancel() {}
 void LobbyClientSender::doaction(const lobby_action& action) {
