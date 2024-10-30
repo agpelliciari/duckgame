@@ -13,51 +13,8 @@
   <property name="windowTitle">
    <string>Duck Game</string>
   </property>
-  <widget class="QWidget" name="gridWidget">
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="2" column="1">
-     <widget class="QWidget" name="widgetBottom" native="true"/>
-    </item>
-    <item row="1" column="2">
-     <widget class="QWidget" name="widgetRight" native="true"/>
-    </item>
-    <item row="0" column="1">
-     <widget class="QWidget" name="widgetTop" native="true"/>
-    </item>
-    <item row="1" column="1">
-     <widget class="QGroupBox" name="menuBox">
-      <property name="title">
-       <string>Duck Game</string>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <widget class="QPushButton" name="buttonCreate">
-         <property name="text">
-          <string>Create Lobby</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="buttonJoin">
-         <property name="text">
-          <string>Join Lobby</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="buttonQuit">
-         <property name="text">
-          <string>Quit</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QWidget" name="widgetLeft" native="true"/>
-    </item>
-   </layout>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout"/>
   </widget>
  </widget>
  <resources/>

@@ -1,6 +1,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "setHostnamePortWidget/setHostnamePortWidget.h"
+#include "createJoinWidget/createJoinWidget.h"
+#include "setLobbyIdWidget/setLobbyIdWidget.h"
+#include "setSoloDuoWidget/setSoloDuoWidget.h"
+#include "lobbyWidget/lobbyHostWidget/lobbyHostWidget.h"
+#include "lobbyWidget/lobbyGuestWidget/lobbyGuestWidget.h"
+
 #include <QMainWindow>
 #include <functional>
 
@@ -22,13 +29,31 @@ private:
 public:
     explicit MainWindow(MenuHandler& handler);
 
+    void updateIdDisplayedInLobby(int id);
+
+    void addPlayerToLobby(int n);
+
     ~MainWindow();
 
 private:
-    void onClickCreateLobby();
+    void mountSetHostnamePort();
 
-    void onClickJoinLobby();
+    void mountCreateJoin();
 
-    void onClickQuit();
+    void mountSetLobbyId();
+
+    void mountSetSoloDuoHost();
+
+    void mountSetSoloDuoGuest();
+
+    void mountSetSoloDuo(SetSoloDuoHandler handler);
+
+    void mountLobbyHost();
+
+    void mountLobbyGuest();
+
+    void mountWidget(QWidget* widget);
+
+    void unMountWidget();
 };
 #endif
