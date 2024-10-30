@@ -42,7 +42,7 @@ void Menu::mountSetHostnamePort() {
     SetHostnamePortHandler setHostnamePortHandler{
             .onClickContinue =
                     [this](const std::string& hostname, const std::string& port) {
-                        this->handler.setHostnamePort(hostname, port);
+                        handler.setHostnamePort(hostname, port);
                         unMountWidget();
                         mountCreateJoin();
                     },
@@ -89,12 +89,14 @@ void Menu::mountSetLobbyId() {
 void Menu::mountSetSoloDuoHost() {
     SetSoloDuoHandler setSoloDuoHandler{.onClickSolo =
                                                 [this] {
+                                                    handler.createSoloLobby();
                                                     unMountWidget();
                                                     mountLobbyHost();
                                                     addPlayerToLobby(1);
                                                 },
                                         .onClickDuo =
                                                 [this] {
+                                                    handler.createDuoLobby();
                                                     unMountWidget();
                                                     mountLobbyHost();
                                                     addPlayerToLobby(1);
@@ -111,6 +113,7 @@ void Menu::mountSetSoloDuoHost() {
 void Menu::mountSetSoloDuoGuest() {
     SetSoloDuoHandler setSoloDuoHandler{.onClickSolo =
                                                 [this] {
+                                                    handler.joinSoloLobby(1234);
                                                     unMountWidget();
                                                     mountLobbyGuest();
                                                     addPlayerToLobby(1);
@@ -119,6 +122,7 @@ void Menu::mountSetSoloDuoGuest() {
                                                 },
                                         .onClickDuo =
                                                 [this] {
+                                                    handler.joinSoloLobby(5678);
                                                     unMountWidget();
                                                     mountLobbyGuest();
                                                     addPlayerToLobby(1);
@@ -140,7 +144,7 @@ void Menu::mountSetSoloDuo(SetSoloDuoHandler setSoloDuoHandler) {
 }
 
 void Menu::mountLobbyHost() {
-    LobbyHostHandler lobbyHostHandler{.onClickStart = [this] {},
+    LobbyHostHandler lobbyHostHandler{.onClickStart = [this] { handler.startLobby("Mapa 1"); },
                                       .onClickCancel =
                                               [this] {
                                                   unMountWidget();
