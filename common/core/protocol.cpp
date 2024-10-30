@@ -174,7 +174,6 @@ void Protocol::notifyevent(uint8_t type) {
     messenger->sendall(&toSend[0], 2);
 }
 
-void Protocol::close() {
-    messenger->shutdown(2);
-    messenger->close();
-}
+// Estando o no en null.
+// Simplemente llama al destructor
+void Protocol::close() { messenger.reset(NULL); }

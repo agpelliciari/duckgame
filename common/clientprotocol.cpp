@@ -7,11 +7,22 @@
 #include "common/core/liberror.h"
 #include "common/dtos.h"
 
-ClientProtocol::ClientProtocol(Messenger* conn): protocol(conn) {}
-ClientProtocol::ClientProtocol(Socket& conn): protocol(conn) {}
-ClientProtocol::ClientProtocol(Socket&& conn): protocol(conn) {}
+ClientProtocol::ClientProtocol(): protocol(NULL), isactive(false) {}
+ClientProtocol::ClientProtocol(Messenger* conn): protocol(conn), isactive(conn != NULL) {}
+ClientProtocol::ClientProtocol(Socket& conn): protocol(conn), isactive(true) {}
+ClientProtocol::ClientProtocol(Socket&& conn): protocol(conn), isactive(true) {}
 
-ClientProtocol::ClientProtocol(Protocol&& prot): protocol(std::move(prot)) {}
+ClientProtocol::ClientProtocol(ClientProtocol&& other): protocol(std::move(other.protocol)) {}
+
+ClientProtocol& ClientProtocol::operator=(ClientProtocol&& other) {
+    if (this == &other) {
+        return *this;
+    }
+
+    protocol = std::move(other.protocol);
+    return *this;
+}
+
 
 void ClientProtocol::sendaction(PlayerActionDTO& action) {
     protocol.sendbytes(&action, sizeof(action));
@@ -65,4 +76,11 @@ MatchDto ClientProtocol::recvstate() {
     return res;
 }
 
-void ClientProtocol::close() { protocol.close(); }
+// Manejo de si esta abierto o no.
+bool ClientProtocol::isopen() { return isactive.load(); }
+
+void ClientProtocol::close() {
+    if (isactive.exchange(false)) {
+        protocol.close();
+    }
+}

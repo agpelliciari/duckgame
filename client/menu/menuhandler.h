@@ -3,18 +3,17 @@
 
 #include <string>
 
-#include "client/core/game_loop.h"
 #include "client/core/lobby_client_sender.h"
+#include "client/core/lobby_connector.h"
 #include "common/dtos.h"
 
 class MenuHandler {
 private:
-    GameLoop& connector;
-    // GameContext& context;
-    LobbyClientSender sender;
+    LobbyConnector& connector;  // cppcheck-suppress unusedStructMember
+    LobbyClientSender* sender;  // cppcheck-suppress unusedStructMember
 
 public:
-    explicit MenuHandler(GameLoop& _connector, GameContext& _context);
+    explicit MenuHandler(LobbyConnector& _connector);
 
     void setHostnamePort(const std::string& hostaname, const std::string& port);
 
