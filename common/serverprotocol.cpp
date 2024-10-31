@@ -19,6 +19,14 @@ bool ServerProtocol::recvsignalstart() {
     return protocol.tryrecvbyte(&sign) && sign == ((uint8_t)LobbyActionType::STARTED_LOBBY);
 }
 
+void ServerProtocol::notifyaction(const LobbyActionType action) { protocol.sendbyte(action); }
+
+void ServerProtocol::notifyinfo(const LobbyActionType action, const uint8_t attached_id) {
+    uint8_t bytes[2] = {action, attached_id};
+    protocol.sendbytes(&bytes, 2);
+}
+
+
 bool ServerProtocol::recvlobbyinfo(lobby_info& out) {
     uint8_t sign;
     if (!protocol.tryrecvbyte(&sign)) {

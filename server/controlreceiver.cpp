@@ -47,19 +47,25 @@ void ControlReceiver::playOn(const ControlledPlayer& player, Match& match) {
     }
 }
 void ControlReceiver::run() {
-    LobbyControl lobby(lobbies, protocol);
+    try {
+        LobbyControl lobby(lobbies, protocol);
 
-    bool isanfitrion;
-    Match& match = lobby.resolveMatch(&isanfitrion);
-    ControlledPlayer& player = isanfitrion ? lobby.start(match) : lobby.waitStart(match);
+        bool isanfitrion;
+        Match& match = lobby.resolveMatch(&isanfitrion);
+        ControlledPlayer& player = isanfitrion ? lobby.start(match) : lobby.waitStart(match);
 
-    // Inicia notifier.
-    ControlNotifier notifier(player, protocol);
-    notifier.start();
+        // Inicia notifier.
+        ControlNotifier notifier(player, protocol);
+        notifier.start();
 
-    playOn(player, match);  // Es no except.
+        playOn(player, match);  // Es no except.
 
-    lobbies.disconnectFrom(match, player);
+        lobbies.disconnectFrom(match, player);
+
+    } catch (const GameError& error) {
+        std::cerr << "Game error at lobby: " << error.what() << std::endl;
+        protocol.notifyinfo(LobbyActionType::CANCEL_LOBBY, LobbyCancelType::GAME_ERROR);
+    }
 }
 
 // Este metodo no hace acciones irreversibles

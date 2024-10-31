@@ -26,7 +26,11 @@ Match& LobbyControl::resolveMatch(bool* isanfitrion) {
     }
     *isanfitrion = false;
     std::cerr << " JOIN lobby id: " << (int)info.attached_id << std::endl;
-    return lobbies.findLobby(info.attached_id);
+    Match& res = lobbies.findLobby(info.attached_id);
+
+    protocol.notifyaction(LobbyActionType::JOIN_LOBBY);
+
+    return res;
 }
 
 ControlledPlayer& LobbyControl::waitStart(Match& match) {
@@ -41,6 +45,16 @@ ControlledPlayer& LobbyControl::waitStart(Match& match) {
     std::cerr << "joined " << player.toString() << " to lobby " << (int)match.getID() << std::endl;
 
     player.open();
+
+    match.waitStart();
+    if (match.isrunning()) {
+        // se empezo.
+        protocol.notifyinfo(LobbyActionType::STARTED_LOBBY, match.playercount());
+    } else {
+        // se cancelo.
+        protocol.notifyinfo(LobbyActionType::CANCEL_LOBBY, LobbyCancelType::ANFITRION_LEFT);
+    }
+
     return player;
 }
 ControlledPlayer& LobbyControl::start(Match& match) {
@@ -63,7 +77,10 @@ ControlledPlayer& LobbyControl::start(Match& match) {
 
     player.open();
     lobbies.startLobby(match);
-    std::cerr << "Started MATCH id: " << (int)match.getID() << std::endl;
+    std::cerr << "Started MATCH id: " << (int)match.getID() << "WITH: " << match.playercount()
+              << std::endl;
+
+    protocol.notifyinfo(LobbyActionType::STARTED_LOBBY, match.playercount());
 
     return player;
 }

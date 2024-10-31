@@ -59,17 +59,20 @@ int Client::execGame(LobbyConnector& connector, const GameContext& context) {
 
     if (context.dualplay) {
         std::cout << "Dos jugadores!!! " << (int)context.first_player << " y "
-                  << (int)context.second_player << std::endl;
+                  << (int)context.second_player << " TOTAL " << (int)context.cantidadjugadores
+                  << std::endl;
     } else {
         // Solo un jugador
-        std::cout << "Un solo jugador!!! " << (int)context.first_player << std::endl;
+        std::cout << "Un solo jugador!!! " << (int)context.first_player << " TOTAL "
+                  << (int)context.cantidadjugadores << std::endl;
     }
 
     UILoop uiLoop(actionListener, listener, context);
 
     uiLoop.exec();
 
-    return 0;
+
+    return connector.cangonext() ? 0 : -1;
 }
 
 Client::~Client() {}

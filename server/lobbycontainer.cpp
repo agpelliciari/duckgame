@@ -58,4 +58,16 @@ void LobbyContainer::finishAll() {
         ++lobbyit;
     }
 }
+
+// Si se esta en la lobby y el anfitrion se va. Se cancela.
+
+void LobbyContainer::cancelLobby(Match& lobby) {
+    std::unique_lock<std::mutex> lck(mtx);  // No other actions on container.
+    if (lobby.isrunning()) {
+        throw GameError("Tried to cancel already started lobby %d", lobby.getID());
+    }
+    lobby.cancel();
+}
+
+
 LobbyContainer::~LobbyContainer() { finishAll(); }
