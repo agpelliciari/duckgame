@@ -5,9 +5,9 @@
 #include "./box.h"
 #include "./match_logic.h"
 #include "./match_queue.h"
+#include "./matchobserver.h"
 #include "common/dtos.h"
 #include "common/dtosplayer.h"
-#include "server/playercontainer.h"
 
 #include "action_command.h"
 #include "player.h"
@@ -29,8 +29,11 @@ public:
     // void add_player(Player player);
     void receive_commands();
     void execute_commands();
-    void send_results(PlayerContainer& observer);
-    void loop(PlayerContainer& observer);
+    void send_results(MatchObserver& observer);
+
+    void add_players(MatchObserver& observer);
+    void step();
+    void loop(MatchObserver& observer);
     void stop();
     ~MatchState();
 };

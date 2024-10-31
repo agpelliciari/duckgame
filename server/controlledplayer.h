@@ -7,8 +7,8 @@
 
 #include "common/dtos.h"
 #include "common/queue.h"
+#include "server/logic_server/matchobserver.h"
 
-typedef unsigned int player_id;
 typedef Queue<MatchDto> player_events;
 
 

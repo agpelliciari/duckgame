@@ -7,9 +7,10 @@
 
 #include "./controlledplayer.h"
 #include "common/dtos.h"
+#include "server/logic_server/matchobserver.h"
 
 // Contenedor/monitor de los players activos en el match.
-class PlayerContainer {
+class PlayerContainer: public MatchObserver {
 public:
     typedef std::list<ControlledPlayer> player_container;
 
@@ -34,13 +35,13 @@ public:
     // Remueve todos los restantes. Normalmente no deberia haber, ya se deberian haber desconectado.
     void removeAll();
 
-    int playercount() const;
+    int playercount() const override;
 
-    std::vector<player_id> getPlayers();
+    std::vector<player_id> getPlayers() override;
 
     // Push/notifica eventos a los players, de forma no bloqueante! No tiene precondiciones perse
     // Devuelve los players que se desconectaron. Podrian ser notificados directamente
-    std::vector<player_id> updateState(const MatchDto& state);
+    std::vector<player_id> updateState(const MatchDto& state) override;
 };
 
 #endif

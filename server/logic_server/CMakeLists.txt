@@ -26,6 +26,7 @@ target_sources(taller_server
             armor.h
             command.h
             action_command.h
+            matchobserver.h
 
 
     )
