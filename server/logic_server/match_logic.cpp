@@ -14,7 +14,7 @@ void MatchLogic::add_player(int id) { players.push_back(Player(id, 0, 0)); }
 
 void MatchLogic::still_player(int id) {
 
-    for (Player player: players) {
+    for (Player& player: players) {
         if (player.same_id(id)) {
             player.still();
         }

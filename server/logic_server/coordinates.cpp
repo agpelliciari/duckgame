@@ -15,9 +15,12 @@ void Coordinates::move_right() { this -> actual_x += step; }
 void Coordinates::move_left() { this -> actual_x -= step; }
 
 void Coordinates::jump() {
-    actual_y = jump_step;
-    actual_jump_step = jump_step;
-    actual_y = -actual_jump_step;
+    if (actual_y == 0){
+    	actual_y = jump_step;
+    	actual_jump_step = jump_step;
+    	actual_y = -actual_jump_step;
+    }
+
 }
 
 void Coordinates::update_position_y(){
