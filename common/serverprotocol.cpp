@@ -57,8 +57,7 @@ PlayerActionDTO ServerProtocol::recvaction() {
     }
 
     // std::cout << "Receiving action from: " << (int)action.playerind << "= " << (int)action.type
-    // <<
-    std::endl;
+    //<< std::endl;
 
     return action;
 }

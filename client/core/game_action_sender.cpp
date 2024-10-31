@@ -8,10 +8,15 @@
 #include "./game_state_recv.h"
 #include "common/core/liberror.h"
 
+GameActionSender::GameActionSender(ClientProtocol& _protocol, EventListener& _listener,
+                                   GameContext& _context):
+        protocol(_protocol),
+        listener(_listener),
+        context(_context),
+        firstidle(true),
+        secondidle(true) {}
 
-GameActionSender::GameActionSender(ClientProtocol& _protocol, EventListener& _listener):
-        protocol(&_protocol), listener(_listener) {}
-
+/*
 GameActionSender::GameActionSender(GameActionSender&& other):
         protocol(other.protocol), listener(other.listener) {
     other.protocol = NULL;
@@ -28,9 +33,44 @@ GameActionSender& GameActionSender::operator=(GameActionSender&& other) {
 
     return *this;
 }
+*/
 
 void GameActionSender::disconnect() { std::cout << "SHOULD SEND DISCCONNECT!" << std::endl; }
-void GameActionSender::doaction(const PlayerActionDTO& action) { actions.try_push(action); }
+void GameActionSender::doaction(const PlayerActionDTO& action) {
+
+    if (action.playerind != 0) {
+
+        if (!context.dualplay) {
+            return;
+        }
+
+        if (secondidle) {
+            if (action.type == NONE) {
+                return;
+            }
+            secondidle = false;
+        } else {
+            if (action.type == NONE) {
+                secondidle = true;
+            }
+        }
+
+    } else {
+        if (firstidle) {
+            if (action.type == NONE) {
+                return;
+            }
+            firstidle = false;
+        } else {
+            if (action.type == NONE) {
+                firstidle = true;
+            }
+        }
+    }
+
+
+    actions.try_push(action);
+}
 
 bool GameActionSender::isrunning() { return _is_alive; }
 
@@ -44,8 +84,8 @@ void GameActionSender::begin() {
 }
 
 void GameActionSender::end() {
-    std::cout << "ENDING GAME SENDER!!\n";
     if (_keep_running) {
+        std::cout << "ENDING GAME SENDER!!\n";
         stop();
         actions.close();
         join();
@@ -55,12 +95,12 @@ void GameActionSender::end() {
 void GameActionSender::run() {
 
     try {
-        GameStateRecv receiver(*protocol, listener);
+        GameStateRecv receiver(protocol, listener);
         receiver.start();
 
         while (_keep_running) {
             PlayerActionDTO dto = actions.pop();
-            protocol->sendaction(dto);
+            protocol.sendaction(dto);
         }
     } catch (const ClosedQueue& error) {
         std::cerr << "Game action sender closed!" << std::endl;

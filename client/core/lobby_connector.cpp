@@ -56,7 +56,7 @@ LobbyClientSender* LobbyConnector::setLobbyJoin(unsigned int lobbyid) {
 
 // Utiliza el protocol del sender, le quita el
 GameActionSender* LobbyConnector::initGame(EventListener& listener) {
-    GameActionSender* game = new GameActionSender(protocol, listener);
+    GameActionSender* game = new GameActionSender(protocol, listener, context);
     state.reset(game);
     return game;
 }
