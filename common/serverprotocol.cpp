@@ -55,6 +55,11 @@ PlayerActionDTO ServerProtocol::recvaction() {
         isactive = false;
         throw ProtocolError("Did not receive action!");
     }
+
+    // std::cout << "Receiving action from: " << (int)action.playerind << "= " << (int)action.type
+    // <<
+    std::endl;
+
     return action;
 }
 void ServerProtocol::sendstate(const MatchDto&& state) { sendstate(state); }

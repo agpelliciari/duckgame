@@ -29,7 +29,7 @@ void ControlReceiver::playOn(const ControlledPlayer& player, Match& match) {
             PlayerActionDTO action = protocol.recvaction();
             if (player.playercount() <= action.playerind) {
                 std::cerr << "Invalid action from client!!\n";
-                return;
+                continue;
             }
             action.playerind = player.getid(action.playerind);
             match.notifyAction(action);
