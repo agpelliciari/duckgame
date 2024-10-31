@@ -1,6 +1,7 @@
 #ifndef LIB_PROTOCOL_H
 #define LIB_PROTOCOL_H
 
+#include <atomic>
 #include <cstdint>
 #include <cstring>
 #include <memory>
@@ -23,9 +24,11 @@ class Protocol {
 protected:
     // Para poder aplicar polimorfismo...
     std::unique_ptr<Messenger> messenger;
+    std::atomic<bool> active;
 
 public:
-    explicit Protocol(Messenger* _messenger);
+    Protocol();                                // Inactive protocol
+    explicit Protocol(Messenger* _messenger);  // Desde un messenger cualquiera
     explicit Protocol(std::unique_ptr<Messenger>& _messenger);
 
     // Para abstraer que hace con el socket en si.
@@ -39,6 +42,7 @@ public:
     Protocol(Protocol&&);
     Protocol& operator=(Protocol&&);
 
+    bool isactive();  // Se fija si esta activo, pudo ser cerrado como nunca haber sido activo.
     void close();
 
     // Byte communicaiton!!

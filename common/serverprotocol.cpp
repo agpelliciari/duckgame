@@ -8,9 +8,9 @@
 #include "common/protocolerror.h"
 
 
-ServerProtocol::ServerProtocol(Socket& messenger): protocol(messenger), isactive(true) {}
-ServerProtocol::ServerProtocol(Messenger* messenger): protocol(messenger), isactive(true) {}
-ServerProtocol::ServerProtocol(Protocol&& prot): protocol(std::move(prot)), isactive(true) {}
+ServerProtocol::ServerProtocol(Socket& messenger): protocol(messenger) {}
+ServerProtocol::ServerProtocol(Messenger* messenger): protocol(messenger) {}
+ServerProtocol::ServerProtocol(Protocol&& prot): protocol(std::move(prot)) {}
 
 uint8_t ServerProtocol::recvplayercount() { return protocol.recvbyte(); }
 
@@ -80,10 +80,6 @@ void ServerProtocol::sendstate(const MatchDto& state) {
 }
 
 
-bool ServerProtocol::isopen() { return isactive.load(); }
+bool ServerProtocol::isopen() { return protocol.isactive(); }
 
-void ServerProtocol::close() {
-    if (isactive.exchange(false)) {
-        protocol.close();
-    }
-}
+void ServerProtocol::close() { protocol.close(); }

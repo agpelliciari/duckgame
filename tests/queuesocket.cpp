@@ -100,14 +100,8 @@ void QueueSocket::recvall(void* data, unsigned int sz) {
     }
 }
 
-// Cierra parcial o completamente. Es no except. Devuelve -1 si fallo.
-int QueueSocket::shutdown(int how) {
-    std::cout << "SHUTDOWN QUEUE SOCKET? " << how << std::endl;
-    return closed ? -1 : 0;
-}
-
-// Cierra el socket. Aunque no necesariamente haria el shutdown.
-int QueueSocket::close() {
+// Cierra el socket
+int QueueSocket::finish() {
     if (closed) {
         return -1;
     }

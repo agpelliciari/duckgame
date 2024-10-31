@@ -7,10 +7,10 @@
 #include "common/core/liberror.h"
 #include "common/dtos.h"
 
-ClientProtocol::ClientProtocol(): protocol(NULL), isactive(false) {}
-ClientProtocol::ClientProtocol(Messenger* conn): protocol(conn), isactive(conn != NULL) {}
-ClientProtocol::ClientProtocol(Socket& conn): protocol(conn), isactive(true) {}
-ClientProtocol::ClientProtocol(Socket&& conn): protocol(conn), isactive(true) {}
+ClientProtocol::ClientProtocol(): protocol() {}
+ClientProtocol::ClientProtocol(Messenger* conn): protocol(conn) {}
+ClientProtocol::ClientProtocol(Socket& conn): protocol(conn) {}
+ClientProtocol::ClientProtocol(Socket&& conn): protocol(conn) {}
 
 ClientProtocol::ClientProtocol(ClientProtocol&& other): protocol(std::move(other.protocol)) {}
 
@@ -99,10 +99,6 @@ MatchDto ClientProtocol::recvstate() {
 }
 
 // Manejo de si esta abierto o no.
-bool ClientProtocol::isopen() { return isactive.load(); }
+bool ClientProtocol::isopen() { return protocol.isactive(); }
 
-void ClientProtocol::close() {
-    if (isactive.exchange(false)) {
-        protocol.close();
-    }
-}
+void ClientProtocol::close() { protocol.close(); }

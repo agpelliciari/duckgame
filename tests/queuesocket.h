@@ -42,10 +42,7 @@ public:
     void recvall(void* data, unsigned int sz) override;
 
     // Cierra parcial o completamente. Es no except. Devuelve -1 si fallo.
-    int shutdown(int how) override;
-
-    // Cierra el socket. Aunque no necesariamente haria el shutdown.
-    int close() override;
+    int finish() override;
 
     // Destructor, se encarga de llamar al shutdown si no lo fue.
     ~QueueSocket();

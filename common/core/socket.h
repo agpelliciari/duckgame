@@ -62,10 +62,12 @@ public:
     Socket accept();
 
     // Cierra parcial o completamente. Es no except. Devuelve -1 si fallo.
-    int shutdown(int how) override;
+    int shutdown(int how);
 
     // Cierra el socket. Aunque no necesariamente haria el shutdown.
-    int close() override;
+    int close();
+
+    int finish() override;
 
     // Destructor, se encarga de llamar al shutdown si no lo fue.
     ~Socket();

@@ -285,6 +285,15 @@ int Socket::close() {
     return ::close(this->skt);
 }
 
+int Socket::finish() {
+    chk_skt_or_fail();
+    ::shutdown(this->skt, 2);  // 2 == ambas cosas, read and write.
+    this->closed = true;
+
+    return ::close(this->skt);
+}
+
+
 Socket::~Socket() {
     if (not this->closed) {
         ::shutdown(this->skt, 2);

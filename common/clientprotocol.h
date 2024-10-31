@@ -16,8 +16,6 @@ class ClientProtocol {
 
 protected:
     Protocol protocol;  // Composicion con el protocolo base para la conexion
-    std::atomic<bool> isactive;
-
 public:
     // El default a partir de la abstraccion de socket
     explicit ClientProtocol(Messenger* connection);

@@ -13,15 +13,21 @@
 
 #define MARK_NOTIF 0x06
 
-Protocol::Protocol(Messenger* _messenger): messenger(_messenger) {}
-Protocol::Protocol(std::unique_ptr<Messenger>& _messenger): messenger(std::move(_messenger)) {}
+Protocol::Protocol(): messenger(), active(false) {}
+Protocol::Protocol(Messenger* _messenger): messenger(_messenger), active(_messenger != NULL) {}
+Protocol::Protocol(std::unique_ptr<Messenger>& _messenger):
+        messenger(std::move(_messenger)), active(messenger.get() != NULL) {}
 
 // Para asegurarse del scope de la variable hay que pasarlo al heap.
-Protocol::Protocol(Socket& _skt): messenger(new Socket(std::move(_skt))) {}
-
+Protocol::Protocol(Socket& _skt): messenger(new Socket(std::move(_skt))), active(true) {}
 
 // El unique ptr le quita el ownership.
-Protocol::Protocol(Protocol&& other): messenger(std::move(other.messenger)) {}
+Protocol::Protocol(Protocol&& other):
+        messenger(std::move(other.messenger)), active(other.active.load()) {
+    // Reset/close del otro.
+    other.messenger.reset(NULL);
+    other.active = false;
+}
 
 Protocol& Protocol::operator=(Protocol&& other) {
     if (this == &other) {
@@ -29,6 +35,11 @@ Protocol& Protocol::operator=(Protocol&& other) {
     }
 
     this->messenger = std::move(other.messenger);  // El ptr le quita owner ship al otro
+    this->active = other.active.load();
+
+    // Reset/close del otro.
+    other.messenger.reset(NULL);
+    other.active = false;
 
     return *this;
 }
@@ -174,6 +185,19 @@ void Protocol::notifyevent(uint8_t type) {
     messenger->sendall(&toSend[0], 2);
 }
 
+bool Protocol::isactive() { return active.load(); }
+
 // Estando o no en null.
 // Simplemente llama al destructor
-void Protocol::close() { messenger.reset(NULL); }
+void Protocol::close() {
+    if (active.exchange(false)) {
+
+        // Esto que seria llamado en el destructor tambien
+        // Cerraria el messenger.
+        messenger->finish();
+
+        // Se podria setear a null. Pero daria segmentation fault.
+        // Y tampoco se quiere verificar con ifs si es active.
+        // messenger.reset(NULL);
+    }
+}
