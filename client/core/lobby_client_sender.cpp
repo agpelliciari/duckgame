@@ -122,30 +122,6 @@ void LobbyClientSender::run() {
     (this->*mode)();  // exec lobby mode.
 }
 
-
-int LobbyClientSender::getcount() {
-    std::cout << ASK_NAME << std::endl;
-
-    std::string name;
-    if (!(std::getline(std::cin, name, '\n'))) {  // Could not read name.
-        throw LibError(1, "Could not read player name");
-    }
-
-    std::string name2;
-
-    std::cerr << ASK_NAME << " segundo player" << std::endl;
-    if (!(std::getline(std::cin, name2, '\n'))) {  // Could not read name.
-        throw LibError(1, "Could not read second player name");
-    }
-
-    if (name2.size() > 0) {
-        std::cerr << "2 players: " << name << " " << name2 << std::endl;
-        return 2;
-    }
-    std::cerr << "1 player: " << name << std::endl;
-    return 1;
-}
-
 bool LobbyClientSender::endstate() {
     if (started_match) {
         return true;

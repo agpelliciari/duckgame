@@ -36,10 +36,10 @@ bool GameActionSender::isrunning() { return _is_alive; }
 
 void GameActionSender::begin() {
     if (is_alive()) {
-        std::cerr << "ALREADY STARTED SENDER!\n";
+        // std::cerr << "ALREADY STARTED SENDER!\n";
         return;
     }
-    std::cout << "GOT TO BEGIN GAME SENDER?! " << protocol << std::endl;
+    // std::cout << "GOT TO BEGIN GAME SENDER?! " << protocol << std::endl;
     start();
 }
 
@@ -60,11 +60,7 @@ void GameActionSender::run() {
 
         while (_keep_running) {
             PlayerActionDTO dto = actions.pop();
-            // std::cout << "POP.. SEND Player ACTION? " << (int)dto.type << " " <<
-            // (int)dto.playerind
-            //           << std::endl;
             protocol->sendaction(dto);
-            // std::cout << "ALO SEND ACTION?" << std::endl;
         }
     } catch (const ClosedQueue& error) {
         std::cerr << "Game action sender closed!" << std::endl;

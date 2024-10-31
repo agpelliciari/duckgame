@@ -32,6 +32,8 @@ void ClientProtocol::recvlobbyinfo(lobby_info& out) {
 
 
 void ClientProtocol::sendaction(PlayerActionDTO& action) {
+    // std::cout << "Sending action from: " << (int)action.playerind << "= " << (int)action.type <<
+    // std::endl;
     protocol.sendbytes(&action, sizeof(action));
 }
 
@@ -69,6 +71,7 @@ MatchDto ClientProtocol::recvstate() {
     protocol.recvbytes(&out, sizeof(out));
 
     MatchDto res = MatchDto(out);
+    // std::cerr << "-----GOT UPDATE\n" << res.parse() << std::endl;
 
     int playercount = (int)protocol.recvbyte();
 
@@ -83,6 +86,15 @@ MatchDto ClientProtocol::recvstate() {
         res.players.push_back(player);
         playercount--;
     }
+
+    /*
+    for (auto playerit = state.players.begin(); playerit != state.players.end();) {
+        PlayerDTO player = *playerit;
+        std::cerr << "-->" << (int)player.id << " at " << player.coord_x << ","
+                  << player.coord_y << std::endl;
+        ++playerit;
+    }
+    */
     return res;
 }
 

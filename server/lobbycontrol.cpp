@@ -25,7 +25,7 @@ Match& LobbyControl::resolveMatch(bool* isanfitrion) {
         return newlobby;
     }
     *isanfitrion = false;
-    std::cerr << " JOIN lobby id: " << (int)info.attached_id << std::endl;
+    // std::cerr << " JOIN lobby id: " << (int)info.attached_id << std::endl;
     Match& res = lobbies.findLobby(info.attached_id);
 
     protocol.notifyaction(LobbyActionType::JOIN_LOBBY);

@@ -58,8 +58,6 @@ public:
 
     void run() override;
 
-    int getcount();
-
     // Lobby state
     bool endstate() override;
 
