@@ -1,4 +1,4 @@
-target_sources(taller_server
+target_sources(taller_server_logic
     PRIVATE
     # .cpp files
             coordinates.cpp
