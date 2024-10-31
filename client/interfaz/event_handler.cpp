@@ -51,10 +51,17 @@ void EventHandler::handle(bool& isRunning_) {
             }
         } else if (event.type == SDL_KEYUP) {
             action.type = NONE;
+            if ((event.key.keysym.sym == SDLK_w) || (event.key.keysym.sym == SDLK_SPACE)) {
+                continue;
+            }
+
+
             if ((event.key.keysym.sym == SDLK_a) || (event.key.keysym.sym == SDLK_d) ||
                 (event.key.keysym.sym == SDLK_w) || (event.key.keysym.sym == SDLK_s)) {
                 action.playerind = 1;
             }
+        } else {
+            continue;
         }
 
         actionSender.doaction(action);
