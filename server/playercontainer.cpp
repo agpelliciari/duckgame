@@ -13,14 +13,16 @@ ControlledPlayer& PlayerContainer::add(uint8_t countplayers) {
     // Por ahora pareceria es lo mismo que el id.
     // Pero a la hora de remove. No parece correcto. Si bien por ahora no se necesita se puedan
     // conectar.
-    totalplayers += countplayers;
 
-    ControlledPlayer& player = players.emplace_back(countplayers);
-    for (uint8_t ind = 0; ind < countplayers; ind++) {
-        player.setid(ind, ++last_id);
+    if (countplayers == 2) {  // Two in the machine!
+        totalplayers += 2;
+        player_id first = ++last_id;
+        return players.emplace_back(first, ++last_id);
     }
 
-    return player;
+    // Por default es 1 solo.
+    totalplayers += 1;
+    return players.emplace_back(++last_id);
 }
 
 // Actualmente el player acceptor se cierra primero.
