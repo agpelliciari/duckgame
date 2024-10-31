@@ -51,11 +51,11 @@ struct PlayerDTO {
     int id;
     int coord_x;
     int coord_y;
+    bool is_alive;
     TypeWeapon weapon;
     TypeMoveAction move_action;
     TypeDoingAction doing_action;
 
-    bool is_alive;
     bool helmet;
     bool chest_armor;
     bool aiming_up;
@@ -65,12 +65,24 @@ struct PlayerDTO {
             id(id_),
             coord_x(x),
             coord_y(y),
+            is_alive(alive),
             weapon(w),
             move_action(action),
             doing_action(TypeDoingAction::NOTHING),
-            is_alive(alive),
             helmet(h),
             chest_armor(armor),
+            aiming_up(false) {}
+
+    PlayerDTO(int id_, bool alive, int x, int y, TypeMoveAction state):
+            id(id_),
+            coord_x(x),
+            coord_y(y),
+            is_alive(alive),
+            weapon(TypeWeapon::NONE),
+            move_action(state),
+            doing_action(TypeDoingAction::NOTHING),
+            helmet(false),
+            chest_armor(false),
             aiming_up(false) {}
 
     PlayerDTO() {}  // Para read.

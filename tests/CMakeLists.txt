@@ -7,10 +7,12 @@ target_sources(taller_tests
     # .cpp files
     testbaseprotocol.cpp
     testprotocolintegration.cpp
+    testermatchdto.cpp
     queuesocket.cpp
     sharedsocket.cpp
     PUBLIC
     # .h files
+    testermatchdto.h
     queuesocket.h
     sharedsocket.h
     )

@@ -2,6 +2,7 @@
 
 #include "./queuesocket.h"
 #include "./sharedsocket.h"
+#include "./testermatchdto.h"
 #include "common/clientprotocol.h"
 #include "common/core/liberror.h"
 #include "common/dtos.h"
@@ -9,9 +10,9 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
-
 using ::testing::InSequence;
 using ::testing::ThrowsMessage;
+/*
 
 static void assertPlayerAreEq(const PlayerDTO& expected, const PlayerDTO& given) {
 
@@ -46,6 +47,8 @@ static void assertMatchDtoEq(const MatchDto& expected, const MatchDto& given) {
     }
 }
 
+*/
+
 TEST(IntegrationProtocolTest, SendReceiveStateNoPlayer) {
 
     QueueSocket msgbase(20, true);
@@ -58,9 +61,8 @@ TEST(IntegrationProtocolTest, SendReceiveStateNoPlayer) {
 
     server.sendstate(state);
 
-    MatchDto result = client.recvstate();
-
-    assertMatchDtoEq(state, result);
+    TesterMatchDTO tester(client.recvstate());
+    tester.assertEquals(state);
 }
 
 
@@ -69,12 +71,8 @@ TEST(IntegrationProtocolTest, SendReceiveState1PlayerMoveLeft) {
     QueueSocket msgbase(20, true);
 
     MatchDto state(INICIADA, 2);
-    PlayerDTO player1;
-    player1.id = 3;
-    player1.coord_x = 10;
-    player1.coord_y = 5;
-    player1.move_action = TypeMoveAction::MOVE_LEFT;
-
+    PlayerDTO player1(3, true, 10, 5,
+                      TypeMoveAction::MOVE_LEFT);  // id, is alive, x , y, move_action
     state.players.push_back(player1);
 
 
@@ -84,9 +82,8 @@ TEST(IntegrationProtocolTest, SendReceiveState1PlayerMoveLeft) {
 
     server.sendstate(state);
 
-    MatchDto result = client.recvstate();
-
-    assertMatchDtoEq(state, result);
+    TesterMatchDTO tester(client.recvstate());
+    tester.assertEquals(state);
 }
 
 
@@ -95,18 +92,12 @@ TEST(IntegrationProtocolTest, SendReceiveState2PlayerMoveLeftAndStill) {
     QueueSocket msgbase(20, true);
 
     MatchDto state(INICIADA, 2);
-    PlayerDTO player1;
-    player1.id = 3;
-    player1.coord_x = 10;
-    player1.coord_y = 5;
-    player1.move_action = TypeMoveAction::MOVE_LEFT;
 
+    PlayerDTO player1(3, true, 10, 5,
+                      TypeMoveAction::MOVE_LEFT);  // id, is alive, x , y, move_action
     state.players.push_back(player1);
-    PlayerDTO player2;
-    player2.id = 1;
-    player2.coord_x = 1;
-    player2.coord_y = 0;
-    player2.move_action = TypeMoveAction::NONE;
+
+    PlayerDTO player2(1, false, 1, 0, TypeMoveAction::NONE);  // id, is alive, x , y, move_action
     state.players.push_back(player2);
 
 
@@ -116,7 +107,6 @@ TEST(IntegrationProtocolTest, SendReceiveState2PlayerMoveLeftAndStill) {
 
     server.sendstate(state);
 
-    MatchDto result = client.recvstate();
-
-    assertMatchDtoEq(state, result);
+    TesterMatchDTO tester(client.recvstate());
+    tester.assertEquals(state);
 }
