@@ -29,7 +29,7 @@ struct GameContext {
             second_player(2),
             map_size_x(50),
             map_size_y(20),
-            cantidadjugadores(2) {}
+            cantidadjugadores(4) {}
 };
 
 #endif

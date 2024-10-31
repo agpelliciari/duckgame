@@ -7,7 +7,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
-#define SIZE 2
+#define SIZE 4
 #define YELLOW_DUCK_SPRITE 0
 #define GREY_DUCK_SPRITE 1
 

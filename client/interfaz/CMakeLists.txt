@@ -4,10 +4,12 @@ target_sources(taller_client
     animation.cpp
     loop_ui.cpp
     texture_container.cpp
+    event_handler.cpp
     
     PUBLIC
     # .h files
     animation.h
     loop_ui.h
     texture_container.h
+    event_handler.h
     )
