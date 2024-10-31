@@ -15,11 +15,8 @@ unsigned int SharedSocket::tryrecvall(void* data, unsigned int sz) {
 // Intenta leer sz bytes. Tira excepcion sino lee todo.
 void SharedSocket::recvall(void* data, unsigned int sz) { messenger.recvall(data, sz); }
 
-// Cierra parcial o completamente. Es no except. Devuelve -1 si fallo.
-int SharedSocket::shutdown(int how) { return messenger.shutdown(how); }
-
-// Cierra el socket. Aunque no necesariamente haria el shutdown.
-int SharedSocket::close() { return messenger.close(); }
+// Cierra el socket.
+int SharedSocket::finish() { return messenger.finish(); }
 
 
 // Destructor, se encarga de llamar al shutdown si no lo fue.
