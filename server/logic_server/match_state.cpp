@@ -8,9 +8,8 @@ MatchState::MatchState(): running(false), match_logic(), acciones(match_logic) {
 void MatchState::pushAction(const PlayerActionDTO& action) { acciones.push_command(action); }
 
 void MatchState::loop(MatchObserver& observer) {
-    this->add_players(observer);
+    start_players(observer);
 
-    running = true;
     while (running) {
         this->step();
         this->send_results(observer);
@@ -18,13 +17,17 @@ void MatchState::loop(MatchObserver& observer) {
     }
 }
 
-void MatchState::add_players(MatchObserver& observer) {
+
+void MatchState::start_players(MatchObserver& observer) {
+
     std::vector<unsigned int> ids = observer.getPlayers();
     for (auto id = ids.begin(); id != ids.end();) {
         match_logic.add_player(*id);
         std::cout << "New player added with id: " << *id << std::endl;
         ++id;
     }
+
+    running = true;
 }
 
 void MatchState::step() {

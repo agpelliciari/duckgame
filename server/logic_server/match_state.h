@@ -29,10 +29,11 @@ public:
     // void add_player(Player player);
     void receive_commands();
     void execute_commands();
-    void send_results(MatchObserver& observer);
 
-    void add_players(MatchObserver& observer);
+    void send_results(MatchObserver& observer);
+    void start_players(MatchObserver& observer);
     void step();
+
     void loop(MatchObserver& observer);
     void stop();
     ~MatchState();
