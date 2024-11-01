@@ -4,10 +4,10 @@
 
 MatchLogic::MatchLogic() {
     this->command_map[0] = [this](int index) { this->add_player_speed(index, 0, 0); };
-    this->command_map[1] = [this](int index) { this->add_player_speed(index, -3, 0); };
-    this->command_map[2] = [this](int index) { this->add_player_speed(index, 3, 0); };
-    this->command_map[3] = [this](int index) { this->add_player_speed(index, 20, 0); };
-    this->command_map[4] = [this](int index) { this->add_player_speed(index, -1, 0); };
+    this->command_map[1] = [this](int index) { this->add_player_speed(index, -10, 0); };
+    this->command_map[2] = [this](int index) { this->add_player_speed(index, 10, 0); };
+    this->command_map[3] = [this](int index) { this->add_player_speed(index, 0, -1); };
+    this->command_map[4] = [this](int index) { this->add_player_speed(index, 0, 60); };
 }
 
 void MatchLogic::add_player(int id) { players.push_back(Player(id, 0, 0)); }
@@ -42,6 +42,8 @@ void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos) {
     }
 }
 
-void MatchLogic::execute_move_command(int action_type, int index) {}
+void MatchLogic::execute_move_command(int action_type, int index) {
+    this->command_map[action_type](index);
+}
 
 MatchLogic::~MatchLogic() {}

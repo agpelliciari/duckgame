@@ -21,10 +21,10 @@ void PhysicalObject::add_speed(int speed_x, int speed_y){
 void PhysicalObject::move(){
     //falta chequear colisiones con objetos
     actual_position.x += speed.x * time_step;
-    if (actual_position.y > 0) {
+    if (actual_position.y >= 0) {
         actual_position.y += speed.y * time_step;
         speed.y += gravity * time_step;
-        if (actual_position.y <= 0) {
+        if (actual_position.y < 0) {
             actual_position.y = 0;
             speed.y = 0;
         }
