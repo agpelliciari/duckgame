@@ -3,7 +3,7 @@
 #include <map>
 #include <functional>
 
-
+#include "tuple.h"
 #include "common/dtosplayer.h"
 #include "box.h"
 #include "player.h"
@@ -17,7 +17,7 @@ class MatchLogic {
 private:
     std::vector<Player> players;  // cppcheck-suppress unusedStructMember
     std::vector<Box> boxes; // cppcheck-suppress unusedStructMember
-    //std::map<>
+    std::map<Tuple, bool> game_map; // cppcheck-suppress unusedStructMember
 	std::map<int, std::function<void(int)>> command_map;  // cppcheck-suppress unusedStructMember
 
 
@@ -26,11 +26,6 @@ public:
 
    	void execute_move_command(int action_type, int index);
     void add_player(int id);
-    void still_player(int id_player);
-    void move_player_left(int id_player);
-    void move_player_right(int id_player);
-    void move_player_jump(int id_player);
-    void move_player_stay_down(int id_player);
     void get_dtos(std::vector<PlayerDTO>& dtos);
     void update_player_positions();
     ~MatchLogic();
