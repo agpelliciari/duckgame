@@ -12,7 +12,7 @@ class PhysicalObject {
         Tuple dimension;
         Tuple speed;
         int gravity;
-        int time_step;
+        float time_step;
 
     public:
 
@@ -24,6 +24,7 @@ class PhysicalObject {
         void move();
         void get_position(int &coord_x, int &coord_y);
 
+        //~PhysicalObject();
 };
 
 
