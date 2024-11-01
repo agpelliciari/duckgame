@@ -11,11 +11,13 @@ target_sources(taller_client
     # .cpp files
     menu.cpp
     menuhandler.cpp
+    menuAction.cpp
     
     PUBLIC
     # .h files
     menu.h
     menuhandler.h
+    menuAction.h
     
     # .ui files
     menu.ui

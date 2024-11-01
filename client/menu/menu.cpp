@@ -4,6 +4,9 @@
 
 Menu::Menu(MenuHandler& handler): ui(new Ui::Menu), handler(handler) {
     ui->setupUi(this);
+
+    initializeTimerForActions();
+
     mountSetHostnamePort();
     ui->centralwidget->setFocus();
 }
@@ -36,13 +39,15 @@ void Menu::addPlayerToLobby(int n) {
     }
 }
 
+void Menu::startLobby() { this->close(); }
+
 Menu::~Menu() { delete ui; }
 
 void Menu::mountSetHostnamePort() {
     SetHostnamePortHandler setHostnamePortHandler{
             .onClickContinue =
                     [this](const std::string& hostname, const std::string& port) {
-                        handler.setHostnamePort(hostname, port);
+                        handler.onSetHostnamePort(hostname, port);
                         unMountWidget();
                         mountCreateJoin();
                     },
@@ -74,12 +79,11 @@ void Menu::mountCreateJoin() {
 void Menu::mountSetLobbyIdForSolo() {
     SetLobbyIdHandler setLobbyIdHandler{.onClickJoin =
                                                 [this](int lobbyId) {
-                                                    handler.joinSoloLobby(lobbyId);
+                                                    handler.onJoinSoloLobby(lobbyId);
                                                     unMountWidget();
                                                     mountLobbyGuest();
                                                     addPlayerToLobby(1);
                                                     addPlayerToLobby(2);
-                                                    addPlayerToLobby(3);
                                                 },
                                         .onClickCancel =
                                                 [this] {
@@ -92,13 +96,11 @@ void Menu::mountSetLobbyIdForSolo() {
 void Menu::mountSetLobbyIdForDuo() {
     SetLobbyIdHandler setLobbyIdHandler{.onClickJoin =
                                                 [this](int lobbyId) {
-                                                    handler.joinDuoLobby(lobbyId);
+                                                    handler.onJoinDuoLobby(lobbyId);
                                                     unMountWidget();
                                                     mountLobbyGuest();
                                                     addPlayerToLobby(1);
                                                     addPlayerToLobby(2);
-                                                    addPlayerToLobby(3);
-                                                    addPlayerToLobby(4);
                                                 },
                                         .onClickCancel =
                                                 [this] {
@@ -116,14 +118,14 @@ void Menu::mountSetLobbyId(SetLobbyIdHandler setLobbyIdHandler) {
 void Menu::mountSetSoloDuoHost() {
     SetSoloDuoHandler setSoloDuoHandler{.onClickSolo =
                                                 [this] {
-                                                    handler.createSoloLobby();
+                                                    handler.onCreateSoloLobby();
                                                     unMountWidget();
                                                     mountLobbyHost();
                                                     addPlayerToLobby(1);
                                                 },
                                         .onClickDuo =
                                                 [this] {
-                                                    handler.createDuoLobby();
+                                                    handler.onCreateDuoLobby();
                                                     unMountWidget();
                                                     mountLobbyHost();
                                                     addPlayerToLobby(1);
@@ -162,7 +164,7 @@ void Menu::mountSetSoloDuo(SetSoloDuoHandler setSoloDuoHandler) {
 }
 
 void Menu::mountLobbyHost() {
-    LobbyHostHandler lobbyHostHandler{.onClickStart = [this] { handler.startLobby("Mapa 1"); },
+    LobbyHostHandler lobbyHostHandler{.onClickStart = [this] { handler.onStartLobby("Mapa 1"); },
                                       .onClickCancel =
                                               [this] {
                                                   unMountWidget();
@@ -199,4 +201,28 @@ void Menu::unMountWidget() {
     QWidget* widget = layout->itemAt(0)->widget();
     layout->removeWidget(widget);
     widget->deleteLater();
+}
+
+void Menu::initializeTimerForActions() {
+    QTimer* timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, [this]() {
+        loadActionsBuffer();
+        processActionsBuffer();
+    });
+    timer->start(1000);
+}
+
+void Menu::loadActionsBuffer() {
+    MenuAction actionToBuffer;
+    while (handler.tryPopActionToMenu(actionToBuffer)) {
+        buffer.push(actionToBuffer);
+    }
+}
+
+void Menu::processActionsBuffer() {
+    while (not buffer.empty()) {
+        MenuAction action = buffer.front();
+        buffer.pop();
+        action.exec(*this);
+    }
 }
