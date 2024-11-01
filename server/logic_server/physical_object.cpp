@@ -41,7 +41,9 @@ void PhysicalObject::stop_moving_y(){
 
 void PhysicalObject::get_position(int &coord_x, int &coord_y){
     coord_x = actual_position.x;
-    coord_y = actual_position.y;
+    //transformo las coordenadas de y para que sean compatibles
+    //con las coordenadas de la interfaz
+    coord_y = 300 - actual_position.y;
 }
 
 //PhysicalObject::~PhysicalObject(){}

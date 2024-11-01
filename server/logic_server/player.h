@@ -13,7 +13,7 @@ class Player {
 
     private:
         unsigned int id;          // cppcheck-suppress unusedStructMember
-        PhysicalObject object;  // cppcheck-suppress unusedStructMember
+        PhysicalObject object;    // cppcheck-suppress unusedStructMember
         bool is_alive;            // cppcheck-suppress unusedStructMember
         Weapon weapon;            // cppcheck-suppress unusedStructMember
         Armor helmet;             // cppcheck-suppress unusedStructMember
@@ -29,11 +29,8 @@ class Player {
                   const bool& chest_armor_equipped, TypeMoveAction& move_action);
 
         void still();
-        void move_right();
-        void move_left();
-        void stay_down();
-        void jump();
-        void update_position_y();
+        void add_speed(int speed_x, int speed_y);
+        void update_position();
 };
 
 

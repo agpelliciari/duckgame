@@ -26,6 +26,7 @@ public:
 
    	void execute_move_command(int action_type, int index);
     void add_player(int id);
+    void add_player_speed(int id, int x, int y);
     void get_dtos(std::vector<PlayerDTO>& dtos);
     void update_player_positions();
     ~MatchLogic();
