@@ -11,8 +11,10 @@ class PhysicalObject {
         Tuple actual_position;
         Tuple dimension;
         Tuple speed;
+
         int gravity;
         float time_step;
+        int flap_attemps;
 
     public:
 

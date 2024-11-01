@@ -4,7 +4,7 @@
 
 Player::Player(unsigned int id_, int initial_x, int initial_y):
         id(id_),
-        object(initial_x, initial_y, 30, 10, 0, 0, 10),
+        object(initial_x, initial_y, 10, 30, 0, 0, 10),
         is_alive(true),
         weapon(),
         helmet(),
@@ -26,6 +26,7 @@ bool Player::same_id(unsigned int id_) { return id == id_; }
 
 void Player::still() {
     move_action.still();
+    object.stop_moving_x();
 }
 
 void Player::update_position(){

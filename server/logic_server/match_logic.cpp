@@ -10,7 +10,7 @@ MatchLogic::MatchLogic() {
     this->command_map[4] = [this](int index) { this->add_player_speed(index, 0, 60); };
 }
 
-void MatchLogic::add_player(int id) { players.push_back(Player(id, 0, 0)); }
+void MatchLogic::add_player(int id) { players.push_back(Player(id, 0, 300)); }
 
 void MatchLogic::add_player_speed(int id, int speed_x, int speed_y) {
     for (Player& player : players) {
