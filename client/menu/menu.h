@@ -40,7 +40,11 @@ private:
 
     void mountCreateJoin();
 
-    void mountSetLobbyId();
+    void mountSetLobbyIdForSolo();
+
+    void mountSetLobbyIdForDuo();
+
+    void mountSetLobbyId(SetLobbyIdHandler setLobbyIdHandler);
 
     void mountSetSoloDuoHost();
 

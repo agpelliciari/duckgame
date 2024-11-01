@@ -63,7 +63,7 @@ void Menu::mountCreateJoin() {
             .onClickJoinGame =
                     [this] {
                         unMountWidget();
-                        mountSetLobbyId();
+                        mountSetSoloDuoGuest();
                     },
             .onClickQuit = [this] { this->close(); },
     };
@@ -71,18 +71,44 @@ void Menu::mountCreateJoin() {
     mountWidget(createJoinWidget);
 }
 
-void Menu::mountSetLobbyId() {
+void Menu::mountSetLobbyIdForSolo() {
     SetLobbyIdHandler setLobbyIdHandler{.onClickJoin =
                                                 [this](int lobbyId) {
                                                     handler.joinSoloLobby(lobbyId);
                                                     unMountWidget();
-                                                    mountSetSoloDuoGuest();
+                                                    mountLobbyGuest();
+                                                    addPlayerToLobby(1);
+                                                    addPlayerToLobby(2);
+                                                    addPlayerToLobby(3);
                                                 },
                                         .onClickCancel =
                                                 [this] {
                                                     unMountWidget();
-                                                    mountCreateJoin();
+                                                    mountSetSoloDuoGuest();
                                                 }};
+    mountSetLobbyId(setLobbyIdHandler);
+}
+
+void Menu::mountSetLobbyIdForDuo() {
+    SetLobbyIdHandler setLobbyIdHandler{.onClickJoin =
+                                                [this](int lobbyId) {
+                                                    handler.joinDuoLobby(lobbyId);
+                                                    unMountWidget();
+                                                    mountLobbyGuest();
+                                                    addPlayerToLobby(1);
+                                                    addPlayerToLobby(2);
+                                                    addPlayerToLobby(3);
+                                                    addPlayerToLobby(4);
+                                                },
+                                        .onClickCancel =
+                                                [this] {
+                                                    unMountWidget();
+                                                    mountSetSoloDuoGuest();
+                                                }};
+    mountSetLobbyId(setLobbyIdHandler);
+}
+
+void Menu::mountSetLobbyId(SetLobbyIdHandler setLobbyIdHandler) {
     SetLobbyIdWidget* setLobbyIdWidget = new SetLobbyIdWidget(setLobbyIdHandler, ui->centralwidget);
     mountWidget(setLobbyIdWidget);
 }
@@ -115,24 +141,17 @@ void Menu::mountSetSoloDuoGuest() {
     SetSoloDuoHandler setSoloDuoHandler{.onClickSolo =
                                                 [this] {
                                                     unMountWidget();
-                                                    mountLobbyGuest();
-                                                    addPlayerToLobby(1);
-                                                    addPlayerToLobby(2);
-                                                    addPlayerToLobby(3);
+                                                    mountSetLobbyIdForSolo();
                                                 },
                                         .onClickDuo =
                                                 [this] {
                                                     unMountWidget();
-                                                    mountLobbyGuest();
-                                                    addPlayerToLobby(1);
-                                                    addPlayerToLobby(2);
-                                                    addPlayerToLobby(3);
-                                                    addPlayerToLobby(4);
+                                                    mountSetLobbyIdForDuo();
                                                 },
                                         .onClickCancel =
                                                 [this] {
                                                     unMountWidget();
-                                                    mountSetLobbyId();
+                                                    mountCreateJoin();
                                                 }};
     mountSetSoloDuo(setSoloDuoHandler);
 }
