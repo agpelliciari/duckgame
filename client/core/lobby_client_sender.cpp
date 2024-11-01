@@ -14,8 +14,13 @@
 #define ACTION_READ "Read"
 
 
-LobbyClientSender::LobbyClientSender(ClientProtocol& _protocol, GameContext& _context):
-        protocol(_protocol), mode(NULL), context(_context), started_match(false) {}
+LobbyClientSender::LobbyClientSender(ClientProtocol& _protocol, GameContext& _context,
+                                     LobbyListener& _listener):
+        protocol(_protocol),
+        mode(NULL),
+        context(_context),
+        started_match(false),
+        listener(_listener) {}
 
 
 void LobbyClientSender::notifyStart() {
@@ -37,29 +42,35 @@ void LobbyClientSender::doaction(const lobby_action& action) {
 }
 
 void LobbyClientSender::handleJoin() {
-    std::cerr << "lobby id to join: " << (int)context.id_lobby << std::endl;
+    // std::cerr << "lobby id to join: " << (int)context.id_lobby << std::endl;
     if (protocol.joinLobby(context.id_lobby)) {
-        std::cerr << "failed join to lobby: " << (int)context.id_lobby << std::endl;
+        listener.failedJoin();
         return;
     }
 
     if (context.dualplay) {
         context.second_player = protocol.setdualplay(&context.first_player);
+        listener.joinedLobbyDual(context);
     } else {
         context.first_player = protocol.setsingleplay();
         context.second_player = 0;
+        listener.joinedLobbySolo(context);
     }
+
     lobby_info success;
     protocol.recvlobbyinfo(success);
     if (success.action == LobbyActionType::STARTED_LOBBY) {
-        std::cout << "Joined Lobby id " << (int)context.id_lobby
-                  << " INICIADA CON count: " << (int)success.attached_id << std::endl;
+        // std::cout << "Joined Lobby id " << (int)context.id_lobby
+        //           << " INICIADA CON count: " << (int)success.attached_id << std::endl;
         context.started = true;
         context.cantidadjugadores = success.attached_id;
+
+        listener.startedLobby();
     } else {
         std::cout << "Join Lobby id " << (int)context.id_lobby
                   << " FALLO CODE: " << (int)success.attached_id << std::endl;
         context.started = false;
+        listener.canceledLobby();
     }
 }
 
@@ -72,25 +83,28 @@ void LobbyClientSender::handleCreate() {
 
     if (context.dualplay) {
         context.second_player = protocol.setdualplay(&context.first_player);
+        listener.createdLobbyDual(context);
     } else {
         context.first_player = protocol.setsingleplay();
         context.second_player = 0;
+        listener.createdLobbySolo(context);
     }
-    std::cout << "Lobby creada con id " << (int)id_lobby << std::endl;
-    waitStart();
 
+    waitStart();
     if (started_match) {
         protocol.startlobby();
         lobby_info success;
         protocol.recvlobbyinfo(success);
         if (success.action == LobbyActionType::STARTED_LOBBY) {
-            std::cout << "Lobby id " << (int)id_lobby
-                      << " INICIADA CON count: " << (int)success.attached_id << std::endl;
+            // std::cout << "Lobby id " << (int)id_lobby
+            //           << " INICIADA CON count: " << (int)success.attached_id << std::endl;
             context.started = true;
             context.cantidadjugadores = success.attached_id;
+            listener.startedLobby();
         } else {
             std::cout << "Lobby id " << (int)id_lobby << " FALLO EL EMPEZAR" << std::endl;
             context.started = false;
+            listener.canceledLobby();
         }
     }
 }

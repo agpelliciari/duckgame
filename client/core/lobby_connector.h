@@ -8,6 +8,7 @@
 
 #include "./game_action_sender.h"
 #include "./lobby_client_sender.h"
+#include "./lobby_listener.h"
 #include "client/eventlistener.h"
 #include "client/gamecontext.h"
 #include "common/clientprotocol.h"
@@ -43,8 +44,8 @@ public:
     bool cangonext();
 
     // Setea el estado para el manejo de lobby
-    LobbyClientSender* setLobbyCreator();
-    LobbyClientSender* setLobbyJoin(unsigned int lobbyid);
+    LobbyClientSender* setLobbyCreator(LobbyListener& listener);
+    LobbyClientSender* setLobbyJoin(LobbyListener& listener, unsigned int lobbyid);
 
     // Setea el estado para el inicio del juego.
     GameActionSender* initGame(EventListener& listener);

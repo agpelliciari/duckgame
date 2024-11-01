@@ -41,15 +41,15 @@ bool LobbyConnector::cangonext() { return state.get() != NULL && state->endstate
 
 
 // Setea el estado para el manejo de lobby
-LobbyClientSender* LobbyConnector::setLobbyCreator() {
-    LobbyClientSender* creator = new LobbyClientSender(protocol, context);
+LobbyClientSender* LobbyConnector::setLobbyCreator(LobbyListener& listener) {
+    LobbyClientSender* creator = new LobbyClientSender(protocol, context, listener);
     state.reset(creator);
     return creator;
 }
 
-LobbyClientSender* LobbyConnector::setLobbyJoin(unsigned int lobbyid) {
+LobbyClientSender* LobbyConnector::setLobbyJoin(LobbyListener& listener, unsigned int lobbyid) {
     std::cout << "Should set state to lobby join " << lobbyid << std::endl;
-    LobbyClientSender* joiner = new LobbyClientSender(protocol, context);
+    LobbyClientSender* joiner = new LobbyClientSender(protocol, context, listener);
     state.reset(joiner);
     return joiner;
 }

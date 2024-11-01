@@ -14,6 +14,7 @@ enum LobbyCancelType : uint8_t { UNKNOWN = 0, ANFITRION_LEFT = 1, GAME_ERROR = 2
 enum LobbyActionType : uint8_t {
     // Tipos acciones para unirse/salir ademas
     CREATE_LOBBY = 0x16,
+
     JOIN_LOBBY = 0x17,
     LEAVE_LOBBY = 0x20,
     // Para empezar/cancelar

@@ -12,4 +12,5 @@ target_sources(taller_client
           lobby_connector.h
           game_action_sender.h
           game_state_recv.h
+          lobby_listener.h
     )

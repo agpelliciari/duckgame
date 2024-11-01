@@ -5,12 +5,13 @@
 
 #include "client/core/lobby_client_sender.h"
 #include "client/core/lobby_connector.h"
+#include "client/core/lobby_listener.h"
 #include "common/dtos.h"
 #include "common/queue.h"
 
 #include "menuAction.h"
 
-class MenuHandler {
+class MenuHandler: public LobbyListener {
 private:
     LobbyConnector& connector;  // cppcheck-suppress unusedStructMember
     LobbyClientSender* sender;  // cppcheck-suppress unusedStructMember
@@ -32,15 +33,30 @@ public:
 
     void onStartLobby(const std::string& map);
 
-    void setLobbyId(int lobbyId);
-
-    void addSoloToLobby();
-
-    void addDuoToLobby();
-
-    void startLobby();
 
     ~MenuHandler();
+
+    // Acciones en el menu a partir de las notificaciones
+    void setLobbyId(int lobbyId);
+    void addSoloToLobby();
+    void addDuoToLobby();
+    void playerLeft();
+
+    // Para recibir notificaciones de la lobby... son directos.
+    void startedLobby() override;
+    void canceledLobby() override;
+    void failedJoin() override;
+    void failedCreate() override;
+
+
+    // Notificacion inicial sobre si se pudo crear/unirse a una lobby.
+    void createdLobbyDual(const GameContext& context) override;
+    void createdLobbySolo(const GameContext& context) override;
+
+    void joinedLobbyDual(const GameContext& context) override;
+    void joinedLobbySolo(const GameContext& context) override;
+
+    void notifyInfo(const GameContext& context, const lobby_info& info) override;
 
 private:
     bool tryPopActionToMenu(MenuAction& actionToMenu);

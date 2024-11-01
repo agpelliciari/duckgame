@@ -6,6 +6,7 @@
 #include <mutex>
 #include <string>
 
+#include "./lobby_listener.h"
 #include "./lobby_state.h"
 #include "client/gamecontext.h"
 #include "common/clientprotocol.h"
@@ -22,7 +23,9 @@ protected:
     ClientProtocol& protocol;  // cppcheck-suppress unusedStructMember
     lobby_runnable mode;       // cppcheck-suppress unusedStructMember
     GameContext& context;      // cppcheck-suppress unusedStructMember
-    bool started_match;        // cppcheck-suppress unusedStructMember
+
+    bool started_match;       // cppcheck-suppress unusedStructMember
+    LobbyListener& listener;  // cppcheck-suppress unusedStructMember
 
     std::mutex mtx;
     std::condition_variable match_start;
@@ -39,7 +42,8 @@ public:
     void doaction(const lobby_action& action);
 
     // Los default sin pasar por socket/protocol.
-    explicit LobbyClientSender(ClientProtocol& _protocol, GameContext& _context);
+    explicit LobbyClientSender(ClientProtocol& _protocol, GameContext& _context,
+                               LobbyListener& _listener);
 
     LobbyClientSender(LobbyClientSender&&);
     LobbyClientSender& operator=(LobbyClientSender&&);
