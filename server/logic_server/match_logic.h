@@ -5,7 +5,7 @@
 
 
 #include "common/dtosplayer.h"
-
+#include "box.h"
 #include "player.h"
 
 #ifndef MATCH_LOGIC_H
@@ -15,8 +15,11 @@
 class MatchLogic {
 
 private:
-    std::list<Player> players;  // cppcheck-suppress unusedStructMember
+    std::vector<Player> players;  // cppcheck-suppress unusedStructMember
+    std::vector<Box> boxes; // cppcheck-suppress unusedStructMember
+    //std::map<>
 	std::map<int, std::function<void(int)>> command_map;  // cppcheck-suppress unusedStructMember
+
 
 public:
     MatchLogic();
