@@ -11,7 +11,8 @@ UILoop::UILoop(ActionListener& dtoSender, SimpleEventListener& _events,
         eventHandler(dtoSender, gameContext),
         matchDtoQueue(_events),
         lastUpdate(),
-        isRunning_(true) {}
+        isRunning_(true),
+        playerId(gameContext.first_player) {}
 
 void UILoop::exec() {
     try {
@@ -56,8 +57,18 @@ void UILoop::draw() {
     renderer.SetDrawColor(255, 255, 255, 255);  // White background
     renderer.Clear();
 
+    const PlayerDTO* mainPlayer = nullptr;
+
     for (const PlayerDTO& player: lastUpdate.players) {
+        if (player.id == playerId) {
+            mainPlayer = &player;
+            continue;
+        }
         drawPlayer(player);
+    }
+
+    if (mainPlayer) {
+        drawPlayer(*mainPlayer);
     }
 
     // Show rendered frame

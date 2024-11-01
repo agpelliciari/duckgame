@@ -14,6 +14,7 @@
 #include "animation.h"
 #include "texture_container.h"
 
+#define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
 #define SPRITE_WIDTH 32
 #define SPRITE_HEIGHT 32
@@ -38,6 +39,8 @@ private:
     MatchDto lastUpdate;
 
     bool isRunning_;  // cppcheck-suppress unusedStructMember
+
+    uint8_t playerId;  // cppcheck-suppress unusedStructMember
 
     // This is where most of the game logic will go;
     // including: movement, AI, and animation updates.
