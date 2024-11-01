@@ -62,7 +62,7 @@ void MatchLogic::move_player_stay_down(int id) {
     std::cout << "player " << id << " stay down" << std::endl;
 }
 
-void MatchLogic::update_player_positions(){
+void MatchLogic::update_player_positions() {
     for (Player& player: players) {
         player.update_position_y();
     }
@@ -75,8 +75,8 @@ void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos) {
         player.get_data(dto.id, dto.coord_x, dto.coord_y, dto.weapon, dto.helmet, dto.chest_armor,
                         dto.move_action);
 
-        std::cout << "DTO Player - id: " << dto.id << " - coordenadas x: " << dto.coord_x
-                  << std::endl;
+        // std::cout << "DTO Player - id: " << dto.id << " - coordenadas x: " << dto.coord_x
+        //           << std::endl;
         dtos.push_back(dto);
     }
 }
