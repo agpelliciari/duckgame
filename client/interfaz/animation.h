@@ -10,20 +10,11 @@
 #include "common/dtos.h"
 #include "common/dtosplayer.h"
 
-// also used in UILoop
-#define SCREEN_WIDTH 640
-#define GROUND 400
-
-#define INITIAL_POSITION_X 100.0
-#define INITIAL_POSITION_Y 400.0
-#define INITIAL_SPEED_X 4.0
-#define INITIAL_SPEED_Y 0.0
-#define GRAVITY 0.5
-
 #define SPRITE_SIZE 32
 
 #define RUNNING_ANIMATION_FRAMES 6
 #define RUNNING_ANIMATION_SPEED 90
+
 #define JUMPING_ANIMATION_FRAMES 5
 #define JUMPING_ANIMATION_SPEED 300
 
@@ -61,6 +52,11 @@ private:
             animationBuilders;  // cppcheck-suppress unusedStructMember
 
     unsigned int frameTicks;  // cppcheck-suppress unusedStructMember
+
+    AnimationBuilder* getAnimationBuilder(int playerId);
+
+    void updatePlayerAnimation(AnimationBuilder& builder, const PlayerDTO& player);
+
 public:
     explicit Animation(const GameContext& context);
 
@@ -68,37 +64,14 @@ public:
     // milliseconds
     void updateFrame();
 
-    // Update game state for this frame
-    // void updatePosition();
-
     // Set sprite coordinates based on the character's state
-    void updateSprite(MatchDto& matchDto);
+    void updateSprite(const MatchDto& matchDto);
 
-    /*void rightCommandFlags();
+    bool isFacingLeft(int playerId);
 
-    void stopRightCommand();
+    int getSpriteX(int playerId);
 
-    void leftCommandFlags();
-
-    void stopLeftCommand();
-
-    void downCommandFlags();
-
-    void stopDownCommand();
-
-    void spaceCommandFlags();
-
-    void stopSpaceCommand();
-
-    float getPositionX() const;
-
-    float getPositionY() const;*/
-
-    bool isFacingLeft(int playerId) const;
-
-    int getSpriteX(int playerId) const;
-
-    int getSpriteY(int playerId) const;
+    int getSpriteY(int playerId);
 
     ~Animation();
 };
