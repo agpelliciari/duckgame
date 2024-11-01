@@ -21,6 +21,8 @@ class PhysicalObject {
 
         void add_speed(int speed_x, int speed_y);
         bool check_collision(int coord_x, int coord_y);
+        void stop_moving_x();
+        void stop_moving_y();
         void move();
         void get_position(int &coord_x, int &coord_y);
 

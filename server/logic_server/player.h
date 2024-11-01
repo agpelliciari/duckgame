@@ -2,7 +2,6 @@
 
 #include "action.h"
 #include "armor.h"
-#include "coordinates.h"
 #include "weapon.h"
 #include "physical_object.h"
 

@@ -1,7 +1,6 @@
 target_sources(taller_server_logic
     PRIVATE
     # .cpp files
-            coordinates.cpp
             action.cpp
             match_logic.cpp
             player.cpp
@@ -22,7 +21,6 @@ target_sources(taller_server_logic
             action.h
             match_state.h
             weapon.h
-            coordinates.h
             box.h
             armor.h
             command.h

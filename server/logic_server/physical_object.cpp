@@ -19,9 +19,8 @@ void PhysicalObject::add_speed(int speed_x, int speed_y){
 }
 
 void PhysicalObject::move(){
-
+    //falta chequear colisiones con objetos
     actual_position.x += speed.x * time_step;
-
     if (actual_position.y > 0) {
         actual_position.y += speed.y * time_step;
         speed.y += gravity * time_step;
@@ -29,8 +28,20 @@ void PhysicalObject::move(){
             actual_position.y = 0;
             speed.y = 0;
         }
-
     }
+}
+
+void PhysicalObject::stop_moving_x(){
+    speed.x = 0;
+}
+
+void PhysicalObject::stop_moving_y(){
+    speed.y = 0;
+}
+
+void PhysicalObject::get_position(int &coord_x, int &coord_y){
+    coord_x = actual_position.x;
+    coord_y = actual_position.y;
 }
 
 //PhysicalObject::~PhysicalObject(){}
