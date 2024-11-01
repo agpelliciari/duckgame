@@ -80,13 +80,16 @@ void LobbyClientSender::waitStart() {
 }
 void LobbyClientSender::handleCreate() {
     uint8_t id_lobby = protocol.createLobby();
-
     if (context.dualplay) {
         context.second_player = protocol.setdualplay(&context.first_player);
+        context.id_lobby = id_lobby;
+
         listener.createdLobbyDual(context);
     } else {
         context.first_player = protocol.setsingleplay();
         context.second_player = 0;
+
+        context.id_lobby = id_lobby;
         listener.createdLobbySolo(context);
     }
 
