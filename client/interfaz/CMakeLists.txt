@@ -5,6 +5,7 @@ target_sources(taller_client
     loop_ui.cpp
     texture_container.cpp
     event_handler.cpp
+    drawer.cpp
     
     PUBLIC
     # .h files
@@ -12,4 +13,5 @@ target_sources(taller_client
     loop_ui.h
     texture_container.h
     event_handler.h
+    drawer.h
     )
