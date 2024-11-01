@@ -12,12 +12,10 @@
 #include "common/dtosplayer.h"
 
 #include "animation.h"
-#include "texture_container.h"
+#include "drawer.h"
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
-#define SPRITE_WIDTH 32
-#define SPRITE_HEIGHT 32
 #define FRAME_DELAY 16
 
 class UILoop {
@@ -26,11 +24,9 @@ private:
 
     SDL2pp::Window window;
 
-    SDL2pp::Renderer renderer;
-
-    TextureContainer textures;  // Procesado de todas las imagenes del juego
-
     Animation animation;
+
+    Drawer drawer;
 
     EventHandler eventHandler;
 
@@ -40,18 +36,9 @@ private:
 
     bool isRunning_;  // cppcheck-suppress unusedStructMember
 
-    uint8_t playerId;  // cppcheck-suppress unusedStructMember
-
     // This is where most of the game logic will go;
     // including: movement, AI, and animation updates.
     void update();
-
-    // Once all the entities have been updated, we draw them to the screen.
-    // This method will be responsible for drawing everything, including the games
-    // UI.
-    void draw();
-
-    void drawPlayer(const PlayerDTO& player);
 
     void frameDelay(unsigned int frameStart);
 
