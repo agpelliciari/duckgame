@@ -44,7 +44,7 @@ ControlledPlayer& LobbyControl::waitStart(Match& match) {
 
     std::cerr << "joined " << player.toString() << " to lobby " << (int)match.getID() << std::endl;
 
-    player.open();
+    // player.open();
 
     match.waitStart();
     if (match.isrunning()) {
@@ -75,7 +75,7 @@ ControlledPlayer& LobbyControl::start(Match& match) {
         throw ProtocolError("Did not receive new lobby start match signal");
     }
 
-    player.open();
+    // player.open();
     lobbies.startLobby(match);
     std::cerr << "Started MATCH id: " << (int)match.getID() << "WITH: " << match.playercount()
               << std::endl;

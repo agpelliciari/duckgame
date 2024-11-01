@@ -6,27 +6,21 @@
 
 #include "./gameerror.h"
 
-ControlledPlayer::ControlledPlayer(player_id first): _is_open(false), count(1), ids() {
+#define SIZE_SNAPSHOTS 120
+#define SIZE_EVENTS 30
+
+// Snapshots esta cerrada inicialmente. Events esta abierta.
+ControlledPlayer::ControlledPlayer(player_id first):
+        count(1), ids(), events(SIZE_EVENTS, true), snapshots(SIZE_SNAPSHOTS, false) {
     ids[0] = first;
     ids[1] = first;
 }
 
 ControlledPlayer::ControlledPlayer(player_id first, player_id second):
-        _is_open(false), count(2), ids() {
+        count(2), ids(), events(SIZE_EVENTS, true), snapshots(SIZE_SNAPSHOTS, false) {
     ids[0] = first;
     ids[1] = second;
 }
-
-
-/*
-// Maximo dos asi que no hace falta algo general.
-ControlledPlayer::ControlledPlayer(uint8_t count): _is_open(false), count(0), ids() {
-    if (count > 2 || count == 0) {
-        throw new GameError("Invalid player count %d ", count);
-    }
-    this->count = count;
-}
-*/
 
 bool ControlledPlayer::operator==(const ControlledPlayer& other) const {
     return this->ids[0] == other.ids[0] && this->ids[1] == other.ids[1];
@@ -38,28 +32,50 @@ uint8_t ControlledPlayer::playercount() const { return this->count; }
 player_id ControlledPlayer::getid(const uint8_t ind) const { return this->ids[ind]; }
 
 
-// Manejo de si esta activo el player. Participando en una partida.
-
-bool ControlledPlayer::open() {
+// Switch del player. Participando en una partida. No mas events de lobby, ahora snapshots.
+bool ControlledPlayer::setgamemode() {
     std::unique_lock<std::mutex> lck(mtx);
-    if (_is_open) {
-        return false;
+    if (snapshots.reopen()) {
+        events.close();
+        return true;
     }
-    _is_open = true;
-    snapshots.reopen();
-    return true;
+    return false;
 }
 
-bool ControlledPlayer::isopen() {
+// Switch del player. Participando a la lobby. No mas snapshots ahora events de lobby.
+bool ControlledPlayer::setlobbymode() {
     std::unique_lock<std::mutex> lck(mtx);
-    return _is_open;
+    if (events.reopen()) {
+        snapshots.close();
+        return true;
+    }
+    return false;
 }
+
+/*
+// Capaz por ahora no hace falta sincronizar
+// Pero mejor ser precavido sobre posibles race conditions.
+bool ControlledPlayer::islobbymode() {
+    std::unique_lock<std::mutex> lck(mtx);
+    return !(events.isclosed());
+}
+
+bool ControlledPlayer::isgamemode() {
+    std::unique_lock<std::mutex> lck(mtx);
+    return !(snapshots.isclosed());
+}
+*/
+
+
 bool ControlledPlayer::disconnect() {
     std::unique_lock<std::mutex> lck(mtx);
-    if (_is_open) {
-        _is_open = false;
+    if (!snapshots.isclosed()) {
         snapshots.close();
-        // std::cout << "CLOSED EVENTS FOR "<< (int)getid(0)<< std::endl;
+        return true;
+    }
+
+    if (!events.isclosed()) {
+        events.close();
         return true;
     }
 
@@ -71,12 +87,12 @@ bool ControlledPlayer::disconnect() {
 // O eso se dio a
 bool ControlledPlayer::recvstate(const MatchDto& state) {
     std::unique_lock<std::mutex> lck(mtx);
-    if (_is_open) {
-        snapshots.try_push(state);
-        return true;
+    if (snapshots.isclosed()) {
+        return false;
     }
 
-    return false;
+    snapshots.try_push(state);
+    return true;
 }
 
 // Se podria hacer de forma polimorfica/delegatoria seguro.
@@ -93,6 +109,23 @@ std::string ControlledPlayer::toString() {
 
     return result.str();
 }
+
+
+// recveinfo es no bloqueante! Recibe el lobby info con try_push a la queue del player
+// Todo es "bloqueante" por posibles locks... pero bueno
+bool ControlledPlayer::recvinfo(const lobby_info& dto) {
+    std::unique_lock<std::mutex> lck(mtx);
+    if (events.isclosed()) {
+        return false;
+    }
+
+    events.try_push(dto);
+    return true;
+}
+
+// Pop lobby info. Bloqueante. Si no hay eventos espera a uno.
+lobby_info ControlledPlayer::popinfo() { return events.pop(); }
+
 
 /// La verdad no deberia pasar no.
 // ControlledPlayer::~ControlledPlayer(){
