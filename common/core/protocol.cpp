@@ -11,8 +11,6 @@
 
 #include "common/core/liberror.h"
 
-#define MARK_NOTIF 0x06
-
 Protocol::Protocol(): messenger(), active(false) {}
 Protocol::Protocol(Messenger* _messenger): messenger(_messenger), active(_messenger != NULL) {}
 Protocol::Protocol(std::unique_ptr<Messenger>& _messenger):
@@ -145,45 +143,6 @@ bool Protocol::tryrecvbyte(uint8_t* out) {
     return true;
 }
 
-const static uint8_t PICKUP_SIGN = 3;
-
-// Este metodo no tira excepcion en EOF,
-// ya que la idea es permitir notificar el EOF mediante esta.
-// Pero si tira si es invalido.
-bool Protocol::recvpickup() {
-    uint8_t sign;
-    if (this->messenger->tryrecvall(&sign, 1) == 0) {
-        return false;
-    }
-
-    if (sign != PICKUP_SIGN) {
-        throw LibError(1,  // default para errores
-                       "Signal received was not pick up signal.");
-    }
-    return true;
-}
-
-// Sends the pickup signal action
-void Protocol::signalpickup() { sendbyte(PICKUP_SIGN); }
-
-
-uint8_t Protocol::recvnotification() {
-    uint8_t id[2];
-    messenger->recvall(&id[0], 2);
-
-    if (id[0] != MARK_NOTIF) {
-        throw LibError(1, "Received notification id is invalid");
-    }
-
-    return id[1];
-}
-
-
-// Envia los bytes de identificacion para una notificacion de pickup
-void Protocol::notifyevent(uint8_t type) {
-    uint8_t toSend[2] = {MARK_NOTIF, type};
-    messenger->sendall(&toSend[0], 2);
-}
 
 bool Protocol::isactive() { return active.load(); }
 

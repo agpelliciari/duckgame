@@ -14,7 +14,7 @@ ControlReceiver::ControlReceiver(LobbyContainer& _lobbies, Socket& skt):
         lobbies(_lobbies), protocol(skt) {}
 
 
-bool ControlReceiver::isopen() { return protocol.isopen(); }
+bool ControlReceiver::isopen() { return protocol.isactive(); }
 
 void ControlReceiver::init() {
     if (_is_alive) {
@@ -38,13 +38,13 @@ bool ControlReceiver::playOn(const ControlledPlayer& player, Match& match) {
 
         return true;
     } catch (const ProtocolError& error) {
-        std::cout << "-->EOF? closed? " << (int)protocol.isopen() << " " << error.what()
-                  << std::endl;
-        // std::endl; EOF of player. No muestres nada. Pero si el protocol esta abierto, significa
-        // el cliente se desconecto.
-        return protocol.isopen();
+        // std::cout << "-->EOF? closed? " << (int)protocol.isactive() << " " << error.what()
+        //           << std::endl;
+        //  std::endl; EOF of player. No muestres nada. Pero si el protocol esta abierto, significa
+        //  el cliente se desconecto.
+        return protocol.isactive();
     } catch (const LibError& error) {
-        if (protocol.isopen()) {  // Si debiera estar activo. Error interno del protocol.
+        if (protocol.isactive()) {  // Si debiera estar activo. Error interno del protocol.
             std::cerr << "Controller lib error:" << error.what() << std::endl;
             return true;
         }

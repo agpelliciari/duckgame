@@ -11,18 +11,11 @@
 #include "common/dtosplayer.h"
 
 // Extension del protocolo base a usar.
-class ServerProtocol {
-
-protected:
-    Protocol protocol;  // Composicion con el protocolo base para la conexion
-
-    std::atomic<bool> isactive;  // Simple manejo de si ya se cerro o no.
-
+class ServerProtocol: public Protocol {
 public:
     // El default a partir de la abstraccion de socket..
     explicit ServerProtocol(Socket& messenger);
     explicit ServerProtocol(Messenger* messenger);
-
     // Permitamos el mov para mayor flexibilidad
     explicit ServerProtocol(Protocol&& prot);
 
@@ -33,29 +26,40 @@ public:
     ServerProtocol(ServerProtocol&&) = delete;
     ServerProtocol& operator=(ServerProtocol&&) = delete;
 
-    uint8_t recvplayercount();
+    // Lobby protocol..
+    // Filtra el tipo de accion. Si bien se podrian tener separadas.
+    LobbyActionType recvresolveinfo();
+    // Para el join
     uint8_t recvlobbyid();
 
-    LobbyActionType recvresolveinfo();
+    // Para ambos, create o join.
+    uint8_t recvplayercount();
 
+    // Para el create
     void notifyid(uint8_t id);
 
+    // Acciones/Respuestas
     LobbyActionType recvlobbyaction();
 
-
     void notifyaction(const LobbyResponseType response);
-    void notifyinfo(const LobbyResponseType response, const uint8_t attached_id);
+    void notifyinfo(const LobbyResponseType response, const uint8_t data);
     void notifyevent(const lobby_info& info);
 
-    // Attempts to receive pickup action.
-    // If failed throws either LibError or GameError.
+    // Info nivel
+    // void sendlevel(const LevelInfo& level);
+
+    // Game protocol
     PlayerActionDTO recvaction();
 
     void sendstate(const MatchDto&& state);
     void sendstate(const MatchDto& state);
 
-    bool isopen();
-    void close();
+    void sendplayer(const PlayerDTO& player);
+
+
+    // metodos generales para is active.
+    using Protocol::close;
+    using Protocol::isactive;
 };
 
 #endif

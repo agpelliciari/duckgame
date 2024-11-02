@@ -80,7 +80,7 @@ bool LobbyControl::handleAnfitrionLobby(Match& match) {  // ControlledPlayer& pl
         lobbies.cancelLobby(match);
         return true;
     } catch (const LibError& error) {
-        if (protocol.isopen()) {  // Si debiera estar activo. Error interno del protocol.
+        if (protocol.isactive()) {  // Si debiera estar activo. Error interno del protocol.
             std::cerr << "Lobby control error:" << error.what() << std::endl;
         }
         std::cerr << "Cancel lobby?:" << error.what() << std::endl;

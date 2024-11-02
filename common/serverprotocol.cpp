@@ -7,47 +7,37 @@
 //#include "./gameerror.h"
 #include "common/protocolerror.h"
 
+ServerProtocol::ServerProtocol(Socket& messenger): Protocol(messenger) {}
+ServerProtocol::ServerProtocol(Messenger* messenger): Protocol(messenger) {}
+ServerProtocol::ServerProtocol(Protocol&& prot): Protocol(std::move(prot)) {}
 
-ServerProtocol::ServerProtocol(Socket& messenger): protocol(messenger) {}
-ServerProtocol::ServerProtocol(Messenger* messenger): protocol(messenger) {}
-ServerProtocol::ServerProtocol(Protocol&& prot): protocol(std::move(prot)) {}
-
-uint8_t ServerProtocol::recvplayercount() { return protocol.recvbyte(); }
-
+uint8_t ServerProtocol::recvplayercount() { return this->recvbyte(); }
 
 LobbyActionType ServerProtocol::recvlobbyaction() {
     uint8_t sign;
-    if (protocol.tryrecvbyte(&sign)) {
+    if (this->tryrecvbyte(&sign)) {
         return (LobbyActionType)sign;  // Podria fallar el casteo? la verificacion es posterior.
     }
 
     throw ProtocolError("Did not receive a lobby action");
 }
 
-/*
-bool ServerProtocol::recvsignalstart() {
-    uint8_t sign;
-    return protocol.tryrecvbyte(&sign) && sign == ((uint8_t)LobbyActionType::STARTED_LOBBY);
-}
-
-*/
-
-void ServerProtocol::notifyaction(const LobbyResponseType response) { protocol.sendbyte(response); }
+void ServerProtocol::notifyaction(const LobbyResponseType response) { this->sendbyte(response); }
 
 void ServerProtocol::notifyinfo(const LobbyResponseType response, const uint8_t data) {
     uint8_t bytes[2] = {response, data};
-    protocol.sendbytes(&bytes, 2);
+    this->sendbytes(&bytes, 2);
 }
 void ServerProtocol::notifyevent(const lobby_info& info) {
     uint8_t bytes[2] = {info.action, info.data};
-    protocol.sendbytes(&bytes, 2);
+    this->sendbytes(&bytes, 2);
 }
 
-uint8_t ServerProtocol::recvlobbyid() { return protocol.recvbyte(); }
+uint8_t ServerProtocol::recvlobbyid() { return this->recvbyte(); }
 
 LobbyActionType ServerProtocol::recvresolveinfo() {
     uint8_t sign;
-    if (!protocol.tryrecvbyte(&sign)) {
+    if (!this->tryrecvbyte(&sign)) {
         throw ProtocolError("Did not receive lobby resolve info.");
     }
     if (LobbyActionType::CREATE_LOBBY == sign) {
@@ -61,13 +51,13 @@ LobbyActionType ServerProtocol::recvresolveinfo() {
     throw ProtocolError("Invalid lobby resolve action!");
 }
 
-void ServerProtocol::notifyid(uint8_t id) { protocol.sendbyte(id); }
+void ServerProtocol::notifyid(uint8_t id) { this->sendbyte(id); }
 
 
 PlayerActionDTO ServerProtocol::recvaction() {
     PlayerActionDTO action;
-    if (!protocol.tryrecvbytes(&action, sizeof(action))) {
-        isactive = false;
+    if (!this->tryrecvbytes(&action, sizeof(action))) {
+        active = false;
         throw ProtocolError("Did not receive action!");
     }
 
@@ -81,20 +71,22 @@ void ServerProtocol::sendstate(const MatchDto&& state) { sendstate(state); }
 void ServerProtocol::sendstate(const MatchDto& state) {
 
     // Primero envia general info
-    protocol.sendbytes(&state.info, sizeof(state.info));
-    protocol.sendbyte(state.players.size());
+    this->sendbytes(&state.info, sizeof(state.info));
+    this->sendbyte(state.players.size());
 
-    for (auto playerit = state.players.begin(); playerit != state.players.end();) {
-        PlayerDTO player = *playerit;
-
-        // std::cout << "EL PLAYER "<< player.id<< " SENDED ESTA EN STATE: " <<
-        // (int)player.move_action << std::endl;
-        protocol.sendbytes(&player, sizeof(player));
-        ++playerit;
+    for (const PlayerDTO& player: state.players) {
+        sendplayer(player);
     }
 }
 
+// Para mayor flexibilidad.. por ahora.
+void ServerProtocol::sendplayer(const PlayerDTO& player) {
+    // std::cout << "EL PLAYER "<< player.id<< " SENDED ESTA EN STATE: " <<
+    // (int)player.move_action << std::endl;
+    this->sendbytes(&player, sizeof(player));
+}
 
-bool ServerProtocol::isopen() { return protocol.isactive(); }
 
-void ServerProtocol::close() { protocol.close(); }
+// bool ServerProtocol::isopen() { return this->isactive(); }
+
+// void ServerProtocol::close() { this->close(); }

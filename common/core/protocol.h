@@ -54,39 +54,23 @@ public:
     void sendshort(const uint16_t num);
 
 
-    // para mandar structs.. o similes
+    // para mandar structs.. o similes, cuando se sabe la longitud.
     void sendbytes(const void* msg, const unsigned int count);
     void recvbytes(void* buff, const unsigned int count);
 
+    // Para flags o condicionales.
     bool tryrecvbytes(void* buff, const unsigned int count);
     bool tryrecvbyte(uint8_t* out);
 
-
-    // Signal action send.
-    // Tries receive pickup order. If EOF then returns false.
-    bool recvpickup();
-    // Sends the pickup signal action
-    void signalpickup();
-
-    // Message communication fixed ... len is on host endiannes.. Conversion to
-    // big endian happens at protocol.
+    // Para mensajes i.e cuando el que recibe no sabe la longitud.
     void sendmsg(const char* buff, const uint16_t len);
     void sendmsg(const std::string& message);
 
-    // attemps read message of chars. Uses vector to store the len.
-    std::vector<char> recvmsg();
-
-    // Reads a vector and converts to string.
-    std::string recvmsgstr();
 
     uint16_t recvmsg(char* buff,
                      const unsigned int max);  // attemps read msg, throws exception if len > max
-
-
-    // Recibe el inicio de una notificacion. Retorna el tipo.
-    uint8_t recvnotification();
-
-    // Envia los bytes de identificacion para una notificacion, del tipo correspondiente.
-    void notifyevent(uint8_t type);
+    // attemps read message of chars. Uses vector to store the len.
+    std::vector<char> recvmsg();
+    std::string recvmsgstr();
 };
 #endif

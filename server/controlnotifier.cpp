@@ -73,8 +73,8 @@ void ControlNotifier::run() {
 
         runGame();
     } catch (const LibError&
-                     error) {     // No deberia pasara realmente, antes pasaria en el controller.
-        if (protocol.isopen()) {  // Si en teoria esta abierto...
+                     error) {       // No deberia pasara realmente, antes pasaria en el controller.
+        if (protocol.isactive()) {  // Si en teoria esta abierto...
             std::cerr << "player " << player.getid(0) << " notify error: " << error.what()
                       << std::endl;
 
