@@ -56,7 +56,10 @@ bool ControlNotifier::runGame() {
         }
         return true;
     } catch (const ClosedQueue& error) {
-        std::cerr << "Se finalizo el match... deberia mandar las estadisticas!" << std::endl;
+
+        if (!match.isrunning()) {
+            std::cerr << "Se finalizo el match... deberia mandar las estadisticas!" << std::endl;
+        }
         protocol.close();  // Si no esta cerrado, cerralo, asi se sale el controller tambien.
         return true;       // Se cerro el game
     }

@@ -15,7 +15,6 @@ protected:
     ClientProtocol& protocol;  // cppcheck-suppress unusedStructMember
     GameContext& context;      // cppcheck-suppress unusedStructMember
 
-    bool started_match;       // cppcheck-suppress unusedStructMember
     LobbyListener& listener;  // cppcheck-suppress unusedStructMember
 
     void run() override;
