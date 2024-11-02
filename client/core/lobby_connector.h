@@ -36,6 +36,7 @@ public:
 
     void setHostnamePort(const std::string& newhost, const std::string& newservice);
 
+    void clear();
     // Resetea el estado al inicial.
     void reset();
 

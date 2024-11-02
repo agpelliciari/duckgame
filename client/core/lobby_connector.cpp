@@ -24,16 +24,21 @@ void LobbyConnector::setHostnamePort(const std::string& newhost, const std::stri
 }
 
 
-// Resetea el estado al inicial.
-// Y reseteo del protocolo.
-// No es una navegacion entre estados perse.
-void LobbyConnector::reset() {
+void LobbyConnector::clear() {
 
     protocol.close();
     // Al hacer close si el state esperando por respuesta del protocolo
     // Tira exception.
-
     state.reset(NULL);  // El destructor del state actual se encarga si hace falta un join.
+}
+
+// Resetea el estado al inicial.
+// Y reseteo del protocolo.
+// No es una navegacion entre estados perse.
+void LobbyConnector::reset() {
+    if (protocol.isopen()) {
+        clear();
+    }
 
     // Reemplazo del protocolo.
     protocol = ClientProtocol(Socket(hostname.c_str(), service.c_str()));

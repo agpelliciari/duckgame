@@ -56,7 +56,8 @@ void MenuHandler::onStartLobby(const std::string& map) {
 
 void MenuHandler::onCancelLobby() {  // Cuando el Host da click en el boton de cancel en lugar de
                                      // start
-    sender->notifyCancel();
+    connector.clear();
+    // sender->notifyCancel();
 }
 
 
@@ -119,6 +120,6 @@ void MenuHandler::notifyInfo(GameContext& context, const lobby_info& info) {
     } else if (info.action == PLAYER_LEFT) {
         context.cantidadjugadores--;
         std::cout << "Left.. Total players actual: " << (int)context.cantidadjugadores << std::endl;
-        playerLeft();
+        removePlayerFromLobby();
     }
 }
