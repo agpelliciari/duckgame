@@ -2,21 +2,15 @@
 #define LOBBY_JOIN_SENDER_H
 
 
-#include "./lobby_listener.h"
-#include "./lobby_state.h"
+#include "./base_lobby_state.h"
 #include "client/gamecontext.h"
 #include "common/clientprotocol.h"
 #include "common/thread.h"
 
 // Clase que encapsula al protocol y mantendria el estado del juego
 // Proporcionado una interfaz para acciones del usuario.
-class LobbyJoinSender: private Thread, public LobbyState {
+class LobbyJoinSender: public BaseLobbyState {
 protected:
-    ClientProtocol& protocol;  // cppcheck-suppress unusedStructMember
-    GameContext& context;      // cppcheck-suppress unusedStructMember
-
-    LobbyListener& listener;  // cppcheck-suppress unusedStructMember
-
     void run() override;
 
 public:
@@ -36,9 +30,9 @@ public:
     bool isrunning();
 
     // Lobby state
-    bool endstate() override;
+    // bool endstate() override;
 
-    ~LobbyJoinSender();
+    //~LobbyJoinSender();
 };
 
 #endif

@@ -1,6 +1,7 @@
 target_sources(taller_client
     PRIVATE
     # .cpp files
+          base_lobby_state.cpp
           lobby_create_sender.cpp
           lobby_join_sender.cpp
           game_action_sender.cpp
@@ -9,6 +10,7 @@ target_sources(taller_client
 
     PUBLIC
     # .h files
+          base_lobby_state.h
           lobby_create_sender.h
           lobby_join_sender.h
           lobby_client_sender.h

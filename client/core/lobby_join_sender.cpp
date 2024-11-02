@@ -10,7 +10,7 @@
 
 LobbyJoinSender::LobbyJoinSender(ClientProtocol& _protocol, GameContext& _context,
                                  LobbyListener& _listener):
-        protocol(_protocol), context(_context), listener(_listener) {}
+        BaseLobbyState(_protocol, _context, _listener) {}
 
 void LobbyJoinSender::joinLobby() {
     if (_is_alive) {  // already running!!
@@ -37,45 +37,5 @@ void LobbyJoinSender::run() {
         listener.joinedLobbySolo(context);
     }
 
-    lobby_info success;
-    protocol.recvlobbyinfo(success);
-    if (success.action == LobbyResponseType::STARTED_LOBBY) {
-        // std::cout << "Joined Lobby id " << (int)context.id_lobby
-        //           << " INICIADA CON count: " << (int)success.data << std::endl;
-        context.started = true;
-        context.cantidadjugadores = success.data;
-
-        // No hace falta por ahora. Ya que no hay ninguna configuracion posible.
-        // protocol.sendready(); // Notifica que se cambio al modo juego. Podria ser antes.
-
-        listener.startedLobby();
-
-    } else {
-        std::cout << "Join Lobby id " << (int)context.id_lobby
-                  << " FALLO CODE: " << (int)success.data << std::endl;
-        context.started = false;
-        listener.canceledLobby();
-    }
-}
-
-bool LobbyJoinSender::endstate() {
-    if (_keep_running) {
-        stop();
-        if (!context.started) {
-            std::cout << "JOIN NOT HAPPENED SO CLOSE SOCKET!?!" << std::endl;
-            protocol.close();
-        }
-        join();
-    }
-    return context.started;
-}
-
-LobbyJoinSender::~LobbyJoinSender() {
-    if (_keep_running) {
-        stop();
-        if (!context.started) {
-            protocol.close();
-        }
-        join();
-    }
+    listeninfo();
 }
