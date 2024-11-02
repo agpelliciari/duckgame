@@ -40,9 +40,16 @@ void MenuAction::exec(Menu& menu) {
             menu.removePlayerFromLobby();
             break;
         case Action::FailJoin:
+            menu.reset();
+            menu.displayNotification("Error: Join Failed");
+            break;
         case Action::FailCreate:
+            menu.reset();
+            menu.displayNotification("Error: Creation Failed");
+            break;
         case Action::CancelLobby:
             menu.reset();
+            menu.displayNotification("The Host closed the room");
             break;
         case Action::StartLobby:
             menu.startLobby();
