@@ -17,10 +17,19 @@ int Match::playercount() const { return players.playercount(); }
 
 bool Match::notifyDisconnect(ControlledPlayer& player) {
     connectedplayers--;  // Solo importa la cantidad de conectados
+    std::cout << "Disconnected player from match? now " << connectedplayers << std::endl;
 
     player.disconnect();
 
-    return connectedplayers == 0;  // Deberia liberar?
+    if (_keep_running) {
+        return connectedplayers == 0;
+    }
+
+    players.remove(player);
+    // El anifitrion no notifica su disconnect.
+    // std::cout << "Should remove it from lobby/notify it?" << std::endl;
+
+    return connectedplayers == 0;  // Nunca deberia ser true. El anfitrion no deberia llamar.
 }
 
 void Match::init() {

@@ -16,10 +16,10 @@ bool ControlNotifier::runLobby() {
                info.action != LobbyResponseType::STARTED_LOBBY) {
 
 
-            std::cerr << "Configuration info " << (int)info.action << ", num: " << (int)info.data
+            std::cerr << "Configuration info? " << (int)info.action << ", num: " << (int)info.data
                       << std::endl;
 
-            protocol.notifyevent(info);
+            // protocol.notifyevent(info);
             info = player.popinfo();
         }
 
@@ -36,7 +36,7 @@ bool ControlNotifier::runLobby() {
         return true;
     } catch (const ClosedQueue& error) {
         if (match.isrunning()) {
-            std::cerr << "Start from queue closed?? " << std::endl;
+            std::cerr << "Start from queue closed/state change?? " << std::endl;
             // se empezo.
             protocol.notifyinfo(LobbyResponseType::STARTED_LOBBY, match.playercount());
             return false;

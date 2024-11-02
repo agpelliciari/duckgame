@@ -20,7 +20,7 @@ protected:
     LobbyContainer& lobbies;  // cppcheck-suppress unusedStructMember
     ServerProtocol protocol;
 
-    void playOn(const ControlledPlayer& player, Match& match);
+    bool playOn(const ControlledPlayer& player, Match& match);
 
 public:
     // Crea el player con el ide pasado e inicia el protocolo

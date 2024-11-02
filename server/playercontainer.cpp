@@ -24,6 +24,23 @@ ControlledPlayer& PlayerContainer::add(uint8_t countplayers) {
     return players.emplace_back(++last_id);
 }
 
+void PlayerContainer::remove(const ControlledPlayer& player) {
+    int mx = player.playercount();
+    totalplayers -= mx;
+
+    std::vector<lobby_info> disconnected;
+    disconnected.reserve(mx);
+    for (int ind = 0; ind < mx; ind++) {
+        disconnected.emplace_back(PLAYER_LEFT, player.getid(ind));
+    }
+
+    players.remove(player);
+
+    for (const lobby_info& info: disconnected) {
+        notifyInfo(info);
+    }
+}
+
 // Actualmente el player acceptor se cierra primero.
 // Lo que haria que al llegar aca la lista perse debiera estar vacia.
 // Pero siempre es bueno verificar.
@@ -64,7 +81,7 @@ std::vector<player_id> PlayerContainer::getPlayers() {
 }
 
 // No nos fijamos si se desconectaron. En fase lobby el lobby container se encarga de notificar.
-// Lo hacen por medio del remove...
+// Lo hacen por medio del remove... Por eso no se verifica si el recvinfo dio true o no.
 void PlayerContainer::notifyInfo(const lobby_info& info) {
     for (ControlledPlayer& player: players) {
         player.recvinfo(info);

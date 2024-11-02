@@ -31,6 +31,7 @@ public:
 
     // Es necesrio trabajar con punteros al ser una coleccion
     ControlledPlayer& add(uint8_t countplayers);
+    void remove(const ControlledPlayer& player);
 
     void finishLobbyMode();
     void finishGameMode();
