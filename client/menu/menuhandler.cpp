@@ -15,8 +15,7 @@ void MenuHandler::onCreateSoloLobby() {
               << std::endl;
 
     connector.reset();  // Reset protocol and curr state si existe.
-    sender = connector.setLobbyCreator(*this);
-    sender->createLobby(false);
+    sender = connector.setLobbyCreator(*this, false);
 }
 
 void MenuHandler::onCreateDuoLobby() {
@@ -24,8 +23,7 @@ void MenuHandler::onCreateDuoLobby() {
               << std::endl;
 
     connector.reset();  // Reset protocol and curr state si existe.
-    sender = connector.setLobbyCreator(*this);
-    sender->createLobby(true);
+    sender = connector.setLobbyCreator(*this, true);
 }
 
 void MenuHandler::onJoinSoloLobby(int lobbyId) {
@@ -33,8 +31,8 @@ void MenuHandler::onJoinSoloLobby(int lobbyId) {
               << " y va a jugar 1 jugador" << std::endl;
 
     connector.reset();  // Reset protocol and curr state si existe.
-    sender = connector.setLobbyJoin(*this, lobbyId);
-    sender->joinLobby(false, lobbyId);
+    connector.setLobbyJoin(*this, false, lobbyId);
+    sender = NULL;  // El que joinea no manda cosas?
     // setLobbyId(lobbyId);
     //  TODO: Llamar a addSoloToLobby o addDuoToLobby
     //  dependiendo de si en el lobby el host es de 1 o 2
@@ -44,8 +42,8 @@ void MenuHandler::onJoinDuoLobby(int lobbyId) {
     std::cout << "Aca se envia que el cliente quiere unirse a la lobby con id: " << lobbyId
               << " y van a jugar 2 jugadores" << std::endl;
     connector.reset();  // Reset protocol and curr state si existe.
-    sender = connector.setLobbyJoin(*this, lobbyId);
-    sender->joinLobby(true, lobbyId);
+    connector.setLobbyJoin(*this, false, lobbyId);
+    sender = NULL;
     // setLobbyId(lobbyId);
     //  TODO: Llamar a addSoloToLobby o addDuoToLobby
     //  dependiendo de si en el lobby el host es de 1 o 2

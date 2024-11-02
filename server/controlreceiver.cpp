@@ -24,7 +24,7 @@ void ControlReceiver::init() {
 }
 bool ControlReceiver::playOn(const ControlledPlayer& player, Match& match) {
     try {
-        // std::cout << "PLAY ON"<< std::endl;
+        std::cout << "PLAY ON" << std::endl;
         //  Loopeado de acciones
         while (_keep_running) {
             PlayerActionDTO action = protocol.recvaction();
@@ -38,7 +38,8 @@ bool ControlReceiver::playOn(const ControlledPlayer& player, Match& match) {
 
         return true;
     } catch (const ProtocolError& error) {
-        // std::cout << "-->EOF? closed? "<< (int) protocol.isopen()<< " " << error.what()<<
+        std::cout << "-->EOF? closed? " << (int)protocol.isopen() << " " << error.what()
+                  << std::endl;
         // std::endl; EOF of player. No muestres nada. Pero si el protocol esta abierto, significa
         // el cliente se desconecto.
         return protocol.isopen();
