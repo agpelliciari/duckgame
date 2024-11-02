@@ -24,7 +24,8 @@ void ControlReceiver::init() {
 }
 void ControlReceiver::playOn(const ControlledPlayer& player, Match& match) {
     try {
-        // Loopeado de acciones
+        // std::cout << "PLAY ON"<< std::endl;
+        //  Loopeado de acciones
         while (_keep_running) {
             PlayerActionDTO action = protocol.recvaction();
             if (player.playercount() <= action.playerind) {
@@ -36,6 +37,7 @@ void ControlReceiver::playOn(const ControlledPlayer& player, Match& match) {
         }
     } catch (const ProtocolError& error) {
         // EOF of player. No muestres nada.
+        // std::cout << "EOF? " << error.what()<< std::endl;
     } catch (const LibError& error) {
         if (protocol.isopen()) {  // Si debiera estar activo. Error interno del protocol.
             std::cerr << "Controller lib error:" << error.what() << std::endl;
@@ -52,19 +54,25 @@ void ControlReceiver::run() {
 
         bool isanfitrion;
         Match& match = lobby.resolveMatch(&isanfitrion);
-        ControlledPlayer& player = isanfitrion ? lobby.start(match) : lobby.waitStart(match);
-
+        ControlledPlayer& player = lobby.joinPlayers(match);
         // Inicia notifier.
-        ControlNotifier notifier(player, protocol);
+        ControlNotifier notifier(match, player, protocol);
         notifier.start();
 
+        if (isanfitrion && lobby.handleAnfitrionLobby(match)) {
+            return;  // No se empezo la partida.
+        }
+
+        // Si no es el anfitrion que ya asuma empezo. Total no deberia mandar nada
+        // En la fase de lobby, solo podria irse. Para lo que esta disconnect despues
         playOn(player, match);  // Es no except.
 
         lobbies.disconnectFrom(match, player);
 
     } catch (const GameError& error) {
         std::cerr << "Game error at lobby: " << error.what() << std::endl;
-        protocol.notifyinfo(LobbyActionType::CANCEL_LOBBY, LobbyCancelType::GAME_ERROR);
+        // Por ahora unknown... pero a futuro se agregara al error.
+        protocol.notifyinfo(LobbyResponseType::GAME_ERROR, LobbyGameErrorType::UNKNOWN);
     }
 }
 

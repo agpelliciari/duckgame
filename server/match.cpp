@@ -24,17 +24,17 @@ bool Match::notifyDisconnect(ControlledPlayer& player) {
 }
 
 void Match::init() {
-    std::unique_lock<std::mutex> lck(mtx);  // No other actions on container.
     if (is_alive()) {
         throw GameError("Tried to start a match already started!!\n");
     }
     start();
-    match_start.notify_all();
+    players.finishLobbyMode();
+    // match_start.notify_all();
 }
 
 void Match::cancel() {
-    std::unique_lock<std::mutex> lck(mtx);  // No other actions on container.
-    match_start.notify_all();
+    players.finishLobbyMode();
+    // match_start.notify_all();
 }
 
 
@@ -46,15 +46,6 @@ void Match::finish() {
     looper.stop();
     join();
 }
-
-void Match::waitStart() {
-    std::unique_lock<std::mutex> lck(mtx);
-    if (_keep_running) {
-        return;
-    }
-    match_start.wait(lck);
-}
-
 
 // General/public methods.
 

@@ -25,8 +25,8 @@ ClientProtocol& ClientProtocol::operator=(ClientProtocol&& other) {
 
 void ClientProtocol::recvlobbyinfo(lobby_info& out) {
     // Podria tirar cast error.
-    out.action = (LobbyActionType)protocol.recvbyte();
-    out.attached_id = protocol.recvbyte();
+    out.action = (LobbyResponseType)protocol.recvbyte();
+    out.data = protocol.recvbyte();
     // throw ProtocolError("Invalid lobby info action!");
 }
 
@@ -63,7 +63,7 @@ uint8_t ClientProtocol::setdualplay(uint8_t* player1) {
 }
 
 
-void ClientProtocol::startlobby() { protocol.sendbyte(LobbyActionType::STARTED_LOBBY); }
+void ClientProtocol::sendready() { protocol.sendbyte(LobbyActionType::PLAYER_READY); }
 
 MatchDto ClientProtocol::recvstate() {
     // Primero recibi info general

@@ -33,8 +33,8 @@ private:
     MatchState looper;        // cppcheck-suppress unusedStructMember
     int connectedplayers;     // cppcheck-suppress unusedStructMember
 
-    std::mutex mtx;
-    std::condition_variable match_start;
+    // std::mutex mtx;
+    // std::condition_variable match_start;
 
     // Para el thread y en general el loopeado
     void run() override;
@@ -72,7 +72,7 @@ public:
 
     lobbyID getID() const;
 
-    void waitStart();
+    // void waitStart();
     int playercount() const;
 
     // Metodos publicos.. accesibles incluso a player controllers.

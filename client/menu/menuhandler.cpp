@@ -113,10 +113,10 @@ void MenuHandler::joinedLobbySolo(const GameContext& context) {
 }
 
 void MenuHandler::notifyInfo(const GameContext& context, const lobby_info& info) {
-    if (info.action == JOIN_LOBBY) {
+    if (info.action == PLAYER_NEW) {
         std::cout << "Added.. Total players actual: " << context.cantidadjugadores << std::endl;
         addSoloToLobby();
-    } else if (info.action == LEAVE_LOBBY) {
+    } else if (info.action == PLAYER_LEFT) {
         std::cout << "Left.. Total players actual: " << context.cantidadjugadores << std::endl;
         playerLeft();
     }

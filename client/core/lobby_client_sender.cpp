@@ -59,16 +59,20 @@ void LobbyClientSender::handleJoin() {
 
     lobby_info success;
     protocol.recvlobbyinfo(success);
-    if (success.action == LobbyActionType::STARTED_LOBBY) {
+    if (success.action == LobbyResponseType::STARTED_LOBBY) {
         // std::cout << "Joined Lobby id " << (int)context.id_lobby
-        //           << " INICIADA CON count: " << (int)success.attached_id << std::endl;
+        //           << " INICIADA CON count: " << (int)success.data << std::endl;
         context.started = true;
-        context.cantidadjugadores = success.attached_id;
+        context.cantidadjugadores = success.data;
+
+        // No hace falta por ahora. Ya que no hay ninguna configuracion posible.
+        // protocol.sendready(); // Notifica que se cambio al modo juego. Podria ser antes.
 
         listener.startedLobby();
+
     } else {
         std::cout << "Join Lobby id " << (int)context.id_lobby
-                  << " FALLO CODE: " << (int)success.attached_id << std::endl;
+                  << " FALLO CODE: " << (int)success.data << std::endl;
         context.started = false;
         listener.canceledLobby();
     }
@@ -95,14 +99,14 @@ void LobbyClientSender::handleCreate() {
 
     waitStart();
     if (started_match) {
-        protocol.startlobby();
+        protocol.sendready();
         lobby_info success;
         protocol.recvlobbyinfo(success);
-        if (success.action == LobbyActionType::STARTED_LOBBY) {
+        if (success.action == LobbyResponseType::STARTED_LOBBY) {
             // std::cout << "Lobby id " << (int)id_lobby
-            //           << " INICIADA CON count: " << (int)success.attached_id << std::endl;
+            //           << " INICIADA CON count: " << (int)success.data << std::endl;
             context.started = true;
-            context.cantidadjugadores = success.attached_id;
+            context.cantidadjugadores = success.data;
             listener.startedLobby();
         } else {
             std::cout << "Lobby id " << (int)id_lobby << " FALLO EL EMPEZAR" << std::endl;

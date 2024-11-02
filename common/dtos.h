@@ -9,26 +9,45 @@
 #include "./dtosobject.h"
 #include "./dtosplayer.h"
 
-enum LobbyCancelType : uint8_t { UNKNOWN = 0, ANFITRION_LEFT = 1, GAME_ERROR = 2 };
+enum LobbyGameErrorType : uint8_t {
+    UNKNOWN = 0,
+    ANFITRION_LEFT = 1,
+    LOBBY_NOT_FOUND = 2,
+    LOBBY_NO_SPACE = 3
+};
 
 enum LobbyActionType : uint8_t {
-    // Tipos acciones para unirse/salir ademas
+    // Accion inicial para saber la lobby.
     CREATE_LOBBY = 0x16,
-
     JOIN_LOBBY = 0x17,
-    LEAVE_LOBBY = 0x20,
-    // Para empezar/cancelar
+
+    // player esta listo/ quiere empezar la partida. Player leave.. se fue.
+    PLAYER_READY = 0x20,
+    PLAYER_LEAVE = 0x22
+};
+
+enum LobbyResponseType : uint8_t {
+    // Responses para acciones de lobby iniciales
+    CREATED_LOBBY = 0x16,
+    JOINED_LOBBY = 0x17,
+
+    // Para empezar/cancelar/terminar la lobby.
     STARTED_LOBBY = 0x18,
-    CANCEL_LOBBY = 0x19
-    // Tipos de acciones de configuracion?
+    GAME_ERROR = 0x19,
+    FINISHED_LOBBY = 0x21,
+
+    // Notificaciones de cambios dentro de la lobby/configuracion
+    PLAYER_NEW = 0x17,
+    PLAYER_LEFT = 0x20
+
 };
 
 struct lobby_info {
-    LobbyActionType action;
-    uint8_t attached_id;  // Un numero. Que muchas veces es necesario
+    LobbyResponseType action;
+    uint8_t data;  // Un numero. Que muchas veces es necesario
 
-    lobby_info(LobbyActionType _action, uint8_t num): action(_action), attached_id(num) {}
-    lobby_info(): action(CANCEL_LOBBY), attached_id(0) {}
+    lobby_info(LobbyResponseType _response, uint8_t num): action(_response), data(num) {}
+    lobby_info(): action(GAME_ERROR), data(0) {}
 } __attribute__((packed));
 
 struct lobby_action {

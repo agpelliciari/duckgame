@@ -13,7 +13,6 @@ ControlledPlayer& PlayerContainer::add(uint8_t countplayers) {
     // Por ahora pareceria es lo mismo que el id.
     // Pero a la hora de remove. No parece correcto. Si bien por ahora no se necesita se puedan
     // conectar.
-
     if (countplayers == 2) {  // Two in the machine!
         totalplayers += 2;
         player_id first = ++last_id;
@@ -38,6 +37,17 @@ void PlayerContainer::removeAll() {
     }
 }
 
+void PlayerContainer::finishLobbyMode() {
+    for (ControlledPlayer& player: players) {
+        player.setgamemode();
+    }
+}
+
+void PlayerContainer::finishGameMode() {
+    for (ControlledPlayer& player: players) {
+        player.setlobbymode();
+    }
+}
 
 std::vector<player_id> PlayerContainer::getPlayers() {
     std::vector<player_id> connected;
@@ -53,18 +63,22 @@ std::vector<player_id> PlayerContainer::getPlayers() {
     return connected;
 }
 
+// No nos fijamos si se desconectaron. En fase lobby el lobby container se encarga de notificar.
+// Lo hacen por medio del remove...
+void PlayerContainer::notifyInfo(const lobby_info& info) {
+    for (ControlledPlayer& player: players) {
+        player.recvinfo(info);
+    }
+}
+
 std::vector<player_id> PlayerContainer::updateState(const MatchDto& matchdto) {
     std::vector<player_id> disconnected;
-
-    // std::cout << matchdto.parse() << std::endl;  // Show what happened on server.
 
     for (auto playerit = players.begin(); playerit != players.end();) {
         if ((*playerit).recvstate(matchdto)) {
             ++playerit;
             continue;
         }
-
-
         // Agrega/ notifica desconectados.
         int mx = (*playerit).playercount();
         for (int ind = 0; ind < mx; ind++) {
@@ -75,8 +89,8 @@ std::vector<player_id> PlayerContainer::updateState(const MatchDto& matchdto) {
 
         playerit = players.erase(playerit);
     }
-    totalplayers -= disconnected.size();
 
+    totalplayers -= disconnected.size();
     return disconnected;
 }
 

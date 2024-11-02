@@ -11,13 +11,13 @@
 
 // Snapshots esta cerrada inicialmente. Events esta abierta.
 ControlledPlayer::ControlledPlayer(player_id first):
-        count(1), ids(), events(SIZE_EVENTS, true), snapshots(SIZE_SNAPSHOTS, false) {
+        count(1), ids(), events(SIZE_EVENTS, false), snapshots(SIZE_SNAPSHOTS, true) {
     ids[0] = first;
     ids[1] = first;
 }
 
 ControlledPlayer::ControlledPlayer(player_id first, player_id second):
-        count(2), ids(), events(SIZE_EVENTS, true), snapshots(SIZE_SNAPSHOTS, false) {
+        count(2), ids(), events(SIZE_EVENTS, false), snapshots(SIZE_SNAPSHOTS, true) {
     ids[0] = first;
     ids[1] = second;
 }

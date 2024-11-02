@@ -69,7 +69,7 @@ public:
     explicit Queue(const unsigned int max_size, const bool _closed):
             max_size(max_size), closed(_closed) {}
 
-    Queue(): Queue(false) {}
+    Queue(): Queue(UINT_MAX - 1) {}
     explicit Queue(const unsigned int max_size): Queue(max_size, false) {}
 
 

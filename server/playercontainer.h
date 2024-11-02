@@ -32,6 +32,9 @@ public:
     // Es necesrio trabajar con punteros al ser una coleccion
     ControlledPlayer& add(uint8_t countplayers);
 
+    void finishLobbyMode();
+    void finishGameMode();
+
     // Remueve todos los restantes. Normalmente no deberia haber, ya se deberian haber desconectado.
     void removeAll();
 
@@ -42,6 +45,8 @@ public:
     // Push/notifica eventos a los players, de forma no bloqueante! No tiene precondiciones perse
     // Devuelve los players que se desconectaron. Podrian ser notificados directamente
     std::vector<player_id> updateState(const MatchDto& state) override;
+
+    void notifyInfo(const lobby_info& info);
 };
 
 #endif
