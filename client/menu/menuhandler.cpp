@@ -42,7 +42,7 @@ void MenuHandler::onJoinDuoLobby(int lobbyId) {
     std::cout << "Aca se envia que el cliente quiere unirse a la lobby con id: " << lobbyId
               << " y van a jugar 2 jugadores" << std::endl;
     connector.reset();  // Reset protocol and curr state si existe.
-    connector.setLobbyJoin(*this, false, lobbyId);
+    connector.setLobbyJoin(*this, true, lobbyId);
     sender = NULL;
     // setLobbyId(lobbyId);
     //  TODO: Llamar a addSoloToLobby o addDuoToLobby
@@ -110,12 +110,15 @@ void MenuHandler::joinedLobbySolo(const GameContext& context) {
     addSoloToLobby();
 }
 
-void MenuHandler::notifyInfo(const GameContext& context, const lobby_info& info) {
+void MenuHandler::notifyInfo(GameContext& context, const lobby_info& info) {
     if (info.action == PLAYER_NEW) {
-        std::cout << "Added.. Total players actual: " << context.cantidadjugadores << std::endl;
+        context.cantidadjugadores++;
+        std::cout << "Added.. Total players actual: " << (int)context.cantidadjugadores
+                  << std::endl;
         addSoloToLobby();
     } else if (info.action == PLAYER_LEFT) {
-        std::cout << "Left.. Total players actual: " << context.cantidadjugadores << std::endl;
+        context.cantidadjugadores--;
+        std::cout << "Left.. Total players actual: " << (int)context.cantidadjugadores << std::endl;
         playerLeft();
     }
 }

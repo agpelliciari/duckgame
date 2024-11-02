@@ -1,33 +1,20 @@
 #ifndef LOBBY_CREATE_SENDER_H
 #define LOBBY_CREATE_SENDER_H
 
-#include <condition_variable>
-#include <memory>
-#include <mutex>
 #include <string>
 
+#include "./base_lobby_state.h"
 #include "./lobby_client_sender.h"
-#include "./lobby_listener.h"
-#include "./lobby_state.h"
 #include "client/gamecontext.h"
 #include "common/clientprotocol.h"
-#include "common/core/socket.h"
-#include "common/thread.h"
+#include "common/dtos.h"
+#include "common/queue.h"
 
 // Clase que encapsula al protocol y mantendria el estado del juego
 // Proporcionado una interfaz para acciones del usuario.
-class LobbyCreateSender: private Thread, public LobbyState, public LobbyClientSender {
+class LobbyCreateSender: public BaseLobbyState {
 protected:
-    ClientProtocol& protocol;  // cppcheck-suppress unusedStructMember
-    GameContext& context;      // cppcheck-suppress unusedStructMember
-
-    bool started_match;       // cppcheck-suppress unusedStructMember
-    LobbyListener& listener;  // cppcheck-suppress unusedStructMember
-
-    std::mutex mtx;
-    std::condition_variable match_start;
-
-    void waitStart();
+    LobbyClientSender sender;
     void run() override;
 
 public:
@@ -42,17 +29,9 @@ public:
     LobbyCreateSender(const LobbyCreateSender&) = delete;
     LobbyCreateSender& operator=(const LobbyCreateSender&) = delete;
 
+    LobbyClientSender& getSender();
+
     void createLobby();
-    void notifyCancel();
-
-    void doaction(const lobby_action& action) override;
-    void notifyStart() override;
-    bool isrunning() override;
-
-    // Lobby state
-    bool endstate() override;
-
-    ~LobbyCreateSender();
 };
 
 #endif

@@ -43,7 +43,7 @@ public:
 
     void recvlobbyinfo(lobby_info& out);
 
-    void sendready();
+    void sendlobbyaction(const lobby_action&& action);
 
     void sendaction(PlayerActionDTO& action);
 

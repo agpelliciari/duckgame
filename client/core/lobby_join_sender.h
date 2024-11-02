@@ -5,7 +5,6 @@
 #include "./base_lobby_state.h"
 #include "client/gamecontext.h"
 #include "common/clientprotocol.h"
-#include "common/thread.h"
 
 // Clase que encapsula al protocol y mantendria el estado del juego
 // Proporcionado una interfaz para acciones del usuario.

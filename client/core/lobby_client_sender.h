@@ -2,14 +2,19 @@
 #define LOBBY_CLIENT_SENDER_H
 
 #include "common/dtos.h"
+#include "common/queue.h"
 
 class LobbyClientSender {
-public:
-    virtual void doaction(const lobby_action& action) = 0;
-    virtual void notifyStart() = 0;
+    Queue<lobby_action> actions;
 
-    virtual bool isrunning() = 0;
-    virtual ~LobbyClientSender() {}
+public:
+    LobbyClientSender();
+    void doaction(const lobby_action& action);
+    void notifyStart();
+    void close();
+    lobby_action popaction();
+
+    ~LobbyClientSender() {}
 };
 
 #endif

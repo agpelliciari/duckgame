@@ -56,7 +56,7 @@ public:
     void joinedLobbyDual(const GameContext& context) override;
     void joinedLobbySolo(const GameContext& context) override;
 
-    void notifyInfo(const GameContext& context, const lobby_info& info) override;
+    void notifyInfo(GameContext& context, const lobby_info& info) override;
 
 private:
     bool tryPopActionToMenu(MenuAction& actionToMenu);

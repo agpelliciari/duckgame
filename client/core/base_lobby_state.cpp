@@ -14,12 +14,19 @@ BaseLobbyState::BaseLobbyState(ClientProtocol& _protocol, GameContext& _context,
 
 void BaseLobbyState::listeninfo() {
     lobby_info info;
-    protocol.recvlobbyinfo(info);
-
-    while (info.action != LobbyResponseType::STARTED_LOBBY &&
-           info.action != LobbyResponseType::GAME_ERROR) {
-        listener.notifyInfo(context, info);
+    try {
         protocol.recvlobbyinfo(info);
+
+        while (info.action != LobbyResponseType::STARTED_LOBBY &&
+               info.action != LobbyResponseType::GAME_ERROR) {
+            listener.notifyInfo(context, info);
+            protocol.recvlobbyinfo(info);
+        }
+    } catch (const LibError& error) {
+        if (protocol.isopen()) {
+            std::cerr << "Lobby state recv error:" << error.what() << std::endl;
+        }
+        return;
     }
 
     if (info.action == LobbyResponseType::STARTED_LOBBY) {

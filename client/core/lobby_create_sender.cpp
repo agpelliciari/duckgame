@@ -5,40 +5,14 @@
 #include <string>
 #include <utility>
 
+#include "./lobby_action_listener.h"
 #include "common/core/liberror.h"
 #include "common/protocolerror.h"
-
-#define ASK_NAME "What is your name?"
-#define ACTION_EXIT "Exit"
-#define ACTION_PICKUP "Pickup"
-#define ACTION_READ "Read"
 
 
 LobbyCreateSender::LobbyCreateSender(ClientProtocol& _protocol, GameContext& _context,
                                      LobbyListener& _listener):
-        protocol(_protocol), context(_context), started_match(false), listener(_listener) {}
-
-
-void LobbyCreateSender::notifyStart() {
-    std::unique_lock<std::mutex> lck(mtx);
-    started_match = true;
-    match_start.notify_all();
-}
-
-void LobbyCreateSender::notifyCancel() {
-    std::unique_lock<std::mutex> lck(mtx);
-    started_match = false;
-    match_start.notify_all();
-}
-
-void LobbyCreateSender::doaction(const lobby_action& action) {
-    std::cout << "SEND ACTION? " << &action << std::endl;
-}
-
-void LobbyCreateSender::waitStart() {
-    std::unique_lock<std::mutex> lck(mtx);
-    match_start.wait(lck);
-}
+        BaseLobbyState(_protocol, _context, _listener) {}
 
 void LobbyCreateSender::createLobby() {
     if (_is_alive) {  // already running!!
@@ -47,7 +21,8 @@ void LobbyCreateSender::createLobby() {
     start();
 }
 
-bool LobbyCreateSender::isrunning() { return _is_alive; }
+LobbyClientSender& LobbyCreateSender::getSender() { return sender; }
+
 
 void LobbyCreateSender::run() {
 
@@ -66,9 +41,13 @@ void LobbyCreateSender::run() {
         listener.createdLobbySolo(context);
     }
 
-    // Open info receiver.
-    waitStart();
+    LobbyActionListener actionlisten(protocol, sender);
+    actionlisten.begin();
 
+    // Open info receiver.
+    listeninfo();
+
+    /*
     if (started_match) {
         protocol.sendready();
         lobby_info success;
@@ -85,20 +64,5 @@ void LobbyCreateSender::run() {
             listener.canceledLobby();
         }
     }
-}
-
-bool LobbyCreateSender::endstate() {
-    if (started_match) {
-        return true;
-    }
-    notifyCancel();
-    return false;
-}
-
-LobbyCreateSender::~LobbyCreateSender() {
-    if (_keep_running) {
-        stop();
-        notifyCancel();
-        join();
-    }
+        */
 }

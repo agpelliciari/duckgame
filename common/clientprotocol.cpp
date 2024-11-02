@@ -63,7 +63,9 @@ uint8_t ClientProtocol::setdualplay(uint8_t* player1) {
 }
 
 
-void ClientProtocol::sendready() { protocol.sendbyte(LobbyActionType::PLAYER_READY); }
+void ClientProtocol::sendlobbyaction(const lobby_action&& action) {
+    protocol.sendbyte(action.type);
+}
 
 MatchDto ClientProtocol::recvstate() {
     // Primero recibi info general

@@ -46,6 +46,8 @@ bool LobbyConnector::cangonext() { return state.get() != NULL && state->endstate
 LobbyClientSender* LobbyConnector::setLobbyCreator(LobbyListener& listener, bool dual) {
     std::cout << "Should set state to lobby create " << std::endl;
     context.dualplay = dual;
+    context.cantidadjugadores = dual ? 2 : 1;
+
 
     LobbyCreateSender* creator = new LobbyCreateSender(protocol, context, listener);
     state.reset(creator);
@@ -53,7 +55,7 @@ LobbyClientSender* LobbyConnector::setLobbyCreator(LobbyListener& listener, bool
     // Ahora empeza el thread. Despues de joinear el anterior.
     creator->createLobby();
 
-    return creator;
+    return &(creator->getSender());
 }
 
 void LobbyConnector::setLobbyJoin(LobbyListener& listener, bool dual, unsigned int lobbyid) {

@@ -23,7 +23,7 @@ public:
     virtual void joinedLobbySolo(const GameContext& context) = 0;
 
     // Info general de respuesta/notificacion de algo.. configuracion o si joineo alguien y asi.
-    virtual void notifyInfo(const GameContext& context, const lobby_info& info) = 0;
+    virtual void notifyInfo(GameContext& context, const lobby_info& info) = 0;
 
     virtual ~LobbyListener() {}
 };

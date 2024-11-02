@@ -19,7 +19,7 @@ bool ControlNotifier::runLobby() {
             std::cerr << "Configuration info? " << (int)info.action << ", num: " << (int)info.data
                       << std::endl;
 
-            // protocol.notifyevent(info);
+            protocol.notifyevent(info);
             info = player.popinfo();
         }
 
