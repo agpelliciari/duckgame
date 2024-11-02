@@ -33,7 +33,7 @@ void MatchState::start_players(MatchObserver& observer) {
 void MatchState::step() {
     this->receive_commands();
     this->execute_commands();
-    match_logic.update_player_positions();
+    match_logic.update_players();
 }
 
 

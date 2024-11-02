@@ -28,7 +28,7 @@ public:
     void add_player(int id);
     void add_player_speed(int id, int x, int y);
     void get_dtos(std::vector<PlayerDTO>& dtos);
-    void update_player_positions();
+    void update_players();
     ~MatchLogic();
 };
 

@@ -2,6 +2,7 @@
 #ifndef PHYSICAL_OBJECT_H
 #define PHYSICAL_OBJECT_H
 
+#include "common/dtosplayer.h"
 #include "tuple.h"
 
 class PhysicalObject {
@@ -26,6 +27,7 @@ class PhysicalObject {
         void stop_moving_x();
         void stop_moving_y();
         void move();
+        void update_action(TypeMoveAction& move_action);
         void get_position(int &coord_x, int &coord_y);
 
         //~PhysicalObject();

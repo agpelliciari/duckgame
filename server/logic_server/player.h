@@ -18,7 +18,7 @@ class Player {
         Weapon weapon;            // cppcheck-suppress unusedStructMember
         Armor helmet;             // cppcheck-suppress unusedStructMember
         Armor chest_armor;        // cppcheck-suppress unusedStructMember
-        Action move_action;       // cppcheck-suppress unusedStructMember
+        TypeMoveAction move_action;       // cppcheck-suppress unusedStructMember
 
     public:
         Player(unsigned int id, int initial_x, int initial_y);
@@ -30,7 +30,8 @@ class Player {
 
         void still();
         void add_speed(int speed_x, int speed_y);
-        void update_position();
+        void update();
+
 };
 
 

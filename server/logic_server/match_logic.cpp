@@ -25,9 +25,9 @@ void MatchLogic::add_player_speed(int id, int speed_x, int speed_y) {
     }
 }
 
-void MatchLogic::update_player_positions() {
+void MatchLogic::update_players() {
     for (Player& player: players) {
-        player.update_position();
+        player.update();
     }
 }
 
