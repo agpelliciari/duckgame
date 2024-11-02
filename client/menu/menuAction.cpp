@@ -12,7 +12,17 @@ MenuAction MenuAction::AddSoloToLobby() { return MenuAction(Action::AddSoloToLob
 
 MenuAction MenuAction::AddDuoToLobby() { return MenuAction(Action::AddDuoToLobby, -1); }
 
+MenuAction MenuAction::RemovePlayerFromLobby() {
+    return MenuAction(Action::RemovePlayerFromLobby, -1);
+}
+
+MenuAction MenuAction::FailJoin() { return MenuAction(Action::FailJoin, -1); }
+
+MenuAction MenuAction::FailCreate() { return MenuAction(Action::FailCreate, -1); }
+
 MenuAction MenuAction::StartLobby() { return MenuAction(Action::StartLobby, -1); }
+
+MenuAction MenuAction::CancelLobby() { return MenuAction(Action::CancelLobby, -1); }
 
 void MenuAction::exec(Menu& menu) {
     switch (action) {
@@ -20,11 +30,19 @@ void MenuAction::exec(Menu& menu) {
             menu.updateIdDisplayedInLobby(lobbyId);
             break;
         case Action::AddSoloToLobby:
-            menu.addPlayerToLobby(3);
+            menu.addPlayerToLobby();
             break;
         case Action::AddDuoToLobby:
-            menu.addPlayerToLobby(3);
-            menu.addPlayerToLobby(4);
+            menu.addPlayerToLobby();
+            menu.addPlayerToLobby();
+            break;
+        case Action::RemovePlayerFromLobby:
+            menu.removePlayerFromLobby();
+            break;
+        case Action::FailJoin:
+        case Action::FailCreate:
+        case Action::CancelLobby:
+            menu.reset();
             break;
         case Action::StartLobby:
             menu.startLobby();

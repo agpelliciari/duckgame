@@ -6,7 +6,17 @@
 
 class Menu;
 
-enum Action { SetLobbyId, AddSoloToLobby, AddDuoToLobby, StartLobby, None };
+enum Action {
+    SetLobbyId,
+    AddSoloToLobby,
+    AddDuoToLobby,
+    RemovePlayerFromLobby,
+    FailJoin,
+    FailCreate,
+    StartLobby,
+    CancelLobby,
+    None
+};
 
 class MenuAction {
 private:
@@ -24,7 +34,15 @@ public:
 
     static MenuAction AddDuoToLobby();
 
+    static MenuAction RemovePlayerFromLobby();
+
+    static MenuAction FailJoin();
+
+    static MenuAction FailCreate();
+
     static MenuAction StartLobby();
+
+    static MenuAction CancelLobby();
 
     void exec(Menu& menu);
 };

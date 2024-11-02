@@ -25,7 +25,7 @@ void Menu::updateIdDisplayedInLobby(int id) {
     }
 }
 
-void Menu::addPlayerToLobby(int n) {
+void Menu::addPlayerToLobby() {
     QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
 
     if (layout->count() == 0)
@@ -33,10 +33,29 @@ void Menu::addPlayerToLobby(int n) {
 
     QWidget* widget = layout->itemAt(0)->widget();
     if (auto* lobbyHostWidget = qobject_cast<LobbyHostWidget*>(widget)) {
-        lobbyHostWidget->addPlayerToLobby(n);
+        lobbyHostWidget->addPlayerToLobby();
     } else if (auto* lobbyGuestWidget = qobject_cast<LobbyGuestWidget*>(widget)) {
-        lobbyGuestWidget->addPlayerToLobby(n);
+        lobbyGuestWidget->addPlayerToLobby();
     }
+}
+
+void Menu::removePlayerFromLobby() {
+    QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
+
+    if (layout->count() == 0)
+        throw std::runtime_error("There is no widget mounted");
+
+    QWidget* widget = layout->itemAt(0)->widget();
+    if (auto* lobbyHostWidget = qobject_cast<LobbyHostWidget*>(widget)) {
+        lobbyHostWidget->removePlayerFromLobby();
+    } else if (auto* lobbyGuestWidget = qobject_cast<LobbyGuestWidget*>(widget)) {
+        lobbyGuestWidget->removePlayerFromLobby();
+    }
+}
+
+void Menu::reset() {
+    unMountWidget();
+    mountCreateJoin();
 }
 
 void Menu::startLobby() { this->close(); }
@@ -82,8 +101,6 @@ void Menu::mountSetLobbyIdForSolo() {
                                                     handler.onJoinSoloLobby(lobbyId);
                                                     unMountWidget();
                                                     mountLobbyGuest();
-                                                    addPlayerToLobby(1);
-                                                    addPlayerToLobby(2);
                                                 },
                                         .onClickCancel =
                                                 [this] {
@@ -99,8 +116,6 @@ void Menu::mountSetLobbyIdForDuo() {
                                                     handler.onJoinDuoLobby(lobbyId);
                                                     unMountWidget();
                                                     mountLobbyGuest();
-                                                    addPlayerToLobby(1);
-                                                    addPlayerToLobby(2);
                                                 },
                                         .onClickCancel =
                                                 [this] {
@@ -121,15 +136,12 @@ void Menu::mountSetSoloDuoHost() {
                                                     handler.onCreateSoloLobby();
                                                     unMountWidget();
                                                     mountLobbyHost();
-                                                    addPlayerToLobby(1);
                                                 },
                                         .onClickDuo =
                                                 [this] {
                                                     handler.onCreateDuoLobby();
                                                     unMountWidget();
                                                     mountLobbyHost();
-                                                    addPlayerToLobby(1);
-                                                    addPlayerToLobby(2);
                                                 },
                                         .onClickCancel =
                                                 [this] {
@@ -167,6 +179,7 @@ void Menu::mountLobbyHost() {
     LobbyHostHandler lobbyHostHandler{.onClickStart = [this] { handler.onStartLobby("Mapa 1"); },
                                       .onClickCancel =
                                               [this] {
+                                                  handler.onCancelLobby();
                                                   unMountWidget();
                                                   mountSetSoloDuoHost();
                                               }};
@@ -176,6 +189,7 @@ void Menu::mountLobbyHost() {
 
 void Menu::mountLobbyGuest() {
     LobbyGuestHandler lobbyGuestHandler{.onClickCancel = [this] {
+        handler.onCancelLobby();
         unMountWidget();
         mountSetSoloDuoGuest();
     }};
