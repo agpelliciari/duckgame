@@ -34,7 +34,7 @@ public:
     ClientProtocol(const ClientProtocol&) = delete;
     ClientProtocol& operator=(const ClientProtocol&) = delete;
 
-    bool joinLobby(const uint8_t id_match);
+    lobby_info joinLobby(const uint8_t id_match);
     uint8_t createLobby();
 
     // Para setear playercount == 1 o == 2

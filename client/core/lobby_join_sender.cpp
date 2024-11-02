@@ -22,7 +22,10 @@ void LobbyJoinSender::joinLobby() {
 bool LobbyJoinSender::isrunning() { return _is_alive; }
 
 void LobbyJoinSender::run() {
-    if (protocol.joinLobby(context.id_lobby)) {
+
+    lobby_info infojoin = protocol.joinLobby(context.id_lobby);
+    if (infojoin.action != JOINED_LOBBY) {
+        std::cerr << "Failed joined error code: " << (int)infojoin.data << std::endl;
         listener.failedJoin();
         return;
     }
@@ -30,11 +33,15 @@ void LobbyJoinSender::run() {
     if (context.dualplay) {
         // std::cerr << "lobby id to join: " << (int)context.id_lobby <<" DUAL"<< std::endl;
         context.second_player = protocol.setdualplay(&context.first_player);
+
+        context.cantidadjugadores = infojoin.data + 2;
         listener.joinedLobbyDual(context);
     } else {
         // std::cerr << "lobby id to join: " << (int)context.id_lobby <<" SINGLE"<< std::endl;
         context.first_player = protocol.setsingleplay();
         context.second_player = 0;
+
+        context.cantidadjugadores = infojoin.data + 1;
         listener.joinedLobbySolo(context);
     }
 

@@ -24,7 +24,7 @@ Match& LobbyControl::resolveMatch(bool* isanfitrion) {
     *isanfitrion = false;
     Match& res = lobbies.findLobby(protocol.recvlobbyid());
 
-    protocol.notifyaction(LobbyResponseType::JOINED_LOBBY);
+    protocol.notifyinfo(LobbyResponseType::JOINED_LOBBY, res.playercount());
 
     return res;
 }

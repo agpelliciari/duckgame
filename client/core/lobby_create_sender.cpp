@@ -32,13 +32,13 @@ void LobbyCreateSender::run() {
         context.second_player = protocol.setdualplay(&context.first_player);
         context.id_lobby = id_lobby;
 
-        listener.createdLobbyDual(context);
+        listener.createdLobbyDual(id_lobby);
     } else {
         context.first_player = protocol.setsingleplay();
         context.second_player = 0;
 
         context.id_lobby = id_lobby;
-        listener.createdLobbySolo(context);
+        listener.createdLobbySolo(id_lobby);
     }
 
     LobbyActionListener actionlisten(protocol, sender);

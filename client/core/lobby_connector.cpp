@@ -87,3 +87,10 @@ LobbyConnector::~LobbyConnector() {
 
     state.reset(NULL);  // Libera el state si hay. El pointer lo haria igual.
 }
+
+
+// Metodos getters para la configuracion.
+
+int LobbyConnector::getTotalPlayers() const { return context.cantidadjugadores; }
+
+bool LobbyConnector::isdual() const { return context.dualplay; }

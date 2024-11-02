@@ -16,6 +16,7 @@ protected:
     GameContext& context;      // cppcheck-suppress unusedStructMember
     LobbyListener& listener;   // cppcheck-suppress unusedStructMember
 
+    void handleNotify(const lobby_info& info);
     void listeninfo();
 
 public:

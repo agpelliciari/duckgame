@@ -84,42 +84,46 @@ void MenuHandler::failedCreate() { queueToMenu.push(MenuAction::FailCreate()); }
 void MenuHandler::failedJoin() { queueToMenu.push(MenuAction::FailJoin()); }
 
 
+// Tambien son directas ahora
+void MenuHandler::playerJoinedLobby(int id) {
+    std::cout << "New player " << id << ".. Total: " << connector.getTotalPlayers() << std::endl;
+    addSoloToLobby();
+}
+
+void MenuHandler::playerLeftLobby(int id) {
+    std::cout << "Player  " << id << " left .. Total: " << connector.getTotalPlayers() << std::endl;
+    removePlayerFromLobby();
+}
+
 // METODOS PARA RECIBIR NOTIFICACIONES DEL PROTOCOLO!
 // Para recibir notificaciones de la lobby.
 // Notificacion inicial sobre si se pudo crear/unirse a una lobby.
-void MenuHandler::createdLobbyDual(const GameContext& context) {
-    std::cout << "Lobby creada dual con id " << (int)context.id_lobby << std::endl;
-    setLobbyId(context.id_lobby);
+void MenuHandler::createdLobbyDual(unsigned int id_lobby) {
+    std::cout << "Lobby creada dual con id " << id_lobby << std::endl;
+    setLobbyId(id_lobby);
     addDuoToLobby();
 }
-void MenuHandler::createdLobbySolo(const GameContext& context) {
-    std::cout << "Lobby creada solo con id " << (int)context.id_lobby << std::endl;
-    setLobbyId(context.id_lobby);
+void MenuHandler::createdLobbySolo(unsigned int id_lobby) {
+    std::cout << "Lobby creada solo con id " << id_lobby << std::endl;
+    setLobbyId(id_lobby);
     addSoloToLobby();
 }
 
 void MenuHandler::joinedLobbyDual(const GameContext& context) {
-    std::cout << "Lobby Join dual con id " << (int)context.id_lobby << std::endl;
+    std::cout << "Lobby Join dual con id " << (int)context.id_lobby << " count there "
+              << context.cantidadjugadores << std::endl;
     setLobbyId(context.id_lobby);
-    addDuoToLobby();  // esto agrega los nuevos players que se unen
-    // faltan agregar los players que YA estaban en la sala
+
+    for (int i = 0; i < context.cantidadjugadores; i++) {
+        addSoloToLobby();  // esto agrega los nuevos players que existen
+    }
 }
 void MenuHandler::joinedLobbySolo(const GameContext& context) {
-    std::cout << "Lobby Join solo con id " << (int)context.id_lobby << std::endl;
+    std::cout << "Lobby Join solo con id " << (int)context.id_lobby << " count there "
+              << context.cantidadjugadores << std::endl;
     setLobbyId(context.id_lobby);
-    addSoloToLobby();  // esto agrega los nuevos players que se unen
-    // faltan agregar los players que YA estaban en la sala
-}
 
-void MenuHandler::notifyInfo(GameContext& context, const lobby_info& info) {
-    if (info.action == PLAYER_NEW) {
-        context.cantidadjugadores++;
-        std::cout << "Added.. Total players actual: " << (int)context.cantidadjugadores
-                  << std::endl;
-        addSoloToLobby();
-    } else if (info.action == PLAYER_LEFT) {
-        context.cantidadjugadores--;
-        std::cout << "Left.. Total players actual: " << (int)context.cantidadjugadores << std::endl;
-        removePlayerFromLobby();
+    for (int i = 0; i < context.cantidadjugadores; i++) {
+        addSoloToLobby();  // esto agrega los nuevos players que existen
     }
 }

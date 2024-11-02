@@ -37,12 +37,19 @@ void ClientProtocol::sendaction(PlayerActionDTO& action) {
     protocol.sendbytes(&action, sizeof(action));
 }
 
-bool ClientProtocol::joinLobby(const uint8_t id_match) {
+lobby_info ClientProtocol::joinLobby(const uint8_t id_match) {
     uint8_t info[2] = {LobbyActionType::JOIN_LOBBY, id_match};
     protocol.sendbytes(&info, 2);
+    lobby_info out;
+    recvlobbyinfo(out);
+
+    if (out.action != JOINED_LOBBY && out.action != GAME_ERROR) {
+        out.action = GAME_ERROR;
+        out.data = LobbyGameErrorType::UNKNOWN;
+    }
 
     // Recibir true si fallo, false si fue exito.
-    return protocol.recvbyte() != (LobbyActionType::JOIN_LOBBY);
+    return out;
 }
 uint8_t ClientProtocol::createLobby() {
     protocol.sendbyte(LobbyActionType::CREATE_LOBBY);

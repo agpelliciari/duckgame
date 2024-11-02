@@ -51,13 +51,16 @@ public:
 
 
     // Notificacion inicial sobre si se pudo crear/unirse a una lobby.
-    void createdLobbyDual(const GameContext& context) override;
-    void createdLobbySolo(const GameContext& context) override;
+    void createdLobbyDual(unsigned int id_lobby) override;
+    void createdLobbySolo(unsigned int id_lobby) override;
 
     void joinedLobbyDual(const GameContext& context) override;
     void joinedLobbySolo(const GameContext& context) override;
 
-    void notifyInfo(GameContext& context, const lobby_info& info) override;
+    void playerJoinedLobby(int id) override;
+    void playerLeftLobby(int id) override;
+
+    // void notifyInfo(GameContext& context, const lobby_info& info) override;
 
 private:
     bool tryPopActionToMenu(MenuAction& actionToMenu);

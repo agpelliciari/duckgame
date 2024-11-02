@@ -52,6 +52,12 @@ public:
     GameActionSender* initGame(EventListener& listener);
 
     ~LobbyConnector();
+
+
+    // Getters del contexto.
+
+    int getTotalPlayers() const;
+    bool isdual() const;
 };
 
 #endif

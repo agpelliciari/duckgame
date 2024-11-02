@@ -12,6 +12,18 @@ BaseLobbyState::BaseLobbyState(ClientProtocol& _protocol, GameContext& _context,
                                LobbyListener& _listener):
         protocol(_protocol), context(_context), listener(_listener) {}
 
+
+void BaseLobbyState::handleNotify(const lobby_info& info) {
+    // Un map para esto... no vale la pena.
+    if (info.action == PLAYER_NEW) {
+        context.cantidadjugadores++;
+        listener.playerJoinedLobby(info.data);
+    } else if (info.action == PLAYER_LEFT) {
+        context.cantidadjugadores--;
+        listener.playerLeftLobby(info.data);
+    }
+}
+
 void BaseLobbyState::listeninfo() {
     lobby_info info;
     try {
@@ -19,7 +31,8 @@ void BaseLobbyState::listeninfo() {
 
         while (info.action != LobbyResponseType::STARTED_LOBBY &&
                info.action != LobbyResponseType::GAME_ERROR) {
-            listener.notifyInfo(context, info);
+
+            handleNotify(info);
             protocol.recvlobbyinfo(info);
         }
     } catch (const LibError& error) {
