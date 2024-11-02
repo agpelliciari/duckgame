@@ -33,6 +33,7 @@ public:
 
     void onStartLobby(const std::string& map);
 
+    void onCancelLobby();
 
     ~MenuHandler();
 
@@ -40,7 +41,7 @@ public:
     void setLobbyId(int lobbyId);
     void addSoloToLobby();
     void addDuoToLobby();
-    void playerLeft();
+    void removePlayerFromLobby();
 
     // Para recibir notificaciones de la lobby... son directos.
     void startedLobby() override;

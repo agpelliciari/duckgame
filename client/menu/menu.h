@@ -37,7 +37,11 @@ public:
 
     void updateIdDisplayedInLobby(int id);
 
-    void addPlayerToLobby(int n);
+    void addPlayerToLobby();
+
+    void removePlayerFromLobby();
+
+    void reset();
 
     void startLobby();
 
