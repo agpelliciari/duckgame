@@ -17,24 +17,33 @@ int Match::playercount() const { return players.playercount(); }
 
 bool Match::notifyDisconnect(ControlledPlayer& player) {
     connectedplayers--;  // Solo importa la cantidad de conectados
+    std::cout << "Disconnected player from match? now " << connectedplayers << std::endl;
 
     player.disconnect();
 
-    return connectedplayers == 0;  // Deberia liberar?
+    if (_keep_running) {
+        return connectedplayers == 0;
+    }
+
+    players.remove(player);
+    // El anifitrion no notifica su disconnect.
+    // std::cout << "Should remove it from lobby/notify it?" << std::endl;
+
+    return connectedplayers == 0;  // Nunca deberia ser true. El anfitrion no deberia llamar.
 }
 
 void Match::init() {
-    std::unique_lock<std::mutex> lck(mtx);  // No other actions on container.
     if (is_alive()) {
         throw GameError("Tried to start a match already started!!\n");
     }
     start();
-    match_start.notify_all();
+    players.finishLobbyMode();
+    // match_start.notify_all();
 }
 
 void Match::cancel() {
-    std::unique_lock<std::mutex> lck(mtx);  // No other actions on container.
-    match_start.notify_all();
+    players.finishLobbyMode();
+    // match_start.notify_all();
 }
 
 
@@ -46,15 +55,6 @@ void Match::finish() {
     looper.stop();
     join();
 }
-
-void Match::waitStart() {
-    std::unique_lock<std::mutex> lck(mtx);
-    if (_keep_running) {
-        return;
-    }
-    match_start.wait(lck);
-}
-
 
 // General/public methods.
 

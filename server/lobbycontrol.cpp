@@ -3,18 +3,15 @@
 #include <iostream>
 #include <utility>
 
+#include "common/core/liberror.h"
 #include "common/protocolerror.h"
 
 LobbyControl::LobbyControl(LobbyContainer& _lobbies, ServerProtocol& _protocol):
         lobbies(_lobbies), protocol(_protocol) {}
 
 Match& LobbyControl::resolveMatch(bool* isanfitrion) {
-    lobby_info info;
-    if (!protocol.recvlobbyinfo(info)) {
-        throw ProtocolError("Client aborted before sending lobby info");
-    }
-
-    if (info.action == CREATE_LOBBY) {
+    LobbyActionType action = protocol.recvresolveinfo();
+    if (action == CREATE_LOBBY) {
         *isanfitrion = true;
 
         Match& newlobby = lobbies.newLobby();
@@ -25,15 +22,13 @@ Match& LobbyControl::resolveMatch(bool* isanfitrion) {
         return newlobby;
     }
     *isanfitrion = false;
-    // std::cerr << " JOIN lobby id: " << (int)info.attached_id << std::endl;
-    Match& res = lobbies.findLobby(info.attached_id);
+    Match& res = lobbies.findLobby(protocol.recvlobbyid());
 
-    protocol.notifyaction(LobbyActionType::JOIN_LOBBY);
+    protocol.notifyinfo(LobbyResponseType::JOINED_LOBBY, res.playercount());
 
     return res;
 }
-
-ControlledPlayer& LobbyControl::waitStart(Match& match) {
+ControlledPlayer& LobbyControl::joinPlayers(Match& match) {
     uint8_t playercount = protocol.recvplayercount();
 
     ControlledPlayer& player = lobbies.joinLobby(playercount, match);
@@ -41,12 +36,17 @@ ControlledPlayer& LobbyControl::waitStart(Match& match) {
     if (player.playercount() == 2) {
         protocol.notifyid(player.getid(1));
     }
-
     std::cerr << "joined " << player.toString() << " to lobby " << (int)match.getID() << std::endl;
+    return player;
+}
 
-    player.open();
 
-    match.waitStart();
+/*
+// Por ahora no hay logica de configuracion que haga el joined
+// Solo puede irse.
+void LobbyControl::handleJoinedLobby(ControlledPlayer& player, Match& match) {
+
+
     if (match.isrunning()) {
         // se empezo.
         protocol.notifyinfo(LobbyActionType::STARTED_LOBBY, match.playercount());
@@ -54,33 +54,37 @@ ControlledPlayer& LobbyControl::waitStart(Match& match) {
         // se cancelo.
         protocol.notifyinfo(LobbyActionType::CANCEL_LOBBY, LobbyCancelType::ANFITRION_LEFT);
     }
-
     return player;
 }
-ControlledPlayer& LobbyControl::start(Match& match) {
-    uint8_t playercount = protocol.recvplayercount();
+*/
 
-    ControlledPlayer& player = lobbies.joinLobby(playercount, match);
-    protocol.notifyid(player.getid(0));
-    if (player.playercount() == 2) {
-        protocol.notifyid(player.getid(1));
+
+bool LobbyControl::handleAnfitrionLobby(Match& match) {  // ControlledPlayer& player,
+    try {
+        // And wait..
+        LobbyActionType action(protocol.recvlobbyaction());
+
+        while (action != LobbyActionType::PLAYER_READY) {
+            // Handlea accion! Si hay que hacer algo. i.e obtene info en base al tipo
+            std::cerr << "RECEIVED ACTION NON READY?" << std::endl;
+            action = protocol.recvlobbyaction();
+        }
+        lobbies.startLobby(match);
+        std::cerr << "Started MATCH id: " << (int)match.getID() << " WITH: " << match.playercount()
+                  << std::endl;
+        return false;
+    } catch (const ProtocolError& error) {
+        // EOF of player. No muestres nada.
+        std::cerr << "CANCELED MATCH ID: " << error.what() << " " << (int)match.getID()
+                  << std::endl;
+        lobbies.cancelLobby(match);
+        return true;
+    } catch (const LibError& error) {
+        if (protocol.isopen()) {  // Si debiera estar activo. Error interno del protocol.
+            std::cerr << "Lobby control error:" << error.what() << std::endl;
+        }
+        std::cerr << "Cancel lobby?:" << error.what() << std::endl;
+        lobbies.cancelLobby(match);
+        return true;
     }
-
-    std::cerr << "joined " << player.toString() << " anfitrion of lobby " << (int)match.getID()
-              << std::endl;
-
-
-    // And wait..
-    if (!protocol.recvsignalstart()) {
-        throw ProtocolError("Did not receive new lobby start match signal");
-    }
-
-    player.open();
-    lobbies.startLobby(match);
-    std::cerr << "Started MATCH id: " << (int)match.getID() << "WITH: " << match.playercount()
-              << std::endl;
-
-    protocol.notifyinfo(LobbyActionType::STARTED_LOBBY, match.playercount());
-
-    return player;
 }

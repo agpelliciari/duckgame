@@ -22,9 +22,10 @@ void ControlReceiver::init() {
     }
     start();
 }
-void ControlReceiver::playOn(const ControlledPlayer& player, Match& match) {
+bool ControlReceiver::playOn(const ControlledPlayer& player, Match& match) {
     try {
-        // Loopeado de acciones
+        std::cout << "PLAY ON" << std::endl;
+        //  Loopeado de acciones
         while (_keep_running) {
             PlayerActionDTO action = protocol.recvaction();
             if (player.playercount() <= action.playerind) {
@@ -34,16 +35,26 @@ void ControlReceiver::playOn(const ControlledPlayer& player, Match& match) {
             action.playerind = player.getid(action.playerind);
             match.notifyAction(action);
         }
+
+        return true;
     } catch (const ProtocolError& error) {
-        // EOF of player. No muestres nada.
+        std::cout << "-->EOF? closed? " << (int)protocol.isopen() << " " << error.what()
+                  << std::endl;
+        // std::endl; EOF of player. No muestres nada. Pero si el protocol esta abierto, significa
+        // el cliente se desconecto.
+        return protocol.isopen();
     } catch (const LibError& error) {
         if (protocol.isopen()) {  // Si debiera estar activo. Error interno del protocol.
             std::cerr << "Controller lib error:" << error.what() << std::endl;
+            return true;
         }
+        return false;
     } catch (const std::exception& err) {
         std::cerr << "excep : " << err.what() << " Ending control receiver.\n";
+        return true;
     } catch (...) {
         std::cerr << "excep <unknown> Ending control receiver.\n";
+        return true;
     }
 }
 void ControlReceiver::run() {
@@ -52,19 +63,27 @@ void ControlReceiver::run() {
 
         bool isanfitrion;
         Match& match = lobby.resolveMatch(&isanfitrion);
-        ControlledPlayer& player = isanfitrion ? lobby.start(match) : lobby.waitStart(match);
-
+        ControlledPlayer& player = lobby.joinPlayers(match);
         // Inicia notifier.
-        ControlNotifier notifier(player, protocol);
+        ControlNotifier notifier(match, player, protocol);
         notifier.start();
 
-        playOn(player, match);  // Es no except.
+        if (isanfitrion && lobby.handleAnfitrionLobby(match)) {
+            return;  // No se empezo la partida.
+        }
 
-        lobbies.disconnectFrom(match, player);
+        // Si no es el anfitrion que ya asuma empezo. Total no deberia mandar nada
+        // En la fase de lobby, solo podria irse. Para lo que esta disconnect despues
+
+        if (playOn(player, match)) {  // Es no except.
+            lobbies.disconnectFrom(match, player);
+        }
+
 
     } catch (const GameError& error) {
         std::cerr << "Game error at lobby: " << error.what() << std::endl;
-        protocol.notifyinfo(LobbyActionType::CANCEL_LOBBY, LobbyCancelType::GAME_ERROR);
+        // Por ahora unknown... pero a futuro se agregara al error.
+        protocol.notifyinfo(LobbyResponseType::GAME_ERROR, LobbyGameErrorType::UNKNOWN);
     }
 }
 

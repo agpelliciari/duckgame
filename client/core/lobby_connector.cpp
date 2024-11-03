@@ -5,6 +5,8 @@
 #include <string>
 #include <utility>
 
+#include "./lobby_create_sender.h"
+#include "./lobby_join_sender.h"
 #include "common/core/liberror.h"
 
 static const char DEFAULT_HOST[] = "127.0.0.1";
@@ -22,16 +24,21 @@ void LobbyConnector::setHostnamePort(const std::string& newhost, const std::stri
 }
 
 
-// Resetea el estado al inicial.
-// Y reseteo del protocolo.
-// No es una navegacion entre estados perse.
-void LobbyConnector::reset() {
+void LobbyConnector::clear() {
 
     protocol.close();
     // Al hacer close si el state esperando por respuesta del protocolo
     // Tira exception.
-
     state.reset(NULL);  // El destructor del state actual se encarga si hace falta un join.
+}
+
+// Resetea el estado al inicial.
+// Y reseteo del protocolo.
+// No es una navegacion entre estados perse.
+void LobbyConnector::reset() {
+    if (protocol.isopen()) {
+        clear();
+    }
 
     // Reemplazo del protocolo.
     protocol = ClientProtocol(Socket(hostname.c_str(), service.c_str()));
@@ -41,17 +48,31 @@ bool LobbyConnector::cangonext() { return state.get() != NULL && state->endstate
 
 
 // Setea el estado para el manejo de lobby
-LobbyClientSender* LobbyConnector::setLobbyCreator(LobbyListener& listener) {
-    LobbyClientSender* creator = new LobbyClientSender(protocol, context, listener);
+LobbyClientSender* LobbyConnector::setLobbyCreator(LobbyListener& listener, bool dual) {
+    std::cout << "Should set state to lobby create " << std::endl;
+    context.dualplay = dual;
+    context.cantidadjugadores = dual ? 2 : 1;
+
+
+    LobbyCreateSender* creator = new LobbyCreateSender(protocol, context, listener);
     state.reset(creator);
-    return creator;
+
+    // Ahora empeza el thread. Despues de joinear el anterior.
+    creator->createLobby();
+
+    return &(creator->getSender());
 }
 
-LobbyClientSender* LobbyConnector::setLobbyJoin(LobbyListener& listener, unsigned int lobbyid) {
+void LobbyConnector::setLobbyJoin(LobbyListener& listener, bool dual, unsigned int lobbyid) {
     std::cout << "Should set state to lobby join " << lobbyid << std::endl;
-    LobbyClientSender* joiner = new LobbyClientSender(protocol, context, listener);
+    context.dualplay = dual;
+    context.id_lobby = lobbyid;
+
+    LobbyJoinSender* joiner = new LobbyJoinSender(protocol, context, listener);
     state.reset(joiner);
-    return joiner;
+
+    // Ahora empeza el thread. Despues de joinear el anterior.
+    joiner->joinLobby();
 }
 
 // Utiliza el protocol del sender, le quita el
@@ -66,3 +87,10 @@ LobbyConnector::~LobbyConnector() {
 
     state.reset(NULL);  // Libera el state si hay. El pointer lo haria igual.
 }
+
+
+// Metodos getters para la configuracion.
+
+int LobbyConnector::getTotalPlayers() const { return context.cantidadjugadores; }
+
+bool LobbyConnector::isdual() const { return context.dualplay; }

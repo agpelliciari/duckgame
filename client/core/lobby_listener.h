@@ -17,13 +17,16 @@ public:
     virtual void failedCreate() = 0;
 
 
-    virtual void createdLobbyDual(const GameContext& context) = 0;
-    virtual void createdLobbySolo(const GameContext& context) = 0;
+    virtual void createdLobbyDual(unsigned int id_lobby) = 0;
+    virtual void createdLobbySolo(unsigned int id_lobby) = 0;
     virtual void joinedLobbyDual(const GameContext& context) = 0;
     virtual void joinedLobbySolo(const GameContext& context) = 0;
 
     // Info general de respuesta/notificacion de algo.. configuracion o si joineo alguien y asi.
-    virtual void notifyInfo(const GameContext& context, const lobby_info& info) = 0;
+    virtual void playerJoinedLobby(int id) = 0;
+    virtual void playerLeftLobby(int id) = 0;
+
+    // virtual void notifyInfo(GameContext& context, const lobby_info& info) = 0;
 
     virtual ~LobbyListener() {}
 };

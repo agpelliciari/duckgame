@@ -36,6 +36,7 @@ public:
 
     void setHostnamePort(const std::string& newhost, const std::string& newservice);
 
+    void clear();
     // Resetea el estado al inicial.
     void reset();
 
@@ -44,13 +45,19 @@ public:
     bool cangonext();
 
     // Setea el estado para el manejo de lobby
-    LobbyClientSender* setLobbyCreator(LobbyListener& listener);
-    LobbyClientSender* setLobbyJoin(LobbyListener& listener, unsigned int lobbyid);
+    LobbyClientSender* setLobbyCreator(LobbyListener& listener, bool dual);
+    void setLobbyJoin(LobbyListener& listener, bool dual, unsigned int lobbyid);
 
     // Setea el estado para el inicio del juego.
     GameActionSender* initGame(EventListener& listener);
 
     ~LobbyConnector();
+
+
+    // Getters del contexto.
+
+    int getTotalPlayers() const;
+    bool isdual() const;
 };
 
 #endif

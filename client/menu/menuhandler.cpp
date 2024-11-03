@@ -15,8 +15,7 @@ void MenuHandler::onCreateSoloLobby() {
               << std::endl;
 
     connector.reset();  // Reset protocol and curr state si existe.
-    sender = connector.setLobbyCreator(*this);
-    sender->createLobby(false);
+    sender = connector.setLobbyCreator(*this, false);
 }
 
 void MenuHandler::onCreateDuoLobby() {
@@ -24,8 +23,7 @@ void MenuHandler::onCreateDuoLobby() {
               << std::endl;
 
     connector.reset();  // Reset protocol and curr state si existe.
-    sender = connector.setLobbyCreator(*this);
-    sender->createLobby(true);
+    sender = connector.setLobbyCreator(*this, true);
 }
 
 void MenuHandler::onJoinSoloLobby(int lobbyId) {
@@ -33,16 +31,22 @@ void MenuHandler::onJoinSoloLobby(int lobbyId) {
               << " y va a jugar 1 jugador" << std::endl;
 
     connector.reset();  // Reset protocol and curr state si existe.
-    sender = connector.setLobbyJoin(*this, lobbyId);
-    sender->joinLobby(false, lobbyId);
+    connector.setLobbyJoin(*this, false, lobbyId);
+    sender = NULL;  // El que joinea no manda cosas?
+    // setLobbyId(lobbyId);
+    //  TODO: Llamar a addSoloToLobby o addDuoToLobby
+    //  dependiendo de si en el lobby el host es de 1 o 2
 }
 
 void MenuHandler::onJoinDuoLobby(int lobbyId) {
     std::cout << "Aca se envia que el cliente quiere unirse a la lobby con id: " << lobbyId
               << " y van a jugar 2 jugadores" << std::endl;
     connector.reset();  // Reset protocol and curr state si existe.
-    sender = connector.setLobbyJoin(*this, lobbyId);
-    sender->joinLobby(true, lobbyId);
+    connector.setLobbyJoin(*this, true, lobbyId);
+    sender = NULL;
+    // setLobbyId(lobbyId);
+    //  TODO: Llamar a addSoloToLobby o addDuoToLobby
+    //  dependiendo de si en el lobby el host es de 1 o 2
 }
 
 void MenuHandler::onStartLobby(const std::string& map) {
@@ -52,7 +56,8 @@ void MenuHandler::onStartLobby(const std::string& map) {
 
 void MenuHandler::onCancelLobby() {  // Cuando el Host da click en el boton de cancel en lugar de
                                      // start
-    sender->notifyCancel();
+    connector.clear();
+    // sender->notifyCancel();
 }
 
 
@@ -79,39 +84,46 @@ void MenuHandler::failedCreate() { queueToMenu.push(MenuAction::FailCreate()); }
 void MenuHandler::failedJoin() { queueToMenu.push(MenuAction::FailJoin()); }
 
 
+// Tambien son directas ahora
+void MenuHandler::playerJoinedLobby(int id) {
+    std::cout << "New player " << id << ".. Total: " << connector.getTotalPlayers() << std::endl;
+    addSoloToLobby();
+}
+
+void MenuHandler::playerLeftLobby(int id) {
+    std::cout << "Player  " << id << " left .. Total: " << connector.getTotalPlayers() << std::endl;
+    removePlayerFromLobby();
+}
+
 // METODOS PARA RECIBIR NOTIFICACIONES DEL PROTOCOLO!
 // Para recibir notificaciones de la lobby.
 // Notificacion inicial sobre si se pudo crear/unirse a una lobby.
-void MenuHandler::createdLobbyDual(const GameContext& context) {
-    std::cout << "Lobby creada dual con id " << (int)context.id_lobby << std::endl;
-    setLobbyId(context.id_lobby);
+void MenuHandler::createdLobbyDual(unsigned int id_lobby) {
+    std::cout << "Lobby creada dual con id " << id_lobby << std::endl;
+    setLobbyId(id_lobby);
     addDuoToLobby();
 }
-void MenuHandler::createdLobbySolo(const GameContext& context) {
-    std::cout << "Lobby creada solo con id " << (int)context.id_lobby << std::endl;
-    setLobbyId(context.id_lobby);
+void MenuHandler::createdLobbySolo(unsigned int id_lobby) {
+    std::cout << "Lobby creada solo con id " << id_lobby << std::endl;
+    setLobbyId(id_lobby);
     addSoloToLobby();
 }
 
 void MenuHandler::joinedLobbyDual(const GameContext& context) {
-    std::cout << "Lobby Join dual con id " << (int)context.id_lobby << std::endl;
+    std::cout << "Lobby Join dual con id " << (int)context.id_lobby << " count there "
+              << context.cantidadjugadores << std::endl;
     setLobbyId(context.id_lobby);
-    addDuoToLobby();  // esto agrega los nuevos players que se unen
-    // faltan agregar los players que YA estaban en la sala
+
+    for (int i = 0; i < context.cantidadjugadores; i++) {
+        addSoloToLobby();  // esto agrega los nuevos players que existen
+    }
 }
 void MenuHandler::joinedLobbySolo(const GameContext& context) {
-    std::cout << "Lobby Join solo con id " << (int)context.id_lobby << std::endl;
+    std::cout << "Lobby Join solo con id " << (int)context.id_lobby << " count there "
+              << context.cantidadjugadores << std::endl;
     setLobbyId(context.id_lobby);
-    addSoloToLobby();  // esto agrega los nuevos players que se unen
-    // faltan agregar los players que YA estaban en la sala
-}
 
-void MenuHandler::notifyInfo(const GameContext& context, const lobby_info& info) {
-    if (info.action == JOIN_LOBBY) {
-        std::cout << "Added.. Total players actual: " << context.cantidadjugadores << std::endl;
-        addSoloToLobby();
-    } else if (info.action == LEAVE_LOBBY) {
-        std::cout << "Left.. Total players actual: " << context.cantidadjugadores << std::endl;
-        removePlayerFromLobby();
+    for (int i = 0; i < context.cantidadjugadores; i++) {
+        addSoloToLobby();  // esto agrega los nuevos players que existen
     }
 }

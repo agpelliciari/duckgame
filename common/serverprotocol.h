@@ -34,15 +34,18 @@ public:
     ServerProtocol& operator=(ServerProtocol&&) = delete;
 
     uint8_t recvplayercount();
+    uint8_t recvlobbyid();
 
-    bool recvlobbyinfo(lobby_info& out);
+    LobbyActionType recvresolveinfo();
+
     void notifyid(uint8_t id);
 
-    bool recvsignalstart();
+    LobbyActionType recvlobbyaction();
 
 
-    void notifyaction(const LobbyActionType action);
-    void notifyinfo(const LobbyActionType action, const uint8_t attached_id);
+    void notifyaction(const LobbyResponseType response);
+    void notifyinfo(const LobbyResponseType response, const uint8_t attached_id);
+    void notifyevent(const lobby_info& info);
 
     // Attempts to receive pickup action.
     // If failed throws either LibError or GameError.

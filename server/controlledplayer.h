@@ -9,7 +9,8 @@
 #include "common/queue.h"
 #include "server/logic_server/matchobserver.h"
 
-typedef Queue<MatchDto> player_events;
+typedef Queue<lobby_info> lobby_events;
+typedef Queue<MatchDto> match_snapshots;
 
 
 // La entidad player es un la parte logica que el match conoce.
@@ -18,16 +19,16 @@ typedef Queue<MatchDto> player_events;
 class ControlledPlayer {
 
 protected:
-    bool _is_open;  // cppcheck-suppress unusedStructMember
-
     // Manejo de ids. Y cantidad de players para la queue de mensajes.
     uint8_t count;  // cppcheck-suppress unusedStructMember
 
     player_id ids[2];  // cppcheck-suppress unusedStructMember
 
     // For notifying actions and/or exit.
-    player_events snapshots;  // cppcheck-suppress unusedStructMember
+    lobby_events events;        // cppcheck-suppress unusedStructMember
+    match_snapshots snapshots;  // cppcheck-suppress unusedStructMember
 
+    // bool _is_open;  // cppcheck-suppress unusedStructMember
     std::mutex mtx;
 
 public:
@@ -51,17 +52,28 @@ public:
 
     player_id getid(const uint8_t ind) const;
 
+    // Abre la queue de lobby info del jugador, cierra la de matchdto, indicando esta activo en una
+    // lobby.
+    bool setlobbymode();
 
-    // Abre el jugador, indicando esta activo en una partida.
-    bool open();
+    // Abre la queue de matchdto, cierra le de lobby info. Indicando fase de juego.
+    bool setgamemode();
 
     // Desconecta/cierra el player. Si esta abierto.
     // Devuelve false si ya estaba cerrado.
     bool disconnect();
 
-    // Checkea si el player sigue abierto, i.e no disconnected
-    bool isopen();
+    // Checkea si el player esta.
+    // bool isgamemode();
+    // bool islobbymode();
 
+
+    // recveinfo es no bloqueante! Recibe el lobby info con try_push a la queue del player
+    // Todo es "bloqueante" por posibles locks... pero bueno
+    bool recvinfo(const lobby_info& dto);
+
+    // Pop lobby info. Bloqueante. Si no hay eventos espera a uno.
+    lobby_info popinfo();
 
     // recvevent es no bloqueante! Recibe el evento con try_push a la queue del player
     // Todo es "bloqueante" por posibles locks... pero bueno

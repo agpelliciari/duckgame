@@ -64,8 +64,13 @@ private:
     }
 
 public:
-    Queue(): max_size(UINT_MAX - 1), closed(false) {}
-    explicit Queue(const unsigned int max_size): max_size(max_size), closed(false) {}
+    // Permiti empezarla inicialmente cerrada y que se reabra despues.
+    // explicit Queue(const bool _closed): max_size(UINT_MAX - 1), closed(_closed) {}
+    explicit Queue(const unsigned int max_size, const bool _closed):
+            max_size(max_size), closed(_closed) {}
+
+    Queue(): Queue(UINT_MAX - 1) {}
+    explicit Queue(const unsigned int max_size): Queue(max_size, false) {}
 
 
     bool try_push(T const& val) {
@@ -186,12 +191,17 @@ public:
         return closed;
     }
 
-    void reopen() {
+    bool reopen() {
         std::unique_lock<std::mutex> lck(mtx);
-        // Aseguremosnos esta vacia la queue.
-        std::queue<T, C> new_q;
-        std::swap(q, new_q);
-        closed = false;
+        if (closed) {
+            // Aseguremosnos esta vacia la queue.
+            std::queue<T, C> new_q;
+            std::swap(q, new_q);
+            closed = false;
+            return true;
+        }
+
+        return false;
     }
 
 private:

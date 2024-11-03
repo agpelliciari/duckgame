@@ -14,36 +14,51 @@ ServerProtocol::ServerProtocol(Protocol&& prot): protocol(std::move(prot)) {}
 
 uint8_t ServerProtocol::recvplayercount() { return protocol.recvbyte(); }
 
+
+LobbyActionType ServerProtocol::recvlobbyaction() {
+    uint8_t sign;
+    if (protocol.tryrecvbyte(&sign)) {
+        return (LobbyActionType)sign;  // Podria fallar el casteo? la verificacion es posterior.
+    }
+
+    throw ProtocolError("Did not receive a lobby action");
+}
+
+/*
 bool ServerProtocol::recvsignalstart() {
     uint8_t sign;
     return protocol.tryrecvbyte(&sign) && sign == ((uint8_t)LobbyActionType::STARTED_LOBBY);
 }
 
-void ServerProtocol::notifyaction(const LobbyActionType action) { protocol.sendbyte(action); }
+*/
 
-void ServerProtocol::notifyinfo(const LobbyActionType action, const uint8_t attached_id) {
-    uint8_t bytes[2] = {action, attached_id};
+void ServerProtocol::notifyaction(const LobbyResponseType response) { protocol.sendbyte(response); }
+
+void ServerProtocol::notifyinfo(const LobbyResponseType response, const uint8_t data) {
+    uint8_t bytes[2] = {response, data};
+    protocol.sendbytes(&bytes, 2);
+}
+void ServerProtocol::notifyevent(const lobby_info& info) {
+    uint8_t bytes[2] = {info.action, info.data};
     protocol.sendbytes(&bytes, 2);
 }
 
+uint8_t ServerProtocol::recvlobbyid() { return protocol.recvbyte(); }
 
-bool ServerProtocol::recvlobbyinfo(lobby_info& out) {
+LobbyActionType ServerProtocol::recvresolveinfo() {
     uint8_t sign;
     if (!protocol.tryrecvbyte(&sign)) {
-        return false;
+        throw ProtocolError("Did not receive lobby resolve info.");
     }
     if (LobbyActionType::CREATE_LOBBY == sign) {
-        out.action = CREATE_LOBBY;
-        return true;
+        return CREATE_LOBBY;
     }
 
     if (LobbyActionType::JOIN_LOBBY == sign) {
-        out.action = JOIN_LOBBY;
-        out.attached_id = protocol.recvbyte();
-        return true;
+        return JOIN_LOBBY;
     }
 
-    throw ProtocolError("Invalid lobby info action!");
+    throw ProtocolError("Invalid lobby resolve action!");
 }
 
 void ServerProtocol::notifyid(uint8_t id) { protocol.sendbyte(id); }
