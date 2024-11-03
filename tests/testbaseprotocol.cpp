@@ -2,11 +2,11 @@
 #include <iostream>
 
 //#include "./mocksocket.h"
-#include "./queuesocket.h"
 #include "common/core/liberror.h"
 #include "common/core/protocol.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "tests/core/queuesocket.h"
 
 using ::testing::Eq;
 using ::testing::ThrowsMessage;

@@ -3,8 +3,8 @@
 
 #include <vector>
 
-#include "./testermatchdto.h"
 #include "server/logic_server/matchobserver.h"
+#include "tests/core/testermatchdto.h"
 
 class MockObserver: public TesterMatchDTO, public MatchObserver {
 private:

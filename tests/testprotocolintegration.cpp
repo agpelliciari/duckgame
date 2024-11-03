@@ -1,14 +1,14 @@
 #include <iostream>
 
-#include "./queuesocket.h"
-#include "./sharedsocket.h"
-#include "./testermatchdto.h"
 #include "common/clientprotocol.h"
 #include "common/core/liberror.h"
 #include "common/dtos.h"
 #include "common/serverprotocol.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "tests/core/queuesocket.h"
+#include "tests/core/sharedsocket.h"
+#include "tests/core/testermatchdto.h"
 
 using ::testing::InSequence;
 using ::testing::ThrowsMessage;
