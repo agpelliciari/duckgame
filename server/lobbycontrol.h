@@ -26,7 +26,7 @@ public:
     Match& resolveMatch(bool* isanfitrion);
     ControlledPlayer& joinPlayers(Match& match);
 
-    bool handleAnfitrionLobby(Match& match);  // ControlledPlayer& player,
+    bool handleAnfitrionLobby(ControlledPlayer& host, Match& match);  // ControlledPlayer& player,
     // void handleJoinedLobby(ControlledPlayer& player, Match& match);
 };
 

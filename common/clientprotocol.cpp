@@ -45,7 +45,7 @@ lobby_info ClientProtocol::joinLobby(const uint8_t id_match) {
 
     if (out.action != JOINED_LOBBY && out.action != GAME_ERROR) {
         out.action = GAME_ERROR;
-        out.data = LobbyGameErrorType::UNKNOWN;
+        out.data = LobbyErrorType::UNKNOWN;
     }
 
     // Recibir true si fallo, false si fue exito.

@@ -34,6 +34,8 @@ public:
 
     ControlledPlayer& joinLobby(uint8_t count, Match& match);
 
+    int countMatches();
+
     // Una vez empezada no se aceptan mas.
     void startLobby(Match& match);
 
@@ -41,7 +43,7 @@ public:
     void disconnectFrom(Match& match, ControlledPlayer& player);
 
     // Si se esta en la lobby y el anfitrion se va. Se cancela.
-    void cancelLobby(Match& match);
+    void hostLeft(Match& match, ControlledPlayer& host);
 
     // Remueve todos los restantes. Normalmente no deberia haber, ya se deberian haber desconectado.
     void finishAll();

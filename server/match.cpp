@@ -17,19 +17,16 @@ int Match::playercount() const { return players.playercount(); }
 
 bool Match::notifyDisconnect(ControlledPlayer& player) {
     connectedplayers--;  // Solo importa la cantidad de conectados
-    std::cout << "Disconnected player from match? now " << connectedplayers << std::endl;
+    if (player.disconnect()) {
+        // Si se esta desconectando ahora entonces notifica.
+        std::cout << "Disconnected player from match? now " << connectedplayers << std::endl;
+        if (_keep_running) {
+            return connectedplayers == 0;
+        }
 
-    player.disconnect();
-
-    if (_keep_running) {
-        return connectedplayers == 0;
+        players.remove(player);
     }
-
-    players.remove(player);
-    // El anifitrion no notifica su disconnect.
-    // std::cout << "Should remove it from lobby/notify it?" << std::endl;
-
-    return connectedplayers == 0;  // Nunca deberia ser true. El anfitrion no deberia llamar.
+    return connectedplayers == 0;
 }
 
 void Match::init() {
@@ -41,9 +38,17 @@ void Match::init() {
     // match_start.notify_all();
 }
 
-void Match::cancel() {
-    players.finishLobbyMode();
-    // match_start.notify_all();
+bool Match::hostLobbyLeft(ControlledPlayer& host) {
+    connectedplayers--;
+    if (connectedplayers == 0) {
+        host.disconnect();
+        return true;
+    }
+    // Notifica a los otros ademas del disconnect.
+    host.disconnect();
+    players.hostLobbyLeft(host);
+
+    return false;
 }
 
 

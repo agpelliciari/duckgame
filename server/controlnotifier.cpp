@@ -32,7 +32,7 @@ bool ControlNotifier::runLobby() {
         }
 
         std::cerr << "Closed notifier before match start" << std::endl;
-        protocol.notifyinfo(LobbyResponseType::GAME_ERROR, LobbyGameErrorType::UNKNOWN);
+        protocol.notifyinfo(LobbyResponseType::GAME_ERROR, LobbyErrorType::UNKNOWN);
         protocol.close();  // Si no esta cerrado, cerralo, asi se sale el controller tambien.
         return true;
     } catch (const ClosedQueue& error) {
@@ -45,7 +45,7 @@ bool ControlNotifier::runLobby() {
         // std::cerr << "CLOSED QUEUE? FOR LOBBY MODE" << std::endl;
 
         // se cancelo.
-        protocol.notifyinfo(LobbyResponseType::GAME_ERROR, LobbyGameErrorType::ANFITRION_LEFT);
+        protocol.notifyinfo(LobbyResponseType::GAME_ERROR, LobbyErrorType::ANFITRION_LEFT);
         protocol.close();  // Si no esta cerrado, cerralo, asi se sale el controller tambien.
         return true;
     }

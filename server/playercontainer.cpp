@@ -67,6 +67,16 @@ void PlayerContainer::finishLobbyMode() {
     }
 }
 
+void PlayerContainer::hostLobbyLeft(const ControlledPlayer& host) {
+    players.remove(host);
+    // Cuando se va el host no se notifica el disconnect... sino se los desconecta.
+    for (ControlledPlayer& player: players) {
+        player.disconnect();
+    }
+    totalplayers = 0;
+}
+
+
 void PlayerContainer::finishGameMode() {
     for (ControlledPlayer& player: players) {
         player.setlobbymode();

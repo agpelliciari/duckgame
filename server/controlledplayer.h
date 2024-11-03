@@ -63,6 +63,7 @@ public:
     // Desconecta/cierra el player. Si esta abierto.
     // Devuelve false si ya estaba cerrado.
     bool disconnect();
+    bool isclosed();
 
     // Checkea si el player esta.
     // bool isgamemode();

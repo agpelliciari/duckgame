@@ -42,6 +42,17 @@ void TesterClient::assertLobbyStarted(uint8_t count) {
     EXPECT_EQ(info.data, count) << "Total count at start is correct";
 }
 
+void TesterClient::assertLobbyCanceled() { assertLobbyError(ANFITRION_LEFT); }
+
+void TesterClient::assertLobbyError(LobbyErrorType type) {
+    lobby_info info;
+    client.recvlobbyinfo(info);
+
+    EXPECT_EQ(info.action, LobbyResponseType::GAME_ERROR) << "Type info is error";
+    EXPECT_EQ(info.data, type) << "Data is anfitrion left, i.e match canceled";
+}
+
+
 void TesterClient::assertLobbyInfoJoined(uint8_t id) {
     lobby_info info;
     client.recvlobbyinfo(info);
@@ -83,4 +94,9 @@ void TesterClient::close() {
     // receiver.reset();
     // sktserver.close();
     // client.close();
+}
+
+void TesterClient::finish() {
+    sktclient.finish();
+    receiver.reset();
 }

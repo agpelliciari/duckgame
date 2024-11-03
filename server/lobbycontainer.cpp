@@ -11,6 +11,12 @@ Match& LobbyContainer::newLobby() {
     return lobbies.emplace_back(++lastLobbyId);
 }
 
+int LobbyContainer::countMatches() {
+    std::unique_lock<std::mutex> lck(mtx);  // No other actions on lobby.
+    return lobbies.size();
+}
+
+
 Match& LobbyContainer::findLobby(lobbyID id) {
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on container.
     for (auto lobbyit = lobbies.begin(); lobbyit != lobbies.end();) {
@@ -42,8 +48,7 @@ void LobbyContainer::startLobby(Match& lobby) {
 
 void LobbyContainer::disconnectFrom(Match& lobby, ControlledPlayer& player) {
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on container.
-
-    std::cerr << ">disconnecting " << player.toString() << std::endl;
+    // std::cerr << ">disconnecting " << player.toString() << std::endl;
 
     if (lobby.notifyDisconnect(player)) {  // Habria que liberar. No hay mas players.
         std::cerr << ">removing lobby " << lobby.getID() << std::endl;
@@ -60,13 +65,15 @@ void LobbyContainer::finishAll() {
 }
 
 // Si se esta en la lobby y el anfitrion se va. Se cancela.
-
-void LobbyContainer::cancelLobby(Match& lobby) {
+void LobbyContainer::hostLeft(Match& lobby, ControlledPlayer& host) {
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on container.
     if (lobby.isrunning()) {
         throw GameError("Tried to cancel already started lobby %d", lobby.getID());
     }
-    lobby.cancel();
+    if (lobby.hostLobbyLeft(host)) {
+        std::cerr << ">removing lobby " << lobby.getID() << " cancel" << std::endl;
+        lobbies.remove(lobby);  // el destructor hace el finish.
+    }
 }
 
 

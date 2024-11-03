@@ -66,6 +66,10 @@ bool ControlledPlayer::isgamemode() {
 }
 */
 
+bool ControlledPlayer::isclosed() {
+    std::unique_lock<std::mutex> lck(mtx);
+    return snapshots.isclosed() && events.isclosed();
+}
 
 bool ControlledPlayer::disconnect() {
     std::unique_lock<std::mutex> lck(mtx);

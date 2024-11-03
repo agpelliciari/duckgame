@@ -22,7 +22,7 @@ protected:
     Socket skt;  // Tiene el ownership del socket tambien.
     ServerProtocol protocol;
 
-    bool playOn(const ControlledPlayer& player, Match& match);
+    void playOn(const ControlledPlayer& player, Match& match);
 
 public:
     // Crea el player con el ide pasado e inicia el protocolo

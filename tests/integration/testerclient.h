@@ -31,11 +31,14 @@ public:
     void assertLobbyStarted(uint8_t count);
     void assertLobbyInfoJoined(uint8_t id);
     void assertLobbyInfoLeft(uint8_t id);
+    void assertLobbyCanceled();
+    void assertLobbyError(LobbyErrorType type);
 
 
     void startMatch();
     ClientProtocol& getClient();
     void close();
+    void finish();
 };
 
 #endif

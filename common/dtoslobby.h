@@ -5,7 +5,7 @@
 #include <sstream>
 #include <string>
 
-enum LobbyGameErrorType : uint8_t {
+enum LobbyErrorType : uint8_t {
     UNKNOWN = 0,
     ANFITRION_LEFT = 1,
     LOBBY_NOT_FOUND = 2,
@@ -43,7 +43,7 @@ struct lobby_info {
     uint8_t data;  // Un numero. Que muchas veces es necesario
 
     lobby_info(LobbyResponseType _response, uint8_t num): action(_response), data(num) {}
-    lobby_info(): action(GAME_ERROR), data(0) {}
+    lobby_info(): action(GAME_ERROR), data(LobbyErrorType::UNKNOWN) {}
 } __attribute__((packed));
 
 struct lobby_action {

@@ -22,7 +22,7 @@ void ControlReceiver::init() {
     }
     start();
 }
-bool ControlReceiver::playOn(const ControlledPlayer& player, Match& match) {
+void ControlReceiver::playOn(const ControlledPlayer& player, Match& match) {
     try {
         // std::cout << "PLAY ON " << std::endl;
         //  Loopeado de acciones
@@ -35,27 +35,19 @@ bool ControlReceiver::playOn(const ControlledPlayer& player, Match& match) {
             action.playerind = player.getid(action.playerind);
             match.notifyAction(action);
         }
-
-        return true;
     } catch (const ProtocolError& error) {
         // std::cout << "-->EOF? closed? " << (int)protocol.isactive() << " " << error.what() <<
         // std::endl;
         //   std::endl; EOF of player. No muestres nada. Pero si el protocol esta abierto, significa
         //   el cliente se desconecto.
-        return true;  // Notifica al match del disconnect.. siempre?
-        // return protocol.isactive();
     } catch (const LibError& error) {
         if (protocol.isactive()) {  // Si debiera estar activo. Error interno del protocol.
             std::cerr << "Controller lib error:" << error.what() << std::endl;
-            return true;
         }
-        return false;
     } catch (const std::exception& err) {
         std::cerr << "excep : " << err.what() << " Ending control receiver.\n";
-        return true;
     } catch (...) {
         std::cerr << "excep <unknown> Ending control receiver.\n";
-        return true;
     }
 }
 void ControlReceiver::run() {
@@ -69,22 +61,19 @@ void ControlReceiver::run() {
         ControlNotifier notifier(match, player, protocol);
         notifier.start();
 
-        if (isanfitrion && lobby.handleAnfitrionLobby(match)) {
+        if (isanfitrion && lobby.handleAnfitrionLobby(player, match)) {
             return;  // No se empezo la partida.
         }
 
         // Si no es el anfitrion que ya asuma empezo. Total no deberia mandar nada
         // En la fase de lobby, solo podria irse. Para lo que esta disconnect despues
-
-        if (playOn(player, match)) {  // Es no except.
-            lobbies.disconnectFrom(match, player);
-        }
-
+        playOn(player, match);
+        lobbies.disconnectFrom(match, player);
 
     } catch (const GameError& error) {
         std::cerr << "Game error at lobby: " << error.what() << std::endl;
         // Por ahora unknown... pero a futuro se agregara al error.
-        protocol.notifyinfo(LobbyResponseType::GAME_ERROR, LobbyGameErrorType::UNKNOWN);
+        protocol.notifyinfo(LobbyResponseType::GAME_ERROR, LobbyErrorType::UNKNOWN);
     }
 }
 

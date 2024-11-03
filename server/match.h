@@ -49,7 +49,7 @@ protected:
 
     // Metodos analogos a los de thread. expuestos a friend nada mas.
     void init();
-    void cancel();
+    bool hostLobbyLeft(ControlledPlayer& host);
 
     // Libera, bien podria prescindirse y usar un destructor.
     // Pero mejor explicitar. Reemplaza el stop.. que no se quiere permitir hacerlo sin hacer el

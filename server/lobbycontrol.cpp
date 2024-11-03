@@ -60,7 +60,8 @@ void LobbyControl::handleJoinedLobby(ControlledPlayer& player, Match& match) {
 */
 
 
-bool LobbyControl::handleAnfitrionLobby(Match& match) {  // ControlledPlayer& player,
+bool LobbyControl::handleAnfitrionLobby(ControlledPlayer& host,
+                                        Match& match) {  // ControlledPlayer& player,
     try {
         // And wait..
         LobbyActionType action(protocol.recvlobbyaction());
@@ -78,14 +79,14 @@ bool LobbyControl::handleAnfitrionLobby(Match& match) {  // ControlledPlayer& pl
         // EOF of player. No muestres nada.
         std::cerr << "CANCELED MATCH ID: " << error.what() << " " << (int)match.getID()
                   << std::endl;
-        lobbies.cancelLobby(match);
+        lobbies.hostLeft(match, host);
         return true;
     } catch (const LibError& error) {
         if (protocol.isactive()) {  // Si debiera estar activo. Error interno del protocol.
             std::cerr << "Lobby control error:" << error.what() << std::endl;
         }
         std::cerr << "Cancel lobby?:" << error.what() << std::endl;
-        lobbies.cancelLobby(match);
+        lobbies.hostLeft(match, host);
         return true;
     }
 }
