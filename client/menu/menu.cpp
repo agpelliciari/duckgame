@@ -25,6 +25,15 @@ void Menu::updateIdDisplayedInLobby(int id) {
     }
 }
 
+void Menu::displayNotification(const std::string& label) {
+    NotificationHandler notificationHandler{.label = label,
+                                            .onClose = [this] { unMountNotification(); }};
+    NotificationWidget* notificationWidget =
+            new NotificationWidget(notificationHandler, ui->centralwidget);
+
+    mountNotification(notificationWidget);
+}
+
 void Menu::addPlayerToLobby() {
     QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
 
@@ -198,23 +207,44 @@ void Menu::mountLobbyGuest() {
 }
 
 void Menu::mountWidget(QWidget* widget) {
-    QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
-
-    if (layout->count() > 0)
+    if (currentWidget != nullptr)
         throw std::runtime_error("A widget is already mounted");
 
-    layout->insertWidget(0, widget);
+    if (currentNotification != nullptr)
+        unMountNotification();
+
+    QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
+    layout->addWidget(widget);
+    currentWidget = widget;
 }
 
 void Menu::unMountWidget() {
-    QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
-
-    if (layout->count() == 0)
+    if (currentWidget == nullptr)
         throw std::runtime_error("There is no widget to unmount");
 
-    QWidget* widget = layout->itemAt(0)->widget();
-    layout->removeWidget(widget);
-    widget->deleteLater();
+    QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
+    layout->removeWidget(currentWidget);
+    currentWidget->deleteLater();
+    currentWidget = nullptr;
+}
+
+void Menu::mountNotification(NotificationWidget* notification) {
+    if (currentNotification != nullptr)
+        unMountNotification();
+
+    QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
+    layout->insertWidget(0, notification);
+    currentNotification = notification;
+}
+
+void Menu::unMountNotification() {
+    if (currentNotification == nullptr)
+        return;
+
+    QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
+    layout->removeWidget(currentNotification);
+    currentNotification->deleteLater();
+    currentNotification = nullptr;
 }
 
 void Menu::initializeTimerForActions() {

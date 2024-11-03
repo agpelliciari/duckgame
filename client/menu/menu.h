@@ -11,6 +11,7 @@
 #include "createJoinWidget/createJoinWidget.h"
 #include "lobbyWidget/lobbyGuestWidget/lobbyGuestWidget.h"
 #include "lobbyWidget/lobbyHostWidget/lobbyHostWidget.h"
+#include "notificationWidget/notificationWidget.h"
 #include "setHostnamePortWidget/setHostnamePortWidget.h"
 #include "setLobbyIdWidget/setLobbyIdWidget.h"
 #include "setSoloDuoWidget/setSoloDuoWidget.h"
@@ -31,11 +32,15 @@ private:
     MenuHandler& handler;  // cppcheck-suppress unusedStructMember
 
     std::queue<MenuAction> buffer;  // cppcheck-suppress unusedStructMember
+    QWidget* currentWidget = nullptr;
+    QWidget* currentNotification = nullptr;
 
 public:
     explicit Menu(MenuHandler& handler);
 
     void updateIdDisplayedInLobby(int id);
+
+    void displayNotification(const std::string& label);
 
     void addPlayerToLobby();
 
@@ -71,6 +76,10 @@ private:
     void mountWidget(QWidget* widget);
 
     void unMountWidget();
+
+    void mountNotification(NotificationWidget* notification);
+
+    void unMountNotification();
 
     void initializeTimerForActions();
 
