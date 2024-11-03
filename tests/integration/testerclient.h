@@ -2,6 +2,8 @@
 #define TESTER_CLIENT
 
 
+#include <optional>
+
 #include "common/clientprotocol.h"
 #include "common/core/socket.h"
 #include "server/controlreceiver.h"
@@ -14,7 +16,7 @@ protected:
 
 
     ClientProtocol client;
-    ControlReceiver receiver;
+    std::optional<ControlReceiver> receiver;
 
 public:
     explicit TesterClient(Socket&& _client, Socket& _serv, LobbyContainer& lobbies);
@@ -27,8 +29,8 @@ public:
 
 
     void assertLobbyStarted(uint8_t count);
-    void assertLobbyJoinNotif(uint8_t id);
-    void assertLobbyLeaveNotif(uint8_t id);
+    void assertLobbyInfoJoined(uint8_t id);
+    void assertLobbyInfoLeft(uint8_t id);
 
 
     void startMatch();

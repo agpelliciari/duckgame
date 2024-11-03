@@ -8,8 +8,8 @@
 
 #include "common/core/protocol.h"
 #include "common/dtos.h"
+#include "common/dtoslobby.h"
 #include "common/dtosplayer.h"
-//#include "common/core/socket.h"
 
 // Extension del protocolo base a usar.
 class ServerProtocol: public Protocol {

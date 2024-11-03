@@ -36,7 +36,8 @@ ControlledPlayer& LobbyControl::joinPlayers(Match& match) {
     if (player.playercount() == 2) {
         protocol.notifyid(player.getid(1));
     }
-    std::cerr << "joined " << player.toString() << " to lobby " << (int)match.getID() << std::endl;
+    // std::cerr << "joined " << player.toString() << " to lobby " << (int)match.getID() <<
+    // std::endl;
     return player;
 }
 

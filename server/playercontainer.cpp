@@ -90,8 +90,9 @@ std::vector<player_id> PlayerContainer::getPlayers() {
 // No nos fijamos si se desconectaron. En fase lobby el lobby container se encarga de notificar.
 // Lo hacen por medio del remove... Por eso no se verifica si el recvinfo dio true o no.
 void PlayerContainer::notifyInfo(const lobby_info& info) {
-    std::cout << "NOTIFYING INFO !! " << (int)info.action << ".. " << (int)info.data << std::endl;
     for (ControlledPlayer& player: players) {
+        // std::cout << "NOTIFYING INFO TO "<< player.toString()<<"!! " << (int)info.action << ".. "
+        // << (int)info.data << std::endl;
         player.recvinfo(info);
     }
 }

@@ -1,7 +1,7 @@
 #ifndef LOBBY_CLIENT_SENDER_H
 #define LOBBY_CLIENT_SENDER_H
 
-#include "common/dtos.h"
+#include "common/dtoslobby.h"
 #include "common/queue.h"
 
 class LobbyClientSender {

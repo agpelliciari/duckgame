@@ -9,15 +9,16 @@ ControlNotifier::ControlNotifier(Match& _match, ControlledPlayer& _player,
         match(_match), player(_player), protocol(_protocol) {}
 
 bool ControlNotifier::runLobby() {
-    std::cerr << "Lobby notifier start!" << std::endl;
+    std::cerr << "#lobby notify for " << player.toString() << " at match " << (int)match.getID()
+              << " start!" << std::endl;
     try {
         lobby_info info = player.popinfo();
         while (_keep_running && info.action != LobbyResponseType::GAME_ERROR &&
                info.action != LobbyResponseType::STARTED_LOBBY) {
 
 
-            std::cerr << "Configuration info? " << (int)info.action << ", num: " << (int)info.data
-                      << std::endl;
+            std::cerr << "Configuration info to " << player.toString() << "? " << (int)info.action
+                      << ", num: " << (int)info.data << std::endl;
 
             protocol.notifyevent(info);
             info = player.popinfo();
@@ -41,6 +42,8 @@ bool ControlNotifier::runLobby() {
             protocol.notifyinfo(LobbyResponseType::STARTED_LOBBY, match.playercount());
             return false;
         }
+        // std::cerr << "CLOSED QUEUE? FOR LOBBY MODE" << std::endl;
+
         // se cancelo.
         protocol.notifyinfo(LobbyResponseType::GAME_ERROR, LobbyGameErrorType::ANFITRION_LEFT);
         protocol.close();  // Si no esta cerrado, cerralo, asi se sale el controller tambien.
@@ -50,6 +53,8 @@ bool ControlNotifier::runLobby() {
 
 
 bool ControlNotifier::runGame() {
+    std::cerr << "#game notify for " << player.toString() << " at match " << (int)match.getID()
+              << " start!" << std::endl;
     try {
         while (_keep_running) {
             protocol.sendstate(player.popstate());
@@ -60,6 +65,8 @@ bool ControlNotifier::runGame() {
         if (!match.isrunning()) {
             std::cerr << "Se finalizo el match... deberia mandar las estadisticas!" << std::endl;
         }
+        // std::cerr << "CLOSED QUEUE? FOR GAME MODE" << std::endl;
+
         protocol.close();  // Si no esta cerrado, cerralo, asi se sale el controller tambien.
         return true;       // Se cerro el game
     }

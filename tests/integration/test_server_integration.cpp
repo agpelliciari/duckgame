@@ -26,7 +26,7 @@ protected:
 };
 
 
-TEST_F(ServerIntegrationTest, SimpleCreateLobby) {
+TEST_F(ServerIntegrationTest, SimpleCreateLobbyDual) {
 
     TesterClient host(openClient(), sktserver, lobbies);
 
@@ -39,7 +39,6 @@ TEST_F(ServerIntegrationTest, SimpleCreateLobby) {
     host.assertLobbyStarted(2);
 }
 
-/*
 TEST_F(ServerIntegrationTest, SimpleCreateLobbySingle) {
 
     TesterClient host(openClient(), sktserver, lobbies);
@@ -65,8 +64,8 @@ TEST_F(ServerIntegrationTest, SimpleCreateLobbyAndJoin) {
     uint8_t first = 0;
     uint8_t second = joined1.assertJoinLobbyDual(id_lobby, 1, &first);
 
-    host.assertLobbyJoinNotif(first);
-    host.assertLobbyJoinNotif(second);
+    host.assertLobbyInfoJoined(first);
+    host.assertLobbyInfoJoined(second);
 
     host.startMatch();
 
@@ -75,4 +74,48 @@ TEST_F(ServerIntegrationTest, SimpleCreateLobbyAndJoin) {
     joined1.assertLobbyStarted(3);
 }
 
-*/
+
+TEST_F(ServerIntegrationTest, SimpleCreateLobbyAndJoinSingle) {
+    TesterClient host(openClient(), sktserver, lobbies);
+
+    uint8_t id_lobby = host.createClientLobbySingle();
+    ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
+
+
+    TesterClient joined1(openClient(), sktserver, lobbies);
+
+    uint8_t first = joined1.assertJoinLobbySingle(id_lobby, 1);
+
+    host.assertLobbyInfoJoined(first);
+
+    host.startMatch();
+
+    // 1 is count of players. Should not start maybe?
+    host.assertLobbyStarted(2);
+    joined1.assertLobbyStarted(2);
+}
+
+
+TEST_F(ServerIntegrationTest, SimpleCreateLobbyAndJoinButLeft) {
+    TesterClient host(openClient(), sktserver, lobbies);
+
+    uint8_t id_lobby = host.createClientLobbyDual();
+    ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
+
+
+    TesterClient joined1(openClient(), sktserver, lobbies);
+
+    uint8_t first = 0;
+    uint8_t second = joined1.assertJoinLobbyDual(id_lobby, 2, &first);
+
+    host.assertLobbyInfoJoined(first);
+    host.assertLobbyInfoJoined(second);
+
+    joined1.close();
+    host.assertLobbyInfoLeft(first);
+    host.assertLobbyInfoLeft(second);
+
+    host.startMatch();
+
+    host.assertLobbyStarted(2);
+}

@@ -9,8 +9,10 @@ TesterClient::TesterClient(Socket&& _client, Socket& _serv, LobbyContainer& lobb
         sktclient(std::move(_client)),
         sktcontrol(_serv.accept()),
         client(sktclient),
-        receiver(lobbies, sktcontrol) {
-    receiver.init();
+        receiver(std::nullopt) {
+
+    receiver.emplace(lobbies, sktcontrol);
+    receiver.value().init();
 }
 
 uint8_t TesterClient::createClientLobbyDual() {
@@ -40,14 +42,14 @@ void TesterClient::assertLobbyStarted(uint8_t count) {
     EXPECT_EQ(info.data, count) << "Total count at start is correct";
 }
 
-void TesterClient::assertLobbyJoinNotif(uint8_t id) {
+void TesterClient::assertLobbyInfoJoined(uint8_t id) {
     lobby_info info;
     client.recvlobbyinfo(info);
     EXPECT_EQ(info.action, LobbyResponseType::PLAYER_NEW) << "client was notified about a join";
     EXPECT_EQ(info.data, id) << "Id of joined is correct";
 }
 
-void TesterClient::assertLobbyLeaveNotif(uint8_t id) {
+void TesterClient::assertLobbyInfoLeft(uint8_t id) {
     lobby_info info;
     client.recvlobbyinfo(info);
     EXPECT_EQ(info.action, LobbyResponseType::PLAYER_LEFT) << "client was notified about a join";
@@ -76,4 +78,9 @@ void TesterClient::startMatch() { client.sendlobbyaction({PLAYER_READY, 0}); }
 
 ClientProtocol& TesterClient::getClient() { return client; }
 
-void TesterClient::close() { client.close(); }
+void TesterClient::close() {
+    sktclient.finish();
+    // receiver.reset();
+    // sktserver.close();
+    // client.close();
+}
