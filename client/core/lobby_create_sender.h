@@ -19,11 +19,11 @@ protected:
 
 public:
     // Los default sin pasar por socket/protocol.
-    explicit LobbyCreateSender(ClientProtocol& _protocol, GameContext& _context,
+    explicit LobbyCreateSender(Messenger& _messenger, GameContext& _context,
                                LobbyListener& _listener);
 
-    LobbyCreateSender(LobbyCreateSender&&);
-    LobbyCreateSender& operator=(LobbyCreateSender&&);
+    LobbyCreateSender(LobbyCreateSender&&) = delete;
+    LobbyCreateSender& operator=(LobbyCreateSender&&) = delete;
 
     // Asumamos por ahora que no se quiere permitir copias, ni mov.
     LobbyCreateSender(const LobbyCreateSender&) = delete;

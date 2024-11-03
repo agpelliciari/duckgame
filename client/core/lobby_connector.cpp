@@ -12,7 +12,7 @@
 static const char DEFAULT_HOST[] = "127.0.0.1";
 static const char DEFAULT_SERVICE[] = "2048";
 
-LobbyConnector::LobbyConnector(GameContext& _context): context(_context), protocol(NULL) {}
+LobbyConnector::LobbyConnector(GameContext& _context): context(_context), skt(std::nullopt) {}
 
 void LobbyConnector::setHostnamePort(const std::string& newhost, const std::string& newservice) {
 
@@ -20,28 +20,30 @@ void LobbyConnector::setHostnamePort(const std::string& newhost, const std::stri
     service = newservice.length() == 0 ? std::string(DEFAULT_SERVICE) : newservice;
 
     std::cout << "Set hostname y port: " << hostname << " : " << service << std::endl;
-    // protocol.reset(new ClientProtocol(Socket(host, service)));
 }
 
 
 void LobbyConnector::clear() {
 
-    protocol.close();
-    // Al hacer close si el state esperando por respuesta del protocolo
+    skt.value().finish();
+    // Al hacer close si el state esperando por respuesta del socket
     // Tira exception.
+    // No se libera... por que podria traer problemas.
     state.reset(NULL);  // El destructor del state actual se encarga si hace falta un join.
+
+    skt.reset();
 }
 
 // Resetea el estado al inicial.
 // Y reseteo del protocolo.
 // No es una navegacion entre estados perse.
 void LobbyConnector::reset() {
-    if (protocol.isopen()) {
+    if (skt.has_value()) {
         clear();
     }
 
     // Reemplazo del protocolo.
-    protocol = ClientProtocol(Socket(hostname.c_str(), service.c_str()));
+    skt.emplace(hostname.c_str(), service.c_str());
 }
 
 bool LobbyConnector::cangonext() { return state.get() != NULL && state->endstate(); }
@@ -54,7 +56,7 @@ LobbyClientSender* LobbyConnector::setLobbyCreator(LobbyListener& listener, bool
     context.cantidadjugadores = dual ? 2 : 1;
 
 
-    LobbyCreateSender* creator = new LobbyCreateSender(protocol, context, listener);
+    LobbyCreateSender* creator = new LobbyCreateSender(skt.value(), context, listener);
     state.reset(creator);
 
     // Ahora empeza el thread. Despues de joinear el anterior.
@@ -68,7 +70,7 @@ void LobbyConnector::setLobbyJoin(LobbyListener& listener, bool dual, unsigned i
     context.dualplay = dual;
     context.id_lobby = lobbyid;
 
-    LobbyJoinSender* joiner = new LobbyJoinSender(protocol, context, listener);
+    LobbyJoinSender* joiner = new LobbyJoinSender(skt.value(), context, listener);
     state.reset(joiner);
 
     // Ahora empeza el thread. Despues de joinear el anterior.
@@ -77,15 +79,15 @@ void LobbyConnector::setLobbyJoin(LobbyListener& listener, bool dual, unsigned i
 
 // Utiliza el protocol del sender, le quita el
 GameActionSender* LobbyConnector::initGame(EventListener& listener) {
-    GameActionSender* game = new GameActionSender(protocol, listener, context);
+    GameActionSender* game = new GameActionSender(skt.value(), listener, context);
     state.reset(game);
     return game;
 }
 
 LobbyConnector::~LobbyConnector() {
-    protocol.close();
-
-    state.reset(NULL);  // Libera el state si hay. El pointer lo haria igual.
+    if (skt.has_value()) {
+        clear();
+    }
 }
 
 

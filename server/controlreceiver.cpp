@@ -10,8 +10,8 @@
 #include "common/protocolerror.h"
 
 
-ControlReceiver::ControlReceiver(LobbyContainer& _lobbies, Socket& skt):
-        lobbies(_lobbies), protocol(skt) {}
+ControlReceiver::ControlReceiver(LobbyContainer& _lobbies, Socket& _skt):
+        lobbies(_lobbies), skt(std::move(_skt)), protocol(skt) {}
 
 
 bool ControlReceiver::isopen() { return protocol.isactive(); }

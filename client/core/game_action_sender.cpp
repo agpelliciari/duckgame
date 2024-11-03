@@ -8,9 +8,9 @@
 #include "./game_state_recv.h"
 #include "common/core/liberror.h"
 
-GameActionSender::GameActionSender(ClientProtocol& _protocol, EventListener& _listener,
+GameActionSender::GameActionSender(Messenger& _messenger, EventListener& _listener,
                                    GameContext& _context):
-        protocol(_protocol),
+        protocol(_messenger),
         listener(_listener),
         context(_context),
         firstidle(true),

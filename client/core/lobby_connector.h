@@ -4,6 +4,7 @@
 //#include "common/core/socket.h"
 
 #include <memory>
+#include <optional>
 #include <string>
 
 #include "./game_action_sender.h"
@@ -12,6 +13,7 @@
 #include "client/eventlistener.h"
 #include "client/gamecontext.h"
 #include "common/clientprotocol.h"
+#include "common/core/socket.h"
 
 // Clase que encapsula al protocol y mantendria el estado del juego
 // Proporcionado una interfaz para acciones del usuario.
@@ -19,9 +21,9 @@ class LobbyConnector {
 protected:
     GameContext& context;  // cppcheck-suppress unusedStructMember
 
-    ClientProtocol protocol;  // cppcheck-suppress unusedStructMember
-    std::string hostname;     // cppcheck-suppress unusedStructMember
-    std::string service;      // cppcheck-suppress unusedStructMember
+    std::optional<Socket> skt;  // cppcheck-suppress unusedStructMember
+    std::string hostname;       // cppcheck-suppress unusedStructMember
+    std::string service;        // cppcheck-suppress unusedStructMember
 
     std::unique_ptr<LobbyState> state;  // cppcheck-suppress unusedStructMember
 public:

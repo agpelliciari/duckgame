@@ -8,9 +8,9 @@
 #include "common/core/liberror.h"
 #include "common/protocolerror.h"
 
-LobbyJoinSender::LobbyJoinSender(ClientProtocol& _protocol, GameContext& _context,
+LobbyJoinSender::LobbyJoinSender(Messenger& _messenger, GameContext& _context,
                                  LobbyListener& _listener):
-        BaseLobbyState(_protocol, _context, _listener) {}
+        BaseLobbyState(_messenger, _context, _listener) {}
 
 void LobbyJoinSender::joinLobby() {
     if (_is_alive) {  // already running!!

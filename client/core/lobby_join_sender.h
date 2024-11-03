@@ -14,11 +14,11 @@ protected:
 
 public:
     // Los default sin pasar por socket/protocol.
-    explicit LobbyJoinSender(ClientProtocol& _protocol, GameContext& _context,
+    explicit LobbyJoinSender(Messenger& _messenger, GameContext& _context,
                              LobbyListener& _listener);
 
-    LobbyJoinSender(LobbyJoinSender&&);
-    LobbyJoinSender& operator=(LobbyJoinSender&&);
+    LobbyJoinSender(LobbyJoinSender&&) = delete;
+    LobbyJoinSender& operator=(LobbyJoinSender&&) = delete;
 
     // Asumamos por ahora que no se quiere permitir copias, ni mov.
     LobbyJoinSender(const LobbyJoinSender&) = delete;

@@ -12,20 +12,19 @@
 // Proporcionado una interfaz para acciones del usuario.
 class BaseLobbyState: protected Thread, public LobbyState {
 protected:
-    ClientProtocol& protocol;  // cppcheck-suppress unusedStructMember
-    GameContext& context;      // cppcheck-suppress unusedStructMember
-    LobbyListener& listener;   // cppcheck-suppress unusedStructMember
+    ClientProtocol protocol;  // cppcheck-suppress unusedStructMember
+    GameContext& context;     // cppcheck-suppress unusedStructMember
+    LobbyListener& listener;  // cppcheck-suppress unusedStructMember
 
     void handleNotify(const lobby_info& info);
     void listeninfo();
 
 public:
     // Los default sin pasar por socket/protocol.
-    explicit BaseLobbyState(ClientProtocol& _protocol, GameContext& _context,
-                            LobbyListener& _listener);
+    explicit BaseLobbyState(Messenger& _messenger, GameContext& _context, LobbyListener& _listener);
 
-    BaseLobbyState(BaseLobbyState&&);
-    BaseLobbyState& operator=(BaseLobbyState&&);
+    BaseLobbyState(BaseLobbyState&&) = delete;
+    BaseLobbyState& operator=(BaseLobbyState&&) = delete;
 
     // Asumamos por ahora que no se quiere permitir copias, ni mov.
     BaseLobbyState(const BaseLobbyState&) = delete;

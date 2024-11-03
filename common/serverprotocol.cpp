@@ -7,9 +7,8 @@
 //#include "./gameerror.h"
 #include "common/protocolerror.h"
 
-ServerProtocol::ServerProtocol(Socket& messenger): Protocol(messenger) {}
-ServerProtocol::ServerProtocol(Messenger* messenger): Protocol(messenger) {}
-ServerProtocol::ServerProtocol(Protocol&& prot): Protocol(std::move(prot)) {}
+// ServerProtocol::ServerProtocol(Socket& messenger): Protocol(messenger) {}
+ServerProtocol::ServerProtocol(Messenger& messenger): Protocol(messenger) {}
 
 uint8_t ServerProtocol::recvplayercount() { return this->recvbyte(); }
 

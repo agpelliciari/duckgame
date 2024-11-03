@@ -10,9 +10,9 @@
 #include "common/protocolerror.h"
 
 
-LobbyCreateSender::LobbyCreateSender(ClientProtocol& _protocol, GameContext& _context,
+LobbyCreateSender::LobbyCreateSender(Messenger& _messenger, GameContext& _context,
                                      LobbyListener& _listener):
-        BaseLobbyState(_protocol, _context, _listener) {}
+        BaseLobbyState(_messenger, _context, _listener) {}
 
 void LobbyCreateSender::createLobby() {
     if (_is_alive) {  // already running!!

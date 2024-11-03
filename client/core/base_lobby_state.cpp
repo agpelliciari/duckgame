@@ -8,9 +8,9 @@
 #include "common/core/liberror.h"
 #include "common/protocolerror.h"
 
-BaseLobbyState::BaseLobbyState(ClientProtocol& _protocol, GameContext& _context,
+BaseLobbyState::BaseLobbyState(Messenger& _messenger, GameContext& _context,
                                LobbyListener& _listener):
-        protocol(_protocol), context(_context), listener(_listener) {}
+        protocol(_messenger), context(_context), listener(_listener) {}
 
 
 void BaseLobbyState::handleNotify(const lobby_info& info) {

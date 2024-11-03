@@ -12,7 +12,7 @@
 #include "common/core/messenger.h"
 
 // Se incluye socket. Para abstraer si es una copia en el heap o no.
-#include "common/core/socket.h"
+//#include "common/core/socket.h"
 
 // Clase protocol, interfaz directa con el socket. Y proporciona los acciones base
 // como lo es mandar un mensaje, numero o string.
@@ -23,24 +23,23 @@
 class Protocol {
 protected:
     // Para poder aplicar polimorfismo...
-    std::unique_ptr<Messenger> messenger;
+    Messenger& messenger;
     std::atomic<bool> active;
 
 public:
-    Protocol();                                // Inactive protocol
-    explicit Protocol(Messenger* _messenger);  // Desde un messenger cualquiera
-    explicit Protocol(std::unique_ptr<Messenger>& _messenger);
+    // explicit Protocol(Messenger* _messenger);  // Desde un messenger cualquiera
+    // explicit Protocol(std::unique_ptr<Messenger>& _messenger);
 
     // Para abstraer que hace con el socket en si.
-    explicit Protocol(Socket& _skt);
+    explicit Protocol(Messenger& _messenger);
 
     // Asumamos por ahora que no se quiere permitir copias..
     Protocol(const Protocol&) = delete;
     Protocol& operator=(const Protocol&) = delete;
 
     // Permitamos el mov... por mas que no sea realmente eficiente.
-    Protocol(Protocol&&);
-    Protocol& operator=(Protocol&&);
+    Protocol(Protocol&&) = delete;
+    Protocol& operator=(Protocol&&) = delete;
 
     bool isactive();  // Se fija si esta activo, pudo ser cerrado como nunca haber sido activo.
     void close();

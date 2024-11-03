@@ -9,15 +9,13 @@
 #include "common/core/protocol.h"
 #include "common/dtos.h"
 #include "common/dtosplayer.h"
+//#include "common/core/socket.h"
 
 // Extension del protocolo base a usar.
 class ServerProtocol: public Protocol {
 public:
     // El default a partir de la abstraccion de socket..
-    explicit ServerProtocol(Socket& messenger);
-    explicit ServerProtocol(Messenger* messenger);
-    // Permitamos el mov para mayor flexibilidad
-    explicit ServerProtocol(Protocol&& prot);
+    explicit ServerProtocol(Messenger& messenger);
 
     // Asumamos por ahora que no se quiere permitir copias, ni mov.
     ServerProtocol(const ServerProtocol&) = delete;

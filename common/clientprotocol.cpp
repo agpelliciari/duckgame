@@ -7,11 +7,9 @@
 #include "common/core/liberror.h"
 #include "common/dtos.h"
 
-ClientProtocol::ClientProtocol(): protocol() {}
-ClientProtocol::ClientProtocol(Messenger* conn): protocol(conn) {}
-ClientProtocol::ClientProtocol(Socket& conn): protocol(conn) {}
-ClientProtocol::ClientProtocol(Socket&& conn): protocol(conn) {}
+ClientProtocol::ClientProtocol(Messenger& conn): protocol(conn) {}
 
+/*
 ClientProtocol::ClientProtocol(ClientProtocol&& other): protocol(std::move(other.protocol)) {}
 
 ClientProtocol& ClientProtocol::operator=(ClientProtocol&& other) {
@@ -22,6 +20,8 @@ ClientProtocol& ClientProtocol::operator=(ClientProtocol&& other) {
     protocol = std::move(other.protocol);
     return *this;
 }
+
+*/
 
 void ClientProtocol::recvlobbyinfo(lobby_info& out) {
     // Podria tirar cast error.
