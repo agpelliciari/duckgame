@@ -104,7 +104,8 @@ endif()
 if(TALLER_SERVER OR TALLER_TESTS)
     # Lets load logic of server.
     add_library(taller_server_logic)
-    add_subdirectory(server/logic_server/)
+    add_subdirectory(server/)
+    #add_subdirectory(server/logic_server/)
 
     # Make them depend on taller_common lib
     add_dependencies(taller_server_logic taller_common)
@@ -113,14 +114,16 @@ endif()
 
 if(TALLER_SERVER)
     # HEY!! TODO XXX: Change the name of the executable to the one you like!
-    add_executable(taller_server)
+    add_executable(taller_server server/main.cpp)
 
     # Make them depend on taller_common lib
     add_dependencies(taller_server taller_common taller_server_logic)
 
     # Add source files and enable warnings
     # HEY!! TODO XXX: add more subfolders here
-    add_subdirectory(server)
+    
+    # Only executable is main.cpp, allows for using server folder as library.. for testing.
+    #add_subdirectory(server)
 
     set_project_warnings(taller_server ${TALLER_MAKE_WARNINGS_AS_ERRORS} FALSE)
 
