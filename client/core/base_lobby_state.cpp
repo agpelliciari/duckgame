@@ -38,6 +38,7 @@ void BaseLobbyState::listeninfo() {
     } catch (const LibError& error) {
         if (protocol.isopen()) {
             std::cerr << "Lobby state recv error:" << error.what() << std::endl;
+            listener.canceledLobby();
         }
         return;
     }
