@@ -1,0 +1,7 @@
+size_x: 700
+size_y: 400
+background_img: 0
+
+map: [
+     1, 2, 3, 4
+]
