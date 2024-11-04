@@ -8,7 +8,7 @@ MatchState::MatchState(): running(false), match_logic(), acciones(match_logic) {
 void MatchState::pushAction(const PlayerActionDTO& action) { acciones.push_command(action); }
 
 void MatchState::loop(MatchObserver& observer) {
-    start_players(observer);
+    // start_players(observer);
 
     while (running) {
         this->step();

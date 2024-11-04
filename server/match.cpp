@@ -33,6 +33,7 @@ void Match::init() {
     if (is_alive()) {
         throw GameError("Tried to start a match already started!!\n");
     }
+    looper.start_players(players);
     start();
     players.finishLobbyMode();
     // match_start.notify_all();

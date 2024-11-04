@@ -40,6 +40,19 @@ TEST_F(ServerIntegrationTest, SimpleCreateLobbyDual) {
     host.assertLobbyStarted(2);
 }
 
+TEST_F(ServerIntegrationTest, SimpleCreateLobbyDualInmediateDisconnect) {
+
+    TesterClient host(openClient(), sktserver, lobbies);
+
+    uint8_t id_lobby = host.createClientLobbyDual();
+    ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
+    ASSERT_EQ(lobbies.countMatches(), 1) << "Lobby was created";
+
+    host.startMatch();
+    host.close();
+}
+
+
 TEST_F(ServerIntegrationTest, SimpleCreateLobbySingle) {
 
     TesterClient host(openClient(), sktserver, lobbies);
