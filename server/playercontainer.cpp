@@ -77,14 +77,18 @@ void PlayerContainer::finishLobbyMode() {
 
 void PlayerContainer::hostLobbyLeft(const ControlledPlayer& host) {
     players.remove(host);
+    lobby_info info(GAME_ERROR, LobbyErrorType::ANFITRION_LEFT);
     // Cuando se va el host no se notifica el disconnect... sino se los desconecta.
     for (ControlledPlayer& player: players) {
+        player.recvinfo(info);
         player.disconnect();
     }
     totalplayers = 0;
 }
 
 
+// Notifica que se empezo la partida. Y cambia a lobby mode.
+// El close/cambio de modo es suficiente para saber que empezo.
 void PlayerContainer::finishGameMode() {
     for (ControlledPlayer& player: players) {
         player.setlobbymode();

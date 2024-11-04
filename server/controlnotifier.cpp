@@ -13,25 +13,25 @@ bool ControlNotifier::runLobby() {
               << " start!" << std::endl;
     try {
         lobby_info info = player.popinfo();
-        while (_keep_running && info.action != LobbyResponseType::GAME_ERROR &&
-               info.action != LobbyResponseType::STARTED_LOBBY) {
+
+        // El start se envia con un close asi que solo si ocurre un error
+        while (_keep_running) {
 
 
-            std::cerr << "Configuration info to " << player.toString() << "? " << (int)info.action
-                      << ", num: " << (int)info.data << std::endl;
+            std::cerr << "match " << (int)match.getID() << " info to " << player.toString() << "? "
+                      << (int)info.action << ", num: " << (int)info.data << std::endl;
 
             protocol.notifyevent(info);
+
+            if (info.action == LobbyResponseType::GAME_ERROR) {
+                std::cout << "----> IF NOTIFY ERROR FROM HERE THEN CUSTOM/LOGIC ERROR??\n";
+                return true;  // Si fue un error el notificado entonces sali.
+            }
+
             info = player.popinfo();
         }
 
-        if (_keep_running) {
-            std::cerr << "Response start! " << (int)info.action << ", num: " << (int)info.data
-                      << std::endl;
-            protocol.notifyevent(info);
-            return false;
-        }
-
-        std::cerr << "Closed notifier before match start" << std::endl;
+        std::cerr << "Closed notifier before match start, why?" << std::endl;
         protocol.notifyinfo(LobbyResponseType::GAME_ERROR, LobbyErrorType::UNKNOWN);
         protocol.close();  // Si no esta cerrado, cerralo, asi se sale el controller tambien.
         return true;
@@ -40,8 +40,9 @@ bool ControlNotifier::runLobby() {
         // Si el player esta closed, el match fue cancelado
         // Ya que para participar en el mismo deberia estar abierto.
         if (player.isclosed()) {
+            std::cout << "----> IF NOTIFY ERROR FROM HERE THEN SERVER ERROR?\n";
             // se cancelo.
-            protocol.notifyinfo(LobbyResponseType::GAME_ERROR, LobbyErrorType::ANFITRION_LEFT);
+            protocol.notifyinfo(LobbyResponseType::GAME_ERROR, LobbyErrorType::SERVER_ERROR);
             protocol.close();  // Si no esta cerrado, cerralo, asi se sale el controller tambien.
             return true;
         }

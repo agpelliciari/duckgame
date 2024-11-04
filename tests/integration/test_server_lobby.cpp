@@ -244,8 +244,8 @@ TEST_F(ServerIntegrationTest, SimpleJoinMultipleCancel) {
 
     host.finish();
 
-    joined1.assertLobbyCanceled();
-    joined2.assertLobbyCanceled();
+    joined1.assertLobbyHostLeft();
+    joined2.assertLobbyHostLeft();
 
     joined1.finish();
     joined2.finish();  // Para garantizar sincronismo. Antes de verificar el delete.
@@ -463,7 +463,7 @@ TEST_F(ServerIntegrationTest, IntegrationMultiMatchForceFinish) {
     joined2.assertLobbyStarted(4);
     joined3.assertLobbyStarted(4);
 
-    std::cout << "-------------> FINISH ALL!" << std::endl;
+    // std::cout << "-------------> FINISH ALL!" << std::endl;
     lobbies.finishAll();
 
 
@@ -471,7 +471,8 @@ TEST_F(ServerIntegrationTest, IntegrationMultiMatchForceFinish) {
     joined2.finish();
     joined3.finish();
 
-    host2.assertLobbyCanceled();
+    ASSERT_EQ(host2.assertLobbyError(), SERVER_ERROR)
+            << "Error type is server error, since forced finish";
     host2.finish();
     // host2.assertLobbyError(UNKNOWN);
     ASSERT_EQ(lobbies.countMatches(), 0) << "Lobby was deleted";
