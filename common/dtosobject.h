@@ -61,7 +61,7 @@ struct ProjectileDTO{
     uint8_t pos_x;
     uint8_t pos_y;
     enum ProjectileType tipo;
-}
+};
 
 struct DynamicObjDTO {
     int pos_x;
