@@ -472,6 +472,7 @@ TEST_F(ServerIntegrationTest, IntegrationMultiMatchForceFinish) {
     joined3.finish();
 
     host2.assertLobbyCanceled();
+    host2.finish();
     // host2.assertLobbyError(UNKNOWN);
     ASSERT_EQ(lobbies.countMatches(), 0) << "Lobby was deleted";
 }

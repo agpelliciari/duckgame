@@ -38,7 +38,8 @@ void TesterClient::assertLobbyStarted(uint8_t count) {
     lobby_info info;
     client.recvlobbyinfo(info);
 
-    EXPECT_EQ(info.action, LobbyResponseType::STARTED_LOBBY) << "INITED Match succesfully ";
+    EXPECT_EQ(info.action, (uint8_t)LobbyResponseType::STARTED_LOBBY)
+            << "INITED Match succesfully ";
     EXPECT_EQ(info.data, count) << "Total count at start is correct";
 }
 

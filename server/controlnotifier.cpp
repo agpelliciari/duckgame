@@ -36,18 +36,19 @@ bool ControlNotifier::runLobby() {
         protocol.close();  // Si no esta cerrado, cerralo, asi se sale el controller tambien.
         return true;
     } catch (const ClosedQueue& error) {
-        if (match.isrunning()) {
-            std::cerr << "Start from queue closed/state change?? " << std::endl;
-            // se empezo.
-            protocol.notifyinfo(LobbyResponseType::STARTED_LOBBY, match.playercount());
-            return false;
-        }
-        // std::cerr << "CLOSED QUEUE? FOR LOBBY MODE" << std::endl;
 
-        // se cancelo.
-        protocol.notifyinfo(LobbyResponseType::GAME_ERROR, LobbyErrorType::ANFITRION_LEFT);
-        protocol.close();  // Si no esta cerrado, cerralo, asi se sale el controller tambien.
-        return true;
+        // Si el player esta closed, el match fue cancelado
+        // Ya que para participar en el mismo deberia estar abierto.
+        if (player.isclosed()) {
+            // se cancelo.
+            protocol.notifyinfo(LobbyResponseType::GAME_ERROR, LobbyErrorType::ANFITRION_LEFT);
+            protocol.close();  // Si no esta cerrado, cerralo, asi se sale el controller tambien.
+            return true;
+        }
+
+        protocol.notifyinfo(LobbyResponseType::STARTED_LOBBY, match.playercount());
+
+        return false;
     }
 }
 
