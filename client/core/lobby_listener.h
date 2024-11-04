@@ -10,11 +10,11 @@ class LobbyListener {
 public:
     // Manejo de start/cancel una vez estando en una lobby.
     virtual void startedLobby() = 0;
-    virtual void canceledLobby() = 0;
+    virtual void canceledLobby(const char* message) = 0;
 
     // Notificacion inicial sobre si se pudo crear/unirse a una lobby.
-    virtual void failedJoin() = 0;
-    virtual void failedCreate() = 0;
+    virtual void failedJoin(const char* message) = 0;
+    virtual void failedCreate(const char* message) = 0;
 
 
     virtual void createdLobbyDual(unsigned int id_lobby) = 0;

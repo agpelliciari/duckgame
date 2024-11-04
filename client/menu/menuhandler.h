@@ -45,9 +45,9 @@ public:
 
     // Para recibir notificaciones de la lobby... son directos.
     void startedLobby() override;
-    void canceledLobby() override;
-    void failedJoin() override;
-    void failedCreate() override;
+    void canceledLobby(const char* msg) override;
+    void failedJoin(const char* msg) override;
+    void failedCreate(const char* msg) override;
 
 
     // Notificacion inicial sobre si se pudo crear/unirse a una lobby.

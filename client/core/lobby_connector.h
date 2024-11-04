@@ -40,7 +40,7 @@ public:
 
     void clear();
     // Resetea el estado al inicial.
-    void reset();
+    bool reset();
 
     // Verifica dado el estado actual, si deberia exitear.
     // O se podria ir a un siguiente estado.

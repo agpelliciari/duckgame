@@ -6,7 +6,13 @@
 #include <utility>
 
 #include "common/core/liberror.h"
+#include "common/errors.h"
 #include "common/protocolerror.h"
+
+const char* BaseLobbyState::ERRORS[] = {
+        "Client connection error",     "Unknown server error", "Server closed the connection",
+        "Match's host left the lobby", "Lobby was not found",  "Lobby was already started",
+        "Lobby had not enough space"};
 
 BaseLobbyState::BaseLobbyState(Messenger& _messenger, GameContext& _context,
                                LobbyListener& _listener):
@@ -38,7 +44,7 @@ void BaseLobbyState::listeninfo() {
     } catch (const LibError& error) {
         if (protocol.isopen()) {
             std::cerr << "Lobby state recv error:" << error.what() << std::endl;
-            listener.canceledLobby();
+            listener.canceledLobby(ERRORS[0]);
         }
         return;
     }
@@ -51,7 +57,8 @@ void BaseLobbyState::listeninfo() {
         std::cout << "Game error received " << (int)context.id_lobby
                   << " FALLO CODE: " << (int)info.data << std::endl;
         context.started = false;
-        listener.canceledLobby();
+
+        listener.canceledLobby(ERRORS[(info.data >= 7) ? 1 : info.data]);
     }
 }
 

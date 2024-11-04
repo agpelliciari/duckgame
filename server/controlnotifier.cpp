@@ -24,7 +24,7 @@ bool ControlNotifier::runLobby() {
             protocol.notifyevent(info);
 
             if (info.action == LobbyResponseType::GAME_ERROR) {
-                std::cout << "----> IF NOTIFY ERROR FROM HERE THEN CUSTOM/LOGIC ERROR??\n";
+                // std::cout << "----> IF NOTIFY ERROR FROM HERE THEN CUSTOM/LOGIC ERROR??\n";
                 return true;  // Si fue un error el notificado entonces sali.
             }
 
@@ -40,8 +40,8 @@ bool ControlNotifier::runLobby() {
         // Si el player esta closed, el match fue cancelado
         // Ya que para participar en el mismo deberia estar abierto.
         if (player.isclosed()) {
-            std::cout << "----> IF NOTIFY ERROR FROM HERE THEN SERVER ERROR?\n";
-            // se cancelo.
+            // std::cout << "----> IF NOTIFY ERROR FROM HERE THEN SERVER ERROR?\n";
+            //  se cancelo.
             protocol.notifyinfo(LobbyResponseType::GAME_ERROR, LobbyErrorType::SERVER_ERROR);
             protocol.close();  // Si no esta cerrado, cerralo, asi se sale el controller tambien.
             return true;

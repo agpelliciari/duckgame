@@ -11,7 +11,12 @@
 // Clase que encapsula al protocol y mantendria el estado del juego
 // Proporcionado una interfaz para acciones del usuario.
 class BaseLobbyState: protected Thread, public LobbyState {
+
+
 protected:
+    // cppcheck-suppress unusedStructMember
+    static const char* ERRORS[];
+
     ClientProtocol protocol;  // cppcheck-suppress unusedStructMember
     GameContext& context;     // cppcheck-suppress unusedStructMember
     LobbyListener& listener;  // cppcheck-suppress unusedStructMember

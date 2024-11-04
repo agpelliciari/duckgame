@@ -37,13 +37,22 @@ void LobbyConnector::clear() {
 // Resetea el estado al inicial.
 // Y reseteo del protocolo.
 // No es una navegacion entre estados perse.
-void LobbyConnector::reset() {
+bool LobbyConnector::reset() {
     if (skt.has_value()) {
         clear();
     }
 
-    // Reemplazo del protocolo.
-    skt.emplace(hostname.c_str(), service.c_str());
+    try {
+        // Reemplazo del protocolo.
+        skt.emplace(hostname.c_str(), service.c_str());
+        return false;
+    } catch (const std::exception& err) {
+        std::cerr << "Connection reset failed: " << err.what() << "\n";
+        return true;
+    } catch (...) {
+        std::cerr << "Connection reset failed.. unknown error\n";
+        return true;
+    }
 }
 
 bool LobbyConnector::cangonext() { return state.get() != NULL && state->endstate(); }

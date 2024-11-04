@@ -14,7 +14,9 @@ void MenuHandler::onCreateSoloLobby() {
     std::cout << "Aca se envia que el cliente quiere crear una lobby y va a jugar 1 jugador"
               << std::endl;
 
-    connector.reset();  // Reset protocol and curr state si existe.
+    if (connector.reset()) {  // Si fallo el reset ... no hagas nada
+        return;
+    }
     sender = connector.setLobbyCreator(*this, false);
 }
 
@@ -22,7 +24,9 @@ void MenuHandler::onCreateDuoLobby() {
     std::cout << "Aca se envia que el cliente quiere crear una lobby y van a jugar 2 jugadores"
               << std::endl;
 
-    connector.reset();  // Reset protocol and curr state si existe.
+    if (connector.reset()) {
+        return;
+    }
     sender = connector.setLobbyCreator(*this, true);
 }
 
@@ -30,7 +34,12 @@ void MenuHandler::onJoinSoloLobby(int lobbyId) {
     std::cout << "Aca se envia que el cliente quiere unirse a la lobby con id: " << lobbyId
               << " y va a jugar 1 jugador" << std::endl;
 
-    connector.reset();  // Reset protocol and curr state si existe.
+    // Reset protocol and curr state si existe.
+    // Si falla retorna true
+    if (connector.reset()) {
+        return;
+    }
+
     connector.setLobbyJoin(*this, false, lobbyId);
     sender = NULL;  // El que joinea no manda cosas?
     // setLobbyId(lobbyId);
@@ -41,7 +50,11 @@ void MenuHandler::onJoinSoloLobby(int lobbyId) {
 void MenuHandler::onJoinDuoLobby(int lobbyId) {
     std::cout << "Aca se envia que el cliente quiere unirse a la lobby con id: " << lobbyId
               << " y van a jugar 2 jugadores" << std::endl;
-    connector.reset();  // Reset protocol and curr state si existe.
+
+    if (connector.reset()) {
+        return;
+    }
+
     connector.setLobbyJoin(*this, true, lobbyId);
     sender = NULL;
     // setLobbyId(lobbyId);
@@ -78,10 +91,19 @@ void MenuHandler::removePlayerFromLobby() { queueToMenu.push(MenuAction::RemoveP
 // Acciones a menu.. Llamados/notificaciones directas ...
 // Se podria pasar el codigo de error si se quiere mostrar un mensaje personalizado.
 void MenuHandler::startedLobby() { queueToMenu.push(MenuAction::StartLobby()); }
-void MenuHandler::canceledLobby() { queueToMenu.push(MenuAction::CancelLobby()); }
+void MenuHandler::canceledLobby(const char* msg) {
+    std::cout << "Canceled lobby " << msg << std::endl;
+    queueToMenu.push(MenuAction::CancelLobby());
+}
 
-void MenuHandler::failedCreate() { queueToMenu.push(MenuAction::FailCreate()); }
-void MenuHandler::failedJoin() { queueToMenu.push(MenuAction::FailJoin()); }
+void MenuHandler::failedCreate(const char* msg) {
+    std::cout << "Failed create " << msg << std::endl;
+    queueToMenu.push(MenuAction::FailCreate());
+}
+void MenuHandler::failedJoin(const char* msg) {
+    std::cout << "Failed join " << msg << std::endl;
+    queueToMenu.push(MenuAction::FailJoin());
+}
 
 
 // Tambien son directas ahora
