@@ -13,7 +13,7 @@ enum BlockType : uint8_t {
 struct BlockDTO {
     uint8_t pos_x;
     uint8_t pos_y;
-    uint8_t tipo;
+    enum BlockType tipo;
     uint8_t size_x;  // Haria falta?! puede que sea mejor si.
     uint8_t size_y;
 } __attribute__((packed));
@@ -24,6 +24,7 @@ enum class TypeDynamicObject : uint8_t {
     // Generales
     BOX,
     PROJECTILE,
+    BURST,
 
     HELMET,
     ARMOR,
@@ -40,6 +41,27 @@ enum class TypeDynamicObject : uint8_t {
     ESCOPETA,
     SNIPER
 };
+
+
+enum ProjectileType : uint8_t {
+    GRANADA,
+    BANANA,
+    PEW_PEW_LASER,
+    LASER_RIFLE,
+    AK_47,
+    PISTOLA_DE_DUELOS,
+    PISTOLA_COWBOY,
+    MAGNUM,
+    ESCOPETA,
+    SNIPER,
+    BURST
+};
+
+struct ProjectileDTO{
+    uint8_t pos_x;
+    uint8_t pos_y;
+    enum ProjectileType tipo;
+}
 
 struct DynamicObjDTO {
     int pos_x;
