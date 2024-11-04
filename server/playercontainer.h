@@ -39,7 +39,7 @@ public:
     void hostLobbyLeft(const ControlledPlayer& player);
 
     // Remueve todos los restantes. Normalmente no deberia haber, ya se deberian haber desconectado.
-    void removeAll();
+    void forceDisconnectAll();
 
     int playercount() const override;
 

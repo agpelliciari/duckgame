@@ -51,7 +51,13 @@ void PlayerContainer::remove(const ControlledPlayer& player) {
 // Actualmente el player acceptor se cierra primero.
 // Lo que haria que al llegar aca la lista perse debiera estar vacia.
 // Pero siempre es bueno verificar.
-void PlayerContainer::removeAll() {
+void PlayerContainer::forceDisconnectAll() {
+    for (ControlledPlayer& player: players) {
+        if (player.disconnect()) {
+            std::cerr << "force disconnect " << player.toString() << " from match" << std::endl;
+        }
+    }
+    /*
     for (auto playerit = players.begin(); playerit != players.end();) {
         if ((*playerit).disconnect()) {
             std::cerr << "force disconnect " << (*playerit).toString() << " from match"
@@ -59,6 +65,8 @@ void PlayerContainer::removeAll() {
         }
         playerit = players.erase(playerit);
     }
+
+    */
 }
 
 void PlayerContainer::finishLobbyMode() {

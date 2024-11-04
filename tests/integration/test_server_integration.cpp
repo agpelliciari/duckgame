@@ -360,6 +360,11 @@ TEST_F(ServerIntegrationTest, IntegrationMultiMatchOneEnds) {
     uint8_t id_lobby = host.createClientLobbyDual();
     ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
 
+    TesterClient host2(openClient(), sktserver, lobbies);
+    uint8_t id_lobby2 = host2.createClientLobbyDual();
+    ASSERT_EQ(id_lobby2, 2) << "ID lobby received by client is 2";
+    ASSERT_EQ(lobbies.countMatches(), 2) << "Lobby was created";
+
 
     TesterClient joined1(openClient(), sktserver, lobbies);
     TesterClient joined2(openClient(), sktserver, lobbies);
@@ -393,13 +398,71 @@ TEST_F(ServerIntegrationTest, IntegrationMultiMatchOneEnds) {
     host.assertLobbyStarted(4);
     joined2.assertLobbyStarted(4);
     joined3.assertLobbyStarted(4);
-    ASSERT_EQ(lobbies.countMatches(), 1) << "Lobby was not deleted before it has to";
+    ASSERT_EQ(lobbies.countMatches(), 2) << "Lobby was not deleted before it has to";
 
     host.finish();
-    ASSERT_EQ(lobbies.countMatches(), 1) << "Lobby was not deleted before it has to";
+    ASSERT_EQ(lobbies.countMatches(), 2) << "Lobby was not deleted before it has to";
     joined2.finish();
-    ASSERT_EQ(lobbies.countMatches(), 1) << "Lobby was not deleted before it has to";
+    ASSERT_EQ(lobbies.countMatches(), 2) << "Lobby was not deleted before it has to";
     joined3.finish();
+
+    ASSERT_EQ(lobbies.countMatches(), 1) << "Lobby was deleted";
+}
+
+
+TEST_F(ServerIntegrationTest, IntegrationMultiMatchForceFinish) {
+    TesterClient host(openClient(), sktserver, lobbies);
+
+    uint8_t id_lobby = host.createClientLobbyDual();
+    ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
+
+    TesterClient host2(openClient(), sktserver, lobbies);
+    uint8_t id_lobby2 = host2.createClientLobbyDual();
+    ASSERT_EQ(id_lobby2, 2) << "ID lobby received by client is 2";
+    ASSERT_EQ(lobbies.countMatches(), 2) << "Lobby was created";
+
+
+    TesterClient joined1(openClient(), sktserver, lobbies);
+    TesterClient joined2(openClient(), sktserver, lobbies);
+
+    uint8_t first = joined1.assertJoinLobbySingle(id_lobby, 2);
+    uint8_t second = joined2.assertJoinLobbySingle(id_lobby, 3);
+    ASSERT_EQ(first, 3) << "ID joined first is correct";
+    ASSERT_EQ(second, 4) << "ID joined second is correct";
+
+
+    host.assertLobbyInfoJoined(first);
+
+    host.assertLobbyInfoJoined(second);
+    joined1.assertLobbyInfoJoined(second);
+
+    joined1.close();
+
+    host.assertLobbyInfoLeft(first);
+    joined2.assertLobbyInfoLeft(first);
+
+    TesterClient joined3(openClient(), sktserver, lobbies);
+
+    uint8_t fourth = joined3.assertJoinLobbySingle(id_lobby, 3);
+    ASSERT_EQ(fourth, 5) << "ID joined fifth is correct";
+
+    host.assertLobbyInfoJoined(fourth);
+    joined2.assertLobbyInfoJoined(fourth);
+
+    host.startMatch();
+
+    host.assertLobbyStarted(4);
+    joined2.assertLobbyStarted(4);
+    joined3.assertLobbyStarted(4);
+
+    std::cout << "-------------> FINISH ALL!" << std::endl;
+    lobbies.finishAll();
+
+
+    host.finish();
+    joined2.finish();
+    joined3.finish();
+    host2.finish();
 
     ASSERT_EQ(lobbies.countMatches(), 0) << "Lobby was deleted";
 }

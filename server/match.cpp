@@ -52,16 +52,6 @@ bool Match::hostLobbyLeft(ControlledPlayer& host) {
     return false;
 }
 
-
-void Match::finish() {
-    if (!_keep_running) {  // Evitemos cerrar dos veces.
-        return;
-    }
-    stop();
-    looper.stop();
-    join();
-}
-
 // General/public methods.
 
 bool Match::operator==(const Match& other) const { return this->id == other.id; }
@@ -81,10 +71,29 @@ void Match::run() {
     looper.loop(players);
     // Checkea si el finish fue natural o forzado.
 
-    // notifica los playeres.
-    players.removeAll();
+    // notifica los playeres. Del final.
+    players.forceDisconnectAll();
 }
 
 bool Match::isrunning() const { return _is_alive; }
 
-Match::~Match() { finish(); }
+
+void Match::finish() {
+    if (_keep_running) {
+        stop();
+        looper.stop();
+        join();
+        return;
+    }
+    // El finish en caso de no estar corriendo.
+    // Asume que se esta en lobby mode.
+    players.forceDisconnectAll();
+}
+
+Match::~Match() {
+    if (_keep_running) {
+        stop();
+        looper.stop();
+        join();
+    }
+}
