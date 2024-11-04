@@ -26,14 +26,15 @@ Match& LobbyContainer::findLobby(lobbyID id) {
         ++lobbyit;
     }
 
-    throw GameError("Not found lobby %d", id);
+    throw GameError(LOBBY_NOT_FOUND, "Not found lobby %d", id);
 }
 
 // Unirse a la lobby y esperar a que empieze. Tira error si no existe.
 ControlledPlayer& LobbyContainer::joinLobby(uint8_t count, Match& lobby) {
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on container.
     if (lobby.isrunning()) {
-        throw GameError("Tried to join already started lobby %d", lobby.getID());
+        throw GameError(LOBBY_ALREADY_STARTED, "Tried to join already started lobby %d",
+                        lobby.getID());
     }
 
     return lobby.addPlayers(count);
@@ -68,7 +69,8 @@ void LobbyContainer::finishAll() {
 void LobbyContainer::hostLeft(Match& lobby, ControlledPlayer& host) {
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on container.
     if (lobby.isrunning()) {
-        throw GameError("Tried to cancel already started lobby %d", lobby.getID());
+        throw GameError(LOBBY_ALREADY_STARTED, "Tried to cancel already started lobby %d",
+                        lobby.getID());
     }
     if (lobby.hostLobbyLeft(host)) {
         std::cerr << ">removing lobby " << lobby.getID() << " cancel" << std::endl;

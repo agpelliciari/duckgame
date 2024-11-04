@@ -5,12 +5,7 @@
 #include <sstream>
 #include <string>
 
-enum LobbyErrorType : uint8_t {
-    UNKNOWN = 0,
-    ANFITRION_LEFT = 1,
-    LOBBY_NOT_FOUND = 2,
-    LOBBY_NO_SPACE = 3
-};
+#include "./errors.h"
 
 enum LobbyActionType : uint8_t {
     // Accion inicial para saber la lobby.

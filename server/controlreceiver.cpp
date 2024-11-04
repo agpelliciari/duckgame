@@ -18,7 +18,8 @@ bool ControlReceiver::isopen() { return protocol.isactive(); }
 
 void ControlReceiver::init() {
     if (_is_alive) {
-        throw GameError("Tried to init player notifier/controller when already inited.");
+        throw GameError(SERVER_ERROR,
+                        "Tried to init player notifier/controller when already inited.");
     }
     start();
 }
@@ -73,7 +74,7 @@ void ControlReceiver::run() {
     } catch (const GameError& error) {
         std::cerr << "Game error at lobby: " << error.what() << std::endl;
         // Por ahora unknown... pero a futuro se agregara al error.
-        protocol.notifyinfo(LobbyResponseType::GAME_ERROR, LobbyErrorType::UNKNOWN);
+        protocol.notifyinfo(LobbyResponseType::GAME_ERROR, error.get_code());
     }
 }
 

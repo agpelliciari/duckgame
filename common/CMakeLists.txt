@@ -17,5 +17,6 @@ target_sources(taller_common
         dtosobject.h
         thread.h
         queue.h
+        errors.h
         
     )

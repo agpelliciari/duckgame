@@ -3,12 +3,19 @@
 
 #include <exception>
 
+#include "common/errors.h"
+
+// typedef uint8_t game_error_type;
+typedef LobbyErrorType game_error_type;
 /*
  * Clase para encapsular el `errno` de C, "el ultimó error".
  * Es una excepción genérica que se encarga de los detalles
  * de decodificar el `errno` en un mensaje más entendible.
  * */
 class GameError: public std::exception {
+    // cppcheck-suppress unusedStructMember
+    game_error_type err_code;  // Codigo de error interno.
+
     // cppcheck-suppress unusedStructMember
     char msg_error[256];  // Si se usa, falso positivo.
 
@@ -27,7 +34,9 @@ public:
      * if (ret == -1)
      *      throw GameError(errno, "The function %s has failed: ", "foo");
      *  */
-    GameError(const char* fmt, ...) noexcept;
+    GameError(game_error_type code, const char* fmt, ...) noexcept;
+
+    game_error_type get_code() const;
 
     virtual const char* what() const noexcept override;
 

@@ -31,7 +31,7 @@ bool Match::notifyDisconnect(ControlledPlayer& player) {
 
 void Match::init() {
     if (is_alive()) {
-        throw GameError("Tried to start a match already started!!\n");
+        throw GameError(LOBBY_ALREADY_STARTED, "Tried to start a match already started!!\n");
     }
     looper.start_players(players);
     start();

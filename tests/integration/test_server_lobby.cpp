@@ -91,6 +91,14 @@ TEST_F(ServerIntegrationTest, SimpleCreateLobbyAndJoin) {
     joined1.assertLobbyStarted(3);
 }
 
+TEST_F(ServerIntegrationTest, JoinFailedNotFound) {
+    TesterClient joined1(openClient(), sktserver, lobbies);
+
+    LobbyErrorType error = joined1.assertJoinLobbyFail(23);
+
+    ASSERT_EQ(error, LOBBY_NOT_FOUND) << "Error type was lobby not found";
+}
+
 
 TEST_F(ServerIntegrationTest, SimpleCreateLobbyAndJoinSingle) {
     TesterClient host(openClient(), sktserver, lobbies);

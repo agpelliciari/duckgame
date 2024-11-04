@@ -24,6 +24,8 @@ public:
     uint8_t createClientLobbyDual();
     uint8_t createClientLobbySingle();
 
+    LobbyErrorType assertJoinLobbyFail(uint8_t id_lobby);
+
     uint8_t assertJoinLobbySingle(uint8_t id_lobby, uint8_t count);
     uint8_t assertJoinLobbyDual(uint8_t id_lobby, uint8_t count, uint8_t* second);
 

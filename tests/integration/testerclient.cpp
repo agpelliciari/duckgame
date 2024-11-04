@@ -76,6 +76,13 @@ uint8_t TesterClient::assertJoinLobbySingle(uint8_t id_lobby, uint8_t count) {
     return client.setsingleplay();
 }
 
+LobbyErrorType TesterClient::assertJoinLobbyFail(uint8_t id_lobby) {
+    lobby_info info = client.joinLobby(id_lobby);
+    EXPECT_EQ(info.action, LobbyResponseType::GAME_ERROR) << "Joined response is game error";
+    return (LobbyErrorType)info.data;
+}
+
+
 uint8_t TesterClient::assertJoinLobbyDual(uint8_t id_lobby, uint8_t count, uint8_t* first) {
     lobby_info info = client.joinLobby(id_lobby);
     EXPECT_EQ(info.action, LobbyResponseType::JOINED_LOBBY) << "Joined Match succesfully ";
