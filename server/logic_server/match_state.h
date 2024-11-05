@@ -25,6 +25,7 @@ private:
 
 public:
     MatchState();
+    MatchState(struct MapPoint size, std::vector<struct MapObject>& objects);
     void pushAction(const PlayerActionDTO& action);
     // void add_player(Player player);
     void receive_commands();
