@@ -57,6 +57,10 @@ private:
 
     void updatePlayerAnimation(AnimationBuilder& builder, const PlayerDTO& player);
 
+    void setBuilder(AnimationBuilder& builder, int spriteX, int spriteY, bool facingLeft);
+
+    void setBuilder(AnimationBuilder& builder, int spriteX, int spriteY);
+
 public:
     explicit Animation(const GameContext& context);
 
