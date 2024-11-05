@@ -2,26 +2,74 @@
 
 #include <iostream>
 
-bool Serializer::isactive() { return active.load(); }
+#include "./level_fields.h"
+ryml::NodeRef blocks;
+ryml::NodeRef boxes;
+ryml::NodeRef item_spawns;
+ryml::NodeRef player_spawns;
 
-void Serializer::close() {
-    if (active.exchange(false)) {
-        std::cout << "CLOSED SERIALIZER!!\n";
-    } else {
-        std::cout << "ALREADY CLOSED SERIALIZER!!\n";
-    }
+Serializer::Serializer(const uint16_t size_x, const uint16_t size_y): tree(), root(tree.rootref()) {
+    root |= ryml::MAP;
+
+    root[LevelFields::SIZE_X] << size_x;
+    root[LevelFields::SIZE_Y] << size_y;
+    root[LevelFields::BACKGROUND] << 1;
+
+    blocks = root[LevelFields::TEXTURES];
+    blocks |= ryml::SEQ;
+
+    boxes = root[LevelFields::BOXES];
+    boxes |= ryml::SEQ;
+
+    item_spawns = root[LevelFields::ITEM_SPAWNS];
+    item_spawns |= ryml::SEQ;
+
+    player_spawns = root[LevelFields::PLAYER_SPAWNS];
+    player_spawns |= ryml::SEQ;
 }
 
 
-void Serializer::dosome() {
-    char yml_buf[] = "{foo: 1, bar: [2, 3], john: doe}";
-    ryml::Tree tree = ryml::parse_in_place(yml_buf);
+void Serializer::setBackground(const char* rel_path) {
+    std::cout << "SET BACKGROUND " << rel_path << std::endl;
+}
 
-    ryml::NodeRef bar = tree["bar"];
-    std::cout << "FIRST IS " << bar[0] << " SECOND IS " << bar[1] << std::endl;
+void Serializer::setBackground(const std::string& rel_path) { setBackground(rel_path.c_str()); }
 
-    tree["foo"] << "Some foo data";
+void Serializer::addTexture(const uint16_t x, const uint16_t y, BlockType type) {
+    std::cout << "ADD TEXTURE " << x << y << type << std::endl;
+    ryml::NodeRef newitm = blocks.append_child();
+    newitm |= ryml::SEQ;
+    newitm.append_child() << x;
+    newitm.append_child() << y;
+    newitm.append_child() << type;
+}
+void Serializer::addBox(const uint16_t x, const uint16_t y) {
+    std::cout << "ADD BOX " << x << y << std::endl;
+    ryml::NodeRef newitm = boxes.append_child();
+    newitm |= ryml::SEQ;
+    newitm.append_child() << x;
+    newitm.append_child() << y;
+}
+void Serializer::addItemSpawn(const uint16_t x, const uint16_t y) {
+    std::cout << "ADD Item spawn " << x << y << std::endl;
+    ryml::NodeRef newitm = item_spawns.append_child();
+    newitm |= ryml::SEQ;
+    newitm.append_child() << x;
+    newitm.append_child() << y;
+}
+void Serializer::addPlayerSpawn(const uint16_t x, const uint16_t y) {
+    std::cout << "ADD Player spawn " << x << y << std::endl;
+    ryml::NodeRef newitm = player_spawns.append_child();
+    newitm |= ryml::SEQ;
+    newitm.append_child() << x;
+    newitm.append_child() << y;
+}
+
+
+void Serializer::save(const char* rel_path) {
+    std::cout << "SAVE TO " << rel_path << std::endl;
 
     std::cout << "----------- PARSED DATA IS?\n";
     ryml::emit_yaml(tree, stdout);
 }
+void Serializer::save(const std::string& rel_path) { save(rel_path.c_str()); }

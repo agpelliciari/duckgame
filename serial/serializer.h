@@ -3,6 +3,7 @@
 
 #include <atomic>
 #include <cstdint>
+#include <string>
 
 // Tomado de https://github.com/biojppm/rapidyaml/blob/master/samples/quickstart.cpp
 #if defined(RYML_SINGLE_HEADER)  // using the single header directly in the executable
@@ -19,12 +20,20 @@
 #include <ryml_std.hpp>   // optional header, provided for std:: interop
 #endif
 
+#include "common/dtosobject.h"
+
 
 class Serializer {
 protected:
-    std::atomic<bool> active;  // cppcheck-suppress unusedStructMember
+    ryml::Tree tree;
+    ryml::NodeRef root;
+    ryml::NodeRef blocks;
+    ryml::NodeRef boxes;
+    ryml::NodeRef item_spawns;
+    ryml::NodeRef player_spawns;
+
 public:
-    Serializer(): active(true) {}
+    explicit Serializer(const uint16_t width, const uint16_t height);
     // Asumamos por ahora que no se quiere permitir copias..
     Serializer(const Serializer&) = delete;
     Serializer& operator=(const Serializer&) = delete;
@@ -34,8 +43,16 @@ public:
     Serializer& operator=(Serializer&&) = delete;
 
 
-    void dosome();
-    bool isactive();  // Se fija si esta activo, pudo ser cerrado como nunca haber sido activo.
-    void close();
+    void setBackground(const char* rel_path);
+    void setBackground(const std::string& rel_path);
+
+    void addTexture(const uint16_t x, const uint16_t y, BlockType type);
+    void addBox(const uint16_t x, const uint16_t y);
+    void addItemSpawn(const uint16_t x, const uint16_t y);
+    void addPlayerSpawn(const uint16_t x, const uint16_t y);
+
+
+    void save(const char* rel_path);
+    void save(const std::string& rel_path);
 };
 #endif

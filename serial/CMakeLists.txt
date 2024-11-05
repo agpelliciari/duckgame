@@ -8,4 +8,5 @@ target_sources(taller_serial
     # .h files
         serializer.h
         deserializer.h
+        level_fields.h
     )

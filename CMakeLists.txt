@@ -91,7 +91,7 @@ if(TALLER_EDITOR OR TALLER_SERVER OR TALLER_TESTS)
 	add_subdirectory(serial/)
 	
 	#add_dependencies(taller_serial yaml-cpp::yaml-cpp)
-	target_link_libraries(taller_serial PUBLIC ryml::ryml)#yaml-cpp::yaml-cpp) 
+	target_link_libraries(taller_serial PUBLIC taller_common ryml::ryml)#yaml-cpp::yaml-cpp) 
 	
 	add_executable(taller_dbg serial/main_dbg.cpp)
 	add_dependencies(taller_dbg taller_serial)
@@ -106,8 +106,8 @@ if(TALLER_EDITOR OR TALLER_SERVER OR TALLER_TESTS)
 	    #add_subdirectory(server/logic_server/)
 
 	    # Make them depend on taller_common lib
-	    add_dependencies(taller_server_logic taller_common)
-	    target_link_libraries(taller_server_logic taller_common)
+	    add_dependencies(taller_server_logic taller_common taller_serial)
+	    target_link_libraries(taller_server_logic taller_common taller_serial)
 	endif()
 	
 endif()
@@ -167,7 +167,7 @@ if(TALLER_EDITOR)
     add_executable(taller_editor)
 
     # Make them depend on taller_common lib
-    add_dependencies(taller_editor taller_common SDL2pp::SDL2pp)
+    add_dependencies(taller_editor taller_common taller_serial SDL2pp::SDL2pp)
 
     # Add source files and enable warnings
     # HEY!! TODO XXX: add more subfolders here
@@ -179,7 +179,7 @@ if(TALLER_EDITOR)
     target_include_directories(taller_editor PRIVATE ${libSDL2pp_SOURCE_DIR})
 
     # Link the taller_common lib target
-    target_link_libraries(taller_editor taller_common SDL2pp::SDL2pp)
+    target_link_libraries(taller_editor taller_common taller_serial SDL2pp::SDL2pp)
 endif()
 
 
