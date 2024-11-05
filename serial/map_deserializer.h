@@ -1,5 +1,5 @@
-#ifndef LIB_DESERIALIZER_H
-#define LIB_DESERIALIZER_H
+#ifndef LIB_MAPDESERIALIZER_H
+#define LIB_MAPDESERIALIZER_H
 
 // Tomado de https://github.com/biojppm/rapidyaml/blob/master/samples/quickstart.cpp
 #if defined(RYML_SINGLE_HEADER)  // using the single header directly in the executable
@@ -24,7 +24,7 @@
 #include "common/dtosobject.h"
 
 
-class Deserializer {
+class MapDeserializer {
 protected:
     ryml::Tree tree;  // cppcheck-suppress unusedStructMember
     ryml::NodeRef root;
@@ -32,14 +32,14 @@ protected:
     void readPoints(ryml::NodeRef& list, std::vector<struct MapPoint>& out);
 
 public:
-    explicit Deserializer(std::string& src);
+    explicit MapDeserializer(std::string& src);
     // Asumamos por ahora que no se quiere permitir copias..
-    Deserializer(const Deserializer&) = delete;
-    Deserializer& operator=(const Deserializer&) = delete;
+    MapDeserializer(const MapDeserializer&) = delete;
+    MapDeserializer& operator=(const MapDeserializer&) = delete;
 
     // Permitamos el mov... por mas que no sea realmente eficiente.
-    Deserializer(Deserializer&&) = delete;
-    Deserializer& operator=(Deserializer&&) = delete;
+    MapDeserializer(MapDeserializer&&) = delete;
+    MapDeserializer& operator=(MapDeserializer&&) = delete;
 
     void dosome();
 

@@ -2,10 +2,12 @@
 target_sources(taller_serial
     PRIVATE
     # .cpp files
-        serializer.cpp
-        deserializer.cpp
+        map_serializer.cpp
+        map_deserializer.cpp
+        map_loader.cpp
     PUBLIC
     # .h files
-        serializer.h
-        deserializer.h
+        map_serializer.h
+        map_deserializer.h
+        map_loader.h
     )

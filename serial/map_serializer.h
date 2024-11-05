@@ -1,5 +1,5 @@
-#ifndef LIB_SERIALIZER_H
-#define LIB_SERIALIZER_H
+#ifndef LIB_MAPSERIALIZER_H
+#define LIB_MAPSERIALIZER_H
 
 #include <atomic>
 #include <cstdint>
@@ -23,7 +23,7 @@
 #include "common/dtosobject.h"
 
 
-class Serializer {
+class MapSerializer {
 public:
     static const char* SIZE_X;         // cppcheck-suppress unusedStructMember
     static const char* SIZE_Y;         // cppcheck-suppress unusedStructMember
@@ -48,14 +48,14 @@ protected:
     ryml::NodeRef player_spawns;
 
 public:
-    explicit Serializer(const uint16_t width, const uint16_t height);
+    explicit MapSerializer(const uint16_t width, const uint16_t height);
     // Asumamos por ahora que no se quiere permitir copias..
-    Serializer(const Serializer&) = delete;
-    Serializer& operator=(const Serializer&) = delete;
+    MapSerializer(const MapSerializer&) = delete;
+    MapSerializer& operator=(const MapSerializer&) = delete;
 
     // Permitamos el mov... por mas que no sea realmente eficiente.
-    Serializer(Serializer&&) = delete;
-    Serializer& operator=(Serializer&&) = delete;
+    MapSerializer(MapSerializer&&) = delete;
+    MapSerializer& operator=(MapSerializer&&) = delete;
 
 
     void setBackground(const char* rel_path);

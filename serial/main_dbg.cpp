@@ -1,13 +1,13 @@
 #include <iostream>
 #include <string>
 
-#include "./deserializer.h"
-#include "./serializer.h"
+#include "./map_deserializer.h"
+#include "./map_serializer.h"
 
 
 static void create(const std::string& file) {
 
-    Serializer serial(100, 550);
+    MapSerializer serial(100, 550);
 
     for (int i = 0; i < 100; i += 3) {
         serial.addTexture(2, 3 + i, GRASS);
@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
 
     // create(file);
 
-    Deserializer serial(file);
+    MapDeserializer serial(file);
 
     serial.dosome();
 
