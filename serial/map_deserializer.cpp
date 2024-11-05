@@ -7,7 +7,7 @@
 #include "common/core/liberror.h"
 
 
-MapDeserializer::MapDeserializer(std::string& src) {
+MapDeserializer::MapDeserializer(const std::string& src) {
 
     std::ifstream file(src, std::ios::binary | std::ios::ate);
     std::streamsize size = file.tellg();

@@ -32,7 +32,7 @@ protected:
     void readPoints(ryml::NodeRef& list, std::vector<struct MapPoint>& out);
 
 public:
-    explicit MapDeserializer(std::string& src);
+    explicit MapDeserializer(const std::string& src);
     // Asumamos por ahora que no se quiere permitir copias..
     MapDeserializer(const MapDeserializer&) = delete;
     MapDeserializer& operator=(const MapDeserializer&) = delete;
