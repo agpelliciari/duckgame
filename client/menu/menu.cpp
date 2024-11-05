@@ -4,6 +4,9 @@
 
 Menu::Menu(MenuHandler& handler): ui(new Ui::Menu), handler(handler) {
     ui->setupUi(this);
+
+    initializeTimerForActions();
+
     mountSetHostnamePort();
     ui->centralwidget->setFocus();
 }
@@ -22,7 +25,16 @@ void Menu::updateIdDisplayedInLobby(int id) {
     }
 }
 
-void Menu::addPlayerToLobby(int n) {
+void Menu::displayNotification(const std::string& label) {
+    NotificationHandler notificationHandler{.label = label,
+                                            .onClose = [this] { unMountNotification(); }};
+    NotificationWidget* notificationWidget =
+            new NotificationWidget(notificationHandler, ui->centralwidget);
+
+    mountNotification(notificationWidget);
+}
+
+void Menu::addPlayerToLobby() {
     QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
 
     if (layout->count() == 0)
@@ -30,11 +42,32 @@ void Menu::addPlayerToLobby(int n) {
 
     QWidget* widget = layout->itemAt(0)->widget();
     if (auto* lobbyHostWidget = qobject_cast<LobbyHostWidget*>(widget)) {
-        lobbyHostWidget->addPlayerToLobby(n);
+        lobbyHostWidget->addPlayerToLobby();
     } else if (auto* lobbyGuestWidget = qobject_cast<LobbyGuestWidget*>(widget)) {
-        lobbyGuestWidget->addPlayerToLobby(n);
+        lobbyGuestWidget->addPlayerToLobby();
     }
 }
+
+void Menu::removePlayerFromLobby() {
+    QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
+
+    if (layout->count() == 0)
+        throw std::runtime_error("There is no widget mounted");
+
+    QWidget* widget = layout->itemAt(0)->widget();
+    if (auto* lobbyHostWidget = qobject_cast<LobbyHostWidget*>(widget)) {
+        lobbyHostWidget->removePlayerFromLobby();
+    } else if (auto* lobbyGuestWidget = qobject_cast<LobbyGuestWidget*>(widget)) {
+        lobbyGuestWidget->removePlayerFromLobby();
+    }
+}
+
+void Menu::reset() {
+    unMountWidget();
+    mountCreateJoin();
+}
+
+void Menu::startLobby() { this->close(); }
 
 Menu::~Menu() { delete ui; }
 
@@ -42,7 +75,7 @@ void Menu::mountSetHostnamePort() {
     SetHostnamePortHandler setHostnamePortHandler{
             .onClickContinue =
                     [this](const std::string& hostname, const std::string& port) {
-                        handler.setHostnamePort(hostname, port);
+                        handler.onSetHostnamePort(hostname, port);
                         unMountWidget();
                         mountCreateJoin();
                     },
@@ -63,7 +96,7 @@ void Menu::mountCreateJoin() {
             .onClickJoinGame =
                     [this] {
                         unMountWidget();
-                        mountSetLobbyId();
+                        mountSetSoloDuoGuest();
                     },
             .onClickQuit = [this] { this->close(); },
     };
@@ -71,18 +104,37 @@ void Menu::mountCreateJoin() {
     mountWidget(createJoinWidget);
 }
 
-void Menu::mountSetLobbyId() {
+void Menu::mountSetLobbyIdForSolo() {
     SetLobbyIdHandler setLobbyIdHandler{.onClickJoin =
                                                 [this](int lobbyId) {
-                                                    handler.joinSoloLobby(lobbyId);
+                                                    handler.onJoinSoloLobby(lobbyId);
                                                     unMountWidget();
-                                                    mountSetSoloDuoGuest();
+                                                    mountLobbyGuest();
                                                 },
                                         .onClickCancel =
                                                 [this] {
                                                     unMountWidget();
-                                                    mountCreateJoin();
+                                                    mountSetSoloDuoGuest();
                                                 }};
+    mountSetLobbyId(setLobbyIdHandler);
+}
+
+void Menu::mountSetLobbyIdForDuo() {
+    SetLobbyIdHandler setLobbyIdHandler{.onClickJoin =
+                                                [this](int lobbyId) {
+                                                    handler.onJoinDuoLobby(lobbyId);
+                                                    unMountWidget();
+                                                    mountLobbyGuest();
+                                                },
+                                        .onClickCancel =
+                                                [this] {
+                                                    unMountWidget();
+                                                    mountSetSoloDuoGuest();
+                                                }};
+    mountSetLobbyId(setLobbyIdHandler);
+}
+
+void Menu::mountSetLobbyId(SetLobbyIdHandler setLobbyIdHandler) {
     SetLobbyIdWidget* setLobbyIdWidget = new SetLobbyIdWidget(setLobbyIdHandler, ui->centralwidget);
     mountWidget(setLobbyIdWidget);
 }
@@ -90,18 +142,15 @@ void Menu::mountSetLobbyId() {
 void Menu::mountSetSoloDuoHost() {
     SetSoloDuoHandler setSoloDuoHandler{.onClickSolo =
                                                 [this] {
-                                                    handler.createSoloLobby();
+                                                    handler.onCreateSoloLobby();
                                                     unMountWidget();
                                                     mountLobbyHost();
-                                                    addPlayerToLobby(1);
                                                 },
                                         .onClickDuo =
                                                 [this] {
-                                                    handler.createDuoLobby();
+                                                    handler.onCreateDuoLobby();
                                                     unMountWidget();
                                                     mountLobbyHost();
-                                                    addPlayerToLobby(1);
-                                                    addPlayerToLobby(2);
                                                 },
                                         .onClickCancel =
                                                 [this] {
@@ -115,24 +164,17 @@ void Menu::mountSetSoloDuoGuest() {
     SetSoloDuoHandler setSoloDuoHandler{.onClickSolo =
                                                 [this] {
                                                     unMountWidget();
-                                                    mountLobbyGuest();
-                                                    addPlayerToLobby(1);
-                                                    addPlayerToLobby(2);
-                                                    addPlayerToLobby(3);
+                                                    mountSetLobbyIdForSolo();
                                                 },
                                         .onClickDuo =
                                                 [this] {
                                                     unMountWidget();
-                                                    mountLobbyGuest();
-                                                    addPlayerToLobby(1);
-                                                    addPlayerToLobby(2);
-                                                    addPlayerToLobby(3);
-                                                    addPlayerToLobby(4);
+                                                    mountSetLobbyIdForDuo();
                                                 },
                                         .onClickCancel =
                                                 [this] {
                                                     unMountWidget();
-                                                    mountSetLobbyId();
+                                                    mountCreateJoin();
                                                 }};
     mountSetSoloDuo(setSoloDuoHandler);
 }
@@ -143,9 +185,10 @@ void Menu::mountSetSoloDuo(SetSoloDuoHandler setSoloDuoHandler) {
 }
 
 void Menu::mountLobbyHost() {
-    LobbyHostHandler lobbyHostHandler{.onClickStart = [this] { handler.startLobby("Mapa 1"); },
+    LobbyHostHandler lobbyHostHandler{.onClickStart = [this] { handler.onStartLobby("Mapa 1"); },
                                       .onClickCancel =
                                               [this] {
+                                                  handler.onCancelLobby();
                                                   unMountWidget();
                                                   mountSetSoloDuoHost();
                                               }};
@@ -155,6 +198,7 @@ void Menu::mountLobbyHost() {
 
 void Menu::mountLobbyGuest() {
     LobbyGuestHandler lobbyGuestHandler{.onClickCancel = [this] {
+        handler.onCancelLobby();
         unMountWidget();
         mountSetSoloDuoGuest();
     }};
@@ -163,21 +207,66 @@ void Menu::mountLobbyGuest() {
 }
 
 void Menu::mountWidget(QWidget* widget) {
-    QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
-
-    if (layout->count() > 0)
+    if (currentWidget != nullptr)
         throw std::runtime_error("A widget is already mounted");
 
-    layout->insertWidget(0, widget);
+    if (currentNotification != nullptr)
+        unMountNotification();
+
+    QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
+    layout->addWidget(widget);
+    currentWidget = widget;
 }
 
 void Menu::unMountWidget() {
-    QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
-
-    if (layout->count() == 0)
+    if (currentWidget == nullptr)
         throw std::runtime_error("There is no widget to unmount");
 
-    QWidget* widget = layout->itemAt(0)->widget();
-    layout->removeWidget(widget);
-    widget->deleteLater();
+    QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
+    layout->removeWidget(currentWidget);
+    currentWidget->deleteLater();
+    currentWidget = nullptr;
+}
+
+void Menu::mountNotification(NotificationWidget* notification) {
+    if (currentNotification != nullptr)
+        unMountNotification();
+
+    QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
+    layout->insertWidget(0, notification);
+    currentNotification = notification;
+}
+
+void Menu::unMountNotification() {
+    if (currentNotification == nullptr)
+        return;
+
+    QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
+    layout->removeWidget(currentNotification);
+    currentNotification->deleteLater();
+    currentNotification = nullptr;
+}
+
+void Menu::initializeTimerForActions() {
+    QTimer* timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, [this]() {
+        loadActionsBuffer();
+        processActionsBuffer();
+    });
+    timer->start(1000);
+}
+
+void Menu::loadActionsBuffer() {
+    MenuAction actionToBuffer;
+    while (handler.tryPopActionToMenu(actionToBuffer)) {
+        buffer.push(actionToBuffer);
+    }
+}
+
+void Menu::processActionsBuffer() {
+    while (not buffer.empty()) {
+        MenuAction action = buffer.front();
+        buffer.pop();
+        action.exec(*this);
+    }
 }

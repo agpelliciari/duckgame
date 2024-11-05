@@ -20,12 +20,16 @@ private:
     Ui::LobbyGuestWidget* ui;         // cppcheck-suppress unusedStructMember
     const LobbyGuestHandler handler;  // cppcheck-suppress unusedStructMember
 
+    int numberOfPlayers = 0;
+
 public:
     explicit LobbyGuestWidget(const LobbyGuestHandler& handler, QWidget* parent = nullptr);
 
     void updateIdDisplayedInLobby(int id);
 
-    void addPlayerToLobby(int n);
+    void addPlayerToLobby();
+
+    void removePlayerFromLobby();
 
     ~LobbyGuestWidget();
 

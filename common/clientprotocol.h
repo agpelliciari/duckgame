@@ -10,6 +10,7 @@
 
 #include "common/core/protocol.h"
 #include "common/dtos.h"
+#include "common/dtoslobby.h"
 
 // Extension del protocolo base a usar.
 class ClientProtocol {
@@ -18,23 +19,18 @@ protected:
     Protocol protocol;  // Composicion con el protocolo base para la conexion
 public:
     // El default a partir de la abstraccion de socket
-    explicit ClientProtocol(Messenger* connection);
-    explicit ClientProtocol(Socket& connection);
-    explicit ClientProtocol(Socket&& connection);
-
-    // Un client protocol, inicialmente cerrado.
-    ClientProtocol();
+    explicit ClientProtocol(Messenger& connection);
 
     // Para mayor facilidad... el move del client protocol permite mas facil
     // reiniciar una conexion.
-    ClientProtocol(ClientProtocol&&);
-    ClientProtocol& operator=(ClientProtocol&&);
+    ClientProtocol(ClientProtocol&&) = delete;
+    ClientProtocol& operator=(ClientProtocol&&) = delete;
 
     // Asumamos por ahora que no se quiere permitir copias
     ClientProtocol(const ClientProtocol&) = delete;
     ClientProtocol& operator=(const ClientProtocol&) = delete;
 
-    bool joinLobby(const uint8_t id_match);
+    lobby_info joinLobby(const uint8_t id_match);
     uint8_t createLobby();
 
     // Para setear playercount == 1 o == 2
@@ -43,7 +39,7 @@ public:
 
     void recvlobbyinfo(lobby_info& out);
 
-    void startlobby();
+    void sendlobbyaction(const lobby_action&& action);
 
     void sendaction(PlayerActionDTO& action);
 

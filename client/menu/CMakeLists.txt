@@ -1,3 +1,4 @@
+add_subdirectory(notificationWidget/)
 add_subdirectory(setHostnamePortWidget/)
 add_subdirectory(createJoinWidget/)
 add_subdirectory(setLobbyIdWidget/)
@@ -11,11 +12,13 @@ target_sources(taller_client
     # .cpp files
     menu.cpp
     menuhandler.cpp
+    menuAction.cpp
     
     PUBLIC
     # .h files
     menu.h
     menuhandler.h
+    menuAction.h
     
     # .ui files
     menu.ui

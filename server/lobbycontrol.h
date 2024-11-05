@@ -24,9 +24,10 @@ public:
     LobbyControl& operator=(const LobbyControl&) = delete;
 
     Match& resolveMatch(bool* isanfitrion);
+    ControlledPlayer& joinPlayers(Match& match);
 
-    ControlledPlayer& start(Match& match);
-    ControlledPlayer& waitStart(Match& match);
+    bool handleAnfitrionLobby(ControlledPlayer& host, Match& match);  // ControlledPlayer& player,
+    // void handleJoinedLobby(ControlledPlayer& player, Match& match);
 };
 
 #endif

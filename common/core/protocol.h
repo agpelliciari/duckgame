@@ -12,7 +12,7 @@
 #include "common/core/messenger.h"
 
 // Se incluye socket. Para abstraer si es una copia en el heap o no.
-#include "common/core/socket.h"
+//#include "common/core/socket.h"
 
 // Clase protocol, interfaz directa con el socket. Y proporciona los acciones base
 // como lo es mandar un mensaje, numero o string.
@@ -23,24 +23,23 @@
 class Protocol {
 protected:
     // Para poder aplicar polimorfismo...
-    std::unique_ptr<Messenger> messenger;
+    Messenger& messenger;
     std::atomic<bool> active;
 
 public:
-    Protocol();                                // Inactive protocol
-    explicit Protocol(Messenger* _messenger);  // Desde un messenger cualquiera
-    explicit Protocol(std::unique_ptr<Messenger>& _messenger);
+    // explicit Protocol(Messenger* _messenger);  // Desde un messenger cualquiera
+    // explicit Protocol(std::unique_ptr<Messenger>& _messenger);
 
     // Para abstraer que hace con el socket en si.
-    explicit Protocol(Socket& _skt);
+    explicit Protocol(Messenger& _messenger);
 
     // Asumamos por ahora que no se quiere permitir copias..
     Protocol(const Protocol&) = delete;
     Protocol& operator=(const Protocol&) = delete;
 
     // Permitamos el mov... por mas que no sea realmente eficiente.
-    Protocol(Protocol&&);
-    Protocol& operator=(Protocol&&);
+    Protocol(Protocol&&) = delete;
+    Protocol& operator=(Protocol&&) = delete;
 
     bool isactive();  // Se fija si esta activo, pudo ser cerrado como nunca haber sido activo.
     void close();
@@ -54,39 +53,23 @@ public:
     void sendshort(const uint16_t num);
 
 
-    // para mandar structs.. o similes
+    // para mandar structs.. o similes, cuando se sabe la longitud.
     void sendbytes(const void* msg, const unsigned int count);
     void recvbytes(void* buff, const unsigned int count);
 
+    // Para flags o condicionales.
     bool tryrecvbytes(void* buff, const unsigned int count);
     bool tryrecvbyte(uint8_t* out);
 
-
-    // Signal action send.
-    // Tries receive pickup order. If EOF then returns false.
-    bool recvpickup();
-    // Sends the pickup signal action
-    void signalpickup();
-
-    // Message communication fixed ... len is on host endiannes.. Conversion to
-    // big endian happens at protocol.
+    // Para mensajes i.e cuando el que recibe no sabe la longitud.
     void sendmsg(const char* buff, const uint16_t len);
     void sendmsg(const std::string& message);
 
-    // attemps read message of chars. Uses vector to store the len.
-    std::vector<char> recvmsg();
-
-    // Reads a vector and converts to string.
-    std::string recvmsgstr();
 
     uint16_t recvmsg(char* buff,
                      const unsigned int max);  // attemps read msg, throws exception if len > max
-
-
-    // Recibe el inicio de una notificacion. Retorna el tipo.
-    uint8_t recvnotification();
-
-    // Envia los bytes de identificacion para una notificacion, del tipo correspondiente.
-    void notifyevent(uint8_t type);
+    // attemps read message of chars. Uses vector to store the len.
+    std::vector<char> recvmsg();
+    std::string recvmsgstr();
 };
 #endif

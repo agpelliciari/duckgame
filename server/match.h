@@ -33,8 +33,8 @@ private:
     MatchState looper;        // cppcheck-suppress unusedStructMember
     int connectedplayers;     // cppcheck-suppress unusedStructMember
 
-    std::mutex mtx;
-    std::condition_variable match_start;
+    // std::mutex mtx;
+    // std::condition_variable match_start;
 
     // Para el thread y en general el loopeado
     void run() override;
@@ -49,7 +49,7 @@ protected:
 
     // Metodos analogos a los de thread. expuestos a friend nada mas.
     void init();
-    void cancel();
+    bool hostLobbyLeft(ControlledPlayer& host);
 
     // Libera, bien podria prescindirse y usar un destructor.
     // Pero mejor explicitar. Reemplaza el stop.. que no se quiere permitir hacerlo sin hacer el
@@ -72,7 +72,7 @@ public:
 
     lobbyID getID() const;
 
-    void waitStart();
+    // void waitStart();
     int playercount() const;
 
     // Metodos publicos.. accesibles incluso a player controllers.

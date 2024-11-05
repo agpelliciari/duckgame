@@ -18,13 +18,15 @@ class ControlReceiver: private Thread {
 
 protected:
     LobbyContainer& lobbies;  // cppcheck-suppress unusedStructMember
+
+    Socket skt;  // Tiene el ownership del socket tambien.
     ServerProtocol protocol;
 
     void playOn(const ControlledPlayer& player, Match& match);
 
 public:
     // Crea el player con el ide pasado e inicia el protocolo
-    explicit ControlReceiver(LobbyContainer& _lobbies, Socket& skt);
+    explicit ControlReceiver(LobbyContainer& _lobbies, Socket& _skt);
 
     // Por ahora tambien nos escapamos del move.
     ControlReceiver(ControlReceiver&&) = delete;

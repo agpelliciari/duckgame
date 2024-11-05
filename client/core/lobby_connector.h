@@ -4,13 +4,16 @@
 //#include "common/core/socket.h"
 
 #include <memory>
+#include <optional>
 #include <string>
 
 #include "./game_action_sender.h"
 #include "./lobby_client_sender.h"
+#include "./lobby_listener.h"
 #include "client/eventlistener.h"
 #include "client/gamecontext.h"
 #include "common/clientprotocol.h"
+#include "common/core/socket.h"
 
 // Clase que encapsula al protocol y mantendria el estado del juego
 // Proporcionado una interfaz para acciones del usuario.
@@ -18,9 +21,9 @@ class LobbyConnector {
 protected:
     GameContext& context;  // cppcheck-suppress unusedStructMember
 
-    ClientProtocol protocol;  // cppcheck-suppress unusedStructMember
-    std::string hostname;     // cppcheck-suppress unusedStructMember
-    std::string service;      // cppcheck-suppress unusedStructMember
+    std::optional<Socket> skt;  // cppcheck-suppress unusedStructMember
+    std::string hostname;       // cppcheck-suppress unusedStructMember
+    std::string service;        // cppcheck-suppress unusedStructMember
 
     std::unique_ptr<LobbyState> state;  // cppcheck-suppress unusedStructMember
 public:
@@ -35,21 +38,28 @@ public:
 
     void setHostnamePort(const std::string& newhost, const std::string& newservice);
 
+    void clear();
     // Resetea el estado al inicial.
-    void reset();
+    bool reset();
 
     // Verifica dado el estado actual, si deberia exitear.
     // O se podria ir a un siguiente estado.
     bool cangonext();
 
     // Setea el estado para el manejo de lobby
-    LobbyClientSender* setLobbyCreator();
-    LobbyClientSender* setLobbyJoin(unsigned int lobbyid);
+    LobbyClientSender* setLobbyCreator(LobbyListener& listener, bool dual);
+    void setLobbyJoin(LobbyListener& listener, bool dual, unsigned int lobbyid);
 
     // Setea el estado para el inicio del juego.
     GameActionSender* initGame(EventListener& listener);
 
     ~LobbyConnector();
+
+
+    // Getters del contexto.
+
+    int getTotalPlayers() const;
+    bool isdual() const;
 };
 
 #endif

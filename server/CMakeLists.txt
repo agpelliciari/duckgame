@@ -1,11 +1,11 @@
 #Se removio mientras no ese usable
-#add_subdirectory(logic_server/)
+add_subdirectory(logic_server/)
 
-target_sources(taller_server
+target_sources(taller_server_logic
     PRIVATE
     # .cpp files
         server.cpp
-        main.cpp
+        #main.cpp
         gameerror.cpp
         lobbycontainer.cpp
         lobbycontrol.cpp

@@ -2,6 +2,7 @@
 #define LIB_ControlNotifier_H
 
 #include "./controlledplayer.h"
+#include "./match.h"
 #include "common/serverprotocol.h"
 #include "common/thread.h"
 
@@ -10,11 +11,15 @@
 class ControlNotifier: public Thread {
 
 protected:
+    Match& match;              // cppcheck-suppress unusedStructMember
     ControlledPlayer& player;  // cppcheck-suppress unusedStructMember
     ServerProtocol& protocol;  // cppcheck-suppress unusedStructMember
 
+    bool runLobby();
+    bool runGame();
+
 public:
-    explicit ControlNotifier(ControlledPlayer& _player, ServerProtocol& protocol);
+    explicit ControlNotifier(Match& match, ControlledPlayer& _player, ServerProtocol& protocol);
 
     // Asumamos por ahora que no se quiere permitir copias, ni mov.
     ControlNotifier(const ControlNotifier&) = delete;

@@ -11,6 +11,12 @@ Match& LobbyContainer::newLobby() {
     return lobbies.emplace_back(++lastLobbyId);
 }
 
+int LobbyContainer::countMatches() {
+    std::unique_lock<std::mutex> lck(mtx);  // No other actions on lobby.
+    return lobbies.size();
+}
+
+
 Match& LobbyContainer::findLobby(lobbyID id) {
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on container.
     for (auto lobbyit = lobbies.begin(); lobbyit != lobbies.end();) {
@@ -20,14 +26,15 @@ Match& LobbyContainer::findLobby(lobbyID id) {
         ++lobbyit;
     }
 
-    throw GameError("Not found lobby %d", id);
+    throw GameError(LOBBY_NOT_FOUND, "Not found lobby %d", id);
 }
 
 // Unirse a la lobby y esperar a que empieze. Tira error si no existe.
 ControlledPlayer& LobbyContainer::joinLobby(uint8_t count, Match& lobby) {
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on container.
     if (lobby.isrunning()) {
-        throw GameError("Tried to join already started lobby %d", lobby.getID());
+        throw GameError(LOBBY_ALREADY_STARTED, "Tried to join already started lobby %d",
+                        lobby.getID());
     }
 
     return lobby.addPlayers(count);
@@ -42,8 +49,7 @@ void LobbyContainer::startLobby(Match& lobby) {
 
 void LobbyContainer::disconnectFrom(Match& lobby, ControlledPlayer& player) {
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on container.
-
-    std::cerr << ">disconnecting " << player.toString() << std::endl;
+    // std::cerr << ">disconnecting " << player.toString() << std::endl;
 
     if (lobby.notifyDisconnect(player)) {  // Habria que liberar. No hay mas players.
         std::cerr << ">removing lobby " << lobby.getID() << std::endl;
@@ -60,13 +66,16 @@ void LobbyContainer::finishAll() {
 }
 
 // Si se esta en la lobby y el anfitrion se va. Se cancela.
-
-void LobbyContainer::cancelLobby(Match& lobby) {
+void LobbyContainer::hostLeft(Match& lobby, ControlledPlayer& host) {
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on container.
     if (lobby.isrunning()) {
-        throw GameError("Tried to cancel already started lobby %d", lobby.getID());
+        throw GameError(LOBBY_ALREADY_STARTED, "Tried to cancel already started lobby %d",
+                        lobby.getID());
     }
-    lobby.cancel();
+    if (lobby.hostLobbyLeft(host)) {
+        std::cerr << ">removing lobby " << lobby.getID() << " cancel" << std::endl;
+        lobbies.remove(lobby);  // el destructor hace el finish.
+    }
 }
 
 

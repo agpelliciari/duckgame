@@ -17,7 +17,7 @@
 // Proporcionado una interfaz para acciones del usuario.
 class GameActionSender: private Thread, public ActionListener, public LobbyState {
 protected:
-    ClientProtocol& protocol;  // cppcheck-suppress unusedStructMember
+    ClientProtocol protocol;  // cppcheck-suppress unusedStructMember
     EventListener& listener;
     GameContext& context;
     bool firstidle;   // cppcheck-suppress unusedStructMember
@@ -31,7 +31,7 @@ public:
     void disconnect() override;
 
     // Los default sin pasar por socket/protocol.
-    explicit GameActionSender(ClientProtocol& _protocol, EventListener& _listener,
+    explicit GameActionSender(Messenger& _messenger, EventListener& _listener,
                               GameContext& _context);
 
     // GameActionSender(GameActionSender&&);

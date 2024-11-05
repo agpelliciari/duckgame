@@ -12,9 +12,11 @@ target_sources(taller_common
         serverprotocol.h
         protocolerror.h
         dtos.h
+        dtoslobby.h
         dtosplayer.h
         dtosobject.h
         thread.h
         queue.h
+        errors.h
         
     )

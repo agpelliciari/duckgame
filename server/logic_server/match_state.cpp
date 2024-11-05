@@ -8,12 +8,12 @@ MatchState::MatchState(): running(false), match_logic(), acciones(match_logic) {
 void MatchState::pushAction(const PlayerActionDTO& action) { acciones.push_command(action); }
 
 void MatchState::loop(MatchObserver& observer) {
-    start_players(observer);
+    // start_players(observer);
 
     while (running) {
         this->step();
         this->send_results(observer);
-        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        std::this_thread::sleep_for(std::chrono::milliseconds(25));
     }
 }
 
@@ -31,9 +31,10 @@ void MatchState::start_players(MatchObserver& observer) {
 }
 
 void MatchState::step() {
-    match_logic.update_player_positions();
     this->receive_commands();
     this->execute_commands();
+    match_logic.update_colition_map();
+    match_logic.update_players();
 }
 
 
