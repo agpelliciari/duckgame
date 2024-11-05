@@ -6,6 +6,7 @@ target_sources(taller_client
     texture_container.cpp
     event_handler.cpp
     drawer.cpp
+    camera.cpp
     
     PUBLIC
     # .h files
@@ -14,4 +15,5 @@ target_sources(taller_client
     texture_container.h
     event_handler.h
     drawer.h
+    camera.h
     )
