@@ -1,12 +1,6 @@
 #ifndef LIB_DESERIALIZER_H
 #define LIB_DESERIALIZER_H
 
-#include <atomic>
-#include <cstdint>
-#include <string>
-#include <vector>
-
-
 // Tomado de https://github.com/biojppm/rapidyaml/blob/master/samples/quickstart.cpp
 #if defined(RYML_SINGLE_HEADER)  // using the single header directly in the executable
 #define RYML_SINGLE_HDR_DEFINE_NOW
@@ -22,11 +16,21 @@
 #include <ryml_std.hpp>   // optional header, provided for std:: interop
 #endif
 
+#include <atomic>
+#include <cstdint>
+#include <string>
+#include <vector>
+
+#include "common/dtosobject.h"
+
 
 class Deserializer {
 protected:
-    std::atomic<bool> active;  // cppcheck-suppress unusedStructMember
-    ryml::Tree tree;           // cppcheck-suppress unusedStructMember
+    ryml::Tree tree;  // cppcheck-suppress unusedStructMember
+    ryml::NodeRef root;
+
+    void readPoints(ryml::NodeRef& list, std::vector<struct MapPoint>& out);
+
 public:
     explicit Deserializer(std::string& src);
     // Asumamos por ahora que no se quiere permitir copias..
@@ -37,9 +41,14 @@ public:
     Deserializer(Deserializer&&) = delete;
     Deserializer& operator=(Deserializer&&) = delete;
 
-
     void dosome();
-    bool isactive();  // Se fija si esta activo, pudo ser cerrado como nunca haber sido activo.
-    void close();
+
+    struct MapPoint readSize();
+    uint8_t readBackground();
+
+    void readBlocks(std::vector<struct BlockDTO>& out);
+    void readPlayerSpawns(std::vector<struct MapPoint>& out);
+    void readItemSpawns(std::vector<struct MapPoint>& out);
+    void readBoxes(std::vector<struct MapPoint>& out);
 };
 #endif

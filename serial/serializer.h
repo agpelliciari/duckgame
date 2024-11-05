@@ -24,6 +24,21 @@
 
 
 class Serializer {
+public:
+    static const char* SIZE_X;         // cppcheck-suppress unusedStructMember
+    static const char* SIZE_Y;         // cppcheck-suppress unusedStructMember
+    static const char* BACKGROUND;     // cppcheck-suppress unusedStructMember
+    static const char* TEXTURES;       // cppcheck-suppress unusedStructMember
+    static const char* BOXES;          // cppcheck-suppress unusedStructMember
+    static const char* ITEM_SPAWNS;    // cppcheck-suppress unusedStructMember
+    static const char* PLAYER_SPAWNS;  // cppcheck-suppress unusedStructMember
+
+
+    static const int POINT_X;  // cppcheck-suppress unusedStructMember
+    static const int POINT_Y;  // cppcheck-suppress unusedStructMember
+
+    static const int BLOCK_TEX;  // cppcheck-suppress unusedStructMember
+
 protected:
     ryml::Tree tree;
     ryml::NodeRef root;
@@ -46,7 +61,7 @@ public:
     void setBackground(const char* rel_path);
     void setBackground(const std::string& rel_path);
 
-    void addTexture(const uint16_t x, const uint16_t y, BlockType type);
+    void addTexture(const uint16_t x, const uint16_t y, BlockTexture type);
     void addBox(const uint16_t x, const uint16_t y);
     void addItemSpawn(const uint16_t x, const uint16_t y);
     void addPlayerSpawn(const uint16_t x, const uint16_t y);

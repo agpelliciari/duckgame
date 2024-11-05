@@ -40,8 +40,6 @@ int main(int argc, char* argv[]) {
     Deserializer serial(file);
 
     serial.dosome();
-    serial.close();
-    serial.close();
 
     return 0;
 }
