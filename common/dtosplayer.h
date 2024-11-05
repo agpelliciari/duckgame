@@ -44,7 +44,8 @@ enum class TypeMoveAction : uint8_t { NONE, MOVE_LEFT, MOVE_RIGHT, STAY_DOWN, JU
 enum class TypeDoingAction : uint8_t {
     NOTHING,
     SHOOTING,
-    FLAPPING
+    PICK_UP,
+    //FLAPPING //el flapping no hace falta
 };  // Capaz podria estar aca el flapping?
 
 struct PlayerDTO {
