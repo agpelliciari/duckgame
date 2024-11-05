@@ -1,20 +1,26 @@
 #include "drawer.h"
 
-Drawer::Drawer(SDL2pp::Window& window, Animation& animation, const GameContext& gameContext):
+Drawer::Drawer(SDL2pp::Window& window, Animation& animation, const GameContext& gameContext,
+               Camera& camera):
         renderer(window, -1, SDL_RENDERER_ACCELERATED),
         textures(renderer),
         animation(animation),
+        camera(camera),
         playerId(gameContext.first_player) {}
 
 void Drawer::drawPlayer(const PlayerDTO& player) {
     // Determine the flip mode based on the last direction
     SDL_RendererFlip flip = animation.isFacingLeft(player.id) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
+    int screenX = camera.getScreenX(player.coord_x);
+    int screenY = camera.getScreenY(player.coord_y);
+    int scaledSize = camera.getScaledSize(SPRITE_HEIGHT);
+
     // Draw player sprite
     renderer.Copy(textures.getTexture(player.id),
                   SDL2pp::Rect(animation.getSpriteX(player.id), animation.getSpriteY(player.id),
                                SPRITE_WIDTH, SPRITE_HEIGHT),
-                  SDL2pp::Rect(player.coord_x, player.coord_y, 50, 50), 0.0, SDL2pp::Point(0, 0),
+                  SDL2pp::Rect(screenX, screenY, scaledSize, scaledSize), 0.0, SDL2pp::Point(0, 0),
                   flip);
 }
 

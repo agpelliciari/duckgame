@@ -12,6 +12,7 @@
 #include "common/dtosplayer.h"
 
 #include "animation.h"
+#include "camera.h"
 #include "drawer.h"
 
 #define SCREEN_WIDTH 640
@@ -25,6 +26,8 @@ private:
     SDL2pp::Window window;
 
     Animation animation;
+
+    Camera camera;
 
     Drawer drawer;
 

@@ -6,7 +6,8 @@ UILoop::UILoop(ActionListener& dtoSender, SimpleEventListener& _events,
         window("UILOOP demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
                SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE),
         animation(gameContext),
-        drawer(window, animation, gameContext),
+        camera(),
+        drawer(window, animation, gameContext, camera),
         eventHandler(dtoSender, gameContext),
         matchDtoQueue(_events),
         lastUpdate(),
@@ -44,6 +45,8 @@ void UILoop::update() {
             isRunning_ = false;
         }
     }
+
+    camera.update(lastUpdate);
 
     animation.updateFrame();
 
