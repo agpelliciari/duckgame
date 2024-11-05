@@ -3,67 +3,106 @@
 EventHandler::EventHandler(ActionListener& sender, const GameContext& context):
         actionSender(sender), dualPlay(context.dualplay) {}
 
+void EventHandler::setAction(PlayerActionDTO& action, PlayerActionType actionType, int playerId) {
+    action.type = actionType;
+    action.playerind = playerId;
+}
+
+void EventHandler::handleKeyDown(SDL_Keycode key, PlayerActionDTO& action) {
+    switch (key) {
+        case SDLK_RIGHT:
+            setAction(action, MOVE_RIGHT, MAIN_PLAYER);
+            break;
+        case SDLK_LEFT:
+            setAction(action, MOVE_LEFT, MAIN_PLAYER);
+            break;
+        case SDLK_DOWN:
+            setAction(action, STAY_DOWN_START, MAIN_PLAYER);
+            break;
+        case SDLK_SPACE:
+            setAction(action, JUMP, MAIN_PLAYER);
+            break;
+    }
+
+    if (dualPlay) {
+        switch (key) {
+            case SDLK_d:
+                setAction(action, MOVE_RIGHT, SECOND_PLAYER);
+                break;
+            case SDLK_a:
+                setAction(action, MOVE_LEFT, SECOND_PLAYER);
+                break;
+            case SDLK_s:
+                setAction(action, STAY_DOWN_START, SECOND_PLAYER);
+                break;
+            case SDLK_w:
+                setAction(action, JUMP, SECOND_PLAYER);
+                break;
+        }
+    }
+}
+
+void EventHandler::handleKeyUp(SDL_Keycode key, PlayerActionDTO& action) {
+    switch (key) {
+        case SDLK_RIGHT:
+            setAction(action, MOVE_RIGHT_END, MAIN_PLAYER);
+            break;
+        case SDLK_LEFT:
+            setAction(action, MOVE_LEFT_END, MAIN_PLAYER);
+            break;
+        case SDLK_DOWN:
+            setAction(action, STAY_DOWN_END, MAIN_PLAYER);
+            break;
+        case SDLK_SPACE:
+            setAction(action, FLAPPING_END, MAIN_PLAYER);
+            break;
+    }
+
+    if (dualPlay) {
+        switch (key) {
+            case SDLK_d:
+                setAction(action, MOVE_RIGHT_END, SECOND_PLAYER);
+                break;
+            case SDLK_a:
+                setAction(action, MOVE_LEFT_END, SECOND_PLAYER);
+                break;
+            case SDLK_s:
+                setAction(action, STAY_DOWN_END, SECOND_PLAYER);
+                break;
+            case SDLK_w:
+                setAction(action, FLAPPING_END, SECOND_PLAYER);
+                break;
+        }
+    }
+}
+
+void EventHandler::handleExit(const SDL_Event& event, bool& isRunning_) {
+    if (event.type == SDL_QUIT ||
+        (event.type == SDL_KEYDOWN &&
+         (event.key.keysym.sym == SDLK_q || event.key.keysym.sym == SDLK_ESCAPE))) {
+        isRunning_ = false;
+    }
+}
+
 void EventHandler::handle(bool& isRunning_) {
     SDL_Event event;
-    PlayerActionDTO action;
 
     while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_QUIT) {
-            isRunning_ = false;
+        PlayerActionDTO action;
+
+        handleExit(event, isRunning_);
+        if (!isRunning_) {
             return;
+
         } else if (event.type == SDL_KEYDOWN) {
-            switch (event.key.keysym.sym) {
-                case SDLK_RIGHT:
-                    action.type = MOVE_RIGHT;
-                    break;
-                case SDLK_LEFT:
-                    action.type = MOVE_LEFT;
-                    break;
-                case SDLK_DOWN:
-                    action.type = STAY_DOWN;
-                    break;
-                case SDLK_SPACE:
-                    action.type = JUMP;
-                    break;
-                case SDLK_ESCAPE:
-                case SDLK_q:
-                    isRunning_ = false;
-                    return;
+            handleKeyDown(event.key.keysym.sym, action);
 
-                    if (dualPlay) {
-                        case SDLK_d:
-                            action.type = MOVE_RIGHT;
-                            action.playerind = 1;
-                            break;
-                        case SDLK_a:
-                            action.type = MOVE_LEFT;
-                            action.playerind = 1;
-                            break;
-                        case SDLK_s:
-                            action.type = STAY_DOWN;
-                            action.playerind = 1;
-                            break;
-                        case SDLK_w:
-                            action.type = JUMP;
-                            action.playerind = 1;
-                            break;
-                    }
-            }
         } else if (event.type == SDL_KEYUP) {
-            action.type = NONE;
-            if ((event.key.keysym.sym == SDLK_w) || (event.key.keysym.sym == SDLK_SPACE)) {
-                continue;
-            }
-
-
-            if ((event.key.keysym.sym == SDLK_a) || (event.key.keysym.sym == SDLK_d) ||
-                (event.key.keysym.sym == SDLK_w) || (event.key.keysym.sym == SDLK_s)) {
-                action.playerind = 1;
-            }
-        } else {
-            continue;
+            handleKeyUp(event.key.keysym.sym, action);
         }
 
-        actionSender.doaction(action);
+        if (action.type != NONE) {
+            actionSender.doaction(action);
+        }
     }
 }
