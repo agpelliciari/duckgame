@@ -11,10 +11,11 @@ Deserializer::Deserializer(std::string& src): active(true) {
     file.seekg(0, std::ios::beg);
 
     // Se asume es lo suficientemente small para que entre.
-    data.reserve(size + 1);
-    if (file.read(data.data(), size)) {
-        data[size] = 0;
-        std::cout << "FILE CONTENT IS ::\n" << std::string(data.data()) << "\n----------END\n";
+    std::vector<char> map;
+    map.reserve(size + 1);
+    if (file.read(map.data(), size)) {
+        map[size] = 0;
+        tree = ryml::parse_in_place(map.data());
     } else {
         active = false;
     }
@@ -37,13 +38,8 @@ void Deserializer::dosome() {
         return;
     }
 
-    ryml::Tree tree = ryml::parse_in_place(data.data());
 
-    ryml::NodeRef bar = tree["map"];
-    std::cout << "FIRST IS " << bar[0] << " SECOND IS " << bar[1] << std::endl;
-
-    tree["size_x"] << 20;
-
-    std::cout << "----------- PARSED DATA IS?\n";
-    ryml::emit_yaml(tree, stdout);
+    ryml::NodeRef blocks = tree["textures"];
+    std::cout << "WIDTH IS " << tree["size_x"] << " HEIGHT IS " << tree["size_y"]
+              << " count blocks " << blocks.num_children() << std::endl;
 }

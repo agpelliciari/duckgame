@@ -4,15 +4,8 @@
 #include "./deserializer.h"
 #include "./serializer.h"
 
-int main(int argc, char* argv[]) {
-    if (argc < 2) {
-        std::cerr << "No se paso por parametro el archivo target!\n";
-        return 1;
-    }
 
-    std::string file("res/maps/");
-    file.append(argv[1]);
-    std::cout << "ACT UPON " << file << std::endl;
+static void create(const std::string& file) {
 
     Serializer serial(100, 550);
 
@@ -31,11 +24,24 @@ int main(int argc, char* argv[]) {
     serial.addPlayerSpawn(23, 3);
 
     serial.save(file);
-    // Deserializer serial(file);
+}
+int main(int argc, char* argv[]) {
+    if (argc < 2) {
+        std::cerr << "No se paso por parametro el archivo target!\n";
+        return 1;
+    }
 
-    // serial.dosome();
-    // serial.close();
-    // serial.close();
+    std::string file("res/maps/");
+    file.append(argv[1]);
+    std::cout << "ACT UPON " << file << std::endl;
+
+    // create(file);
+
+    Deserializer serial(file);
+
+    serial.dosome();
+    serial.close();
+    serial.close();
 
     return 0;
 }

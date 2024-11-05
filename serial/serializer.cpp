@@ -1,5 +1,6 @@
 #include "./serializer.h"
 
+#include <fstream>
 #include <iostream>
 
 #include "./level_fields.h"
@@ -66,10 +67,11 @@ void Serializer::addPlayerSpawn(const uint16_t x, const uint16_t y) {
 }
 
 
-void Serializer::save(const char* rel_path) {
-    std::cout << "SAVE TO " << rel_path << std::endl;
+void Serializer::save(const char* out) {
 
-    std::cout << "----------- PARSED DATA IS?\n";
-    ryml::emit_yaml(tree, stdout);
+    std::cout << "SAVE TO " << out << std::endl;
+    std::ofstream file(out, std::ios::binary | std::ios::ate);
+
+    file << tree;
 }
 void Serializer::save(const std::string& rel_path) { save(rel_path.c_str()); }

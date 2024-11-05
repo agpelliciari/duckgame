@@ -26,7 +26,7 @@
 class Deserializer {
 protected:
     std::atomic<bool> active;  // cppcheck-suppress unusedStructMember
-    std::vector<char> data;    // cppcheck-suppress unusedStructMember
+    ryml::Tree tree;           // cppcheck-suppress unusedStructMember
 public:
     explicit Deserializer(std::string& src);
     // Asumamos por ahora que no se quiere permitir copias..
