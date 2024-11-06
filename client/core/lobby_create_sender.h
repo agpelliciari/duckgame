@@ -7,7 +7,6 @@
 #include "./lobby_client_sender.h"
 #include "client/gamecontext.h"
 #include "common/clientprotocol.h"
-#include "common/dtos.h"
 #include "common/queue.h"
 
 // Clase que encapsula al protocol y mantendria el estado del juego

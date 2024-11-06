@@ -3,8 +3,7 @@
 
 #include <algorithm>
 
-#include "common/dtos.h"
-#include "common/dtosplayer.h"
+#include "common/dtosgame.h"
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480

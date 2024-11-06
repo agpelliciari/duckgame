@@ -72,7 +72,7 @@ bool LobbyControl::handleAnfitrionLobby(ControlledPlayer& host,
             action = protocol.recvlobbyaction();
         }
 
-        char mapa[] = "mapa1.yaml";
+        char mapa[] = "mapa1";
         lobbies.startLobby(match, &mapa[0]);
         std::cerr << "Started MATCH id: " << (int)match.getID() << " WITH: " << match.playercount()
                   << std::endl;

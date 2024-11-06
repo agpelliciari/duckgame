@@ -6,18 +6,6 @@
 
 #include "./map_deserializer.h"
 
-struct MapInfo {
-    std::string mapname;
-    struct MapPoint size;
-    uint8_t bk;
-    std::vector<struct BlockDTO> blocks;         // cppcheck-suppress unusedStructMember
-    std::vector<struct MapPoint> boxes;          // cppcheck-suppress unusedStructMember
-    std::vector<struct MapPoint> spawns_player;  // cppcheck-suppress unusedStructMember
-    std::vector<struct MapPoint> spawns_items;   // cppcheck-suppress unusedStructMember
-
-    MapInfo(const std::string& name, const struct MapPoint _size, uint8_t _bk):
-            mapname(name), size(_size), bk(_bk) {}
-};
 
 class MapLoader {
 protected:

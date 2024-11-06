@@ -6,7 +6,7 @@
 #include "./match_logic.h"
 #include "./match_queue.h"
 #include "./matchobserver.h"
-#include "common/dtos.h"
+#include "common/dtosgame.h"
 #include "common/dtosplayer.h"
 
 #include "action_command.h"

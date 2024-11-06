@@ -20,7 +20,7 @@
 #include <ryml_std.hpp>   // optional header, provided for std:: interop
 #endif
 
-#include "common/dtosobject.h"
+#include "common/dtosmap.h"
 
 
 class MapSerializer {

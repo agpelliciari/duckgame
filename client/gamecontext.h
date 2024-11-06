@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <vector>
 
-#include "common/dtosobject.h"
+#include "common/dtosmap.h"
 
 struct GameContext {
     unsigned int id_lobby;  // cppcheck-suppress unusedStructMember

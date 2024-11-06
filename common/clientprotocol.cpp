@@ -5,7 +5,6 @@
 #include <utility>
 
 #include "common/core/liberror.h"
-#include "common/dtos.h"
 
 ClientProtocol::ClientProtocol(Messenger& conn): protocol(conn) {}
 

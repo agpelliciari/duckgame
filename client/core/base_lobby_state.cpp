@@ -52,6 +52,10 @@ void BaseLobbyState::listeninfo() {
     if (info.action == LobbyResponseType::STARTED_LOBBY) {
         context.started = true;
         context.cantidadjugadores = info.data;
+
+        // Receive map data.
+
+
         listener.startedLobby();
     } else {
         std::cout << "Game error received " << (int)context.id_lobby

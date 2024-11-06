@@ -9,8 +9,9 @@
 #include <utility>
 
 #include "common/core/protocol.h"
-#include "common/dtos.h"
+#include "common/dtosgame.h"
 #include "common/dtoslobby.h"
+#include "common/dtosmap.h"
 
 // Extension del protocolo base a usar.
 class ClientProtocol {
