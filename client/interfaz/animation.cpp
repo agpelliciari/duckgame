@@ -1,7 +1,5 @@
 #include "animation.h"
 
-#include <iostream>
-
 Animation::Animation(const GameContext& context): animationBuilders(), frameTicks(0) {
     for (int i = 1; i <= static_cast<int>(context.cantidadjugadores); i++) {
         animationBuilders.emplace(i, AnimationBuilder());
@@ -27,39 +25,56 @@ AnimationBuilder* Animation::getAnimationBuilder(int playerId) {
     return nullptr;
 }
 
+void Animation::setBuilder(AnimationBuilder& builder, int spriteX, int spriteY, bool facingLeft) {
+    builder.spriteX = spriteX;
+    builder.spriteY = spriteY;
+    builder.facingLeft = facingLeft;
+}
+
+void Animation::setBuilder(AnimationBuilder& builder, int spriteX, int spriteY) {
+    builder.spriteX = spriteX;
+    builder.spriteY = spriteY;
+}
+
 void Animation::updatePlayerAnimation(AnimationBuilder& builder, const PlayerDTO& player) {
     switch (player.move_action) {
         case TypeMoveAction::MOVE_RIGHT:
-            builder.facingLeft = false;
-            builder.spriteX =
-                    STARTING_SPRITE_X + SPRITE_SIZE * ((frameTicks / RUNNING_ANIMATION_SPEED) %
-                                                       RUNNING_ANIMATION_FRAMES);
-            builder.spriteY = STARTING_SPRITE_Y;
+            setBuilder(builder,
+                       (STARTING_SPRITE_X + SPRITE_SIZE * ((frameTicks / RUNNING_ANIMATION_SPEED) %
+                                                           RUNNING_ANIMATION_FRAMES)),
+                       STARTING_SPRITE_Y, false);
             break;
         case TypeMoveAction::MOVE_LEFT:
-            builder.facingLeft = true;
-            builder.spriteX =
-                    STARTING_SPRITE_X + SPRITE_SIZE * ((frameTicks / RUNNING_ANIMATION_SPEED) %
-                                                       RUNNING_ANIMATION_FRAMES);
-            builder.spriteY = STARTING_SPRITE_Y;
+            setBuilder(builder,
+                       (STARTING_SPRITE_X + SPRITE_SIZE * ((frameTicks / RUNNING_ANIMATION_SPEED) %
+                                                           RUNNING_ANIMATION_FRAMES)),
+                       STARTING_SPRITE_Y, true);
             break;
-        case TypeMoveAction::JUMP:
-            builder.spriteX =
-                    STARTING_SPRITE_X + SPRITE_SIZE * ((frameTicks / JUMPING_ANIMATION_SPEED) %
-                                                       JUMPING_ANIMATION_FRAMES);
-            builder.spriteY = JUMPING_SPRITE_Y;
+        case TypeMoveAction::AIR_RIGHT:
+            setBuilder(builder,
+                       (STARTING_SPRITE_X + SPRITE_SIZE * ((frameTicks / JUMPING_ANIMATION_SPEED) %
+                                                           JUMPING_ANIMATION_FRAMES)),
+                       JUMPING_SPRITE_Y, false);
             break;
-        case TypeMoveAction::FLAP:
-            builder.spriteX = STARTING_SPRITE_X + SPRITE_SIZE * FLAPPING_SPRITE_X_OFFSET;
-            builder.spriteY = FLAPPING_SPRITE_Y;
+        case TypeMoveAction::AIR_LEFT:
+            setBuilder(builder,
+                       (STARTING_SPRITE_X + SPRITE_SIZE * ((frameTicks / JUMPING_ANIMATION_SPEED) %
+                                                           JUMPING_ANIMATION_FRAMES)),
+                       JUMPING_SPRITE_Y, true);
+            break;
+        case TypeMoveAction::FLAP_RIGHT:
+            setBuilder(builder, (STARTING_SPRITE_X + SPRITE_SIZE * FLAPPING_SPRITE_X_OFFSET),
+                       FLAPPING_SPRITE_Y, false);
+            break;
+        case TypeMoveAction::FLAP_LEFT:
+            setBuilder(builder, (STARTING_SPRITE_X + SPRITE_SIZE * FLAPPING_SPRITE_X_OFFSET),
+                       FLAPPING_SPRITE_Y, true);
             break;
         case TypeMoveAction::STAY_DOWN:
-            builder.spriteX = STARTING_SPRITE_X;
-            builder.spriteY = LAY_DOWN_SPRITE_Y;
+            setBuilder(builder, STARTING_SPRITE_X, LAY_DOWN_SPRITE_Y);
             break;
         case TypeMoveAction::NONE:
-            builder.spriteX = STARTING_SPRITE_X;
-            builder.spriteY = STARTING_SPRITE_Y;
+            setBuilder(builder, STARTING_SPRITE_X, STARTING_SPRITE_Y);
             break;
     }
 }

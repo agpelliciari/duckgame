@@ -53,30 +53,6 @@ void UILoop::update() {
     animation.updateSprite(lastUpdate);
 }
 
-void UILoop::draw() {
-    // Clear screen
-    renderer.SetDrawColor(255, 255, 255, 255);  // White background
-    renderer.Clear();
-
-    for (const PlayerDTO& player: lastUpdate.players) {
-        drawPlayer(player);
-    }
-
-    // Show rendered frame
-    renderer.Present();
-}
-
-void UILoop::drawPlayer(const PlayerDTO& player) {
-    // Determine the flip mode based on the last direction
-    SDL_RendererFlip flip = animation.isFacingLeft(player.id) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-
-    // Draw player sprite
-    renderer.Copy(textures.getTexture(player.id),
-                  SDL2pp::Rect(animation.getSpriteX(player.id), animation.getSpriteY(player.id),
-                               SPRITE_WIDTH, SPRITE_HEIGHT),
-                  SDL2pp::Rect(player.pos.x, player.pos.y, 50, 50), 0.0, SDL2pp::Point(0, 0), flip);
-}
-
 void UILoop::frameDelay(unsigned int frameStart) {
     unsigned int frameTime = SDL_GetTicks() - frameStart;
     if (FRAME_DELAY > frameTime) {
