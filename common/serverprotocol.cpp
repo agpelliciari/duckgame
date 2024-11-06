@@ -92,11 +92,18 @@ void ServerProtocol::sendmapinfo(const MapInfo& map) {
     this->senduint(map.size.y);
     this->sendbyte(map.bk);
 
-    /*
-    for (const PlayerDTO& player: state.players) {
-        sendplayer(player);
+    this->senduint(map.blocks.size());
+
+    for (const BlockDTO& block: map.blocks) {
+        this->senduint(block.pos.x);
+        this->senduint(block.pos.y);
+        this->sendbyte(block.texture);
+
+        // sendplayer(player);
     }
-    */
+
+    /*
+     */
 }
 
 

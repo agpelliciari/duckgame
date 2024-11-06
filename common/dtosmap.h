@@ -13,9 +13,9 @@ enum BlockTexture : uint8_t {
 };
 
 struct BlockDTO {
-    enum BlockTexture texture;  // cppcheck-suppress unusedStructMember
-    struct MapPoint pos;        // cppcheck-suppress unusedStructMember
-    struct MapPoint size;       // cppcheck-suppress unusedStructMember
+    BlockTexture texture;  // cppcheck-suppress unusedStructMember
+    struct MapPoint pos;   // cppcheck-suppress unusedStructMember
+    struct MapPoint size;  // cppcheck-suppress unusedStructMember
 
     BlockDTO(const coordinate_t x, const coordinate_t y, const BlockTexture _tex):
             texture(_tex), pos(x, y), size(1, 1) {}

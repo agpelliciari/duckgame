@@ -7,6 +7,7 @@
 #include <atomic>
 #include <string>
 #include <utility>
+#include <vector>
 
 #include "common/core/protocol.h"
 #include "common/dtosgame.h"
@@ -45,8 +46,7 @@ public:
     void sendaction(PlayerActionDTO& action);
 
     MatchDto recvstate();
-    MapInfo recvmapinfo();
-
+    struct MapPoint recvmap(uint8_t* background, std::vector<BlockDTO>& out);
 
     bool isopen();
     void close();

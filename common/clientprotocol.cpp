@@ -74,15 +74,29 @@ void ClientProtocol::sendlobbyaction(const lobby_action&& action) {
 }
 
 
-MapInfo ClientProtocol::recvmapinfo() {
-
+struct MapPoint ClientProtocol::recvmap(uint8_t* background, std::vector<BlockDTO>& out) {
     coordinate_t width = protocol.recvuint();
     coordinate_t height = protocol.recvuint();
-    uint8_t _bk = protocol.recvbyte();
-    MapInfo res(width, height, _bk);
 
-    return res;
+    *background = protocol.recvbyte();
+
+    // Read blocks
+    int block_count = protocol.recvuint();
+    out.reserve(block_count);
+
+    while (block_count > 0) {
+        coordinate_t _x = protocol.recvuint();
+        coordinate_t _y = protocol.recvuint();
+
+        out.emplace_back(_x, _y, (BlockTexture)protocol.recvbyte());
+
+        block_count--;
+    }
+
+
+    return MapPoint(width, height);
 }
+
 
 MatchDto ClientProtocol::recvstate() {
     // Primero recibi info general

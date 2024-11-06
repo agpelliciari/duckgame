@@ -55,10 +55,14 @@ void BaseLobbyState::listeninfo() {
 
         // Receive map data.
 
-        MapInfo map = protocol.recvmapinfo();
-        std::cout << "MAP SIZE IS " << map.size.x << " , " << map.size.y
-                  << " BACKGROUND: " << (int)(map.bk) << std::endl;
+        uint8_t bk;
+        struct MapPoint size = protocol.recvmap(&bk, context.blocks);
+        std::cout << "MAP SIZE IS " << size.x << " , " << size.y << " BACKGROUND: " << (int)(bk)
+                  << std::endl;
 
+        for (const struct BlockDTO& block: context.blocks) {
+            std::cout << "Block at " << block.pos.x << " , " << block.pos.y << std::endl;
+        }
 
         listener.startedLobby();
     } else {
