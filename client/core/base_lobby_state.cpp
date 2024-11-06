@@ -57,12 +57,17 @@ void BaseLobbyState::listeninfo() {
 
         uint8_t bk;
         struct MapPoint size = protocol.recvmap(&bk, context.blocks);
-        std::cout << "MAP SIZE IS " << size.x << " , " << size.y << " BACKGROUND: " << (int)(bk)
-                  << std::endl;
+
+        context.map_width = size.x;
+        context.map_height = size.y;
+        std::cout << "MAP SIZE IS " << context.map_width << " , " << context.map_height
+                  << " BACKGROUND: " << (int)(bk) << std::endl;
 
         for (const struct BlockDTO& block: context.blocks) {
             std::cout << "Block at " << block.pos.x << " , " << block.pos.y << std::endl;
         }
+
+        context.map_background = "default.png";
 
         listener.startedLobby();
     } else {
