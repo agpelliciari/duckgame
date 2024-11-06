@@ -60,8 +60,8 @@ void MapDeserializer::readBlocks(std::vector<struct BlockDTO>& res) {
 
     for (int i = 0; i < size; i++) {
         ryml::NodeRef block = blocks[i];
-        uint16_t x;
-        uint16_t y;
+        coordinate_t x;
+        coordinate_t y;
         uint8_t tex;
 
 

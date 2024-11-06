@@ -3,25 +3,29 @@
 
 #include <cstdint>
 
+typedef int coordinate_t;
+
 struct MapPoint {
-    int x;  // cppcheck-suppress unusedStructMember
-    int y;  // cppcheck-suppress unusedStructMember
-    MapPoint(int _x, int _y): x(_x), y(_y) {}
+    coordinate_t x;  // cppcheck-suppress unusedStructMember
+    coordinate_t y;  // cppcheck-suppress unusedStructMember
+    MapPoint(const coordinate_t _x, const coordinate_t _y): x(_x), y(_y) {}
     MapPoint(): x(0), y(0) {}
 };
 
 // Paredes/Plataformas estaticas!
-enum BlockType : uint8_t {
+enum BlockTexture : uint8_t {
     GRASS = 1,
     ROCK = 2  // Algun tipo?
 };
 
 struct BlockDTO {
-    enum BlockType tipo;   // cppcheck-suppress unusedStructMember
-    struct MapPoint pos;   // cppcheck-suppress unusedStructMember
-    struct MapPoint size;  // cppcheck-suppress unusedStructMember
-};
+    enum BlockTexture texture;  // cppcheck-suppress unusedStructMember
+    struct MapPoint pos;        // cppcheck-suppress unusedStructMember
+    struct MapPoint size;       // cppcheck-suppress unusedStructMember
 
+    BlockDTO(const coordinate_t x, const coordinate_t y, const BlockTexture _tex):
+            texture(_tex), pos(x, y), size(1, 1) {}
+};
 
 // Objetos dinamicos!
 enum class TypeDynamicObject : uint8_t {
@@ -69,7 +73,8 @@ struct ProjectileDTO {
 struct DynamicObjDTO {
     struct MapPoint pos;
     TypeDynamicObject type;
-    DynamicObjDTO(int x, int y, TypeDynamicObject _type): pos(x, y), type(_type) {}
+    DynamicObjDTO(coordinate_t x, coordinate_t y, TypeDynamicObject _type):
+            pos(x, y), type(_type) {}
     DynamicObjDTO() {}
 };
 

@@ -38,34 +38,8 @@ GameActionSender& GameActionSender::operator=(GameActionSender&& other) {
 void GameActionSender::disconnect() { std::cout << "SHOULD SEND DISCCONNECT!" << std::endl; }
 void GameActionSender::doaction(const PlayerActionDTO& action) {
 
-    if (action.playerind != 0) {
-
-        if (!context.dualplay) {
-            return;
-        }
-
-        if (secondidle) {
-            if (action.type == NONE) {
-                return;
-            }
-            secondidle = false;
-        } else {
-            if (action.type == NONE) {
-                secondidle = true;
-            }
-        }
-
-    } else {
-        if (firstidle) {
-            if (action.type == NONE) {
-                return;
-            }
-            firstidle = false;
-        } else {
-            if (action.type == NONE) {
-                firstidle = true;
-            }
-        }
+    if (action.playerind != 0 && !context.dualplay) {
+        return;
     }
 
 
