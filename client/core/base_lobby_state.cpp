@@ -60,12 +60,7 @@ void BaseLobbyState::listeninfo() {
 
         context.map_width = size.x;
         context.map_height = size.y;
-        std::cout << "MAP SIZE IS " << context.map_width << " , " << context.map_height
-                  << " BACKGROUND: " << (int)(bk) << std::endl;
-
-        for (const struct BlockDTO& block: context.blocks) {
-            std::cout << "Block at " << block.pos.x << " , " << block.pos.y << std::endl;
-        }
+        std::cout << " BACKGROUND INT : " << (int)(bk) << std::endl;
 
         context.map_background = "default.png";
 
