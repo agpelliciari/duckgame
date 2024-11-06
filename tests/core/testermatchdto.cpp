@@ -12,8 +12,8 @@ MatchDto TesterMatchDTO::getState() const { return curr_state; }
 
 void TesterMatchDTO::assertPlayerAreEq(const PlayerDTO& expected, const PlayerDTO& given) {
     ASSERT_EQ(given.id, expected.id) << "Players id are the same";
-    ASSERT_EQ(given.coord_x, expected.coord_x) << "Players x are the same";
-    ASSERT_EQ(given.coord_y, expected.coord_y) << "Players y are the same";
+    ASSERT_EQ(given.pos.x, expected.pos.x) << "Players x are the same";
+    ASSERT_EQ(given.pos.y, expected.pos.y) << "Players y are the same";
     ASSERT_EQ(given.weapon, expected.weapon) << "Players weapon are the same";
     ASSERT_EQ(given.move_action, expected.move_action) << "Players move_action are the same";
     ASSERT_EQ(given.doing_action, expected.doing_action) << "Players doing_action are the same";

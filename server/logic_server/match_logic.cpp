@@ -55,7 +55,7 @@ void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos) {
     for (Player player: players) {
 
         PlayerDTO dto = {0, false, 0, 0, TypeWeapon::NONE, false, false, TypeMoveAction::NONE};
-        player.get_data(dto.id, dto.coord_x, dto.coord_y, dto.weapon, dto.helmet, dto.chest_armor,
+        player.get_data(dto.id, dto.pos.x, dto.pos.y, dto.weapon, dto.helmet, dto.chest_armor,
                         dto.move_action);
 
         dtos.push_back(dto);

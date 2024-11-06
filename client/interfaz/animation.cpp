@@ -1,5 +1,7 @@
 #include "animation.h"
 
+#include <iostream>
+
 Animation::Animation(const GameContext& context): animationBuilders(), frameTicks(0) {
     for (int i = 1; i <= static_cast<int>(context.cantidadjugadores); i++) {
         animationBuilders.emplace(i, AnimationBuilder());
