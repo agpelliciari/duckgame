@@ -49,6 +49,15 @@ bool ControlNotifier::runLobby() {
 
         protocol.notifyinfo(LobbyResponseType::STARTED_LOBBY, match.playercount());
 
+        const MapInfo& info = *(match.getMap());
+
+        std::cout << "MAP SIZE IS " << info.size.x << " , " << info.size.y
+                  << " BACKGROUND: " << (int)(info.bk) << std::endl;
+
+        for (const struct MapPoint& point: info.spawns_items) {
+            std::cout << "Item spawn at " << point.x << " , " << point.y << std::endl;
+        }
+
         return false;
     }
 }
