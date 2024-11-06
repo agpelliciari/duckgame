@@ -55,6 +55,10 @@ void BaseLobbyState::listeninfo() {
 
         // Receive map data.
 
+        MapInfo map = protocol.recvmapinfo();
+        std::cout << "MAP SIZE IS " << map.size.x << " , " << map.size.y
+                  << " BACKGROUND: " << (int)(map.bk) << std::endl;
+
 
         listener.startedLobby();
     } else {

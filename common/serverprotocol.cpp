@@ -86,6 +86,20 @@ void ServerProtocol::sendplayer(const PlayerDTO& player) {
 }
 
 
+void ServerProtocol::sendmapinfo(const MapInfo& map) {
+
+    this->senduint(map.size.x);
+    this->senduint(map.size.y);
+    this->sendbyte(map.bk);
+
+    /*
+    for (const PlayerDTO& player: state.players) {
+        sendplayer(player);
+    }
+    */
+}
+
+
 // bool ServerProtocol::isopen() { return this->isactive(); }
 
 // void ServerProtocol::close() { this->close(); }

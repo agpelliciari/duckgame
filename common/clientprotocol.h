@@ -45,6 +45,7 @@ public:
     void sendaction(PlayerActionDTO& action);
 
     MatchDto recvstate();
+    MapInfo recvmapinfo();
 
 
     bool isopen();

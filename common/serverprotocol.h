@@ -54,6 +54,7 @@ public:
 
     void sendplayer(const PlayerDTO& player);
 
+    void sendmapinfo(const MapInfo& map);
 
     // metodos generales para is active.
     using Protocol::close;

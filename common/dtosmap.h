@@ -32,6 +32,9 @@ struct MapInfo {
 
     MapInfo(const std::string& name, const struct MapPoint _size, uint8_t _bk):
             mapname(name), size(_size), bk(_bk) {}
+    MapInfo(const struct MapPoint _size, uint8_t _bk): mapname(), size(_size), bk(_bk) {}
+    MapInfo(const coordinate_t width, const coordinate_t height, uint8_t _bk):
+            mapname(), size(width, height), bk(_bk) {}
 };
 
 

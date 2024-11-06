@@ -73,6 +73,17 @@ void ClientProtocol::sendlobbyaction(const lobby_action&& action) {
     protocol.sendbyte(action.type);
 }
 
+
+MapInfo ClientProtocol::recvmapinfo() {
+
+    coordinate_t width = protocol.recvuint();
+    coordinate_t height = protocol.recvuint();
+    uint8_t _bk = protocol.recvbyte();
+    MapInfo res(width, height, _bk);
+
+    return res;
+}
+
 MatchDto ClientProtocol::recvstate() {
     // Primero recibi info general
     match_info_dto out;
