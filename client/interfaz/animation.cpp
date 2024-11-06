@@ -1,4 +1,5 @@
 #include "animation.h"
+#include <iostream>
 
 Animation::Animation(const GameContext& context): animationBuilders(), frameTicks(0) {
     for (int i = 1; i <= static_cast<int>(context.cantidadjugadores); i++) {
@@ -73,17 +74,30 @@ void Animation::updateSprite(MatchDto& matchDto) {
                                            RUNNING_ANIMATION_FRAMES);
                     builder->second.spriteY = STARTING_SPRITE_Y;
                     break;
-                case TypeMoveAction::JUMP:
-                    builder->second.spriteX =
-                            STARTING_SPRITE_X +
-                            SPRITE_SIZE * ((frameTicks / JUMPING_ANIMATION_SPEED) %
-                                           JUMPING_ANIMATION_FRAMES);
-                    builder->second.spriteY = JUMPING_SPRITE_Y;
+                // DEJO COMENTADO EL JUMP Y FLAP POR TEMAS DE COMPILACION
+                //case TypeMoveAction::JUMP:
+                //    builder->second.spriteX =
+                //            STARTING_SPRITE_X +
+                //            SPRITE_SIZE * ((frameTicks / JUMPING_ANIMATION_SPEED) %
+                //                           JUMPING_ANIMATION_FRAMES);
+                //    builder->second.spriteY = JUMPING_SPRITE_Y;
+                //    break;
+                //case TypeMoveAction::FLAP:
+                //    builder->second.spriteX =
+                //            STARTING_SPRITE_X + SPRITE_SIZE * FLAPPING_SPRITE_X_OFFSET;
+                //    builder->second.spriteY = FLAPPING_SPRITE_Y;
+                //    break;
+                case TypeMoveAction::AIR_LEFT:
+                    std::cout << "Air left" << std::endl;
                     break;
-                case TypeMoveAction::FLAP:
-                    builder->second.spriteX =
-                            STARTING_SPRITE_X + SPRITE_SIZE * FLAPPING_SPRITE_X_OFFSET;
-                    builder->second.spriteY = FLAPPING_SPRITE_Y;
+                case TypeMoveAction::AIR_RIGHT:
+                    std::cout << "Air right" << std::endl;
+                    break;
+                case TypeMoveAction::FLAP_LEFT:
+                    std::cout << "Flap left" << std::endl;
+                    break;
+                case TypeMoveAction::FLAP_RIGHT:
+                    std::cout << "Flap right" << std::endl;
                     break;
                 case TypeMoveAction::STAY_DOWN:
                     builder->second.spriteX = STARTING_SPRITE_X;

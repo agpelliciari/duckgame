@@ -4,9 +4,9 @@
 #include <cstdint>
 
 struct MapPoint {
-    uint16_t x;  // cppcheck-suppress unusedStructMember
-    uint16_t y;  // cppcheck-suppress unusedStructMember
-    MapPoint(uint16_t _x, uint16_t _y): x(_x), y(_y) {}
+    int x;  // cppcheck-suppress unusedStructMember
+    int y;  // cppcheck-suppress unusedStructMember
+    MapPoint(int _x, int _y): x(_x), y(_y) {}
     MapPoint(): x(0), y(0) {}
 };
 

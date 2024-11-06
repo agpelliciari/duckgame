@@ -1,6 +1,5 @@
 #include "common/dtosplayer.h"
 #include "tuple.h"
-#include "action.h"
 #include "armor.h"
 #include "weapon.h"
 #include "physical_object.h"
