@@ -12,8 +12,8 @@ void Drawer::drawPlayer(const PlayerDTO& player) {
     // Determine the flip mode based on the last direction
     SDL_RendererFlip flip = animation.isFacingLeft(player.id) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
-    int screenX = camera.getScreenX(player.coord_x);
-    int screenY = camera.getScreenY(player.coord_y);
+    int screenX = camera.getScreenX(player.pos.x);
+    int screenY = camera.getScreenY(player.pos.y);
     int scaledSize = camera.getScaledSize(SPRITE_HEIGHT);
 
     // Draw player sprite
