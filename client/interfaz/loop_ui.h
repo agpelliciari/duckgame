@@ -8,8 +8,7 @@
 #include "client/gamecontext.h"
 #include "client/interfaz/event_handler.h"
 #include "client/simpleeventlistener.h"
-#include "common/dtos.h"
-#include "common/dtosplayer.h"
+#include "common/dtosgame.h"
 
 #include "animation.h"
 #include "camera.h"

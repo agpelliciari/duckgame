@@ -21,7 +21,7 @@
 #include <string>
 #include <vector>
 
-#include "common/dtosobject.h"
+#include "common/dtosmap.h"
 
 
 class MapDeserializer {

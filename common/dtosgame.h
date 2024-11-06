@@ -9,6 +9,35 @@
 #include "./dtosobject.h"
 #include "./dtosplayer.h"
 
+
+enum ProjectileType : uint8_t {
+    GRANADA,
+    BANANA,
+    PEW_PEW_LASER,
+    LASER_RIFLE,
+    AK_47,
+    PISTOLA_DE_DUELOS,
+    PISTOLA_COWBOY,
+    MAGNUM,
+    ESCOPETA,
+    SNIPER,
+    BURST
+};
+
+struct ProjectileDTO {
+    struct MapPoint pos;       // cppcheck-suppress unusedStructMember
+    enum ProjectileType tipo;  // cppcheck-suppress unusedStructMember
+};
+
+struct DynamicObjDTO {
+    struct MapPoint pos;
+    TypeDynamicObject type;
+    DynamicObjDTO(coordinate_t x, coordinate_t y, TypeDynamicObject _type):
+            pos(x, y), type(_type) {}
+    DynamicObjDTO() {}
+};
+
+
 enum MatchStateType : uint8_t {
     INICIADA = 0x01,
     TERMINADA = 0x02,

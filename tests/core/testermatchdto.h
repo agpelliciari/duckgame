@@ -1,7 +1,7 @@
 #ifndef TESTER_MATCH_DTO
 #define TESTER_MATCH_DTO
 
-#include "common/dtos.h"
+#include "common/dtosgame.h"
 
 class TesterMatchDTO {
 protected:

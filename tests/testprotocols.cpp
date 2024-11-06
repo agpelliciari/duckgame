@@ -2,7 +2,6 @@
 
 #include "common/clientprotocol.h"
 #include "common/core/liberror.h"
-#include "common/dtos.h"
 #include "common/serverprotocol.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"

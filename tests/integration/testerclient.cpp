@@ -2,7 +2,6 @@
 
 #include <utility>
 
-#include "common/dtos.h"
 #include "gtest/gtest.h"
 
 TesterClient::TesterClient(Socket&& _client, Socket& _serv, LobbyContainer& lobbies):

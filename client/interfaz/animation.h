@@ -7,8 +7,7 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "client/gamecontext.h"
-#include "common/dtos.h"
-#include "common/dtosplayer.h"
+#include "common/dtosgame.h"
 
 #define SPRITE_SIZE 32
 
