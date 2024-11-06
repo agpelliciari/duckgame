@@ -5,9 +5,9 @@ UILoop::UILoop(ActionListener& dtoSender, SimpleEventListener& _events,
         sdlLib(SDL_INIT_VIDEO),
         window("UILOOP demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
                SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE),
-        renderer(window, -1, SDL_RENDERER_ACCELERATED),
-        textures(renderer),
         animation(gameContext),
+        camera(),
+        drawer(window, animation, gameContext, camera),
         eventHandler(dtoSender, gameContext),
         matchDtoQueue(_events),
         lastUpdate(),
@@ -22,15 +22,15 @@ void UILoop::exec() {
 
             update();
 
-            draw();
+            drawer.draw(lastUpdate);
 
             frameDelay(frameStart);
         }
     } catch (const std::exception& e) {
-        std::cerr << "Exception caught in UILoop::exec: " << e.what() << std::endl;
+        std::cerr << "Exception caught in UILoop" << e.what() << std::endl;
         isRunning_ = false;
     } catch (...) {
-        std::cerr << "Unknown exception caught in UILoop::exec" << std::endl;
+        std::cerr << "Unknown exception caught in UILoop" << std::endl;
         isRunning_ = false;
     }
 }
@@ -46,34 +46,11 @@ void UILoop::update() {
         }
     }
 
+    camera.update(lastUpdate);
+
     animation.updateFrame();
 
     animation.updateSprite(lastUpdate);
-}
-
-void UILoop::draw() {
-    // Clear screen
-    renderer.SetDrawColor(255, 255, 255, 255);  // White background
-    renderer.Clear();
-
-    for (const PlayerDTO& player: lastUpdate.players) {
-        drawPlayer(player);
-    }
-
-    // Show rendered frame
-    renderer.Present();
-}
-
-void UILoop::drawPlayer(const PlayerDTO& player) {
-    // Determine the flip mode based on the last direction
-    SDL_RendererFlip flip = animation.isFacingLeft(player.id) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-
-    // Draw player sprite
-    renderer.Copy(textures.getTexture(player.id),
-                  SDL2pp::Rect(animation.getSpriteX(player.id), animation.getSpriteY(player.id),
-                               SPRITE_WIDTH, SPRITE_HEIGHT),
-                  SDL2pp::Rect(player.coord_x, player.coord_y, 50, 50), 0.0, SDL2pp::Point(0, 0),
-                  flip);
 }
 
 void UILoop::frameDelay(unsigned int frameStart) {

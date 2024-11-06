@@ -1,9 +1,9 @@
 #include "common/dtosplayer.h"
-
-#include "action.h"
+#include "tuple.h"
 #include "armor.h"
 #include "weapon.h"
 #include "physical_object.h"
+#include <vector>
 
 #ifndef PLAYER_H
 #define PLAYER_H
@@ -30,8 +30,8 @@ class Player {
 
         void still();
         void add_speed(int speed_x, int speed_y);
-        void update();
-
+        void update(std::vector<std::vector<bool>> &colition_map);
+        Tuple get_position();
 };
 
 

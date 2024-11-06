@@ -3,6 +3,12 @@
 
 #include <cstdint>
 
+struct MapPoint {
+    int x;  // cppcheck-suppress unusedStructMember
+    int y;  // cppcheck-suppress unusedStructMember
+    MapPoint(int _x, int _y): x(_x), y(_y) {}
+    MapPoint(): x(0), y(0) {}
+};
 
 // Paredes/Plataformas estaticas!
 enum BlockType : uint8_t {
@@ -11,12 +17,10 @@ enum BlockType : uint8_t {
 };
 
 struct BlockDTO {
-    uint8_t pos_x;
-    uint8_t pos_y;
-    uint8_t tipo;
-    uint8_t size_x;  // Haria falta?! puede que sea mejor si.
-    uint8_t size_y;
-} __attribute__((packed));
+    enum BlockType tipo;   // cppcheck-suppress unusedStructMember
+    struct MapPoint pos;   // cppcheck-suppress unusedStructMember
+    struct MapPoint size;  // cppcheck-suppress unusedStructMember
+};
 
 
 // Objetos dinamicos!
@@ -24,6 +28,7 @@ enum class TypeDynamicObject : uint8_t {
     // Generales
     BOX,
     PROJECTILE,
+    BURST,
 
     HELMET,
     ARMOR,
@@ -41,12 +46,39 @@ enum class TypeDynamicObject : uint8_t {
     SNIPER
 };
 
+
+enum ProjectileType : uint8_t {
+    GRANADA,
+    BANANA,
+    PEW_PEW_LASER,
+    LASER_RIFLE,
+    AK_47,
+    PISTOLA_DE_DUELOS,
+    PISTOLA_COWBOY,
+    MAGNUM,
+    ESCOPETA,
+    SNIPER,
+    BURST
+};
+
+struct ProjectileDTO {
+    struct MapPoint pos;       // cppcheck-suppress unusedStructMember
+    enum ProjectileType tipo;  // cppcheck-suppress unusedStructMember
+};
+
 struct DynamicObjDTO {
-    int pos_x;
-    int pos_y;
+    struct MapPoint pos;
     TypeDynamicObject type;
-    DynamicObjDTO(int x, int y, TypeDynamicObject _type): pos_x(x), pos_y(y), type(_type) {}
+    DynamicObjDTO(int x, int y, TypeDynamicObject _type): pos(x, y), type(_type) {}
     DynamicObjDTO() {}
 };
+
+enum ObjectType : uint8_t { BOX, ITEM_SPAWN, PLAYER_SPAWN, BLOCK };
+
+struct MapObject {
+    struct MapPoint pos;  // cppcheck-suppress unusedStructMember
+    ObjectType type;      // cppcheck-suppress unusedStructMember
+};
+
 
 #endif

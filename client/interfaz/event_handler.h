@@ -7,22 +7,27 @@
 #include "client/gamecontext.h"
 #include "common/dtosplayer.h"
 
+#define MAIN_PLAYER 0
+#define SECOND_PLAYER 1
+
 class EventHandler {
 private:
     ActionListener& actionSender;
 
     bool dualPlay;  // cppcheck-suppress unusedStructMember
 
+    void setAction(PlayerActionDTO& action, PlayerActionType actionType, int playerId);
+
+    void handleKeyDown(SDL_Keycode key, PlayerActionDTO& action);
+
+    void handleKeyUp(SDL_Keycode key, PlayerActionDTO& action);
+
+    void handleExit(const SDL_Event& event, bool& isRunning_);
+
 public:
     EventHandler(ActionListener& sender, const GameContext& context);
 
-    // Event processing:
-    // - If window is closed, or Q or Escape buttons are pressed, quit the
-    // application
-    // - If Right key is pressed, character would run
-    // - If Right key is released, character would stop
-    // - If Space key is pressed, character would jump
-    // - If Down key is pressed, character would lay dead
+    // Keyboard Event processing
     void handle(bool& isRunning_);
 };
 
