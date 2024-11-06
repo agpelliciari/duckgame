@@ -108,12 +108,12 @@ void PhysicalObject::update_action(TypeMoveAction& move_action){
     if (speed.x < 0){
         move_action = TypeMoveAction::MOVE_LEFT;
     }
-    if (speed.y > 0){
+    /*if (speed.y > 0){
         move_action = TypeMoveAction::JUMP;
     }
     if (flap_attemps < 10 && flap_attemps > 0){
         move_action = TypeMoveAction::FLAP;
-    }
+    }*/
 
 }
 

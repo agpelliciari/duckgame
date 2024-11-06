@@ -2,6 +2,7 @@
 #define LIB_DTOS_PLAYER_H
 
 #include <cstdint>
+#include "./dtosobject.h"
 
 enum PlayerActionType : uint8_t {
     NONE = 0,
