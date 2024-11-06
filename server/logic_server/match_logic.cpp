@@ -2,12 +2,54 @@
 
 #include <iostream>
 
+
 MatchLogic::MatchLogic(): colition_map(700, 500) {
-    this->command_map[0] = [this](int index) { this->add_player_speed(index, 0, 0); };
-    this->command_map[1] = [this](int index) { this->add_player_speed(index, -10, 0); };
-    this->command_map[2] = [this](int index) { this->add_player_speed(index, 10, 0); };
-    this->command_map[3] = [this](int index) { this->add_player_speed(index, 0, 0); };
-    this->command_map[4] = [this](int index) { this->add_player_speed(index, 0, 60); };
+    this->command_map[PlayerActionType::NONE] = [this](int index) {
+        this->add_player_speed(index, 0, 0);
+    };
+    this->command_map[PlayerActionType::MOVE_LEFT] = [this](int index) {
+        this->add_player_speed(index, -10, 0);
+    };
+    this->command_map[PlayerActionType::MOVE_LEFT_END] = [this](int index) {
+        this->add_player_speed(index, 0, 0);
+    };
+
+    this->command_map[PlayerActionType::STAY_DOWN] = [this](int index) {
+        this->add_player_speed(index, 0, 0);
+    };
+    this->command_map[PlayerActionType::STAY_DOWN_START] = [this](int index) {
+        this->add_player_speed(index, 0, 0);
+    };
+    this->command_map[PlayerActionType::STAY_DOWN_END] = [this](int index) {
+        this->add_player_speed(index, 0, 0);
+    };
+
+    this->command_map[PlayerActionType::FLAPPING_END] = [this](int index) {
+        this->add_player_speed(index, 0, 0);
+    };
+
+    this->command_map[PlayerActionType::AIM_UP_START] = [this](int index) {
+        this->add_player_speed(index, 0, 0);
+    };
+    this->command_map[PlayerActionType::AIM_UP_END] = [this](int index) {
+        this->add_player_speed(index, 0, 0);
+    };
+    this->command_map[PlayerActionType::SHOOT] = [this](int index) {
+        this->add_player_speed(index, 0, 0);
+    };
+
+
+    this->command_map[PlayerActionType::MOVE_RIGHT] = [this](int index) {
+        this->add_player_speed(index, 10, 0);
+    };
+    this->command_map[PlayerActionType::MOVE_RIGHT_END] = [this](int index) {
+        this->add_player_speed(index, 0, 0);
+    };
+
+    // this->command_map[3] = [this](int index) { this->add_player_speed(index, 0, 0); };
+    this->command_map[PlayerActionType::JUMP] = [this](int index) {
+        this->add_player_speed(index, 0, 60);
+    };
 }
 
 void MatchLogic::add_player(int id) { players.push_back(Player(id, 10 + id * 50, 50)); }
@@ -20,6 +62,7 @@ void MatchLogic::add_player_speed(int id, int speed_x, int speed_y) {
             } else {
                 player.add_speed(speed_x, speed_y);
             }
+            return;
         }
     }
 }
