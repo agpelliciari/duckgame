@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "common/dtosplayer.h"
-
+#include "common/dtosmap.h"
 #include "box.h"
 #include "match_map.h"
 #include "player.h"
@@ -38,6 +38,7 @@ public:
     void update_players();
     void update_colition_map();
     //void add_colition(PhysicalObject &object);
+    void add_boxes(const std::vector<struct MapPoint>& boxes);
     ~MatchLogic();
 };
 

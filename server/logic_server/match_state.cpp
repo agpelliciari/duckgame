@@ -10,6 +10,7 @@ void MatchState::pushAction(const PlayerActionDTO& action) { acciones.push_comma
 void MatchState::loop(MatchObserver& observer) {
     // start_players(observer);
 
+
     while (running) {
         this->step();
         this->send_results(observer);
@@ -58,6 +59,10 @@ void MatchState::send_results(MatchObserver& observer) {
     MatchDto dto = MatchDto(INICIADA, 1);
     match_logic.get_dtos(dto.players);
     observer.updateState(dto);
+}
+
+void MatchState::add_objects(const struct MapInfo& map_info){
+    match_logic.add_boxes(map_info.boxes);
 }
 
 MatchState::~MatchState() {}

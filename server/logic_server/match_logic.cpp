@@ -81,6 +81,11 @@ void MatchLogic::update_colition_map() {
     for (Player& player: players) {
         colition_map.add_collision(player.get_map_position(), player.get_dimension());
     }
+    for (Box& box: boxes) {
+        if (box.is_spawned()){
+            colition_map.add_collision(box.get_spawn_point(), box.get_dimension());
+        }
+    }
 }
 
 /*void MatchLogic::add_colition(PhysicalObject &object) {
@@ -108,6 +113,12 @@ void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos) {
 
 void MatchLogic::execute_move_command(int action_type, int index) {
     this->command_map[action_type](index);
+}
+
+void MatchLogic::add_boxes(const std::vector<struct MapPoint>& boxes){
+    for (const struct MapPoint& box: boxes) {
+        this->boxes.push_back(Box(box.x, box.y));
+    }
 }
 
 MatchLogic::~MatchLogic() {}
