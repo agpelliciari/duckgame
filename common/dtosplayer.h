@@ -52,8 +52,10 @@ enum class TypeMoveAction : uint8_t {
     MOVE_LEFT,
     MOVE_RIGHT,
     STAY_DOWN,
+    AIR_NEUTRAL,
     AIR_LEFT,
     AIR_RIGHT,
+    FLAP_NEUTRAL,
     FLAP_LEFT,
     FLAP_RIGHT
 };
