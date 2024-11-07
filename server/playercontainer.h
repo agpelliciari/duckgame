@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "./controlledplayer.h"
-#include "common/dtos.h"
+#include "common/dtosgame.h"
 #include "server/logic_server/matchobserver.h"
 
 // Contenedor/monitor de los players activos en el match.

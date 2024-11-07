@@ -9,7 +9,6 @@
 #include "client/eventlistener.h"
 #include "client/gamecontext.h"
 #include "common/clientprotocol.h"
-#include "common/dtos.h"
 #include "common/queue.h"
 #include "common/thread.h"
 

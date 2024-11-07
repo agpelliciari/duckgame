@@ -71,7 +71,9 @@ bool LobbyControl::handleAnfitrionLobby(ControlledPlayer& host,
             std::cerr << "RECEIVED ACTION NON READY?" << std::endl;
             action = protocol.recvlobbyaction();
         }
-        lobbies.startLobby(match);
+
+        char mapa[] = "mapa1";
+        lobbies.startLobby(match, &mapa[0]);
         std::cerr << "Started MATCH id: " << (int)match.getID() << " WITH: " << match.playercount()
                   << std::endl;
         return false;
