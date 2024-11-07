@@ -111,10 +111,19 @@ MatchDto ClientProtocol::recvstate() {
     while (playercount > 0) {
         PlayerDTO player;
 
-        protocol.recvbytes(&player, sizeof(player));
+        player.id = protocol.recvuint();
+        player.pos.x = protocol.recvuint();
+        player.pos.y = protocol.recvuint();
 
-        // std::cout << "EL PLAYER "<< player.id<< " RECV EN STATE: " << (int)player.move_action <<
-        // std::endl;
+        player.weapon = (TypeWeapon)protocol.recvbyte();
+        player.move_action = (TypeMoveAction)protocol.recvbyte();
+        player.doing_action = (TypeDoingAction)protocol.recvbyte();
+
+
+        player.is_alive = protocol.recvbyte();
+        player.helmet = protocol.recvbyte();
+        player.chest_armor = protocol.recvbyte();
+        player.aiming_up = protocol.recvbyte();
 
         res.players.push_back(player);
         playercount--;
