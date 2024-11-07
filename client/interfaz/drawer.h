@@ -21,9 +21,13 @@ private:
 
     Camera& camera;
 
-    uint8_t playerId;  // cppcheck-suppress unusedStructMember
+    const GameContext& context;
 
     void drawPlayer(const PlayerDTO& player);
+
+    void drawBackground();
+
+    void drawObjects();
 
 public:
     Drawer(SDL2pp::Window& window, Animation& animation, const GameContext& gameContext,
