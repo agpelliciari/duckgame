@@ -34,7 +34,7 @@ void Match::init(MapLoader& maps, const char* mapname) {
         throw GameError(LOBBY_ALREADY_STARTED, "Tried to start a match already started!!\n");
     }
     map = &maps.loadMap(mapname);
-
+    looper.add_objects(*map);
     looper.start_players(players);
     players.finishLobbyMode();
     start();
