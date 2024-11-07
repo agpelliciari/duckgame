@@ -59,7 +59,7 @@ if(TALLER_CLIENT OR TALLER_EDITOR)
     set(SDL2PP_WITH_TTF ON) # if you need SDL_ttf support
     find_package(SDL2pp REQUIRED)
     
-    add_definitions(-DDATA_PATH="${PROJECT_SOURCE_DIR}/client/interfaz/imagenes")
+    add_definitions(-DDATA_PATH="${PROJECT_SOURCE_DIR}/res")
     
     FetchContent_MakeAvailable(libSDL2pp)
 

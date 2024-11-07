@@ -14,7 +14,7 @@ enum class TextureType {
     WHITE_DUCK,
 
     BACKGROUND,
-    PLATFORM
+    TREE
 };
 
 class TextureContainer {
@@ -29,6 +29,8 @@ public:
     explicit TextureContainer(SDL2pp::Renderer& renderer);
 
     SDL2pp::Texture& getTexture(int index);
+
+    SDL2pp::Texture& getTexture(TextureType type);
 
     ~TextureContainer();
 };
