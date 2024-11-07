@@ -5,6 +5,8 @@
 
 #include "common/dtosplayer.h"
 #include "common/dtosmap.h"
+#include "common/dtosgame.h"
+#include "common/dtosobject.h"
 #include "box.h"
 #include "match_map.h"
 #include "player.h"
@@ -34,7 +36,7 @@ public:
     void execute_move_command(int action_type, int index);
     void add_player(int id);
     void add_player_speed(int id, int x, int y);
-    void get_dtos(std::vector<PlayerDTO>& dtos);
+    void get_dtos(std::vector<PlayerDTO>& dtos, std::vector<DynamicObjDTO>& objects);
     void update_players();
     void update_colition_map();
     //void add_colition(PhysicalObject &object);

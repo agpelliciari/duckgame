@@ -100,7 +100,7 @@ void MatchLogic::update_colition_map() {
     // }
 }*/
 
-void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos) {
+void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos, std::vector<DynamicObjDTO>& objects) {
     for (Player player: players) {
 
         PlayerDTO dto = {0, false, 0, 0, TypeWeapon::NONE, false, false, TypeMoveAction::NONE};
@@ -109,6 +109,15 @@ void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos) {
 
         dtos.push_back(dto);
     }
+
+    for (Box box: boxes){
+        DynamicObjDTO dto = {0, 0, TypeDynamicObject::BOX};
+        Tuple position = box.get_spawn_point();
+        dto.pos.x = position.x;
+        dto.pos.y = position.y;
+        objects.push_back(dto);
+    }
+
 }
 
 void MatchLogic::execute_move_command(int action_type, int index) {
