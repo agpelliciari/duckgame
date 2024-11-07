@@ -52,7 +52,10 @@ MatchLogic::MatchLogic(): colition_map(700, 500) {
     };
 }
 
-void MatchLogic::add_player(int id) { players.push_back(Player(id, 10 + id * 50, 50)); }
+void MatchLogic::add_player(int id) {
+    players.push_back(Player(id, 10 + id * 50, 50));
+    colition_map.add_collision(players.back().get_map_position(), players.back().get_dimension());
+}
 
 void MatchLogic::add_player_speed(int id, int speed_x, int speed_y) {
     for (Player& player: players) {
@@ -74,22 +77,23 @@ void MatchLogic::update_players() {
 }
 
 void MatchLogic::update_colition_map() {
+    colition_map.clear_objects();
     for (Player& player: players) {
-        Tuple position = player.get_position();
-        Tuple dimension_player = {10, 30};
-        add_colition(position, dimension_player);
+        colition_map.add_collision(player.get_map_position(), player.get_dimension());
     }
 }
 
-void MatchLogic::add_colition(Tuple position, Tuple dimension) {
+/*void MatchLogic::add_colition(PhysicalObject &object) {
 
-    colition_map.add_temp_collision(position.x + dimension.x, position.y + dimension.y);
+    //colition_map.add_colition(object);
+
+    //colition_map.add_temp_collision(position.x + dimension.x, position.y + dimension.y);
 
     // for (int i = 0; i < dimension.x; i++) {
     //     for (int j = 0; j < dimension.y; j++) {
     //     }
     // }
-}
+}*/
 
 void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos) {
     for (Player player: players) {

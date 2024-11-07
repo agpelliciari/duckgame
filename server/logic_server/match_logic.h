@@ -37,7 +37,7 @@ public:
     void get_dtos(std::vector<PlayerDTO>& dtos);
     void update_players();
     void update_colition_map();
-    void add_colition(Tuple position, Tuple dimension);
+    //void add_colition(PhysicalObject &object);
     ~MatchLogic();
 };
 

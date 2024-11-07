@@ -5,9 +5,10 @@
 #include <vector>
 
 #include "common/dtosplayer.h"
-
 #include "match_map.h"
 #include "tuple.h"
+
+class MatchMap;
 
 class PhysicalObject {
 
@@ -38,6 +39,9 @@ public:
     bool check_right_collision(const MatchMap& colition_map);
     bool check_down_collision(const MatchMap& colition_map);
     bool check_up_collision(const MatchMap& colition_map);
+    //bool detect_others_collision(int coord_x, int coord_y);
+    Tuple get_position();
+    Tuple get_dimension();
     Tuple get_real_position();
     //~PhysicalObject();
 };
