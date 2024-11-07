@@ -37,6 +37,11 @@ bool ControlNotifier::runLobby() {
         return true;
     } catch (const ClosedQueue& error) {
 
+        if (!protocol.isactive()) {
+            // Se presiono la q. Y ya se cerro el protocol.
+            std::cout << "--------> PRESSED Q AND ALREADY CLOSED AT NOTIFIER!\n";
+            return true;
+        }
         // Si el player esta closed, el match fue cancelado
         // Ya que para participar en el mismo deberia estar abierto.
         if (player.isclosed()) {
@@ -103,6 +108,6 @@ void ControlNotifier::run() {
 
 ControlNotifier::~ControlNotifier() {
     stop();
-    player.disconnect();  // Por si no se cerro, cerra la queue.
+    // player.disconnect();  // Por si no se cerro, cerra la queue.
     join();
 }
