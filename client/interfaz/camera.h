@@ -34,6 +34,8 @@ public:
 
     int getScaledSize(int size);
 
+    int backgroundScaledSize(int size);
+
     ~Camera();
 };
 
