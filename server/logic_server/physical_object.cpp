@@ -175,7 +175,7 @@ bool PhysicalObject::check_down_collision(const MatchMap& colition_map) {
 
     for (int x = 0; x <= dimension.x && (actual_position.x + x) < colition_map.getWidth(); x++) {
         if (colition_map.check_collision(actual_position.x + x, actual_position.y - 1)) {
-            std::cout << "Over something!\n";
+            //std::cout << "Over something!\n";
             on_air = false;
             return false;
         }
