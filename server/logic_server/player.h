@@ -33,8 +33,11 @@ public:
 
     void still();
     void add_speed(int speed_x, int speed_y);
-    void update(MatchMap& colition_map);
+    void update(const MatchMap& colition_map);
+    PhysicalObject& get_object();
     Tuple get_position();
+    Tuple get_map_position();
+    Tuple get_dimension();
 };
 
 

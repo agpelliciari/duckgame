@@ -198,4 +198,31 @@ bool PhysicalObject::check_up_collision(const MatchMap& colition_map) {
     return true;
 }
 
+/*
+bool PhysicalObject::detect_others_collision(int other_object_x, int other_object_y){
+
+    //por el momento solo pruebo las colisiones entre las esquinas del objeto
+
+    if (actual_position.x == other_object_x && actual_position.y == other_object_y ) {
+        return true;
+    }
+    if (actual_position.x + dimension.x == other_object_x && actual_position.y == other_object_y){
+        return true;
+    }
+    if (actual_position.x == other_object_x && actual_position.y + dimension.y == other_object_y){
+        return true;
+    }
+    if (actual_position.x + dimension.x == other_object_x && actual_position.y + dimension.y == other_object_y){
+        return true;
+    }
+
+    return false;
+}*/
+
+Tuple PhysicalObject::get_position() { return actual_position; }
+Tuple PhysicalObject::get_dimension() { return dimension; }
+
+
 // PhysicalObject::~PhysicalObject(){}
+
+

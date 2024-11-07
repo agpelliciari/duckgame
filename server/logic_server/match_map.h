@@ -2,17 +2,25 @@
 #define MATCH_MAP_H
 
 #include <vector>
+#include "map_object.h"
+#include "tuple.h"
+#include "physical_object.h"
+
 class MatchMap {
 
 private:
     int width;
     int height;
     std::vector<std::vector<bool>> game_map;  // cppcheck-suppress unusedStructMember
+    std::vector<MapObjectServer> objects;
 
 public:
     MatchMap(int size_x, int size_y);
 
     void add_temp_collision(const int x, const int y);
+
+    void add_collision(Tuple position, Tuple dimension);
+    void clear_objects();
 
     int getWidth() const;
     int getHeight() const;
