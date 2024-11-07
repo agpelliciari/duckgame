@@ -51,6 +51,13 @@ void Drawer::draw(const MatchDto& matchDto) {
 
     drawObjects();
 
+    // dibujo los objetos de la partida -> luego agregar en una funcion
+    for (const auto& object: matchDto.objects) {
+        renderer.Copy(textures.getTexture(TextureType::BOX), SDL2pp::Rect(0, 16, 16, 16),
+                      SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(object.pos.y),
+                                   camera.getScaledSize(16), camera.getScaledSize(16)));
+    }
+
     const PlayerDTO* mainPlayer = nullptr;
 
     for (const PlayerDTO& player: matchDto.players) {

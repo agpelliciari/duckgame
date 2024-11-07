@@ -13,6 +13,8 @@ TextureContainer::TextureContainer(SDL2pp::Renderer& renderer) {
                      SDL2pp::Texture(renderer, DATA_PATH "/backgrounds/default.png"));
     textures.emplace(TextureType::TREE,
                      SDL2pp::Texture(renderer, DATA_PATH "/textures/Surface_Tree_1.png"));
+    textures.emplace(TextureType::BOX,
+                     SDL2pp::Texture(renderer, DATA_PATH "/textures/Objects.png"));
 }
 
 TextureType TextureContainer::indexToTextureType(int index) const {
@@ -29,6 +31,8 @@ TextureType TextureContainer::indexToTextureType(int index) const {
             return TextureType::BACKGROUND;
         case 6:
             return TextureType::TREE;
+        case 7:
+            return TextureType::BOX;
         default:
             throw std::out_of_range("Invalid texture index");
     }
