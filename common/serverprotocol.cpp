@@ -76,6 +76,16 @@ void ServerProtocol::sendstate(const MatchDto& state) {
     for (const PlayerDTO& player: state.players) {
         sendplayer(player);
     }
+
+
+    this->sendshort(state.objects.size());
+    // std::cout << "SERVER SENDING OBJ COUNT" << state.objects.size() << std::endl;
+
+    for (const DynamicObjDTO& obj: state.objects) {
+        this->senduint(obj.pos.x);
+        this->senduint(obj.pos.y);
+        this->sendbyte((uint8_t)obj.type);
+    }
 }
 
 // Para mayor flexibilidad.. por ahora.

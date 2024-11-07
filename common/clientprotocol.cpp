@@ -129,6 +129,19 @@ MatchDto ClientProtocol::recvstate() {
         playercount--;
     }
 
+    int objcount = (int)protocol.recvshort();
+    // std::cout << "CLIENT RECV OBJ COUNT" << objcount << std::endl;
+
+    while (objcount > 0) {
+        DynamicObjDTO obj;
+
+        obj.pos.x = protocol.recvuint();
+        obj.pos.y = protocol.recvuint();
+        obj.type = (TypeDynamicObject)protocol.recvbyte();
+
+        objcount--;
+    }
+
     /*
     for (auto playerit = state.players.begin(); playerit != state.players.end();) {
         PlayerDTO player = *playerit;
