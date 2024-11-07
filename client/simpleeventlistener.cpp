@@ -11,6 +11,10 @@ void SimpleEventListener::matchUpdated(const MatchDto& state) {
          std::cerr << "-->" << (int)player.id << " at " << player.pos.x << ","
                  << player.pos.y << std::endl;
     }
+    for(const DynamicObjDTO& obj: state.objects){
+         std::cerr << "-->obj " << (int)obj.type << " at " << obj.pos.x << ","
+                 << obj.pos.y << std::endl;
+    }
 
     */
 }

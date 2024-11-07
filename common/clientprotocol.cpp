@@ -139,6 +139,7 @@ MatchDto ClientProtocol::recvstate() {
         obj.pos.y = protocol.recvuint();
         obj.type = (TypeDynamicObject)protocol.recvbyte();
 
+        res.objects.push_back(obj);
         objcount--;
     }
 
