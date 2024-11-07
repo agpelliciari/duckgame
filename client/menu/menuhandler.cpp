@@ -97,16 +97,16 @@ void MenuHandler::removePlayerFromLobby() { queueToMenu.push(MenuAction::RemoveP
 void MenuHandler::startedLobby() { queueToMenu.push(MenuAction::StartLobby()); }
 void MenuHandler::canceledLobby(const char* msg) {
     std::cout << "Canceled lobby " << msg << std::endl;
-    queueToMenu.push(MenuAction::CancelLobby());
+    queueToMenu.push(MenuAction::CancelLobby(msg));
 }
 
 void MenuHandler::failedCreate(const char* msg) {
     std::cout << "Failed create " << msg << std::endl;
-    queueToMenu.push(MenuAction::FailCreate());
+    queueToMenu.push(MenuAction::FailCreate(msg));
 }
 void MenuHandler::failedJoin(const char* msg) {
     std::cout << "Failed join " << msg << std::endl;
-    queueToMenu.push(MenuAction::FailJoin());
+    queueToMenu.push(MenuAction::FailJoin(msg));
 }
 
 

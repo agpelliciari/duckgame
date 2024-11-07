@@ -22,8 +22,9 @@ class MenuAction {
 private:
     Action action;
     int lobbyId;
+    std::string message;
 
-    MenuAction(Action action, int lobbyId);
+    MenuAction(Action action, int lobbyId, const std::string& message);
 
 public:
     MenuAction();
@@ -36,13 +37,13 @@ public:
 
     static MenuAction RemovePlayerFromLobby();
 
-    static MenuAction FailJoin();
+    static MenuAction FailJoin(const std::string& message);
 
-    static MenuAction FailCreate();
+    static MenuAction FailCreate(const std::string& message);
 
     static MenuAction StartLobby();
 
-    static MenuAction CancelLobby();
+    static MenuAction CancelLobby(const std::string& message);
 
     void exec(Menu& menu);
 };
