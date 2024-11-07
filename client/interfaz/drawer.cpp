@@ -6,22 +6,40 @@ Drawer::Drawer(SDL2pp::Window& window, Animation& animation, const GameContext& 
         textures(renderer),
         animation(animation),
         camera(camera),
-        playerId(gameContext.first_player) {}
+        context(gameContext) {}
 
 void Drawer::drawPlayer(const PlayerDTO& player) {
-    // Determine the flip mode based on the last direction
     SDL_RendererFlip flip = animation.isFacingLeft(player.id) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
-    int screenX = camera.getScreenX(player.pos.x);
-    int screenY = camera.getScreenY(player.pos.y);
-    int scaledSize = camera.getScaledSize(SPRITE_HEIGHT);
+    renderer.Copy(
+            textures.getTexture(player.id),
+            SDL2pp::Rect(animation.getSpriteX(player.id), animation.getSpriteY(player.id),
+                         SPRITE_WIDTH, SPRITE_HEIGHT),
+            SDL2pp::Rect(camera.getScreenX(player.pos.x), camera.getScreenY(player.pos.y),
+                         camera.getScaledSize(SPRITE_WIDTH), camera.getScaledSize(SPRITE_HEIGHT)),
+            0.0, SDL2pp::Point(0, 0), flip);
+}
 
-    // Draw player sprite
-    renderer.Copy(textures.getTexture(player.id),
-                  SDL2pp::Rect(animation.getSpriteX(player.id), animation.getSpriteY(player.id),
-                               SPRITE_WIDTH, SPRITE_HEIGHT),
-                  SDL2pp::Rect(screenX, screenY, scaledSize, scaledSize), 0.0, SDL2pp::Point(0, 0),
-                  flip);
+void Drawer::drawBackground() {
+    int scaledWidth = camera.backgroundScaledSize(SCREEN_WIDTH);
+    int scaledHeight = camera.backgroundScaledSize(SCREEN_HEIGHT);
+
+    renderer.Copy(textures.getTexture(TextureType::BACKGROUND),
+                  SDL2pp::Rect((SCREEN_WIDTH - scaledWidth) / 2, (SCREEN_HEIGHT - scaledHeight) / 2,
+                               scaledWidth, scaledHeight),
+                  SDL2pp::Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
+}
+
+void Drawer::drawObjects() {
+    // inicialmente dibujo solo los primeros 4 elementos del .yaml
+    for (int i = 0; i < 4; i++) {
+
+        renderer.Copy(textures.getTexture((int)context.blocks[i].texture),
+                      SDL2pp::Rect(0, 0, 73, 93),
+                      SDL2pp::Rect(camera.getScreenX(context.blocks[i].pos.x),
+                                   camera.getScreenY(context.blocks[i].pos.y),
+                                   camera.getScaledSize(73), camera.getScaledSize(93)));
+    }
 }
 
 void Drawer::draw(const MatchDto& matchDto) {
@@ -29,10 +47,14 @@ void Drawer::draw(const MatchDto& matchDto) {
     renderer.SetDrawColor(255, 255, 255, 255);  // White background
     renderer.Clear();
 
+    drawBackground();
+
+    drawObjects();
+
     const PlayerDTO* mainPlayer = nullptr;
 
     for (const PlayerDTO& player: matchDto.players) {
-        if (player.id == playerId) {
+        if (player.id == context.first_player) {
             mainPlayer = &player;
             continue;
         }
