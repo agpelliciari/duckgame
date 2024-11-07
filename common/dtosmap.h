@@ -9,7 +9,8 @@
 // Paredes/Plataformas estaticas!
 enum BlockTexture : uint8_t {
     GRASS = 1,
-    ROCK = 2  // Algun tipo?
+    ROCK = 2,
+    TREE = 6  // Algun tipo?
 };
 
 struct BlockDTO {

@@ -8,6 +8,7 @@ target_sources(taller_server_logic
             weapon.cpp
             match_queue.cpp
             match_state.cpp
+            match_map.cpp
             box.cpp
             action_command.cpp
             physical_object.cpp
@@ -19,6 +20,7 @@ target_sources(taller_server_logic
             match_logic.h
             match_queue.h
             match_state.h
+            match_map.h
             weapon.h
             box.h
             armor.h

@@ -41,6 +41,7 @@ public:
     ClientProtocol& getClient();
     void close();
     void finish();
+    bool isReceiverOpen();
 };
 
 #endif

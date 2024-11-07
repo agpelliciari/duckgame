@@ -76,13 +76,34 @@ void ServerProtocol::sendstate(const MatchDto& state) {
     for (const PlayerDTO& player: state.players) {
         sendplayer(player);
     }
+
+
+    this->sendshort(state.objects.size());
+    // std::cout << "SERVER SENDING OBJ COUNT" << state.objects.size() << std::endl;
+
+    for (const DynamicObjDTO& obj: state.objects) {
+        this->senduint(obj.pos.x);
+        this->senduint(obj.pos.y);
+        this->sendbyte((uint8_t)obj.type);
+    }
 }
 
 // Para mayor flexibilidad.. por ahora.
 void ServerProtocol::sendplayer(const PlayerDTO& player) {
-    // std::cout << "EL PLAYER "<< player.id<< " SENDED ESTA EN STATE: " <<
-    // (int)player.move_action << std::endl;
-    this->sendbytes(&player, sizeof(player));
+
+    this->senduint(player.id);
+    this->senduint(player.pos.x);
+    this->senduint(player.pos.y);
+
+    this->sendbyte((uint8_t)player.weapon);
+    this->sendbyte((uint8_t)player.move_action);
+    this->sendbyte((uint8_t)player.doing_action);
+
+    // Se podria juntar en 1 solo byte. Por ahora no?
+    this->sendbyte((uint8_t)player.is_alive);
+    this->sendbyte((uint8_t)player.helmet);
+    this->sendbyte((uint8_t)player.chest_armor);
+    this->sendbyte((uint8_t)player.aiming_up);
 }
 
 

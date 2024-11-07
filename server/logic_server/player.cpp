@@ -25,19 +25,27 @@ void Player::get_data(int& id, int& x, int& y, const TypeWeapon& weapon,
 bool Player::same_id(unsigned int id_) { return id == id_; }
 
 void Player::still() {
-    //move_action.still();
+    // move_action.still();
     object.stop_moving_x();
 }
 
-void Player::update(std::vector<std::vector<bool>> &colition_map){
+void Player::update(const MatchMap& colition_map) {
     object.move(colition_map);
     object.update_action(move_action);
 }
 
-void Player::add_speed(int speed_x, int speed_y){
-    this->object.add_speed(speed_x, speed_y);
+void Player::add_speed(int speed_x, int speed_y) { this->object.add_speed(speed_x, speed_y); }
+
+PhysicalObject& Player::get_object(){
+    return this->object;
 }
 
-Tuple Player::get_position(){
-    return object.get_real_position();
+Tuple Player::get_map_position(){
+    return object.get_position();
 }
+
+Tuple Player::get_dimension(){
+    return object.get_dimension();
+}
+
+Tuple Player::get_position() { return object.get_real_position(); }

@@ -50,4 +50,6 @@ int Camera::getScreenY(int playerY) { return static_cast<int>((playerY - y) * zo
 
 int Camera::getScaledSize(int size) { return static_cast<int>(size * zoom); }
 
+int Camera::backgroundScaledSize(int size) { return static_cast<int>(size / zoom); }
+
 Camera::~Camera() = default;
