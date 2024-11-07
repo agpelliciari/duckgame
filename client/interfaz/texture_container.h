@@ -14,7 +14,8 @@ enum class TextureType {
     WHITE_DUCK,
 
     BACKGROUND,
-    TREE
+    TREE,
+    BOX
 };
 
 class TextureContainer {
