@@ -57,8 +57,9 @@ void MatchState::stop() { running = false; }
 
 void MatchState::send_results(MatchObserver& observer) {
     MatchDto dto = MatchDto(INICIADA, 1);
-    match_logic.get_dtos(dto.players);
+    match_logic.get_dtos(dto.players, dto.objects);
     observer.updateState(dto);
+
 }
 
 void MatchState::add_objects(const struct MapInfo& map_info){
