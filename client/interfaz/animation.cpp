@@ -50,6 +50,12 @@ void Animation::updatePlayerAnimation(AnimationBuilder& builder, const PlayerDTO
                                                            RUNNING_ANIMATION_FRAMES)),
                        STARTING_SPRITE_Y, true);
             break;
+        case TypeMoveAction::AIR_NEUTRAL:
+            setBuilder(builder,
+                       (STARTING_SPRITE_X + SPRITE_SIZE * ((frameTicks / JUMPING_ANIMATION_SPEED) %
+                                                           JUMPING_ANIMATION_FRAMES)),
+                       JUMPING_SPRITE_Y, false);
+            break;
         case TypeMoveAction::AIR_RIGHT:
             setBuilder(builder,
                        (STARTING_SPRITE_X + SPRITE_SIZE * ((frameTicks / JUMPING_ANIMATION_SPEED) %
@@ -61,6 +67,10 @@ void Animation::updatePlayerAnimation(AnimationBuilder& builder, const PlayerDTO
                        (STARTING_SPRITE_X + SPRITE_SIZE * ((frameTicks / JUMPING_ANIMATION_SPEED) %
                                                            JUMPING_ANIMATION_FRAMES)),
                        JUMPING_SPRITE_Y, true);
+            break;
+        case TypeMoveAction::FLAP_NEUTRAL:
+            setBuilder(builder, (STARTING_SPRITE_X + SPRITE_SIZE * FLAPPING_SPRITE_X_OFFSET),
+                       FLAPPING_SPRITE_Y, false);
             break;
         case TypeMoveAction::FLAP_RIGHT:
             setBuilder(builder, (STARTING_SPRITE_X + SPRITE_SIZE * FLAPPING_SPRITE_X_OFFSET),
