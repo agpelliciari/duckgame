@@ -2,7 +2,6 @@
 
 #include "./testerclient.h"
 #include "common/core/liberror.h"
-#include "common/dtos.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "server/lobbycontainer.h"

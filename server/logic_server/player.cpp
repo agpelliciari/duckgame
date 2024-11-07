@@ -29,11 +29,15 @@ void Player::still() {
     object.stop_moving_x();
 }
 
-void Player::update(){
-    object.move();
+void Player::update(std::vector<std::vector<bool>> &colition_map){
+    object.move(colition_map);
     object.update_action(move_action);
 }
 
 void Player::add_speed(int speed_x, int speed_y){
     this->object.add_speed(speed_x, speed_y);
+}
+
+Tuple Player::get_position(){
+    return object.get_real_position();
 }

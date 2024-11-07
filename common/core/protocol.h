@@ -52,6 +52,9 @@ public:
     uint16_t recvshort();
     void sendshort(const uint16_t num);
 
+    unsigned int recvuint();
+    void senduint(const unsigned int num);
+
 
     // para mandar structs.. o similes, cuando se sabe la longitud.
     void sendbytes(const void* msg, const unsigned int count);

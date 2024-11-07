@@ -2,7 +2,6 @@
 #define Lobby_LISTENER_H
 
 #include "client/gamecontext.h"
-#include "common/dtos.h"
 
 // Clase que encapsula al protocol y mantendria el estado del juego
 // Proporcionado una interfaz para acciones del usuario.

@@ -2,9 +2,10 @@
 #define GAME_CONTEXT_H
 
 #include <cstdint>
+#include <string>
 #include <vector>
 
-#include "common/dtosobject.h"
+#include "common/dtosmap.h"
 
 struct GameContext {
     unsigned int id_lobby;  // cppcheck-suppress unusedStructMember
@@ -15,8 +16,10 @@ struct GameContext {
     uint8_t first_player;   // cppcheck-suppress unusedStructMember
     uint8_t second_player;  // cppcheck-suppress unusedStructMember
 
-    int map_size_x;                // cppcheck-suppress unusedStructMember
-    int map_size_y;                // cppcheck-suppress unusedStructMember
+
+    std::string map_background;    // cppcheck-suppress unusedStructMember
+    int map_width;                 // cppcheck-suppress unusedStructMember
+    int map_height;                // cppcheck-suppress unusedStructMember
     std::vector<BlockDTO> blocks;  // cppcheck-suppress unusedStructMember
 
     uint8_t cantidadjugadores;  // No hace falta? El dto match lo dira
@@ -27,8 +30,8 @@ struct GameContext {
             dualplay(true),
             first_player(1),
             second_player(2),
-            map_size_x(50),
-            map_size_y(20),
+            map_width(50),
+            map_height(20),
             cantidadjugadores(4) {}
 };
 

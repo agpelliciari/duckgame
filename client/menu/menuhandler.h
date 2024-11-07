@@ -6,7 +6,6 @@
 #include "client/core/lobby_client_sender.h"
 #include "client/core/lobby_connector.h"
 #include "client/core/lobby_listener.h"
-#include "common/dtos.h"
 #include "common/queue.h"
 
 #include "menuAction.h"

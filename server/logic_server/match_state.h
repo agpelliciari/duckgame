@@ -6,7 +6,7 @@
 #include "./match_logic.h"
 #include "./match_queue.h"
 #include "./matchobserver.h"
-#include "common/dtos.h"
+#include "common/dtosgame.h"
 #include "common/dtosplayer.h"
 
 #include "action_command.h"
@@ -25,6 +25,7 @@ private:
 
 public:
     MatchState();
+    MatchState(struct MapPoint size, std::vector<struct MapObject>& objects);
     void pushAction(const PlayerActionDTO& action);
     // void add_player(Player player);
     void receive_commands();

@@ -3,27 +3,20 @@
 
 #include <cstdint>
 
+typedef int coordinate_t;
 
-// Paredes/Plataformas estaticas!
-enum BlockType : uint8_t {
-    GRASS = 1,
-    ROCK = 2  // Algun tipo?
+struct MapPoint {
+    coordinate_t x;  // cppcheck-suppress unusedStructMember
+    coordinate_t y;  // cppcheck-suppress unusedStructMember
+    MapPoint(const coordinate_t _x, const coordinate_t _y): x(_x), y(_y) {}
+    MapPoint(): x(0), y(0) {}
 };
-
-struct BlockDTO {
-    uint8_t pos_x;
-    uint8_t pos_y;
-    uint8_t tipo;
-    uint8_t size_x;  // Haria falta?! puede que sea mejor si.
-    uint8_t size_y;
-} __attribute__((packed));
-
-
 // Objetos dinamicos!
 enum class TypeDynamicObject : uint8_t {
     // Generales
     BOX,
     PROJECTILE,
+    BURST,
 
     HELMET,
     ARMOR,
@@ -39,14 +32,6 @@ enum class TypeDynamicObject : uint8_t {
     MAGNUM,
     ESCOPETA,
     SNIPER
-};
-
-struct DynamicObjDTO {
-    int pos_x;
-    int pos_y;
-    TypeDynamicObject type;
-    DynamicObjDTO(int x, int y, TypeDynamicObject _type): pos_x(x), pos_y(y), type(_type) {}
-    DynamicObjDTO() {}
 };
 
 #endif

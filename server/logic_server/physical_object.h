@@ -4,6 +4,7 @@
 
 #include "common/dtosplayer.h"
 #include "tuple.h"
+#include <vector>
 
 class PhysicalObject {
 
@@ -16,6 +17,7 @@ class PhysicalObject {
         int gravity;
         float time_step;
         int flap_attemps;
+        bool on_air;
 
     public:
 
@@ -26,10 +28,15 @@ class PhysicalObject {
         bool check_collision(int coord_x, int coord_y);
         void stop_moving_x();
         void stop_moving_y();
-        void move();
+        void move(std::vector<std::vector<bool>> &colition_map);
         void update_action(TypeMoveAction& move_action);
         void get_position(int &coord_x, int &coord_y);
-
+        bool check_collision(std::vector<std::vector<bool>> &colition_map);
+        bool check_left_collision(std::vector<std::vector<bool>> &colition_map);
+        bool check_right_collision(std::vector<std::vector<bool>> &colition_map);
+        bool check_down_collision(std::vector<std::vector<bool>> &colition_map);
+        bool check_up_collision(std::vector<std::vector<bool>> &colition_map);
+        Tuple get_real_position();
         //~PhysicalObject();
 };
 
