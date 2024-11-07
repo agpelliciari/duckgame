@@ -25,6 +25,7 @@ bool ControlNotifier::runLobby() {
 
             if (info.action == LobbyResponseType::GAME_ERROR) {
                 // std::cout << "----> IF NOTIFY ERROR FROM HERE THEN CUSTOM/LOGIC ERROR??\n";
+                protocol.close();
                 return true;  // Si fue un error el notificado entonces sali.
             }
 
@@ -39,7 +40,7 @@ bool ControlNotifier::runLobby() {
 
         if (!protocol.isactive()) {
             // Se presiono la q. Y ya se cerro el protocol.
-            std::cout << "--------> PRESSED Q AND ALREADY CLOSED AT NOTIFIER!\n";
+            // std::cout << "--------> ALREADY CLOSED AT NOTIFIER SO no need?!\n";
             return true;
         }
         // Si el player esta closed, el match fue cancelado

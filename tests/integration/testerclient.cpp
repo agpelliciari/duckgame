@@ -54,7 +54,6 @@ LobbyErrorType TesterClient::assertLobbyError() {
     return (LobbyErrorType)info.data;
 }
 
-
 void TesterClient::assertLobbyInfoJoined(uint8_t id) {
     lobby_info info;
     client.recvlobbyinfo(info);
@@ -104,6 +103,8 @@ void TesterClient::close() {
     // sktserver.close();
     // client.close();
 }
+
+bool TesterClient::isReceiverOpen() { return receiver->isopen(); }
 
 void TesterClient::finish() {
     sktclient.finish();
