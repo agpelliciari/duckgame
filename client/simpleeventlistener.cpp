@@ -4,7 +4,16 @@
 
 SimpleEventListener::SimpleEventListener() {}
 
-void SimpleEventListener::matchUpdated(const MatchDto& state) { updates.push(state); }
+void SimpleEventListener::matchUpdated(const MatchDto& state) {
+    updates.push(state);
+    /*
+    for(const PlayerDTO& player: state.players){
+         std::cerr << "-->" << (int)player.id << " at " << player.pos.x << ","
+                 << player.pos.y << std::endl;
+    }
+
+    */
+}
 void SimpleEventListener::matchFinished(const MatchDto& final_info) {
     updates.push(final_info);
     updates.close();
