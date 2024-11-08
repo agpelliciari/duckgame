@@ -1,7 +1,6 @@
-#include "./game_state_recv.h"
-
 #include <iostream>
 
+#include "./game_state_recv.h"
 #include "common/core/liberror.h"
 
 GameStateRecv::GameStateRecv(ClientProtocol& _protocol, EventListener& _listener):

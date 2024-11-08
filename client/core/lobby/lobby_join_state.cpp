@@ -1,10 +1,9 @@
-#include "./lobby_join_sender.h"
-
 #include <cstring>
 #include <iostream>
 #include <string>
 #include <utility>
 
+#include "./lobby_join_sender.h"
 #include "common/core/liberror.h"
 #include "common/protocolerror.h"
 

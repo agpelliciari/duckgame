@@ -1,10 +1,9 @@
-#include "./game_action_sender.h"
-
 #include <cstring>
 #include <iostream>
 #include <string>
 #include <utility>
 
+#include "./game_action_sender.h"
 #include "./game_state_recv.h"
 #include "common/core/liberror.h"
 

@@ -1,10 +1,9 @@
-#include "./base_lobby_state.h"
-
 #include <cstring>
 #include <iostream>
 #include <string>
 #include <utility>
 
+#include "./base_lobby_state.h"
 #include "common/core/liberror.h"
 #include "common/errors.h"
 #include "common/protocolerror.h"

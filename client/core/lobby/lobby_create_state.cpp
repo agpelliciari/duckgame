@@ -1,11 +1,10 @@
-#include "./lobby_create_sender.h"
-
 #include <cstring>
 #include <iostream>
 #include <string>
 #include <utility>
 
 #include "./lobby_action_listener.h"
+#include "./lobby_create_sender.h"
 #include "common/core/liberror.h"
 #include "common/protocolerror.h"
 

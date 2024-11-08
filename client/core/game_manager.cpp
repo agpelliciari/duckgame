@@ -1,10 +1,9 @@
-#include "./lobby_connector.h"
-
 #include <cstring>
 #include <iostream>
 #include <string>
 #include <utility>
 
+#include "./lobby_connector.h"
 #include "./lobby_create_sender.h"
 #include "./lobby_join_sender.h"
 #include "common/core/liberror.h"

@@ -1,7 +1,6 @@
-#include "./lobby_action_listener.h"
-
 #include <iostream>
 
+#include "./lobby_action_listener.h"
 #include "common/core/liberror.h"
 
 
