@@ -17,13 +17,6 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="nameInput">
-         <property name="placeholderText">
-          <string>Map Name</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QComboBox" name="backgroundDropdown">
          <property name="placeholderText">
           <string>Background</string>
@@ -67,20 +60,6 @@
         <widget class="QComboBox" name="blockDropdown">
          <property name="placeholderText">
           <string>Block</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="placeButton">
-         <property name="text">
-          <string>Place</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="removeButton">
-         <property name="text">
-          <string>Remove</string>
          </property>
         </widget>
        </item>

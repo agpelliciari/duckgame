@@ -4,22 +4,42 @@
 #include <QDir>
 #include <QDebug>
 
-Playground::Playground(QWidget* parent): QGraphicsView(parent), ui(new Ui::Playground), map(new QGraphicsScene(this)) {
+Playground::Playground(const PlaygroundHandler& handler, QWidget* parent): QGraphicsView(parent), ui(new Ui::Playground), map(new QGraphicsScene(this)), handler(handler) {
     ui->setupUi(this);
 
     const int width = 20;
     const int height = 10;
     const int blockSize = 32;
 
-    setScene(map);
-    setupGrid(width, height, blockSize);
+    initializeMap(width, height, blockSize);
+}
+
+void Playground::addBlock(QPoint position, QBrush texture) {
+    QGraphicsItem* graphicItem = map->itemAt(position, QTransform());
+
+    if (!graphicItem || graphicItem->type() != QGraphicsRectItem::Type)
+        return;
+
+    QGraphicsRectItem* block = static_cast<QGraphicsRectItem*>(graphicItem);
+    block->setBrush(texture);
+}
+
+void Playground::removeBlock(QPoint position) {
+    QGraphicsItem* graphicItem = map->itemAt(position, QTransform());
+
+    if (!graphicItem || graphicItem->type() != QGraphicsRectItem::Type)
+        return;
+
+    QGraphicsRectItem* block = static_cast<QGraphicsRectItem*>(graphicItem);
+    block->setBrush(Qt::NoBrush);
 }
 
 Playground::~Playground() {
     delete ui;
 }
 
-void Playground::setupGrid(int width, int height, int blockSize) {
+void Playground::initializeMap(int width, int height, int blockSize) {
+    setScene(map);
     map->setSceneRect(0, 0, width * blockSize, height * blockSize);
 
     QBrush blueBrush(QColor(0, 0, 255));
@@ -35,24 +55,15 @@ void Playground::setupGrid(int width, int height, int blockSize) {
 
             blockRect->setData(0, row * width + col);
         }
-    } 
+    }
 }
 
 void Playground::mousePressEvent(QMouseEvent* event) {
-    QPointF scenePos = mapToScene(event->pos());
-    QGraphicsItem* block = map->itemAt(scenePos, QTransform());
+    QPointF position = mapToScene(event->pos());
 
-    if (block && block->type() == QGraphicsRectItem::Type) {
-        QGraphicsRectItem* blockRect = static_cast<QGraphicsRectItem*>(block);
-
-        QPixmap texturePixmap;
-        if (event->button() == Qt::LeftButton) {
-            texturePixmap.load("./editor/bloque.png");
-        } else if (event->button() == Qt::RightButton) {
-            texturePixmap.load("./editor/pasto.png");
-        }
-
-        QBrush textureBrush(texturePixmap);
-        blockRect->setBrush(textureBrush);
+    if (event->button() == Qt::LeftButton) {
+        handler.onLeftClick(position.toPoint());
+    } else if (event->button() == Qt::RightButton) {
+        handler.onRightClick(position.toPoint());
     }
 }

@@ -9,6 +9,11 @@
 #include <QColor>
 #include <QMouseEvent>
 
+struct PlaygroundHandler {
+    std::function<void(QPoint)> onLeftClick;
+    std::function<void(QPoint)> onRightClick;
+};
+
 namespace Ui {
 class Playground;
 }
@@ -20,13 +25,19 @@ private:
     Ui::Playground* ui;
     QGraphicsScene* map;
 
+    const PlaygroundHandler handler;
+
 public:
-    explicit Playground(QWidget* parent = nullptr);
+    explicit Playground(const PlaygroundHandler& handler, QWidget* parent = nullptr);
+
+    void addBlock(QPoint position, QBrush texture);
+
+    void removeBlock(QPoint position);
 
     ~Playground();
 
 private:
-    void setupGrid(int width, int height, int blockSize);
+    void initializeMap(int width, int height, int blockSize);
 
     void mousePressEvent(QMouseEvent* event) override;
 };
