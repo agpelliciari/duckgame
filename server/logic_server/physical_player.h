@@ -21,9 +21,9 @@ class PhysicalPlayer: public PhysicalObject {
     public:
         PhysicalPlayer(int init_coord_x, int init_coord_y);
 
-        void react_to_sides_collision();
-        void react_to_down_collision();
-        void react_to_up_collision();
+        void react_to_sides_collision() override;
+        void react_to_down_collision() override;
+        void react_to_up_collision() override;
         void update_action(TypeMoveAction& move_action);
         void stop_moving_x();
 
