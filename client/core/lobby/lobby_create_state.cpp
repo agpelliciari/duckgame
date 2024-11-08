@@ -1,29 +1,30 @@
+#include "./lobby_create_state.h"
+
 #include <cstring>
 #include <iostream>
 #include <string>
 #include <utility>
 
-#include "./lobby_action_listener.h"
-#include "./lobby_create_sender.h"
+#include "./lobby_action_sender.h"
 #include "common/core/liberror.h"
 #include "common/protocolerror.h"
 
 
-LobbyCreateSender::LobbyCreateSender(Messenger& _messenger, GameContext& _context,
-                                     LobbyListener& _listener):
-        BaseLobbyState(_messenger, _context, _listener) {}
+LobbyCreateState::LobbyCreateState(Messenger& _messenger, GameContext& _context,
+                                   LobbyListener& _listener):
+        LobbyStateRecv(_messenger, _context, _listener) {}
 
-void LobbyCreateSender::createLobby() {
+void LobbyCreateState::createLobby() {
     if (_is_alive) {  // already running!!
         throw LibError(1, "Already running client!! finish it first!");
     }
     start();
 }
 
-LobbyClientSender& LobbyCreateSender::getSender() { return sender; }
+LobbyActionQueue& LobbyCreateState::getSender() { return sender; }
 
 
-void LobbyCreateSender::run() {
+void LobbyCreateState::run() {
 
     try {
         uint8_t id_lobby = protocol.createLobby();
@@ -49,7 +50,7 @@ void LobbyCreateSender::run() {
         return;
     }
 
-    LobbyActionListener actionlisten(protocol, sender);
+    LobbyActionSender actionlisten(protocol, sender);
     actionlisten.begin();
 
     // Open info receiver.

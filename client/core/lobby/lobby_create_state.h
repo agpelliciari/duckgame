@@ -3,32 +3,32 @@
 
 #include <string>
 
-#include "./base_lobby_state.h"
-#include "./lobby_client_sender.h"
+#include "./lobby_action_queue.h"
+#include "./lobby_state_recv.h"
 #include "client/gamecontext.h"
 #include "common/clientprotocol.h"
 #include "common/queue.h"
 
 // Clase que encapsula al protocol y mantendria el estado del juego
 // Proporcionado una interfaz para acciones del usuario.
-class LobbyCreateSender: public BaseLobbyState {
+class LobbyCreateState: public LobbyStateRecv {
 protected:
-    LobbyClientSender sender;
+    LobbyActionQueue sender;
     void run() override;
 
 public:
     // Los default sin pasar por socket/protocol.
-    explicit LobbyCreateSender(Messenger& _messenger, GameContext& _context,
-                               LobbyListener& _listener);
+    explicit LobbyCreateState(Messenger& _messenger, GameContext& _context,
+                              LobbyListener& _listener);
 
-    LobbyCreateSender(LobbyCreateSender&&) = delete;
-    LobbyCreateSender& operator=(LobbyCreateSender&&) = delete;
+    LobbyCreateState(LobbyCreateState&&) = delete;
+    LobbyCreateState& operator=(LobbyCreateState&&) = delete;
 
     // Asumamos por ahora que no se quiere permitir copias, ni mov.
-    LobbyCreateSender(const LobbyCreateSender&) = delete;
-    LobbyCreateSender& operator=(const LobbyCreateSender&) = delete;
+    LobbyCreateState(const LobbyCreateState&) = delete;
+    LobbyCreateState& operator=(const LobbyCreateState&) = delete;
 
-    LobbyClientSender& getSender();
+    LobbyActionQueue& getSender();
 
     void createLobby();
 };

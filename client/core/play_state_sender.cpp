@@ -1,14 +1,15 @@
+#include "./play_state_sender.h"
+
 #include <cstring>
 #include <iostream>
 #include <string>
 #include <utility>
 
-#include "./game_action_sender.h"
-#include "./game_state_recv.h"
+#include "./play_state_recv.h"
 #include "common/core/liberror.h"
 
-GameActionSender::GameActionSender(Messenger& _messenger, EventListener& _listener,
-                                   GameContext& _context):
+PlayStateSender::PlayStateSender(Messenger& _messenger, EventListener& _listener,
+                                 GameContext& _context):
         protocol(_messenger),
         listener(_listener),
         context(_context),
@@ -16,11 +17,11 @@ GameActionSender::GameActionSender(Messenger& _messenger, EventListener& _listen
         secondidle(true) {}
 
 /*
-GameActionSender::GameActionSender(GameActionSender&& other):
+PlayStateSender::PlayStateSender(PlayStateSender&& other):
         protocol(other.protocol), listener(other.listener) {
     other.protocol = NULL;
 }
-GameActionSender& GameActionSender::operator=(GameActionSender&& other) {
+PlayStateSender& PlayStateSender::operator=(PlayStateSender&& other) {
     if (protocol == other.protocol) {
         return *this;
     }
@@ -34,8 +35,8 @@ GameActionSender& GameActionSender::operator=(GameActionSender&& other) {
 }
 */
 
-void GameActionSender::disconnect() { std::cout << "SHOULD SEND DISCCONNECT!" << std::endl; }
-void GameActionSender::doaction(const PlayerActionDTO& action) {
+void PlayStateSender::disconnect() { std::cout << "SHOULD SEND DISCCONNECT!" << std::endl; }
+void PlayStateSender::doaction(const PlayerActionDTO& action) {
 
     if (action.playerind != 0 && !context.dualplay) {
         return;
@@ -45,9 +46,9 @@ void GameActionSender::doaction(const PlayerActionDTO& action) {
     actions.try_push(action);
 }
 
-bool GameActionSender::isrunning() { return _is_alive; }
+bool PlayStateSender::isrunning() { return _is_alive; }
 
-void GameActionSender::begin() {
+void PlayStateSender::begin() {
     if (is_alive()) {
         // std::cerr << "ALREADY STARTED SENDER!\n";
         return;
@@ -56,7 +57,7 @@ void GameActionSender::begin() {
     start();
 }
 
-void GameActionSender::end() {
+void PlayStateSender::end() {
     if (_keep_running) {
         std::cout << "ENDING GAME SENDER!!\n";
         stop();
@@ -65,10 +66,10 @@ void GameActionSender::end() {
     }
 }
 
-void GameActionSender::run() {
+void PlayStateSender::run() {
 
     try {
-        GameStateRecv receiver(protocol, listener);
+        PlayStateRecv receiver(protocol, listener);
         receiver.start();
 
         while (_keep_running) {
@@ -85,9 +86,9 @@ void GameActionSender::run() {
 }
 
 
-bool GameActionSender::endstate() {
+bool PlayStateSender::endstate() {
     end();
     return true;
 }
 
-GameActionSender::~GameActionSender() { end(); }
+PlayStateSender::~PlayStateSender() { end(); }

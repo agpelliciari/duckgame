@@ -6,11 +6,11 @@
 #include <string>
 
 #include "./gamecontext.h"
-#include "client/core/lobby_connector.h"
+#include "client/core/game_manager.h"
 #include "interfaz/loop_ui.h"
 #include "menu/menu.h"
 #include "menu/menuhandler.h"
-//#include "client/core/game_action_sender.h"
+//#include "client/core/play_state_sender.h"
 
 
 class Client {
@@ -18,8 +18,8 @@ private:
     int argc;     // cppcheck-suppress unusedStructMember
     char** argv;  // cppcheck-suppress unusedStructMember
 
-    int execMenu(LobbyConnector& connector);
-    int execGame(LobbyConnector& connector, const GameContext& context);
+    int execMenu(GameManager& connector);
+    int execGame(GameManager& connector, const GameContext& context);
 
 public:
     explicit Client(int argc, char* argv[]);

@@ -7,27 +7,27 @@
 
 
 // El thread que basicamente notifica de eventos al protocolo/client.
-class GameStateRecv: public Thread {
+class PlayStateRecv: public Thread {
 
 protected:
     ClientProtocol& protocol;  // cppcheck-suppress unusedStructMember
     EventListener& listener;   // cppcheck-suppress unusedStructMember
 
 public:
-    explicit GameStateRecv(ClientProtocol& _protocol, EventListener& _listener);
+    explicit PlayStateRecv(ClientProtocol& _protocol, EventListener& _listener);
 
     // Asumamos por ahora que no se quiere permitir copias, ni mov.
-    GameStateRecv(const GameStateRecv&) = delete;
-    GameStateRecv& operator=(const GameStateRecv&) = delete;
+    PlayStateRecv(const PlayStateRecv&) = delete;
+    PlayStateRecv& operator=(const PlayStateRecv&) = delete;
 
-    GameStateRecv(GameStateRecv&&) = delete;
-    GameStateRecv& operator=(GameStateRecv&&) = delete;
+    PlayStateRecv(PlayStateRecv&&) = delete;
+    PlayStateRecv& operator=(PlayStateRecv&&) = delete;
 
     // Run para el thread corra cuando empieze.
     // Simplemente espera, en envia el evento
     void run() override;
 
-    ~GameStateRecv();
+    ~PlayStateRecv();
 };
 
 #endif

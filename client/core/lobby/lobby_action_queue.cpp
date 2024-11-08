@@ -1,16 +1,16 @@
-#include "./lobby_client_sender.h"
+#include "./lobby_action_queue.h"
 
 
-LobbyClientSender::LobbyClientSender() {}
+LobbyActionQueue::LobbyActionQueue() {}
 
-void LobbyClientSender::close() { actions.close(); }
+void LobbyActionQueue::close() { actions.close(); }
 
-void LobbyClientSender::doaction(const lobby_action& action) { actions.push(action); }
+void LobbyActionQueue::doaction(const lobby_action& action) { actions.push(action); }
 
 
-lobby_action LobbyClientSender::popaction() { return actions.pop(); }
+lobby_action LobbyActionQueue::popaction() { return actions.pop(); }
 
-void LobbyClientSender::notifyStart() {
+void LobbyActionQueue::notifyStart() {
     lobby_action action(PLAYER_READY, 0);
     actions.push(action);
 }

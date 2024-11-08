@@ -1,14 +1,15 @@
+#include "./lobby_action_sender.h"
+
 #include <iostream>
 
-#include "./lobby_action_listener.h"
 #include "common/core/liberror.h"
 
 
-LobbyActionListener::LobbyActionListener(ClientProtocol& _protocol, LobbyClientSender& _actions):
+LobbyActionSender::LobbyActionSender(ClientProtocol& _protocol, LobbyActionQueue& _actions):
         protocol(_protocol), actions(_actions) {}
-void LobbyActionListener::begin() { start(); }
+void LobbyActionSender::begin() { start(); }
 
-void LobbyActionListener::run() {
+void LobbyActionSender::run() {
     try {
         while (_keep_running) {
             protocol.sendlobbyaction(actions.popaction());
@@ -18,7 +19,7 @@ void LobbyActionListener::run() {
     }
 }
 
-LobbyActionListener::~LobbyActionListener() {
+LobbyActionSender::~LobbyActionSender() {
     if (_keep_running) {
         stop();
         actions.close();

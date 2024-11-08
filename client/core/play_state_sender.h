@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 
-#include "./lobby_state.h"
+#include "./game_state.h"
 #include "client/actionlistener.h"
 #include "client/eventlistener.h"
 #include "client/gamecontext.h"
@@ -14,7 +14,7 @@
 
 // Clase que encapsula al protocol y mantendria el estado del juego
 // Proporcionado una interfaz para acciones del usuario.
-class GameActionSender: private Thread, public ActionListener, public LobbyState {
+class PlayStateSender: private Thread, public ActionListener, public GameState {
 protected:
     ClientProtocol protocol;  // cppcheck-suppress unusedStructMember
     EventListener& listener;
@@ -30,15 +30,15 @@ public:
     void disconnect() override;
 
     // Los default sin pasar por socket/protocol.
-    explicit GameActionSender(Messenger& _messenger, EventListener& _listener,
-                              GameContext& _context);
+    explicit PlayStateSender(Messenger& _messenger, EventListener& _listener,
+                             GameContext& _context);
 
-    // GameActionSender(GameActionSender&&);
-    // GameActionSender& operator=(GameActionSender&&);
+    // PlayStateSender(PlayStateSender&&);
+    // PlayStateSender& operator=(PlayStateSender&&);
 
     // Asumamos por ahora que no se quiere permitir copias, ni mov.
-    GameActionSender(const GameActionSender&) = delete;
-    GameActionSender& operator=(const GameActionSender&) = delete;
+    PlayStateSender(const PlayStateSender&) = delete;
+    PlayStateSender& operator=(const PlayStateSender&) = delete;
 
 
     void begin();
@@ -56,7 +56,7 @@ public:
 
     bool endstate() override;
 
-    ~GameActionSender();
+    ~PlayStateSender();
 };
 
 #endif

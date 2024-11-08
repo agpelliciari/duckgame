@@ -1,24 +1,25 @@
+#include "./lobby_state_recv.h"
+
 #include <cstring>
 #include <iostream>
 #include <string>
 #include <utility>
 
-#include "./base_lobby_state.h"
 #include "common/core/liberror.h"
 #include "common/errors.h"
 #include "common/protocolerror.h"
 
-const char* BaseLobbyState::ERRORS[] = {
+const char* LobbyStateRecv::ERRORS[] = {
         "Client connection error",     "Unknown server error", "Server closed the connection",
         "Match's host left the lobby", "Lobby was not found",  "Lobby was already started",
         "Lobby had not enough space"};
 
-BaseLobbyState::BaseLobbyState(Messenger& _messenger, GameContext& _context,
+LobbyStateRecv::LobbyStateRecv(Messenger& _messenger, GameContext& _context,
                                LobbyListener& _listener):
         protocol(_messenger), context(_context), listener(_listener) {}
 
 
-void BaseLobbyState::handleNotify(const lobby_info& info) {
+void LobbyStateRecv::handleNotify(const lobby_info& info) {
     // Un map para esto... no vale la pena.
     if (info.action == PLAYER_NEW) {
         context.cantidadjugadores++;
@@ -29,7 +30,7 @@ void BaseLobbyState::handleNotify(const lobby_info& info) {
     }
 }
 
-void BaseLobbyState::listeninfo() {
+void LobbyStateRecv::listeninfo() {
     lobby_info info;
     try {
         protocol.recvlobbyinfo(info);
@@ -73,7 +74,7 @@ void BaseLobbyState::listeninfo() {
     }
 }
 
-bool BaseLobbyState::endstate() {
+bool LobbyStateRecv::endstate() {
     if (_keep_running) {
         stop();
         if (!context.started) {
@@ -85,7 +86,7 @@ bool BaseLobbyState::endstate() {
     return context.started;
 }
 
-BaseLobbyState::~BaseLobbyState() {
+LobbyStateRecv::~LobbyStateRecv() {
     if (_keep_running) {
         stop();
         if (!context.started) {

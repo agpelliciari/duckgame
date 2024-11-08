@@ -4,17 +4,17 @@
 #include "common/dtoslobby.h"
 #include "common/queue.h"
 
-class LobbyClientSender {
+class LobbyActionQueue {
     Queue<lobby_action> actions;
 
 public:
-    LobbyClientSender();
+    LobbyActionQueue();
     void doaction(const lobby_action& action);
     void notifyStart();
     void close();
     lobby_action popaction();
 
-    ~LobbyClientSender() {}
+    ~LobbyActionQueue() {}
 };
 
 #endif

@@ -2,27 +2,26 @@
 #define LOBBY_JOIN_SENDER_H
 
 
-#include "./base_lobby_state.h"
+#include "./lobby_state_recv.h"
 #include "client/gamecontext.h"
 #include "common/clientprotocol.h"
 
 // Clase que encapsula al protocol y mantendria el estado del juego
 // Proporcionado una interfaz para acciones del usuario.
-class LobbyJoinSender: public BaseLobbyState {
+class LobbyJoinState: public LobbyStateRecv {
 protected:
     void run() override;
 
 public:
     // Los default sin pasar por socket/protocol.
-    explicit LobbyJoinSender(Messenger& _messenger, GameContext& _context,
-                             LobbyListener& _listener);
+    explicit LobbyJoinState(Messenger& _messenger, GameContext& _context, LobbyListener& _listener);
 
-    LobbyJoinSender(LobbyJoinSender&&) = delete;
-    LobbyJoinSender& operator=(LobbyJoinSender&&) = delete;
+    LobbyJoinState(LobbyJoinState&&) = delete;
+    LobbyJoinState& operator=(LobbyJoinState&&) = delete;
 
     // Asumamos por ahora que no se quiere permitir copias, ni mov.
-    LobbyJoinSender(const LobbyJoinSender&) = delete;
-    LobbyJoinSender& operator=(const LobbyJoinSender&) = delete;
+    LobbyJoinState(const LobbyJoinState&) = delete;
+    LobbyJoinState& operator=(const LobbyJoinState&) = delete;
 
     // void doaction(const lobby_action& action);
     void joinLobby();
@@ -31,7 +30,7 @@ public:
     // Lobby state
     // bool endstate() override;
 
-    //~LobbyJoinSender();
+    //~LobbyJoinState();
 };
 
 #endif

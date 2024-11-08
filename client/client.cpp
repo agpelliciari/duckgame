@@ -4,7 +4,7 @@
 
 Client::Client(int argc, char* argv[]): argc(argc), argv(argv) {}
 
-int Client::execMenu(LobbyConnector& connector) {
+int Client::execMenu(GameManager& connector) {
     MenuHandler menuHandler(connector);
 
     QApplication application(argc, argv);
@@ -31,7 +31,7 @@ int Client::execMenu(LobbyConnector& connector) {
 }
 int Client::exec() {
     GameContext context;
-    LobbyConnector connector(context);
+    GameManager connector(context);
     if (execMenu(connector) != 0) {
         return 1;
     }
@@ -50,11 +50,11 @@ int Client::exec() {
 }
 
 
-int Client::execGame(LobbyConnector& connector, const GameContext& context) {
+int Client::execGame(GameManager& connector, const GameContext& context) {
     // Crear event queue iniciar action listener y exec del uiloop!
     SimpleEventListener listener;
 
-    GameActionSender& actionListener(*connector.initGame(listener));
+    PlayStateSender& actionListener(*connector.initGame(listener));
     actionListener.begin();
 
     std::cout << "MAP SIZE IS " << context.map_width << " , " << context.map_height

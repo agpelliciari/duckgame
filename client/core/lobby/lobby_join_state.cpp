@@ -1,26 +1,27 @@
+#include "./lobby_join_state.h"
+
 #include <cstring>
 #include <iostream>
 #include <string>
 #include <utility>
 
-#include "./lobby_join_sender.h"
 #include "common/core/liberror.h"
 #include "common/protocolerror.h"
 
-LobbyJoinSender::LobbyJoinSender(Messenger& _messenger, GameContext& _context,
-                                 LobbyListener& _listener):
-        BaseLobbyState(_messenger, _context, _listener) {}
+LobbyJoinState::LobbyJoinState(Messenger& _messenger, GameContext& _context,
+                               LobbyListener& _listener):
+        LobbyStateRecv(_messenger, _context, _listener) {}
 
-void LobbyJoinSender::joinLobby() {
+void LobbyJoinState::joinLobby() {
     if (_is_alive) {  // already running!!
         throw LibError(1, "Already running client!! finish it first!");
     }
     start();
 }
 
-bool LobbyJoinSender::isrunning() { return _is_alive; }
+bool LobbyJoinState::isrunning() { return _is_alive; }
 
-void LobbyJoinSender::run() {
+void LobbyJoinState::run() {
     try {
         lobby_info infojoin = protocol.joinLobby(context.id_lobby);
         if (infojoin.action != JOINED_LOBBY) {

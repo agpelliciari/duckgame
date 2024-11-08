@@ -3,28 +3,28 @@
 
 #include <string>
 
-#include "./lobby_client_sender.h"
+#include "./lobby_action_queue.h"
 #include "common/clientprotocol.h"
 #include "common/thread.h"
 
 // Clase que encapsula al protocol y mantendria el estado del juego
 // Proporcionado una interfaz para acciones del usuario.
-class LobbyActionListener: private Thread {
+class LobbyActionSender: private Thread {
 protected:
     ClientProtocol& protocol;
-    LobbyClientSender& actions;
+    LobbyActionQueue& actions;
     void run() override;
 
 public:
     // Los default sin pasar por socket/protocol.
-    explicit LobbyActionListener(ClientProtocol& _protocol, LobbyClientSender& _actions);
+    explicit LobbyActionSender(ClientProtocol& _protocol, LobbyActionQueue& _actions);
 
-    LobbyActionListener(LobbyActionListener&&);
-    LobbyActionListener& operator=(LobbyActionListener&&);
+    LobbyActionSender(LobbyActionSender&&);
+    LobbyActionSender& operator=(LobbyActionSender&&);
 
     // Asumamos por ahora que no se quiere permitir copias, ni mov.
-    LobbyActionListener(const LobbyActionListener&) = delete;
-    LobbyActionListener& operator=(const LobbyActionListener&) = delete;
+    LobbyActionSender(const LobbyActionSender&) = delete;
+    LobbyActionSender& operator=(const LobbyActionSender&) = delete;
 
     void begin();
 
@@ -34,7 +34,7 @@ public:
 
     bool isrunning();
 
-    ~LobbyActionListener();
+    ~LobbyActionSender();
 };
 
 #endif
