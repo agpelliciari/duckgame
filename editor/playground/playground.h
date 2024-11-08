@@ -24,11 +24,14 @@ class Playground : public QGraphicsView {
 private:
     Ui::Playground* ui;
     QGraphicsScene* map;
+    QGraphicsRectItem* background;
 
     const PlaygroundHandler handler;
 
 public:
     explicit Playground(const PlaygroundHandler& handler, QWidget* parent = nullptr);
+
+    void setBackground(QPixmap texture);
 
     void addBlock(QPoint position, QBrush texture);
 

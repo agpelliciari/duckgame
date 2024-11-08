@@ -7,19 +7,18 @@ EditorWindow::EditorWindow(QWidget *parent):
     QMainWindow(parent),
     ui(new Ui::EditorWindow),
     interface(new Interface(InterfaceHandler{
+        .onBackgroundDropdownIndexChanged = [this](size_t index) {
+            selectedBackgroundTexture(index);
+        },
         .onBlockDropdownIndexChanged = [this](size_t index) {
-            selectedTextureIndex = index;
-            QPixmap pixelMap;
-            pixelMap.load(QString::fromStdString(textures[selectedTextureIndex].source));
-            QBrush texture(pixelMap);
-            interface->displayOnPreview(texture);
+            selectedBlockTexture(index);
         },
         .onExport = [this]() { exportToFileSystem(); }
     }, this)),
     playground(new Playground(PlaygroundHandler{
         .onLeftClick = [this](QPoint position) {
             QPixmap texturePixmap;
-            texturePixmap.load(QString::fromStdString(textures[selectedTextureIndex].source));
+            texturePixmap.load(QString::fromStdString(blocks[selectedBlockIndex].source));
             QBrush texture(texturePixmap);
             playground->addBlock(position, texture);
         },
@@ -30,7 +29,7 @@ EditorWindow::EditorWindow(QWidget *parent):
 {
     ui->setupUi(this);
 
-    textures = {
+    blocks = {
         { "Nature corner-top-left", "./res/blocks/corner_top_left.png" },
         { "Nature center-top", "./res/blocks/center_top.png" },
         { "Nature corner-top-right", "./res/blocks/corner_top_right.png" },
@@ -42,9 +41,16 @@ EditorWindow::EditorWindow(QWidget *parent):
         { "Nature corner-bottom-right", "./res/blocks/corner_bottom_right.png" },
     };
 
+    backgrounds = {
+        { "Nature Day", "./res/backgrounds/nature_day.png" },
+        { "Nature Night", "./res/backgrounds/nature_night.png" },
+    };
+
     interface->setMaximumWidth(200);
     ui->horizontalLayout->addWidget(interface);
     ui->horizontalLayout->addWidget(playground, 1);
+
+    interface->setBackgroundDropdownOptions(backgroundTextureNames());
 
     interface->setBlockDropdownOptions(blockTextureNames());
     selectedBlockTexture(0);
@@ -56,20 +62,28 @@ EditorWindow::~EditorWindow() {
 
 void EditorWindow::wheelEvent(QWheelEvent *event) {
     if (event->angleDelta().y() > 0) {
-        if (selectedTextureIndex > 0)
-            selectedBlockTexture(selectedTextureIndex - 1);
+        if (selectedBlockIndex > 0)
+            selectedBlockTexture(selectedBlockIndex - 1);
     } else {
-        if (selectedTextureIndex < textures.size() - 1)
-            selectedBlockTexture(selectedTextureIndex + 1);
+        if (selectedBlockIndex < blocks.size() - 1)
+            selectedBlockTexture(selectedBlockIndex + 1);
     }
 }
 
-void EditorWindow::selectedBlockTexture(size_t index) {
-    selectedTextureIndex = index;
+void EditorWindow::selectedBackgroundTexture(size_t index) {
+    selectedBackgroundIndex = index;
 
-    interface->blockDropdownIndexChanged(selectedTextureIndex);
+    QPixmap texture;
+    texture.load(QString::fromStdString(backgrounds[selectedBackgroundIndex].source));
+    playground->setBackground(texture);
+}
+
+void EditorWindow::selectedBlockTexture(size_t index) {
+    selectedBlockIndex = index;
+
+    interface->blockDropdownIndexChanged(selectedBlockIndex);
     QPixmap pixelMap;
-    pixelMap.load(QString::fromStdString(textures[selectedTextureIndex].source));
+    pixelMap.load(QString::fromStdString(blocks[selectedBlockIndex].source));
     QBrush texture(pixelMap);
     interface->displayOnPreview(texture);
 }
@@ -80,8 +94,16 @@ void EditorWindow::exportToFileSystem() {
 
 std::vector<std::string> EditorWindow::blockTextureNames() {
     std::vector<std::string> blockTextureNames;
-    for (const auto& texture : textures) {
-        blockTextureNames.push_back(texture.name);
+    for (const auto& block : blocks) {
+        blockTextureNames.push_back(block.name);
     }
     return blockTextureNames;
+}
+
+std::vector<std::string> EditorWindow::backgroundTextureNames() {
+    std::vector<std::string> backgroundTextureNames;
+    for (const auto& background : backgrounds) {
+        backgroundTextureNames.push_back(background.name);
+    }
+    return backgroundTextureNames;
 }

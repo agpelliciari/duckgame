@@ -26,8 +26,11 @@ private:
     Interface *interface;
     Playground *playground;
 
-    std::vector<BlockTexture> textures;
-    size_t selectedTextureIndex = 0;
+    std::vector<BlockTexture> blocks;
+    size_t selectedBlockIndex = 0;
+
+    std::vector<BlockTexture> backgrounds;
+    size_t selectedBackgroundIndex = 0;
 
 public:
     EditorWindow(QWidget *parent = nullptr);
@@ -37,11 +40,15 @@ public:
 private:
     void wheelEvent(QWheelEvent *event) override;
 
+    void selectedBackgroundTexture(size_t index);
+
     void selectedBlockTexture(size_t index);
 
     void exportToFileSystem();
 
     std::vector<std::string> blockTextureNames();
+
+    std::vector<std::string> backgroundTextureNames();
 };
 
 #endif

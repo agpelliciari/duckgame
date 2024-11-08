@@ -7,7 +7,16 @@ Interface::Interface(const InterfaceHandler& handler, QWidget* parent): QWidget(
     initializePreview();
 
     connect(ui->exportButton, &QPushButton::clicked, this, &Interface::onClickExport);
+    connect(ui->backgroundDropdown, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &Interface::onBackgroundDropdownIndexChanged);
     connect(ui->blockDropdown, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &Interface::onBlockDropdownIndexChanged);
+}
+
+void Interface::setBackgroundDropdownOptions(std::vector<std::string> backgroundNames) {
+    QStringList qBackgroundNames;
+    for (const auto& name : backgroundNames) {
+        qBackgroundNames << QString::fromStdString(name);
+    }
+    ui->backgroundDropdown->addItems(qBackgroundNames);
 }
 
 void Interface::setBlockDropdownOptions(std::vector<std::string> blockNames) {
@@ -39,6 +48,10 @@ void Interface::initializePreview() {
     ui->previewView->setScene(preview);
     preview->setSceneRect(0, 0, blockSize, blockSize);
     block = preview->addRect(0, 0, blockSize, blockSize, QPen(Qt::NoPen), Qt::NoBrush);
+}
+
+void Interface::onBackgroundDropdownIndexChanged(int index) {
+    handler.onBackgroundDropdownIndexChanged(index);
 }
 
 void Interface::onBlockDropdownIndexChanged(int index) {
