@@ -52,6 +52,18 @@ void BaseLobbyState::listeninfo() {
     if (info.action == LobbyResponseType::STARTED_LOBBY) {
         context.started = true;
         context.cantidadjugadores = info.data;
+
+        // Receive map data.
+
+        uint8_t bk;
+        struct MapPoint size = protocol.recvmap(&bk, context.blocks);
+
+        context.map_width = size.x;
+        context.map_height = size.y;
+        std::cout << " BACKGROUND INT : " << (int)(bk) << std::endl;
+
+        context.map_background = "default.png";
+
         listener.startedLobby();
     } else {
         std::cout << "Game error received " << (int)context.id_lobby

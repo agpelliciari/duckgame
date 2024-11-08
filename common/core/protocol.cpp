@@ -65,6 +65,23 @@ void Protocol::sendshort(const uint16_t num) {
 }
 
 
+unsigned int Protocol::recvuint() {
+    unsigned int num;
+    if (this->messenger.tryrecvall(&num, 4) != 4) {  // Intenta leer los 2 bytes.
+        throw LibError(1, "Read of length failed read less than 4 byte");
+    }
+    return ntohl(num);  // castea a host endiannes.
+}
+
+void Protocol::senduint(const unsigned int num) {
+    unsigned int size = htonl(num);  // Aserveramos big endian.
+    // Envio del size del mensaje a mandar
+    if (this->messenger.trysendall(&size, 4) != 4) {
+        throw LibError(1, "Failed to send of uint.");
+    }
+}
+
+
 // Lee todo el mensaje aseguradamente. Y le pone un 0 al final. Para hacer facil la conversion a
 // string.
 std::vector<char> Protocol::recvmsg() {

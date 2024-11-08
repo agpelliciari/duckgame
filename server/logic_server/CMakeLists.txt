@@ -1,13 +1,14 @@
 target_sources(taller_server_logic
     PRIVATE
     # .cpp files
-            action.cpp
+
             match_logic.cpp
             player.cpp
             armor.cpp
             weapon.cpp
             match_queue.cpp
             match_state.cpp
+            match_map.cpp
             box.cpp
             action_command.cpp
             physical_object.cpp
@@ -18,8 +19,8 @@ target_sources(taller_server_logic
             player.h
             match_logic.h
             match_queue.h
-            action.h
             match_state.h
+            match_map.h
             weapon.h
             box.h
             armor.h

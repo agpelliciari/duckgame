@@ -5,7 +5,7 @@
 #include <string>
 #include <utility>
 
-#include "common/dtos.h"
+#include "common/dtosgame.h"
 #include "common/dtoslobby.h"
 #include "common/queue.h"
 #include "server/logic_server/matchobserver.h"

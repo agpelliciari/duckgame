@@ -5,7 +5,6 @@
 #include <utility>
 
 #include "common/core/liberror.h"
-#include "common/dtos.h"
 
 ClientProtocol::ClientProtocol(Messenger& conn): protocol(conn) {}
 
@@ -74,6 +73,31 @@ void ClientProtocol::sendlobbyaction(const lobby_action&& action) {
     protocol.sendbyte(action.type);
 }
 
+
+struct MapPoint ClientProtocol::recvmap(uint8_t* background, std::vector<BlockDTO>& out) {
+    coordinate_t width = protocol.recvuint();
+    coordinate_t height = protocol.recvuint();
+
+    *background = protocol.recvbyte();
+
+    // Read blocks
+    int block_count = protocol.recvuint();
+    out.reserve(block_count);
+
+    while (block_count > 0) {
+        coordinate_t _x = protocol.recvuint();
+        coordinate_t _y = protocol.recvuint();
+
+        out.emplace_back(_x, _y, (BlockTexture)protocol.recvbyte());
+
+        block_count--;
+    }
+
+
+    return MapPoint(width, height);
+}
+
+
 MatchDto ClientProtocol::recvstate() {
     // Primero recibi info general
     match_info_dto out;
@@ -87,13 +111,36 @@ MatchDto ClientProtocol::recvstate() {
     while (playercount > 0) {
         PlayerDTO player;
 
-        protocol.recvbytes(&player, sizeof(player));
+        player.id = protocol.recvuint();
+        player.pos.x = protocol.recvuint();
+        player.pos.y = protocol.recvuint();
 
-        // std::cout << "EL PLAYER "<< player.id<< " RECV EN STATE: " << (int)player.move_action <<
-        // std::endl;
+        player.weapon = (TypeWeapon)protocol.recvbyte();
+        player.move_action = (TypeMoveAction)protocol.recvbyte();
+        player.doing_action = (TypeDoingAction)protocol.recvbyte();
+
+
+        player.is_alive = protocol.recvbyte();
+        player.helmet = protocol.recvbyte();
+        player.chest_armor = protocol.recvbyte();
+        player.aiming_up = protocol.recvbyte();
 
         res.players.push_back(player);
         playercount--;
+    }
+
+    int objcount = (int)protocol.recvshort();
+    // std::cout << "CLIENT RECV OBJ COUNT" << objcount << std::endl;
+
+    while (objcount > 0) {
+        DynamicObjDTO obj;
+
+        obj.pos.x = protocol.recvuint();
+        obj.pos.y = protocol.recvuint();
+        obj.type = (TypeDynamicObject)protocol.recvbyte();
+
+        res.objects.push_back(obj);
+        objcount--;
     }
 
     /*

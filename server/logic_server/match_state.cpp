@@ -10,6 +10,7 @@ void MatchState::pushAction(const PlayerActionDTO& action) { acciones.push_comma
 void MatchState::loop(MatchObserver& observer) {
     // start_players(observer);
 
+
     while (running) {
         this->step();
         this->send_results(observer);
@@ -33,6 +34,7 @@ void MatchState::start_players(MatchObserver& observer) {
 void MatchState::step() {
     this->receive_commands();
     this->execute_commands();
+    match_logic.update_colition_map();
     match_logic.update_players();
 }
 
@@ -55,8 +57,13 @@ void MatchState::stop() { running = false; }
 
 void MatchState::send_results(MatchObserver& observer) {
     MatchDto dto = MatchDto(INICIADA, 1);
-    match_logic.get_dtos(dto.players);
+    match_logic.get_dtos(dto.players, dto.objects);
     observer.updateState(dto);
+
+}
+
+void MatchState::add_objects(const struct MapInfo& map_info){
+    match_logic.add_boxes(map_info.boxes);
 }
 
 MatchState::~MatchState() {}

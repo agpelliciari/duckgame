@@ -2,14 +2,22 @@
 #define LIB_DTOS_PLAYER_H
 
 #include <cstdint>
+#include "./dtosobject.h"
 
 enum PlayerActionType : uint8_t {
     NONE = 0,
     MOVE_LEFT = 1,
-    MOVE_RIGHT = 2,
-    STAY_DOWN = 3,
-    JUMP = 4,
-    PICK_UP = 5,
+    MOVE_LEFT_END = 2,
+    MOVE_RIGHT = 3,
+    MOVE_RIGHT_END = 4,
+    STAY_DOWN = 5,
+    JUMP = 6,
+    FLAPPING_END = 7,
+    STAY_DOWN_START = 8,
+    STAY_DOWN_END = 9,
+    AIM_UP_START = 10,
+    AIM_UP_END = 11,
+    SHOOT = 12
 };
 
 struct PlayerActionDTO {
@@ -39,18 +47,30 @@ enum class TypeWeapon : uint8_t {
     SNIPER
 };
 
-enum class TypeMoveAction : uint8_t { NONE, MOVE_LEFT, MOVE_RIGHT, STAY_DOWN, JUMP, FLAP };
+enum class TypeMoveAction : uint8_t {
+    NONE,
+    MOVE_LEFT,
+    MOVE_RIGHT,
+    STAY_DOWN,
+    AIR_NEUTRAL,
+    AIR_LEFT,
+    AIR_RIGHT,
+    FLAP_NEUTRAL,
+    FLAP_LEFT,
+    FLAP_RIGHT
+};
 
 enum class TypeDoingAction : uint8_t {
-    NOTHING,
+    NONE,
     SHOOTING,
-    FLAPPING
+    SHOOTING_UP,
+    DAMAGED,
+    PICK_UP
 };  // Capaz podria estar aca el flapping?
 
 struct PlayerDTO {
     int id;
-    int coord_x;
-    int coord_y;
+    struct MapPoint pos;
     bool is_alive;
     TypeWeapon weapon;
     TypeMoveAction move_action;
@@ -63,29 +83,26 @@ struct PlayerDTO {
     PlayerDTO(int id_, bool alive, int x, int y, TypeWeapon w, bool h, bool armor,
               TypeMoveAction action):
             id(id_),
-            coord_x(x),
-            coord_y(y),
+            pos(x, y),
             is_alive(alive),
             weapon(w),
             move_action(action),
-            doing_action(TypeDoingAction::NOTHING),
+            doing_action(TypeDoingAction::NONE),
             helmet(h),
             chest_armor(armor),
             aiming_up(false) {}
 
     PlayerDTO(int id_, bool alive, int x, int y, TypeMoveAction state):
             id(id_),
-            coord_x(x),
-            coord_y(y),
+            pos(x, y),
             is_alive(alive),
             weapon(TypeWeapon::NONE),
             move_action(state),
-            doing_action(TypeDoingAction::NOTHING),
+            doing_action(TypeDoingAction::NONE),
             helmet(false),
             chest_armor(false),
             aiming_up(false) {}
-
-    PlayerDTO() {}  // Para read.
-};                  //__attribute__((packed));
+    PlayerDTO(): PlayerDTO(0, false, 0, 0, TypeMoveAction::NONE) {}
+};
 
 #endif

@@ -2,7 +2,6 @@
 
 #include "./testerclient.h"
 #include "common/core/liberror.h"
-#include "common/dtos.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "server/lobbycontainer.h"
@@ -220,6 +219,36 @@ TEST_F(ServerIntegrationTest, SimpleJoinMultipleWithLeaves) {
     joined3.assertLobbyStarted(4);
 }
 
+TEST_F(ServerIntegrationTest, SimpleCreateLobbyAndJoinCancel) {
+    TesterClient host(openClient(), sktserver, lobbies);
+
+    uint8_t id_lobby = host.createClientLobbySingle();
+    ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
+
+
+    TesterClient joined1(openClient(), sktserver, lobbies);
+
+    uint8_t first = 0;
+    uint8_t second = joined1.assertJoinLobbyDual(id_lobby, 1, &first);
+
+    ASSERT_EQ(first, 2) << "ID joined first is correct";
+    ASSERT_EQ(second, 3) << "ID joined second is correct";
+
+    host.assertLobbyInfoJoined(first);
+    host.assertLobbyInfoJoined(second);
+
+    // host.startMatch();
+
+    // 1 is count of players. Should not start maybe?
+    host.finish();
+
+    joined1.assertLobbyHostLeft();
+    ASSERT_FALSE(host.isReceiverOpen()) << "receiver protocol was not open";
+
+    joined1.finish();  // Sincronismo. Sino hay una race condition
+    ASSERT_FALSE(joined1.isReceiverOpen()) << "receiver protocol was not open";
+    ASSERT_EQ(lobbies.countMatches(), 0) << "Lobby was deleted";
+}
 
 TEST_F(ServerIntegrationTest, SimpleJoinMultipleCancel) {
     TesterClient host(openClient(), sktserver, lobbies);
@@ -245,10 +274,13 @@ TEST_F(ServerIntegrationTest, SimpleJoinMultipleCancel) {
     host.finish();
 
     joined1.assertLobbyHostLeft();
+
     joined2.assertLobbyHostLeft();
 
     joined1.finish();
     joined2.finish();  // Para garantizar sincronismo. Antes de verificar el delete.
+    ASSERT_FALSE(joined1.isReceiverOpen()) << "receiver protocol was not open";
+    ASSERT_FALSE(joined2.isReceiverOpen()) << "receiver protocol was not open";
 
     ASSERT_EQ(lobbies.countMatches(), 0) << "Lobby was deleted";
 }
@@ -296,9 +328,16 @@ TEST_F(ServerIntegrationTest, SimpleMatchNoPlayersEnds) {
     ASSERT_EQ(lobbies.countMatches(), 1) << "Lobby was not deleted before it has to";
 
     host.finish();
+
+    ASSERT_FALSE(host.isReceiverOpen()) << "receiver protocol was not open";
     ASSERT_EQ(lobbies.countMatches(), 1) << "Lobby was not deleted before it has to";
+
+
+    // ASSERT_FALSE(joined2.isReceiverOpen()) << "receiver protocol was not open";
     joined2.finish();
+
     ASSERT_EQ(lobbies.countMatches(), 1) << "Lobby was not deleted before it has to";
+    // ASSERT_FALSE(joined3.isReceiverOpen()) << "receiver protocol was not open";
     joined3.finish();
 
     ASSERT_EQ(lobbies.countMatches(), 0) << "Lobby was deleted";
@@ -333,6 +372,7 @@ TEST_F(ServerIntegrationTest, IntegrationMultiMatchCreateOneCancel) {
     ASSERT_EQ(lobbies.countMatches(), 1) << "Lobby was created";
 
     host.finish();
+    ASSERT_FALSE(host.isReceiverOpen()) << "receiver protocol was not open";
 
     uint8_t id_lobby2 = host2.createClientLobbyDual();
     ASSERT_EQ(id_lobby2, 2) << "ID lobby received by client is 2";
@@ -351,6 +391,7 @@ TEST_F(ServerIntegrationTest, IntegrationMultiMatchCreateOneCancelAfter) {
     ASSERT_EQ(lobbies.countMatches(), 2) << "Lobby was created";
 
     host.finish();
+    ASSERT_FALSE(host.isReceiverOpen()) << "receiver protocol was not open";
 
     // Para asegurar sincronia...
     host2.startMatch();
@@ -409,9 +450,14 @@ TEST_F(ServerIntegrationTest, IntegrationMultiMatchOneEnds) {
     ASSERT_EQ(lobbies.countMatches(), 2) << "Lobby was not deleted before it has to";
 
     host.finish();
+    ASSERT_FALSE(host.isReceiverOpen()) << "receiver protocol was not open";
+
     ASSERT_EQ(lobbies.countMatches(), 2) << "Lobby was not deleted before it has to";
+    // ASSERT_FALSE(joined2.isReceiverOpen()) << "receiver protocol was not open";
     joined2.finish();
     ASSERT_EQ(lobbies.countMatches(), 2) << "Lobby was not deleted before it has to";
+    // ASSERT_FALSE(joined3.isReceiverOpen()) << "receiver protocol was not open";
+
     joined3.finish();
 
     ASSERT_EQ(lobbies.countMatches(), 1) << "Lobby was deleted";
@@ -466,6 +512,9 @@ TEST_F(ServerIntegrationTest, IntegrationMultiMatchForceFinish) {
     // std::cout << "-------------> FINISH ALL!" << std::endl;
     lobbies.finishAll();
 
+    // ASSERT_FALSE(host.isReceiverOpen()) << "receiver protocol was not open";
+    // ASSERT_FALSE(joined2.isReceiverOpen()) << "receiver protocol was not open";
+    // ASSERT_FALSE(joined3.isReceiverOpen()) << "receiver protocol was not open";
 
     host.finish();
     joined2.finish();
@@ -473,6 +522,7 @@ TEST_F(ServerIntegrationTest, IntegrationMultiMatchForceFinish) {
 
     ASSERT_EQ(host2.assertLobbyError(), SERVER_ERROR)
             << "Error type is server error, since forced finish";
+    ASSERT_FALSE(host2.isReceiverOpen()) << "receiver protocol was not open";
     host2.finish();
     // host2.assertLobbyError(UNKNOWN);
     ASSERT_EQ(lobbies.countMatches(), 0) << "Lobby was deleted";

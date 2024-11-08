@@ -25,6 +25,7 @@ bool ControlNotifier::runLobby() {
 
             if (info.action == LobbyResponseType::GAME_ERROR) {
                 // std::cout << "----> IF NOTIFY ERROR FROM HERE THEN CUSTOM/LOGIC ERROR??\n";
+                protocol.close();
                 return true;  // Si fue un error el notificado entonces sali.
             }
 
@@ -37,6 +38,11 @@ bool ControlNotifier::runLobby() {
         return true;
     } catch (const ClosedQueue& error) {
 
+        if (!protocol.isactive()) {
+            // Se presiono la q. Y ya se cerro el protocol.
+            // std::cout << "--------> ALREADY CLOSED AT NOTIFIER SO no need?!\n";
+            return true;
+        }
         // Si el player esta closed, el match fue cancelado
         // Ya que para participar en el mismo deberia estar abierto.
         if (player.isclosed()) {
@@ -48,6 +54,14 @@ bool ControlNotifier::runLobby() {
         }
 
         protocol.notifyinfo(LobbyResponseType::STARTED_LOBBY, match.playercount());
+
+        protocol.sendmapinfo(*(match.getMap()));
+        // std::cout << "MAP SIZE IS " << info.size.x << " , " << info.size.y
+        //           << " BACKGROUND: " << (int)(info.bk) << std::endl;
+
+        // for (const struct MapPoint& point: info.spawns_items) {
+        //     std::cout << "Item spawn at " << point.x << " , " << point.y << std::endl;
+        // }
 
         return false;
     }
@@ -95,6 +109,6 @@ void ControlNotifier::run() {
 
 ControlNotifier::~ControlNotifier() {
     stop();
-    player.disconnect();  // Por si no se cerro, cerra la queue.
+    // player.disconnect();  // Por si no se cerro, cerra la queue.
     join();
 }

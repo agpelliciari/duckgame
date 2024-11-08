@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "common/dtos.h"
+#include "common/dtosgame.h"
 
 typedef unsigned int player_id;
 

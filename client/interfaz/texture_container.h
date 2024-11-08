@@ -2,23 +2,36 @@
 #define TEXTURE_CONTAINER_H
 
 #include <memory>
-#include <vector>
+#include <unordered_map>
 
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
-#define SIZE 4
-#define YELLOW_DUCK_SPRITE 0
-#define GREY_DUCK_SPRITE 1
+enum class TextureType {
+    YELLOW_DUCK = 1,
+    GREY_DUCK,
+    ORANGE_DUCK,
+    WHITE_DUCK,
+
+    BACKGROUND,
+    TREE,
+    BOX
+};
 
 class TextureContainer {
 private:
-    std::vector<SDL2pp::Texture> textures;  // cppcheck-suppress unusedStructMember
+    std::unordered_map<TextureType, SDL2pp::Texture>
+            textures;  // cppcheck-suppress unusedStructMember
+
+    // No va a hacer falta cuando se setee previamente el tipo de textura
+    TextureType indexToTextureType(int index) const;
 
 public:
     explicit TextureContainer(SDL2pp::Renderer& renderer);
 
     SDL2pp::Texture& getTexture(int index);
+
+    SDL2pp::Texture& getTexture(TextureType type);
 
     ~TextureContainer();
 };

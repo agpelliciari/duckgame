@@ -2,27 +2,27 @@
 
 #include "menu.h"
 
-MenuAction::MenuAction(Action action, int lobbyId): action(action), lobbyId(lobbyId) {}
+MenuAction::MenuAction(Action action, int lobbyId, const std::string& message): action(action), lobbyId(lobbyId), message(message) {}
 
-MenuAction::MenuAction(): action(Action::None), lobbyId(-1) {}
+MenuAction::MenuAction(): action(Action::None), lobbyId(-1), message("") {}
 
-MenuAction MenuAction::SetLobbyId(int lobbyId) { return MenuAction(Action::SetLobbyId, lobbyId); }
+MenuAction MenuAction::SetLobbyId(int lobbyId) { return MenuAction(Action::SetLobbyId, lobbyId, ""); }
 
-MenuAction MenuAction::AddSoloToLobby() { return MenuAction(Action::AddSoloToLobby, -1); }
+MenuAction MenuAction::AddSoloToLobby() { return MenuAction(Action::AddSoloToLobby, -1, ""); }
 
-MenuAction MenuAction::AddDuoToLobby() { return MenuAction(Action::AddDuoToLobby, -1); }
+MenuAction MenuAction::AddDuoToLobby() { return MenuAction(Action::AddDuoToLobby, -1, ""); }
 
 MenuAction MenuAction::RemovePlayerFromLobby() {
-    return MenuAction(Action::RemovePlayerFromLobby, -1);
+    return MenuAction(Action::RemovePlayerFromLobby, -1, "");
 }
 
-MenuAction MenuAction::FailJoin() { return MenuAction(Action::FailJoin, -1); }
+MenuAction MenuAction::FailJoin(const std::string& message) { return MenuAction(Action::FailJoin, -1, message); }
 
-MenuAction MenuAction::FailCreate() { return MenuAction(Action::FailCreate, -1); }
+MenuAction MenuAction::FailCreate(const std::string& message) { return MenuAction(Action::FailCreate, -1, message); }
 
-MenuAction MenuAction::StartLobby() { return MenuAction(Action::StartLobby, -1); }
+MenuAction MenuAction::StartLobby() { return MenuAction(Action::StartLobby, -1, ""); }
 
-MenuAction MenuAction::CancelLobby() { return MenuAction(Action::CancelLobby, -1); }
+MenuAction MenuAction::CancelLobby(const std::string& message) { return MenuAction(Action::CancelLobby, -1, message); }
 
 void MenuAction::exec(Menu& menu) {
     switch (action) {
@@ -41,15 +41,15 @@ void MenuAction::exec(Menu& menu) {
             break;
         case Action::FailJoin:
             menu.reset();
-            menu.displayNotification("Error: Join Failed");
+            menu.displayNotification(message);
             break;
         case Action::FailCreate:
             menu.reset();
-            menu.displayNotification("Error: Creation Failed");
+            menu.displayNotification(message);
             break;
         case Action::CancelLobby:
             menu.reset();
-            menu.displayNotification("The Host closed the room");
+            menu.displayNotification(message);
             break;
         case Action::StartLobby:
             menu.startLobby();

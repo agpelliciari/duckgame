@@ -15,6 +15,7 @@ void MenuHandler::onCreateSoloLobby() {
               << std::endl;
 
     if (connector.reset()) {  // Si fallo el reset ... no hagas nada
+        canceledLobby("Fallo la conexion");
         return;
     }
     sender = connector.setLobbyCreator(*this, false);
@@ -25,6 +26,7 @@ void MenuHandler::onCreateDuoLobby() {
               << std::endl;
 
     if (connector.reset()) {
+        canceledLobby("Fallo la conexion");
         return;
     }
     sender = connector.setLobbyCreator(*this, true);
@@ -37,6 +39,7 @@ void MenuHandler::onJoinSoloLobby(int lobbyId) {
     // Reset protocol and curr state si existe.
     // Si falla retorna true
     if (connector.reset()) {
+        canceledLobby("Fallo la conexion");
         return;
     }
 
@@ -52,6 +55,7 @@ void MenuHandler::onJoinDuoLobby(int lobbyId) {
               << " y van a jugar 2 jugadores" << std::endl;
 
     if (connector.reset()) {
+        canceledLobby("Fallo la conexion");
         return;
     }
 
@@ -93,16 +97,16 @@ void MenuHandler::removePlayerFromLobby() { queueToMenu.push(MenuAction::RemoveP
 void MenuHandler::startedLobby() { queueToMenu.push(MenuAction::StartLobby()); }
 void MenuHandler::canceledLobby(const char* msg) {
     std::cout << "Canceled lobby " << msg << std::endl;
-    queueToMenu.push(MenuAction::CancelLobby());
+    queueToMenu.push(MenuAction::CancelLobby(msg));
 }
 
 void MenuHandler::failedCreate(const char* msg) {
     std::cout << "Failed create " << msg << std::endl;
-    queueToMenu.push(MenuAction::FailCreate());
+    queueToMenu.push(MenuAction::FailCreate(msg));
 }
 void MenuHandler::failedJoin(const char* msg) {
     std::cout << "Failed join " << msg << std::endl;
-    queueToMenu.push(MenuAction::FailJoin());
+    queueToMenu.push(MenuAction::FailJoin(msg));
 }
 
 

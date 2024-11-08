@@ -4,7 +4,7 @@
 
 #include "./gameerror.h"
 
-Match::Match(lobbyID _id): id(_id), players(), looper(), connectedplayers(0) {}
+Match::Match(lobbyID _id): id(_id), players(), looper(), connectedplayers(0), map(NULL) {}
 
 
 // Protected// friend accessed methods
@@ -29,10 +29,12 @@ bool Match::notifyDisconnect(ControlledPlayer& player) {
     return connectedplayers == 0;
 }
 
-void Match::init() {
+void Match::init(MapLoader& maps, const char* mapname) {
     if (is_alive()) {
         throw GameError(LOBBY_ALREADY_STARTED, "Tried to start a match already started!!\n");
     }
+    map = &maps.loadMap(mapname);
+    looper.add_objects(*map);
     looper.start_players(players);
     players.finishLobbyMode();
     start();
@@ -77,8 +79,16 @@ void Match::run() {
 
 bool Match::isrunning() const { return _is_alive; }
 
+MapInfo* Match::getMap() { return map; }
 
-void Match::finish() {
+
+void Match::finish(MapLoader& maps) {
+
+    if (map != NULL) {
+        maps.removeMap(map->mapname);
+        map = NULL;
+    }
+
     if (_keep_running) {
         stop();
         looper.stop();

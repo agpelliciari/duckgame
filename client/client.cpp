@@ -57,6 +57,15 @@ int Client::execGame(LobbyConnector& connector, const GameContext& context) {
     GameActionSender& actionListener(*connector.initGame(listener));
     actionListener.begin();
 
+    std::cout << "MAP SIZE IS " << context.map_width << " , " << context.map_height
+              << " BACKGROUND: " << context.map_background << std::endl;
+
+    for (const struct BlockDTO& block: context.blocks) {
+        std::cout << "Block at " << block.pos.x << " , " << block.pos.y
+                  << " tex:" << (int)block.texture << std::endl;
+    }
+
+
     if (context.dualplay) {
         std::cout << "Dos jugadores!!! " << (int)context.first_player << " y "
                   << (int)context.second_player << " TOTAL " << (int)context.cantidadjugadores
@@ -66,6 +75,7 @@ int Client::execGame(LobbyConnector& connector, const GameContext& context) {
         std::cout << "Un solo jugador!!! " << (int)context.first_player << " TOTAL "
                   << (int)context.cantidadjugadores << std::endl;
     }
+
 
     UILoop uiLoop(actionListener, listener, context);
 

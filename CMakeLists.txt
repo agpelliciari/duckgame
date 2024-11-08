@@ -59,7 +59,7 @@ if(TALLER_CLIENT OR TALLER_EDITOR)
     set(SDL2PP_WITH_TTF ON) # if you need SDL_ttf support
     find_package(SDL2pp REQUIRED)
     
-    add_definitions(-DDATA_PATH="${PROJECT_SOURCE_DIR}/client/interfaz/imagenes")
+    add_definitions(-DDATA_PATH="${PROJECT_SOURCE_DIR}/res")
     
     FetchContent_MakeAvailable(libSDL2pp)
 
@@ -72,6 +72,48 @@ if(TALLER_CLIENT OR TALLER_EDITOR)
     find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
     find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 endif()
+
+if(TALLER_EDITOR OR TALLER_SERVER OR TALLER_TESTS)
+	# Fetch rapid yaml	
+	include(FetchContent)
+
+	FetchContent_Declare(ryml #yaml-cpp
+	    GIT_REPOSITORY https://github.com/biojppm/rapidyaml.git
+	    GIT_TAG master
+	    GIT_SHALLOW FALSE  # ensure submodules are checked out
+	    #GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git # yaml version...
+	)
+	FetchContent_MakeAvailable(ryml)
+	
+	
+	# Create serial lib
+	add_library(taller_serial)
+	add_subdirectory(serial/)
+	
+	#add_dependencies(taller_serial yaml-cpp::yaml-cpp)
+	target_link_libraries(taller_serial PUBLIC taller_common ryml::ryml)#yaml-cpp::yaml-cpp) 
+	
+	add_executable(taller_dbg serial/main_dbg.cpp)
+	add_dependencies(taller_dbg taller_serial)
+	target_link_libraries(taller_dbg taller_serial)
+	
+	
+	# Si es el server o tests. Entonces separa la lib de logica del server       
+	if(TALLER_SERVER OR TALLER_TESTS)
+	    # Lets load logic of server.
+	    add_library(taller_server_logic)
+	    add_subdirectory(server/)
+	    #add_subdirectory(server/logic_server/)
+
+	    # Make them depend on taller_common lib
+	    add_dependencies(taller_server_logic taller_common taller_serial)
+	    target_link_libraries(taller_server_logic taller_common taller_serial)
+	endif()
+	
+endif()
+
+
+
 
 
 # Program section
@@ -101,17 +143,6 @@ endif()
 
 
 
-if(TALLER_SERVER OR TALLER_TESTS)
-    # Lets load logic of server.
-    add_library(taller_server_logic)
-    add_subdirectory(server/)
-    #add_subdirectory(server/logic_server/)
-
-    # Make them depend on taller_common lib
-    add_dependencies(taller_server_logic taller_common)
-    target_link_libraries(taller_server_logic taller_common)
-endif()
-
 if(TALLER_SERVER)
     # HEY!! TODO XXX: Change the name of the executable to the one you like!
     add_executable(taller_server server/main.cpp)
@@ -136,7 +167,7 @@ if(TALLER_EDITOR)
     add_executable(taller_editor)
 
     # Make them depend on taller_common lib
-    add_dependencies(taller_editor taller_common SDL2pp::SDL2pp)
+    add_dependencies(taller_editor taller_common taller_serial SDL2pp::SDL2pp)
 
     # Add source files and enable warnings
     # HEY!! TODO XXX: add more subfolders here
@@ -148,7 +179,7 @@ if(TALLER_EDITOR)
     target_include_directories(taller_editor PRIVATE ${libSDL2pp_SOURCE_DIR})
 
     # Link the taller_common lib target
-    target_link_libraries(taller_editor taller_common SDL2pp::SDL2pp Qt${QT_VERSION_MAJOR}::Widgets)
+    target_link_libraries(taller_editor taller_common taller_serial SDL2pp::SDL2pp Qt${QT_VERSION_MAJOR}::Widgets)
 endif()
 
 

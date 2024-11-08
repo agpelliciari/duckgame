@@ -6,6 +6,7 @@
 #include <mutex>
 
 #include "./match.h"
+#include "serial/map_loader.h"
 
 // Contenedor/monitor de los players activos en el match.
 class LobbyContainer {
@@ -13,7 +14,8 @@ public:
     typedef std::list<Match> lobby_container;
 
 private:
-    lobbyID lastLobbyId;      // cppcheck-suppress unusedStructMember
+    lobbyID lastLobbyId;  // cppcheck-suppress unusedStructMember
+    MapLoader maps;
     lobby_container lobbies;  // cppcheck-suppress unusedStructMember
     std::mutex mtx;
 
@@ -37,7 +39,7 @@ public:
     int countMatches();
 
     // Una vez empezada no se aceptan mas.
-    void startLobby(Match& match);
+    void startLobby(Match& match, const char* mapname);
 
 
     void disconnectFrom(Match& match, ControlledPlayer& player);

@@ -41,9 +41,9 @@ ControlledPlayer& LobbyContainer::joinLobby(uint8_t count, Match& lobby) {
 }
 
 // Una vez empezada no se aceptan mas.
-void LobbyContainer::startLobby(Match& lobby) {
+void LobbyContainer::startLobby(Match& lobby, const char* mapname) {
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on container.
-    return lobby.init();
+    return lobby.init(maps, mapname);
     // return findLobby(id).start();
 }
 
@@ -53,6 +53,8 @@ void LobbyContainer::disconnectFrom(Match& lobby, ControlledPlayer& player) {
 
     if (lobby.notifyDisconnect(player)) {  // Habria que liberar. No hay mas players.
         std::cerr << ">removing lobby " << lobby.getID() << std::endl;
+        lobby.finish(maps);
+
         lobbies.remove(lobby);  // el destructor hace el finish.
     }
 }
@@ -60,7 +62,7 @@ void LobbyContainer::disconnectFrom(Match& lobby, ControlledPlayer& player) {
 void LobbyContainer::finishAll() {
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on lobby.
     for (auto lobbyit = lobbies.begin(); lobbyit != lobbies.end();) {
-        lobbyit->finish();
+        lobbyit->finish(maps);
         ++lobbyit;
     }
 }
