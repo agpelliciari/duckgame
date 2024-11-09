@@ -1,11 +1,6 @@
 #include "playground.h"
 #include "ui_playground.h"
 
-#include <QDir>
-#include <QDebug>
-
-#include <iostream>
-
 Playground::Playground(const PlaygroundHandler& handler, QWidget* parent): QGraphicsView(parent), ui(new Ui::Playground), map(new QGraphicsScene(this)), handler(handler) {
     ui->setupUi(this);
     qRegisterMetaType<MapObjectData>("MapObjectData");

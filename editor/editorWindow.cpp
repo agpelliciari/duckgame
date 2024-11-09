@@ -8,17 +8,27 @@ EditorWindow::EditorWindow(QWidget *parent):
     ui(new Ui::EditorWindow),
     loader("./res"),
     interface(new Interface(InterfaceHandler{
-        .onBackgroundDropdownIndexChanged = [this](size_t index) {
-            selectBackgroundTexture(index);
+        .onEditorModeDropdownChanged = [this](EditorMode mode) {
+            selectEditorMode(mode);
         },
-        .onBlockDropdownIndexChanged = [this](size_t index) {
-            selectBlockTexture(index);
+        .onSelectorDropdownIndexChanged = [this](size_t index) {
+            switch (editorMode) {
+                case EditorMode::EMBackground:
+                    selectBackgroundTexture(index);
+                    break;
+                case EditorMode::EMBlock:
+                    selectBlockTexture(index);
+                    break;
+                default:
+                    break;
+            }
         },
         .onExport = [this]() { exportToFileSystem(); }
     }, this)),
     playground(new Playground(PlaygroundHandler{
         .onLeftClick = [this](QPoint position) {
-            playground->addBlock(position, loader.blockAt(selectedBlockIndex).pixelMap);
+            if (editorMode == EditorMode::EMBlock)
+                playground->addBlock(position, loader.blockAt(selectedBlockIndex).pixelMap);
         },
         .onRightClick = [this](QPoint position) {
             playground->removeBlock(position);
@@ -31,9 +41,10 @@ EditorWindow::EditorWindow(QWidget *parent):
     ui->horizontalLayout->addWidget(interface);
     ui->horizontalLayout->addWidget(playground, 1);
 
-    interface->setBackgroundDropdownOptions(loader.backgroundNames());
-    interface->setBlockDropdownOptions(loader.blockNames());
-    selectBlockTexture(0);
+    interface->setEditorModeDropdownOptions({
+        "Backgrounds",
+        "Blocks"
+    });
 }
 
 EditorWindow::~EditorWindow() {
@@ -49,24 +60,63 @@ void EditorWindow::wheelEvent(QWheelEvent *event) {
         }
     } else {
         if (event->angleDelta().y() > 0) {
-            if (selectedBlockIndex > 0)
-                selectBlockTexture(selectedBlockIndex - 1);
+            switch (editorMode) {
+                case EditorMode::EMBackground:
+                    if (selectedBackgroundIndex > 0)
+                        selectBackgroundTexture(selectedBackgroundIndex - 1);
+                    break;
+                case EditorMode::EMBlock:
+                    if (selectedBlockIndex > 0)
+                        selectBlockTexture(selectedBlockIndex - 1);
+                    break;
+                default:
+                    break;
+            }
         } else {
-            if (selectedBlockIndex < loader.blocksSize() - 1)
-                selectBlockTexture(selectedBlockIndex + 1);
+            switch (editorMode) {
+                case EditorMode::EMBackground:
+                    if (selectedBackgroundIndex < loader.backgroundsSize() - 1)
+                        selectBackgroundTexture(selectedBackgroundIndex + 1);
+                    break;
+                case EditorMode::EMBlock:
+                    if (selectedBlockIndex < loader.blocksSize() - 1)
+                        selectBlockTexture(selectedBlockIndex + 1);
+                    break;
+                default:
+                    break;
+            }
         }
+    }
+}
+
+void EditorWindow::selectEditorMode(EditorMode mode) {
+    editorMode = mode;
+    switch (editorMode) {
+        case EditorMode::EMBackground:
+            interface->setSelectorDropdownOptions(loader.backgroundNames());
+            interface->selectorDropdownIndexChanged(selectedBackgroundIndex);
+            interface->displayNoneOnPreview();
+            break;
+        case EditorMode::EMBlock:
+            interface->setSelectorDropdownOptions(loader.blockNames());
+            interface->selectorDropdownIndexChanged(selectedBlockIndex);
+            interface->displayBlockOnPreview(loader.blockAt(selectedBlockIndex).pixelMap);
+            break;
+        default:
+            break;
     }
 }
 
 void EditorWindow::selectBackgroundTexture(size_t index) {
     selectedBackgroundIndex = index;
+    interface->selectorDropdownIndexChanged(selectedBackgroundIndex);
     playground->setBackground(loader.backgroundAt(selectedBackgroundIndex).pixelMap);
 }
 
 void EditorWindow::selectBlockTexture(size_t index) {
     selectedBlockIndex = index;
-    interface->blockDropdownIndexChanged(selectedBlockIndex);
-    interface->displayOnPreview(loader.blockAt(selectedBlockIndex).pixelMap);
+    interface->selectorDropdownIndexChanged(selectedBlockIndex);
+    interface->displayBlockOnPreview(loader.blockAt(selectedBlockIndex).pixelMap);
 }
 
 void EditorWindow::exportToFileSystem() {

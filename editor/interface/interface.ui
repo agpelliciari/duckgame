@@ -17,9 +17,9 @@
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="backgroundDropdown">
+        <widget class="QComboBox" name="editorModeDropdown">
          <property name="placeholderText">
-          <string>Background</string>
+          <string></string>
          </property>
         </widget>
        </item>
@@ -57,9 +57,9 @@
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="blockDropdown">
+        <widget class="QComboBox" name="selectorDropdown">
          <property name="placeholderText">
-          <string>Block</string>
+          <string></string>
          </property>
         </widget>
        </item>

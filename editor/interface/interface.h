@@ -6,9 +6,14 @@
 #include <QStringList>
 #include <QComboBox>
 
+enum EditorMode {
+    EMBackground,
+    EMBlock
+};
+
 struct InterfaceHandler {
-    std::function<void(size_t)> onBackgroundDropdownIndexChanged;
-    std::function<void(size_t)> onBlockDropdownIndexChanged;
+    std::function<void(EditorMode)> onEditorModeDropdownChanged;
+    std::function<void(size_t)> onSelectorDropdownIndexChanged;
     std::function<void()> onExport;
 };
 
@@ -34,22 +39,25 @@ private:
 public:
     explicit Interface(const InterfaceHandler& handler, QWidget* parent = nullptr);
 
-    void setBackgroundDropdownOptions(std::vector<std::string> backgroundNames);
+    void setEditorModeDropdownOptions(std::vector<std::string> editorModeNames);
 
-    void setBlockDropdownOptions(std::vector<std::string> blockNames);
+    void setSelectorDropdownOptions(std::vector<std::string> names);
 
-    void blockDropdownIndexChanged(size_t index);
+    void selectorDropdownIndexChanged(size_t index);
 
-    void displayOnPreview(QPixmap pixelMap);
+    void displayNoneOnPreview();
+
+    void displayBlockOnPreview(QPixmap pixelMap);
 
     ~Interface();
 
 private:
     void onClickExport();
 
-    void onBackgroundDropdownIndexChanged(int index);
+    void onEditorModeDropdownChangedInt(int index);
+    void onEditorModeDropdownChanged(EditorMode mode);
 
-    void onBlockDropdownIndexChanged(int index);
+    void onSelectorDropdownIndexChanged(int index);
 
     void initializePreview();
 

@@ -7,23 +7,29 @@ Interface::Interface(const InterfaceHandler& handler, QWidget* parent): QWidget(
     initializePreview();
 
     connect(ui->exportButton, &QPushButton::clicked, this, &Interface::onClickExport);
-    connect(ui->backgroundDropdown, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &Interface::onBackgroundDropdownIndexChanged);
-    connect(ui->blockDropdown, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &Interface::onBlockDropdownIndexChanged);
+    connect(ui->editorModeDropdown, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &Interface::onEditorModeDropdownChangedInt);
+    connect(ui->selectorDropdown, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &Interface::onSelectorDropdownIndexChanged);
 }
 
-void Interface::setBackgroundDropdownOptions(std::vector<std::string> backgroundNames) {
-    setDropdownOptions(backgroundNames, ui->backgroundDropdown);
+void Interface::setEditorModeDropdownOptions(std::vector<std::string> names) {
+    setDropdownOptions(names, ui->editorModeDropdown);
 }
 
-void Interface::setBlockDropdownOptions(std::vector<std::string> blockNames) {
-    setDropdownOptions(blockNames, ui->blockDropdown);
+void Interface::setSelectorDropdownOptions(std::vector<std::string> names) {
+    setDropdownOptions(names, ui->selectorDropdown);
 }
 
-void Interface::blockDropdownIndexChanged(size_t index) {
-    ui->blockDropdown->setCurrentIndex(index);
+void Interface::selectorDropdownIndexChanged(size_t index) {
+    ui->selectorDropdown->blockSignals(true);
+    ui->selectorDropdown->setCurrentIndex(index);
+    ui->selectorDropdown->blockSignals(false);
 }
 
-void Interface::displayOnPreview(QPixmap pixelMap) {
+void Interface::displayNoneOnPreview() {
+    preview->setBrush(Qt::NoBrush);
+}
+
+void Interface::displayBlockOnPreview(QPixmap pixelMap) {
     QBrush texture(pixelMap);
     preview->setBrush(texture);
 }
@@ -36,12 +42,17 @@ void Interface::onClickExport() {
     handler.onExport();
 }
 
-void Interface::onBackgroundDropdownIndexChanged(int index) {
-    handler.onBackgroundDropdownIndexChanged(index);
+void Interface::onEditorModeDropdownChangedInt(int index) {
+    EditorMode mode = static_cast<EditorMode>(index);
+    onEditorModeDropdownChanged(mode);
 }
 
-void Interface::onBlockDropdownIndexChanged(int index) {
-    handler.onBlockDropdownIndexChanged(index);
+void Interface::onEditorModeDropdownChanged(EditorMode mode) {
+    handler.onEditorModeDropdownChanged(mode);
+}
+
+void Interface::onSelectorDropdownIndexChanged(int index) {
+    handler.onSelectorDropdownIndexChanged(index);
 }
 
 void Interface::initializePreview() {
@@ -53,8 +64,23 @@ void Interface::initializePreview() {
 }
 
 void Interface::setDropdownOptions(std::vector<std::string> options, QComboBox* dropdown) {
+    bool wasEmpty = dropdown->count() == 0;
+
+    if (!wasEmpty) {
+        ui->selectorDropdown->blockSignals(true);
+        ui->selectorDropdown->setCurrentIndex(0);
+        while (dropdown->count() > 1) {
+            dropdown->removeItem(0);
+        }
+    }
+
     QStringList qOptions;
     for (const auto& option : options)
         qOptions << QString::fromStdString(option);
     dropdown->addItems(qOptions);
+
+    if (!wasEmpty) {
+        dropdown->removeItem(0);
+        ui->selectorDropdown->blockSignals(false);
+    }
 }

@@ -21,6 +21,10 @@ Texture Loader::blockAt(size_t index) {
     return blocks.at(index);
 }
 
+size_t Loader::backgroundsSize() {
+    return backgrounds.size();
+}
+
 size_t Loader::blocksSize() {
     return blocks.size();
 }

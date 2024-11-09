@@ -39,6 +39,8 @@ public:
 
     Texture blockAt(size_t index);
 
+    size_t backgroundsSize();
+
     size_t blocksSize();
 
     ~Loader();

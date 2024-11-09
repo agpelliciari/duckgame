@@ -23,8 +23,9 @@ private:
     Interface *interface;
     Playground *playground;
 
-    size_t selectedBlockIndex = 0;
+    EditorMode editorMode = EditorMode::EMBackground;
     size_t selectedBackgroundIndex = 0;
+    size_t selectedBlockIndex = 0;
 
 public:
     EditorWindow(QWidget *parent = nullptr);
@@ -33,6 +34,8 @@ public:
 
 private:
     void wheelEvent(QWheelEvent *event) override;
+
+    void selectEditorMode(EditorMode mode);
 
     void selectBackgroundTexture(size_t index);
 
