@@ -45,5 +45,8 @@ Tuple Player::get_dimension(){
     return object.get_dimension();
 }
 
+void Player::stop_moving_x(){
+    object.stop_moving_x();
+}
 
 //Tuple Player::get_position() { return object.get_real_position(); }

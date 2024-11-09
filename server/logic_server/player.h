@@ -34,7 +34,7 @@ public:
     void still();
     void add_speed(int speed_x, int speed_y);
     void update(const MatchMap& colition_map);
-
+    void stop_moving_x();
     //Tuple get_position();
     Tuple get_map_position();
     Tuple get_dimension();

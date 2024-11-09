@@ -6,8 +6,13 @@ PhysicalObject::PhysicalObject(int position_x, int position_y, int dimension_x, 
         time_step(0.4) {}
 
 void PhysicalObject::add_speed(int speed_x, int speed_y) {
-    this->speed.x += speed_x;
-    this->speed.y += speed_y;
+    //FIX RAPIDO PARA PROBAR VELOCIDAD CONSTANTE:
+    if (speed.x + speed_x <= 10 && speed.x + speed_x >= -10) {
+        this->speed.x += speed_x;
+    }
+    if (speed.y + speed_y <= 50) {
+        this->speed.y += speed_y;
+    }
 }
 
 void PhysicalObject::add_acceleration(int acceleration_x, int acceleration_y) {
@@ -57,7 +62,7 @@ bool PhysicalObject::detect_y_collision(const MatchMap& colition_map){
 
 void PhysicalObject::move(const MatchMap& colition_map){
 
-    if (speed.x != 0){
+    if (this->speed.x != 0){
         int sign;
         speed.x > 0 ? sign = 1 : sign = -1;
         for (int x = 0; x <= speed.x * time_step * sign; x++) {

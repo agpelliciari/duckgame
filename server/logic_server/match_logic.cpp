@@ -11,7 +11,18 @@ MatchLogic::MatchLogic(): colition_map(700, 500) {
         this->add_player_speed(index, -10, 0);
     };
     this->command_map[PlayerActionType::MOVE_LEFT_END] = [this](int index) {
-        this->add_player_speed(index, 0, 0);
+        this->still_player(index);
+    };
+
+    this->command_map[PlayerActionType::MOVE_RIGHT] = [this](int index) {
+        this->add_player_speed(index, 10, 0);
+    };
+    this->command_map[PlayerActionType::MOVE_RIGHT_END] = [this](int index) {
+        this->still_player(index);
+    };
+
+    this->command_map[PlayerActionType::JUMP] = [this](int index) {
+        this->add_player_speed(index, 0, 50);
     };
 
     this->command_map[PlayerActionType::STAY_DOWN] = [this](int index) {
@@ -39,17 +50,10 @@ MatchLogic::MatchLogic(): colition_map(700, 500) {
     };
 
 
-    this->command_map[PlayerActionType::MOVE_RIGHT] = [this](int index) {
-        this->add_player_speed(index, 10, 0);
-    };
-    this->command_map[PlayerActionType::MOVE_RIGHT_END] = [this](int index) {
-        this->add_player_speed(index, 0, 0);
-    };
+
 
     // this->command_map[3] = [this](int index) { this->add_player_speed(index, 0, 0); };
-    this->command_map[PlayerActionType::JUMP] = [this](int index) {
-        this->add_player_speed(index, 0, 60);
-    };
+
 }
 
 void MatchLogic::add_player(int id) {
@@ -60,11 +64,16 @@ void MatchLogic::add_player(int id) {
 void MatchLogic::add_player_speed(int id, int speed_x, int speed_y) {
     for (Player& player: players) {
         if (player.same_id(id)) {
-            if (speed_x == 0 && speed_y == 0) {
-                player.still();
-            } else {
-                player.add_speed(speed_x, speed_y);
-            }
+            player.add_speed(speed_x, speed_y);
+            return;
+        }
+    }
+}
+
+void MatchLogic::still_player(int id) {
+    for (Player& player: players) {
+        if (player.same_id(id)) {
+            player.still();
             return;
         }
     }
