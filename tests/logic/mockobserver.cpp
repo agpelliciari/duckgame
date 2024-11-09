@@ -16,45 +16,46 @@ MockObserver::MockObserver(const MatchDto& firstUpdate, const int count):
     }
 }
 
-void MockObserver::assertPlayerMovedLeft(const int id, const MatchDto& base) {
-    const PlayerDTO* playerBase = base.getPlayer(id);
-    if (playerBase == NULL) {
-        std::cout << "NOT FOUND ID TO TEST " << id << std::endl;
-        return;
-    }
+const PlayerDTO* MockObserver::getPlayer(int id) const { return curr_state.getPlayer(id); }
 
-    std::cout << "FOUND ID TO TEST MOVE LEFT" << id << std::endl;
+void MockObserver::assertPlayerMovedHigher(const PlayerDTO* playerGiven,
+                                           const PlayerDTO* playerBase) {
+    ASSERT_GT(playerGiven->pos.y, playerBase->pos.y)
+            << "New y coord of player is effectivily greater than last one";
 }
-void MockObserver::assertPlayerMovedRight(const int id, const MatchDto& base) {
-    const PlayerDTO* playerGiven = curr_state.getPlayer(id);
-    ASSERT_TRUE(playerGiven != NULL)
-            << "El player de id " << id << "estaba contenido en el curr state";
 
-    const PlayerDTO* playerBase = base.getPlayer(id);
-    if (playerBase == NULL) {
-        std::cout << "NOT FOUND ID TO TEST " << id << std::endl;
-        return;
-    }
-    std::cout << "FOUND ID TO TEST MOVE RIGHT" << id << std::endl;
 
+void MockObserver::assertPlayerMovedRight(const PlayerDTO* playerGiven,
+                                          const PlayerDTO* playerBase) {
     ASSERT_EQ(playerGiven->move_action, TypeMoveAction::MOVE_RIGHT)
-            << "Player is currently moving right";
+            << "Player is currently moving right on ground";
+    ASSERT_GT(playerGiven->pos.x, playerBase->pos.x)
+            << "New x coord of player is effectivily greater than last one";
 }
 
-void MockObserver::assertPlayerMovedAirRight(const int id, const MatchDto& base) {
-    const PlayerDTO* playerGiven = curr_state.getPlayer(id);
-    ASSERT_TRUE(playerGiven != NULL)
-            << "El player de id " << id << "estaba contenido en el curr state";
-
-    const PlayerDTO* playerBase = base.getPlayer(id);
-    if (playerBase == NULL) {
-        std::cout << "NOT FOUND ID TO TEST " << id << std::endl;
-        return;
-    }
-    std::cout << "FOUND ID TO TEST MOVE RIGHT" << id << std::endl;
-
+void MockObserver::assertPlayerMovedAirRight(const PlayerDTO* playerGiven,
+                                             const PlayerDTO* playerBase) {
     ASSERT_EQ(playerGiven->move_action, TypeMoveAction::AIR_RIGHT)
             << "Player is currently moving right on air";
+    ASSERT_GT(playerGiven->pos.x, playerBase->pos.x)
+            << "New x coord of player is effectivily greater than last one";
+}
+
+
+void MockObserver::assertPlayerMovedLeft(const PlayerDTO* playerGiven,
+                                         const PlayerDTO* playerBase) {
+    ASSERT_EQ(playerGiven->move_action, TypeMoveAction::MOVE_LEFT)
+            << "Player is currently moving left on ground";
+    ASSERT_LT(playerGiven->pos.x, playerBase->pos.x)
+            << "New x coord of player is effectivily less than last one";
+}
+
+void MockObserver::assertPlayerMovedAirLeft(const PlayerDTO* playerGiven,
+                                            const PlayerDTO* playerBase) {
+    ASSERT_EQ(playerGiven->move_action, TypeMoveAction::AIR_LEFT)
+            << "Player is currently moving left on air";
+    ASSERT_LT(playerGiven->pos.x, playerBase->pos.x)
+            << "New x coord of player is effectivily less than last one";
 }
 
 

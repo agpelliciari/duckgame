@@ -15,9 +15,14 @@ private:
 public:
     explicit MockObserver(const MatchDto& firstUpdate, const int count);
 
-    void assertPlayerMovedLeft(const int id, const MatchDto& base);
-    void assertPlayerMovedRight(const int id, const MatchDto& base);
-    void assertPlayerMovedAirRight(const int id, const MatchDto& base);
+    const PlayerDTO* getPlayer(int id) const;
+
+    void assertPlayerMovedLeft(const PlayerDTO* playerGiven, const PlayerDTO* playerBase);
+    void assertPlayerMovedRight(const PlayerDTO* playerGiven, const PlayerDTO* playerBase);
+
+    void assertPlayerMovedHigher(const PlayerDTO* playerGiven, const PlayerDTO* playerBase);
+    void assertPlayerMovedAirRight(const PlayerDTO* playerGiven, const PlayerDTO* playerBase);
+    void assertPlayerMovedAirLeft(const PlayerDTO* playerGiven, const PlayerDTO* playerBase);
 
     void assertHasAllPlayers();
 
