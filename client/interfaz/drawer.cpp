@@ -30,7 +30,7 @@ void Drawer::drawBackground() {
                   SDL2pp::Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 }
 
-void Drawer::drawObjects() {
+void Drawer::drawObjects(const MatchDto& matchDto) {
     // inicialmente dibujo solo los primeros 4 elementos del .yaml
     for (int i = 0; i < 4; i++) {
 
@@ -39,6 +39,13 @@ void Drawer::drawObjects() {
                       SDL2pp::Rect(camera.getScreenX(context.blocks[i].pos.x),
                                    camera.getScreenY(context.blocks[i].pos.y),
                                    camera.getScaledSize(73), camera.getScaledSize(93)));
+    }
+
+    // dibujo los objetos de la partida -> luego agregar en una funcion
+    for (const auto& object: matchDto.objects) {
+        renderer.Copy(textures.getTexture(TextureType::BOX), SDL2pp::Rect(0, 16, 16, 16),
+                      SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(object.pos.y),
+                                   camera.getScaledSize(16), camera.getScaledSize(16)));
     }
 }
 
@@ -49,14 +56,7 @@ void Drawer::draw(const MatchDto& matchDto) {
 
     drawBackground();
 
-    drawObjects();
-
-    // dibujo los objetos de la partida -> luego agregar en una funcion
-    for (const auto& object: matchDto.objects) {
-        renderer.Copy(textures.getTexture(TextureType::BOX), SDL2pp::Rect(0, 16, 16, 16),
-                      SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(object.pos.y),
-                                   camera.getScaledSize(16), camera.getScaledSize(16)));
-    }
+    drawObjects(matchDto);
 
     const PlayerDTO* mainPlayer = nullptr;
 
