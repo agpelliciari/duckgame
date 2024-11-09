@@ -1,246 +1,110 @@
+
 #include "physical_object.h"
 
-#include <iostream>
-
-PhysicalObject::PhysicalObject(int init_coord_x, int init_coord_y, int dimension_x, int dimension_y,
-                               int speed_x, int speed_y, int gravity_):
-        initial_position{init_coord_x, init_coord_y},
-        actual_position{init_coord_x, init_coord_y},
-        dimension{dimension_x, dimension_y},
-        speed{speed_x, speed_y},
-        gravity(-gravity_),
-        time_step(0.4),
-        flap_attemps(10),
-        on_air(true) {}
+PhysicalObject::PhysicalObject(int position_x, int position_y, int dimension_x, int dimension_y):
+        position{position_x, position_y}, dimension{dimension_x, dimension_y}, speed{0, 0}, acceleration{0, -10},
+        time_step(0.4) {}
 
 void PhysicalObject::add_speed(int speed_x, int speed_y) {
-    if (this->speed.x >= -10 && this->speed.x <= 10) {
+    //FIX RAPIDO PARA PROBAR VELOCIDAD CONSTANTE:
+    if (speed.x + speed_x <= 10 && speed.x + speed_x >= -10) {
         this->speed.x += speed_x;
     }
-
-    if (this->speed.y == 0) {
-        // salto normal
-        if (!on_air) {
-            this->speed.y += speed_y;
-            on_air = true;
-        }
-    } else if (this->speed.y < 0) {
-        if (flap_attemps > 0 && actual_position.y > 5) {
-            // aleteo en caida libre
-            this->speed.y += speed_y * 0.2;
-            gravity = -5;
-            flap_attemps--;
-            // std::cout << "Flap attemps: " << flap_attemps << std::endl;
-        }
+    if (speed.y + speed_y <= 50) {
+        this->speed.y += speed_y;
     }
 }
 
-void PhysicalObject::move(const MatchMap& colition_map) {
-    // falta chequear colisiones con objetos
-
-    // actual_position.x += speed.x * time_step;
-
-    if (speed.x < 0) {
-        for (int x = 0; x >= speed.x * time_step; x--) {
-            if (check_left_collision(colition_map)) {
-                actual_position.x--;
-            } /*else {
-                //speed.y = 0;
-                actual_position.x +=1;
-            }*/
-        }
-    }
-    if (speed.x > 0) {
-        for (int x = 0; x <= speed.x * time_step; x++) {
-            if (check_right_collision(colition_map)) {
-                actual_position.x++;
-            } /*else {
-                //speed.y = 0;
-                actual_position.x -=1;
-            }*/
-        }
-    }
-
-    if (actual_position.y >= 0) {
-        speed.y += gravity * time_step;
-        // actual_position.y += speed.y * time_step;
-
-
-        if (speed.y < 0) {
-            for (int y = 0; y >= speed.y * time_step; y--) {
-                if (check_down_collision(colition_map)) {
-                    actual_position.y--;
-                } else {
-                    // actual_position.y +=1;
-                    speed.y = 0;
-                    gravity = -10;
-                    flap_attemps = 10;
-                }
-            }
-        }
-
-        if (speed.y > 0) {
-            for (int y = 0; y <= speed.y * time_step; y++) {
-                if (check_up_collision(colition_map)) {
-                    actual_position.y++;
-                } else {
-                    speed.y = 0;
-                    // actual_position.y -=1;
-                }
-            }
-        }
-
-        /*if (actual_position.y < 0 || (actual_position.y <=5 && speed.y < 0)) {
-            gravity = -10;
-            actual_position.y = 0;
-            speed.y = 0;
-            flap_attemps = 10;
-        }*/
-    }
+void PhysicalObject::add_acceleration(int acceleration_x, int acceleration_y) {
+    this->acceleration.x += acceleration_x;
+    this->acceleration.y += acceleration_y;
 }
 
-bool PhysicalObject::check_collision() { return true; }
+bool PhysicalObject::detect_x_collision(const MatchMap& colition_map){
 
-void PhysicalObject::update_action(TypeMoveAction& move_action) {
-    // std::cout << "speed y: " << speed.y << std::endl;
-    move_action = TypeMoveAction::NONE;
-    if (speed.x > 0) {
-        move_action = TypeMoveAction::MOVE_RIGHT;
-    }
-    if (speed.x < 0) {
-        move_action = TypeMoveAction::MOVE_LEFT;
-    }
-    if (speed.y > 0) {
-        move_action = TypeMoveAction::AIR_NEUTRAL;
-    }
-    if (speed.y > 0 && speed.x > 0) {
-        move_action = TypeMoveAction::AIR_RIGHT;
-    }
-    if (speed.y > 0 && speed.x < 0) {
-        move_action = TypeMoveAction::AIR_LEFT;
-    }
-    if (flap_attemps < 10 && flap_attemps > 0){
-        move_action = TypeMoveAction::FLAP_NEUTRAL;
-    }
-    if (flap_attemps < 10 && flap_attemps > 0 && speed.x > 0) {
-        move_action = TypeMoveAction::FLAP_RIGHT;
-    }
-    if (flap_attemps < 10 && flap_attemps > 0 && speed.x < 0) {
-        move_action = TypeMoveAction::FLAP_LEFT;
-    }
-    /*if (speed.y > 0){
-        move_action = TypeMoveAction::JUMP;
-    }
-    if (flap_attemps < 10 && flap_attemps > 0){
-        move_action = TypeMoveAction::FLAP;
-    }*/
-}
-
-void PhysicalObject::stop_moving_x() { speed.x = 0; }
-
-void PhysicalObject::stop_moving_y() { speed.y = 0; }
-
-void PhysicalObject::get_position(int& coord_x, int& coord_y) {
-
-    coord_x = actual_position.x;
-    // transformo las coordenadas de y para que sean compatibles
-    // con las coordenadas de la interfaz
-    coord_y = 300 - actual_position.y;
-}
-
-Tuple PhysicalObject::get_real_position() { return actual_position; }
-
-
-bool PhysicalObject::check_left_collision(const MatchMap& colition_map) {
-    if (colition_map.out_of_map_x(actual_position.x - 1) ||
-        colition_map.out_of_map_y(actual_position.y) ||
-        colition_map.out_of_map_y(actual_position.y + dimension.y)) {
-        return false;
-    }
-
-
-    for (int y = 0; y <= dimension.y; y++) {
-        if (colition_map.check_collision(actual_position.x - 1, actual_position.y + y)) {
-            return false;
-        }
-    }
-    return true;
-}
-
-bool PhysicalObject::check_right_collision(const MatchMap& colition_map) {
-    if (colition_map.out_of_map_x(actual_position.x + dimension.x + 1) ||
-        colition_map.out_of_map_y(actual_position.y) ||
-        colition_map.out_of_map_y(actual_position.y + dimension.y)) {
-        return false;
+    if (colition_map.out_of_map_x(position.x - 1) ||
+        colition_map.out_of_map_x(position.x + dimension.x + 1) ||
+        colition_map.out_of_map_y(position.y) ||
+        colition_map.out_of_map_y(position.y + dimension.y)) {
+        return true;
     }
 
     for (int y = 0; y <= dimension.y; y++) {
-        if (colition_map.check_collision(actual_position.x + dimension.x + 1,
-                                         actual_position.y + y)) {
-            return false;
+        if (colition_map.check_collision(position.x + dimension.x + 1, position.y + y) && speed.x > 0) {
+            return true;
         }
-    }
 
-    return true;
-}
-
-bool PhysicalObject::check_down_collision(const MatchMap& colition_map) {
-    if (colition_map.out_of_map_y(actual_position.y - 1)) {
-        std::cout << "Grouuund!\n";
-        on_air = false;
-        return false;
-    }
-
-    for (int x = 0; x <= dimension.x && (actual_position.x + x) < colition_map.getWidth(); x++) {
-        if (colition_map.check_collision(actual_position.x + x, actual_position.y - 1)) {
-            //std::cout << "Over something!\n";
-            on_air = false;
-            return false;
+        if (colition_map.check_collision(position.x - 1, position.y + y) && speed.x < 0) {
+            return true;
         }
-    }
-    on_air = true;
-    return true;
-}
-
-bool PhysicalObject::check_up_collision(const MatchMap& colition_map) {
-    if (colition_map.out_of_map_y(actual_position.y + dimension.y + 1)) {
-        return false;
-    }
-
-    for (int x = 0; x <= dimension.x && (actual_position.x + x) < colition_map.getWidth(); x++) {
-        if (colition_map.check_collision(actual_position.x + x,
-                                         actual_position.y + dimension.y + 1)) {
-            return false;
-        }
-    }
-    return true;
-}
-
-/*
-bool PhysicalObject::detect_others_collision(int other_object_x, int other_object_y){
-
-    //por el momento solo pruebo las colisiones entre las esquinas del objeto
-
-    if (actual_position.x == other_object_x && actual_position.y == other_object_y ) {
-        return true;
-    }
-    if (actual_position.x + dimension.x == other_object_x && actual_position.y == other_object_y){
-        return true;
-    }
-    if (actual_position.x == other_object_x && actual_position.y + dimension.y == other_object_y){
-        return true;
-    }
-    if (actual_position.x + dimension.x == other_object_x && actual_position.y + dimension.y == other_object_y){
-        return true;
     }
 
     return false;
-}*/
+}
 
-Tuple PhysicalObject::get_position() { return actual_position; }
-Tuple PhysicalObject::get_dimension() { return dimension; }
+bool PhysicalObject::detect_y_collision(const MatchMap& colition_map){
+
+    if (colition_map.out_of_map_y(position.y - 1) || colition_map.out_of_map_y(position.y + dimension.y + 1)) {
+        return true;
+    }
+
+    for (int x = 0; x <= dimension.x && (position.x + x) < colition_map.getWidth(); x++) {
+        if (colition_map.check_collision(position.x + x, position.y - 1) && speed.y <= 0) {
+            return true;
+        }
+        if (colition_map.check_collision(position.x + x, position.y + dimension.y + 1) && speed.y > 0) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void PhysicalObject::move(const MatchMap& colition_map){
+
+    if (this->speed.x != 0){
+        int sign;
+        speed.x > 0 ? sign = 1 : sign = -1;
+        for (int x = 0; x <= speed.x * time_step * sign; x++) {
+            if (detect_x_collision(colition_map)) {
+                this->react_to_sides_collision();
+            } else {
+                position.x += 1 * sign;
+            }
+        }
+    }
+
+    speed.y += acceleration.y * time_step;
+    if (speed.y <= 0){
+        for (int y = 0; y >= speed.y * time_step; y--) {
+            if (detect_y_collision(colition_map) ) {
+               this->react_to_down_collision();
+            } else {
+                position.y--;
+            }
+        }
+    } else {
+        for (int y = 0; y <= speed.y * time_step; y++) {
+            if (detect_y_collision(colition_map)) {
+                this->react_to_up_collision();
+            } else {
+                position.y++;
+            }
+        }
+    }
+
+}
 
 
-// PhysicalObject::~PhysicalObject(){}
+Tuple PhysicalObject::get_position(){
+    return position;
+}
 
+void PhysicalObject::get_real_position(int &x, int &y){
+    x = position.x;
+    y = -position.y;
+}
 
+Tuple PhysicalObject::get_dimension(){
+    return dimension;
+}

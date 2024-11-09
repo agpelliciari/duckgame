@@ -12,6 +12,8 @@ target_sources(taller_server_logic
             box.cpp
             action_command.cpp
             physical_object.cpp
+            physical_player.cpp
+
 
 
     PUBLIC
@@ -28,6 +30,8 @@ target_sources(taller_server_logic
             action_command.h
             matchobserver.h
             physical_object.h
+            physical_player.h
+
 
 
     )
