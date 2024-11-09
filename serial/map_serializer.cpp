@@ -46,14 +46,24 @@ void MapSerializer::setBackground(const char* rel_path) {
 
 void MapSerializer::setBackground(const std::string& rel_path) { setBackground(rel_path.c_str()); }
 
-void MapSerializer::addTexture(const uint16_t x, const uint16_t y, BlockTexture type) {
-    std::cout << "ADD TEXTURE " << x << y << type << std::endl;
+
+void MapSerializer::addBlock(const uint16_t x, const uint16_t y, const std::string& name) {
+    std::cout << "ADD BLOCK " << x << y << name << std::endl;
     ryml::NodeRef newitm = blocks.append_child();
     newitm |= ryml::SEQ;
     newitm.append_child() << x;
     newitm.append_child() << y;
-    newitm.append_child() << type;
+    newitm.append_child() << BlockTexture::TREE;
 }
+void MapSerializer::addDecoration(const uint16_t x, const uint16_t y, const std::string& name) {
+    std::cout << "ADD DECORATION " << x << y << name << std::endl;
+    ryml::NodeRef newitm = blocks.append_child();
+    newitm |= ryml::SEQ;
+    newitm.append_child() << x;
+    newitm.append_child() << y;
+    newitm.append_child() << BlockTexture::TREE;
+}
+
 void MapSerializer::addBox(const uint16_t x, const uint16_t y) {
     std::cout << "ADD BOX " << x << y << std::endl;
     ryml::NodeRef newitm = boxes.append_child();
