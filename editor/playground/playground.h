@@ -9,6 +9,23 @@
 #include <QColor>
 #include <QMouseEvent>
 
+enum MapObject {
+    Block,
+    Decoration,
+    Spawn,
+    Box,
+    Empty
+};
+
+struct MapObjectData {
+    int row;
+    int column;
+    MapObject mapObject;
+    std::string texture;
+};
+
+Q_DECLARE_METATYPE(MapObjectData)
+
 struct PlaygroundHandler {
     std::function<void(QPoint)> onLeftClick;
     std::function<void(QPoint)> onRightClick;
@@ -25,6 +42,7 @@ private:
     Ui::Playground* ui;
     QGraphicsScene* map;
     QGraphicsRectItem* background;
+    std::vector<QGraphicsRectItem*> mapObjects;
 
     const PlaygroundHandler handler;
 
@@ -36,6 +54,8 @@ public:
     void addBlock(QPoint position, QBrush texture);
 
     void removeBlock(QPoint position);
+
+    std::vector<MapObjectData> blocks();
 
     ~Playground();
 

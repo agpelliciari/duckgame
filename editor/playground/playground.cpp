@@ -8,10 +8,11 @@
 
 Playground::Playground(const PlaygroundHandler& handler, QWidget* parent): QGraphicsView(parent), ui(new Ui::Playground), map(new QGraphicsScene(this)), handler(handler) {
     ui->setupUi(this);
+    qRegisterMetaType<MapObjectData>("MapObjectData");
 
     const int width = 20;
     const int height = 10;
-    const int blockSize = 32;
+    const int blockSize = 16;
 
     initializeMap(width, height, blockSize);
 }
@@ -19,7 +20,7 @@ Playground::Playground(const PlaygroundHandler& handler, QWidget* parent): QGrap
 void Playground::setBackground(QPixmap texture) {
     const int width = 20;
     const int height = 10;
-    const int blockSize = 32;
+    const int blockSize = 16;
     texture = texture.scaled(width * blockSize, height * blockSize, Qt::IgnoreAspectRatio);
     background->setBrush(texture);
 }
@@ -32,6 +33,11 @@ void Playground::addBlock(QPoint position, QBrush texture) {
 
     QGraphicsRectItem* block = static_cast<QGraphicsRectItem*>(graphicItem);
     block->setBrush(texture);
+
+    MapObjectData mapObjectData = block->data(0).value<MapObjectData>();
+    mapObjectData.mapObject = MapObject::Block;
+    mapObjectData.texture = "";
+    block->setData(0, QVariant::fromValue(mapObjectData));
 }
 
 void Playground::removeBlock(QPoint position) {
@@ -42,6 +48,23 @@ void Playground::removeBlock(QPoint position) {
 
     QGraphicsRectItem* block = static_cast<QGraphicsRectItem*>(graphicItem);
     block->setBrush(Qt::NoBrush);
+
+    MapObjectData mapObjectData = block->data(0).value<MapObjectData>();
+    mapObjectData.mapObject = MapObject::Empty;
+    mapObjectData.texture = "";
+    block->setData(0, QVariant::fromValue(mapObjectData));
+}
+
+std::vector<MapObjectData> Playground::blocks() {
+    std::vector<MapObjectData> blocks;
+
+    for (QGraphicsRectItem* mapObject : mapObjects) {
+        MapObjectData mapObjectData = mapObject->data(0).value<MapObjectData>();
+        if (mapObjectData.mapObject == MapObject::Block)
+            blocks.push_back(mapObjectData);
+    }
+
+    return blocks;
 }
 
 Playground::~Playground() {
@@ -60,12 +83,13 @@ void Playground::initializeMap(int width, int height, int blockSize) {
 
     for (int row = 0; row < height; ++row) {
         for (int col = 0; col < width; ++col) {
-            QGraphicsRectItem* blockRect = map->addRect(
+            QGraphicsRectItem* mapObject = map->addRect(
                 col * blockSize, row * blockSize, blockSize, blockSize,
                 QPen(Qt::NoPen), Qt::NoBrush
             );
-            blockRect->setZValue(2);
-            blockRect->setData(0, row * width + col);
+            mapObject->setZValue(2);
+            mapObject->setData(0, QVariant::fromValue(MapObjectData{ row, col, MapObject::Empty, "" }));
+            mapObjects.push_back(mapObject);
         }
     }
 }

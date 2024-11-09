@@ -13,17 +13,15 @@ Interface::Interface(const InterfaceHandler& handler, QWidget* parent): QWidget(
 
 void Interface::setBackgroundDropdownOptions(std::vector<std::string> backgroundNames) {
     QStringList qBackgroundNames;
-    for (const auto& name : backgroundNames) {
+    for (const auto& name : backgroundNames)
         qBackgroundNames << QString::fromStdString(name);
-    }
     ui->backgroundDropdown->addItems(qBackgroundNames);
 }
 
 void Interface::setBlockDropdownOptions(std::vector<std::string> blockNames) {
     QStringList qBlockNames;
-    for (const auto& name : blockNames) {
+    for (const auto& name : blockNames)
         qBlockNames << QString::fromStdString(name);
-    }
     ui->blockDropdown->addItems(qBlockNames);
 }
 
@@ -44,7 +42,7 @@ void Interface::onClickExport() {
 }
 
 void Interface::initializePreview() {
-    int blockSize = 32; // TODO CONSTANTE
+    int blockSize = 16; // TODO CONSTANTE
     ui->previewView->setScene(preview);
     preview->setSceneRect(0, 0, blockSize, blockSize);
     block = preview->addRect(0, 0, blockSize, blockSize, QPen(Qt::NoPen), Qt::NoBrush);
