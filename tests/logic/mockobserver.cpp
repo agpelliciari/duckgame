@@ -20,8 +20,8 @@ const PlayerDTO* MockObserver::getPlayer(int id) const { return curr_state.getPl
 
 void MockObserver::assertPlayerMovedHigher(const PlayerDTO* playerGiven,
                                            const PlayerDTO* playerBase) {
-    ASSERT_GT(playerGiven->pos.y, playerBase->pos.y)
-            << "New y coord of player is effectivily greater than last one";
+    ASSERT_LT(playerGiven->pos.y, playerBase->pos.y)
+            << "New y coord of player is effectivily less than last one, which means higher";
 }
 
 

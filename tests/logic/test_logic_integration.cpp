@@ -52,6 +52,32 @@ TEST(IntegrationLogicTest, SendMoveOnlyPlayer3Right) {
     observer.assertPlayerMovedRight(playerGiven, playerBase);
 }
 
+TEST(IntegrationLogicTest, SendMoveOnlyPlayer3Left) {
+    MatchDto state(CANCELADA, 2);
+
+    MockObserver observer(state, 3);
+
+    MatchState match;
+
+    match.start_players(observer);
+
+    match.send_results(observer);
+    observer.assertHasAllPlayers();
+
+    // Cambia el checkpoint.
+    int idPlayer = 3;
+
+    state = observer.sendActionAndUpdate(match, MOVE_LEFT, idPlayer);
+
+    const PlayerDTO* playerGiven = observer.getPlayer(idPlayer);
+    ASSERT_TRUE(playerGiven != NULL)
+            << "El player de id " << idPlayer << "estaba contenido en el curr state";
+
+    const PlayerDTO* playerBase = state.getPlayer(idPlayer);
+
+    observer.assertPlayerMovedLeft(playerGiven, playerBase);
+}
+
 
 TEST(IntegrationLogicTest, SendMoveOnlyPlayer3AirRight) {
     MatchDto state(CANCELADA, 2);
@@ -80,4 +106,34 @@ TEST(IntegrationLogicTest, SendMoveOnlyPlayer3AirRight) {
 
     observer.assertPlayerMovedHigher(playerGiven, playerBase);
     observer.assertPlayerMovedAirRight(playerGiven, playerBase);
+}
+
+
+TEST(IntegrationLogicTest, SendMoveOnlyPlayer3AirLeft) {
+    MatchDto state(CANCELADA, 2);
+
+    MockObserver observer(state, 3);
+
+    MatchState match;
+
+    match.start_players(observer);
+
+    match.send_results(observer);
+    observer.assertHasAllPlayers();
+
+    int idPlayer = 3;
+
+    observer.sendActionAndUpdate(match, MOVE_LEFT, idPlayer);
+    // Cambia el checkpoint.
+    state = observer.sendActionAndUpdate(match, JUMP, idPlayer);
+
+    const PlayerDTO* playerGiven = observer.getPlayer(idPlayer);
+    ASSERT_TRUE(playerGiven != NULL)
+            << "El player de id " << idPlayer << "estaba contenido en el curr state";
+
+
+    const PlayerDTO* playerBase = state.getPlayer(idPlayer);
+
+    observer.assertPlayerMovedHigher(playerGiven, playerBase);
+    observer.assertPlayerMovedAirLeft(playerGiven, playerBase);
 }
