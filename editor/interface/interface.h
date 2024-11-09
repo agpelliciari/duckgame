@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QGraphicsPixmapItem>
 #include <QStringList>
+#include <QComboBox>
 
 struct InterfaceHandler {
     std::function<void(size_t)> onBackgroundDropdownIndexChanged;
@@ -24,11 +25,11 @@ size_t selectedTexture = 0;
 
 private:
     Ui::Interface* ui;
-    QGraphicsScene* preview;
-
     const InterfaceHandler handler;
 
-    QGraphicsRectItem* block;
+    QGraphicsRectItem* preview;
+
+    const int textureSize = 16;
 
 public:
     explicit Interface(const InterfaceHandler& handler, QWidget* parent = nullptr);
@@ -39,18 +40,20 @@ public:
 
     void blockDropdownIndexChanged(size_t index);
 
-    void displayOnPreview(QBrush texture);
+    void displayOnPreview(QPixmap pixelMap);
 
     ~Interface();
 
 private:
-    void initializePreview();
+    void onClickExport();
 
     void onBackgroundDropdownIndexChanged(int index);
 
     void onBlockDropdownIndexChanged(int index);
 
-    void onClickExport();
+    void initializePreview();
+
+    void setDropdownOptions(std::vector<std::string> options, QComboBox* dropdown);
 };
 
 #endif

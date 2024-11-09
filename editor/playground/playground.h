@@ -46,12 +46,16 @@ private:
 
     const PlaygroundHandler handler;
 
+    const int width = 20;
+    const int height = 10;
+    const int textureSize = 16;
+
 public:
     explicit Playground(const PlaygroundHandler& handler, QWidget* parent = nullptr);
 
-    void setBackground(QPixmap texture);
+    void setBackground(QPixmap pixelMap);
 
-    void addBlock(QPoint position, QBrush texture);
+    void addBlock(QPoint position, QPixmap pixelMap);
 
     void removeBlock(QPoint position);
 
@@ -60,7 +64,7 @@ public:
     ~Playground();
 
 private:
-    void initializeMap(int width, int height, int blockSize);
+    void initializeMap();
 
     void mousePressEvent(QMouseEvent* event) override;
 };

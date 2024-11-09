@@ -10,28 +10,22 @@ Playground::Playground(const PlaygroundHandler& handler, QWidget* parent): QGrap
     ui->setupUi(this);
     qRegisterMetaType<MapObjectData>("MapObjectData");
 
-    const int width = 20;
-    const int height = 10;
-    const int blockSize = 16;
-
-    initializeMap(width, height, blockSize);
+    initializeMap();
 }
 
-void Playground::setBackground(QPixmap texture) {
-    const int width = 20;
-    const int height = 10;
-    const int blockSize = 16;
-    texture = texture.scaled(width * blockSize, height * blockSize, Qt::IgnoreAspectRatio);
-    background->setBrush(texture);
+void Playground::setBackground(QPixmap pixelMap) {
+    pixelMap = pixelMap.scaled(width * textureSize, height * textureSize, Qt::IgnoreAspectRatio);
+    background->setBrush(pixelMap);
 }
 
-void Playground::addBlock(QPoint position, QBrush texture) {
+void Playground::addBlock(QPoint position, QPixmap pixelMap) {
     QGraphicsItem* graphicItem = map->itemAt(position, QTransform());
 
     if (!graphicItem || graphicItem->type() != QGraphicsRectItem::Type)
         return;
 
     QGraphicsRectItem* block = static_cast<QGraphicsRectItem*>(graphicItem);
+    QBrush texture(pixelMap);
     block->setBrush(texture);
 
     MapObjectData mapObjectData = block->data(0).value<MapObjectData>();
@@ -71,11 +65,12 @@ Playground::~Playground() {
     delete ui;
 }
 
-void Playground::initializeMap(int width, int height, int blockSize) {
+void Playground::initializeMap() {
     setScene(map);
-    map->setSceneRect(0, 0, width * blockSize, height * blockSize);
+    scale(3.0, 3.0); // TODO HARDCODED
+    map->setSceneRect(0, 0, width * textureSize, height * textureSize);
 
-    background = new QGraphicsRectItem(0, 0, width * blockSize, height * blockSize);
+    background = new QGraphicsRectItem(0, 0, width * textureSize, height * textureSize);
     background->setBrush(Qt::NoBrush);
     background->setPen(Qt::NoPen);
     background->setZValue(1);
@@ -84,7 +79,7 @@ void Playground::initializeMap(int width, int height, int blockSize) {
     for (int row = 0; row < height; ++row) {
         for (int col = 0; col < width; ++col) {
             QGraphicsRectItem* mapObject = map->addRect(
-                col * blockSize, row * blockSize, blockSize, blockSize,
+                col * textureSize, row * textureSize, textureSize, textureSize,
                 QPen(Qt::NoPen), Qt::NoBrush
             );
             mapObject->setZValue(2);

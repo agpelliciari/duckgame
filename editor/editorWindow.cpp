@@ -18,8 +18,7 @@ EditorWindow::EditorWindow(QWidget *parent):
     }, this)),
     playground(new Playground(PlaygroundHandler{
         .onLeftClick = [this](QPoint position) {
-            QBrush texture(loader.blockAt(selectedBlockIndex).pixelMap);
-            playground->addBlock(position, texture);
+            playground->addBlock(position, loader.blockAt(selectedBlockIndex).pixelMap);
         },
         .onRightClick = [this](QPoint position) {
             playground->removeBlock(position);
@@ -59,8 +58,7 @@ void EditorWindow::selectBackgroundTexture(size_t index) {
 void EditorWindow::selectBlockTexture(size_t index) {
     selectedBlockIndex = index;
     interface->blockDropdownIndexChanged(selectedBlockIndex);
-    QBrush texture(loader.blockAt(selectedBlockIndex).pixelMap);
-    interface->displayOnPreview(texture);
+    interface->displayOnPreview(loader.blockAt(selectedBlockIndex).pixelMap);
 }
 
 void EditorWindow::exportToFileSystem() {

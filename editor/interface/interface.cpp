@@ -1,7 +1,7 @@
 #include "interface.h"
 #include "ui_interface.h"
 
-Interface::Interface(const InterfaceHandler& handler, QWidget* parent): QWidget(parent), ui(new Ui::Interface), preview(new QGraphicsScene(this)), handler(handler) {
+Interface::Interface(const InterfaceHandler& handler, QWidget* parent): QWidget(parent), ui(new Ui::Interface), handler(handler) {
     ui->setupUi(this);
 
     initializePreview();
@@ -12,25 +12,20 @@ Interface::Interface(const InterfaceHandler& handler, QWidget* parent): QWidget(
 }
 
 void Interface::setBackgroundDropdownOptions(std::vector<std::string> backgroundNames) {
-    QStringList qBackgroundNames;
-    for (const auto& name : backgroundNames)
-        qBackgroundNames << QString::fromStdString(name);
-    ui->backgroundDropdown->addItems(qBackgroundNames);
+    setDropdownOptions(backgroundNames, ui->backgroundDropdown);
 }
 
 void Interface::setBlockDropdownOptions(std::vector<std::string> blockNames) {
-    QStringList qBlockNames;
-    for (const auto& name : blockNames)
-        qBlockNames << QString::fromStdString(name);
-    ui->blockDropdown->addItems(qBlockNames);
+    setDropdownOptions(blockNames, ui->blockDropdown);
 }
 
 void Interface::blockDropdownIndexChanged(size_t index) {
     ui->blockDropdown->setCurrentIndex(index);
 }
 
-void Interface::displayOnPreview(QBrush texture) {
-    block->setBrush(texture);
+void Interface::displayOnPreview(QPixmap pixelMap) {
+    QBrush texture(pixelMap);
+    preview->setBrush(texture);
 }
 
 Interface::~Interface() {
@@ -41,17 +36,25 @@ void Interface::onClickExport() {
     handler.onExport();
 }
 
-void Interface::initializePreview() {
-    int blockSize = 16; // TODO CONSTANTE
-    ui->previewView->setScene(preview);
-    preview->setSceneRect(0, 0, blockSize, blockSize);
-    block = preview->addRect(0, 0, blockSize, blockSize, QPen(Qt::NoPen), Qt::NoBrush);
-}
-
 void Interface::onBackgroundDropdownIndexChanged(int index) {
     handler.onBackgroundDropdownIndexChanged(index);
 }
 
 void Interface::onBlockDropdownIndexChanged(int index) {
     handler.onBlockDropdownIndexChanged(index);
+}
+
+void Interface::initializePreview() {
+    QGraphicsScene* scene = new QGraphicsScene(this);
+    ui->previewView->setScene(scene);
+    ui->previewView->scale(3.0, 3.0); // TODO HARDCODED
+    scene->setSceneRect(0, 0, textureSize, textureSize);
+    preview = scene->addRect(0, 0, textureSize, textureSize, QPen(Qt::NoPen), Qt::NoBrush);
+}
+
+void Interface::setDropdownOptions(std::vector<std::string> options, QComboBox* dropdown) {
+    QStringList qOptions;
+    for (const auto& option : options)
+        qOptions << QString::fromStdString(option);
+    dropdown->addItems(qOptions);
 }
