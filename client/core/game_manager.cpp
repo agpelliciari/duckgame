@@ -1,20 +1,20 @@
-#include "./lobby_connector.h"
+#include "./game_manager.h"
 
 #include <cstring>
 #include <iostream>
 #include <string>
 #include <utility>
 
-#include "./lobby_create_sender.h"
-#include "./lobby_join_sender.h"
 #include "common/core/liberror.h"
+#include "lobby/lobby_create_state.h"
+#include "lobby/lobby_join_state.h"
 
 static const char DEFAULT_HOST[] = "127.0.0.1";
 static const char DEFAULT_SERVICE[] = "2048";
 
-LobbyConnector::LobbyConnector(GameContext& _context): context(_context), skt(std::nullopt) {}
+GameManager::GameManager(GameContext& _context): context(_context), skt(std::nullopt) {}
 
-void LobbyConnector::setHostnamePort(const std::string& newhost, const std::string& newservice) {
+void GameManager::setHostnamePort(const std::string& newhost, const std::string& newservice) {
 
     hostname = newhost.length() == 0 ? std::string(DEFAULT_HOST) : newhost;
     service = newservice.length() == 0 ? std::string(DEFAULT_SERVICE) : newservice;
@@ -23,7 +23,7 @@ void LobbyConnector::setHostnamePort(const std::string& newhost, const std::stri
 }
 
 
-void LobbyConnector::clear() {
+void GameManager::clear() {
 
     skt.value().finish();
     // Al hacer close si el state esperando por respuesta del socket
@@ -37,7 +37,7 @@ void LobbyConnector::clear() {
 // Resetea el estado al inicial.
 // Y reseteo del protocolo.
 // No es una navegacion entre estados perse.
-bool LobbyConnector::reset() {
+bool GameManager::reset() {
     if (skt.has_value()) {
         clear();
     }
@@ -55,17 +55,17 @@ bool LobbyConnector::reset() {
     }
 }
 
-bool LobbyConnector::cangonext() { return state.get() != NULL && state->endstate(); }
+bool GameManager::cangonext() { return state.get() != NULL && state->endstate(); }
 
 
 // Setea el estado para el manejo de lobby
-LobbyClientSender* LobbyConnector::setLobbyCreator(LobbyListener& listener, bool dual) {
+LobbyActionQueue* GameManager::setLobbyCreator(LobbyListener& listener, bool dual) {
     std::cout << "Should set state to lobby create " << std::endl;
     context.dualplay = dual;
     context.cantidadjugadores = dual ? 2 : 1;
 
 
-    LobbyCreateSender* creator = new LobbyCreateSender(skt.value(), context, listener);
+    LobbyCreateState* creator = new LobbyCreateState(skt.value(), context, listener);
     state.reset(creator);
 
     // Ahora empeza el thread. Despues de joinear el anterior.
@@ -74,12 +74,12 @@ LobbyClientSender* LobbyConnector::setLobbyCreator(LobbyListener& listener, bool
     return &(creator->getSender());
 }
 
-void LobbyConnector::setLobbyJoin(LobbyListener& listener, bool dual, unsigned int lobbyid) {
+void GameManager::setLobbyJoin(LobbyListener& listener, bool dual, unsigned int lobbyid) {
     std::cout << "Should set state to lobby join " << lobbyid << std::endl;
     context.dualplay = dual;
     context.id_lobby = lobbyid;
 
-    LobbyJoinSender* joiner = new LobbyJoinSender(skt.value(), context, listener);
+    LobbyJoinState* joiner = new LobbyJoinState(skt.value(), context, listener);
     state.reset(joiner);
 
     // Ahora empeza el thread. Despues de joinear el anterior.
@@ -87,13 +87,13 @@ void LobbyConnector::setLobbyJoin(LobbyListener& listener, bool dual, unsigned i
 }
 
 // Utiliza el protocol del sender, le quita el
-GameActionSender* LobbyConnector::initGame(EventListener& listener) {
-    GameActionSender* game = new GameActionSender(skt.value(), listener, context);
+PlayStateSender* GameManager::initGame(EventListener& listener) {
+    PlayStateSender* game = new PlayStateSender(skt.value(), listener, context);
     state.reset(game);
     return game;
 }
 
-LobbyConnector::~LobbyConnector() {
+GameManager::~GameManager() {
     if (skt.has_value()) {
         clear();
     }
@@ -102,6 +102,6 @@ LobbyConnector::~LobbyConnector() {
 
 // Metodos getters para la configuracion.
 
-int LobbyConnector::getTotalPlayers() const { return context.cantidadjugadores; }
+int GameManager::getTotalPlayers() const { return context.cantidadjugadores; }
 
-bool LobbyConnector::isdual() const { return context.dualplay; }
+bool GameManager::isdual() const { return context.dualplay; }

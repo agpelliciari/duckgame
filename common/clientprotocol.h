@@ -32,12 +32,12 @@ public:
     ClientProtocol(const ClientProtocol&) = delete;
     ClientProtocol& operator=(const ClientProtocol&) = delete;
 
-    lobby_info joinLobby(const uint8_t id_match);
-    uint8_t createLobby();
+    lobby_info sendJoinLobby(const uint8_t id_match, const uint8_t count);
+    uint8_t sendCreateLobby(const uint8_t count);
 
-    // Para setear playercount == 1 o == 2
-    uint8_t setsingleplay();
-    uint8_t setdualplay(uint8_t* player1);
+    uint8_t recvIDSinglePlayer();
+    uint8_t recvIDDualPlayer(uint8_t* player1);
+
 
     void recvlobbyinfo(lobby_info& out);
 

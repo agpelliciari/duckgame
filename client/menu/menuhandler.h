@@ -3,8 +3,8 @@
 
 #include <string>
 
-#include "client/core/lobby_client_sender.h"
-#include "client/core/lobby_connector.h"
+#include "client/core/game_manager.h"
+#include "client/core/lobby/lobby_action_queue.h"
 #include "client/core/lobby_listener.h"
 #include "common/queue.h"
 
@@ -12,13 +12,13 @@
 
 class MenuHandler: public LobbyListener {
 private:
-    LobbyConnector& connector;  // cppcheck-suppress unusedStructMember
-    LobbyClientSender* sender;  // cppcheck-suppress unusedStructMember
+    GameManager& connector;    // cppcheck-suppress unusedStructMember
+    LobbyActionQueue* sender;  // cppcheck-suppress unusedStructMember
 
     Queue<MenuAction> queueToMenu = Queue<MenuAction>(20);  // cppcheck-suppress unusedStructMember
 
 public:
-    explicit MenuHandler(LobbyConnector& _connector);
+    explicit MenuHandler(GameManager& _connector);
 
     void onSetHostnamePort(const std::string& hostaname, const std::string& port);
 

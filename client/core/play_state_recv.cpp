@@ -1,13 +1,13 @@
-#include "./game_state_recv.h"
+#include "./play_state_recv.h"
 
 #include <iostream>
 
 #include "common/core/liberror.h"
 
-GameStateRecv::GameStateRecv(ClientProtocol& _protocol, EventListener& _listener):
+PlayStateRecv::PlayStateRecv(ClientProtocol& _protocol, EventListener& _listener):
         protocol(_protocol), listener(_listener) {}
 
-void GameStateRecv::run() {
+void PlayStateRecv::run() {
     try {
         while (_keep_running) {
             // Capaz termino?
@@ -21,7 +21,7 @@ void GameStateRecv::run() {
     }
 }
 
-GameStateRecv::~GameStateRecv() {
+PlayStateRecv::~PlayStateRecv() {
     stop();
     join();
 }

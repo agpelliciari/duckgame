@@ -2,7 +2,7 @@
 
 #include <utility>
 
-MenuHandler::MenuHandler(LobbyConnector& _connector): connector(_connector), sender(NULL) {}
+MenuHandler::MenuHandler(GameManager& _connector): connector(_connector), sender(NULL) {}
 
 void MenuHandler::onSetHostnamePort(const std::string& hostname, const std::string& port) {
     connector.setHostnamePort(hostname, port);
