@@ -3,8 +3,10 @@
 
 #include <vector>
 
+#include "server/logic_server/match_state.h"
 #include "server/logic_server/matchobserver.h"
 #include "tests/core/testermatchdto.h"
+
 
 class MockObserver: public TesterMatchDTO, public MatchObserver {
 private:
@@ -13,7 +15,15 @@ private:
 public:
     explicit MockObserver(const MatchDto& firstUpdate, const int count);
 
+    void assertPlayerMovedLeft(const int id, const MatchDto& base);
+    void assertPlayerMovedRight(const int id, const MatchDto& base);
+    void assertPlayerMovedAirRight(const int id, const MatchDto& base);
+
     void assertHasAllPlayers();
+
+    // Sends action pide actualizar y retorna estado anterior.
+    MatchDto sendActionAndUpdate(MatchState& match, const PlayerActionType& _type,
+                                 uint8_t _playerind);
 
 
     int playercount() const override;

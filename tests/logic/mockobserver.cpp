@@ -1,5 +1,7 @@
 #include "./mockobserver.h"
 
+#include <iostream>
+
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
@@ -10,8 +12,49 @@ MockObserver::MockObserver(const MatchDto& firstUpdate, const int count):
         TesterMatchDTO(firstUpdate), players() {
     players.reserve(count);
     for (int i = 0; i < count; i++) {
-        players[i] = i + 1;
+        players.push_back(i + 1);
     }
+}
+
+void MockObserver::assertPlayerMovedLeft(const int id, const MatchDto& base) {
+    const PlayerDTO* playerBase = base.getPlayer(id);
+    if (playerBase == NULL) {
+        std::cout << "NOT FOUND ID TO TEST " << id << std::endl;
+        return;
+    }
+
+    std::cout << "FOUND ID TO TEST MOVE LEFT" << id << std::endl;
+}
+void MockObserver::assertPlayerMovedRight(const int id, const MatchDto& base) {
+    const PlayerDTO* playerGiven = curr_state.getPlayer(id);
+    ASSERT_TRUE(playerGiven != NULL)
+            << "El player de id " << id << "estaba contenido en el curr state";
+
+    const PlayerDTO* playerBase = base.getPlayer(id);
+    if (playerBase == NULL) {
+        std::cout << "NOT FOUND ID TO TEST " << id << std::endl;
+        return;
+    }
+    std::cout << "FOUND ID TO TEST MOVE RIGHT" << id << std::endl;
+
+    ASSERT_EQ(playerGiven->move_action, TypeMoveAction::MOVE_RIGHT)
+            << "Player is currently moving right";
+}
+
+void MockObserver::assertPlayerMovedAirRight(const int id, const MatchDto& base) {
+    const PlayerDTO* playerGiven = curr_state.getPlayer(id);
+    ASSERT_TRUE(playerGiven != NULL)
+            << "El player de id " << id << "estaba contenido en el curr state";
+
+    const PlayerDTO* playerBase = base.getPlayer(id);
+    if (playerBase == NULL) {
+        std::cout << "NOT FOUND ID TO TEST " << id << std::endl;
+        return;
+    }
+    std::cout << "FOUND ID TO TEST MOVE RIGHT" << id << std::endl;
+
+    ASSERT_EQ(playerGiven->move_action, TypeMoveAction::AIR_RIGHT)
+            << "Player is currently moving right on air";
 }
 
 
@@ -36,6 +79,18 @@ void MockObserver::assertHasAllPlayers() {
     }
 }
 
+MatchDto MockObserver::sendActionAndUpdate(MatchState& match, const PlayerActionType& _type,
+                                           uint8_t _playerind) {
+    MatchDto bfr = curr_state;
+
+    PlayerActionDTO action(_type, _playerind);
+    match.pushAction(action);
+
+    match.step();
+    match.send_results(*this);
+
+    return bfr;
+}
 
 // Inteface..
 
