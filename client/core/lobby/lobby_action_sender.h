@@ -1,5 +1,5 @@
-#ifndef LOBBY_ACTION_LISTENER
-#define LOBBY_ACTION_LISTENER
+#ifndef LOBBY_ACTION_SENDER
+#define LOBBY_ACTION_SENDER
 
 #include <string>
 
@@ -7,8 +7,8 @@
 #include "common/clientprotocol.h"
 #include "common/thread.h"
 
-// Clase que encapsula al protocol y mantendria el estado del juego
-// Proporcionado una interfaz para acciones del usuario.
+
+// Thread para consumir a la lobby action queue.
 class LobbyActionSender: private Thread {
 protected:
     ClientProtocol& protocol;
@@ -16,7 +16,6 @@ protected:
     void run() override;
 
 public:
-    // Los default sin pasar por socket/protocol.
     explicit LobbyActionSender(ClientProtocol& _protocol, LobbyActionQueue& _actions);
 
     LobbyActionSender(LobbyActionSender&&);

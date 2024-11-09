@@ -16,26 +16,8 @@ PlayStateSender::PlayStateSender(Messenger& _messenger, EventListener& _listener
         firstidle(true),
         secondidle(true) {}
 
-/*
-PlayStateSender::PlayStateSender(PlayStateSender&& other):
-        protocol(other.protocol), listener(other.listener) {
-    other.protocol = NULL;
-}
-PlayStateSender& PlayStateSender::operator=(PlayStateSender&& other) {
-    if (protocol == other.protocol) {
-        return *this;
-    }
-
-    this->protocol = other.protocol;
-    other.protocol = NULL;
-
-    this->listener = other.listener;
-
-    return *this;
-}
-*/
-
 void PlayStateSender::disconnect() { std::cout << "SHOULD SEND DISCCONNECT!" << std::endl; }
+
 void PlayStateSender::doaction(const PlayerActionDTO& action) {
 
     if (action.playerind != 0 && !context.dualplay) {

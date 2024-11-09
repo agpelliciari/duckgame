@@ -9,6 +9,8 @@
 #include "common/core/liberror.h"
 #include "common/protocolerror.h"
 
+#define getErrorMsg(ind) ERRORS[(ind >= 7) ? 1 : ind]
+
 
 LobbyCreateState::LobbyCreateState(Messenger& _messenger, GameContext& _context,
                                    LobbyListener& _listener):
@@ -23,8 +25,7 @@ void LobbyCreateState::createLobby() {
 
 LobbyActionQueue& LobbyCreateState::getSender() { return sender; }
 
-
-void LobbyCreateState::run() {
+bool LobbyCreateState::checkcreatefail() {
 
     try {
         uint8_t id_lobby = protocol.createLobby();
@@ -41,18 +42,37 @@ void LobbyCreateState::run() {
             context.id_lobby = id_lobby;
             listener.createdLobbySolo(id_lobby);
         }
-
+        return false;
     } catch (const LibError& error) {
         if (protocol.isopen()) {
             std::cerr << "Lobby create lib error:" << error.what() << std::endl;
-            listener.failedCreate(ERRORS[0]);
+            listener.failedCreate(CLIENT_CONN_ERROR);
         }
+        return true;
+    }
+}
+void LobbyCreateState::run() {
+    if (checkcreatefail()) {
         return;
     }
 
-    LobbyActionSender actionlisten(protocol, sender);
-    actionlisten.begin();
+    try {
+        LobbyActionSender actionlisten(protocol, sender);
+        actionlisten.begin();
 
-    // Open info receiver.
-    listeninfo();
+        // Wait until start/cancel info.
+        lobby_info info = listenUntilLobbyEnd();
+
+        if (info.action == LobbyResponseType::STARTED_LOBBY) {
+            setInitedMatch(info.data);
+        } else {
+            context.started = false;
+            listener.canceledLobby(getErrorMsg(info.data));
+        }
+    } catch (const LibError& error) {
+        if (protocol.isopen()) {
+            std::cerr << "CreateLobby state recv error:" << error.what() << std::endl;
+            listener.canceledLobby(CLIENT_CONN_ERROR);
+        }
+    }
 }

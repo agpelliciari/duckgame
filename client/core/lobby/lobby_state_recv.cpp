@@ -9,10 +9,14 @@
 #include "common/errors.h"
 #include "common/protocolerror.h"
 
+const char LobbyStateRecv::CLIENT_CONN_ERROR[] = "Client connection error";
 const char* LobbyStateRecv::ERRORS[] = {
-        "Client connection error",     "Unknown server error", "Server closed the connection",
+        "Unknown client error",        "Unknown server error", "Server closed the connection",
         "Match's host left the lobby", "Lobby was not found",  "Lobby was already started",
         "Lobby had not enough space"};
+
+#define getErrorMsg(ind) ERRORS[(ind >= 7) ? 1 : ind]
+
 
 LobbyStateRecv::LobbyStateRecv(Messenger& _messenger, GameContext& _context,
                                LobbyListener& _listener):
@@ -30,48 +34,36 @@ void LobbyStateRecv::handleNotify(const lobby_info& info) {
     }
 }
 
-void LobbyStateRecv::listeninfo() {
+
+void LobbyStateRecv::setInitedMatch(int totalplayers) {
+    // Receive map data.
+    uint8_t bk;
+    struct MapPoint size = protocol.recvmap(&bk, context.blocks);
+
+
+    context.map_width = size.x;
+    context.map_height = size.y;
+    std::cout << " BACKGROUND INT : " << (int)(bk) << std::endl;
+
+    context.map_background = "default.png";
+
+    context.started = true;
+    context.cantidadjugadores = totalplayers;
+
+    listener.startedLobby();
+}
+
+lobby_info LobbyStateRecv::listenUntilLobbyEnd() {
     lobby_info info;
-    try {
+    protocol.recvlobbyinfo(info);
+
+    while (info.action != LobbyResponseType::STARTED_LOBBY &&
+           info.action != LobbyResponseType::GAME_ERROR) {
+
+        handleNotify(info);
         protocol.recvlobbyinfo(info);
-
-        while (info.action != LobbyResponseType::STARTED_LOBBY &&
-               info.action != LobbyResponseType::GAME_ERROR) {
-
-            handleNotify(info);
-            protocol.recvlobbyinfo(info);
-        }
-    } catch (const LibError& error) {
-        if (protocol.isopen()) {
-            std::cerr << "Lobby state recv error:" << error.what() << std::endl;
-            listener.canceledLobby(ERRORS[0]);
-        }
-        return;
     }
-
-    if (info.action == LobbyResponseType::STARTED_LOBBY) {
-        context.started = true;
-        context.cantidadjugadores = info.data;
-
-        // Receive map data.
-
-        uint8_t bk;
-        struct MapPoint size = protocol.recvmap(&bk, context.blocks);
-
-        context.map_width = size.x;
-        context.map_height = size.y;
-        std::cout << " BACKGROUND INT : " << (int)(bk) << std::endl;
-
-        context.map_background = "default.png";
-
-        listener.startedLobby();
-    } else {
-        std::cout << "Game error received " << (int)context.id_lobby
-                  << " FALLO CODE: " << (int)info.data << std::endl;
-        context.started = false;
-
-        listener.canceledLobby(ERRORS[(info.data >= 7) ? 1 : info.data]);
-    }
+    return info;
 }
 
 bool LobbyStateRecv::endstate() {

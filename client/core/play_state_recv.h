@@ -1,12 +1,12 @@
-#ifndef GAME_STATE_RECV_H
-#define GAME_STATE_RECV_H
+#ifndef PLAY_STATE_RECV_H
+#define PLAY_STATE_RECV_H
 
 #include "client/eventlistener.h"
 #include "common/clientprotocol.h"
 #include "common/thread.h"
 
 
-// El thread que basicamente notifica de eventos al protocolo/client.
+// El thread que basicamente notifica los cambios del protocolo al listener.
 class PlayStateRecv: public Thread {
 
 protected:

@@ -1,5 +1,5 @@
-#ifndef LOBBY_CLIENT_SENDER_H
-#define LOBBY_CLIENT_SENDER_H
+#ifndef LOBBY_ACTION_QUEUE
+#define LOBBY_ACTION_QUEUE
 
 #include "common/dtoslobby.h"
 #include "common/queue.h"

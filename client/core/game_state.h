@@ -1,8 +1,6 @@
-#ifndef Lobby_STATE_H
-#define Lobby_STATE_H
+#ifndef GAME_STATE_H
+#define GAME_STATE_H
 
-// Clase que encapsula al protocol y mantendria el estado del juego
-// Proporcionado una interfaz para acciones del usuario.
 class GameState {
 public:
     // Checks and ends the state. Ensuring needed data

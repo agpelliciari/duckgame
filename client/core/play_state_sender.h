@@ -1,7 +1,6 @@
-#ifndef GAME_ACTION_SENDER_H
-#define GAME_ACTION_SENDER_H
+#ifndef PLAY_STATE_SENDER_H
+#define PLAY_STATE_SENDER_H
 
-#include <memory>
 #include <string>
 
 #include "./game_state.h"
@@ -12,8 +11,10 @@
 #include "common/queue.h"
 #include "common/thread.h"
 
-// Clase que encapsula al protocol y mantendria el estado del juego
-// Proporcionado una interfaz para acciones del usuario.
+// El encapsulador del play state, donde se esta escuchando por acciones
+// Que se mandaran al match en el server, en el thread separado.
+// En el thread del sender tambien se lanza paralelamente el thread recibidor.
+
 class PlayStateSender: private Thread, public ActionListener, public GameState {
 protected:
     ClientProtocol protocol;  // cppcheck-suppress unusedStructMember
@@ -24,6 +25,7 @@ protected:
 
     Queue<PlayerActionDTO> actions;
 
+    void run() override;
 
 public:
     void doaction(const PlayerActionDTO& action) override;
@@ -33,8 +35,8 @@ public:
     explicit PlayStateSender(Messenger& _messenger, EventListener& _listener,
                              GameContext& _context);
 
-    // PlayStateSender(PlayStateSender&&);
-    // PlayStateSender& operator=(PlayStateSender&&);
+    PlayStateSender(PlayStateSender&&) = delete;
+    PlayStateSender& operator=(PlayStateSender&&) = delete;
 
     // Asumamos por ahora que no se quiere permitir copias, ni mov.
     PlayStateSender(const PlayStateSender&) = delete;
@@ -46,13 +48,6 @@ public:
     void end();
 
     bool isrunning();
-
-    // void startJoinLobby(uint8_t playercount, unsigned int idlobby);
-    // void startCreateLobby(uint8_t playercount);
-
-    void run() override;
-
-    int getcount();
 
     bool endstate() override;
 

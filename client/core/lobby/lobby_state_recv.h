@@ -1,5 +1,5 @@
-#ifndef BASE_LOBBY_SENDER_H
-#define BASE_LOBBY_SENDER_H
+#ifndef LOBBY_STATE_RECV_H
+#define LOBBY_STATE_RECV_H
 
 
 #include "client/core/game_state.h"
@@ -8,24 +8,25 @@
 #include "common/clientprotocol.h"
 #include "common/thread.h"
 
-// Clase que encapsula al protocol y mantendria el estado del juego
-// Proporcionado una interfaz para acciones del usuario.
+
+// Base para los states de lobby que recibe la info del server y se la
+// notifica al listener.
 class LobbyStateRecv: protected Thread, public GameState {
-
-
 protected:
     // cppcheck-suppress unusedStructMember
     static const char* ERRORS[];
+    static const char CLIENT_CONN_ERROR[];  // cppcheck-suppress unusedStructMember
 
     ClientProtocol protocol;  // cppcheck-suppress unusedStructMember
     GameContext& context;     // cppcheck-suppress unusedStructMember
     LobbyListener& listener;  // cppcheck-suppress unusedStructMember
 
     void handleNotify(const lobby_info& info);
-    void listeninfo();
+    lobby_info listenUntilLobbyEnd();
+
+    void setInitedMatch(int totalplayers);
 
 public:
-    // Los default sin pasar por socket/protocol.
     explicit LobbyStateRecv(Messenger& _messenger, GameContext& _context, LobbyListener& _listener);
 
     LobbyStateRecv(LobbyStateRecv&&) = delete;
@@ -35,7 +36,7 @@ public:
     LobbyStateRecv(const LobbyStateRecv&) = delete;
     LobbyStateRecv& operator=(const LobbyStateRecv&) = delete;
 
-    // Lobby state
+    // Termina forzosamente de ser necesario y retorna si deberia continuar al play state.
     bool endstate() override;
 
     virtual ~LobbyStateRecv();

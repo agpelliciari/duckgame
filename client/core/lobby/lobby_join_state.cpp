@@ -8,6 +8,9 @@
 #include "common/core/liberror.h"
 #include "common/protocolerror.h"
 
+#define getErrorMsg(ind) ERRORS[(ind >= 7) ? 1 : ind]
+
+
 LobbyJoinState::LobbyJoinState(Messenger& _messenger, GameContext& _context,
                                LobbyListener& _listener):
         LobbyStateRecv(_messenger, _context, _listener) {}
@@ -21,37 +24,59 @@ void LobbyJoinState::joinLobby() {
 
 bool LobbyJoinState::isrunning() { return _is_alive; }
 
-void LobbyJoinState::run() {
+bool LobbyJoinState::tryJoinLobbyFail() {
     try {
         lobby_info infojoin = protocol.joinLobby(context.id_lobby);
         if (infojoin.action != JOINED_LOBBY) {
             std::cerr << "Failed joined error code: " << (int)infojoin.data << std::endl;
-            listener.failedJoin(ERRORS[infojoin.data]);
-            return;
+            listener.failedJoin(getErrorMsg(infojoin.data));
+            return true;
         }
 
         if (context.dualplay) {
-            // std::cerr << "lobby id to join: " << (int)context.id_lobby <<" DUAL"<< std::endl;
             context.second_player = protocol.setdualplay(&context.first_player);
 
             context.cantidadjugadores = infojoin.data + 2;
             listener.joinedLobbyDual(context);
         } else {
-            // std::cerr << "lobby id to join: " << (int)context.id_lobby <<" SINGLE"<< std::endl;
             context.first_player = protocol.setsingleplay();
             context.second_player = 0;
 
             context.cantidadjugadores = infojoin.data + 1;
             listener.joinedLobbySolo(context);
         }
+
+        return false;
     } catch (const LibError& error) {
         if (protocol.isopen()) {
             std::cerr << "Lobby join lib error:" << error.what() << std::endl;
-            listener.failedJoin(ERRORS[0]);
+            listener.failedJoin(CLIENT_CONN_ERROR);
         }
+
+        return true;
+    }
+}
+
+
+void LobbyJoinState::run() {
+    if (tryJoinLobbyFail()) {
         return;
     }
 
+    try {
+        // Wait until start/cancel info.
+        lobby_info info = listenUntilLobbyEnd();
 
-    listeninfo();
+        if (info.action == LobbyResponseType::STARTED_LOBBY) {
+            setInitedMatch(info.data);
+        } else {
+            context.started = false;
+            listener.canceledLobby(getErrorMsg(info.data));
+        }
+    } catch (const LibError& error) {
+        if (protocol.isopen()) {
+            std::cerr << "JoinLobby state recv error:" << error.what() << std::endl;
+            listener.canceledLobby(CLIENT_CONN_ERROR);
+        }
+    }
 }

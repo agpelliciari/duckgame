@@ -1,7 +1,5 @@
-#ifndef GAME_LOOP_H
-#define GAME_LOOP_H
-
-//#include "common/core/socket.h"
+#ifndef GAME_MANAGER_H
+#define GAME_MANAGER_H
 
 #include <memory>
 #include <optional>
@@ -15,17 +13,20 @@
 #include "common/core/socket.h"
 #include "lobby/lobby_action_queue.h"
 
-// Clase que encapsula al protocol y mantendria el estado del juego
-// Proporcionado una interfaz para acciones del usuario.
+// El game manager se encarga de conectar al server
+// Y mantener la referencia al estado actual, que es el que hace realmente cosas
+// Con la conexion, por ahora existiendo dos fases principales
+// la fase Lobby y la fase Play.
 class GameManager {
 protected:
     GameContext& context;  // cppcheck-suppress unusedStructMember
 
-    std::optional<Socket> skt;  // cppcheck-suppress unusedStructMember
-    std::string hostname;       // cppcheck-suppress unusedStructMember
-    std::string service;        // cppcheck-suppress unusedStructMember
-
+    std::optional<Socket> skt;         // cppcheck-suppress unusedStructMember
     std::unique_ptr<GameState> state;  // cppcheck-suppress unusedStructMember
+
+    std::string hostname;  // cppcheck-suppress unusedStructMember
+    std::string service;   // cppcheck-suppress unusedStructMember
+
 public:
     explicit GameManager(GameContext& _context);
 

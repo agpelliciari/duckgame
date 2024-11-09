@@ -1,5 +1,5 @@
-#ifndef LOBBY_CREATE_SENDER_H
-#define LOBBY_CREATE_SENDER_H
+#ifndef LOBBY_CREATE_STATE_H
+#define LOBBY_CREATE_STATE_H
 
 #include <string>
 
@@ -9,15 +9,15 @@
 #include "common/clientprotocol.h"
 #include "common/queue.h"
 
-// Clase que encapsula al protocol y mantendria el estado del juego
-// Proporcionado una interfaz para acciones del usuario.
+// GameState para la creacion de una lobby,
+// que comparte la parte de recibir info de la lobby del server.
 class LobbyCreateState: public LobbyStateRecv {
 protected:
     LobbyActionQueue sender;
     void run() override;
+    bool checkcreatefail();
 
 public:
-    // Los default sin pasar por socket/protocol.
     explicit LobbyCreateState(Messenger& _messenger, GameContext& _context,
                               LobbyListener& _listener);
 
@@ -28,8 +28,12 @@ public:
     LobbyCreateState(const LobbyCreateState&) = delete;
     LobbyCreateState& operator=(const LobbyCreateState&) = delete;
 
+    // No es ideal. Pero por ahora que se decidio el state perse
+    // Sea el receiver de info, la queue del sender que tiene el mismo scope.
+    // Se guarda en el receiver. Y se expone para el menu.
     LobbyActionQueue& getSender();
 
+    // Inicia el thread, y hace lo necesario para que se cree la partida.
     void createLobby();
 };
 
