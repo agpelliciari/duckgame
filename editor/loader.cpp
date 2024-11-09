@@ -57,7 +57,27 @@ void Loader::load(const std::string& root, const std::string& path, TextureType 
         texture.pixelMap = pixelMap;
 
         textures.push_back(texture);
+
+        std::sort(textures.begin(), textures.end(), [](const Texture& a, const Texture& b) {
+        auto getNumber = [](const std::string& name) {
+            size_t pos = name.find('_');
+            if (pos != std::string::npos && pos + 1 < name.size()) {
+                std::string numberPart = name.substr(pos + 1);
+                if (std::all_of(numberPart.begin(), numberPart.end(), ::isdigit)) {
+                    try {
+                        return std::stoi(numberPart);
+                    } catch (const std::exception& e) {
+                        return 0;
+                    }
+                }
+            }
+            return 0;
+        };
+        return getNumber(a.name) < getNumber(b.name);
+    });
     }
+
+    
 }
 
 std::vector<std::string> Loader::names(const std::vector<Texture>& textures) {

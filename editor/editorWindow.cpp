@@ -41,12 +41,20 @@ EditorWindow::~EditorWindow() {
 }
 
 void EditorWindow::wheelEvent(QWheelEvent *event) {
-    if (event->angleDelta().y() > 0) {
-        if (selectedBlockIndex > 0)
-            selectBlockTexture(selectedBlockIndex - 1);
+    if (event->modifiers() & Qt::ControlModifier) {
+        if (event->angleDelta().y() > 0) {
+            playground->zoomIn();
+        } else {
+            playground->zoomOut();
+        }
     } else {
-        if (selectedBlockIndex < loader.blocksSize() - 1)
-            selectBlockTexture(selectedBlockIndex + 1);
+        if (event->angleDelta().y() > 0) {
+            if (selectedBlockIndex > 0)
+                selectBlockTexture(selectedBlockIndex - 1);
+        } else {
+            if (selectedBlockIndex < loader.blocksSize() - 1)
+                selectBlockTexture(selectedBlockIndex + 1);
+        }
     }
 }
 
@@ -62,7 +70,7 @@ void EditorWindow::selectBlockTexture(size_t index) {
 }
 
 void EditorWindow::exportToFileSystem() {
-    const std::vector<std::string> blocks = loader.backgroundNames();
+    const std::vector<std::string> blocks = loader.blockNames();
 
     for (const auto& block : blocks) {
         std::cout << block << std::endl;

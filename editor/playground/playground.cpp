@@ -61,13 +61,24 @@ std::vector<MapObjectData> Playground::blocks() {
     return blocks;
 }
 
+void Playground::zoomIn() {
+    if (scaleFactor < ZOOM_MAX)
+        scaleFactor += ZOOM_STEP;
+    zoom(scaleFactor);
+}
+
+void Playground::zoomOut() {
+    if (scaleFactor > ZOOM_MIN)
+        scaleFactor -= ZOOM_STEP;
+    zoom(scaleFactor);
+}
+
 Playground::~Playground() {
     delete ui;
 }
 
 void Playground::initializeMap() {
     setScene(map);
-    scale(3.0, 3.0); // TODO HARDCODED
     map->setSceneRect(0, 0, width * textureSize, height * textureSize);
 
     background = new QGraphicsRectItem(0, 0, width * textureSize, height * textureSize);
@@ -97,4 +108,10 @@ void Playground::mousePressEvent(QMouseEvent* event) {
     } else if (event->button() == Qt::RightButton) {
         handler.onRightClick(position.toPoint());
     }
+}
+
+void Playground::zoom(int scaleFactor) {
+    qreal qReal = scaleFactor / 100.0;
+    resetTransform();
+    scale(qReal, qReal);
 }

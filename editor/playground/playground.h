@@ -39,6 +39,10 @@ class Playground : public QGraphicsView {
     Q_OBJECT
 
 private:
+    static constexpr int ZOOM_STEP = 50;
+    static constexpr int ZOOM_MIN = 100;
+    static constexpr int ZOOM_MAX = 300;
+
     Ui::Playground* ui;
     QGraphicsScene* map;
     QGraphicsRectItem* background;
@@ -46,6 +50,7 @@ private:
 
     const PlaygroundHandler handler;
 
+    int scaleFactor = ZOOM_MIN;
     const int width = 20;
     const int height = 10;
     const int textureSize = 16;
@@ -61,12 +66,18 @@ public:
 
     std::vector<MapObjectData> blocks();
 
+    void zoomIn();
+
+    void zoomOut();
+
     ~Playground();
 
 private:
     void initializeMap();
 
     void mousePressEvent(QMouseEvent* event) override;
+
+    void zoom(int scaleFactor);
 };
 
 #endif
