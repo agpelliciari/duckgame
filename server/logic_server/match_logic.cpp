@@ -50,14 +50,11 @@ MatchLogic::MatchLogic(): colition_map(700, 500) {
     };
 
 
-
-
     // this->command_map[3] = [this](int index) { this->add_player_speed(index, 0, 0); };
-
 }
 
 void MatchLogic::add_player(int id) {
-    players.push_back(Player(id, 10 + id * 50, 50));
+    players.push_back(Player(id, 10 + id * 50, 0));
     colition_map.add_collision(players.back().get_map_position(), players.back().get_dimension());
 }
 
@@ -91,7 +88,7 @@ void MatchLogic::update_colition_map() {
         colition_map.add_collision(player.get_map_position(), player.get_dimension());
     }
     for (Box& box: boxes) {
-        if (box.is_spawned()){
+        if (box.is_spawned()) {
             colition_map.add_collision(box.get_spawn_point(), box.get_dimension());
         }
     }
@@ -119,21 +116,20 @@ void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos, std::vector<DynamicObjDT
         dtos.push_back(dto);
     }
 
-    for (Box box: boxes){
+    for (Box box: boxes) {
         DynamicObjDTO dto = {0, 0, TypeDynamicObject::BOX};
         Tuple position = box.get_spawn_point();
         dto.pos.x = position.x;
         dto.pos.y = position.y;
         objects.push_back(dto);
     }
-
 }
 
 void MatchLogic::execute_move_command(int action_type, int index) {
     this->command_map[action_type](index);
 }
 
-void MatchLogic::add_boxes(const std::vector<struct MapPoint>& boxes){
+void MatchLogic::add_boxes(const std::vector<struct MapPoint>& boxes) {
     for (const struct MapPoint& box: boxes) {
         this->boxes.push_back(Box(box.x, box.y));
     }
