@@ -137,3 +137,32 @@ TEST(IntegrationLogicTest, SendMoveOnlyPlayer3AirLeft) {
     observer.assertPlayerMovedHigher(playerGiven, playerBase);
     observer.assertPlayerMovedAirLeft(playerGiven, playerBase);
 }
+
+
+TEST(IntegrationLogicTest, SendMoveOnlyPlayer3Jumps) {
+    MatchDto state(CANCELADA, 2);
+
+    MockObserver observer(state, 3);
+
+    MatchState match;
+
+    match.start_players(observer);
+
+    match.send_results(observer);
+    observer.assertHasAllPlayers();
+
+    int idPlayer = 3;
+
+    state = observer.sendActionAndUpdate(match, MOVE_LEFT, idPlayer);
+    // Cambia el checkpoint.
+    observer.sendActionAndUpdate(match, JUMP, idPlayer);
+
+    const PlayerDTO* playerGiven = observer.getPlayer(idPlayer);
+    ASSERT_TRUE(playerGiven != NULL)
+            << "El player de id " << idPlayer << "estaba contenido en el curr state";
+
+
+    const PlayerDTO* playerBase = state.getPlayer(idPlayer);
+
+    observer.assertPlayerMovedHigher(playerGiven, playerBase);
+}
