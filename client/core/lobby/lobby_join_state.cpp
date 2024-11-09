@@ -26,25 +26,33 @@ bool LobbyJoinState::isrunning() { return _is_alive; }
 
 bool LobbyJoinState::tryJoinLobbyFail() {
     try {
-        lobby_info infojoin = protocol.joinLobby(context.id_lobby);
+        if (context.dualplay) {
+            lobby_info infojoin = protocol.sendJoinLobby(context.id_lobby, 2);
+            if (infojoin.action != JOINED_LOBBY) {
+                std::cerr << "Failed join dual code: " << (int)infojoin.data << std::endl;
+                listener.failedJoin(getErrorMsg(infojoin.data));
+                return true;
+            }
+
+            context.second_player = protocol.recvIDDualPlayer(&context.first_player);
+
+            context.cantidadjugadores = infojoin.data;  // + 2;
+            listener.joinedLobbyDual(context);
+            return false;
+        }
+
+        lobby_info infojoin = protocol.sendJoinLobby(context.id_lobby, 1);
         if (infojoin.action != JOINED_LOBBY) {
-            std::cerr << "Failed joined error code: " << (int)infojoin.data << std::endl;
+            std::cerr << "Failed join single error code: " << (int)infojoin.data << std::endl;
             listener.failedJoin(getErrorMsg(infojoin.data));
             return true;
         }
 
-        if (context.dualplay) {
-            context.second_player = protocol.setdualplay(&context.first_player);
+        context.first_player = protocol.recvIDSinglePlayer();
+        context.second_player = 0;
 
-            context.cantidadjugadores = infojoin.data + 2;
-            listener.joinedLobbyDual(context);
-        } else {
-            context.first_player = protocol.setsingleplay();
-            context.second_player = 0;
-
-            context.cantidadjugadores = infojoin.data + 1;
-            listener.joinedLobbySolo(context);
-        }
+        context.cantidadjugadores = infojoin.data;  // + 1;
+        listener.joinedLobbySolo(context);
 
         return false;
     } catch (const LibError& error) {
@@ -52,7 +60,6 @@ bool LobbyJoinState::tryJoinLobbyFail() {
             std::cerr << "Lobby join lib error:" << error.what() << std::endl;
             listener.failedJoin(CLIENT_CONN_ERROR);
         }
-
         return true;
     }
 }

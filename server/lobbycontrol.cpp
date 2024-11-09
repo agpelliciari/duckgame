@@ -22,13 +22,26 @@ Match& LobbyControl::resolveMatch(bool* isanfitrion) {
         return newlobby;
     }
     *isanfitrion = false;
-    Match& res = lobbies.findLobby(protocol.recvlobbyid());
-
-    protocol.notifyinfo(LobbyResponseType::JOINED_LOBBY, res.playercount());
-
-    return res;
+    return lobbies.findLobby(protocol.recvlobbyid());
 }
-ControlledPlayer& LobbyControl::joinPlayers(Match& match) {
+
+ControlledPlayer& LobbyControl::getJoinedPlayers(Match& match) {
+    uint8_t playercount = protocol.recvplayercount();
+
+    ControlledPlayer& player = lobbies.joinLobby(playercount, match);
+
+    // Si no hubo error.. ahora notifica el join.
+    protocol.notifyinfo(LobbyResponseType::JOINED_LOBBY, match.playercount());
+
+    protocol.notifyid(player.getid(0));
+    if (player.playercount() == 2) {
+        protocol.notifyid(player.getid(1));
+    }
+    return player;
+}
+
+
+ControlledPlayer& LobbyControl::getHostPlayers(Match& match) {
     uint8_t playercount = protocol.recvplayercount();
 
     ControlledPlayer& player = lobbies.joinLobby(playercount, match);
@@ -36,8 +49,6 @@ ControlledPlayer& LobbyControl::joinPlayers(Match& match) {
     if (player.playercount() == 2) {
         protocol.notifyid(player.getid(1));
     }
-    // std::cerr << "joined " << player.toString() << " to lobby " << (int)match.getID() <<
-    // std::endl;
     return player;
 }
 

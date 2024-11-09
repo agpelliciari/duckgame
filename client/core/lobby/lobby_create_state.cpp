@@ -28,17 +28,19 @@ LobbyActionQueue& LobbyCreateState::getSender() { return sender; }
 bool LobbyCreateState::checkcreatefail() {
 
     try {
-        uint8_t id_lobby = protocol.createLobby();
 
         if (context.dualplay) {
-            context.second_player = protocol.setdualplay(&context.first_player);
+            uint8_t id_lobby = protocol.sendCreateLobby(2);
+
+            context.second_player = protocol.recvIDDualPlayer(&context.first_player);
             context.id_lobby = id_lobby;
 
             listener.createdLobbyDual(id_lobby);
         } else {
-            context.first_player = protocol.setsingleplay();
-            context.second_player = 0;
+            uint8_t id_lobby = protocol.sendCreateLobby(1);
 
+            context.first_player = protocol.recvIDSinglePlayer();
+            context.second_player = 0;
             context.id_lobby = id_lobby;
             listener.createdLobbySolo(id_lobby);
         }

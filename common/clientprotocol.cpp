@@ -8,19 +8,6 @@
 
 ClientProtocol::ClientProtocol(Messenger& conn): protocol(conn) {}
 
-/*
-ClientProtocol::ClientProtocol(ClientProtocol&& other): protocol(std::move(other.protocol)) {}
-
-ClientProtocol& ClientProtocol::operator=(ClientProtocol&& other) {
-    if (this == &other) {
-        return *this;
-    }
-
-    protocol = std::move(other.protocol);
-    return *this;
-}
-
-*/
 
 void ClientProtocol::recvlobbyinfo(lobby_info& out) {
     // Podria tirar cast error.
@@ -31,14 +18,12 @@ void ClientProtocol::recvlobbyinfo(lobby_info& out) {
 
 
 void ClientProtocol::sendaction(PlayerActionDTO& action) {
-    // std::cout << "Sending action from: " << (int)action.playerind << "= " << (int)action.type <<
-    // std::endl;
     protocol.sendbytes(&action, sizeof(action));
 }
 
-lobby_info ClientProtocol::joinLobby(const uint8_t id_match) {
-    uint8_t info[2] = {LobbyActionType::JOIN_LOBBY, id_match};
-    protocol.sendbytes(&info, 2);
+lobby_info ClientProtocol::sendJoinLobby(const uint8_t id_match, const uint8_t count) {
+    uint8_t info[3] = {LobbyActionType::JOIN_LOBBY, id_match, count};
+    protocol.sendbytes(&info, sizeof(info));
     lobby_info out;
     recvlobbyinfo(out);
 
@@ -50,21 +35,18 @@ lobby_info ClientProtocol::joinLobby(const uint8_t id_match) {
     // Recibir true si fallo, false si fue exito.
     return out;
 }
-uint8_t ClientProtocol::createLobby() {
-    protocol.sendbyte(LobbyActionType::CREATE_LOBBY);
+uint8_t ClientProtocol::sendCreateLobby(const uint8_t count) {
+    uint8_t info[2] = {LobbyActionType::CREATE_LOBBY, count};
+    protocol.sendbytes(&info, sizeof(info));
     return protocol.recvbyte();
 }
 
-uint8_t ClientProtocol::setsingleplay() {
-    protocol.sendbyte(1);        // Send del playercount == 1
+uint8_t ClientProtocol::recvIDSinglePlayer() {
     return protocol.recvbyte();  // id player 1
 }
 
-uint8_t ClientProtocol::setdualplay(uint8_t* player1) {
-
-    protocol.sendbyte(2);  // Send del playercount == 2
+uint8_t ClientProtocol::recvIDDualPlayer(uint8_t* player1) {
     *player1 = protocol.recvbyte();
-
     return protocol.recvbyte();
 }
 
