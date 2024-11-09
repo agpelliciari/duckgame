@@ -6,9 +6,11 @@ target_sources(taller_editor
     # .cpp files
     main.cpp
     editorWindow.cpp
+    loader.cpp
     PUBLIC
     # .h files
     editorWindow.h
+    loader.h
     # .ui files
     editorWindow.ui
     )

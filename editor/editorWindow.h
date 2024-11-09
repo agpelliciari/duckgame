@@ -3,13 +3,9 @@
 
 #include <QMainWindow>
 
+#include "loader.h"
 #include "interface/interface.h"
 #include "playground/playground.h"
-
-struct BlockTexture {
-    std::string name;
-    std::string source;
-};
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -23,14 +19,13 @@ class EditorWindow : public QMainWindow {
 private:
     Ui::EditorWindow *ui;
 
+    Loader loader;
     Interface *interface;
     Playground *playground;
 
-    std::vector<BlockTexture> blocks;
-    size_t selectedBlockIndex = 0;
-
-    std::vector<BlockTexture> backgrounds;
+    EditorMode editorMode = EditorMode::EMBackground;
     size_t selectedBackgroundIndex = 0;
+    size_t selectedBlockIndex = 0;
 
 public:
     EditorWindow(QWidget *parent = nullptr);
@@ -40,15 +35,13 @@ public:
 private:
     void wheelEvent(QWheelEvent *event) override;
 
-    void selectedBackgroundTexture(size_t index);
+    void selectEditorMode(EditorMode mode);
 
-    void selectedBlockTexture(size_t index);
+    void selectBackgroundTexture(size_t index);
+
+    void selectBlockTexture(size_t index);
 
     void exportToFileSystem();
-
-    std::vector<std::string> blockTextureNames();
-
-    std::vector<std::string> backgroundTextureNames();
 };
 
 #endif
