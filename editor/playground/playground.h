@@ -9,18 +9,12 @@
 #include <QColor>
 #include <QMouseEvent>
 
-enum MapObject {
-    Block,
-    Decoration,
-    Spawn,
-    Box,
-    Empty
-};
+#include "../types.h"
 
 struct MapObjectData {
     int row;
     int column;
-    MapObject mapObject;
+    MapObjectType mapObjectType;
     std::string texture;
 };
 
@@ -45,10 +39,11 @@ private:
 
     Ui::Playground* ui;
     QGraphicsScene* map;
-    QGraphicsRectItem* background;
-    std::vector<QGraphicsRectItem*> mapObjects;
-
     const PlaygroundHandler handler;
+
+    QGraphicsRectItem* background;
+    std::vector<QGraphicsRectItem*> physicalObjects;
+    std::vector<QGraphicsRectItem*> nonPhysicalObjects;
 
     int scaleFactor = ZOOM_MIN;
     const int width = 20;
@@ -58,13 +53,25 @@ private:
 public:
     explicit Playground(const PlaygroundHandler& handler, QWidget* parent = nullptr);
 
-    void setBackground(QPixmap pixelMap);
+    void setBackground(Texture texture);
 
-    void addBlock(QPoint position, QPixmap pixelMap);
+    void addPhysicalObject(QPoint position, Texture texture);
 
-    void removeBlock(QPoint position);
+    void addNonPhysicalObject(QPoint position, Texture texture);
 
-    std::vector<MapObjectData> blocks();
+    void removePhysicalObject(QPoint position);
+
+    void removeNonPhysicalObject(QPoint position);
+
+    MapObjectData backgroundToExport();
+
+    std::vector<MapObjectData> blocksToExport();
+
+    std::vector<MapObjectData> spawnsToExport();
+
+    std::vector<MapObjectData> boxesToExport();
+
+    std::vector<MapObjectData> decorationsToExport();
 
     void zoomIn();
 
@@ -78,6 +85,14 @@ private:
     void mousePressEvent(QMouseEvent* event) override;
 
     void zoom(int scaleFactor);
+
+    void setMapObjectData(QGraphicsRectItem* mapObject, MapObjectType mapObjectType, const std::string& texture);
+
+    void cleanObjectData(QGraphicsRectItem* mapObject);
+
+    QGraphicsRectItem* mapObjectAt(std::vector<QGraphicsRectItem*> mapObjects, QPoint position);
+
+    std::vector<MapObjectData> mapObjectsFilter(const std::vector<QGraphicsRectItem*>& mapObjects, MapObjectType mapObjectType);
 };
 
 #endif

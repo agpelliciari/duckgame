@@ -11,6 +11,7 @@ target_sources(taller_editor
     # .h files
     editorWindow.h
     loader.h
+    types.h
     # .ui files
     editorWindow.ui
     )

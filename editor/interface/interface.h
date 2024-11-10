@@ -6,13 +6,10 @@
 #include <QStringList>
 #include <QComboBox>
 
-enum EditorMode {
-    EMBackground,
-    EMBlock
-};
+#include "../types.h"
 
 struct InterfaceHandler {
-    std::function<void(EditorMode)> onEditorModeDropdownChanged;
+    std::function<void(MapObjectType)> onEditorModeDropdownChanged;
     std::function<void(size_t)> onSelectorDropdownIndexChanged;
     std::function<void()> onExport;
 };
@@ -47,7 +44,7 @@ public:
 
     void displayNoneOnPreview();
 
-    void displayBlockOnPreview(QPixmap pixelMap);
+    void displayMapObjectOnPreview(Texture texture);
 
     ~Interface();
 
@@ -55,7 +52,7 @@ private:
     void onClickExport();
 
     void onEditorModeDropdownChangedInt(int index);
-    void onEditorModeDropdownChanged(EditorMode mode);
+    void onEditorModeDropdownChanged(MapObjectType mode);
 
     void onSelectorDropdownIndexChanged(int index);
 
