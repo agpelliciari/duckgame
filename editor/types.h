@@ -7,7 +7,8 @@
 enum MapObjectType {
     Background,
     Block,
-    Spawn,
+    SpawnPlayer,
+    SpawnWeapon,
     Box,
     Decoration,
     Empty

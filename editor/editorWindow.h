@@ -30,7 +30,8 @@ private:
 
     size_t selectedBackgroundIndex = 0;
     size_t selectedBlockIndex = 0;
-    size_t selectedSpawnIndex = 0;
+    size_t selectedSpawnPlayerIndex = 0;
+    size_t selectedSpawnWeaponIndex = 0;
     size_t selectedBoxIndex = 0;
     size_t selectedDecorationIndex = 0;
 
@@ -48,7 +49,9 @@ private:
 
     void selectBlockTexture(size_t index);
 
-    void selectSpawnTexture(size_t index);
+    void selectSpawnPlayerTexture(size_t index);
+
+    void selectSpawnWeaponTexture(size_t index);
 
     void selectBoxTexture(size_t index);
 

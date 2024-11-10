@@ -67,8 +67,12 @@ std::vector<MapObjectData> Playground::blocksToExport() {
     return mapObjectsFilter(physicalObjects, MapObjectType::Block);
 }
 
-std::vector<MapObjectData> Playground::spawnsToExport() {
-    return mapObjectsFilter(nonPhysicalObjects, MapObjectType::Spawn);
+std::vector<MapObjectData> Playground::spawnPlayersToExport() {
+    return mapObjectsFilter(nonPhysicalObjects, MapObjectType::SpawnPlayer);
+}
+
+std::vector<MapObjectData> Playground::spawnWeaponsToExport() {
+    return mapObjectsFilter(nonPhysicalObjects, MapObjectType::SpawnWeapon);
 }
 
 std::vector<MapObjectData> Playground::boxesToExport() {

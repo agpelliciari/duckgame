@@ -67,7 +67,9 @@ public:
 
     std::vector<MapObjectData> blocksToExport();
 
-    std::vector<MapObjectData> spawnsToExport();
+    std::vector<MapObjectData> spawnPlayersToExport();
+
+    std::vector<MapObjectData> spawnWeaponsToExport();
 
     std::vector<MapObjectData> boxesToExport();
 

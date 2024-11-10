@@ -15,7 +15,8 @@ private:
     std::vector<Texture> backgrounds;
     std::vector<Texture> blocks;
     std::vector<Texture> boxes;
-    std::vector<Texture> spawns;
+    std::vector<Texture> spawnPlayers;
+    std::vector<Texture> spawnWeapons;
     std::vector<Texture> decorations;
 
 public:
@@ -24,19 +25,22 @@ public:
     std::vector<std::string> backgroundNames();
     std::vector<std::string> blockNames();
     std::vector<std::string> boxesNames();
-    std::vector<std::string> spawnNames();
+    std::vector<std::string> spawnPlayersNames();
+    std::vector<std::string> spawnWeaponsNames();
     std::vector<std::string> decorationNames();
 
     Texture backgroundAt(size_t index);
     Texture blockAt(size_t index);
     Texture boxAt(size_t index);
-    Texture spawnAt(size_t index);
+    Texture spawnPlayerAt(size_t index);
+    Texture spawnWeaponAt(size_t index);
     Texture decorationAt(size_t index);
 
     size_t backgroundsSize();
     size_t blocksSize();
     size_t boxesSize();
-    size_t spawnsSize();
+    size_t spawnPlayersSize();
+    size_t spawnWeaponsSize();
     size_t decorationsSize();
 
     ~Loader();
@@ -48,7 +52,9 @@ private:
 
     void loadBoxes(const std::string& root);
 
-    void loadSpawns(const std::string& root);
+    void loadSpawnPlayers(const std::string& root);
+
+    void loadSpawnWeapons(const std::string& root);
 
     void loadDecorations(const std::string& root);
 

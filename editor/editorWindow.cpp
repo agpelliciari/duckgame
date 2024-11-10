@@ -19,8 +19,11 @@ EditorWindow::EditorWindow(QWidget *parent):
                 case MapObjectType::Block:
                     selectBlockTexture(index);
                     break;
-                case MapObjectType::Spawn:
-                    selectSpawnTexture(index);
+                case MapObjectType::SpawnPlayer:
+                    selectSpawnPlayerTexture(index);
+                    break;
+                case MapObjectType::SpawnWeapon:
+                    selectSpawnWeaponTexture(index);
                     break;
                 case MapObjectType::Box:
                     selectBoxTexture(index);
@@ -42,8 +45,11 @@ EditorWindow::EditorWindow(QWidget *parent):
                 case MapObjectType::Block:
                     playground->addPhysicalObject(position, loader.blockAt(selectedBlockIndex));
                     break;
-                case MapObjectType::Spawn:
-                    playground->addNonPhysicalObject(position, loader.spawnAt(selectedSpawnIndex));
+                case MapObjectType::SpawnPlayer:
+                    playground->addNonPhysicalObject(position, loader.spawnPlayerAt(selectedSpawnPlayerIndex));
+                    break;
+                case MapObjectType::SpawnWeapon:
+                    playground->addNonPhysicalObject(position, loader.spawnWeaponAt(selectedSpawnWeaponIndex));
                     break;
                 case MapObjectType::Box:
                     playground->addPhysicalObject(position, loader.boxAt(selectedBoxIndex));
@@ -62,7 +68,10 @@ EditorWindow::EditorWindow(QWidget *parent):
                 case MapObjectType::Block:
                     playground->removePhysicalObject(position);
                     break;
-                case MapObjectType::Spawn:
+                case MapObjectType::SpawnPlayer:
+                    playground->removeNonPhysicalObject(position);
+                    break;
+                case MapObjectType::SpawnWeapon:
                     playground->removeNonPhysicalObject(position);
                     break;
                 case MapObjectType::Box:
@@ -86,7 +95,8 @@ EditorWindow::EditorWindow(QWidget *parent):
     interface->setEditorModeDropdownOptions({
         "Backgrounds",
         "Blocks",
-        "Spawns",
+        "Player Spawns",
+        "Weapon Spawns",
         "Boxes",
         "Decorations"
     });
@@ -114,9 +124,13 @@ void EditorWindow::wheelEvent(QWheelEvent *event) {
                     if (selectedBlockIndex > 0)
                         selectBlockTexture(selectedBlockIndex - 1);
                     break;
-                case MapObjectType::Spawn:
-                    if (selectedSpawnIndex > 0)
-                        selectSpawnTexture(selectedSpawnIndex - 1);
+                case MapObjectType::SpawnPlayer:
+                    if (selectedSpawnPlayerIndex > 0)
+                        selectSpawnPlayerTexture(selectedSpawnPlayerIndex - 1);
+                    break;
+                case MapObjectType::SpawnWeapon:
+                    if (selectedSpawnWeaponIndex > 0)
+                        selectSpawnWeaponTexture(selectedSpawnWeaponIndex - 1);
                     break;
                 case MapObjectType::Box:
                     if (selectedBoxIndex > 0)
@@ -139,9 +153,13 @@ void EditorWindow::wheelEvent(QWheelEvent *event) {
                     if (selectedBlockIndex < loader.blocksSize() - 1)
                         selectBlockTexture(selectedBlockIndex + 1);
                     break;
-                case MapObjectType::Spawn:
-                    if (selectedSpawnIndex < loader.spawnsSize() - 1)
-                        selectSpawnTexture(selectedSpawnIndex + 1);
+                case MapObjectType::SpawnPlayer:
+                    if (selectedSpawnPlayerIndex < loader.spawnPlayersSize() - 1)
+                        selectSpawnPlayerTexture(selectedSpawnPlayerIndex + 1);
+                    break;
+                case MapObjectType::SpawnWeapon:
+                    if (selectedSpawnWeaponIndex < loader.spawnWeaponsSize() - 1)
+                        selectSpawnWeaponTexture(selectedSpawnWeaponIndex + 1);
                     break;
                 case MapObjectType::Box:
                     if (selectedBoxIndex < loader.boxesSize() - 1)
@@ -171,10 +189,15 @@ void EditorWindow::selectEditorMode(MapObjectType mode) {
             interface->selectorDropdownIndexChanged(selectedBlockIndex);
             interface->displayMapObjectOnPreview(loader.blockAt(selectedBlockIndex));
             break;
-        case MapObjectType::Spawn:
-            interface->setSelectorDropdownOptions(loader.spawnNames());
-            interface->selectorDropdownIndexChanged(selectedSpawnIndex);
-            interface->displayMapObjectOnPreview(loader.spawnAt(selectedSpawnIndex));
+        case MapObjectType::SpawnPlayer:
+            interface->setSelectorDropdownOptions(loader.spawnPlayersNames());
+            interface->selectorDropdownIndexChanged(selectedSpawnPlayerIndex);
+            interface->displayMapObjectOnPreview(loader.spawnPlayerAt(selectedSpawnPlayerIndex));
+            break;
+        case MapObjectType::SpawnWeapon:
+            interface->setSelectorDropdownOptions(loader.spawnWeaponsNames());
+            interface->selectorDropdownIndexChanged(selectedSpawnWeaponIndex);
+            interface->displayMapObjectOnPreview(loader.spawnWeaponAt(selectedSpawnWeaponIndex));
             break;
         case MapObjectType::Box:
             interface->setSelectorDropdownOptions(loader.boxesNames());
@@ -203,10 +226,16 @@ void EditorWindow::selectBlockTexture(size_t index) {
     interface->displayMapObjectOnPreview(loader.blockAt(selectedBlockIndex));
 }
 
-void EditorWindow::selectSpawnTexture(size_t index) {
-    selectedSpawnIndex = index;
-    interface->selectorDropdownIndexChanged(selectedSpawnIndex);
-    interface->displayMapObjectOnPreview(loader.spawnAt(selectedSpawnIndex));
+void EditorWindow::selectSpawnPlayerTexture(size_t index) {
+    selectedSpawnPlayerIndex = index;
+    interface->selectorDropdownIndexChanged(selectedSpawnPlayerIndex);
+    interface->displayMapObjectOnPreview(loader.spawnPlayerAt(selectedSpawnPlayerIndex));
+}
+
+void EditorWindow::selectSpawnWeaponTexture(size_t index) {
+    selectedSpawnWeaponIndex = index;
+    interface->selectorDropdownIndexChanged(selectedSpawnWeaponIndex);
+    interface->displayMapObjectOnPreview(loader.spawnWeaponAt(selectedSpawnWeaponIndex));
 }
 
 void EditorWindow::selectBoxTexture(size_t index) {
@@ -224,7 +253,8 @@ void EditorWindow::selectDecorationTexture(size_t index) {
 void EditorWindow::exportToFileSystem() {
     const MapObjectData background = playground->backgroundToExport();
     const std::vector<MapObjectData> blocks = playground->blocksToExport();
-    const std::vector<MapObjectData> spawns = playground->spawnsToExport();
+    const std::vector<MapObjectData> spawnPlayers = playground->spawnPlayersToExport();
+    const std::vector<MapObjectData> spawnWeapons = playground->spawnWeaponsToExport();
     const std::vector<MapObjectData> boxes = playground->boxesToExport();
     const std::vector<MapObjectData> decorations = playground->decorationsToExport();
 
@@ -235,8 +265,12 @@ void EditorWindow::exportToFileSystem() {
         serial.addBlock(block.row, block.column , block.texture);
     }
 
-    for (const auto& spawn : spawns) {
-        serial.addItemSpawn(spawn.row, spawn.column); // spawn.texture
+    for (const auto& spawnPlayer : spawnPlayers) {
+        serial.addItemSpawn(spawnPlayer.row, spawnPlayer.column); // spawn.texture
+    }
+
+    for (const auto& spawnWeapon : spawnWeapons) {
+        serial.addItemSpawn(spawnWeapon.row, spawnWeapon.column); // spawn.texture
     }
 
     for (const auto& box : boxes) {

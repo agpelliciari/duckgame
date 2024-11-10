@@ -4,7 +4,8 @@ Loader::Loader(const std::string& root) {
     loadBackgrounds(root);
     loadBlocks(root);
     loadBoxes(root);
-    loadSpawns(root);
+    loadSpawnPlayers(root);
+    loadSpawnWeapons(root);
     loadDecorations(root);
 }
 
@@ -20,8 +21,12 @@ std::vector<std::string> Loader::boxesNames() {
     return names(boxes);
 }
 
-std::vector<std::string> Loader::spawnNames() {
-    return names(spawns);
+std::vector<std::string> Loader::spawnPlayersNames() {
+    return names(spawnPlayers);
+}
+
+std::vector<std::string> Loader::spawnWeaponsNames() {
+    return names(spawnWeapons);
 }
 
 std::vector<std::string> Loader::decorationNames() {
@@ -40,8 +45,12 @@ Texture Loader::boxAt(size_t index) {
     return boxes.at(index);
 }
 
-Texture Loader::spawnAt(size_t index) {
-    return spawns.at(index);
+Texture Loader::spawnPlayerAt(size_t index) {
+    return spawnPlayers.at(index);
+}
+
+Texture Loader::spawnWeaponAt(size_t index) {
+    return spawnWeapons.at(index);
 }
 
 Texture Loader::decorationAt(size_t index) {
@@ -60,8 +69,12 @@ size_t Loader::boxesSize() {
     return boxes.size();
 }
 
-size_t Loader::spawnsSize() {
-    return spawns.size();
+size_t Loader::spawnPlayersSize() {
+    return spawnPlayers.size();
+}
+
+size_t Loader::spawnWeaponsSize() {
+    return spawnWeapons.size();
 }
 
 size_t Loader::decorationsSize() {
@@ -82,8 +95,12 @@ void Loader::loadBoxes(const std::string& root) {
     load(root, "/boxes", MapObjectType::Box, boxes);
 }
 
-void Loader::loadSpawns(const std::string& root) {
-    load(root, "/spawns", MapObjectType::Spawn, spawns);
+void Loader::loadSpawnPlayers(const std::string& root) {
+    load(root, "/spawns/players", MapObjectType::SpawnPlayer, spawnPlayers);
+}
+
+void Loader::loadSpawnWeapons(const std::string& root) {
+    load(root, "/spawns/weapons", MapObjectType::SpawnWeapon, spawnWeapons);
 }
 
 void Loader::loadDecorations(const std::string& root) {
