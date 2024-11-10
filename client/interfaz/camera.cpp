@@ -8,6 +8,9 @@ void Camera::updateZoom(int boxWidth, int boxHeight) {
 
     // this is necessary to fit the entire group of players in the screen
     zoom = std::min(zoomX, zoomY);
+
+    // range values for zoom in/out
+    zoom = std::clamp(zoom, MIN_ZOOM_LEVEL, MAX_ZOOM_LEVEL);
 }
 
 void Camera::updatePosition(int minX, int minY, int boxWidth, int boxHeight) {
