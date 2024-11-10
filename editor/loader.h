@@ -12,7 +12,7 @@ enum TextureType {
     TBackground,
     TBlock,
     TSpawn,
-    TTBox,
+    TBox,
     TDecoration
 };
 
@@ -28,6 +28,7 @@ private:
     std::vector<Texture> backgrounds;
     std::vector<Texture> blocks;
     std::vector<Texture> boxes;
+    std::vector<Texture> spawns;
 
 public:
     explicit Loader(const std::string& root);
@@ -35,14 +36,17 @@ public:
     std::vector<std::string> backgroundNames();
     std::vector<std::string> blockNames();
     std::vector<std::string> boxesNames();
+    std::vector<std::string> spawnNames();
 
     Texture backgroundAt(size_t index);
     Texture blockAt(size_t index);
     Texture boxAt(size_t index);
+    Texture spawnAt(size_t index);
 
     size_t backgroundsSize();
     size_t blocksSize();
     size_t boxesSize();
+    size_t spawnsSize();
 
     ~Loader();
 
@@ -52,6 +56,8 @@ private:
     void loadBlocks(const std::string& root);
 
     void loadBoxes(const std::string& root);
+
+    void loadSpawns(const std::string& root);
 
     void load(const std::string& root, const std::string& path, TextureType type, std::vector<Texture>& textures);
 

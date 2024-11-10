@@ -4,6 +4,7 @@ Loader::Loader(const std::string& root) {
     loadBackgrounds(root);
     loadBlocks(root);
     loadBoxes(root);
+    loadSpawns(root);
 }
 
 std::vector<std::string> Loader::backgroundNames() {
@@ -18,6 +19,10 @@ std::vector<std::string> Loader::boxesNames() {
     return names(boxes);
 }
 
+std::vector<std::string> Loader::spawnNames() {
+    return names(spawns);
+}
+
 Texture Loader::backgroundAt(size_t index) {
     return backgrounds.at(index);
 }
@@ -28,6 +33,10 @@ Texture Loader::blockAt(size_t index) {
 
 Texture Loader::boxAt(size_t index) {
     return boxes.at(index);
+}
+
+Texture Loader::spawnAt(size_t index) {
+    return spawns.at(index);
 }
 
 size_t Loader::backgroundsSize() {
@@ -42,6 +51,10 @@ size_t Loader::boxesSize() {
     return boxes.size();
 }
 
+size_t Loader::spawnsSize() {
+    return spawns.size();
+}
+
 Loader::~Loader() {}
 
 void Loader::loadBackgrounds(const std::string& root) {
@@ -53,7 +66,11 @@ void Loader::loadBlocks(const std::string& root) {
 }
 
 void Loader::loadBoxes(const std::string& root) {
-    load(root, "/boxes", TextureType::TBlock, boxes);
+    load(root, "/boxes", TextureType::TBox, boxes);
+}
+
+void Loader::loadSpawns(const std::string& root) {
+    load(root, "/spawns", TextureType::TSpawn, spawns);
 }
 
 void Loader::load(const std::string& root, const std::string& path, TextureType type, std::vector<Texture>& textures) {

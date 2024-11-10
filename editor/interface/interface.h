@@ -9,7 +9,8 @@
 enum EditorMode {
     EMBackground,
     EMBlock,
-    EMBox
+    EMBox,
+    EMSpawn
 };
 
 struct InterfaceHandler {

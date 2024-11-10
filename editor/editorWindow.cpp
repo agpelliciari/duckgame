@@ -22,6 +22,9 @@ EditorWindow::EditorWindow(QWidget *parent):
                 case EditorMode::EMBox:
                     selectBoxTexture(index);
                     break;
+                case EditorMode::EMSpawn:
+                    selectSpawnTexture(index);
+                    break;
                 default:
                     break;
             }
@@ -38,6 +41,9 @@ EditorWindow::EditorWindow(QWidget *parent):
                     break;
                 case EditorMode::EMBox:
                     playground->addBlock(position, loader.boxAt(selectedBoxIndex).pixelMap);
+                    break;
+                case EditorMode::EMSpawn:
+                    playground->addBlock(position, loader.spawnAt(selectedSpawnIndex).pixelMap);
                     break;
                 default:
                     break;
@@ -57,7 +63,8 @@ EditorWindow::EditorWindow(QWidget *parent):
     interface->setEditorModeDropdownOptions({
         "Backgrounds",
         "Blocks",
-        "Boxes"
+        "Boxes",
+        "Spawns"
     });
 }
 
@@ -87,6 +94,10 @@ void EditorWindow::wheelEvent(QWheelEvent *event) {
                     if (selectedBoxIndex > 0)
                         selectBoxTexture(selectedBoxIndex - 1);
                     break;
+                case EditorMode::EMSpawn:
+                    if (selectedSpawnIndex > 0)
+                        selectSpawnTexture(selectedSpawnIndex - 1);
+                    break;
                 default:
                     break;
             }
@@ -103,6 +114,10 @@ void EditorWindow::wheelEvent(QWheelEvent *event) {
                 case EditorMode::EMBox:
                     if (selectedBoxIndex < loader.boxesSize() - 1)
                         selectBoxTexture(selectedBoxIndex + 1);
+                    break;
+                case EditorMode::EMSpawn:
+                    if (selectedSpawnIndex < loader.spawnsSize() - 1)
+                        selectSpawnTexture(selectedSpawnIndex + 1);
                     break;
                 default:
                     break;
@@ -125,9 +140,14 @@ void EditorWindow::selectEditorMode(EditorMode mode) {
             interface->displayBlockOnPreview(loader.blockAt(selectedBlockIndex).pixelMap);
             break;
         case EditorMode::EMBox:
-             interface->setSelectorDropdownOptions(loader.boxesNames());
+            interface->setSelectorDropdownOptions(loader.boxesNames());
             interface->selectorDropdownIndexChanged(selectedBoxIndex);
             interface->displayBlockOnPreview(loader.boxAt(selectedBoxIndex).pixelMap);
+            break;
+        case EditorMode::EMSpawn:
+            interface->setSelectorDropdownOptions(loader.spawnNames());
+            interface->selectorDropdownIndexChanged(selectedSpawnIndex);
+            interface->displayBlockOnPreview(loader.spawnAt(selectedSpawnIndex).pixelMap);
             break;
         default:
             break;
@@ -150,6 +170,12 @@ void EditorWindow::selectBoxTexture(size_t index) {
     selectedBoxIndex = index;
     interface->selectorDropdownIndexChanged(selectedBoxIndex);
     interface->displayBlockOnPreview(loader.boxAt(selectedBoxIndex).pixelMap);
+}
+
+void EditorWindow::selectSpawnTexture(size_t index) {
+    selectedSpawnIndex = index;
+    interface->selectorDropdownIndexChanged(selectedSpawnIndex);
+    interface->displayBlockOnPreview(loader.spawnAt(selectedSpawnIndex).pixelMap);
 }
 
 void EditorWindow::exportToFileSystem() {

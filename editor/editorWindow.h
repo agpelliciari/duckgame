@@ -27,6 +27,7 @@ private:
     size_t selectedBackgroundIndex = 0;
     size_t selectedBlockIndex = 0;
     size_t selectedBoxIndex = 0;
+    size_t selectedSpawnIndex = 0;
 
 public:
     EditorWindow(QWidget *parent = nullptr);
@@ -43,6 +44,8 @@ private:
     void selectBlockTexture(size_t index);
 
     void selectBoxTexture(size_t index);
+
+    void selectSpawnTexture(size_t index);
 
     void exportToFileSystem();
 };
