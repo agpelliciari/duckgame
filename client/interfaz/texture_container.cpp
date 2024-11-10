@@ -15,6 +15,8 @@ TextureContainer::TextureContainer(SDL2pp::Renderer& renderer) {
                      SDL2pp::Texture(renderer, DATA_PATH "/textures/Surface_Tree_1.png"));
     textures.emplace(TextureType::BOX,
                      SDL2pp::Texture(renderer, DATA_PATH "/textures/Objects.png"));
+    textures.emplace(TextureType::COWBOY_GUN,
+                     SDL2pp::Texture(renderer, DATA_PATH "/weapons/cowboyPistol.png"));
 }
 
 TextureType TextureContainer::indexToTextureType(int index) const {
@@ -33,6 +35,8 @@ TextureType TextureContainer::indexToTextureType(int index) const {
             return TextureType::TREE;
         case 7:
             return TextureType::BOX;
+        case 8:
+            return TextureType::COWBOY_GUN;
         default:
             throw std::out_of_range("Invalid texture index");
     }

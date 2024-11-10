@@ -15,7 +15,8 @@ enum class TextureType {
 
     BACKGROUND,
     TREE,
-    BOX
+    BOX,
+    COWBOY_GUN
 };
 
 class TextureContainer {
