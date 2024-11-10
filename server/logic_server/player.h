@@ -4,7 +4,7 @@
 
 #include "armor.h"
 #include "match_map.h"
-#include "physical_object.h"
+#include "physical_player.h"
 #include "tuple.h"
 #include "weapon.h"
 
@@ -16,7 +16,7 @@ class Player {
 
 private:
     unsigned int id;             // cppcheck-suppress unusedStructMember
-    PhysicalObject object;       // cppcheck-suppress unusedStructMember
+    PhysicalPlayer object;       // cppcheck-suppress unusedStructMember
     bool is_alive;               // cppcheck-suppress unusedStructMember
     Weapon weapon;               // cppcheck-suppress unusedStructMember
     Armor helmet;                // cppcheck-suppress unusedStructMember
@@ -34,8 +34,8 @@ public:
     void still();
     void add_speed(int speed_x, int speed_y);
     void update(const MatchMap& colition_map);
-    PhysicalObject& get_object();
-    Tuple get_position();
+    void stop_moving_x();
+    //Tuple get_position();
     Tuple get_map_position();
     Tuple get_dimension();
 };

@@ -4,6 +4,7 @@
 #include "./map_deserializer.h"
 #include "./map_loader.h"
 #include "./map_serializer.h"
+#include "common/clock.h"
 
 static void deserial(const std::string& file) {
     MapDeserializer serial(file);
@@ -39,16 +40,34 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    // std::string file("res/maps/");
-    // file.append(argv[1]);
-    //  create(file);
+    Clock clock(30);
+    clock.resetnow();
+    std::string file("res/maps/");
+    file.append(argv[1]);
+    create(file);
+    int ms = clock.measure();
+
+
+    std::cout << "--->TOOK " << ms << "ms?" << std::endl;
+
+
     //  deserial(file);
 
     std::cout << "ACT UPON " << argv[1] << std::endl;
+
+    clock.resetnext();
+
     MapLoader loader;
 
     const MapInfo& info = loader.loadMap(argv[1]);
     const MapInfo& info2 = loader.loadMap(argv[1]);
+
+    clock.tick();
+    clock.tick();
+    clock.tick();
+    clock.tick();
+
+    std::cout << "TICK COUNT AFTER IS " << clock.tickcount() << std::endl;
 
     std::cout << "MAP 1 SIZE IS " << info.size.x << " , " << info.size.y
               << " BACKGROUND: " << (int)(info.bk) << std::endl;

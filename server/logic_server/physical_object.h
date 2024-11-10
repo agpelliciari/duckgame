@@ -2,9 +2,6 @@
 #ifndef PHYSICAL_OBJECT_H
 #define PHYSICAL_OBJECT_H
 
-#include <vector>
-
-#include "common/dtosplayer.h"
 #include "match_map.h"
 #include "tuple.h"
 
@@ -12,38 +9,32 @@ class MatchMap;
 
 class PhysicalObject {
 
-private:
-    Tuple initial_position;
-    Tuple actual_position;
+protected:
+    Tuple position;
     Tuple dimension;
     Tuple speed;
-
-    int gravity;
+    Tuple acceleration;
     float time_step;
-    int flap_attemps;
-    bool on_air;
 
 public:
-    PhysicalObject(int init_coord_x, int init_coord_y, int dimension_x, int dimension_y,
-                   int speed_x, int speed_y, int gravity);
+    PhysicalObject(int position_x, int position_y, int dimension_x, int dimension_y);
 
     void add_speed(int speed_x, int speed_y);
-    bool check_collision(int coord_x, int coord_y);
-    void stop_moving_x();
-    void stop_moving_y();
+    void add_acceleration(int acceleration_x, int acceleration_y);
+
     void move(const MatchMap& colition_map);
-    void update_action(TypeMoveAction& move_action);
-    void get_position(int& coord_x, int& coord_y);
-    bool check_collision();
-    bool check_left_collision(const MatchMap& colition_map);
-    bool check_right_collision(const MatchMap& colition_map);
-    bool check_down_collision(const MatchMap& colition_map);
-    bool check_up_collision(const MatchMap& colition_map);
-    //bool detect_others_collision(int coord_x, int coord_y);
+    bool detect_x_collision(const MatchMap& colition_map, const int diff);
+    bool detect_y_collision(const MatchMap& colition_map, const int diff);
+
+    virtual void react_to_sides_collision() = 0;
+    virtual void react_to_down_collision() = 0;
+    virtual void react_to_up_collision() = 0;
+
     Tuple get_position();
     Tuple get_dimension();
-    Tuple get_real_position();
-    //~PhysicalObject();
+    void get_real_position(int& x, int& y);
+
+    virtual ~PhysicalObject() = default;
 };
 
 
