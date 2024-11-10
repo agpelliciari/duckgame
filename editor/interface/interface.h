@@ -4,9 +4,16 @@
 #include <QWidget>
 #include <QGraphicsPixmapItem>
 #include <QStringList>
+#include <QComboBox>
+
+enum EditorMode {
+    EMBackground,
+    EMBlock
+};
 
 struct InterfaceHandler {
-    std::function<void(size_t)> onBlockDropdownIndexChanged;
+    std::function<void(EditorMode)> onEditorModeDropdownChanged;
+    std::function<void(size_t)> onSelectorDropdownIndexChanged;
     std::function<void()> onExport;
 };
 
@@ -23,29 +30,38 @@ size_t selectedTexture = 0;
 
 private:
     Ui::Interface* ui;
-    QGraphicsScene* preview;
-
     const InterfaceHandler handler;
 
-    QGraphicsRectItem* block;
+    QGraphicsRectItem* preview;
+
+    const int textureSize = 16;
 
 public:
     explicit Interface(const InterfaceHandler& handler, QWidget* parent = nullptr);
 
-    void setBlockDropdownOptions(std::vector<std::string> blockNames);
+    void setEditorModeDropdownOptions(std::vector<std::string> editorModeNames);
 
-    void blockDropdownIndexChanged(size_t index);
+    void setSelectorDropdownOptions(std::vector<std::string> names);
 
-    void displayOnPreview(QBrush texture);
+    void selectorDropdownIndexChanged(size_t index);
+
+    void displayNoneOnPreview();
+
+    void displayBlockOnPreview(QPixmap pixelMap);
 
     ~Interface();
 
 private:
+    void onClickExport();
+
+    void onEditorModeDropdownChangedInt(int index);
+    void onEditorModeDropdownChanged(EditorMode mode);
+
+    void onSelectorDropdownIndexChanged(int index);
+
     void initializePreview();
 
-    void onBlockDropdownIndexChanged(int index);
-
-    void onClickExport();
+    void setDropdownOptions(std::vector<std::string> options, QComboBox* dropdown);
 };
 
 #endif

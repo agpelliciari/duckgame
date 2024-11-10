@@ -27,7 +27,7 @@ private:
 
     void drawBackground();
 
-    void drawObjects();
+    void drawObjects(const MatchDto& matchDto);
 
 public:
     Drawer(SDL2pp::Window& window, Animation& animation, const GameContext& gameContext,

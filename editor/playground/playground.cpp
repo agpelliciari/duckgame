@@ -1,27 +1,32 @@
 #include "playground.h"
 #include "ui_playground.h"
 
-#include <QDir>
-#include <QDebug>
-
 Playground::Playground(const PlaygroundHandler& handler, QWidget* parent): QGraphicsView(parent), ui(new Ui::Playground), map(new QGraphicsScene(this)), handler(handler) {
     ui->setupUi(this);
+    qRegisterMetaType<MapObjectData>("MapObjectData");
 
-    const int width = 20;
-    const int height = 10;
-    const int blockSize = 32;
-
-    initializeMap(width, height, blockSize);
+    initializeMap();
 }
 
-void Playground::addBlock(QPoint position, QBrush texture) {
+void Playground::setBackground(QPixmap pixelMap) {
+    pixelMap = pixelMap.scaled(width * textureSize, height * textureSize, Qt::IgnoreAspectRatio);
+    background->setBrush(pixelMap);
+}
+
+void Playground::addBlock(QPoint position, QPixmap pixelMap) {
     QGraphicsItem* graphicItem = map->itemAt(position, QTransform());
 
     if (!graphicItem || graphicItem->type() != QGraphicsRectItem::Type)
         return;
 
     QGraphicsRectItem* block = static_cast<QGraphicsRectItem*>(graphicItem);
+    QBrush texture(pixelMap);
     block->setBrush(texture);
+
+    MapObjectData mapObjectData = block->data(0).value<MapObjectData>();
+    mapObjectData.mapObject = MapObject::Block;
+    mapObjectData.texture = "";
+    block->setData(0, QVariant::fromValue(mapObjectData));
 }
 
 void Playground::removeBlock(QPoint position) {
@@ -32,28 +37,60 @@ void Playground::removeBlock(QPoint position) {
 
     QGraphicsRectItem* block = static_cast<QGraphicsRectItem*>(graphicItem);
     block->setBrush(Qt::NoBrush);
+
+    MapObjectData mapObjectData = block->data(0).value<MapObjectData>();
+    mapObjectData.mapObject = MapObject::Empty;
+    mapObjectData.texture = "";
+    block->setData(0, QVariant::fromValue(mapObjectData));
+}
+
+std::vector<MapObjectData> Playground::blocks() {
+    std::vector<MapObjectData> blocks;
+
+    for (QGraphicsRectItem* mapObject : mapObjects) {
+        MapObjectData mapObjectData = mapObject->data(0).value<MapObjectData>();
+        if (mapObjectData.mapObject == MapObject::Block)
+            blocks.push_back(mapObjectData);
+    }
+
+    return blocks;
+}
+
+void Playground::zoomIn() {
+    if (scaleFactor < ZOOM_MAX)
+        scaleFactor += ZOOM_STEP;
+    zoom(scaleFactor);
+}
+
+void Playground::zoomOut() {
+    if (scaleFactor > ZOOM_MIN)
+        scaleFactor -= ZOOM_STEP;
+    zoom(scaleFactor);
 }
 
 Playground::~Playground() {
     delete ui;
 }
 
-void Playground::initializeMap(int width, int height, int blockSize) {
+void Playground::initializeMap() {
     setScene(map);
-    map->setSceneRect(0, 0, width * blockSize, height * blockSize);
+    map->setSceneRect(0, 0, width * textureSize, height * textureSize);
 
-    QBrush blueBrush(QColor(0, 0, 255));
-    QBrush redBrush(QColor(255, 0, 0));
+    background = new QGraphicsRectItem(0, 0, width * textureSize, height * textureSize);
+    background->setBrush(Qt::NoBrush);
+    background->setPen(Qt::NoPen);
+    background->setZValue(1);
+    map->addItem(background);
 
     for (int row = 0; row < height; ++row) {
         for (int col = 0; col < width; ++col) {
-            QBrush& currentBrush = (row + col) % 2 == 0 ? blueBrush : redBrush;
-            QGraphicsRectItem* blockRect = map->addRect(
-                col * blockSize, row * blockSize, blockSize, blockSize,
-                QPen(Qt::NoPen), currentBrush
+            QGraphicsRectItem* mapObject = map->addRect(
+                col * textureSize, row * textureSize, textureSize, textureSize,
+                QPen(Qt::NoPen), Qt::NoBrush
             );
-
-            blockRect->setData(0, row * width + col);
+            mapObject->setZValue(2);
+            mapObject->setData(0, QVariant::fromValue(MapObjectData{ row, col, MapObject::Empty, "" }));
+            mapObjects.push_back(mapObject);
         }
     }
 }
@@ -66,4 +103,10 @@ void Playground::mousePressEvent(QMouseEvent* event) {
     } else if (event->button() == Qt::RightButton) {
         handler.onRightClick(position.toPoint());
     }
+}
+
+void Playground::zoom(int scaleFactor) {
+    qreal qReal = scaleFactor / 100.0;
+    resetTransform();
+    scale(qReal, qReal);
 }

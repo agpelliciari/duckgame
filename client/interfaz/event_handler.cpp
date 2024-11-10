@@ -94,7 +94,7 @@ void EventHandler::handle(bool& isRunning_) {
         if (!isRunning_) {
             return;
 
-        } else if (event.type == SDL_KEYDOWN) {
+        } else if ((event.type == SDL_KEYDOWN) && (event.key.repeat == 0)) {
             handleKeyDown(event.key.keysym.sym, action);
 
         } else if (event.type == SDL_KEYUP) {
