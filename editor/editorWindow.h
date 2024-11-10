@@ -7,6 +7,9 @@
 #include "interface/interface.h"
 #include "playground/playground.h"
 
+#undef emit
+#include "../serial/map_serializer.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class EditorWindow;

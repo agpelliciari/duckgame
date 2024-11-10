@@ -228,41 +228,25 @@ void EditorWindow::exportToFileSystem() {
     const std::vector<MapObjectData> boxes = playground->boxesToExport();
     const std::vector<MapObjectData> decorations = playground->decorationsToExport();
 
-    std::cout << "Background:\n";
-    std::cout << "Row: " << background.row 
-                  << ", Column: " << background.column 
-                  << ", Type: " << background.mapObjectType 
-                  << ", Texture: " << background.texture << "\n";
+    MapSerializer serial(20, 10);
+    serial.setBackground(background.texture);
 
-    std::cout << "Blocks:\n";
     for (const auto& block : blocks) {
-        std::cout << "Row: " << block.row 
-                  << ", Column: " << block.column 
-                  << ", Type: " << block.mapObjectType 
-                  << ", Texture: " << block.texture << "\n";
+        serial.addBlock(block.row, block.column , block.texture);
     }
 
-    std::cout << "Spawns:\n";
     for (const auto& spawn : spawns) {
-        std::cout << "Row: " << spawn.row 
-                  << ", Column: " << spawn.column 
-                  << ", Type: " << spawn.mapObjectType 
-                  << ", Texture: " << spawn.texture << "\n";
+        serial.addItemSpawn(spawn.row, spawn.column); // spawn.texture
     }
 
-    std::cout << "Boxes:\n";
     for (const auto& box : boxes) {
-        std::cout << "Row: " << box.row 
-                  << ", Column: " << box.column 
-                  << ", Type: " << box.mapObjectType 
-                  << ", Texture: " << box.texture << "\n";
+        serial.addBox(box.row, box.column); // box.texture
     }
 
-    std::cout << "Decorations:\n";
     for (const auto& decoration : decorations) {
-        std::cout << "Row: " << decoration.row 
-                  << ", Column: " << decoration.column 
-                  << ", Type: " << decoration.mapObjectType 
-                  << ", Texture: " << decoration.texture << "\n";
+        serial.addDecoration(decoration.row , decoration.column, decoration.texture);
     }
+
+    std::string file("./res/maps/MAPACHE.yaml");
+    serial.save(file);
 }
