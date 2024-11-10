@@ -57,7 +57,7 @@ MatchLogic::MatchLogic(): colition_map(700, 500) {
 }
 
 void MatchLogic::add_player(int id) {
-    players.push_back(Player(id, 10 + id * 50, 50));
+    players.push_back(Player(id, 10 + id * 50, 1));
     colition_map.add_collision(players.back().get_map_position(), players.back().get_dimension());
 }
 
@@ -127,6 +127,13 @@ void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos, std::vector<DynamicObjDT
         objects.push_back(dto);
     }
 
+    for (Item item: items) {
+        DynamicObjDTO dto = {0, 0, TypeDynamicObject::BOX};
+        item.get_data(dto.pos.x, dto.pos.y, dto.type);
+        objects.push_back(dto);
+    }
+
+
 }
 
 void MatchLogic::execute_move_command(int action_type, int index) {
@@ -136,6 +143,12 @@ void MatchLogic::execute_move_command(int action_type, int index) {
 void MatchLogic::add_boxes(const std::vector<struct MapPoint>& boxes){
     for (const struct MapPoint& box: boxes) {
         this->boxes.push_back(Box(box.x, box.y));
+    }
+}
+
+void MatchLogic::add_items(const std::vector<struct MapPoint>& items){
+    for (const struct MapPoint& item: items) {
+        this->items.push_back(Item(TypeDynamicObject::PISTOLA_COWBOY, item.x, item.y, 10, 10, 5, 0.025));
     }
 }
 

@@ -10,7 +10,7 @@ void PhysicalObject::add_speed(int speed_x, int speed_y) {
     if (speed.x + speed_x <= 10 && speed.x + speed_x >= -10) {
         this->speed.x += speed_x;
     }
-    if (speed.y + speed_y <= 50) {
+    if (speed.y == 0) {
         this->speed.y += speed_y;
     }
 }

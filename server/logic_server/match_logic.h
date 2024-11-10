@@ -7,6 +7,7 @@
 #include "common/dtosmap.h"
 #include "common/dtosgame.h"
 #include "common/dtosobject.h"
+#include "item.h"
 #include "box.h"
 #include "match_map.h"
 #include "player.h"
@@ -23,7 +24,7 @@ private:
 
     std::vector<Player> players;  // cppcheck-suppress unusedStructMember
     std::vector<Box> boxes;       // cppcheck-suppress unusedStructMember
-
+    std::vector<Item> items;     // cppcheck-suppress unusedStructMember
 
     // std::vector<std::vector<bool>> colition_map; // cppcheck-suppress unusedStructMember
 
@@ -42,6 +43,7 @@ public:
     void update_colition_map();
     //void add_colition(PhysicalObject &object);
     void add_boxes(const std::vector<struct MapPoint>& boxes);
+    void add_items(const std::vector<struct MapPoint>& items);
     ~MatchLogic();
 };
 
