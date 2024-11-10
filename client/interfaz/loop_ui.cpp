@@ -3,7 +3,7 @@
 UILoop::UILoop(ActionListener& dtoSender, SimpleEventListener& _events,
                const GameContext& gameContext):
         sdlLib(SDL_INIT_VIDEO),
-        window("UILOOP demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
+        window("DuckGame", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
                SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE),
         animation(gameContext),
         camera(),

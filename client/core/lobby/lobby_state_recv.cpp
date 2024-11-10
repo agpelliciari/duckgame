@@ -45,7 +45,7 @@ void LobbyStateRecv::setInitedMatch(int totalplayers) {
     context.map_height = size.y;
     std::cout << " BACKGROUND INT : " << (int)(bk) << std::endl;
 
-    context.map_background = "default.png";
+    context.map_background = "virtual.png";
 
     context.started = true;
     context.cantidadjugadores = totalplayers;
