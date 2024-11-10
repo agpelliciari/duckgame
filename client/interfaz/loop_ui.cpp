@@ -1,7 +1,5 @@
 #include "loop_ui.h"
 
-#include "common/clock.h"
-
 UILoop::UILoop(ActionListener& dtoSender, SimpleEventListener& _events,
                const GameContext& gameContext):
         sdlLib(SDL_INIT_VIDEO),
@@ -17,11 +15,8 @@ UILoop::UILoop(ActionListener& dtoSender, SimpleEventListener& _events,
 
 void UILoop::exec() {
     try {
-        Clock clock(FRAME_DELAY);
-        clock.resetnext();
         while (isRunning_) {
-            // unsigned int frameStart = SDL_GetTicks();
-            // unsigned int tickStart = clock.tickcount();
+            unsigned int frameStart = SDL_GetTicks();
 
             eventHandler.handle(isRunning_);
 
@@ -29,8 +24,7 @@ void UILoop::exec() {
 
             drawer.draw(lastUpdate);
 
-            clock.tick();
-            // frameDelay(frameStart);
+            frameDelay(frameStart);
         }
     } catch (const std::exception& e) {
         std::cerr << "Exception caught in UILoop" << e.what() << std::endl;
@@ -45,12 +39,11 @@ void UILoop::update() {
 
     MatchDto matchUpdate;
 
-    while (matchDtoQueue.try_update(matchUpdate)) {
+    if (matchDtoQueue.try_update(matchUpdate)) {
         lastUpdate = matchUpdate;
-    }
-
-    if (matchUpdate.info.estado == TERMINADA) {
-        isRunning_ = false;
+        if (matchUpdate.info.estado == TERMINADA) {
+            isRunning_ = false;
+        }
     }
 
     camera.update(lastUpdate);

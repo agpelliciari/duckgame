@@ -4,6 +4,7 @@
 #include <vector>
 #include "map_object.h"
 #include "tuple.h"
+#include "physical_object.h"
 
 class MatchMap {
 
