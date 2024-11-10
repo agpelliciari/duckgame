@@ -53,7 +53,7 @@ public:
         if (ahead_dur.count() > 0) {
             std::this_thread::sleep_for(ahead_dur);
             time += time_per_tick;
-            std::cout << "Ahead by " << ahead_dur.count() << "ms :" << tickcount() << " ticks\n";
+            // std::cout << "Ahead by " << ahead_dur.count() << "ms :" << tickcount() << " ticks\n";
         } else {
 
             // int behind = -ahead_dur.count();
@@ -67,8 +67,8 @@ public:
 
             time += time_per_tick + lost;
 
-            std::cout << "Behind by " << -ahead_dur.count() << "ms lost " << lost.count()
-                      << "ms:: " << tickcount() << "ticks\n";
+            // std::cout << "Behind by " << -ahead_dur.count() << "ms lost " << lost.count()
+            //           << "ms:: " << tickcount() << "ticks\n";
         }
     }
 };
