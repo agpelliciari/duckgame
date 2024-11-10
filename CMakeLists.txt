@@ -179,7 +179,7 @@ if(TALLER_EDITOR)
     target_include_directories(taller_editor PRIVATE ${libSDL2pp_SOURCE_DIR})
 
     # Link the taller_common lib target
-    target_link_libraries(taller_editor taller_common taller_serial SDL2pp::SDL2pp)
+    target_link_libraries(taller_editor taller_common taller_serial SDL2pp::SDL2pp Qt${QT_VERSION_MAJOR}::Widgets)
 endif()
 
 

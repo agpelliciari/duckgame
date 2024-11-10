@@ -24,7 +24,9 @@ public:
     LobbyControl& operator=(const LobbyControl&) = delete;
 
     Match& resolveMatch(bool* isanfitrion);
-    ControlledPlayer& joinPlayers(Match& match);
+
+    ControlledPlayer& getJoinedPlayers(Match& match);
+    ControlledPlayer& getHostPlayers(Match& match);
 
     bool handleAnfitrionLobby(ControlledPlayer& host, Match& match);  // ControlledPlayer& player,
     // void handleJoinedLobby(ControlledPlayer& player, Match& match);

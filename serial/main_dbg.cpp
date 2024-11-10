@@ -12,9 +12,13 @@ static void deserial(const std::string& file) {
 static void create(const std::string& file) {
 
     MapSerializer serial(100, 550);
+    std::string name("NAME");
 
-    for (int i = 0; i < 100; i += 3) {
-        serial.addTexture(2, 3 + i, GRASS);
+    for (int i = 0; i < 50; i += 3) {
+        serial.addBlock(2, 3 + i, name);
+    }
+    for (int i = 50; i < 100; i += 3) {
+        serial.addDecoration(2, 3 + i, name);
     }
 
     serial.addBox(4, 3);

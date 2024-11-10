@@ -61,7 +61,8 @@ public:
     void setBackground(const char* rel_path);
     void setBackground(const std::string& rel_path);
 
-    void addTexture(const uint16_t x, const uint16_t y, BlockTexture type);
+    void addBlock(const uint16_t x, const uint16_t y, const std::string& name);
+    void addDecoration(const uint16_t x, const uint16_t y, const std::string& name);
     void addBox(const uint16_t x, const uint16_t y);
     void addItemSpawn(const uint16_t x, const uint16_t y);
     void addPlayerSpawn(const uint16_t x, const uint16_t y);
