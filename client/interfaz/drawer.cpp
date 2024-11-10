@@ -19,17 +19,33 @@ void Drawer::drawPlayer(const PlayerDTO& player) {
                          camera.getScaledSize(SPRITE_WIDTH), camera.getScaledSize(SPRITE_HEIGHT)),
             0.0, SDL2pp::Point(0, 0), flip);
 
-    if (player.weapon == TypeWeapon::PISTOLA_COWBOY) {
+    drawWeapon(player, flip);
+}
+
+void Drawer::drawWeapon(const PlayerDTO& player, SDL_RendererFlip flip) {
+    static const std::unordered_map<TypeWeapon, std::tuple<TextureType, int, int>> weaponTextures =
+            {
+                    // almaceno enum de textura del container y dimensiones
+                    {TypeWeapon::PISTOLA_COWBOY,
+                     {TextureType::COWBOY_GUN, COWBOY_GUN_WIDTH, COWBOY_GUN_HEIGHT}}
+                    // demas armas
+            };
+
+    auto weaponTexture = weaponTextures.find(player.weapon);
+    if (weaponTexture != weaponTextures.end()) {
+        const auto& [textureType, width, height] = weaponTexture->second;
+
         renderer.Copy(
-                textures.getTexture(TextureType::COWBOY_GUN), SDL2pp::Rect(0, 0, 22, 11),
-                SDL2pp::Rect(camera.getScreenX(player.pos.x +
-                                               (flip == SDL_FLIP_HORIZONTAL ?
-                                                        -1 :
-                                                        16)),  // condicional por el tema del flip
-                             camera.getScreenY(player.pos.y + 16), camera.getScaledSize(22 - 6),
-                             camera.getScaledSize(11 - 6)),
+                textures.getTexture(textureType), SDL2pp::Rect(0, 0, width, height),
+                SDL2pp::Rect(camera.getScreenX(player.pos.x + getWeaponFlip(flip)),
+                             camera.getScreenY(player.pos.y + (SPRITE_HEIGHT / 2)),
+                             camera.getScaledSize(width - 6), camera.getScaledSize(height - 6)),
                 0.0, SDL2pp::Point(0, 0), flip);
     }
+}
+
+int Drawer::getWeaponFlip(SDL_RendererFlip flip) {
+    return flip == SDL_FLIP_HORIZONTAL ? FLIP : UNFLIP;
 }
 
 void Drawer::drawBackground() {

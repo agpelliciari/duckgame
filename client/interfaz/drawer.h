@@ -1,6 +1,9 @@
 #ifndef DRAWER_H
 #define DRAWER_H
 
+#include <tuple>
+#include <unordered_map>
+
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
@@ -10,6 +13,12 @@
 
 #define SPRITE_WIDTH 32
 #define SPRITE_HEIGHT 32
+
+#define COWBOY_GUN_WIDTH 22
+#define COWBOY_GUN_HEIGHT 11
+
+#define FLIP -1
+#define UNFLIP 16
 
 class Drawer {
 private:
@@ -24,6 +33,10 @@ private:
     const GameContext& context;
 
     void drawPlayer(const PlayerDTO& player);
+
+    void drawWeapon(const PlayerDTO& player, SDL_RendererFlip flip);
+
+    int getWeaponFlip(SDL_RendererFlip flip);
 
     void drawBackground();
 
