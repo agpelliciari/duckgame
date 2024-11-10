@@ -26,6 +26,7 @@ private:
     EditorMode editorMode = EditorMode::EMBackground;
     size_t selectedBackgroundIndex = 0;
     size_t selectedBlockIndex = 0;
+    size_t selectedBoxIndex = 0;
 
 public:
     EditorWindow(QWidget *parent = nullptr);
@@ -40,6 +41,8 @@ private:
     void selectBackgroundTexture(size_t index);
 
     void selectBlockTexture(size_t index);
+
+    void selectBoxTexture(size_t index);
 
     void exportToFileSystem();
 };
