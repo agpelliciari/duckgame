@@ -11,7 +11,7 @@ void MatchState::pushAction(const PlayerActionDTO& action) { acciones.push_comma
 
 void MatchState::loop(MatchObserver& observer) {
     // start_players(observer);
-    Clock clock(30);  // 16ms sleep == 60 frames por segundo aprox. 30 = 30 fps
+    Clock clock(16);  // 16ms sleep == 60 frames por segundo aprox. 30 = 30 fps
     clock.resetnext();
     while (running) {
         this->step();
