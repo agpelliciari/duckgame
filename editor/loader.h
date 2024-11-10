@@ -8,20 +8,7 @@
 #include <string>
 #include <vector>
 
-enum TextureType {
-    TBackground,
-    TBlock,
-    TSpawn,
-    TBox,
-    TDecoration
-};
-
-struct Texture {
-    std::string name;
-    std::string source;
-    TextureType textureType;
-    QPixmap pixelMap;
-};
+#include "types.h"
 
 class Loader {
 private:
@@ -29,6 +16,7 @@ private:
     std::vector<Texture> blocks;
     std::vector<Texture> boxes;
     std::vector<Texture> spawns;
+    std::vector<Texture> decorations;
 
 public:
     explicit Loader(const std::string& root);
@@ -37,16 +25,19 @@ public:
     std::vector<std::string> blockNames();
     std::vector<std::string> boxesNames();
     std::vector<std::string> spawnNames();
+    std::vector<std::string> decorationNames();
 
     Texture backgroundAt(size_t index);
     Texture blockAt(size_t index);
     Texture boxAt(size_t index);
     Texture spawnAt(size_t index);
+    Texture decorationAt(size_t index);
 
     size_t backgroundsSize();
     size_t blocksSize();
     size_t boxesSize();
     size_t spawnsSize();
+    size_t decorationsSize();
 
     ~Loader();
 
@@ -59,7 +50,9 @@ private:
 
     void loadSpawns(const std::string& root);
 
-    void load(const std::string& root, const std::string& path, TextureType type, std::vector<Texture>& textures);
+    void loadDecorations(const std::string& root);
+
+    void load(const std::string& root, const std::string& path, MapObjectType mapObjectType, std::vector<Texture>& textures);
 
     std::vector<std::string> names(const std::vector<Texture>& textures);
 };

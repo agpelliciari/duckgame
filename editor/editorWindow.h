@@ -23,11 +23,13 @@ private:
     Interface *interface;
     Playground *playground;
 
-    EditorMode editorMode = EditorMode::EMBackground;
+    MapObjectType editorIsCurrentlySetting = MapObjectType::Background;
+
     size_t selectedBackgroundIndex = 0;
     size_t selectedBlockIndex = 0;
-    size_t selectedBoxIndex = 0;
     size_t selectedSpawnIndex = 0;
+    size_t selectedBoxIndex = 0;
+    size_t selectedDecorationIndex = 0;
 
 public:
     EditorWindow(QWidget *parent = nullptr);
@@ -37,15 +39,17 @@ public:
 private:
     void wheelEvent(QWheelEvent *event) override;
 
-    void selectEditorMode(EditorMode mode);
+    void selectEditorMode(MapObjectType mode);
 
     void selectBackgroundTexture(size_t index);
 
     void selectBlockTexture(size_t index);
 
+    void selectSpawnTexture(size_t index);
+
     void selectBoxTexture(size_t index);
 
-    void selectSpawnTexture(size_t index);
+    void selectDecorationTexture(size_t index);
 
     void exportToFileSystem();
 };

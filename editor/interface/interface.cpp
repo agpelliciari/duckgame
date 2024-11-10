@@ -29,9 +29,9 @@ void Interface::displayNoneOnPreview() {
     preview->setBrush(Qt::NoBrush);
 }
 
-void Interface::displayBlockOnPreview(QPixmap pixelMap) {
-    QBrush texture(pixelMap);
-    preview->setBrush(texture);
+void Interface::displayMapObjectOnPreview(Texture texture) {
+    QBrush brush(texture.pixelMap);
+    preview->setBrush(brush);
 }
 
 Interface::~Interface() {
@@ -43,11 +43,11 @@ void Interface::onClickExport() {
 }
 
 void Interface::onEditorModeDropdownChangedInt(int index) {
-    EditorMode mode = static_cast<EditorMode>(index);
+    MapObjectType mode = static_cast<MapObjectType>(index);
     onEditorModeDropdownChanged(mode);
 }
 
-void Interface::onEditorModeDropdownChanged(EditorMode mode) {
+void Interface::onEditorModeDropdownChanged(MapObjectType mode) {
     handler.onEditorModeDropdownChanged(mode);
 }
 

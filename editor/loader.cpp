@@ -5,6 +5,7 @@ Loader::Loader(const std::string& root) {
     loadBlocks(root);
     loadBoxes(root);
     loadSpawns(root);
+    loadDecorations(root);
 }
 
 std::vector<std::string> Loader::backgroundNames() {
@@ -23,6 +24,10 @@ std::vector<std::string> Loader::spawnNames() {
     return names(spawns);
 }
 
+std::vector<std::string> Loader::decorationNames() {
+    return names(decorations);
+}
+
 Texture Loader::backgroundAt(size_t index) {
     return backgrounds.at(index);
 }
@@ -37,6 +42,10 @@ Texture Loader::boxAt(size_t index) {
 
 Texture Loader::spawnAt(size_t index) {
     return spawns.at(index);
+}
+
+Texture Loader::decorationAt(size_t index) {
+    return decorations.at(index);
 }
 
 size_t Loader::backgroundsSize() {
@@ -55,25 +64,33 @@ size_t Loader::spawnsSize() {
     return spawns.size();
 }
 
+size_t Loader::decorationsSize() {
+    return decorations.size();
+}
+
 Loader::~Loader() {}
 
 void Loader::loadBackgrounds(const std::string& root) {
-    load(root, "/backgrounds", TextureType::TBackground, backgrounds);
+    load(root, "/backgrounds", MapObjectType::Background, backgrounds);
 }
 
 void Loader::loadBlocks(const std::string& root) {
-    load(root, "/blocks", TextureType::TBlock, blocks);
+    load(root, "/blocks", MapObjectType::Block, blocks);
 }
 
 void Loader::loadBoxes(const std::string& root) {
-    load(root, "/boxes", TextureType::TBox, boxes);
+    load(root, "/boxes", MapObjectType::Box, boxes);
 }
 
 void Loader::loadSpawns(const std::string& root) {
-    load(root, "/spawns", TextureType::TSpawn, spawns);
+    load(root, "/spawns", MapObjectType::Spawn, spawns);
 }
 
-void Loader::load(const std::string& root, const std::string& path, TextureType type, std::vector<Texture>& textures) {
+void Loader::loadDecorations(const std::string& root) {
+    load(root, "/decorations", MapObjectType::Decoration, decorations);
+}
+
+void Loader::load(const std::string& root, const std::string& path, MapObjectType mapObjectType, std::vector<Texture>& textures) {
     QString fullPath = QString::fromStdString(root + path);
     QDir directory(fullPath);
 
@@ -91,7 +108,7 @@ void Loader::load(const std::string& root, const std::string& path, TextureType 
         Texture texture;
         texture.name = fileInfo.baseName().toStdString();
         texture.source = fileInfo.filePath().toStdString();
-        texture.textureType = type;
+        texture.mapObjectType = mapObjectType;
         texture.pixelMap = pixelMap;
 
         textures.push_back(texture);
