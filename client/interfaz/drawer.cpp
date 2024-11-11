@@ -19,7 +19,37 @@ void Drawer::drawPlayer(const PlayerDTO& player) {
                          camera.getScaledSize(SPRITE_WIDTH), camera.getScaledSize(SPRITE_HEIGHT)),
             0.0, SDL2pp::Point(0, 0), flip);
 
-    drawWeapon(player, flip);
+    if (player.weapon != TypeWeapon::NONE) {
+        drawWeapon(player, flip);
+    }
+
+    drawArmor(player, flip);
+}
+
+void Drawer::drawArmor(const PlayerDTO& player, SDL_RendererFlip flip) {
+
+    if (player.helmet) {
+        renderer.Copy(
+                textures.getTexture(TextureType::HELMET_ARMOR),
+                SDL2pp::Rect(0, 0, SPRITE_WIDTH, SPRITE_HEIGHT),
+                SDL2pp::Rect(
+                        camera.getScreenX(player.pos.x + getTextureFlipValue(flip, HELMET_FLIP_X,
+                                                                             HELMET_UNFLIP_X)),
+                        camera.getScreenY(player.pos.y - 10), camera.getScaledSize(SPRITE_WIDTH),
+                        camera.getScaledSize(SPRITE_HEIGHT)),
+                0.0, SDL2pp::Point(0, 0), flip);
+    }
+
+
+    if (player.chest_armor) {
+        renderer.Copy(
+                textures.getTexture(TextureType::CHEST_ARMOR),
+                SDL2pp::Rect(0, 0, SPRITE_WIDTH, SPRITE_HEIGHT),
+                SDL2pp::Rect(camera.getScreenX(player.pos.x), camera.getScreenY(player.pos.y + 3),
+                             camera.getScaledSize(SPRITE_WIDTH),
+                             camera.getScaledSize(SPRITE_HEIGHT)),
+                0.0, SDL2pp::Point(0, 0), flip);
+    }
 }
 
 void Drawer::drawWeapon(const PlayerDTO& player, SDL_RendererFlip flip) {
@@ -37,15 +67,16 @@ void Drawer::drawWeapon(const PlayerDTO& player, SDL_RendererFlip flip) {
 
         renderer.Copy(
                 textures.getTexture(textureType), SDL2pp::Rect(0, 0, width, height),
-                SDL2pp::Rect(camera.getScreenX(player.pos.x + getWeaponFlip(flip)),
+                SDL2pp::Rect(camera.getScreenX(player.pos.x +
+                                               getTextureFlipValue(flip, GUN_FLIP_X, GUN_UNFLIP_X)),
                              camera.getScreenY(player.pos.y + (SPRITE_HEIGHT / 2)),
                              camera.getScaledSize(width - 6), camera.getScaledSize(height - 6)),
                 0.0, SDL2pp::Point(0, 0), flip);
     }
 }
 
-int Drawer::getWeaponFlip(SDL_RendererFlip flip) {
-    return flip == SDL_FLIP_HORIZONTAL ? FLIP : UNFLIP;
+int Drawer::getTextureFlipValue(SDL_RendererFlip flip, int flipValue, int unflipValue) {
+    return flip == SDL_FLIP_HORIZONTAL ? flipValue : unflipValue;
 }
 
 void Drawer::drawBackground() {

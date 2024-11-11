@@ -17,8 +17,10 @@
 #define COWBOY_GUN_WIDTH 22
 #define COWBOY_GUN_HEIGHT 11
 
-#define FLIP -1
-#define UNFLIP 16
+#define GUN_FLIP_X -1
+#define GUN_UNFLIP_X 16
+#define HELMET_FLIP_X 3
+#define HELMET_UNFLIP_X -3
 
 class Drawer {
 private:
@@ -36,7 +38,9 @@ private:
 
     void drawWeapon(const PlayerDTO& player, SDL_RendererFlip flip);
 
-    int getWeaponFlip(SDL_RendererFlip flip);
+    int getTextureFlipValue(SDL_RendererFlip flip, int flipValue, int unflipValue);
+
+    void drawArmor(const PlayerDTO& player, SDL_RendererFlip flip);
 
     void drawBackground();
 
