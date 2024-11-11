@@ -26,13 +26,8 @@ private:
     std::unordered_map<TextureType, SDL2pp::Texture>
             textures;  // cppcheck-suppress unusedStructMember
 
-    // No va a hacer falta cuando se setee previamente el tipo de textura
-    TextureType indexToTextureType(int index) const;
-
 public:
     explicit TextureContainer(SDL2pp::Renderer& renderer);
-
-    SDL2pp::Texture& getTexture(int index);
 
     SDL2pp::Texture& getTexture(TextureType type);
 

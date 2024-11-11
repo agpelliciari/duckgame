@@ -9,21 +9,32 @@ Drawer::Drawer(SDL2pp::Window& window, Animation& animation, const GameContext& 
         context(gameContext) {}
 
 void Drawer::drawPlayer(const PlayerDTO& player) {
-    SDL_RendererFlip flip = animation.isFacingLeft(player.id) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+    static const std::unordered_map<int, TextureType> duckTextures = {{1, TextureType::YELLOW_DUCK},
+                                                                      {2, TextureType::GREY_DUCK},
+                                                                      {3, TextureType::ORANGE_DUCK},
+                                                                      {4, TextureType::WHITE_DUCK}};
 
-    renderer.Copy(
-            textures.getTexture(player.id),
-            SDL2pp::Rect(animation.getSpriteX(player.id), animation.getSpriteY(player.id),
-                         SPRITE_WIDTH, SPRITE_HEIGHT),
-            SDL2pp::Rect(camera.getScreenX(player.pos.x), camera.getScreenY(player.pos.y),
-                         camera.getScaledSize(SPRITE_WIDTH), camera.getScaledSize(SPRITE_HEIGHT)),
-            0.0, SDL2pp::Point(0, 0), flip);
+    auto mappedTexture = duckTextures.find(player.id);
+    if (mappedTexture != duckTextures.end()) {
+        const auto& playerTexture = mappedTexture->second;
 
-    if (player.weapon != TypeWeapon::NONE) {
-        drawWeapon(player, flip);
+        SDL_RendererFlip flip =
+                animation.isFacingLeft(player.id) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+
+        renderer.Copy(textures.getTexture(playerTexture),
+                      SDL2pp::Rect(animation.getSpriteX(player.id), animation.getSpriteY(player.id),
+                                   SPRITE_WIDTH, SPRITE_HEIGHT),
+                      SDL2pp::Rect(camera.getScreenX(player.pos.x), camera.getScreenY(player.pos.y),
+                                   camera.getScaledSize(SPRITE_WIDTH),
+                                   camera.getScaledSize(SPRITE_HEIGHT)),
+                      0.0, SDL2pp::Point(0, 0), flip);
+
+        if (player.weapon != TypeWeapon::NONE) {
+            drawWeapon(player, flip);
+        }
+
+        drawArmor(player, flip);
     }
-
-    drawArmor(player, flip);
 }
 
 void Drawer::drawArmor(const PlayerDTO& player, SDL_RendererFlip flip) {
