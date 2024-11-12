@@ -6,7 +6,8 @@ Drawer::Drawer(SDL2pp::Window& window, Animation& animation, const GameContext& 
         textures(renderer),
         animation(animation),
         camera(camera),
-        context(gameContext) {}
+        context(gameContext),
+        startTime(std::chrono::steady_clock::now()) {}
 
 void Drawer::drawPlayer(const PlayerDTO& player) {
     static const std::unordered_map<int, TextureType> duckTextures = {{1, TextureType::YELLOW_DUCK},
@@ -21,13 +22,13 @@ void Drawer::drawPlayer(const PlayerDTO& player) {
         SDL_RendererFlip flip =
                 animation.isFacingLeft(player.id) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
-        renderer.Copy(textures.getTexture(playerTexture),
-                      SDL2pp::Rect(animation.getSpriteX(player.id), animation.getSpriteY(player.id),
-                                   SPRITE_WIDTH, SPRITE_HEIGHT),
-                      SDL2pp::Rect(camera.getScreenX(player.pos.x), camera.getScreenY(player.pos.y),
-                                   camera.getScaledSize(SPRITE_WIDTH),
-                                   camera.getScaledSize(SPRITE_HEIGHT)),
-                      0.0, SDL2pp::Point(0, 0), flip);
+        renderer.Copy(
+                textures.getTexture(playerTexture),
+                SDL2pp::Rect(animation.getSpriteX(player.id), animation.getSpriteY(player.id),
+                             SPRITE_SIZE, SPRITE_SIZE),
+                SDL2pp::Rect(camera.getScreenX(player.pos.x), camera.getScreenY(player.pos.y),
+                             camera.getScaledSize(SPRITE_SIZE), camera.getScaledSize(SPRITE_SIZE)),
+                0.0, SDL2pp::Point(0, 0), flip);
 
         if (player.weapon != TypeWeapon::NONE) {
             drawWeapon(player, flip);
@@ -37,17 +38,35 @@ void Drawer::drawPlayer(const PlayerDTO& player) {
     }
 }
 
+void Drawer::drawIndicator(const PlayerDTO& player, bool isMainPlayer) {
+    SDL2pp::Rect indicatorType;
+
+    float spriteX = animation.getIndicatorSprite(INDICATOR_WIDTH);
+
+    if (isMainPlayer) {
+        indicatorType = SDL2pp::Rect(spriteX, 0, INDICATOR_WIDTH, INDICATOR_HEIGHT);
+    } else {
+        indicatorType = SDL2pp::Rect(spriteX, INDICATOR_HEIGHT, INDICATOR_WIDTH, INDICATOR_HEIGHT);
+    }
+
+    renderer.Copy(
+            textures.getTexture(TextureType::PLAYER_INDICATOR), indicatorType,
+            SDL2pp::Rect(camera.getScreenX(player.pos.x + 8), camera.getScreenY(player.pos.y - 25),
+                         camera.getScaledSize(INDICATOR_WIDTH_RESIZED),
+                         camera.getScaledSize(INDICATOR_HEIGHT_RESIZED)));
+}
+
 void Drawer::drawArmor(const PlayerDTO& player, SDL_RendererFlip flip) {
 
     if (player.helmet) {
         renderer.Copy(
                 textures.getTexture(TextureType::HELMET_ARMOR),
-                SDL2pp::Rect(0, 0, SPRITE_WIDTH, SPRITE_HEIGHT),
+                SDL2pp::Rect(0, 0, SPRITE_SIZE, SPRITE_SIZE),
                 SDL2pp::Rect(
                         camera.getScreenX(player.pos.x + getTextureFlipValue(flip, HELMET_FLIP_X,
                                                                              HELMET_UNFLIP_X)),
-                        camera.getScreenY(player.pos.y - 10), camera.getScaledSize(SPRITE_WIDTH),
-                        camera.getScaledSize(SPRITE_HEIGHT)),
+                        camera.getScreenY(player.pos.y - 10), camera.getScaledSize(SPRITE_SIZE),
+                        camera.getScaledSize(SPRITE_SIZE)),
                 0.0, SDL2pp::Point(0, 0), flip);
     }
 
@@ -55,10 +74,9 @@ void Drawer::drawArmor(const PlayerDTO& player, SDL_RendererFlip flip) {
     if (player.chest_armor) {
         renderer.Copy(
                 textures.getTexture(TextureType::CHEST_ARMOR),
-                SDL2pp::Rect(0, 0, SPRITE_WIDTH, SPRITE_HEIGHT),
+                SDL2pp::Rect(0, 0, SPRITE_SIZE, SPRITE_SIZE),
                 SDL2pp::Rect(camera.getScreenX(player.pos.x), camera.getScreenY(player.pos.y + 3),
-                             camera.getScaledSize(SPRITE_WIDTH),
-                             camera.getScaledSize(SPRITE_HEIGHT)),
+                             camera.getScaledSize(SPRITE_SIZE), camera.getScaledSize(SPRITE_SIZE)),
                 0.0, SDL2pp::Point(0, 0), flip);
     }
 }
@@ -80,7 +98,7 @@ void Drawer::drawWeapon(const PlayerDTO& player, SDL_RendererFlip flip) {
                 textures.getTexture(textureType), SDL2pp::Rect(0, 0, width, height),
                 SDL2pp::Rect(camera.getScreenX(player.pos.x +
                                                getTextureFlipValue(flip, GUN_FLIP_X, GUN_UNFLIP_X)),
-                             camera.getScreenY(player.pos.y + (SPRITE_HEIGHT / 2)),
+                             camera.getScreenY(player.pos.y + (SPRITE_SIZE / 2)),
                              camera.getScaledSize(width - 6), camera.getScaledSize(height - 6)),
                 0.0, SDL2pp::Point(0, 0), flip);
     }
@@ -130,26 +148,29 @@ void Drawer::drawObjects(const MatchDto& matchDto) {
 }
 
 void Drawer::draw(const MatchDto& matchDto) {
-    // Clear screen
-    renderer.SetDrawColor(255, 255, 255, 255);  // White background
     renderer.Clear();
 
     drawBackground();
 
     drawObjects(matchDto);
 
-    const PlayerDTO* mainPlayer = nullptr;
+    // encapsular en una funcion //TODO: consultar si es lo mas eficiente
+    auto currentTime = std::chrono::steady_clock::now();
+    auto elapsedTime =
+            std::chrono::duration_cast<std::chrono::seconds>(currentTime - startTime).count();
+    bool showIndicators = elapsedTime < INDICATOR_MAX_TIME;
 
     for (const PlayerDTO& player: matchDto.players) {
-        if (player.id == context.first_player) {
-            mainPlayer = &player;
-            continue;
-        }
-        drawPlayer(player);
-    }
 
-    if (mainPlayer) {
-        drawPlayer(*mainPlayer);
+        if (showIndicators) {
+            if (player.id == context.first_player) {
+                drawIndicator(player, IS_MAIN_PLAYER);
+            } else if ((context.dualplay) && (player.id == context.second_player)) {
+                drawIndicator(player, IS_SECONDARY_PLAYER);
+            }
+        }
+
+        drawPlayer(player);
     }
 
     // Show rendered frame

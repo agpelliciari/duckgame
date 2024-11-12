@@ -1,6 +1,7 @@
 #ifndef DRAWER_H
 #define DRAWER_H
 
+#include <chrono>
 #include <tuple>
 #include <unordered_map>
 
@@ -11,16 +12,22 @@
 #include "camera.h"
 #include "texture_container.h"
 
-#define SPRITE_WIDTH 32
-#define SPRITE_HEIGHT 32
-
 #define COWBOY_GUN_WIDTH 22
 #define COWBOY_GUN_HEIGHT 11
+
+#define INDICATOR_WIDTH 18.2f
+#define INDICATOR_WIDTH_RESIZED 14
+#define INDICATOR_HEIGHT_RESIZED 30
+#define INDICATOR_HEIGHT 33.5f
+#define INDICATOR_MAX_TIME 5
 
 #define GUN_FLIP_X -1
 #define GUN_UNFLIP_X 16
 #define HELMET_FLIP_X 3
 #define HELMET_UNFLIP_X -3
+
+#define IS_MAIN_PLAYER true
+#define IS_SECONDARY_PLAYER false
 
 class Drawer {
 private:
@@ -34,7 +41,11 @@ private:
 
     const GameContext& context;
 
+    std::chrono::time_point<std::chrono::steady_clock> startTime;
+
     void drawPlayer(const PlayerDTO& player);
+
+    void drawIndicator(const PlayerDTO& player, bool isMainPlayer);
 
     void drawWeapon(const PlayerDTO& player, SDL_RendererFlip flip);
 
