@@ -5,19 +5,24 @@
 #include <QFileInfoList>
 #include <QPixmap>
 
+#include <fstream>
 #include <string>
 #include <vector>
+#include <map>
 
 #include "types.h"
+#include "tileset.h"
 
 class Loader {
 private:
     std::vector<Texture> backgrounds;
-    std::vector<Texture> blocks;
+    std::vector<TileSet> blocks;
     std::vector<Texture> boxes;
     std::vector<Texture> spawnPlayers;
     std::vector<Texture> spawnWeapons;
     std::vector<Texture> decorations;
+
+    std::map<std::string, std::string> tileSetMap;
 
 public:
     explicit Loader(const std::string& root);
@@ -30,7 +35,7 @@ public:
     std::vector<std::string> decorationNames();
 
     Texture backgroundAt(size_t index);
-    Texture blockAt(size_t index);
+    TileSet blockAt(size_t index);
     Texture boxAt(size_t index);
     Texture spawnPlayerAt(size_t index);
     Texture spawnWeaponAt(size_t index);
@@ -42,6 +47,8 @@ public:
     size_t spawnPlayersSize();
     size_t spawnWeaponsSize();
     size_t decorationsSize();
+
+    std::string textureNameFor(const std::string& stringRepresentationOfAdyacentsBlocks);
 
     ~Loader();
 
@@ -57,6 +64,8 @@ private:
     void loadSpawnWeapons(const std::string& root);
 
     void loadDecorations(const std::string& root);
+
+    void loadTileSetMap(const std::string& root);
 
     void load(const std::string& root, const std::string& path, MapObjectType mapObjectType, std::vector<Texture>& textures);
 

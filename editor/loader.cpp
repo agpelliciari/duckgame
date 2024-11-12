@@ -7,6 +7,7 @@ Loader::Loader(const std::string& root) {
     loadSpawnPlayers(root);
     loadSpawnWeapons(root);
     loadDecorations(root);
+    loadTileSetMap(root);
 }
 
 std::vector<std::string> Loader::backgroundNames() {
@@ -14,7 +15,10 @@ std::vector<std::string> Loader::backgroundNames() {
 }
 
 std::vector<std::string> Loader::blockNames() {
-    return names(blocks);
+    std::vector<std::string> names;
+    for (const TileSet& tileSet : blocks)
+        names.push_back(tileSet.name());
+    return names;
 }
 
 std::vector<std::string> Loader::boxesNames() {
@@ -37,7 +41,7 @@ Texture Loader::backgroundAt(size_t index) {
     return backgrounds.at(index);
 }
 
-Texture Loader::blockAt(size_t index) {
+TileSet Loader::blockAt(size_t index) {
     return blocks.at(index);
 }
 
@@ -81,6 +85,14 @@ size_t Loader::decorationsSize() {
     return decorations.size();
 }
 
+std::string Loader::textureNameFor(const std::string& stringRepresentationOfAdyacentsBlocks) {
+    try {
+        return tileSetMap.at(stringRepresentationOfAdyacentsBlocks);
+    } catch (const std::exception& e) {
+        throw std::runtime_error("Invalid string representation of adyacents blocks");
+    }
+}
+
 Loader::~Loader() {}
 
 void Loader::loadBackgrounds(const std::string& root) {
@@ -88,7 +100,16 @@ void Loader::loadBackgrounds(const std::string& root) {
 }
 
 void Loader::loadBlocks(const std::string& root) {
-    load(root, "/blocks", MapObjectType::Block, blocks);
+    QString fullPath = QString::fromStdString(root + "/blocks");
+    QDir blocksDirectory(fullPath);
+
+    for (const QFileInfo &fileInfo : blocksDirectory.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+        if (fileInfo.isDir()) {
+            QDir tileSetDirectory(fileInfo.filePath());
+            TileSet tileSet(*this, tileSetDirectory);
+            blocks.push_back(tileSet);
+        }
+    }
 }
 
 void Loader::loadBoxes(const std::string& root) {
@@ -105,6 +126,25 @@ void Loader::loadSpawnWeapons(const std::string& root) {
 
 void Loader::loadDecorations(const std::string& root) {
     load(root, "/decorations", MapObjectType::Decoration, decorations);
+}
+
+void Loader::loadTileSetMap(const std::string& root) {
+    std::ifstream tileSetMapFile(root + "/blocks/tileSetMap.txt");
+
+    if (tileSetMapFile.is_open()) {
+        std::string line;
+        while (std::getline(tileSetMapFile, line)) {
+            size_t delimiterPos = line.find('-');
+            if (delimiterPos != std::string::npos) {
+                std::string key = line.substr(0, delimiterPos);
+                std::string value = line.substr(delimiterPos + 1);
+                tileSetMap[key] = value;
+            }
+        }
+        tileSetMapFile.close();
+    } else {
+        throw std::runtime_error("There is no tileSetMap file");
+    }
 }
 
 void Loader::load(const std::string& root, const std::string& path, MapObjectType mapObjectType, std::vector<Texture>& textures) {

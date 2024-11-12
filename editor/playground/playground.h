@@ -12,6 +12,7 @@
 
 
 #include "../types.h"
+#include "../tileset.h"
 
 struct MapObjectData {
     int row;
@@ -39,6 +40,7 @@ private:
     static constexpr int MAX_WIDTH = 50;
     static constexpr int MAX_HEIGHT = 40;
     static constexpr int TEXTURE_SIZE = 16;
+
     static constexpr int ZOOM_STEP = 50;
     static constexpr int ZOOM_MIN = 100;
     static constexpr int ZOOM_MAX = 300;
@@ -48,6 +50,7 @@ private:
     const PlaygroundHandler handler;
 
     QGraphicsRectItem* background;
+    std::vector<QGraphicsRectItem*> blocks;
     std::vector<QGraphicsRectItem*> physicalObjects;
     std::vector<QGraphicsRectItem*> nonPhysicalObjects;
 
@@ -60,13 +63,21 @@ public:
 
     void setBackground(Texture texture);
 
+    void addBlock(QPoint position, TileSet tileSet);
+
     void addPhysicalObject(QPoint position, Texture texture);
 
     void addNonPhysicalObject(QPoint position, Texture texture);
 
+    void removeBlock(QPoint position, TileSet tileSet);
+
     void removePhysicalObject(QPoint position);
 
     void removeNonPhysicalObject(QPoint position);
+
+    int maxWidthToExport();
+
+    int maxHeightToExport();
 
     MapObjectData backgroundToExport();
 
@@ -102,6 +113,14 @@ private:
     void setMapObjectData(QGraphicsRectItem* mapObject, MapObjectType mapObjectType, const std::string& texture);
 
     void cleanObjectData(QGraphicsRectItem* mapObject);
+
+    void createMapLayerFor(std::vector<QGraphicsRectItem*>& mapObjects, int zIndex);
+
+    void repainAllBlocksWith(TileSet tileSet);
+
+    void repainBlocksWith(TileSet tileSet);
+
+    std::string stringRepresentationOfAdyacentsBlocks(MapObjectData centerBlock, const std::vector<MapObjectData>& allMapObjectBlocks);
 
     QGraphicsRectItem* mapObjectAt(std::vector<QGraphicsRectItem*> mapObjects, QPoint position);
 

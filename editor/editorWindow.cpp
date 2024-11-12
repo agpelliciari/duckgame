@@ -43,7 +43,7 @@ EditorWindow::EditorWindow(QWidget *parent):
                 case MapObjectType::Background:
                     break;
                 case MapObjectType::Block:
-                    playground->addPhysicalObject(position, loader.blockAt(selectedBlockIndex));
+                    playground->addBlock(position, loader.blockAt(selectedBlockIndex));
                     break;
                 case MapObjectType::SpawnPlayer:
                     playground->addNonPhysicalObject(position, loader.spawnPlayerAt(selectedSpawnPlayerIndex));
@@ -66,7 +66,7 @@ EditorWindow::EditorWindow(QWidget *parent):
                 case MapObjectType::Background:
                     break;
                 case MapObjectType::Block:
-                    playground->removePhysicalObject(position);
+                    playground->removeBlock(position, loader.blockAt(selectedBlockIndex));
                     break;
                 case MapObjectType::SpawnPlayer:
                     playground->removeNonPhysicalObject(position);
@@ -187,7 +187,7 @@ void EditorWindow::selectEditorMode(MapObjectType mode) {
         case MapObjectType::Block:
             interface->setSelectorDropdownOptions(loader.blockNames());
             interface->selectorDropdownIndexChanged(selectedBlockIndex);
-            interface->displayMapObjectOnPreview(loader.blockAt(selectedBlockIndex));
+            interface->displayMapObjectOnPreview(loader.blockAt(selectedBlockIndex).preview());
             break;
         case MapObjectType::SpawnPlayer:
             interface->setSelectorDropdownOptions(loader.spawnPlayersNames());
@@ -223,7 +223,7 @@ void EditorWindow::selectBackgroundTexture(size_t index) {
 void EditorWindow::selectBlockTexture(size_t index) {
     selectedBlockIndex = index;
     interface->selectorDropdownIndexChanged(selectedBlockIndex);
-    interface->displayMapObjectOnPreview(loader.blockAt(selectedBlockIndex));
+    interface->displayMapObjectOnPreview(loader.blockAt(selectedBlockIndex).preview());
 }
 
 void EditorWindow::selectSpawnPlayerTexture(size_t index) {
@@ -251,6 +251,8 @@ void EditorWindow::selectDecorationTexture(size_t index) {
 }
 
 void EditorWindow::exportToFileSystem() {
+    const int maxWidth = playground->maxWidthToExport();
+    const int maxHeight = playground->maxHeightToExport();
     const MapObjectData background = playground->backgroundToExport();
     const std::vector<MapObjectData> blocks = playground->blocksToExport();
     const std::vector<MapObjectData> spawnPlayers = playground->spawnPlayersToExport();
@@ -258,7 +260,7 @@ void EditorWindow::exportToFileSystem() {
     const std::vector<MapObjectData> boxes = playground->boxesToExport();
     const std::vector<MapObjectData> decorations = playground->decorationsToExport();
 
-    MapSerializer serial(20, 10);
+    MapSerializer serial(maxWidth, maxHeight);
     serial.setBackground(background.texture);
 
     for (const auto& block : blocks) {

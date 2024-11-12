@@ -7,10 +7,12 @@ target_sources(taller_editor
     main.cpp
     editorWindow.cpp
     loader.cpp
+    tileset.cpp
     PUBLIC
     # .h files
     editorWindow.h
     loader.h
+    tileset.h
     types.h
     # .ui files
     editorWindow.ui

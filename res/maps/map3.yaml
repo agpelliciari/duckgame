@@ -5,8 +5,8 @@ blocks_z: 0
 boxes_z: 1
 box_texture: default_tex.png
 textures:
-  - blocks/11.png
-  - blocks/43.png
+  - blocks/Nature/11.png
+  - blocks/Nature/43.png
   - decorations/notexture.png
   - spawns/weapons/gunSpawner1.png
 blocks:
