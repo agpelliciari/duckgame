@@ -8,6 +8,8 @@ constexpr int ERROR_CODE = 1;
 int main(int argc, char* argv[]) {
     try {
         QApplication application(argc, argv);
+        QPixmap cursorPixmap("./res/ui/default.png");
+        QApplication::setOverrideCursor(QCursor(cursorPixmap));
 
         QPalette darkTheme;
         darkTheme.setColor(QPalette::Window, QColor(53, 53, 53));

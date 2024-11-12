@@ -10,11 +10,11 @@ TextureContainer::TextureContainer(SDL2pp::Renderer& renderer) {
     textures.emplace(TextureType::WHITE_DUCK,
                      SDL2pp::Texture(renderer, DATA_PATH "/duck_sprites/white_duck.png"));
     textures.emplace(TextureType::BACKGROUND,
-                     SDL2pp::Texture(renderer, DATA_PATH "/backgrounds/default.png"));
+                     SDL2pp::Texture(renderer, DATA_PATH "/backgrounds/virtual.png"));
     textures.emplace(TextureType::TREE,
-                     SDL2pp::Texture(renderer, DATA_PATH "/textures/Surface_Tree_1.png"));
+                     SDL2pp::Texture(renderer, DATA_PATH "/notexture.png"));
     textures.emplace(TextureType::BOX,
-                     SDL2pp::Texture(renderer, DATA_PATH "/textures/Objects.png"));
+                     SDL2pp::Texture(renderer, DATA_PATH "/boxes/itemBox1.png"));
 }
 
 TextureType TextureContainer::indexToTextureType(int index) const {
