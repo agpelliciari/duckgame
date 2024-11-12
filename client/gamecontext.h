@@ -7,6 +7,13 @@
 
 #include "common/dtosmap.h"
 
+struct MapObject {
+    int row;
+    int column;
+    int zIndex;
+    const std::string& texture;
+};
+
 struct GameContext {
     unsigned int id_lobby;  // cppcheck-suppress unusedStructMember
 

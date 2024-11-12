@@ -61,11 +61,11 @@ public:
     void setBackground(const char* rel_path);
     void setBackground(const std::string& rel_path);
 
-    void addBlock(const uint16_t x, const uint16_t y, const std::string& name);
-    void addDecoration(const uint16_t x, const uint16_t y, const std::string& name);
-    void addBox(const uint16_t x, const uint16_t y);
-    void addItemSpawn(const uint16_t x, const uint16_t y);
-    void addPlayerSpawn(const uint16_t x, const uint16_t y);
+    void addBlock(const uint16_t x, const uint16_t y, const uint16_t z, const std::string& name);
+    void addDecoration(const uint16_t x, const uint16_t y, const uint16_t z, const std::string& name);
+    void addBox(const uint16_t x, const uint16_t y, const uint16_t z, const std::string& name);
+    void addItemSpawn(const uint16_t x, const uint16_t y, const uint16_t z, const std::string& name);
+    void addPlayerSpawn(const uint16_t x, const uint16_t y, const uint16_t z, const std::string& name);
 
 
     void save(const char* rel_path);
