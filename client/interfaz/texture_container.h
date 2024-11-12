@@ -18,7 +18,8 @@ enum class TextureType {
     BOX,
     COWBOY_GUN,
     CHEST_ARMOR,
-    HELMET_ARMOR
+    HELMET_ARMOR,
+    PLAYER_INDICATOR
 };
 
 class TextureContainer {

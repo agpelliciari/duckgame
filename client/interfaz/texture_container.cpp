@@ -19,6 +19,8 @@ TextureContainer::TextureContainer(SDL2pp::Renderer& renderer) {
                      SDL2pp::Texture(renderer, DATA_PATH "/armors/chestPlateAnim.png"));
     textures.emplace(TextureType::HELMET_ARMOR,
                      SDL2pp::Texture(renderer, DATA_PATH "/armors/helmet.png"));
+    textures.emplace(TextureType::PLAYER_INDICATOR,
+                     SDL2pp::Texture(renderer, DATA_PATH "/duck_sprites/playerIndicator.png"));
 }
 
 SDL2pp::Texture& TextureContainer::getTexture(TextureType type) { return textures.at(type); }
