@@ -113,4 +113,8 @@ int Animation::getSpriteY(int playerId) {
     return 0;
 }
 
+float Animation::getIndicatorSprite(float width) {
+    return width * ((frameTicks / INDICATOR_ANIMATION_SPEED) % INDICATOR_ANIMATION_FRAMES);
+}
+
 Animation::~Animation() = default;

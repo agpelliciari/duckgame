@@ -27,6 +27,9 @@
 #define FLAPPING_SPRITE_X_OFFSET 2
 #define FLAPPING_SPRITE_Y 72
 
+#define INDICATOR_ANIMATION_FRAMES 5
+#define INDICATOR_ANIMATION_SPEED 150
+
 
 struct AnimationBuilder {
     int spriteX;  // cppcheck-suppress unusedStructMember
@@ -75,6 +78,8 @@ public:
     int getSpriteX(int playerId);
 
     int getSpriteY(int playerId);
+
+    float getIndicatorSprite(float width);
 
     ~Animation();
 };
