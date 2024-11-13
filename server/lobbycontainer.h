@@ -46,6 +46,7 @@ public:
 
     // Si se esta en la lobby y el anfitrion se va. Se cancela.
     void hostLeft(Match& match, ControlledPlayer& host);
+    void errorOnLobby(Match& match, LobbyErrorType error);
 
     // Remueve todos los restantes. Normalmente no deberia haber, ya se deberian haber desconectado.
     void finishAll();

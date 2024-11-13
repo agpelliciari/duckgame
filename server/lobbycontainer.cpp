@@ -79,6 +79,14 @@ void LobbyContainer::hostLeft(Match& lobby, ControlledPlayer& host) {
         lobbies.remove(lobby);  // el destructor hace el finish.
     }
 }
+void LobbyContainer::errorOnLobby(Match& lobby, LobbyErrorType error) {
+    std::unique_lock<std::mutex> lck(mtx);  // No other actions on container.
+    if (lobby.isrunning()) {
+        throw GameError(LOBBY_ALREADY_STARTED,
+                        "Tried to notify lobby error on already started lobby %d", lobby.getID());
+    }
+    lobby.cancelByError(error);
+}
 
 
 LobbyContainer::~LobbyContainer() { finishAll(); }

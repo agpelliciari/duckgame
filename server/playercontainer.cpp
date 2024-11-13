@@ -2,11 +2,16 @@
 
 #include <iostream>
 
-PlayerContainer::PlayerContainer(): totalplayers(0), last_id(0) {}
+#include "./gameerror.h"
+
+PlayerContainer::PlayerContainer(): canceled(false), totalplayers(0), last_id(0) {}
 
 
 // Todo esto no hace falta sincronizar ya que es sincronico!
 ControlledPlayer& PlayerContainer::add(uint8_t countplayers) {
+    if (canceled) {
+        throw GameError(LOBBY_NOT_FOUND, "Tried to join to lobby already cancelled");
+    }
 
     // totalplayers no es perse el id para el player
     // conceptualmente es distinto.
@@ -77,7 +82,12 @@ void PlayerContainer::finishLobbyMode() {
 
 void PlayerContainer::hostLobbyLeft(const ControlledPlayer& host) {
     players.remove(host);
-    lobby_info info(GAME_ERROR, LobbyErrorType::ANFITRION_LEFT);
+    cancelByError(ANFITRION_LEFT);
+}
+void PlayerContainer::cancelByError(LobbyErrorType cancelError) {
+    canceled = true;
+    lobby_info info(GAME_ERROR, cancelError);
+
     // Cuando se va el host no se notifica el disconnect... sino se los desconecta.
     for (ControlledPlayer& player: players) {
         player.recvinfo(info);

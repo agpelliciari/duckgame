@@ -16,6 +16,7 @@ public:
 
 private:
     player_container players;  // cppcheck-suppress unusedStructMember
+    bool canceled;             // cppcheck-suppress unusedStructMember
 
     int totalplayers;  // cppcheck-suppress unusedStructMember
     // Por ahora player last id es la cantidad de total_players+1 basicamente.
@@ -37,6 +38,7 @@ public:
     void finishGameMode();
 
     void hostLobbyLeft(const ControlledPlayer& player);
+    void cancelByError(LobbyErrorType error);
 
     // Remueve todos los restantes. Normalmente no deberia haber, ya se deberian haber desconectado.
     void forceDisconnectAll();

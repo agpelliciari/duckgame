@@ -3,6 +3,7 @@
 #include <iostream>
 #include <utility>
 
+#include "./gameerror.h"
 #include "common/core/liberror.h"
 #include "common/protocolerror.h"
 
@@ -100,6 +101,12 @@ bool LobbyControl::handleAnfitrionLobby(ControlledPlayer& host,
         }
         std::cerr << "Cancel lobby?:" << error.what() << std::endl;
         lobbies.hostLeft(match, host);
+        return true;
+    } catch (const GameError& error) {
+        // Fallo alguna accion. Sea el start u otra.
+        std::cerr << "Game error at host lobby recv: " << error.what() << std::endl;
+        // protocol.notifyinfo(LobbyResponseType::GAME_ERROR, error.get_code());
+        lobbies.errorOnLobby(match, error.get_code());
         return true;
     }
 }

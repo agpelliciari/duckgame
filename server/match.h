@@ -52,6 +52,7 @@ protected:
     // Metodos analogos a los de thread. expuestos a friend nada mas.
     void init(MapLoader& maps, const char* mapname);
     bool hostLobbyLeft(ControlledPlayer& host);
+    void cancelByError(LobbyErrorType error);
 
     // Libera, bien podria prescindirse y usar un destructor.
     // Pero mejor explicitar. Reemplaza el stop.. que no se quiere permitir hacerlo sin hacer el

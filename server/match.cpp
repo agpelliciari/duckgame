@@ -9,8 +9,14 @@ Match::Match(lobbyID _id): id(_id), players(), looper(), connectedplayers(0), ma
 
 // Protected// friend accessed methods
 ControlledPlayer& Match::addPlayers(uint8_t count) {
-    connectedplayers++;  // Solo importa la cantidad de conectados
-    return players.add(count);
+    ControlledPlayer& player = players.add(count);
+
+    // Se suma despues porque el add puede fallar!
+    // Por capacidad o por que esta cancelada!
+    connectedplayers++;  // Solo importa la cantidad de conectados...
+
+
+    return player;
 }
 int Match::playercount() const { return players.playercount(); }
 
@@ -71,6 +77,9 @@ bool Match::hostLobbyLeft(ControlledPlayer& host) {
 
     return false;
 }
+
+void Match::cancelByError(LobbyErrorType error) { players.cancelByError(error); }
+
 
 // General/public methods.
 
