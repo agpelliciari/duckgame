@@ -38,6 +38,16 @@ void LobbyStateRecv::handleNotify(const lobby_info& info) {
 void LobbyStateRecv::setInitedMatch(int totalplayers) {
     // Receive map data.
     protocol.recvmapdata(context.map);
+
+    std::cout << "w:" << context.map.width << "h:" << context.map.height
+              << "box_z:" << context.map.boxes_z << std::endl;
+    std::cout << "BK:" << context.map.background << "box_tex:" << context.map.boxes_tex
+              << std::endl;
+
+    for (const std::string& tex: context.map.textures) {
+        std::cout << "map tex:" << tex << std::endl;
+    }
+
     //"virtual.png"
 
     context.started = true;
