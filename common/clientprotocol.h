@@ -19,10 +19,13 @@ struct MapObject {
     int row;
     int column;
     int zIndex;
-    const std::string& texture;
 
-    MapObject(const coordinate_t x, const coordinate_t y, const uint16_t z, const std::string& tex):
-            row(x), column(y), zIndex(z), texture(tex) {}
+    const std::string& texture;
+    uint16_t ind_texture;
+
+    MapObject(const coordinate_t x, const coordinate_t y, const uint16_t z, const std::string& tex,
+              const uint16_t ind):
+            row(x), column(y), zIndex(z), texture(tex), ind_texture(ind) {}
 };
 
 struct MapData {

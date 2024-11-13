@@ -57,12 +57,18 @@ int Client::execGame(GameManager& connector, const GameContext& context) {
     PlayStateSender& actionListener(*connector.initGame(listener));
     actionListener.begin();
 
-    std::cout << "MAP SIZE IS " << context.map_width << " , " << context.map_height
-              << " BACKGROUND: " << context.map_background << std::endl;
+    std::cout << "w:" << context.map.width << "h:" << context.map.height
+              << "box_z:" << context.map.boxes_z << std::endl;
+    std::cout << "BK:" << context.map.background << "box_tex:" << context.map.boxes_tex
+              << std::endl;
 
-    for (const struct BlockDTO& block: context.blocks) {
-        std::cout << "Block at " << block.pos.x << " , " << block.pos.y
-                  << " tex:" << (int)block.texture << std::endl;
+    for (const std::string& tex: context.map.textures) {
+        std::cout << "map tex:" << tex << std::endl;
+    }
+
+    for (const struct MapObject& obj: context.map.objects) {
+        std::cout << "obj x:" << obj.column << " y:" << obj.row << " z:" << obj.zIndex
+                  << "tex:" << obj.texture << std::endl;
     }
 
 
