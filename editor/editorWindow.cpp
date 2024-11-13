@@ -261,8 +261,14 @@ void EditorWindow::exportToFileSystem() {
     MapSerializer serial(20, 10);
     serial.setBackground(background.texture);
 
-    for (const auto& block : blocks) {
-        serial.addBlock(block.row, block.column , block.texture);
+    (void)blocks;
+    (void)spawnPlayers;
+    (void)spawnWeapons;
+    (void)boxes;
+    (void)decorations;
+
+    /*for (const auto& block : blocks) {
+        serial.addBlock(block.row, block.column, block.texture);
     }
 
     for (const auto& spawnPlayer : spawnPlayers) {
@@ -279,7 +285,7 @@ void EditorWindow::exportToFileSystem() {
 
     for (const auto& decoration : decorations) {
         serial.addDecoration(decoration.row , decoration.column, decoration.texture);
-    }
+    }*/
 
     std::string file("./res/maps/MAPACHE.yaml");
     serial.save(file);
