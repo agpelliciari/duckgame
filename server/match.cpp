@@ -33,7 +33,7 @@ void Match::init(MapLoader& maps, const char* mapname) {
     if (is_alive()) {
         throw GameError(LOBBY_ALREADY_STARTED, "Tried to start a match already started!!\n");
     }
-    MapDeserializer& deserial = maps.loadMap(mapname);
+    MapDeserializer& deserial = maps.getLoader(mapname);
 
     deserial.loadMapInfo(map);
 
@@ -101,11 +101,7 @@ const MapInfo& Match::getMap() const { return map; }
 
 
 void Match::finish(MapLoader& maps) {
-
-    if (map != NULL) {
-        maps.removeMap(map->mapname);
-        map = NULL;
-    }
+    maps.removeLoader(map.map_id);
 
     if (_keep_running) {
         stop();

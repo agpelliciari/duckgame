@@ -37,15 +37,8 @@ void LobbyStateRecv::handleNotify(const lobby_info& info) {
 
 void LobbyStateRecv::setInitedMatch(int totalplayers) {
     // Receive map data.
-    uint8_t bk;
-    struct MapPoint size = protocol.recvmap(&bk, context.blocks);
-
-
-    context.map_width = size.x;
-    context.map_height = size.y;
-    std::cout << " BACKGROUND INT : " << (int)(bk) << std::endl;
-
-    context.map_background = "virtual.png";
+    protocol.recvmapdata(context.map);
+    //"virtual.png"
 
     context.started = true;
     context.cantidadjugadores = totalplayers;

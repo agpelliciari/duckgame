@@ -63,8 +63,8 @@ void MatchState::send_results(MatchObserver& observer) {
     observer.updateState(dto);
 }
 
-void MatchState::add_objects(const struct MapInfo& map_info) {
-    match_logic.add_boxes(map_info.boxes);
+void MatchState::add_objects(const struct ObjectsInfo& objects_info) {
+    match_logic.add_boxes(objects_info.boxes);
 }
 
 MatchState::~MatchState() {}
