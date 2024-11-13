@@ -9,10 +9,38 @@
 #include <utility>
 #include <vector>
 
+#include "./dtosobject.h"
 #include "common/core/protocol.h"
 #include "common/dtosgame.h"
 #include "common/dtoslobby.h"
-#include "common/dtosmap.h"
+
+// Mas que MapObject, DrawableObject.
+struct MapObject {
+    int row;
+    int column;
+    int zIndex;
+    const std::string& texture;
+
+    MapObject(const coordinate_t x, const coordinate_t y, const uint16_t z, const std::string& tex):
+            row(x), column(y), zIndex(z), texture(tex) {}
+};
+
+struct MapData {
+    int width;   // cppcheck-suppress unusedStructMember
+    int height;  // cppcheck-suppress unusedStructMember
+
+    uint16_t blocks_z;  // cppcheck-suppress unusedStructMember
+    uint16_t boxes_z;   // cppcheck-suppress unusedStructMember
+
+    std::string background;  // cppcheck-suppress unusedStructMember
+    std::string boxes_tex;   // cppcheck-suppress unusedStructMember
+
+    std::vector<std::string> textures;      // cppcheck-suppress unusedStructMember
+    std::vector<struct MapObject> objects;  // cppcheck-suppress unusedStructMember
+
+    MapData(): width(0), height(0), blocks_z(0), boxes_z(0) {}
+};
+
 
 // Extension del protocolo base a usar.
 class ClientProtocol {
@@ -46,7 +74,8 @@ public:
     void sendaction(PlayerActionDTO& action);
 
     MatchDto recvstate();
-    struct MapPoint recvmap(uint8_t* background, std::vector<BlockDTO>& out);
+
+    void recvmapdata(struct MapData& data);
 
     bool isopen();
     void close();

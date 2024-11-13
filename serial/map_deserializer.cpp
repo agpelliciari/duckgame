@@ -6,8 +6,7 @@
 #include "./map_serializer.h"
 #include "common/core/liberror.h"
 
-
-MapDeserializer::MapDeserializer(const std::string& src) {
+MapDeserializer::MapDeserializer(const std::string& src): srcmap(src) {
 
     std::ifstream file(src, std::ios::binary | std::ios::ate);
     std::streamsize size = file.tellg();
@@ -26,22 +25,72 @@ MapDeserializer::MapDeserializer(const std::string& src) {
     }
 }
 
-struct MapPoint MapDeserializer::readSize() {
+const std::string& MapDeserializer::getMapName() const { return srcmap; }
 
-    struct MapPoint size;
 
+void MapDeserializer::readSize(struct MapPoint& size) {
     root[MapSerializer::SIZE_X] >> size.x;
     root[MapSerializer::SIZE_Y] >> size.y;
-
-    return size;
 }
-uint8_t MapDeserializer::readBackground() {
-    uint8_t background = 0;
 
+void MapDeserializer::readBackground(std::string& background) {
     root[MapSerializer::BACKGROUND] >> background;
-
-    return background;
 }
+
+void MapDeserializer::readBlocksZ(uint16_t& z) { root[MapSerializer::BLOCK_Z] >> z; }
+
+void MapDeserializer::readBoxesZ(uint16_t& z) { root[MapSerializer::BOX_Z] >> z; }
+
+void MapDeserializer::readBoxesTexture(std::string& box_tex) {
+    root[MapSerializer::BOX_TEX] >> box_tex;
+}
+
+
+void MapDeserializer::readTextures(std::vector<std::string>& res) {
+    ryml::NodeRef textures = root[MapSerializer::TEXTURES];
+    if (!textures.is_seq()) {
+        std::cout << "NOT FOUND!! TEXTURES SEGMENT!\n";
+        return;
+    }
+
+    int size = textures.num_children();
+    res.reserve(size);
+
+    for (int i = 0; i < size; i++) {
+        std::string tex;
+        textures[i] >> tex;
+        res.push_back(tex);
+    }
+}
+
+void MapDeserializer::readDecorations(std::vector<struct DecorationDTO>& res) {
+    ryml::NodeRef decorations = root[MapSerializer::DECORATIONS];
+    if (!decorations.is_seq()) {
+        std::cout << "NOT FOUND!! DECORATIONS SEGMENT!\n";
+        return;
+    }
+
+
+    int size = decorations.num_children();
+    res.reserve(size);
+
+    for (int i = 0; i < size; i++) {
+        ryml::NodeRef block = decorations[i];
+        coordinate_t x;
+        coordinate_t y;
+        uint8_t tex;
+        uint16_t z;
+
+
+        block[MapSerializer::POINT_X] >> x;
+        block[MapSerializer::POINT_Y] >> y;
+        block[MapSerializer::BLOCK_TEX] >> tex;
+        block[MapSerializer::DECORATION_Z] >> z;
+
+        res.emplace_back(x, y, tex, z);
+    }
+}
+
 
 void MapDeserializer::readBlocks(std::vector<struct BlockDTO>& res) {
 
@@ -69,7 +118,7 @@ void MapDeserializer::readBlocks(std::vector<struct BlockDTO>& res) {
         block[MapSerializer::POINT_Y] >> y;
         block[MapSerializer::BLOCK_TEX] >> tex;
 
-        res.emplace_back(x, y, (BlockTexture)tex);
+        res.emplace_back(x, y, tex);
     }
 }
 
@@ -114,21 +163,28 @@ void MapDeserializer::readBoxes(std::vector<struct MapPoint>& res) {
     readPoints(list, res);
 }
 
-void MapDeserializer::dosome() {
-    struct MapPoint size = readSize();
-    uint8_t bk = readBackground();
 
-    std::cout << "MAP SIZE IS " << size.x << " , " << size.y << " BACKGROUND: " << (int)bk
-              << std::endl;
+void MapDeserializer::loadMapInfo(struct MapInfo& info) {
+    readSize(info.size);
 
-    std::vector<BlockDTO> blocks;
+    readBlocksZ(info.blocks_z);
+    readBoxesZ(info.boxes_z);
 
-    readBlocks(blocks);
+    readBackground(info.background);
+    readBoxesTexture(info.boxes_tex);
 
-    std::cout << "Block count " << blocks.size() << std::endl;
+    readTextures(info.textures);
+    readBlocks(info.blocks);
+    readDecorations(info.decorations);
 
-    for (const BlockDTO& block: blocks) {
-        std::cout << "Block at " << block.pos.x << " , " << block.pos.y
-                  << " Tex: " << (int)block.texture << std::endl;
-    }
+    info.map_id = srcmap;
+}
+
+
+void MapDeserializer::loadObjectsInfo(struct ObjectsInfo& info) {
+    readPlayerSpawns(info.player_spawns);
+    readItemSpawns(info.item_spawns);
+    readBoxes(info.boxes);
+
+    // Read blocks .. again? NAA
 }

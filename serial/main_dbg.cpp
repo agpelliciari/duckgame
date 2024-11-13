@@ -6,10 +6,6 @@
 #include "./map_serializer.h"
 #include "common/clock.h"
 
-static void deserial(const std::string& file) {
-    MapDeserializer serial(file);
-    serial.dosome();
-}
 static void create(const std::string& file) {
 
     MapSerializer serial(100, 550);
@@ -66,9 +62,15 @@ int main(int argc, char* argv[]) {
     clock.resetnext();
 
     MapLoader loader;
+    MapInfo info;
+    ObjectsInfo info2;
 
-    const MapInfo& info = loader.loadMap(argv[1]);
-    const MapInfo& info2 = loader.loadMap(argv[1]);
+    MapDeserializer& load1 = loader.getLoader(argv[1]);
+    MapDeserializer& load2 = loader.getLoader(argv[1]);
+
+    load1.loadMapInfo(info);
+    load2.loadObjectsInfo(info2);
+
 
     clock.tick();
     clock.tick();
@@ -78,25 +80,23 @@ int main(int argc, char* argv[]) {
     std::cout << "TICK COUNT AFTER IS " << clock.tickcount() << std::endl;
 
     std::cout << "MAP 1 SIZE IS " << info.size.x << " , " << info.size.y
-              << " BACKGROUND: " << (int)(info.bk) << std::endl;
-    std::cout << "MAP 2 SIZE IS " << info2.size.x << " , " << info2.size.y
-              << " BACKGROUND: " << (int)(info2.bk) << std::endl;
+              << " BACKGROUND: " << (info.background) << " z bl: " << (int)(info.blocks_z)
+              << std::endl;
+    std::cout << "Map 1 block count " << info.blocks.size() << std::endl;
 
-    std::cout << "Map 1 player count " << info.spawns_player.size() << std::endl;
-
-    for (const struct MapPoint& point: info.spawns_player) {
-        std::cout << "Player spawn at " << point.x << " , " << point.y << std::endl;
+    for (const std::string& tex: info.textures) {
+        std::cout << "tex = " << tex << std::endl;
     }
 
-    std::cout << "Map 2 item spawn count " << info2.spawns_items.size() << std::endl;
+    std::cout << "Map 2 item spawn count " << info2.item_spawns.size() << std::endl;
 
-    for (const struct MapPoint& point: info2.spawns_items) {
+    for (const struct MapPoint& point: info2.item_spawns) {
         std::cout << "Item spawn at " << point.x << " , " << point.y << std::endl;
     }
 
-    loader.removeMap(info.mapname);
-    std::cout << "DELETED MAP 1 " << info.mapname << std::endl;
-    loader.removeMap(info2.mapname);
+    loader.removeLoader(info.map_id);
+    std::cout << "DELETED MAP 1 " << info.map_id << std::endl;
+    loader.removeLoader(load2.getMapName());
 
 
     return 0;

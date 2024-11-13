@@ -11,6 +11,7 @@
 #include "common/dtoslobby.h"
 #include "common/dtosmap.h"
 
+
 // Extension del protocolo base a usar.
 class ServerProtocol: public Protocol {
 public:

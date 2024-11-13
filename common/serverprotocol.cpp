@@ -109,22 +109,43 @@ void ServerProtocol::sendplayer(const PlayerDTO& player) {
 
 void ServerProtocol::sendmapinfo(const MapInfo& map) {
 
+    // Send Map size
     this->senduint(map.size.x);
     this->senduint(map.size.y);
-    this->sendbyte(map.bk);
 
+    // Send constant z inds
+    this->sendshort(map.blocks_z);
+    this->sendshort(map.boxes_z);
+
+    // Send constant 'textures'/'resources'
+    this->sendmsg(map.background);
+    this->sendmsg(map.boxes_tex);
+
+    // Send textures.
+    this->senduint(map.textures.size());
+    for (const std::string& tex: map.textures) {
+        this->sendmsg(tex);
+    }
+
+    // Send objects sizes.
     this->senduint(map.blocks.size());
+    this->senduint(map.decorations.size());
 
+    // Send blocks
     for (const BlockDTO& block: map.blocks) {
         this->senduint(block.pos.x);
         this->senduint(block.pos.y);
-        this->sendbyte(block.texture);
-
-        // sendplayer(player);
+        this->sendbyte(block.texture_id);
     }
 
-    /*
-     */
+    // Send decorations
+    for (const DecorationDTO& decoration: map.decorations) {
+        this->senduint(decoration.pos.x);
+        this->senduint(decoration.pos.y);
+        this->sendbyte(decoration.texture_id);
+
+        this->sendshort(decoration.z_ind);
+    }
 }
 
 

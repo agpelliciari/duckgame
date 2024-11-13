@@ -1,8 +1,8 @@
 #ifndef LIB_MAP_LOADER
 #define LIB_MAP_LOADER
 
+#include <list>
 #include <string>
-#include <vector>
 
 #include "./map_deserializer.h"
 
@@ -10,13 +10,12 @@
 class MapLoader {
 protected:
     struct ReferencedMap {
-        MapInfo info;
+        MapDeserializer deserial;
         int count;
-        ReferencedMap(const std::string& name, const struct MapPoint _size, uint8_t _bk):
-                info(name, _size, _bk), count(1) {}
+        explicit ReferencedMap(const std::string& name): deserial(name), count(1) {}
     };
 
-    std::vector<struct ReferencedMap> maps;  // cppcheck-suppress unusedStructMember
+    std::list<struct ReferencedMap> maps;  // cppcheck-suppress unusedStructMember
 
 public:
     MapLoader();
@@ -28,7 +27,8 @@ public:
     MapLoader(MapLoader&&) = delete;
     MapLoader& operator=(MapLoader&&) = delete;
 
-    MapInfo& loadMap(const char* mapname);
-    void removeMap(const std::string& name);
+    MapDeserializer& getLoader(const char* mapname);
+
+    void removeLoader(const std::string& loader_id);
 };
 #endif

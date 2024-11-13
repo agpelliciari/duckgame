@@ -33,7 +33,7 @@ private:
     PlayerContainer players;  // cppcheck-suppress unusedStructMember
     MatchState looper;        // cppcheck-suppress unusedStructMember
     int connectedplayers;     // cppcheck-suppress unusedStructMember
-    MapInfo* map;             // cppcheck-suppress unusedStructMember
+    MapInfo map;              // cppcheck-suppress unusedStructMember
 
     // std::mutex mtx;
     // std::condition_variable match_start;
@@ -73,7 +73,7 @@ public:
     bool operator==(const Match& other) const;
 
     lobbyID getID() const;
-    MapInfo* getMap();
+    const MapInfo& getMap() const;
     // void waitStart();
     int playercount() const;
 

@@ -7,7 +7,7 @@ static const char* EXT = ".yaml";
 
 MapLoader::MapLoader() {}
 
-MapInfo& MapLoader::loadMap(const char* mapname) {
+MapDeserializer& MapLoader::getLoader(const char* mapname) {
 
     std::string name(DIR_MAPS);
     name.append(mapname);
@@ -15,36 +15,29 @@ MapInfo& MapLoader::loadMap(const char* mapname) {
 
     for (ReferencedMap& ref: maps) {
         // cppcheck-suppress useStlAlgorithm
-        if (ref.info.mapname == name) {
+        if (ref.deserial.getMapName() == name) {
             ref.count++;
-            return ref.info;
+            return ref.deserial;
         }
     }
 
     std::cout << "LOADING NEW MAP " << name << std::endl;
     // No estaba.
-    MapDeserializer deserial(name);
 
-    ReferencedMap& ref = maps.emplace_back(name, deserial.readSize(), deserial.readBackground());
-
-    deserial.readBlocks(ref.info.blocks);
-    deserial.readPlayerSpawns(ref.info.spawns_player);
-    deserial.readItemSpawns(ref.info.spawns_items);
-    deserial.readBoxes(ref.info.boxes);
-
-
-    return ref.info;
+    ReferencedMap& ref = maps.emplace_back(name);
+    return ref.deserial;
 }
 
-void MapLoader::removeMap(const std::string& name) {
+void MapLoader::removeLoader(const std::string& loader_id) {
     for (auto refit = maps.begin(); refit != maps.end();) {
-        if (refit->info.mapname != name) {
+        if (refit->deserial.getMapName() != loader_id) {
             ++refit;
             continue;
         }
+
         refit->count--;
         if (refit->count <= 0) {
-            std::cout << "ERASING MAP " << refit->info.mapname << std::endl;
+            std::cout << "ERASING MAP " << refit->deserial.getMapName() << std::endl;
             maps.erase(refit);
         }
         return;
