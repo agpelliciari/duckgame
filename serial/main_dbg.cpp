@@ -48,11 +48,12 @@ int main(int argc, char* argv[]) {
     clock.resetnow();
     std::string file("res/maps/");
     file.append(argv[1]);
+    file.append(".yaml");
     create(file);
     int ms = clock.measure();
 
 
-    std::cout << "--->TOOK " << ms << "ms?" << std::endl;
+    std::cout << "--->TOOK " << ms << "ms? create " << file << std::endl;
 
 
     //  deserial(file);

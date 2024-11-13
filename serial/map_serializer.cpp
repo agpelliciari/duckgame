@@ -7,6 +7,7 @@
 
 
 static const char* DEF_MAP_BK = "default.png";
+static const char* DEF_BOX_TEX = "default_tex.png";
 
 const char* MapSerializer::SIZE_X = "size_x";
 const char* MapSerializer::SIZE_Y = "size_y";
@@ -33,7 +34,12 @@ const char* MapSerializer::DECORATION_Z = "z_ind";
 
 
 MapSerializer::MapSerializer(const uint16_t size_x, const uint16_t size_y):
-        count_textures(0), z_ind_block(0), z_ind_box(1), box_tex(), tree(), root(tree.rootref()) {
+        count_textures(0),
+        z_ind_block(0),
+        z_ind_box(1),
+        box_tex(DEF_BOX_TEX),
+        tree(),
+        root(tree.rootref()) {
     root |= ryml::MAP;
 
     root[MapSerializer::SIZE_X] << size_x;
@@ -42,7 +48,7 @@ MapSerializer::MapSerializer(const uint16_t size_x, const uint16_t size_y):
 
     root[MapSerializer::BLOCK_Z] << z_ind_block;
     root[MapSerializer::BOX_Z] << z_ind_box;
-    root[MapSerializer::BOX_TEX] << "";
+    root[MapSerializer::BOX_TEX] << box_tex;
 
     ryml::NodeRef textures = root[MapSerializer::TEXTURES];
     textures |= ryml::SEQ;

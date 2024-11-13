@@ -68,7 +68,7 @@ int Client::execGame(GameManager& connector, const GameContext& context) {
 
     for (const struct MapObject& obj: context.map.objects) {
         std::cout << "obj x:" << obj.column << " y:" << obj.row << " z:" << obj.zIndex
-                  << "tex:" << obj.texture << std::endl;
+                  << "tex:" << obj.ind_texture << " " << obj.texture << std::endl;
     }
 
 
