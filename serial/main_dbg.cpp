@@ -14,12 +14,17 @@ static void create(const std::string& file) {
 
     MapSerializer serial(100, 550);
     std::string name("NAME");
+    std::string name1("OT");
+    std::string name2("LAS");
 
     for (int i = 0; i < 50; i += 3) {
         serial.addBlock(2, 3 + i, name);
     }
+    for (int i = 0; i < 25; i += 3) {
+        serial.addBlock(5 + i, 3 + i, name1);
+    }
     for (int i = 50; i < 100; i += 3) {
-        serial.addDecoration(2, 3 + i, name);
+        serial.addDecoration(2, 3 + i, 2, name2);
     }
 
     serial.addBox(4, 3);
@@ -27,10 +32,13 @@ static void create(const std::string& file) {
     serial.addBox(6, 4);
     serial.addBox(7, 3);
 
-    serial.addItemSpawn(12, 3);
-    serial.addItemSpawn(99, 3);
-    serial.addPlayerSpawn(14, 3);
-    serial.addPlayerSpawn(23, 3);
+    std::string pl = "playswp";
+
+    serial.addItemSpawn(12, 3, pl);
+    serial.addItemSpawn(99, 3, pl);
+
+    serial.addPlayerSpawn(14, 3, pl);
+    serial.addPlayerSpawn(23, 3, pl);
 
     serial.save(file);
 }

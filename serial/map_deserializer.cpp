@@ -48,7 +48,7 @@ void MapDeserializer::readBlocks(std::vector<struct BlockDTO>& res) {
     // size_t list_id = tree.find_child(tree.root_id(), MapSerializer::TEXTURES);
     // if(!tree.is_seq(list_id)){
 
-    ryml::NodeRef blocks = root[MapSerializer::TEXTURES];
+    ryml::NodeRef blocks = root[MapSerializer::BLOCKS];
     if (!blocks.is_seq()) {
         std::cout << "NOT FOUND!! BLOCKS SEGMENT!\n";
         return;
