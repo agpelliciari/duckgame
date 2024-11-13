@@ -20,6 +20,8 @@ LobbyActionType ServerProtocol::recvlobbyaction() {
 
     throw ProtocolError("Did not receive a lobby action");
 }
+std::string ServerProtocol::recvmapname() { return this->recvmsgstr(); }
+
 
 void ServerProtocol::notifyaction(const LobbyResponseType response) { this->sendbyte(response); }
 

@@ -51,9 +51,8 @@ uint8_t ClientProtocol::recvIDDualPlayer(uint8_t* player1) {
 }
 
 
-void ClientProtocol::sendlobbyaction(const lobby_action&& action) {
-    protocol.sendbyte(action.type);
-}
+void ClientProtocol::sendlobbyaction(const lobby_action& action) { protocol.sendbyte(action.type); }
+void ClientProtocol::sendmapname(const std::string& mapname) { protocol.sendmsg(mapname); }
 
 void ClientProtocol::recvmapdata(struct MapData& data) {
     data.width = protocol.recvuint();

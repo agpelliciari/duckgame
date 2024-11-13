@@ -39,6 +39,7 @@ public:
 
     // Acciones/Respuestas
     LobbyActionType recvlobbyaction();
+    std::string recvmapname();
 
     void notifyaction(const LobbyResponseType response);
     void notifyinfo(const LobbyResponseType response, const uint8_t data);

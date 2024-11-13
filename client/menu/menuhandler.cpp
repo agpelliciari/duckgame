@@ -68,7 +68,7 @@ void MenuHandler::onJoinDuoLobby(int lobbyId) {
 
 void MenuHandler::onStartLobby(const std::string& map) {
     std::cout << "Empeza con el mapa: " << map << std::endl;
-    sender->notifyStart();
+    sender->notifyStart(map);
 }
 
 void MenuHandler::onCancelLobby() {  // Cuando el Host da click en el boton de cancel en lugar de

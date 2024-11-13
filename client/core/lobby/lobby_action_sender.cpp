@@ -12,7 +12,16 @@ void LobbyActionSender::begin() { start(); }
 void LobbyActionSender::run() {
     try {
         while (_keep_running) {
-            protocol.sendlobbyaction(actions.popaction());
+
+            lobby_action action = actions.popaction();
+
+
+            protocol.sendlobbyaction(action);
+
+            if (action.type == PLAYER_READY) {
+                protocol.sendmapname(actions.getMapName());
+                break;
+            }
         }
     } catch (const ClosedQueue& error) {
         std::cout << "Closed lobby sender" << std::endl;

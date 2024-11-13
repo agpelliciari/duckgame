@@ -72,7 +72,8 @@ public:
 
     void recvlobbyinfo(lobby_info& out);
 
-    void sendlobbyaction(const lobby_action&& action);
+    void sendlobbyaction(const lobby_action& action);
+    void sendmapname(const std::string& mapname);
 
     void sendaction(PlayerActionDTO& action);
 
