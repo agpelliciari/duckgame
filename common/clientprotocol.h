@@ -25,7 +25,7 @@ struct MapObject {
 
     MapObject(const coordinate_t x, const coordinate_t y, const uint16_t z, const std::string& tex,
               const uint16_t ind):
-            row(x), column(y), zIndex(z), texture(tex), ind_texture(ind) {}
+            row(y), column(x), zIndex(z), texture(tex), ind_texture(ind) {}
 };
 
 struct MapData {

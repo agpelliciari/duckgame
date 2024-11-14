@@ -86,7 +86,9 @@ void ClientProtocol::recvmapdata(struct MapData& data) {
 
         uint8_t ind_tex = protocol.recvbyte();
 
-        data.objects.emplace_back(_x, _y, data.blocks_z, data.textures[ind_tex], ind_tex);
+        data.objects.emplace_back(_x, _y  // data.height-_y
+                                  ,
+                                  data.blocks_z, data.textures[ind_tex], ind_tex);
 
         count_blocks--;
     }
@@ -98,7 +100,9 @@ void ClientProtocol::recvmapdata(struct MapData& data) {
 
         uint8_t _z = protocol.recvshort();
 
-        data.objects.emplace_back(_x, _y, _z, data.textures[ind_tex], ind_tex);
+        data.objects.emplace_back(_x, _y  // data.height-_y
+                                  ,
+                                  _z, data.textures[ind_tex], ind_tex);
 
         count_decorations--;
     }
