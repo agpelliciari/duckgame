@@ -1,6 +1,7 @@
 #include "animation.h"
 
-Animation::Animation(const GameContext& context): animationBuilders(), frameTicks(0) {
+Animation::Animation(const GameContext& context, SoundManager& soundManager):
+        animationBuilders(), soundManager(soundManager), frameTicks(0) {
     for (int i = 1; i <= static_cast<int>(context.cantidadjugadores); i++) {
         animationBuilders.emplace(i, AnimationBuilder());
     }
@@ -55,18 +56,21 @@ void Animation::updatePlayerAnimation(AnimationBuilder& builder, const PlayerDTO
                        (STARTING_SPRITE_X + SPRITE_SIZE * ((frameTicks / JUMPING_ANIMATION_SPEED) %
                                                            JUMPING_ANIMATION_FRAMES)),
                        JUMPING_SPRITE_Y, false);
+            // soundManager.playSound(SoundType::JUMP);
             break;
         case TypeMoveAction::AIR_RIGHT:
             setBuilder(builder,
                        (STARTING_SPRITE_X + SPRITE_SIZE * ((frameTicks / JUMPING_ANIMATION_SPEED) %
                                                            JUMPING_ANIMATION_FRAMES)),
                        JUMPING_SPRITE_Y, false);
+            // soundManager.playSound(SoundType::JUMP);
             break;
         case TypeMoveAction::AIR_LEFT:
             setBuilder(builder,
                        (STARTING_SPRITE_X + SPRITE_SIZE * ((frameTicks / JUMPING_ANIMATION_SPEED) %
                                                            JUMPING_ANIMATION_FRAMES)),
                        JUMPING_SPRITE_Y, true);
+            // soundManager.playSound(SoundType::JUMP);
             break;
         case TypeMoveAction::FLAP_NEUTRAL:
             setBuilder(builder, (STARTING_SPRITE_X + SPRITE_SIZE * FLAPPING_SPRITE_X_OFFSET),
@@ -111,6 +115,10 @@ int Animation::getSpriteY(int playerId) {
         return builder->spriteY;
     }
     return 0;
+}
+
+float Animation::getIndicatorSprite(float width) {
+    return width * ((frameTicks / INDICATOR_ANIMATION_SPEED) % INDICATOR_ANIMATION_FRAMES);
 }
 
 Animation::~Animation() = default;

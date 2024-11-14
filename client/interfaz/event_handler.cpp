@@ -1,7 +1,8 @@
 #include "event_handler.h"
 
-EventHandler::EventHandler(ActionListener& sender, const GameContext& context):
-        actionSender(sender), dualPlay(context.dualplay) {}
+EventHandler::EventHandler(ActionListener& sender, const GameContext& context,
+                           SoundManager& soundManager):
+        actionSender(sender), soundManager(soundManager), dualPlay(context.dualplay) {}
 
 void EventHandler::setAction(PlayerActionDTO& action, PlayerActionType actionType, int playerId) {
     action.type = actionType;
@@ -21,6 +22,10 @@ void EventHandler::handleKeyDown(SDL_Keycode key, PlayerActionDTO& action) {
             break;
         case SDLK_SPACE:
             setAction(action, JUMP, MAIN_PLAYER);
+            soundManager.playSound(SoundType::JUMP);
+            break;
+        case SDLK_m:
+            soundManager.stopBackgroundMusic();
             break;
     }
 
@@ -37,6 +42,7 @@ void EventHandler::handleKeyDown(SDL_Keycode key, PlayerActionDTO& action) {
                 break;
             case SDLK_w:
                 setAction(action, JUMP, SECOND_PLAYER);
+                soundManager.playSound(SoundType::JUMP);
                 break;
         }
     }
@@ -94,7 +100,7 @@ void EventHandler::handle(bool& isRunning_) {
         if (!isRunning_) {
             return;
 
-        } else if (event.type == SDL_KEYDOWN) {
+        } else if ((event.type == SDL_KEYDOWN) && (event.key.repeat == 0)) {
             handleKeyDown(event.key.keysym.sym, action);
 
         } else if (event.type == SDL_KEYUP) {

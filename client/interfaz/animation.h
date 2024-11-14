@@ -9,6 +9,8 @@
 #include "client/gamecontext.h"
 #include "common/dtosgame.h"
 
+#include "sound_manager.h"
+
 #define SPRITE_SIZE 32
 
 #define RUNNING_ANIMATION_FRAMES 6
@@ -26,6 +28,9 @@
 
 #define FLAPPING_SPRITE_X_OFFSET 2
 #define FLAPPING_SPRITE_Y 72
+
+#define INDICATOR_ANIMATION_FRAMES 5
+#define INDICATOR_ANIMATION_SPEED 150
 
 
 struct AnimationBuilder {
@@ -50,6 +55,8 @@ private:
     std::unordered_map<int, AnimationBuilder>
             animationBuilders;  // cppcheck-suppress unusedStructMember
 
+    SoundManager& soundManager;
+
     unsigned int frameTicks;  // cppcheck-suppress unusedStructMember
 
     AnimationBuilder* getAnimationBuilder(int playerId);
@@ -61,7 +68,7 @@ private:
     void setBuilder(AnimationBuilder& builder, int spriteX, int spriteY);
 
 public:
-    explicit Animation(const GameContext& context);
+    Animation(const GameContext& context, SoundManager& soundManager);
 
     // Timing: calculate difference between this and previous frame in
     // milliseconds
@@ -75,6 +82,8 @@ public:
     int getSpriteX(int playerId);
 
     int getSpriteY(int playerId);
+
+    float getIndicatorSprite(float width);
 
     ~Animation();
 };
