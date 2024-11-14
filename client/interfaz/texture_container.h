@@ -19,7 +19,9 @@ enum class TextureType {
     COWBOY_GUN,
     CHEST_ARMOR,
     HELMET_ARMOR,
-    PLAYER_INDICATOR
+    PLAYER_INDICATOR,
+    SCOREBOARD,
+    FONT
 };
 
 class TextureContainer {
