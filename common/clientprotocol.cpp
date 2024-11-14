@@ -6,6 +6,7 @@
 
 #include "common/core/liberror.h"
 
+
 ClientProtocol::ClientProtocol(Messenger& conn): protocol(conn) {}
 
 
@@ -54,7 +55,7 @@ uint8_t ClientProtocol::recvIDDualPlayer(uint8_t* player1) {
 void ClientProtocol::sendlobbyaction(const lobby_action& action) { protocol.sendbyte(action.type); }
 void ClientProtocol::sendmapname(const std::string& mapname) { protocol.sendmsg(mapname); }
 
-void ClientProtocol::recvmapdata(struct MapData& data) {
+void ClientProtocol::recvmapdata(struct MapData& data, const int unit) {
     data.width = protocol.recvuint();
     data.height = protocol.recvuint();
 
@@ -86,7 +87,7 @@ void ClientProtocol::recvmapdata(struct MapData& data) {
 
         uint8_t ind_tex = protocol.recvbyte();
 
-        data.objects.emplace_back(_x, _y  // data.height-_y
+        data.objects.emplace_back(unit * _x, (data.height - _y * unit)  //*unit // Inverti!
                                   ,
                                   data.blocks_z, data.textures[ind_tex], ind_tex);
 
@@ -100,7 +101,7 @@ void ClientProtocol::recvmapdata(struct MapData& data) {
 
         uint8_t _z = protocol.recvshort();
 
-        data.objects.emplace_back(_x, _y  // data.height-_y
+        data.objects.emplace_back(unit * _x, (data.height - _y * unit)  //*unit //Inverti!
                                   ,
                                   _z, data.textures[ind_tex], ind_tex);
 

@@ -17,7 +17,13 @@ enum class TextureType {
 
     BACKGROUND,
     TREE,
-    BOX
+    BOX,
+    COWBOY_GUN,
+    CHEST_ARMOR,
+    HELMET_ARMOR,
+    PLAYER_INDICATOR,
+    SCOREBOARD,
+    FONT
 };
 
 class TextureContainer {
@@ -26,14 +32,9 @@ private:
             textures;                              // cppcheck-suppress unusedStructMember
     std::vector<SDL2pp::Texture> textures_blocks;  // cppcheck-suppress unusedStructMember
 
-    // No va a hacer falta cuando se setee previamente el tipo de textura
-    TextureType indexToTextureType(int index) const;
-
 public:
     explicit TextureContainer(SDL2pp::Renderer& renderer,
                               const std::vector<std::string>& _textures);
-
-    SDL2pp::Texture& getTexture(int index);
 
     SDL2pp::Texture& getTexture(TextureType type);
 

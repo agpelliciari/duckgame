@@ -23,7 +23,7 @@ struct MapObject {
     const std::string& texture;
     uint16_t ind_texture;
 
-    MapObject(const coordinate_t x, const coordinate_t y, const uint16_t z, const std::string& tex,
+    MapObject(const int x, const int y, const uint16_t z, const std::string& tex,
               const uint16_t ind):
             row(y), column(x), zIndex(z), texture(tex), ind_texture(ind) {}
 };
@@ -79,7 +79,7 @@ public:
 
     MatchDto recvstate();
 
-    void recvmapdata(struct MapData& data);
+    void recvmapdata(struct MapData& data, const int unit);
 
     bool isopen();
     void close();

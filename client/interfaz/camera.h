@@ -9,6 +9,9 @@
 #define SCREEN_HEIGHT 480
 #define PADDING 100
 
+#define MIN_ZOOM_LEVEL 0.5f
+#define MAX_ZOOM_LEVEL 2.0f
+
 class Camera {
 private:
     int x;  // cppcheck-suppress unusedStructMember

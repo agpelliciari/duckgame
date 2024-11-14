@@ -13,6 +13,7 @@
 #include "animation.h"
 #include "camera.h"
 #include "drawer.h"
+#include "sound_manager.h"
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
@@ -23,6 +24,8 @@ private:
     SDL2pp::SDL sdlLib;
 
     SDL2pp::Window window;
+
+    SoundManager soundManager;
 
     Animation animation;
 

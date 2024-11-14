@@ -23,32 +23,17 @@ TextureContainer::TextureContainer(SDL2pp::Renderer& renderer,
                      SDL2pp::Texture(renderer, DATA_PATH "/backgrounds/virtual.png"));
     textures.emplace(TextureType::TREE, SDL2pp::Texture(renderer, DATA_PATH "/notexture.png"));
     textures.emplace(TextureType::BOX, SDL2pp::Texture(renderer, DATA_PATH "/boxes/itemBox1.png"));
-}
-
-TextureType TextureContainer::indexToTextureType(int index) const {
-    switch (index) {
-        case 1:
-            return TextureType::YELLOW_DUCK;
-        case 2:
-            return TextureType::GREY_DUCK;
-        case 3:
-            return TextureType::ORANGE_DUCK;
-        case 4:
-            return TextureType::WHITE_DUCK;
-        case 5:
-            return TextureType::BACKGROUND;
-        case 6:
-            return TextureType::TREE;
-        case 7:
-            return TextureType::BOX;
-        default:
-            throw std::out_of_range("Invalid texture index");
-    }
-}
-
-SDL2pp::Texture& TextureContainer::getTexture(int index) {
-    TextureType type = indexToTextureType(index);
-    return textures.at(type);
+    textures.emplace(TextureType::COWBOY_GUN,
+                     SDL2pp::Texture(renderer, DATA_PATH "/weapons/cowboyPistol.png"));
+    textures.emplace(TextureType::CHEST_ARMOR,
+                     SDL2pp::Texture(renderer, DATA_PATH "/armors/chestPlateAnim.png"));
+    textures.emplace(TextureType::HELMET_ARMOR,
+                     SDL2pp::Texture(renderer, DATA_PATH "/armors/helmet.png"));
+    textures.emplace(TextureType::PLAYER_INDICATOR,
+                     SDL2pp::Texture(renderer, DATA_PATH "/duck_sprites/playerIndicator.png"));
+    textures.emplace(TextureType::SCOREBOARD,
+                     SDL2pp::Texture(renderer, DATA_PATH "/leaderboard/scoreboard.png"));
+    textures.emplace(TextureType::FONT, SDL2pp::Texture(renderer, DATA_PATH "/font/biosFont.png"));
 }
 
 SDL2pp::Texture& TextureContainer::getBlockTexture(int index) { return textures_blocks[index]; }

@@ -51,7 +51,7 @@ void PlayStateSender::end() {
 void PlayStateSender::run() {
 
     try {
-        PlayStateRecv receiver(protocol, listener);
+        PlayStateRecv receiver(protocol, listener, context);
         receiver.start();
 
         while (_keep_running) {

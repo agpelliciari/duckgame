@@ -60,16 +60,6 @@ public:
     explicit MatchDto(match_info_dto _info): info(_info) {}
     MatchDto(): info({INICIADA, 0}) {}
 
-    const PlayerDTO* getPlayer(const int id) const {
-        for (const PlayerDTO& player: players) {
-            // cppcheck-suppress useStlAlgorithm
-            if (player.id == id) {
-                return &player;
-            }
-        }
-
-        return NULL;
-    }
 
     std::string parse() const {
         std::stringstream result;
