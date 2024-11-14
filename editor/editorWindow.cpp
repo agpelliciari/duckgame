@@ -261,31 +261,25 @@ void EditorWindow::exportToFileSystem() {
     MapSerializer serial(20, 10);
     serial.setBackground(background.texture);
 
-    (void)blocks;
-    (void)spawnPlayers;
-    (void)spawnWeapons;
-    (void)boxes;
-    (void)decorations;
-
-    /*for (const auto& block : blocks) {
-        serial.addBlock(block.row, block.column, block.texture);
+    for (const auto& block : blocks) {
+        serial.addBlock(block.row, block.column, block.zIndex, block.texture);
     }
 
     for (const auto& spawnPlayer : spawnPlayers) {
-        serial.addItemSpawn(spawnPlayer.row, spawnPlayer.column); // spawn.texture
+        serial.addItemSpawn(spawnPlayer.row, spawnPlayer.column, spawnPlayer.zIndex, spawnPlayer.texture);
     }
 
     for (const auto& spawnWeapon : spawnWeapons) {
-        serial.addItemSpawn(spawnWeapon.row, spawnWeapon.column); // spawn.texture
+        serial.addItemSpawn(spawnWeapon.row, spawnWeapon.column, spawnWeapon.zIndex, spawnWeapon.texture);
     }
 
     for (const auto& box : boxes) {
-        serial.addBox(box.row, box.column); // box.texture
+        serial.addBox(box.row, box.column, box.zIndex, box.texture);
     }
 
     for (const auto& decoration : decorations) {
-        serial.addDecoration(decoration.row , decoration.column, decoration.texture);
-    }*/
+        serial.addDecoration(decoration.row , decoration.column, decoration.zIndex, decoration.texture);
+    }
 
     std::string file("./res/maps/MAPACHE.yaml");
     serial.save(file);

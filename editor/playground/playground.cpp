@@ -107,7 +107,7 @@ void Playground::initializeMap() {
     background->setBrush(Qt::NoBrush);
     background->setPen(Qt::NoPen);
     background->setZValue(1);
-    background->setData(0, QVariant::fromValue(MapObjectData{ -1, -1, MapObjectType::Empty, "" }));
+    background->setData(0, QVariant::fromValue(MapObjectData{ 1, 1, 1, MapObjectType::Empty, "" }));
     map->addItem(background);
 
     for (int row = 0; row < height; ++row) {
@@ -117,7 +117,7 @@ void Playground::initializeMap() {
                 QPen(Qt::NoPen), Qt::NoBrush
             );
             physicalObject->setZValue(2);
-            physicalObject->setData(0, QVariant::fromValue(MapObjectData{ row, col, MapObjectType::Empty, "" }));
+            physicalObject->setData(0, QVariant::fromValue(MapObjectData{ row, col, 2, MapObjectType::Empty, "" }));
             physicalObjects.push_back(physicalObject);
         }
     }
@@ -129,7 +129,7 @@ void Playground::initializeMap() {
                 QPen(Qt::NoPen), Qt::NoBrush
             );
             nonPhysicalObject->setZValue(3);
-            nonPhysicalObject->setData(0, QVariant::fromValue(MapObjectData{ row, col, MapObjectType::Empty, "" }));
+            nonPhysicalObject->setData(0, QVariant::fromValue(MapObjectData{ row, col, 3, MapObjectType::Empty, "" }));
             nonPhysicalObjects.push_back(nonPhysicalObject);
         }
     }

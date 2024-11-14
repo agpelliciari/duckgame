@@ -14,6 +14,7 @@
 struct MapObjectData {
     int row;
     int column;
+    int zIndex;
     MapObjectType mapObjectType;
     std::string texture;
 };
