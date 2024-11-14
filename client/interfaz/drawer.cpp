@@ -27,7 +27,7 @@ void Drawer::drawPlayer(const PlayerDTO& player) {
                 textures.getTexture(playerTexture),
                 SDL2pp::Rect(animation.getSpriteX(player.id), animation.getSpriteY(player.id),
                              SPRITE_SIZE, SPRITE_SIZE),
-                SDL2pp::Rect(camera.getScreenX(player.pos.x), camera.getScreenY(player.pos.y),
+                SDL2pp::Rect(camera.getScreenX(player.pos.x-BLOCK_WIDTH/2), camera.getScreenY(player.pos.y),
                              camera.getScaledSize(SPRITE_SIZE), camera.getScaledSize(SPRITE_SIZE)),
                 0.0, SDL2pp::Point(0, 0), flip);
 
@@ -120,22 +120,22 @@ void Drawer::drawBackground() {
 }
 
 void Drawer::drawObjects(const MatchDto& matchDto) {
-    // inicialmente dibujo solo los primeros 4 elementos del .yaml
+    // inicialmente se dibuja como si todos fueran objects.    
     for (const MapObject& object: context.map.objects) {
         renderer.Copy(
-                textures.getBlockTexture(object.ind_texture), SDL2pp::Rect(0, 0, 16, 16),
-                SDL2pp::Rect(camera.getScreenX(object.column * 16),  // 16 es el size de una unidad?
-                             camera.getScreenY(object.row * 16), camera.getScaledSize(16),
-                             camera.getScaledSize(16)));
+                textures.getBlockTexture(object.ind_texture), SDL2pp::Rect(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT),
+                SDL2pp::Rect(camera.getScreenX(object.column), 
+                             camera.getScreenY(object.row + BLOCK_HEIGHT), camera.getScaledSize(BLOCK_WIDTH),
+                             camera.getScaledSize(BLOCK_HEIGHT)));
     }
 
     for (const auto& object: matchDto.objects) {
 
         if (object.type == TypeDynamicObject::BOX) {
             renderer.Copy(
-                    textures.getTexture(TextureType::BOX), SDL2pp::Rect(0, 16, 16, 16),
-                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(object.pos.y),
-                                 camera.getScaledSize(16), camera.getScaledSize(16)));
+                    textures.getTexture(TextureType::BOX), SDL2pp::Rect(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT),
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(object.pos.y+BLOCK_HEIGHT*2),
+                                 camera.getScaledSize(BLOCK_WIDTH), camera.getScaledSize(BLOCK_HEIGHT)));
 
         } else if (object.type == TypeDynamicObject::PISTOLA_COWBOY) {
             renderer.Copy(

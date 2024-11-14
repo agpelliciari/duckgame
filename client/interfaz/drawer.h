@@ -12,6 +12,9 @@
 #include "camera.h"
 #include "texture_container.h"
 
+#define BLOCK_WIDTH 16
+#define BLOCK_HEIGHT 16
+
 #define COWBOY_GUN_WIDTH 22
 #define COWBOY_GUN_HEIGHT 11
 
