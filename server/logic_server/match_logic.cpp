@@ -200,17 +200,20 @@ void MatchLogic::damage_player(int id) {
 
 void MatchLogic::update_bullets(){
     for (auto bullet = bullets.begin(); bullet!=bullets.end();) {
-        bool impacted;
-        bool impacted_player;
-        int id_player;
+        bool impacted = false;
+        bool impacted_player = false;
+        int id_player = 0;
         bullet->get_data(impacted, impacted_player, id_player);
         if (impacted) {
             if (impacted_player) {
                 this->damage_player(id_player);
             }
+            std::cout << "ERASING BULLET !!\n";
             bullet = bullets.erase(bullet);
         } else {
+            std::cout << "MOVING BULLET !!\n";
             bullet->move(colition_map);
+            ++bullet;
         }
     }
 }
