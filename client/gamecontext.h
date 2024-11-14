@@ -7,6 +7,10 @@
 
 #include "common/clientprotocol.h"
 #include "common/dtosmap.h"
+
+#define MAP_BLOCK_UNIT 16
+
+
 struct GameContext {
     unsigned int id_lobby;  // cppcheck-suppress unusedStructMember
 

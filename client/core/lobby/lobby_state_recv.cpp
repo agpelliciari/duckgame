@@ -37,7 +37,7 @@ void LobbyStateRecv::handleNotify(const lobby_info& info) {
 
 void LobbyStateRecv::setInitedMatch(int totalplayers) {
     // Receive map data.
-    protocol.recvmapdata(context.map);
+    protocol.recvmapdata(context.map, MAP_BLOCK_UNIT);
 
     context.started = true;
     context.cantidadjugadores = totalplayers;
