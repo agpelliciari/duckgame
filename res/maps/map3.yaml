@@ -1,9 +1,9 @@
 size_x: 100
 size_y: 300
-background: default.png
+background: backgrounds/virtual.png
 blocks_z: 0
 boxes_z: 1
-box_texture: default_tex.png
+box_texture: backgrounds/virtual.png
 textures:
   - blocks/Nature/11.png
   - blocks/Nature/43.png

@@ -35,7 +35,7 @@ private:
 
 public:
     explicit TextureContainer(SDL2pp::Renderer& renderer,
-                              const std::vector<std::string>& _textures);
+                              const std::vector<std::string>& _textures, const std::string& background);
 
     SDL2pp::Texture& getTexture(TextureType type);
 

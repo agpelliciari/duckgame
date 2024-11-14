@@ -1,7 +1,7 @@
 #include "texture_container.h"
 
 TextureContainer::TextureContainer(SDL2pp::Renderer& renderer,
-                                   const std::vector<std::string>& _textures_objs) {
+                                   const std::vector<std::string>& _textures_objs, const std::string& background) {
 
     textures_blocks.reserve(_textures_objs.size());
     std::string data_path(&DATA_PATH[0]);
@@ -11,6 +11,10 @@ TextureContainer::TextureContainer(SDL2pp::Renderer& renderer,
         textures_blocks.emplace_back(renderer, data_path + tex_path);
     }
 
+    textures.emplace(TextureType::BACKGROUND,
+                     SDL2pp::Texture(renderer, data_path+background));
+
+
     textures.emplace(TextureType::YELLOW_DUCK,
                      SDL2pp::Texture(renderer, DATA_PATH "/duck_sprites/yellow_duck.png"));
     textures.emplace(TextureType::GREY_DUCK,
@@ -19,8 +23,6 @@ TextureContainer::TextureContainer(SDL2pp::Renderer& renderer,
                      SDL2pp::Texture(renderer, DATA_PATH "/duck_sprites/orange_duck.png"));
     textures.emplace(TextureType::WHITE_DUCK,
                      SDL2pp::Texture(renderer, DATA_PATH "/duck_sprites/white_duck.png"));
-    textures.emplace(TextureType::BACKGROUND,
-                     SDL2pp::Texture(renderer, DATA_PATH "/backgrounds/virtual.png"));
     textures.emplace(TextureType::TREE, SDL2pp::Texture(renderer, DATA_PATH "/notexture.png"));
     textures.emplace(TextureType::BOX, SDL2pp::Texture(renderer, DATA_PATH "/boxes/itemBox1.png"));
     textures.emplace(TextureType::COWBOY_GUN,

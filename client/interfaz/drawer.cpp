@@ -3,7 +3,7 @@
 Drawer::Drawer(SDL2pp::Window& window, Animation& animation, const GameContext& gameContext,
                Camera& camera):
         renderer(window, -1, SDL_RENDERER_ACCELERATED),
-        textures(renderer, gameContext.map.textures),
+        textures(renderer, gameContext.map.textures, gameContext.map.background),
         animation(animation),
         camera(camera),
         context(gameContext),

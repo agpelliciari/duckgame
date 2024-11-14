@@ -82,7 +82,7 @@ uint8_t MapSerializer::mapTexture(const std::string& tex_name) {
 
 void MapSerializer::setBackground(const char* rel_path) {
     std::cout << "SET BACKGROUND " << rel_path << std::endl;
-    root[MapSerializer::BACKGROUND] << DEF_MAP_BK;
+    root[MapSerializer::BACKGROUND] << rel_path;
 }
 
 void MapSerializer::setBackground(const std::string& rel_path) { setBackground(rel_path.c_str()); }

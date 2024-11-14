@@ -1,0 +1,337 @@
+size_x: 50
+size_y: 40
+background: backgrounds/forest2.png
+blocks_z: 3
+boxes_z: 2
+box_texture: boxes/itemBox1.png
+textures:
+  - blocks/Castle/38.png
+  - blocks/Castle/32.png
+  - blocks/Castle/33.png
+  - blocks/Castle/46.png
+  - blocks/Castle/41.png
+  - blocks/Castle/36.png
+  - spawns/players/respawner.png
+  - decorations/notexture.png
+blocks:
+  - x: 31
+    y: 6
+    ind_tex: 0
+  - x: 31
+    y: 7
+    ind_tex: 1
+  - x: 31
+    y: 8
+    ind_tex: 2
+  - x: 31
+    y: 9
+    ind_tex: 1
+  - x: 31
+    y: 10
+    ind_tex: 1
+  - x: 31
+    y: 11
+    ind_tex: 1
+  - x: 31
+    y: 12
+    ind_tex: 1
+  - x: 31
+    y: 13
+    ind_tex: 1
+  - x: 31
+    y: 14
+    ind_tex: 1
+  - x: 31
+    y: 15
+    ind_tex: 1
+  - x: 31
+    y: 16
+    ind_tex: 1
+  - x: 31
+    y: 17
+    ind_tex: 3
+  - x: 32
+    y: 8
+    ind_tex: 4
+  - x: 32
+    y: 17
+    ind_tex: 4
+  - x: 32
+    y: 22
+    ind_tex: 0
+  - x: 32
+    y: 23
+    ind_tex: 1
+  - x: 32
+    y: 24
+    ind_tex: 1
+  - x: 32
+    y: 25
+    ind_tex: 1
+  - x: 32
+    y: 26
+    ind_tex: 2
+  - x: 32
+    y: 27
+    ind_tex: 1
+  - x: 32
+    y: 28
+    ind_tex: 1
+  - x: 32
+    y: 29
+    ind_tex: 1
+  - x: 32
+    y: 30
+    ind_tex: 1
+  - x: 32
+    y: 31
+    ind_tex: 1
+  - x: 32
+    y: 32
+    ind_tex: 2
+  - x: 32
+    y: 33
+    ind_tex: 1
+  - x: 32
+    y: 34
+    ind_tex: 1
+  - x: 32
+    y: 35
+    ind_tex: 1
+  - x: 32
+    y: 36
+    ind_tex: 1
+  - x: 32
+    y: 37
+    ind_tex: 1
+  - x: 32
+    y: 38
+    ind_tex: 1
+  - x: 32
+    y: 39
+    ind_tex: 1
+  - x: 32
+    y: 40
+    ind_tex: 1
+  - x: 32
+    y: 41
+    ind_tex: 1
+  - x: 32
+    y: 42
+    ind_tex: 3
+  - x: 33
+    y: 26
+    ind_tex: 4
+  - x: 33
+    y: 32
+    ind_tex: 4
+  - x: 33
+    y: 42
+    ind_tex: 4
+  - x: 38
+    y: 11
+    ind_tex: 0
+  - x: 38
+    y: 12
+    ind_tex: 1
+  - x: 38
+    y: 13
+    ind_tex: 1
+  - x: 38
+    y: 14
+    ind_tex: 1
+  - x: 38
+    y: 15
+    ind_tex: 1
+  - x: 38
+    y: 16
+    ind_tex: 2
+  - x: 38
+    y: 17
+    ind_tex: 1
+  - x: 38
+    y: 18
+    ind_tex: 1
+  - x: 38
+    y: 19
+    ind_tex: 1
+  - x: 38
+    y: 20
+    ind_tex: 1
+  - x: 38
+    y: 21
+    ind_tex: 1
+  - x: 38
+    y: 22
+    ind_tex: 1
+  - x: 38
+    y: 23
+    ind_tex: 5
+  - x: 39
+    y: 16
+    ind_tex: 4
+  - x: 39
+    y: 32
+    ind_tex: 0
+  - x: 39
+    y: 33
+    ind_tex: 1
+  - x: 39
+    y: 34
+    ind_tex: 1
+  - x: 39
+    y: 35
+    ind_tex: 1
+  - x: 39
+    y: 36
+    ind_tex: 1
+  - x: 39
+    y: 37
+    ind_tex: 1
+  - x: 39
+    y: 38
+    ind_tex: 1
+  - x: 39
+    y: 39
+    ind_tex: 1
+  - x: 39
+    y: 40
+    ind_tex: 1
+  - x: 39
+    y: 41
+    ind_tex: 1
+  - x: 39
+    y: 42
+    ind_tex: 1
+  - x: 39
+    y: 43
+    ind_tex: 5
+  - x: 31
+    y: 27
+    ind_tex: 6
+  - x: 31
+    y: 33
+    ind_tex: 6
+  - x: 37
+    y: 17
+    ind_tex: 6
+decorations:
+  - x: 0
+    y: 0
+    z_ind: 3
+    ind_tex: 7
+  - x: 0
+    y: 1
+    z_ind: 3
+    ind_tex: 7
+  - x: 0
+    y: 49
+    z_ind: 3
+    ind_tex: 7
+  - x: 1
+    y: 0
+    z_ind: 3
+    ind_tex: 7
+  - x: 1
+    y: 49
+    z_ind: 3
+    ind_tex: 7
+  - x: 27
+    y: 1
+    z_ind: 3
+    ind_tex: 7
+  - x: 27
+    y: 10
+    z_ind: 3
+    ind_tex: 7
+  - x: 28
+    y: 0
+    z_ind: 3
+    ind_tex: 7
+  - x: 28
+    y: 10
+    z_ind: 3
+    ind_tex: 7
+  - x: 29
+    y: 0
+    z_ind: 3
+    ind_tex: 7
+  - x: 29
+    y: 1
+    z_ind: 3
+    ind_tex: 7
+  - x: 29
+    y: 10
+    z_ind: 3
+    ind_tex: 7
+  - x: 30
+    y: 1
+    z_ind: 3
+    ind_tex: 7
+  - x: 30
+    y: 10
+    z_ind: 3
+    ind_tex: 7
+  - x: 32
+    y: 1
+    z_ind: 3
+    ind_tex: 7
+  - x: 33
+    y: 1
+    z_ind: 3
+    ind_tex: 7
+  - x: 34
+    y: 0
+    z_ind: 3
+    ind_tex: 7
+  - x: 35
+    y: 0
+    z_ind: 3
+    ind_tex: 7
+  - x: 36
+    y: 0
+    z_ind: 3
+    ind_tex: 7
+  - x: 38
+    y: 0
+    z_ind: 3
+    ind_tex: 7
+  - x: 39
+    y: 0
+    z_ind: 3
+    ind_tex: 7
+  - x: 39
+    y: 49
+    z_ind: 3
+    ind_tex: 7
+boxes:
+  - x: 30
+    y: 14
+  - x: 32
+    y: 21
+  - x: 38
+    y: 24
+  - x: 38
+    y: 25
+  - x: 39
+    y: 7
+  - x: 39
+    y: 8
+  - x: 39
+    y: 27
+  - x: 39
+    y: 28
+  - x: 39
+    y: 29
+  - x: 39
+    y: 30
+  - x: 39
+    y: 31
+spawns_item:
+  - x: 31
+    y: 27
+  - x: 31
+    y: 33
+  - x: 37
+    y: 17
+spawns_player: []
