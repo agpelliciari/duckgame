@@ -6,15 +6,15 @@ PhysicalBullet::PhysicalBullet(int init_coord_x, int init_coord_y):
         impacted(false), impacted_in_player(false), id_impacted_player(0){}
 
 void PhysicalBullet::shoot_up(){
-        this->add_speed(0, 40);
+        this->add_speed(0, 5);
 }
 
 void PhysicalBullet::shoot_left(){
-        this->add_speed(-40, 0);
+        this->add_speed(-5, 0);
 }
 
 void PhysicalBullet::shoot_right(){
-        this->add_speed(40, 0);
+        this->add_speed(5, 0);
 }
 
 void PhysicalBullet::react_to_sides_collision(bool is_player, int id_player) {

@@ -23,7 +23,8 @@ enum class TextureType {
     HELMET_ARMOR,
     PLAYER_INDICATOR,
     SCOREBOARD,
-    FONT
+    FONT, 
+    SIMPLE_BULLET
 };
 
 class TextureContainer {

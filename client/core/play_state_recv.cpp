@@ -27,6 +27,11 @@ void PlayStateRecv::run() {
 
             for (DynamicObjDTO& obj: state.objects) {
                 // MAP_BLOCK_UNIT*
+                if(obj.type == TypeDynamicObject::PROJECTILE){
+                   obj.pos.y = (context.map.height - obj.pos.y);  // Inverti!
+                   continue;
+                }
+                
                 obj.pos.y = (context.map.height - obj.pos.y * MAP_BLOCK_UNIT);  // Inverti!
                 obj.pos.x = (obj.pos.x);
             }

@@ -34,6 +34,10 @@ TextureContainer::TextureContainer(SDL2pp::Renderer& renderer,
     textures.emplace(TextureType::SCOREBOARD,
                      SDL2pp::Texture(renderer, DATA_PATH "/leaderboard/scoreboard.png"));
     textures.emplace(TextureType::FONT, SDL2pp::Texture(renderer, DATA_PATH "/font/biosFont.png"));
+    
+    textures.emplace(TextureType::SIMPLE_BULLET, SDL2pp::Texture(renderer, DATA_PATH "/weapons/chainBullet.png"));
+    
+    
 }
 
 SDL2pp::Texture& TextureContainer::getBlockTexture(int index) { return textures_blocks[index]; }
