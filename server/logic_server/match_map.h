@@ -8,17 +8,17 @@
 class MatchMap {
 
 private:
-    int width;
-    int height;
+    int width;                                // cppcheck-suppress unusedStructMember
+    int height;                               // cppcheck-suppress unusedStructMember
     std::vector<std::vector<bool>> game_map;  // cppcheck-suppress unusedStructMember
-    std::vector<MapObjectServer> objects;
+    std::vector<MapObjectServer> objects;     // cppcheck-suppress unusedStructMember
 
 public:
     MatchMap(int size_x, int size_y);
 
     void add_temp_collision(const int x, const int y);
 
-    void add_collision(Tuple position, Tuple dimension);
+    void add_collision(Tuple position, Tuple dimension, bool is_player, int id_player);
     void clear_objects();
 
     int getWidth() const;
@@ -27,7 +27,7 @@ public:
     bool out_of_map_y(const int y) const;
     bool out_of_map_x(const int x) const;
 
-    bool check_collision(const int x, const int y) const;
+    bool check_collision(const int x, const int y, bool &is_player, int &id_player) const;
     bool check_horizontal_collision(const int x, const int y) const;
     bool check_vertical_collision(const int x, const int y) const;
 };
