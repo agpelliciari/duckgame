@@ -2,6 +2,7 @@
 #define PLAY_STATE_RECV_H
 
 #include "client/eventlistener.h"
+#include "client/gamecontext.h"
 #include "common/clientprotocol.h"
 #include "common/thread.h"
 
@@ -12,9 +13,11 @@ class PlayStateRecv: public Thread {
 protected:
     ClientProtocol& protocol;  // cppcheck-suppress unusedStructMember
     EventListener& listener;   // cppcheck-suppress unusedStructMember
+    GameContext& context;      // cppcheck-suppress unusedStructMember
 
 public:
-    explicit PlayStateRecv(ClientProtocol& _protocol, EventListener& _listener);
+    explicit PlayStateRecv(ClientProtocol& _protocol, EventListener& _listener,
+                           GameContext& _context);
 
     // Asumamos por ahora que no se quiere permitir copias, ni mov.
     PlayStateRecv(const PlayStateRecv&) = delete;
