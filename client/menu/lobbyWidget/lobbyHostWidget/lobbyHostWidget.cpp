@@ -6,16 +6,19 @@ LobbyHostWidget::LobbyHostWidget(const LobbyHostHandler& handler, QWidget* paren
         QWidget(parent), ui(new Ui::LobbyHostWidget), handler(handler) {
     ui->setupUi(this);
 
-    ui->mapDropdown->addItem("Map 1");
-    ui->mapDropdown->addItem("Map 2");
-    ui->mapDropdown->addItem("Map 3");
-
     connect(ui->startButton, &QPushButton::clicked, this, &LobbyHostWidget::onClickStart);
     connect(ui->cancelButton, &QPushButton::clicked, this, &LobbyHostWidget::onClickCancel);
 }
 
 void LobbyHostWidget::updateIdDisplayedInLobby(int id) {
     ui->lobbyIDLabel->setText(QString("Lobby ID: %1").arg(id));
+}
+
+void LobbyHostWidget::updateMapsDisplayedInLobby(const std::vector<std::string>& maps) {
+    ui->mapDropdown->clear();
+    for (const std::string& map : maps) {
+        ui->mapDropdown->addItem(QString::fromStdString(map));
+    }
 }
 
 void LobbyHostWidget::addPlayerToLobby() {
@@ -45,7 +48,7 @@ LobbyHostWidget::~LobbyHostWidget() { delete ui; }
 
 void LobbyHostWidget::onClickStart() {
     if (handler.onClickStart)
-        handler.onClickStart();
+        handler.onClickStart(ui->mapDropdown->currentText().toStdString());
 }
 
 void LobbyHostWidget::onClickCancel() {

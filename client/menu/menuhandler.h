@@ -38,6 +38,7 @@ public:
 
     // Acciones en el menu a partir de las notificaciones
     void setLobbyId(int lobbyId);
+    void setLobbyMaps(const std::vector<std::string>& maps);
     void addSoloToLobby();
     void addDuoToLobby();
     void removePlayerFromLobby();

@@ -3,10 +3,12 @@
 
 #include <QWidget>
 
+#include <vector>
+
 #include "../playerWidget/playerWidget.h"
 
 struct LobbyHostHandler {
-    std::function<void()> onClickStart;
+    std::function<void(const std::string&)> onClickStart;
     std::function<void()> onClickCancel;
 };
 
@@ -27,6 +29,8 @@ public:
     explicit LobbyHostWidget(const LobbyHostHandler& handler, QWidget* parent = nullptr);
 
     void updateIdDisplayedInLobby(int id);
+
+    void updateMapsDisplayedInLobby(const std::vector<std::string>& maps);
 
     void addPlayerToLobby();
 

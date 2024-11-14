@@ -3,11 +3,13 @@
 
 #include <cstdint>
 #include <string>
+#include <vector>
 
 class Menu;
 
 enum Action {
     SetLobbyId,
+    SetLobbyMaps,
     AddSoloToLobby,
     AddDuoToLobby,
     RemovePlayerFromLobby,
@@ -22,14 +24,17 @@ class MenuAction {
 private:
     Action action;
     int lobbyId;
+    std::vector<std::string> maps;
     std::string message;
 
-    MenuAction(Action action, int lobbyId, const std::string& message);
+    MenuAction(Action action, const std::string& message);
 
 public:
     MenuAction();
 
     static MenuAction SetLobbyId(int lobbyId);
+
+    static MenuAction SetLobbyMaps(const std::vector<std::string>& maps);
 
     static MenuAction AddSoloToLobby();
 
@@ -46,6 +51,10 @@ public:
     static MenuAction CancelLobby(const std::string& message);
 
     void exec(Menu& menu);
+
+    void setId(int lobbyId);
+    
+    void setMaps(const std::vector<std::string>& maps);
 };
 
 #endif

@@ -25,6 +25,18 @@ void Menu::updateIdDisplayedInLobby(int id) {
     }
 }
 
+void Menu::updateMapsDisplayedInLobby(const std::vector<std::string>& maps) {
+    QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(ui->centralwidget->layout());
+
+    if (layout->count() == 0)
+        throw std::runtime_error("There is no widget mounted");
+
+    QWidget* widget = layout->itemAt(0)->widget();
+    if (auto* lobbyHostWidget = qobject_cast<LobbyHostWidget*>(widget)) {
+        lobbyHostWidget->updateMapsDisplayedInLobby(maps);
+    }
+}
+
 void Menu::displayNotification(const std::string& label) {
     NotificationHandler notificationHandler{.label = label,
                                             .onClose = [this] { unMountNotification(); }};
@@ -185,7 +197,7 @@ void Menu::mountSetSoloDuo(SetSoloDuoHandler setSoloDuoHandler) {
 }
 
 void Menu::mountLobbyHost() {
-    LobbyHostHandler lobbyHostHandler{.onClickStart = [this] { handler.onStartLobby("Mapa 1"); },
+    LobbyHostHandler lobbyHostHandler{.onClickStart = [this](const std::string& selectedMap) { handler.onStartLobby(selectedMap); },
                                       .onClickCancel =
                                               [this] {
                                                   handler.onCancelLobby();

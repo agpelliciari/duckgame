@@ -40,6 +40,8 @@ public:
 
     void updateIdDisplayedInLobby(int id);
 
+    void updateMapsDisplayedInLobby(const std::vector<std::string>& maps);
+
     void displayNotification(const std::string& label);
 
     void addPlayerToLobby();
