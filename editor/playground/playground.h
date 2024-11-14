@@ -8,6 +8,8 @@
 #include <QBrush>
 #include <QColor>
 #include <QMouseEvent>
+#include <QScrollBar>
+
 
 #include "../types.h"
 
@@ -34,6 +36,9 @@ class Playground : public QGraphicsView {
     Q_OBJECT
 
 private:
+    static constexpr int MAX_WIDTH = 50;
+    static constexpr int MAX_HEIGHT = 40;
+    static constexpr int TEXTURE_SIZE = 16;
     static constexpr int ZOOM_STEP = 50;
     static constexpr int ZOOM_MIN = 100;
     static constexpr int ZOOM_MAX = 300;
@@ -47,9 +52,8 @@ private:
     std::vector<QGraphicsRectItem*> nonPhysicalObjects;
 
     int scaleFactor = ZOOM_MIN;
-    const int width = 20;
-    const int height = 10;
-    const int textureSize = 16;
+    bool isDragging = false;
+    QPoint lastMousePosition;
 
 public:
     explicit Playground(const PlaygroundHandler& handler, QWidget* parent = nullptr);
@@ -85,7 +89,13 @@ public:
 private:
     void initializeMap();
 
+    void wheelEvent(QWheelEvent */*event*/) override {};
+
     void mousePressEvent(QMouseEvent* event) override;
+
+    void mouseReleaseEvent(QMouseEvent* event) override;
+
+    void mouseMoveEvent(QMouseEvent* event) override;
 
     void zoom(int scaleFactor);
 

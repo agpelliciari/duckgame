@@ -5,11 +5,12 @@ Playground::Playground(const PlaygroundHandler& handler, QWidget* parent): QGrap
     ui->setupUi(this);
     qRegisterMetaType<MapObjectData>("MapObjectData");
 
+
     initializeMap();
 }
 
 void Playground::setBackground(Texture texture) {
-    QPixmap pixelMap = texture.pixelMap.scaled(width * textureSize, height * textureSize, Qt::IgnoreAspectRatio);
+    QPixmap pixelMap = texture.pixelMap.scaled(MAX_WIDTH * TEXTURE_SIZE, MAX_HEIGHT * TEXTURE_SIZE, Qt::IgnoreAspectRatio);
     background->setBrush(pixelMap);
 
     setMapObjectData(background, texture.mapObjectType, texture.source) ;
@@ -101,19 +102,19 @@ Playground::~Playground() {
 
 void Playground::initializeMap() {
     setScene(map);
-    map->setSceneRect(0, 0, width * textureSize, height * textureSize);
+    map->setSceneRect(0, 0, MAX_WIDTH * TEXTURE_SIZE, MAX_HEIGHT * TEXTURE_SIZE);
 
-    background = new QGraphicsRectItem(0, 0, width * textureSize, height * textureSize);
+    background = new QGraphicsRectItem(0, 0, MAX_WIDTH * TEXTURE_SIZE, MAX_HEIGHT * TEXTURE_SIZE);
     background->setBrush(Qt::NoBrush);
     background->setPen(Qt::NoPen);
     background->setZValue(1);
     background->setData(0, QVariant::fromValue(MapObjectData{ 1, 1, 1, MapObjectType::Empty, "" }));
     map->addItem(background);
 
-    for (int row = 0; row < height; ++row) {
-        for (int col = 0; col < width; ++col) {
+    for (int row = 0; row < MAX_HEIGHT; ++row) {
+        for (int col = 0; col < MAX_WIDTH; ++col) {
             QGraphicsRectItem* physicalObject = map->addRect(
-                col * textureSize, row * textureSize, textureSize, textureSize,
+                col * TEXTURE_SIZE, row * TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE,
                 QPen(Qt::NoPen), Qt::NoBrush
             );
             physicalObject->setZValue(2);
@@ -122,10 +123,10 @@ void Playground::initializeMap() {
         }
     }
 
-    for (int row = 0; row < height; ++row) {
-        for (int col = 0; col < width; ++col) {
+    for (int row = 0; row < MAX_HEIGHT; ++row) {
+        for (int col = 0; col < MAX_WIDTH; ++col) {
             QGraphicsRectItem* nonPhysicalObject = map->addRect(
-                col * textureSize, row * textureSize, textureSize, textureSize,
+                col * TEXTURE_SIZE, row * TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE,
                 QPen(Qt::NoPen), Qt::NoBrush
             );
             nonPhysicalObject->setZValue(3);
@@ -142,6 +143,35 @@ void Playground::mousePressEvent(QMouseEvent* event) {
         handler.onLeftClick(position.toPoint());
     } else if (event->button() == Qt::RightButton) {
         handler.onRightClick(position.toPoint());
+    } else if (event->button() == Qt::MiddleButton) {
+        isDragging = true;
+        lastMousePosition = event->pos();
+        setCursor(Qt::ClosedHandCursor);
+        event->accept();
+    } else {
+        QGraphicsView::mousePressEvent(event);
+    }
+}
+
+void Playground::mouseMoveEvent(QMouseEvent* event) {
+    if (isDragging) {
+        QPoint delta = event->pos() - lastMousePosition;
+        lastMousePosition = event->pos();
+        horizontalScrollBar()->setValue(horizontalScrollBar()->value() - delta.x());
+        verticalScrollBar()->setValue(verticalScrollBar()->value() - delta.y());
+        event->accept();
+    } else {
+        QGraphicsView::mouseMoveEvent(event);
+    }
+}
+
+void Playground::mouseReleaseEvent(QMouseEvent* event) {
+    if (event->button() == Qt::MiddleButton) {
+        isDragging = false;
+        setCursor(Qt::ArrowCursor);
+        event->accept();
+    } else {
+        QGraphicsView::mouseReleaseEvent(event);
     }
 }
 
@@ -163,10 +193,10 @@ void Playground::cleanObjectData(QGraphicsRectItem* mapObject) {
 }
 
 QGraphicsRectItem* Playground::mapObjectAt(std::vector<QGraphicsRectItem*> mapObjects, QPoint position) {
-    int column = static_cast<int>(position.x()) / textureSize;
-    int row = static_cast<int>(position.y()) / textureSize;
+    int column = static_cast<int>(position.x()) / TEXTURE_SIZE;
+    int row = static_cast<int>(position.y()) / TEXTURE_SIZE;
 
-    if (column < 0 || column >= width || row < 0 || row >= height)
+    if (column < 0 || column >= MAX_WIDTH || row < 0 || row >= MAX_HEIGHT)
         return nullptr;
 
     for (QGraphicsRectItem* mapObject : mapObjects) {
