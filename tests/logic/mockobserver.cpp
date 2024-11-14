@@ -1,5 +1,7 @@
 #include "./mockobserver.h"
 
+#include <iostream>
+
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
@@ -10,8 +12,50 @@ MockObserver::MockObserver(const MatchDto& firstUpdate, const int count):
         TesterMatchDTO(firstUpdate), players() {
     players.reserve(count);
     for (int i = 0; i < count; i++) {
-        players[i] = i + 1;
+        players.push_back(i + 1);
     }
+}
+
+const PlayerDTO* MockObserver::getPlayer(int id) const { return curr_state.getPlayer(id); }
+
+void MockObserver::assertPlayerMovedHigher(const PlayerDTO* playerGiven,
+                                           const PlayerDTO* playerBase) {
+    ASSERT_LT(playerGiven->pos.y, playerBase->pos.y)
+            << "New y coord of player is effectivily less than last one, which means higher";
+}
+
+
+void MockObserver::assertPlayerMovedRight(const PlayerDTO* playerGiven,
+                                          const PlayerDTO* playerBase) {
+    ASSERT_EQ(playerGiven->move_action, TypeMoveAction::MOVE_RIGHT)
+            << "Player is currently moving right on ground";
+    ASSERT_GT(playerGiven->pos.x, playerBase->pos.x)
+            << "New x coord of player is effectivily greater than last one";
+}
+
+void MockObserver::assertPlayerMovedAirRight(const PlayerDTO* playerGiven,
+                                             const PlayerDTO* playerBase) {
+    ASSERT_EQ(playerGiven->move_action, TypeMoveAction::AIR_RIGHT)
+            << "Player is currently moving right on air";
+    ASSERT_GT(playerGiven->pos.x, playerBase->pos.x)
+            << "New x coord of player is effectivily greater than last one";
+}
+
+
+void MockObserver::assertPlayerMovedLeft(const PlayerDTO* playerGiven,
+                                         const PlayerDTO* playerBase) {
+    ASSERT_EQ(playerGiven->move_action, TypeMoveAction::MOVE_LEFT)
+            << "Player is currently moving left on ground";
+    ASSERT_LT(playerGiven->pos.x, playerBase->pos.x)
+            << "New x coord of player is effectivily less than last one";
+}
+
+void MockObserver::assertPlayerMovedAirLeft(const PlayerDTO* playerGiven,
+                                            const PlayerDTO* playerBase) {
+    ASSERT_EQ(playerGiven->move_action, TypeMoveAction::AIR_LEFT)
+            << "Player is currently moving left on air";
+    ASSERT_LT(playerGiven->pos.x, playerBase->pos.x)
+            << "New x coord of player is effectivily less than last one";
 }
 
 
@@ -36,6 +80,18 @@ void MockObserver::assertHasAllPlayers() {
     }
 }
 
+MatchDto MockObserver::sendActionAndUpdate(MatchState& match, const PlayerActionType& _type,
+                                           uint8_t _playerind) {
+    MatchDto bfr = curr_state;
+
+    PlayerActionDTO action(_type, _playerind);
+    match.pushAction(action);
+
+    match.step();
+    match.send_results(*this);
+
+    return bfr;
+}
 
 // Inteface..
 
