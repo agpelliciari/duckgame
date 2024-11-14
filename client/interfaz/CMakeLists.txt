@@ -7,6 +7,8 @@ target_sources(taller_client
     event_handler.cpp
     drawer.cpp
     camera.cpp
+    sound_manager.cpp
+    sound_container.cpp
     
     PUBLIC
     # .h files
@@ -16,4 +18,6 @@ target_sources(taller_client
     event_handler.h
     drawer.h
     camera.h
+    sound_manager.h
+    sound_container.h
     )
