@@ -14,6 +14,8 @@ target_sources(taller_server_logic
             action_command.cpp
             physical_object.cpp
             physical_player.cpp
+            cowboy_pistol_weapon.cpp
+            physical_bullet.cpp
 
 
 
@@ -33,6 +35,9 @@ target_sources(taller_server_logic
             matchobserver.h
             physical_object.h
             physical_player.h
+            shooting_direction.h
+            cowboy_pistol_weapon.h
+            physical_bullet.h
 
 
 

@@ -46,7 +46,7 @@ MatchLogic::MatchLogic(): colition_map(700, 500) {
         this->add_player_speed(index, 0, 0);
     };
     this->command_map[PlayerActionType::SHOOT] = [this](int index) {
-        this->add_player_speed(index, 0, 0);
+        this->player_shoot(index);
     };
 
 
@@ -58,13 +58,41 @@ MatchLogic::MatchLogic(): colition_map(700, 500) {
 
 void MatchLogic::add_player(int id) {
     players.push_back(Player(id, 10 + id * 50, 1));
-    colition_map.add_collision(players.back().get_map_position(), players.back().get_dimension());
+    colition_map.add_collision(players.back().get_map_position(), players.back().get_dimension(),
+                               true, players.back().get_id());
 }
 
 void MatchLogic::add_player_speed(int id, int speed_x, int speed_y) {
     for (Player& player: players) {
         if (player.same_id(id)) {
             player.add_speed(speed_x, speed_y);
+            return;
+        }
+    }
+}
+
+void MatchLogic::player_shoot(int id) {
+    for (Player& player: players) {
+        if (player.same_id(id)) {
+            player.shoot(this->bullets);
+            return;
+        }
+    }
+}
+
+void MatchLogic::player_aim_up_start(int id) {
+    for (Player& player: players) {
+        if (player.same_id(id)) {
+            player.aim_up_start();
+            return;
+        }
+    }
+}
+
+void MatchLogic::player_aim_up_end(int id) {
+    for (Player& player: players) {
+        if (player.same_id(id)) {
+            player.aim_up_end();
             return;
         }
     }
@@ -88,11 +116,11 @@ void MatchLogic::update_players() {
 void MatchLogic::update_colition_map() {
     colition_map.clear_objects();
     for (Player& player: players) {
-        colition_map.add_collision(player.get_map_position(), player.get_dimension());
+        colition_map.add_collision(player.get_map_position(), player.get_dimension(), true, player.get_id());
     }
     for (Box& box: boxes) {
         if (box.is_spawned()){
-            colition_map.add_collision(box.get_spawn_point(), box.get_dimension());
+            colition_map.add_collision(box.get_spawn_point(), box.get_dimension(), false, 0);
         }
     }
 }
@@ -110,7 +138,7 @@ void MatchLogic::update_colition_map() {
 }*/
 
 void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos, std::vector<DynamicObjDTO>& objects) {
-    for (Player player: players) {
+    for (Player &player: players) {
 
         PlayerDTO dto = {0, false, 0, 0, TypeWeapon::NONE, false, false, TypeMoveAction::NONE};
         player.get_data(dto.id, dto.pos.x, dto.pos.y, dto.weapon, dto.helmet, dto.chest_armor,
@@ -133,6 +161,11 @@ void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos, std::vector<DynamicObjDT
         objects.push_back(dto);
     }
 
+    for (PhysicalBullet bullet: bullets) {
+        Tuple position = bullet.get_position();
+        DynamicObjDTO dto = {position.x, position.y, TypeDynamicObject::PROJECTILE};
+        objects.push_back(dto);
+    }
 
 }
 
@@ -149,6 +182,36 @@ void MatchLogic::add_boxes(const std::vector<struct MapPoint>& boxes){
 void MatchLogic::add_items(const std::vector<struct MapPoint>& items){
     for (const struct MapPoint& item: items) {
         this->items.push_back(Item(TypeDynamicObject::PISTOLA_COWBOY, item.x, item.y, 10, 10, 5, 0.025));
+    }
+}
+
+void MatchLogic::add_bullet(PhysicalBullet bullet){
+    this->bullets.push_back(bullet);
+}
+
+void MatchLogic::damage_player(int id) {
+    for (Player& player: players) {
+        if (player.same_id(id)) {
+            player.take_damage();
+            return;
+        }
+    }
+}
+
+void MatchLogic::update_bullets(){
+    for (auto bullet = bullets.begin(); bullet!=bullets.end();) {
+        bool impacted;
+        bool impacted_player;
+        int id_player;
+        bullet->get_data(impacted, impacted_player, id_player);
+        if (impacted) {
+            if (impacted_player) {
+                this->damage_player(id_player);
+            }
+            bullet = bullets.erase(bullet);
+        } else {
+            bullet->move(colition_map);
+        }
     }
 }
 

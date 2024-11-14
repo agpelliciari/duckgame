@@ -12,6 +12,7 @@
 #include "match_map.h"
 #include "player.h"
 #include "tuple.h"
+#include "physical_bullet.h"
 
 #ifndef MATCH_LOGIC_H
 #define MATCH_LOGIC_H
@@ -25,6 +26,7 @@ private:
     std::vector<Player> players;  // cppcheck-suppress unusedStructMember
     std::vector<Box> boxes;       // cppcheck-suppress unusedStructMember
     std::vector<Item> items;     // cppcheck-suppress unusedStructMember
+    std::vector<PhysicalBullet> bullets; // cppcheck-suppress unusedStructMember
 
     // std::vector<std::vector<bool>> colition_map; // cppcheck-suppress unusedStructMember
 
@@ -44,6 +46,12 @@ public:
     //void add_colition(PhysicalObject &object);
     void add_boxes(const std::vector<struct MapPoint>& boxes);
     void add_items(const std::vector<struct MapPoint>& items);
+    void add_bullet(PhysicalBullet bullet);
+    void update_bullets();
+    void player_shoot(int index);
+    void player_aim_up_start(int index);
+    void player_aim_up_end(int index);
+    void damage_player(int id);
     ~MatchLogic();
 };
 
