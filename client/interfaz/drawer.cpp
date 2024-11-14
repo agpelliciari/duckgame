@@ -3,7 +3,7 @@
 Drawer::Drawer(SDL2pp::Window& window, Animation& animation, const GameContext& gameContext,
                Camera& camera):
         renderer(window, -1, SDL_RENDERER_ACCELERATED),
-        textures(renderer),
+        textures(renderer, gameContext.map.textures),
         animation(animation),
         camera(camera),
         context(gameContext) {}
@@ -32,13 +32,12 @@ void Drawer::drawBackground() {
 
 void Drawer::drawObjects() {
     // inicialmente dibujo solo los primeros 4 elementos del .yaml
-    for (int i = 0; i < 4; i++) {
-
-        renderer.Copy(textures.getTexture((int)context.blocks[i].texture),
-                      SDL2pp::Rect(0, 0, 73, 93),
-                      SDL2pp::Rect(camera.getScreenX(context.blocks[i].pos.x),
-                                   camera.getScreenY(context.blocks[i].pos.y),
-                                   camera.getScaledSize(73), camera.getScaledSize(93)));
+    for (const MapObject& object: context.map.objects) {
+        renderer.Copy(
+                textures.getBlockTexture(object.ind_texture), SDL2pp::Rect(0, 0, 73, 93),
+                SDL2pp::Rect(camera.getScreenX(object.column * 16),  // 16 es el size de una unidad?
+                             camera.getScreenY(object.row * 16), camera.getScaledSize(16),
+                             camera.getScaledSize(16)));
     }
 }
 
