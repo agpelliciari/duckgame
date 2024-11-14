@@ -7,7 +7,8 @@ Drawer::Drawer(SDL2pp::Window& window, Animation& animation, const GameContext& 
         animation(animation),
         camera(camera),
         context(gameContext),
-        startTime(std::chrono::steady_clock::now()) {}
+        startTime(std::chrono::steady_clock::now()),
+        showIndicators(true) {}
 
 void Drawer::drawPlayer(const PlayerDTO& player) {
     static const std::unordered_map<int, TextureType> duckTextures = {{1, TextureType::YELLOW_DUCK},
@@ -147,6 +148,13 @@ void Drawer::drawObjects(const MatchDto& matchDto) {
     }
 }
 
+void Drawer::updateIndicatorFlag() {
+    auto currentTime = std::chrono::steady_clock::now();
+    auto elapsedTime =
+            std::chrono::duration_cast<std::chrono::seconds>(currentTime - startTime).count();
+    showIndicators = elapsedTime < INDICATOR_MAX_TIME;
+}
+
 void Drawer::draw(const MatchDto& matchDto) {
     renderer.Clear();
 
@@ -154,11 +162,7 @@ void Drawer::draw(const MatchDto& matchDto) {
 
     drawObjects(matchDto);
 
-    // encapsular en una funcion //TODO: consultar si es lo mas eficiente
-    auto currentTime = std::chrono::steady_clock::now();
-    auto elapsedTime =
-            std::chrono::duration_cast<std::chrono::seconds>(currentTime - startTime).count();
-    bool showIndicators = elapsedTime < INDICATOR_MAX_TIME;
+    updateIndicatorFlag();
 
     for (const PlayerDTO& player: matchDto.players) {
 

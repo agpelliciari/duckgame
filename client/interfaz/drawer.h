@@ -43,6 +43,10 @@ private:
 
     std::chrono::time_point<std::chrono::steady_clock> startTime;
 
+    bool showIndicators;  // cppcheck-suppress unusedStructMember
+
+    void updateIndicatorFlag();
+
     void drawPlayer(const PlayerDTO& player);
 
     void drawIndicator(const PlayerDTO& player, bool isMainPlayer);
