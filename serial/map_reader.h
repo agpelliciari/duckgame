@@ -23,6 +23,9 @@
 
 #include "common/dtosobject.h"
 
+typedef const ryml::ConstNodeRef read_seq_t;
+typedef const ryml::ConstNodeRef read_item_t;
+
 class MapReader {
 public:
     static const char* SIZE_X;       // cppcheck-suppress unusedStructMember
@@ -74,22 +77,22 @@ public:
     void readBoxesTexture(std::string& box_tex);
         
     
-    void readItemPosition(const ryml::ConstNodeRef& item, struct MapPoint& out);
-    void readItemZInd(const ryml::ConstNodeRef& item, uint16_t& out);
-    void readItemTexture(const ryml::ConstNodeRef& item, uint8_t& out);
+    void readItemPosition(read_item_t& item, struct MapPoint& out);
+    void readItemZInd(read_item_t& item, uint16_t& out);
+    void readItemTexture(read_item_t& item, uint8_t& out);
       
       
     // Uno utilitario en si.
-    void readPoints(const ryml::NodeRef& list, std::vector<struct MapPoint>& out);
+    void readPoints(read_seq_t& list, std::vector<struct MapPoint>& out);
 
     // Accesos a iteradores/secuencias de elementos. Sin pasarlos a vector
     // Para hacerlo mas eficiente.
     // Se podria hacer el agregado a un vector tmbn.
-    const ryml::NodeRef& getBlocks();
-    const ryml::NodeRef& getDecorations();
-    const ryml::NodeRef& getItemSpawns();
-    const ryml::NodeRef& getPlayerSpawns();
-    const ryml::NodeRef& getBoxes();
+    read_seq_t& getBlocks();
+    read_seq_t& getDecorations();
+    read_seq_t& getItemSpawns();
+    read_seq_t& getPlayerSpawns();
+    read_seq_t& getBoxes();
     
 };
 #endif

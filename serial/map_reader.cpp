@@ -93,20 +93,20 @@ void MapReader::readTextures(std::vector<std::string>& res) {
     }
 }
 
-void MapReader::readItemPosition(const ryml::ConstNodeRef& item, struct MapPoint& pos){
+void MapReader::readItemPosition(read_item_t& item, struct MapPoint& pos){
     item[MapReader::POINT_X] >> pos.x;
     item[MapReader::POINT_Y] >> pos.y;
 }
 
-void MapReader::readItemZInd(const ryml::ConstNodeRef& item, uint16_t& out){
+void MapReader::readItemZInd(read_item_t& item, uint16_t& out){
     item[MapReader::DECORATION_Z] >> out;
 }
 
-void MapReader::readItemTexture(const ryml::ConstNodeRef& item, uint8_t& out){
+void MapReader::readItemTexture(read_item_t& item, uint8_t& out){
     item[MapReader::BLOCK_TEX] >> out;
 }
 
-void MapReader::readPoints(const ryml::NodeRef& list, std::vector<struct MapPoint>& res) {
+void MapReader::readPoints(read_seq_t& list, std::vector<struct MapPoint>& res) {
     int size = list.num_children();
     res.reserve(size);
 
@@ -115,24 +115,24 @@ void MapReader::readPoints(const ryml::NodeRef& list, std::vector<struct MapPoin
     }
 }
 
-const ryml::NodeRef& MapReader::getBoxes() {
-    const ryml::NodeRef& list = root[MapReader::BOXES];
+read_seq_t& MapReader::getBoxes() {
+    read_seq_t& list = root[MapReader::BOXES];
     if (list.is_seq()) {
          return list;
     }
     throw LibError(1, "Did not find boxes segment");
 }
 
-const ryml::NodeRef& MapReader::getItemSpawns() {
-    const ryml::NodeRef& list = root[MapReader::ITEM_SPAWNS];
+read_seq_t& MapReader::getItemSpawns() {
+    read_seq_t& list = root[MapReader::ITEM_SPAWNS];
     if (list.is_seq()) {
          return list;
     }
     throw LibError(1, "Did not find item spawns segment");
 }
 
-const ryml::NodeRef& MapReader::getPlayerSpawns() {
-    const ryml::NodeRef& list = root[MapReader::PLAYER_SPAWNS];
+read_seq_t& MapReader::getPlayerSpawns() {
+    read_seq_t& list = root[MapReader::PLAYER_SPAWNS];
     if (list.is_seq()) {
          return list;
     }
@@ -140,16 +140,16 @@ const ryml::NodeRef& MapReader::getPlayerSpawns() {
 }
 
 
-const ryml::NodeRef& MapReader::getBlocks() {
-    const ryml::NodeRef& list = root[MapReader::BLOCKS];
+read_seq_t& MapReader::getBlocks() {
+    read_seq_t& list = root[MapReader::BLOCKS];
     if (list.is_seq()) {
          return list;
     }
     throw LibError(1, "Did not find player blocks segment");
 }
 
-const ryml::NodeRef& MapReader::getDecorations() {
-    const ryml::NodeRef& list = root[MapReader::DECORATIONS];
+read_seq_t& MapReader::getDecorations() {
+    read_seq_t& list = root[MapReader::DECORATIONS];
     if (list.is_seq()) {
          return list;
     }

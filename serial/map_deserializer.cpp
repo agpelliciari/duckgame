@@ -41,13 +41,13 @@ void MapDeserializer::readTextures(std::vector<std::string>& res) {
 const std::string& MapDeserializer::getMapName() const { return srcmap; }
 
 void MapDeserializer::readDecorations(std::vector<struct DecorationDTO>& res) {
-    const ryml::NodeRef& decorations = reader.getDecorations();
+    read_seq_t& decorations = reader.getDecorations();
     
     int size = decorations.num_children();
     res.reserve(size);
 
     for (int i = 0; i < size; i++) {
-        const ryml::ConstNodeRef& item = decorations[i];
+        read_item_t& item = decorations[i];
         DecorationDTO& decoration = res.emplace_back();
         
         reader.readItemPosition(item, decoration.pos);
@@ -58,17 +58,23 @@ void MapDeserializer::readDecorations(std::vector<struct DecorationDTO>& res) {
 
 
 void MapDeserializer::readBlocks(std::vector<struct BlockDTO>& res) {
-    const ryml::NodeRef& blocks = reader.getBlocks();
+    read_seq_t& blocks = reader.getBlocks();
     
     int size = blocks.num_children();
     res.reserve(size);
-
+    
+    std::cout << "GOT BLOCKS!? COUNT " << size<<std::endl;
     for (int i = 0; i < size; i++) {
-        const ryml::ConstNodeRef& item = blocks[i];
+        std::cout << "SHOUL READ BLOCK!? COUNT " << i << "::"<<std::endl;
+        read_item_t& item = blocks[i];
+        std::cout << "NEW BLOCK!? COUNT " << i << "::"<<std::endl;
         BlockDTO& block = res.emplace_back();
         
+        std::cout << "EMPLACED BLOCK!? COUNT " << i << "::"<<std::endl;
         reader.readItemPosition(item, block.pos);
         reader.readItemTexture(item, block.texture_id);
+        
+        std::cout << "READ DATA!? COUNT " << i << "::"<<std::endl;
         //reader.readItemZInd(item, block.z_ind);
     }
 }
