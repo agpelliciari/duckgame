@@ -23,8 +23,9 @@
 
 #include "common/dtosobject.h"
 
-typedef const ryml::ConstNodeRef read_seq_t;
-typedef const ryml::ConstNodeRef read_item_t;
+//const ryml::ConstNodeRef
+typedef ryml::NodeRef read_seq_t;
+typedef ryml::NodeRef read_item_t;
 
 class MapReader {
 public:
@@ -83,16 +84,16 @@ public:
       
       
     // Uno utilitario en si.
-    void readPoints(read_seq_t& list, std::vector<struct MapPoint>& out);
+    void readPoints(read_seq_t list, std::vector<struct MapPoint>& out);
 
     // Accesos a iteradores/secuencias de elementos. Sin pasarlos a vector
     // Para hacerlo mas eficiente.
     // Se podria hacer el agregado a un vector tmbn.
-    read_seq_t& getBlocks();
-    read_seq_t& getDecorations();
-    read_seq_t& getItemSpawns();
-    read_seq_t& getPlayerSpawns();
-    read_seq_t& getBoxes();
+    read_seq_t getBlocks();
+    read_seq_t getDecorations();
+    read_seq_t getItemSpawns();
+    read_seq_t getPlayerSpawns();
+    read_seq_t getBoxes();
     
 };
 #endif

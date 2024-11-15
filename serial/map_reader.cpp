@@ -106,33 +106,34 @@ void MapReader::readItemTexture(read_item_t& item, uint8_t& out){
     item[MapReader::BLOCK_TEX] >> out;
 }
 
-void MapReader::readPoints(read_seq_t& list, std::vector<struct MapPoint>& res) {
+void MapReader::readPoints(read_seq_t list, std::vector<struct MapPoint>& res) {
     int size = list.num_children();
     res.reserve(size);
 
     for (int i = 0; i < size; i++) {
-        readItemPosition(list[i], res.emplace_back(0, 0));
+        read_item_t item = list[i];
+        readItemPosition(item, res.emplace_back(0, 0));
     }
 }
 
-read_seq_t& MapReader::getBoxes() {
-    read_seq_t& list = root[MapReader::BOXES];
+read_seq_t MapReader::getBoxes() {
+    read_seq_t list = root[MapReader::BOXES];
     if (list.is_seq()) {
          return list;
     }
     throw LibError(1, "Did not find boxes segment");
 }
 
-read_seq_t& MapReader::getItemSpawns() {
-    read_seq_t& list = root[MapReader::ITEM_SPAWNS];
+read_seq_t MapReader::getItemSpawns() {
+    read_seq_t list = root[MapReader::ITEM_SPAWNS];
     if (list.is_seq()) {
          return list;
     }
     throw LibError(1, "Did not find item spawns segment");
 }
 
-read_seq_t& MapReader::getPlayerSpawns() {
-    read_seq_t& list = root[MapReader::PLAYER_SPAWNS];
+read_seq_t MapReader::getPlayerSpawns() {
+    read_seq_t list = root[MapReader::PLAYER_SPAWNS];
     if (list.is_seq()) {
          return list;
     }
@@ -140,16 +141,16 @@ read_seq_t& MapReader::getPlayerSpawns() {
 }
 
 
-read_seq_t& MapReader::getBlocks() {
-    read_seq_t& list = root[MapReader::BLOCKS];
+read_seq_t MapReader::getBlocks() {
+    read_seq_t list = root[MapReader::BLOCKS];
     if (list.is_seq()) {
          return list;
     }
     throw LibError(1, "Did not find player blocks segment");
 }
 
-read_seq_t& MapReader::getDecorations() {
-    read_seq_t& list = root[MapReader::DECORATIONS];
+read_seq_t MapReader::getDecorations() {
+    read_seq_t list = root[MapReader::DECORATIONS];
     if (list.is_seq()) {
          return list;
     }
