@@ -34,6 +34,8 @@
 
 class Drawer {
 private:
+    SDL2pp::Window& window;
+
     SDL2pp::Renderer renderer;
 
     TextureContainer textures;

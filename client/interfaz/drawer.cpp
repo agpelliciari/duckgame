@@ -2,6 +2,7 @@
 
 Drawer::Drawer(SDL2pp::Window& window, Animation& animation, const GameContext& gameContext,
                Camera& camera):
+        window(window),
         renderer(window, -1, SDL_RENDERER_ACCELERATED),
         textures(renderer, gameContext.map.textures),
         animation(animation),
@@ -110,13 +111,13 @@ int Drawer::getTextureFlipValue(SDL_RendererFlip flip, int flipValue, int unflip
 }
 
 void Drawer::drawBackground() {
-    int scaledWidth = camera.backgroundScaledSize(SCREEN_WIDTH);
-    int scaledHeight = camera.backgroundScaledSize(SCREEN_HEIGHT);
+    int scaledWidth = camera.backgroundScaledSize(window.GetWidth());
+    int scaledHeight = camera.backgroundScaledSize(window.GetHeight());
 
     renderer.Copy(textures.getTexture(TextureType::BACKGROUND),
-                  SDL2pp::Rect((SCREEN_WIDTH - scaledWidth) / 2, (SCREEN_HEIGHT - scaledHeight) / 2,
+                  SDL2pp::Rect((window.GetWidth() - scaledWidth) / 2, (window.GetHeight() - scaledHeight) / 2,
                                scaledWidth, scaledHeight),
-                  SDL2pp::Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
+                  SDL2pp::Rect(0, 0, window.GetWidth(), window.GetHeight()));
 }
 
 void Drawer::drawObjects(const MatchDto& matchDto) {

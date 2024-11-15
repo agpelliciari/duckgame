@@ -1,10 +1,10 @@
 #include "camera.h"
 
-Camera::Camera(): x(0), y(0), zoom(1.0f) {}
+Camera::Camera(SDL2pp::Window& window): window(window), x(0), y(0), zoom(1.0f) {}
 
 void Camera::updateZoom(int boxWidth, int boxHeight) {
-    float zoomX = static_cast<float>(SCREEN_WIDTH) / (boxWidth + PADDING);
-    float zoomY = static_cast<float>(SCREEN_HEIGHT) / (boxHeight + PADDING);
+    float zoomX = static_cast<float>(window.GetWidth()) / (boxWidth + PADDING);
+    float zoomY = static_cast<float>(window.GetHeight()) / (boxHeight + PADDING);
 
     // this is necessary to fit the entire group of players in the screen
     zoom = std::min(zoomX, zoomY);
@@ -14,8 +14,8 @@ void Camera::updateZoom(int boxWidth, int boxHeight) {
 }
 
 void Camera::updatePosition(int minX, int minY, int boxWidth, int boxHeight) {
-    x = minX + boxWidth / 2 - (SCREEN_WIDTH / 2) / zoom;
-    y = minY + boxHeight / 2 - (SCREEN_HEIGHT / 2) / zoom;
+    x = minX + boxWidth / 2 - (window.GetWidth() / 2) / zoom;
+    y = minY + boxHeight / 2 - (window.GetHeight() / 2) / zoom;
 }
 
 void Camera::update(const MatchDto& matchDto) {

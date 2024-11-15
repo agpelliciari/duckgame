@@ -3,10 +3,11 @@
 
 #include <algorithm>
 
+#include <SDL2/SDL.h>
+#include <SDL2pp/SDL2pp.hh>
+
 #include "common/dtosgame.h"
 
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
 #define PADDING 100
 
 #define MIN_ZOOM_LEVEL 0.5f
@@ -14,6 +15,8 @@
 
 class Camera {
 private:
+    SDL2pp::Window& window;
+
     int x;  // cppcheck-suppress unusedStructMember
 
     int y;  // cppcheck-suppress unusedStructMember
@@ -25,7 +28,7 @@ private:
     void updatePosition(int minX, int minY, int boxWidth, int boxHeight);
 
 public:
-    Camera();
+    Camera(SDL2pp::Window& window);
 
     // Update the camera position and zoom level based on a bounding box which
     // contains all players in the match determined by their positions.
