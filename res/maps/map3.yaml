@@ -1,6 +1,6 @@
 size_x: 100
 size_y: 300
-background: default.png
+background: backgrounds/forestNight.png
 blocks_z: 0
 boxes_z: 1
 box_texture: default_tex.png

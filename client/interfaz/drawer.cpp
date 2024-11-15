@@ -4,7 +4,7 @@ Drawer::Drawer(SDL2pp::Window& window, Animation& animation, const GameContext& 
                Camera& camera):
         window(window),
         renderer(window, -1, SDL_RENDERER_ACCELERATED),
-        textures(renderer, gameContext.map.textures),
+        textures(renderer),
         animation(animation),
         camera(camera),
         context(gameContext),
@@ -12,10 +12,10 @@ Drawer::Drawer(SDL2pp::Window& window, Animation& animation, const GameContext& 
         showIndicators(true) {}
 
 void Drawer::drawPlayer(const PlayerDTO& player) {
-    static const std::unordered_map<int, TextureType> duckTextures = {{1, TextureType::YELLOW_DUCK},
-                                                                      {2, TextureType::GREY_DUCK},
-                                                                      {3, TextureType::ORANGE_DUCK},
-                                                                      {4, TextureType::WHITE_DUCK}};
+    static const std::unordered_map<int, std::string> duckTextures = {{1, TextureContainer::YELLOW_DUCK},
+                                                                      {2, TextureContainer::GREY_DUCK},
+                                                                      {3, TextureContainer::ORANGE_DUCK},
+                                                                      {4, TextureContainer::WHITE_DUCK}};
 
     auto mappedTexture = duckTextures.find(player.id);
     if (mappedTexture != duckTextures.end()) {
@@ -52,7 +52,7 @@ void Drawer::drawIndicator(const PlayerDTO& player, bool isMainPlayer) {
     }
 
     renderer.Copy(
-            textures.getTexture(TextureType::PLAYER_INDICATOR), indicatorType,
+            textures.getTexture(TextureContainer::PLAYER_INDICATOR), indicatorType,
             SDL2pp::Rect(camera.getScreenX(player.pos.x + 8), camera.getScreenY(player.pos.y - 25),
                          camera.getScaledSize(INDICATOR_WIDTH_RESIZED),
                          camera.getScaledSize(INDICATOR_HEIGHT_RESIZED)));
@@ -62,7 +62,7 @@ void Drawer::drawArmor(const PlayerDTO& player, SDL_RendererFlip flip) {
 
     if (player.helmet) {
         renderer.Copy(
-                textures.getTexture(TextureType::HELMET_ARMOR),
+                textures.getTexture(TextureContainer::HELMET_ARMOR),
                 SDL2pp::Rect(0, 0, SPRITE_SIZE, SPRITE_SIZE),
                 SDL2pp::Rect(
                         camera.getScreenX(player.pos.x + getTextureFlipValue(flip, HELMET_FLIP_X,
@@ -75,7 +75,7 @@ void Drawer::drawArmor(const PlayerDTO& player, SDL_RendererFlip flip) {
 
     if (player.chest_armor) {
         renderer.Copy(
-                textures.getTexture(TextureType::CHEST_ARMOR),
+                textures.getTexture(TextureContainer::CHEST_ARMOR),
                 SDL2pp::Rect(0, 0, SPRITE_SIZE, SPRITE_SIZE),
                 SDL2pp::Rect(camera.getScreenX(player.pos.x), camera.getScreenY(player.pos.y + 3),
                              camera.getScaledSize(SPRITE_SIZE), camera.getScaledSize(SPRITE_SIZE)),
@@ -84,11 +84,11 @@ void Drawer::drawArmor(const PlayerDTO& player, SDL_RendererFlip flip) {
 }
 
 void Drawer::drawWeapon(const PlayerDTO& player, SDL_RendererFlip flip) {
-    static const std::unordered_map<TypeWeapon, std::tuple<TextureType, int, int>> weaponTextures =
+    static const std::unordered_map<TypeWeapon, std::tuple<std::string, int, int>> weaponTextures =
             {
                     // almaceno enum de textura del container y dimensiones
                     {TypeWeapon::PISTOLA_COWBOY,
-                     {TextureType::COWBOY_GUN, COWBOY_GUN_WIDTH, COWBOY_GUN_HEIGHT}}
+                     {TextureContainer::COWBOY_GUN, COWBOY_GUN_WIDTH, COWBOY_GUN_HEIGHT}}
                     // demas armas
             };
 
@@ -114,7 +114,7 @@ void Drawer::drawBackground() {
     int scaledWidth = camera.backgroundScaledSize(window.GetWidth());
     int scaledHeight = camera.backgroundScaledSize(window.GetHeight());
 
-    renderer.Copy(textures.getTexture(TextureType::BACKGROUND),
+    renderer.Copy(textures.getTexture(context.map.background),
                   SDL2pp::Rect((window.GetWidth() - scaledWidth) / 2, (window.GetHeight() - scaledHeight) / 2,
                                scaledWidth, scaledHeight),
                   SDL2pp::Rect(0, 0, window.GetWidth(), window.GetHeight()));
@@ -124,7 +124,7 @@ void Drawer::drawObjects(const MatchDto& matchDto) {
     // inicialmente se dibuja como si todos fueran objects.    
     for (const MapObject& object: context.map.objects) {
         renderer.Copy(
-                textures.getBlockTexture(object.ind_texture), SDL2pp::Rect(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT),
+                textures.getTexture(object.texture), SDL2pp::Rect(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT),
                 SDL2pp::Rect(camera.getScreenX(object.column), 
                              camera.getScreenY(object.row + BLOCK_HEIGHT), camera.getScaledSize(BLOCK_WIDTH),
                              camera.getScaledSize(BLOCK_HEIGHT)));
@@ -134,13 +134,13 @@ void Drawer::drawObjects(const MatchDto& matchDto) {
 
         if (object.type == TypeDynamicObject::BOX) {
             renderer.Copy(
-                    textures.getTexture(TextureType::BOX), SDL2pp::Rect(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT),
+                    textures.getTexture(TextureContainer::BOX), SDL2pp::Rect(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT),
                     SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(object.pos.y+BLOCK_HEIGHT*2),
                                  camera.getScaledSize(BLOCK_WIDTH), camera.getScaledSize(BLOCK_HEIGHT)));
 
         } else if (object.type == TypeDynamicObject::PISTOLA_COWBOY) {
             renderer.Copy(
-                    textures.getTexture(TextureType::COWBOY_GUN), SDL2pp::Rect(0, 0, 22, 11),
+                    textures.getTexture(TextureContainer::COWBOY_GUN), SDL2pp::Rect(0, 0, 22, 11),
                     SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(object.pos.y),
                                  camera.getScaledSize(22 - 6), camera.getScaledSize(11 - 6)));
         }
