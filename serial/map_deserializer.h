@@ -24,6 +24,33 @@
 #include "common/dtosmap.h"
 
 
+/*
+void EditorWindow::importFromFileSystem() {
+    MapDeserializer deserial("./res/maps/map3.yaml");
+
+    const std::string background = serial.getBackground();
+
+    const std::vector<MapObjectData> blocks = serial.getBlocks();
+    const std::vector<MapObjectData> spawnPlayers = serial.getPlayerSpawns();
+    const std::vector<MapObjectData> spawnWeapons = serial.getItemSpawns();
+    const std::vector<MapObjectData> boxes = serial.getBoxes();
+    const std::vector<MapObjectData> decorations = serial.getDecorations();
+}
+struct MapObjectData {
+    int row;
+    int column;
+    int zIndex;
+    MapObjectType mapObjectType;
+    std::string texture;
+};
+enum MapObjectType {
+    Block,
+    SpawnPlayer,
+    SpawnWeapon,
+    Box,
+    Decoration
+};
+*/
 class MapDeserializer {
 protected:
     std::string srcmap;  // cppcheck-suppress unusedStructMember

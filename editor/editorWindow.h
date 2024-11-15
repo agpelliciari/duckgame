@@ -9,6 +9,7 @@
 
 #undef emit
 #include "../serial/map_serializer.h"
+#include "../serial/map_deserializer.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -58,6 +59,8 @@ private:
     void selectDecorationTexture(size_t index);
 
     void exportToFileSystem();
+
+    //void importFromFileSystem();
 };
 
 #endif

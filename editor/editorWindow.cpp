@@ -286,3 +286,16 @@ void EditorWindow::exportToFileSystem() {
     std::string file("./res/maps/MAPACHE.yaml");
     serial.save(file);
 }
+/*
+void EditorWindow::importFromFileSystem() {
+    MapDeserializer deserial("./res/maps/map3.yaml");
+
+    const std::string background = serial.getBackground();
+
+    const std::vector<MapObjectData> blocks = serial.getBlocks();
+    const std::vector<MapObjectData> spawnPlayers = serial.getPlayerSpawns();
+    const std::vector<MapObjectData> spawnWeapons = serial.getItemSpawns();
+    const std::vector<MapObjectData> boxes = serial.getBoxes();
+    const std::vector<MapObjectData> decorations = serial.getDecorations();
+}
+*/
