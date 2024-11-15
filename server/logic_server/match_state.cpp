@@ -14,7 +14,7 @@ void MatchState::loop(MatchObserver& observer) {
     Clock clock(30);  // 16ms sleep == 60 frames por segundo aprox. 30 = 30 fps
     clock.resetnext();
     while (running) {
-        std::cout << "LOOP COUNT " << clock.tickcount()<< std::endl;
+        //std::cout << "LOOP COUNT " << clock.tickcount()<< std::endl;
         this->step();
         this->send_results(observer);
         clock.tick();
