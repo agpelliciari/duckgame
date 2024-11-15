@@ -111,7 +111,7 @@ void Match::run() {
     while(_keep_running && this->stats.state == PAUSADA){
          // Wait 5 seconds?
          timer.resetnext();
-         int mx = 5;
+         int mx = 2;
          lobby_info info(MATCH_PAUSE_TICK, mx);
          
          while(_keep_running && timer.tickcount() < mx){
