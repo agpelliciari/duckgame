@@ -105,13 +105,12 @@ void MapSerializer::addBox(const uint16_t x, const uint16_t y, const uint16_t z,
 
 
 void MapSerializer::addItemSpawn(const uint16_t x, const uint16_t y, const std::string& name) {
-    addBlock(x, y, name);  // Add block to represent in map
-
     std::cout << "ADD Item spawn " << x << y << std::endl;
     ryml::NodeRef newitm = item_spawns.append_child();
     newitm |= ryml::MAP;
     newitm[MapReader::POINT_X] << x;
     newitm[MapReader::POINT_Y] << y;
+    newitm[MapReader::BLOCK_TEX] << mapTexture(name);
 }
 
 
@@ -123,13 +122,12 @@ void MapSerializer::addItemSpawn(const uint16_t x, const uint16_t y, const uint1
 
 
 void MapSerializer::addPlayerSpawn(const uint16_t x, const uint16_t y, const std::string& name) {
-    addBlock(x, y, name);  // Add block to represent in map
-
     std::cout << "ADD Player spawn " << x << y << std::endl;
     ryml::NodeRef newitm = player_spawns.append_child();
     newitm |= ryml::MAP;
     newitm[MapReader::POINT_X] << x;
     newitm[MapReader::POINT_Y] << y;
+    newitm[MapReader::BLOCK_TEX] << mapTexture(name);
 }
 
 void MapSerializer::addPlayerSpawn(const uint16_t x, const uint16_t y, const uint16_t z,

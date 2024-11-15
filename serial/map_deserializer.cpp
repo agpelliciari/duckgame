@@ -59,24 +59,36 @@ void MapDeserializer::readDecorations(std::vector<struct DecorationDTO>& res) {
 
 void MapDeserializer::readBlocks(std::vector<struct BlockDTO>& res) {
     read_seq_t blocks = reader.getBlocks();
+    read_seq_t spawns_items = reader.getItemSpawns();
+    read_seq_t spawns_players = reader.getPlayerSpawns();
+
+    int size_blocks = blocks.num_children();
+    int size_itms = spawns_items.num_children();
+    int size_players = spawns_players.num_children();
+
+    res.reserve(size_blocks+size_itms+size_players);
     
-    int size = blocks.num_children();
-    res.reserve(size);
-    
-    std::cout << "GOT BLOCKS!? COUNT " << size<<std::endl;
-    for (int i = 0; i < size; i++) {
-        std::cout << "SHOUL READ BLOCK!? COUNT " << i << "::"<<std::endl;
+    for (int i = 0; i < size_blocks; i++) {
         read_item_t item = blocks[i];
-        std::cout << "NEW BLOCK!? COUNT " << i << "::"<<std::endl;
         BlockDTO& block = res.emplace_back();
-        
-        std::cout << "EMPLACED BLOCK!? COUNT " << i << "::"<<std::endl;
         reader.readItemPosition(item, block.pos);
         reader.readItemTexture(item, block.texture_id);
-        
-        std::cout << "READ DATA!? COUNT " << i << "::"<<std::endl;
-        //reader.readItemZInd(item, block.z_ind);
     }
+    
+    // Ahora los spawns...
+    for (int i = 0; i < size_itms; i++) {
+        read_item_t item = spawns_items[i];
+        BlockDTO& block = res.emplace_back();
+        reader.readItemPosition(item, block.pos);
+        reader.readItemTexture(item, block.texture_id);
+    }
+
+    for (int i = 0; i < size_players; i++) {
+        read_item_t item = spawns_players[i];
+        BlockDTO& block = res.emplace_back();
+        reader.readItemPosition(item, block.pos);
+        reader.readItemTexture(item, block.texture_id);
+    }    
 }
 
 void MapDeserializer::readPlayerSpawns(std::vector<struct MapPoint>& res) {

@@ -13,13 +13,13 @@ static void create(const std::string& file) {
     std::string name1("OT");
     std::string name2("LAS");
 
-    for (int i = 0; i < 50; i += 3) {
+    for (int i = 0; i < 3; i += 3) {
         serial.addBlock(2, 3 + i, name);
     }
-    for (int i = 0; i < 25; i += 3) {
+    for (int i = 0; i < 2; i += 3) {
         serial.addBlock(5 + i, 3 + i, name1);
     }
-    for (int i = 50; i < 100; i += 3) {
+    for (int i = 50; i < 4; i += 3) {
         serial.addDecoration(2, 3 + i, 2, name2);
     }
 
@@ -88,6 +88,12 @@ int main(int argc, char* argv[]) {
     for (const std::string& tex: info.textures) {
         std::cout << "tex = " << tex << std::endl;
     }
+
+    for (const struct BlockDTO& block: info.blocks) {
+        std::cout << "block at x: " << block.pos.x<<" y: " << block.pos.y << std::endl;
+    }
+
+    
 
     std::cout << "Map 2 item spawn count " << info2.item_spawns.size() << std::endl;
 
