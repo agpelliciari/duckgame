@@ -14,13 +14,13 @@ void MatchState::playRound(MatchObserver& observer, MatchStatsInfo& stats) {
     // start_players(observer);
     Clock clock(30);  // 16ms sleep == 60 frames por segundo aprox. 30 = 30 fps
     clock.resetnext();
-    while (running && clock.tickcount() < 90) {
+    while (running && clock.tickcount() < 150) {
         //std::cout << "LOOP COUNT " << clock.tickcount()<< std::endl;
         this->step();
         this->send_results(observer);
         clock.tickNoRest();
     }
-    std::cout << "FINISHED TICK COUNT OF 90!?" << clock.tickcount()<<std::endl;
+    std::cout << "FINISHED TICK COUNT OF 15!?" << clock.tickcount()<<std::endl;
     
     if(stats.numronda >= 5){ // Termino la partida!
         stats.state = TERMINADA;

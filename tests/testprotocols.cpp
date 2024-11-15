@@ -11,24 +11,31 @@
 using ::testing::InSequence;
 using ::testing::ThrowsMessage;
 
-TEST(IntegrationProtocolTest, SendReceiveStateNoPlayer) {
+TEST(TestProtocolMocked, SendReceiveStateNoPlayer) {
 
     QueueSocket msgbase(20, true);
 
     MatchDto state;
+    
 
     // Los protocols se encargan. De liberar el shared socket.
     ServerProtocol server(msgbase);
     ClientProtocol client(msgbase);
 
     server.sendstate(state);
+    
+    MatchDto state_recv;
+    MatchStatsInfo stats_recv;
 
-    TesterMatchDTO tester(client.recvstate());
+    // Assert que se mando/se esta jugando.
+    ASSERT_TRUE(client.recvstate(stats_recv, state_recv));
+
+    TesterMatchDTO tester(state);
     tester.assertEquals(state);
 }
 
 
-TEST(IntegrationProtocolTest, SendReceiveState1PlayerMoveLeft) {
+TEST(TestProtocolMocked, SendReceiveState1PlayerMoveLeft) {
 
     QueueSocket msgbase(20, true);
 
@@ -44,12 +51,20 @@ TEST(IntegrationProtocolTest, SendReceiveState1PlayerMoveLeft) {
 
     server.sendstate(state);
 
-    TesterMatchDTO tester(client.recvstate());
+
+    MatchDto state_recv;
+    MatchStatsInfo stats_recv;
+
+    // Assert que se mando/se esta jugando.
+    ASSERT_TRUE(client.recvstate(stats_recv, state_recv));
+
+
+    TesterMatchDTO tester(state_recv);
     tester.assertEquals(state);
 }
 
 
-TEST(IntegrationProtocolTest, SendReceiveState2PlayerMoveLeftAndStill) {
+TEST(TestProtocolMocked, SendReceiveState2PlayerMoveLeftAndStill) {
 
     QueueSocket msgbase(20, true);
 
@@ -68,7 +83,13 @@ TEST(IntegrationProtocolTest, SendReceiveState2PlayerMoveLeftAndStill) {
     ClientProtocol client(msgbase);
 
     server.sendstate(state);
+    
+    MatchDto state_recv;
+    MatchStatsInfo stats_recv;
 
-    TesterMatchDTO tester(client.recvstate());
+    // Assert que se mando/se esta jugando.
+    ASSERT_TRUE(client.recvstate(stats_recv, state_recv));
+
+    TesterMatchDTO tester(state_recv);
     tester.assertEquals(state);
 }

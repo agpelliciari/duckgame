@@ -109,15 +109,22 @@ void ClientProtocol::recvmapdata(struct MapData& data, const int unit) {
     }
 }
 
+void ClientProtocol::recvstats(MatchStatsInfo& outstats) {
+    outstats.numronda = protocol.recvbyte();
+    outstats.champion_player = protocol.recvbyte();
+    
+    int count = protocol.recvbyte();
+    outstats.stats.reserve(count);
+    
+    while(count > 0){
+        uint8_t id = protocol.recvbyte();
+        uint8_t wins = protocol.recvbyte();
+        outstats.stats.emplace_back(id,wins);
+        count--;
+    }
+}
 
-MatchDto ClientProtocol::recvstate() {
-    // Primero recibi info general
-    //match_info_dto out;
-    //protocol.recvbytes(&out, sizeof(out));
-
-    MatchDto res = MatchDto();
-    // std::cerr << "-----GOT UPDATE\n" << res.parse() << std::endl;
-
+void ClientProtocol::recvmatch(MatchDto& outstate) {
     int playercount = (int)protocol.recvbyte();
 
     while (playercount > 0) {
@@ -137,7 +144,7 @@ MatchDto ClientProtocol::recvstate() {
         player.chest_armor = protocol.recvbyte();
         player.aiming_up = protocol.recvbyte();
 
-        res.players.push_back(player);
+        outstate.players.push_back(player);
         playercount--;
     }
 
@@ -151,19 +158,23 @@ MatchDto ClientProtocol::recvstate() {
         obj.pos.y = protocol.recvuint();
         obj.type = (TypeDynamicObject)protocol.recvbyte();
 
-        res.objects.push_back(obj);
+        outstate.objects.push_back(obj);
         objcount--;
     }
+}
 
-    /*
-    for (auto playerit = state.players.begin(); playerit != state.players.end();) {
-        PlayerDTO player = *playerit;
-        std::cerr << "-->" << (int)player.id << " at " << player.coord_x << ","
-                  << player.coord_y << std::endl;
-        ++playerit;
+bool ClientProtocol::recvstate(MatchStatsInfo& outstats, MatchDto& outstate) {
+    
+    outstats.state = (MatchStateType) protocol.recvbyte();
+    
+    if(outstats.state == INICIADA){ // Receive matchdto
+        std::cout << "---->RECV MATCH DTO!\n";
+        recvmatch(outstate);
+        return true;
     }
-    */
-    return res;
+    std::cout << "RECV STATS DTO!\n";
+    recvstats(outstats);
+    return false;
 }
 
 // Manejo de si esta abierto o no.

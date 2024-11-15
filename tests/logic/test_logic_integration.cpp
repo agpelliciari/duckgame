@@ -9,7 +9,7 @@
 using ::testing::InSequence;
 using ::testing::ThrowsMessage;
 
-TEST(IntegrationLogicTest, SendReceiveFirstState3players) {
+TEST(TestLogicIntegration, SendReceiveFirstState3players) {
 
 
     MatchDto state;
@@ -26,7 +26,7 @@ TEST(IntegrationLogicTest, SendReceiveFirstState3players) {
 }
 
 
-TEST(IntegrationLogicTest, SendMoveOnlyPlayer3Right) {
+TEST(TestLogicIntegration, SendMoveOnlyPlayer3Right) {
     MatchDto state;
 
     MockObserver observer(state, 3);
@@ -52,7 +52,7 @@ TEST(IntegrationLogicTest, SendMoveOnlyPlayer3Right) {
     observer.assertPlayerMovedRight(playerGiven, playerBase);
 }
 
-TEST(IntegrationLogicTest, SendMoveOnlyPlayer3Left) {
+TEST(TestLogicIntegration, SendMoveOnlyPlayer3Left) {
     MatchDto state;
 
     MockObserver observer(state, 3);
@@ -79,7 +79,7 @@ TEST(IntegrationLogicTest, SendMoveOnlyPlayer3Left) {
 }
 
 
-TEST(IntegrationLogicTest, SendMoveOnlyPlayer3AirRight) {
+TEST(TestLogicIntegration, SendMoveOnlyPlayer3AirRight) {
     MatchDto state;
 
     MockObserver observer(state, 3);
@@ -109,7 +109,7 @@ TEST(IntegrationLogicTest, SendMoveOnlyPlayer3AirRight) {
 }
 
 
-TEST(IntegrationLogicTest, SendMoveOnlyPlayer3AirLeft) {
+TEST(TestLogicIntegration, SendMoveOnlyPlayer3AirLeft) {
     MatchDto state;
 
     MockObserver observer(state, 3);
@@ -139,7 +139,7 @@ TEST(IntegrationLogicTest, SendMoveOnlyPlayer3AirLeft) {
 }
 
 
-TEST(IntegrationLogicTest, SendMoveOnlyPlayer3Jumps) {
+TEST(TestLogicIntegration, SendMoveOnlyPlayer3Jumps) {
     MatchDto state;
 
     MockObserver observer(state, 3);

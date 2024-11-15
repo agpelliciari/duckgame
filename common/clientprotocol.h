@@ -77,7 +77,14 @@ public:
 
     void sendaction(PlayerActionDTO& action);
 
-    MatchDto recvstate();
+
+    //Receiver del client.
+    bool recvstate(MatchStatsInfo& outstats, MatchDto& outstate);
+    
+    void recvstats(MatchStatsInfo& outinfo);
+    void recvmatch(MatchDto& outstate);
+    
+    
 
     void recvmapdata(struct MapData& data, const int unit);
 

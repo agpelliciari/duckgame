@@ -69,11 +69,15 @@ public:
 };
 
 struct PlayerStatDto {
-    uint8_t id;    // cppcheck-suppress unusedStructMember
+    uint8_t player_id;    // cppcheck-suppress unusedStructMember
     uint8_t wins;  // cppcheck-suppress unusedStructMember
+    
+    PlayerStatDto():player_id(0), wins(0){}
+    PlayerStatDto(const uint8_t id, const uint8_t _wins):player_id(id), wins(_wins){}
 };
 
 enum MatchStateType : uint8_t {
+    WAITING = 0x06,
     INICIADA = 0x01,
     PAUSADA = 0x04,
     ROUND_END = 0x05,
