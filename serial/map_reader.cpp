@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <errno.h>
 
 #include "common/core/liberror.h"
 
@@ -55,7 +56,7 @@ MapReader::MapReader(const std::string& src) {
         root = tree.rootref();
         // std::cout << "CONTENT:\n" << map.data() << "\n----------------------\n";
     } else {
-        throw LibError(1, "Failed to read the file to deserialize");
+        throw LibError(errno, "Failed to read the file to deserialize ");
     }
 }
 

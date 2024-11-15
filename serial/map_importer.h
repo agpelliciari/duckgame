@@ -69,6 +69,8 @@ protected:
 
     std::vector<std::string> textures;              // cppcheck-suppress unusedStructMember
     
+    void getBlockObjects(read_seq_t seq, const MapObjectType type, std::vector<MapObjectData>& out);
+    
 public:
     explicit MapImporter(const std::string& src);
     // Asumamos por ahora que no se quiere permitir copias..

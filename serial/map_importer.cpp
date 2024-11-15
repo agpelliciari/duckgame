@@ -1,7 +1,9 @@
 #include "./map_importer.h"
+#include <iostream>
 
 MapImporter::MapImporter(const std::string& src): reader(src),blocks_z(0), boxes_z(0){
-    
+
+    std::cout << "GOT TO START READING?\n";
     // Lee informacion que sera usada recurrentemente.
     reader.readBlocksZ(blocks_z);
     reader.readBoxesZ(boxes_z);
@@ -25,29 +27,6 @@ std::string MapImporter::getBackground() {
 }
 
 
-
-std::vector<MapObjectData> MapImporter::getBlocks(){
-    read_seq_t blocks = reader.getBlocks();
-    std::vector<MapObjectData> res;
-    
-    
-    int size = blocks.num_children();
-    res.reserve(size);
-
-    for (int i = 0; i < size; i++) {
-        struct MapPoint pos;
-        uint8_t tex_id;
-        
-        read_item_t item = blocks[i];
-        
-        reader.readItemPosition(item, pos);
-        reader.readItemTexture(item, tex_id);
-        
-        res.emplace_back(pos.y,pos.x, blocks_z, Block, textures[tex_id]);
-    }
-    
-    return res;
-}
 
 
 std::vector<MapObjectData> MapImporter::getDecorations(){
@@ -90,34 +69,43 @@ std::vector<MapObjectData> MapImporter::getBoxes(){
         
         reader.readItemPosition(item, pos);
         
-        res.emplace_back(pos.y,pos.x, blocks_z, Box, boxes_tex);
+        res.emplace_back(pos.y,pos.x, boxes_z, Box, boxes_tex);
     }
     
     return res;
+}
 
-
-
+void MapImporter::getBlockObjects(read_seq_t seq, const MapObjectType type, std::vector<MapObjectData>& res){
+    int size = seq.num_children();
+    res.reserve(size);
+    for (int i = 0; i < size; i++) {
+        struct MapPoint pos;
+        uint8_t tex_id;
+        read_item_t item = seq[i];
+        
+        reader.readItemPosition(item, pos);
+        reader.readItemTexture(item, tex_id);
+        
+        res.emplace_back(pos.y,pos.x, blocks_z, type, textures[tex_id]);
+    }    
 }
 
 
 std::vector<MapObjectData> MapImporter::getPlayerSpawns(){
-    read_seq_t spawns = reader.getPlayerSpawns();
     std::vector<MapObjectData> res;
-    
-    
-    int size = spawns.num_children();
-    res.reserve(size);
-    
+    getBlockObjects(reader.getPlayerSpawns(), SpawnPlayer, res);
     return res;
 }
 
 std::vector<MapObjectData> MapImporter::getItemSpawns(){
-    read_seq_t spawns = reader.getItemSpawns();
     std::vector<MapObjectData> res;
-    
-    int size = spawns.num_children();
-    res.reserve(size);
-    
+    getBlockObjects(reader.getItemSpawns(), SpawnWeapon, res);
+    return res;
+}
+
+std::vector<MapObjectData> MapImporter::getBlocks(){
+    std::vector<MapObjectData> res;
+    getBlockObjects(reader.getBlocks(), Block, res);
     return res;
 }
 

@@ -7,6 +7,7 @@ box_texture: default_tex.png
 textures:
   - NAME
   - OT
+  - LAS
   - playswp
 blocks:
   - x: 2
@@ -15,7 +16,15 @@ blocks:
   - x: 5
     y: 3
     ind_tex: 1
-decorations: []
+decorations:
+  - x: 2
+    y: 53
+    z_ind: 2
+    ind_tex: 2
+  - x: 2
+    y: 56
+    z_ind: 2
+    ind_tex: 2
 boxes:
   - x: 4
     y: 3
@@ -28,14 +37,14 @@ boxes:
 spawns_item:
   - x: 12
     y: 3
-    ind_tex: 2
+    ind_tex: 3
   - x: 99
     y: 3
-    ind_tex: 2
+    ind_tex: 3
 spawns_player:
   - x: 14
     y: 3
-    ind_tex: 2
+    ind_tex: 3
   - x: 23
     y: 3
-    ind_tex: 2
+    ind_tex: 3
