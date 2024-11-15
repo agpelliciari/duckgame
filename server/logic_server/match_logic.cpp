@@ -3,7 +3,7 @@
 #include <iostream>
 
 
-MatchLogic::MatchLogic(): colition_map(700, 500) {
+MatchLogic::MatchLogic(): colition_map(800, 640) {
     this->command_map[PlayerActionType::NONE] = [this](int index) {
         this->add_player_speed(index, 0, 0);
     };
