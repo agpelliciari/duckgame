@@ -12,7 +12,7 @@ using ::testing::ThrowsMessage;
 TEST(IntegrationLogicTest, SendReceiveFirstState3players) {
 
 
-    MatchDto state(CANCELADA, 2);
+    MatchDto state;
 
     MockObserver observer(state, 3);
 
@@ -27,7 +27,7 @@ TEST(IntegrationLogicTest, SendReceiveFirstState3players) {
 
 
 TEST(IntegrationLogicTest, SendMoveOnlyPlayer3Right) {
-    MatchDto state(CANCELADA, 2);
+    MatchDto state;
 
     MockObserver observer(state, 3);
 
@@ -53,7 +53,7 @@ TEST(IntegrationLogicTest, SendMoveOnlyPlayer3Right) {
 }
 
 TEST(IntegrationLogicTest, SendMoveOnlyPlayer3Left) {
-    MatchDto state(CANCELADA, 2);
+    MatchDto state;
 
     MockObserver observer(state, 3);
 
@@ -80,7 +80,7 @@ TEST(IntegrationLogicTest, SendMoveOnlyPlayer3Left) {
 
 
 TEST(IntegrationLogicTest, SendMoveOnlyPlayer3AirRight) {
-    MatchDto state(CANCELADA, 2);
+    MatchDto state;
 
     MockObserver observer(state, 3);
 
@@ -110,7 +110,7 @@ TEST(IntegrationLogicTest, SendMoveOnlyPlayer3AirRight) {
 
 
 TEST(IntegrationLogicTest, SendMoveOnlyPlayer3AirLeft) {
-    MatchDto state(CANCELADA, 2);
+    MatchDto state;
 
     MockObserver observer(state, 3);
 
@@ -140,7 +140,7 @@ TEST(IntegrationLogicTest, SendMoveOnlyPlayer3AirLeft) {
 
 
 TEST(IntegrationLogicTest, SendMoveOnlyPlayer3Jumps) {
-    MatchDto state(CANCELADA, 2);
+    MatchDto state;
 
     MockObserver observer(state, 3);
 

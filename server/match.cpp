@@ -3,6 +3,8 @@
 #include <iostream>
 
 #include "./gameerror.h"
+//#include <thread>
+#include "common/clock.h"
 
 Match::Match(lobbyID _id): id(_id), players(), looper(), connectedplayers(0), map() {}
 
@@ -95,9 +97,41 @@ void Match::notifyAction(const PlayerActionDTO& action) {
     }
 }
 
+const MatchStatsInfo& Match::getStats() const{
+     return this->stats;
+}
+
 void Match::run() {
 
-    looper.loop(players);
+    looper.playRound(players,this->stats);
+    players.finishGameMode(); // Notify/move players to lobby mode.
+    // Notifier will check wether to send stats or so
+    
+    Clock timer(1000); // Timer de a pasos de 1 segundo.
+    while(_keep_running && this->stats.state == PAUSADA){
+         // Wait 5 seconds?
+         timer.resetnext();
+         int mx = 5;
+         lobby_info info(MATCH_PAUSE_TICK, mx);
+         
+         while(_keep_running && timer.tickcount() < mx){
+             info.data = mx-timer.tickcount();
+             players.notifyInfo(info);
+             timer.tickRest(); // sleep for 1 second if so is needed
+         }
+         
+         // Go next round/s
+         if(_keep_running){
+             info.action = MATCH_PAUSE_END;
+             info.data = 0;// reset data 
+             
+             players.notifyInfo(info);
+             players.finishLobbyMode();
+             looper.playRound(players,this->stats);
+             players.finishGameMode(); // Notify/move players to lobby mode.
+         }
+    }
+    
     // Checkea si el finish fue natural o forzado.
 
     // notifica los playeres. Del final.

@@ -73,10 +73,10 @@ int main(int argc, char* argv[]) {
     load2.loadObjectsInfo(info2);
 
 
-    clock.tick();
-    clock.tick();
-    clock.tick();
-    clock.tick();
+    clock.tickNoRest();
+    clock.tickNoRest();
+    clock.tickNoRest();
+    clock.tickNoRest();
 
     std::cout << "TICK COUNT AFTER IS " << clock.tickcount() << std::endl;
 

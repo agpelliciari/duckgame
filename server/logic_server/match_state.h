@@ -37,7 +37,7 @@ public:
     void add_objects(const struct ObjectsInfo& objects_info);
     void step();
 
-    void loop(MatchObserver& observer);
+    void playRound(MatchObserver& observer, MatchStatsInfo& stats);
     void stop();
     ~MatchState();
 };

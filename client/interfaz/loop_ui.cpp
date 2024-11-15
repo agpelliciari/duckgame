@@ -29,7 +29,7 @@ void UILoop::exec() {
 
             drawer.draw(lastUpdate);
             
-            clock.tick();
+            clock.tickNoRest();
             //frameDelay(frameStart);
         }
     } catch (const std::exception& e) {
@@ -42,14 +42,18 @@ void UILoop::exec() {
 }
 
 void UILoop::update() {
+    
+    MatchStatsInfo stats;
+    while (isRunning_ && matchDtoQueue.update_stats(stats)) {
+        if(stats.state == TERMINADA || stats.state == CANCELADA){ // stats.state == PAUSADA? mostrar info, o round end.
+            isRunning_ = false;
+        }
+    }
 
     MatchDto matchUpdate;
 
     while (isRunning_ && matchDtoQueue.try_update(matchUpdate)) {
         lastUpdate = matchUpdate;
-        if (matchUpdate.info.estado == TERMINADA) {
-            isRunning_ = false;
-        }
     }
 
     camera.update(lastUpdate);

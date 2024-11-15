@@ -35,6 +35,10 @@ player_id ControlledPlayer::getid(const uint8_t ind) const { return this->ids[in
 // Switch del player. Participando en una partida. No mas events de lobby, ahora snapshots.
 bool ControlledPlayer::setgamemode() {
     std::unique_lock<std::mutex> lck(mtx);
+    if(events.isclosed()){
+       return false;
+    }
+    
     if (snapshots.reopen()) {
         events.close();
         return true;
@@ -45,6 +49,10 @@ bool ControlledPlayer::setgamemode() {
 // Switch del player. Participando a la lobby. No mas snapshots ahora events de lobby.
 bool ControlledPlayer::setlobbymode() {
     std::unique_lock<std::mutex> lck(mtx);
+    if(snapshots.isclosed()){
+       return false;
+    }
+    
     if (events.reopen()) {
         snapshots.close();
         return true;
@@ -73,17 +81,17 @@ bool ControlledPlayer::isclosed() {
 
 bool ControlledPlayer::disconnect() {
     std::unique_lock<std::mutex> lck(mtx);
-    if (!snapshots.isclosed()) {
-        snapshots.close();
-        return true;
-    }
-
-    if (!events.isclosed()) {
+    if (snapshots.isclosed()) {
+        if (events.isclosed()) {
+            return false;
+        }
+        
         events.close();
         return true;
     }
-
-    return false;
+    
+    snapshots.close();
+    return true;
 }
 
 // No hace falta sincronizar/lockear ya que si se llama a este metodo

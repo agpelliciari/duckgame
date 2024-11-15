@@ -30,9 +30,9 @@ void TesterMatchDTO::assertPlayerEquals(int pos, const PlayerDTO& expected) {
 
 
 void TesterMatchDTO::assertEquals(const MatchDto& expected) {
-    ASSERT_EQ(curr_state.info.estado, expected.info.estado) << "State is the same";
-    ASSERT_EQ(curr_state.info.numronda, expected.info.numronda)
-            << "State round number are the same";
+    //ASSERT_EQ(curr_state.info.estado, expected.info.estado) << "State is the same";
+    //ASSERT_EQ(curr_state.info.numronda, expected.info.numronda)
+    //        << "State round number are the same";
 
     ASSERT_EQ(curr_state.players.size(), expected.players.size()) << "Player counts are the same";
 

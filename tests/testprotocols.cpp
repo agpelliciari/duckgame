@@ -15,7 +15,7 @@ TEST(IntegrationProtocolTest, SendReceiveStateNoPlayer) {
 
     QueueSocket msgbase(20, true);
 
-    MatchDto state(INICIADA, 2);
+    MatchDto state;
 
     // Los protocols se encargan. De liberar el shared socket.
     ServerProtocol server(msgbase);
@@ -32,7 +32,7 @@ TEST(IntegrationProtocolTest, SendReceiveState1PlayerMoveLeft) {
 
     QueueSocket msgbase(20, true);
 
-    MatchDto state(INICIADA, 2);
+    MatchDto state;
     PlayerDTO player1(3, true, 10, 5,
                       TypeMoveAction::MOVE_LEFT);  // id, is alive, x , y, move_action
     state.players.push_back(player1);
@@ -53,7 +53,7 @@ TEST(IntegrationProtocolTest, SendReceiveState2PlayerMoveLeftAndStill) {
 
     QueueSocket msgbase(20, true);
 
-    MatchDto state(INICIADA, 2);
+    MatchDto state;
 
     PlayerDTO player1(3, true, 10, 5,
                       TypeMoveAction::MOVE_LEFT);  // id, is alive, x , y, move_action

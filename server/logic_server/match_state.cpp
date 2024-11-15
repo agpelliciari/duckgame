@@ -9,15 +9,26 @@ MatchState::MatchState(): running(false), match_logic(), acciones(match_logic) {
 
 void MatchState::pushAction(const PlayerActionDTO& action) { acciones.push_command(action); }
 
-void MatchState::loop(MatchObserver& observer) {
+void MatchState::playRound(MatchObserver& observer, MatchStatsInfo& stats) {
+    stats.state = INICIADA;
     // start_players(observer);
     Clock clock(30);  // 16ms sleep == 60 frames por segundo aprox. 30 = 30 fps
     clock.resetnext();
-    while (running) {
+    while (running && clock.tickcount() < 90) {
         //std::cout << "LOOP COUNT " << clock.tickcount()<< std::endl;
         this->step();
         this->send_results(observer);
-        clock.tick();
+        clock.tickNoRest();
+    }
+    std::cout << "FINISHED TICK COUNT OF 90!?" << clock.tickcount()<<std::endl;
+    
+    if(stats.numronda >= 5){ // Termino la partida!
+        stats.state = TERMINADA;
+        stats.champion_player = 1;
+    } else{ // Termino la ronda o asi. Podria seguir internamente. O no.
+        stats.state = PAUSADA; // Para probar.
+        stats.numronda++;
+        //stats.state = ROUND_END;  // Capaz a futuro para mandar las stats del round.
     }
 }
 
@@ -60,7 +71,7 @@ void MatchState::execute_commands() {
 void MatchState::stop() { running = false; }
 
 void MatchState::send_results(MatchObserver& observer) {
-    MatchDto dto = MatchDto(INICIADA, 1);
+    MatchDto dto;
     match_logic.get_dtos(dto.players, dto.objects);
     observer.updateState(dto);
 }

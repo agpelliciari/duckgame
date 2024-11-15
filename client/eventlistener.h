@@ -8,7 +8,7 @@
 class EventListener {
 public:
     virtual void matchUpdated(const MatchDto& state) = 0;
-    virtual void matchFinished(const MatchDto& final_info) = 0;
+    virtual void statsUpdated(const MatchStatsInfo& stats_update) = 0;
     // virtual void matchCanceled(const MatchDto& final_info) = 0;
 
     virtual ~EventListener() {}
