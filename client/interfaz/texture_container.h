@@ -18,6 +18,7 @@ public:
 
     /* WEAPONS */
     static constexpr const char* COWBOY_GUN = "/weapons/cowboyPistol.png";
+    static constexpr const char* PISTOL_BULLET = "/weapons/chainBullet.png";
 
     /* ARMORS */
     static constexpr const char* CHEST_ARMOR = "/armors/chestPlateAnim.png";

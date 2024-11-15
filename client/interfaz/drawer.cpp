@@ -144,7 +144,7 @@ void Drawer::drawObjects(const MatchDto& matchDto) {
 
         } else if(object.type == TypeDynamicObject::PROJECTILE){
             renderer.Copy(
-                    textures.getTexture(TextureType::SIMPLE_BULLET), SDL2pp::Rect(0, 0, 3, 8),
+                    textures.getTexture(TextureContainer::PISTOL_BULLET), SDL2pp::Rect(0, 0, 3, 8),
                     SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(object.pos.y),
                                  camera.getScaledSize(3), camera.getScaledSize(8)));
 
