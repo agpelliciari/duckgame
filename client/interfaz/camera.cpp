@@ -53,6 +53,17 @@ int Camera::getScreenY(int playerY) { return static_cast<int>((playerY - y) * zo
 
 int Camera::getScaledSize(int size) { return static_cast<int>(size * zoom); }
 
-int Camera::backgroundScaledSize(int size) { return static_cast<int>(size / zoom); }
+SDL_Rect Camera::backgroundVisibleSection(int targetWidth, int targetHeight, float offSetFactor) const {
+    int visibleWidth = static_cast<int>(targetWidth / zoom);
+    int visibleHeight = static_cast<int>(targetHeight / zoom);
+
+    int offsetX = static_cast<int>(x * offSetFactor) - visibleWidth / 2;
+    int offsetY = static_cast<int>(y * offSetFactor) - visibleHeight / 2;
+
+    offsetX = std::clamp(offsetX, 0, targetWidth - visibleWidth);
+    offsetY = std::clamp(offsetY, 0, targetHeight - visibleHeight);
+
+    return { offsetX, offsetY, visibleWidth, visibleHeight };
+}
 
 Camera::~Camera() = default;

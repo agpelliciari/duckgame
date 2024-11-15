@@ -28,7 +28,6 @@ void TextureContainer::recursiveLoadTextures(SDL2pp::Renderer& renderer, const s
             recursiveLoadTextures(renderer, root, entry.path().string());
         } else if (entry.is_regular_file() && entry.path().extension() == ".png") {
             std::string relative_path = entry.path().string().substr(root.size());
-            relative_path.erase(0, 1);
             textures.emplace(relative_path, SDL2pp::Texture(renderer, entry.path().string()));
         }
     }

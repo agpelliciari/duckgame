@@ -40,7 +40,7 @@ public:
 
     int getScaledSize(int size);
 
-    int backgroundScaledSize(int size);
+    SDL_Rect backgroundVisibleSection(int targetWidth, int targetHeight, float offSetFactor) const;
 
     ~Camera();
 };

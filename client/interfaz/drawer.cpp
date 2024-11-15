@@ -53,7 +53,7 @@ void Drawer::drawIndicator(const PlayerDTO& player, bool isMainPlayer) {
 
     renderer.Copy(
             textures.getTexture(TextureContainer::PLAYER_INDICATOR), indicatorType,
-            SDL2pp::Rect(camera.getScreenX(player.pos.x + 8), camera.getScreenY(player.pos.y - 25),
+            SDL2pp::Rect(camera.getScreenX(player.pos.x), camera.getScreenY(player.pos.y - 30),
                          camera.getScaledSize(INDICATOR_WIDTH_RESIZED),
                          camera.getScaledSize(INDICATOR_HEIGHT_RESIZED)));
 }
@@ -111,30 +111,34 @@ int Drawer::getTextureFlipValue(SDL_RendererFlip flip, int flipValue, int unflip
 }
 
 void Drawer::drawBackground() {
-    int scaledWidth = camera.backgroundScaledSize(window.GetWidth());
-    int scaledHeight = camera.backgroundScaledSize(window.GetHeight());
+    const float PARALLAX_OFFSET_FACTOR = 0.5f;
+    int windowWidth = window.GetWidth();
+    int windowHeight = window.GetHeight();
 
-    renderer.Copy(textures.getTexture(context.map.background),
-                  SDL2pp::Rect((window.GetWidth() - scaledWidth) / 2, (window.GetHeight() - scaledHeight) / 2,
-                               scaledWidth, scaledHeight),
-                  SDL2pp::Rect(0, 0, window.GetWidth(), window.GetHeight()));
+    SDL_Rect visibleSection = camera.backgroundVisibleSection(windowWidth, windowHeight, PARALLAX_OFFSET_FACTOR);
+
+    renderer.Copy(
+        textures.getTexture(context.map.background),
+        SDL2pp::Rect(visibleSection.x, visibleSection.y, visibleSection.w, visibleSection.h),
+        SDL2pp::Rect(0, 0, windowWidth, windowHeight)
+    );
 }
 
 void Drawer::drawObjects(const MatchDto& matchDto) {
-    // inicialmente se dibuja como si todos fueran objects.    
     for (const MapObject& object: context.map.objects) {
         renderer.Copy(
                 textures.getTexture(object.texture), SDL2pp::Rect(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT),
-                SDL2pp::Rect(camera.getScreenX(object.column), 
-                             camera.getScreenY(object.row + BLOCK_HEIGHT), camera.getScaledSize(BLOCK_WIDTH),
-                             camera.getScaledSize(BLOCK_HEIGHT)));
+                SDL2pp::Rect(camera.getScreenX(object.column),
+                             camera.getScreenY(object.row),
+                             camera.getScaledSize(BLOCK_WIDTH),
+                             camera.getScaledSize(BLOCK_HEIGHT)
+                             ));
     }
 
     for (const auto& object: matchDto.objects) {
-
         if (object.type == TypeDynamicObject::BOX) {
             renderer.Copy(
-                    textures.getTexture(TextureContainer::BOX), SDL2pp::Rect(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT),
+                    textures.getTexture(context.map.boxes_tex), SDL2pp::Rect(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT),
                     SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(object.pos.y+BLOCK_HEIGHT*2),
                                  camera.getScaledSize(BLOCK_WIDTH), camera.getScaledSize(BLOCK_HEIGHT)));
 
