@@ -22,6 +22,7 @@
 #include <vector>
 
 #include "common/dtosmap.h"
+#include "./map_reader.h"
 
 
 /*
@@ -54,12 +55,7 @@ enum MapObjectType {
 class MapDeserializer {
 protected:
     std::string srcmap;  // cppcheck-suppress unusedStructMember
-
-    ryml::Tree tree;  // cppcheck-suppress unusedStructMember
-    ryml::NodeRef root;
-
-    void readPoints(ryml::NodeRef& list, std::vector<struct MapPoint>& out);
-
+    MapReader reader;
 public:
     explicit MapDeserializer(const std::string& src);
     // Asumamos por ahora que no se quiere permitir copias..
@@ -70,10 +66,8 @@ public:
     MapDeserializer(MapDeserializer&&) = delete;
     MapDeserializer& operator=(MapDeserializer&&) = delete;
 
-    const std::string& getMapName() const;
 
-
-    // Loadings inplace for data.
+    // Loadings inplace for data.. delegatorios
     void readSize(struct MapPoint& size);
     void readBackground(std::string& background);
 
@@ -83,6 +77,10 @@ public:
     void readBoxesTexture(std::string& box_tex);
 
     void readTextures(std::vector<std::string>& out);
+    
+    
+    // Especificos para el server
+    const std::string& getMapName() const;
 
     void readBlocks(std::vector<struct BlockDTO>& out);
     void readDecorations(std::vector<struct DecorationDTO>& out);
@@ -90,7 +88,6 @@ public:
     void readPlayerSpawns(std::vector<struct MapPoint>& out);
     void readItemSpawns(std::vector<struct MapPoint>& out);
     void readBoxes(std::vector<struct MapPoint>& out);
-
 
     // General methods que encapsulan multiples acciones.
     void loadMapInfo(struct MapInfo& info);
