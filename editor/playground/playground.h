@@ -125,6 +125,7 @@ private:
     QGraphicsRectItem* mapObjectAt(std::vector<QGraphicsRectItem*> mapObjects, QPoint position);
 
     std::vector<MapObjectData> mapObjectsFilter(const std::vector<QGraphicsRectItem*>& mapObjects, MapObjectType mapObjectType);
+    std::vector<MapObjectData> mapObjectsFilter2(const std::vector<QGraphicsRectItem*>& mapObjects, MapObjectType mapObjectType);
 };
 
 #endif
