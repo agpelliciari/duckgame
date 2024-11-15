@@ -67,12 +67,19 @@ PlayerActionDTO ServerProtocol::recvaction() {
 
     return action;
 }
+
+void ServerProtocol::sendstats(const MatchStatsInfo& state){
+    
+    std::cout << "SEND STATS?" << state.parse() << std::endl;
+}
+
+
 void ServerProtocol::sendstate(const MatchDto&& state) { sendstate(state); }
 
 void ServerProtocol::sendstate(const MatchDto& state) {
 
     // Primero envia general info
-    this->sendbytes(&state.info, sizeof(state.info));
+    //this->sendbytes(&state.info, sizeof(state.info));
     this->sendbyte(state.players.size());
 
     for (const PlayerDTO& player: state.players) {

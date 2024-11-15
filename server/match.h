@@ -34,7 +34,7 @@ private:
     MatchState looper;        // cppcheck-suppress unusedStructMember
     int connectedplayers;     // cppcheck-suppress unusedStructMember
     MapInfo map;              // cppcheck-suppress unusedStructMember
-
+    MatchStatsInfo stats;
     // std::mutex mtx;
     // std::condition_variable match_start;
 
@@ -75,6 +75,7 @@ public:
 
     lobbyID getID() const;
     const MapInfo& getMap() const;
+    const MatchStatsInfo& getStats() const;
     // void waitStart();
     int playercount() const;
 

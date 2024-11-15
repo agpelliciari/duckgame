@@ -10,9 +10,12 @@ target_sources(taller_server_logic
             match_state.cpp
             match_map.cpp
             box.cpp
+            item.cpp
             action_command.cpp
             physical_object.cpp
             physical_player.cpp
+            cowboy_pistol_weapon.cpp
+            physical_bullet.cpp
 
 
 
@@ -25,12 +28,16 @@ target_sources(taller_server_logic
             match_map.h
             weapon.h
             box.h
+            item.h
             armor.h
             command.h
             action_command.h
             matchobserver.h
             physical_object.h
             physical_player.h
+            shooting_direction.h
+            cowboy_pistol_weapon.h
+            physical_bullet.h
 
 
 

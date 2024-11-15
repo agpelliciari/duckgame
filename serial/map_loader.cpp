@@ -23,6 +23,14 @@ MapDeserializer& MapLoader::getLoader(const char* mapname) {
 
     std::cout << "LOADING NEW MAP " << name << std::endl;
 
+    // Por ahora pone uno default ... por tema espacios?
+    //name = std::string(DIR_MAPS);
+    //name.append("map3");
+    //name.append(EXT);
+
+
+    // No estaba.
+
     ReferencedMap& ref = maps.emplace_back(name);
     return ref.deserial;
 }

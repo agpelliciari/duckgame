@@ -142,7 +142,15 @@ void Drawer::drawObjects(const MatchDto& matchDto) {
                     SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(object.pos.y+BLOCK_HEIGHT*2),
                                  camera.getScaledSize(BLOCK_WIDTH), camera.getScaledSize(BLOCK_HEIGHT)));
 
-        } else if (object.type == TypeDynamicObject::PISTOLA_COWBOY) {
+        } else if(object.type == TypeDynamicObject::PROJECTILE){
+            renderer.Copy(
+                    textures.getTexture(TextureType::SIMPLE_BULLET), SDL2pp::Rect(0, 0, 3, 8),
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(object.pos.y),
+                                 camera.getScaledSize(3), camera.getScaledSize(8)));
+
+        }
+        
+        else if (object.type == TypeDynamicObject::PISTOLA_COWBOY) {
             renderer.Copy(
                     textures.getTexture(TextureContainer::COWBOY_GUN), SDL2pp::Rect(0, 0, 22, 11),
                     SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(object.pos.y),

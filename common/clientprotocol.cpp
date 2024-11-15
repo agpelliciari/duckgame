@@ -112,10 +112,10 @@ void ClientProtocol::recvmapdata(struct MapData& data, const int unit) {
 
 MatchDto ClientProtocol::recvstate() {
     // Primero recibi info general
-    match_info_dto out;
-    protocol.recvbytes(&out, sizeof(out));
+    //match_info_dto out;
+    //protocol.recvbytes(&out, sizeof(out));
 
-    MatchDto res = MatchDto(out);
+    MatchDto res = MatchDto();
     // std::cerr << "-----GOT UPDATE\n" << res.parse() << std::endl;
 
     int playercount = (int)protocol.recvbyte();

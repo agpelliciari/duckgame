@@ -29,8 +29,12 @@ enum LobbyResponseType : uint8_t {
 
     // Notificaciones de cambios dentro de la lobby/configuracion
     PLAYER_NEW = 0x17,
-    PLAYER_LEFT = 0x20
-
+    PLAYER_LEFT = 0x20,
+    
+    // For in-game lobby kind of..
+    MATCH_PAUSE_TICK = 0x23,
+    MATCH_PAUSE_END = 0x24
+    
 };
 
 struct lobby_info {

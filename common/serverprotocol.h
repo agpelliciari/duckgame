@@ -53,7 +53,8 @@ public:
 
     void sendstate(const MatchDto&& state);
     void sendstate(const MatchDto& state);
-
+    void sendstats(const MatchStatsInfo& state);
+    
     void sendplayer(const PlayerDTO& player);
 
     void sendmapinfo(const MapInfo& map);

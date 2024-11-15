@@ -16,8 +16,9 @@ protected:
     ServerProtocol& protocol;  // cppcheck-suppress unusedStructMember
 
     bool runLobby();
-    bool runGame();
-
+    MatchStateType runGame();
+    
+    bool runPostGame(MatchStateType state);
 public:
     explicit ControlNotifier(Match& match, ControlledPlayer& _player, ServerProtocol& protocol);
 

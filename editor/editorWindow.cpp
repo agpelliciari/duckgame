@@ -268,7 +268,7 @@ void EditorWindow::exportToFileSystem() {
     }
 
     for (const auto& spawnPlayer : spawnPlayers) {
-        serial.addItemSpawn(spawnPlayer.row, spawnPlayer.column, spawnPlayer.zIndex, spawnPlayer.texture);
+        serial.addPlayerSpawn(spawnPlayer.row, spawnPlayer.column, spawnPlayer.zIndex, spawnPlayer.texture);
     }
 
     for (const auto& spawnWeapon : spawnWeapons) {
