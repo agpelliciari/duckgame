@@ -1,8 +1,6 @@
 #include "editorWindow.h"
 #include "./ui_editorWindow.h"
 
-#include <iostream>
-
 EditorWindow::EditorWindow(QWidget *parent):
     QMainWindow(parent),
     ui(new Ui::EditorWindow),
@@ -261,26 +259,26 @@ void EditorWindow::exportToFileSystem() {
     const std::vector<MapObjectData> decorations = playground->decorationsToExport();
 
     MapSerializer serial(maxWidth, maxHeight);
-    serial.setBackground(background.texture);
+    serial.setBackground(background.texture.substr(5));
 
     for (const auto& block : blocks) {
-        serial.addBlock(block.row, block.column, block.zIndex, block.texture);
+        serial.addBlock(block.row, block.column, block.zIndex, block.texture.substr(5));
     }
 
     for (const auto& spawnPlayer : spawnPlayers) {
-        serial.addItemSpawn(spawnPlayer.row, spawnPlayer.column, spawnPlayer.zIndex, spawnPlayer.texture);
+        serial.addPlayerSpawn(spawnPlayer.row, spawnPlayer.column, spawnPlayer.zIndex, spawnPlayer.texture.substr(5));
     }
 
     for (const auto& spawnWeapon : spawnWeapons) {
-        serial.addItemSpawn(spawnWeapon.row, spawnWeapon.column, spawnWeapon.zIndex, spawnWeapon.texture);
+        serial.addItemSpawn(spawnWeapon.row, spawnWeapon.column, spawnWeapon.zIndex, spawnWeapon.texture.substr(5));
     }
 
     for (const auto& box : boxes) {
-        serial.addBox(box.row, box.column, box.zIndex, box.texture);
+        serial.addBox(box.row, box.column, box.zIndex, box.texture.substr(5));
     }
 
     for (const auto& decoration : decorations) {
-        serial.addDecoration(decoration.row , decoration.column, decoration.zIndex, decoration.texture);
+        serial.addDecoration(decoration.row , decoration.column, decoration.zIndex, decoration.texture.substr(5));
     }
 
     std::string file("./res/maps/MAPACHE.yaml");

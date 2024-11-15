@@ -1,14 +1,14 @@
 size_x: 100
 size_y: 300
-background: default.png
+background: /backgrounds/forestNight.png
 blocks_z: 0
 boxes_z: 1
-box_texture: default_tex.png
+box_texture: /boxes/itemBox1.png
 textures:
-  - blocks/Nature/11.png
-  - blocks/Nature/43.png
-  - decorations/notexture.png
-  - spawns/weapons/gunSpawner1.png
+  - /blocks/Nature/11.png
+  - /blocks/Nature/43.png
+  - /decorations/notexture.png
+  - /spawns/weapons/gunSpawner1.png
 blocks:
   - x: 4
     y: 0

@@ -23,12 +23,12 @@ public:
     void add_acceleration(int acceleration_x, int acceleration_y);
 
     void move(const MatchMap& colition_map);
-    bool detect_x_collision(const MatchMap& colition_map, const int diff);
-    bool detect_y_collision(const MatchMap& colition_map, const int diff);
+    bool detect_x_collision(const MatchMap& colition_map, const int diff, bool &is_player, int &id_player);
+    bool detect_y_collision(const MatchMap& colition_map, const int diff, bool &is_player, int &id_player);
 
-    virtual void react_to_sides_collision() = 0;
-    virtual void react_to_down_collision() = 0;
-    virtual void react_to_up_collision() = 0;
+    virtual void react_to_sides_collision(bool is_player, int id_player) = 0;
+    virtual void react_to_down_collision(bool is_player, int id_player) = 0;
+    virtual void react_to_up_collision(bool is_player, int id_player) = 0;
 
     Tuple get_position();
     Tuple get_dimension();

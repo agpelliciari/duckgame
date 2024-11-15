@@ -42,7 +42,11 @@ void EventHandler::handleKeyDown(SDL_Keycode key, PlayerActionDTO& action) {
                 break;
             case SDLK_w:
                 setAction(action, JUMP, SECOND_PLAYER);
-                soundManager.playSound(SoundType::JUMP);
+                soundManager.playSound(SoundType::JUMP);            
+                break;
+            case SDLK_e:
+                setAction(action, SHOOT, SECOND_PLAYER);
+                soundManager.playSound(SoundType::SHOT);
                 break;
         }
     }

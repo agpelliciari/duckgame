@@ -96,23 +96,23 @@ MapObjectData Playground::backgroundToExport() {
 }
 
 std::vector<MapObjectData> Playground::blocksToExport() {
-    return mapObjectsFilter(blocks, MapObjectType::Block);
+    return mapObjectsFilter2(blocks, MapObjectType::Block);
 }
 
 std::vector<MapObjectData> Playground::spawnPlayersToExport() {
-    return mapObjectsFilter(nonPhysicalObjects, MapObjectType::SpawnPlayer);
+    return mapObjectsFilter2(nonPhysicalObjects, MapObjectType::SpawnPlayer);
 }
 
 std::vector<MapObjectData> Playground::spawnWeaponsToExport() {
-    return mapObjectsFilter(nonPhysicalObjects, MapObjectType::SpawnWeapon);
+    return mapObjectsFilter2(nonPhysicalObjects, MapObjectType::SpawnWeapon);
 }
 
 std::vector<MapObjectData> Playground::boxesToExport() {
-    return mapObjectsFilter(physicalObjects, MapObjectType::Box);
+    return mapObjectsFilter2(physicalObjects, MapObjectType::Box);
 }
 
 std::vector<MapObjectData> Playground::decorationsToExport() {
-    return mapObjectsFilter(nonPhysicalObjects, MapObjectType::Decoration);
+    return mapObjectsFilter2(nonPhysicalObjects, MapObjectType::Decoration);
 }
 
 void Playground::zoomIn() {
@@ -286,6 +286,26 @@ std::vector<MapObjectData> Playground::mapObjectsFilter(const std::vector<QGraph
         MapObjectData mapObjectData = mapObject->data(0).value<MapObjectData>();
         if (mapObjectData.mapObjectType == mapObjectType)
             result.push_back(mapObjectData);
+    }
+
+    return result;
+}
+
+std::vector<MapObjectData> Playground::mapObjectsFilter2(const std::vector<QGraphicsRectItem*>& mapObjects, MapObjectType mapObjectType) {
+    std::vector<MapObjectData> result;
+
+    for (QGraphicsRectItem* mapObject : mapObjects) {
+        MapObjectData mapObjectData = mapObject->data(0).value<MapObjectData>();
+        if (mapObjectData.mapObjectType == mapObjectType) {
+            MapObjectData newMapObjectData = {
+                MAX_HEIGHT - mapObjectData.row - 1,
+                mapObjectData.column,
+                mapObjectData.zIndex,
+                mapObjectData.mapObjectType,
+                mapObjectData.texture,
+            };
+            result.push_back(newMapObjectData);
+        }
     }
 
     return result;

@@ -38,40 +38,32 @@ struct DynamicObjDTO {
 };
 
 
-enum MatchStateType : uint8_t {
-    INICIADA = 0x01,
-    TERMINADA = 0x02,
-    CANCELADA = 0x03,
-};
-
-struct match_info_dto {
-    MatchStateType estado;
-    uint8_t numronda;
-    // uint8_t cantidadjugadores;
-};
 
 class MatchDto {
 public:
-    match_info_dto info;
+    //match_info_dto info;
     std::vector<PlayerDTO> players;      // cppcheck-suppress unusedStructMember
     std::vector<DynamicObjDTO> objects;  // cppcheck-suppress unusedStructMember
+    
+    MatchDto(){}
+    //explicit MatchDto(MatchStateType _estado, uint8_t _numronda): info({_estado, _numronda}) {}
+    //explicit MatchDto(match_info_dto _info): info(_info) {}
+    //MatchDto(): info({INICIADA, 0}) {}
 
-    explicit MatchDto(MatchStateType _estado, uint8_t _numronda): info({_estado, _numronda}) {}
-    explicit MatchDto(match_info_dto _info): info(_info) {}
-    MatchDto(): info({INICIADA, 0}) {}
+    const PlayerDTO* getPlayer(const int id) const {
+        for (const PlayerDTO& player: players) {
+            // cppcheck-suppress useStlAlgorithm
+            if (player.id == id) {
+                return &player;
+            }
+        }
 
+        return NULL;
+    }
 
     std::string parse() const {
         std::stringstream result;
-        if (info.estado == INICIADA) {
-            result << "INICIADA ";
-        } else if (info.estado == TERMINADA) {
-            result << "TERMINADA ";
-
-        } else if (info.estado == CANCELADA) {
-            result << "CANCELADA ";
-        }
-        result << (int)info.numronda;
+        result << "player count" << players.size();
         return result.str();
     }
 };
@@ -81,15 +73,41 @@ struct PlayerStatDto {
     uint8_t wins;  // cppcheck-suppress unusedStructMember
 };
 
+enum MatchStateType : uint8_t {
+    INICIADA = 0x01,
+    PAUSADA = 0x04,
+    ROUND_END = 0x05,
+    TERMINADA = 0x02,
+    CANCELADA = 0x03,
+};
+
 // Info estadisticas
-class StatInfoDto {
+class MatchStatsInfo {
 public:
-    MatchStateType estado;
+    MatchStateType state;
     uint8_t numronda;
     std::vector<PlayerStatDto> stats;  // cppcheck-suppress unusedStructMember
+    uint8_t champion_player; // cppcheck-suppress unusedStructMember
 
-    explicit StatInfoDto(MatchStateType _estado, uint8_t _numronda):
-            estado(_estado), numronda(_numronda) {}
+    explicit MatchStatsInfo(MatchStateType _estado, uint8_t _numronda, const uint8_t _champion_player):
+            state(_estado), numronda(_numronda),champion_player(_champion_player) {}
+            
+    MatchStatsInfo():state(PAUSADA), numronda(1),champion_player(0) {}
+    
+    std::string parse() const{
+        std::stringstream result;
+        result << (int)numronda;
+        if (state == INICIADA) {
+            result << " INICIADA ";
+        } else if (state == TERMINADA) {
+            result << " TERMINADA WON "<< (int) champion_player;
+        } else if (state == PAUSADA) {
+            result << " ROUND END :: WON "<< (int) champion_player;
+        } else if (state == CANCELADA) {
+            result << " CANCELADA ";
+        }
+        return result.str();    
+    }
 };
 
 
