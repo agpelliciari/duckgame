@@ -17,6 +17,8 @@
 
 #define COWBOY_GUN_WIDTH 22
 #define COWBOY_GUN_HEIGHT 11
+#define PEW_PEW_LASER_SIZE 32
+#define MAGNUM_SIZE 32
 
 #define INDICATOR_WIDTH 18.2f
 #define INDICATOR_WIDTH_RESIZED 14
@@ -74,6 +76,9 @@ public:
     // This method will be responsible for drawing everything, including the games
     // UI.
     void draw(const MatchDto& matchDto);
+
+    // Draw the leaderboard at the end of 5 rounds.
+    // void drawLeaderboard(const MatchStatsInfo& stats);
 
     ~Drawer();
 };
