@@ -24,6 +24,7 @@ private:
     MatchMap colition_map;  // cppcheck-suppress unusedStructMember
 
     std::vector<Player> players;  // cppcheck-suppress unusedStructMember
+    //std::vector<int> id_alive_players;    // cppcheck-suppress unusedStructMember
     std::vector<Box> boxes;       // cppcheck-suppress unusedStructMember
     std::vector<Item> items;     // cppcheck-suppress unusedStructMember
     std::vector<PhysicalBullet> bullets; // cppcheck-suppress unusedStructMember
@@ -41,7 +42,7 @@ public:
     void add_player_speed(int id, int x, int y);
     void still_player(int id);
     void get_dtos(std::vector<PlayerDTO>& dtos, std::vector<DynamicObjDTO>& objects);
-    void update_players();
+    void update_players(std::vector<int> &id_alive_players);
     void update_colition_map();
     //void add_colition(PhysicalObject &object);
     void add_boxes(const std::vector<struct MapPoint>& boxes);

@@ -24,6 +24,10 @@ MatchLogic::MatchLogic(): colition_map(800, 640) {
     this->command_map[PlayerActionType::JUMP] = [this](int index) {
         this->add_player_speed(index, 0, 50);
     };
+
+    this->command_map[PlayerActionType::FLAPPING_END] = [this](int index) {
+        this->add_player_speed(index, 0, 0);
+    };
     /*
     this->command_map[PlayerActionType::STAY_DOWN] = [this](int index) {
         this->add_player_speed(index, 0, 0);
@@ -122,9 +126,13 @@ void MatchLogic::still_player(int id) {
     }
 }
 
-void MatchLogic::update_players() {
+void MatchLogic::update_players(std::vector<int> &id_alive_players) {
+    id_alive_players.clear();
     for (Player& player: players) {
         player.update(colition_map);
+        if (player.is_still_alive()){
+            id_alive_players.push_back(player.get_id());
+        }
     }
 }
 

@@ -50,9 +50,7 @@ void Match::init(MapLoader& maps, const char* mapname) {
     deserial.loadMapInfo(map);
 
     // Notify/start players. Ya podrian enviar la info del mapa.
-    looper.start_players(players);
-    
-    
+    looper.start_players(players, stats);
     players.finishLobbyMode();
 
     // Carga info para el server
@@ -102,8 +100,9 @@ void Match::notifyAction(const PlayerActionDTO& action) {
     }
 }
 
-const MatchStatsInfo& Match::getStats() const { return this->stats; }
-
+const MatchStatsInfo& Match::getStats() const{
+     return this->stats;
+}
 
 bool Match::pausedMatch(){
     Clock timer(MS_SECOND);  // Timer de a pasos de 1 segundo.
@@ -162,7 +161,6 @@ void Match::run() {
         std::cout << "FINISHED MATCH? NOTIFY!!! "<< stats.parse()<<" \n";    
     }
     players.finishGameMode(this->stats);
-
 
     // Checkea si el finish fue natural o forzado.
 

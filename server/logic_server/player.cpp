@@ -94,6 +94,10 @@ void Player::aim_up_end(){
     aim_up = false;
 }
 
+bool Player::is_still_alive(){
+    return is_alive;
+}
+
 void Player::take_damage(){
     if (is_alive) {
         life_points--;
@@ -107,8 +111,18 @@ void Player::shoot(std::vector <PhysicalBullet> &bullets){
     //if (weapon != nullptr){
         Tuple bullet_position = this->get_map_position();
         Tuple player_dimension = this->get_dimension();
-        bullet_position.x += player_dimension.x / 2;
-        bullet_position.y += player_dimension.y / 2;
+        if (shooting_direction == ShootingDirection::UP){
+            bullet_position.x += player_dimension.x / 2;
+            bullet_position.y += player_dimension.y  + 5;
+        }
+        if (shooting_direction == ShootingDirection::LEFT){
+            bullet_position.x -= 5;
+            bullet_position.y += player_dimension.y / 2;
+        }
+        if (shooting_direction == ShootingDirection::RIGHT){
+            bullet_position.x += 5;
+            bullet_position.y += player_dimension.y / 2;
+        }
         weapon.shoot(this->shooting_direction, bullets, bullet_position);
     //}
 }

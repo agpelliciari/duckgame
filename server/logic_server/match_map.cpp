@@ -35,25 +35,8 @@ bool MatchMap::check_collision(const int other_object_x, const int other_object_
         return true;
     }
     for (auto& object: objects) {
-        if (object.map_point.x == other_object_x && object.map_point.y == other_object_y) {
-            is_player = object.is_player;
-            id_player = object.id_player;
-            return true;
-        }
-        if (object.map_point.x + object.dimension.x == other_object_x &&
-            object.map_point.y == other_object_y) {
-            is_player = object.is_player;
-            id_player = object.id_player;
-            return true;
-        }
-        if (object.map_point.x == other_object_x &&
-            object.map_point.y + object.dimension.y == other_object_y) {
-            is_player = object.is_player;
-            id_player = object.id_player;
-            return true;
-        }
-        if (object.map_point.x + object.dimension.x == other_object_x &&
-            object.map_point.y + object.dimension.y == other_object_y) {
+        if (other_object_x >= object.map_point.x && other_object_x <= object.map_point.x + object.dimension.x &&
+                other_object_y >= object.map_point.y && other_object_y <= object.map_point.y + object.dimension.y) {
             is_player = object.is_player;
             id_player = object.id_player;
             return true;
