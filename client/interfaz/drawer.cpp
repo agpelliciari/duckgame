@@ -12,10 +12,11 @@ Drawer::Drawer(SDL2pp::Window& window, Animation& animation, const GameContext& 
         showIndicators(true) {}
 
 void Drawer::drawPlayer(const PlayerDTO& player) {
-    static const std::unordered_map<int, std::string> duckTextures = {{1, TextureContainer::YELLOW_DUCK},
-                                                                      {2, TextureContainer::GREY_DUCK},
-                                                                      {3, TextureContainer::ORANGE_DUCK},
-                                                                      {4, TextureContainer::WHITE_DUCK}};
+    static const std::unordered_map<int, std::string> duckTextures = {
+            {1, TextureContainer::YELLOW_DUCK},
+            {2, TextureContainer::GREY_DUCK},
+            {3, TextureContainer::ORANGE_DUCK},
+            {4, TextureContainer::WHITE_DUCK}};
 
     auto mappedTexture = duckTextures.find(player.id);
     if (mappedTexture != duckTextures.end()) {
@@ -28,8 +29,9 @@ void Drawer::drawPlayer(const PlayerDTO& player) {
                 textures.getTexture(playerTexture),
                 SDL2pp::Rect(animation.getSpriteX(player.id), animation.getSpriteY(player.id),
                              SPRITE_SIZE, SPRITE_SIZE),
-                SDL2pp::Rect(camera.getScreenX(player.pos.x-BLOCK_WIDTH/2), camera.getScreenY(player.pos.y),
-                             camera.getScaledSize(SPRITE_SIZE), camera.getScaledSize(SPRITE_SIZE)),
+                SDL2pp::Rect(camera.getScreenX(player.pos.x - BLOCK_WIDTH / 2),
+                             camera.getScreenY(player.pos.y), camera.getScaledSize(SPRITE_SIZE),
+                             camera.getScaledSize(SPRITE_SIZE)),
                 0.0, SDL2pp::Point(0, 0), flip);
 
         if (player.weapon != TypeWeapon::NONE) {
@@ -88,7 +90,10 @@ void Drawer::drawWeapon(const PlayerDTO& player, SDL_RendererFlip flip) {
             {
                     // almaceno enum de textura del container y dimensiones
                     {TypeWeapon::PISTOLA_COWBOY,
-                     {TextureContainer::COWBOY_GUN, COWBOY_GUN_WIDTH, COWBOY_GUN_HEIGHT}}
+                     {TextureContainer::COWBOY_GUN, COWBOY_GUN_WIDTH, COWBOY_GUN_HEIGHT}},
+                    {TypeWeapon::PEW_PEW_LASER,
+                     {TextureContainer::PEW_PEW_LASER, PEW_PEW_LASER_SIZE, PEW_PEW_LASER_SIZE}},
+                    {TypeWeapon::MAGNUM, {TextureContainer::MAGNUM, MAGNUM_SIZE, MAGNUM_SIZE}}
                     // demas armas
             };
 
@@ -99,7 +104,8 @@ void Drawer::drawWeapon(const PlayerDTO& player, SDL_RendererFlip flip) {
         renderer.Copy(
                 textures.getTexture(textureType), SDL2pp::Rect(0, 0, width, height),
                 SDL2pp::Rect(camera.getScreenX(player.pos.x +
-                                               getTextureFlipValue(flip, GUN_FLIP_X, GUN_UNFLIP_X)),
+                                               getTextureFlipValue(flip, GUN_FLIP_X, GUN_UNFLIP_X) -
+                                               BLOCK_WIDTH / 2),
                              camera.getScreenY(player.pos.y + (SPRITE_SIZE / 2)),
                              camera.getScaledSize(width - 6), camera.getScaledSize(height - 6)),
                 0.0, SDL2pp::Point(0, 0), flip);
@@ -115,46 +121,52 @@ void Drawer::drawBackground() {
     int windowWidth = window.GetWidth();
     int windowHeight = window.GetHeight();
 
-    SDL_Rect visibleSection = camera.backgroundVisibleSection(windowWidth, windowHeight, PARALLAX_OFFSET_FACTOR);
+    SDL_Rect visibleSection =
+            camera.backgroundVisibleSection(windowWidth, windowHeight, PARALLAX_OFFSET_FACTOR);
 
     renderer.Copy(
-        textures.getTexture(context.map.background),
-        SDL2pp::Rect(visibleSection.x, visibleSection.y, visibleSection.w, visibleSection.h),
-        SDL2pp::Rect(0, 0, windowWidth, windowHeight)
-    );
+            textures.getTexture(context.map.background),
+            SDL2pp::Rect(visibleSection.x, visibleSection.y, visibleSection.w, visibleSection.h),
+            SDL2pp::Rect(0, 0, windowWidth, windowHeight));
 }
 
 void Drawer::drawObjects(const MatchDto& matchDto) {
     for (const MapObject& object: context.map.objects) {
         renderer.Copy(
                 textures.getTexture(object.texture), SDL2pp::Rect(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT),
-                SDL2pp::Rect(camera.getScreenX(-object.row),
-                             camera.getScreenY(-object.column),
+                SDL2pp::Rect(camera.getScreenX(-object.row), camera.getScreenY(-object.column),
                              camera.getScaledSize(BLOCK_WIDTH),
-                             camera.getScaledSize(BLOCK_HEIGHT)
-                             ));
+                             camera.getScaledSize(BLOCK_HEIGHT)));
     }
 
-    for (const auto& object: matchDto.objects) {
+    for (const auto& object:
+         matchDto.objects) {  // modificar por switch cuando se agreguen todos los objetos
         if (object.type == TypeDynamicObject::BOX) {
-            renderer.Copy(
-                    textures.getTexture(context.map.boxes_tex), SDL2pp::Rect(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT),
-                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(object.pos.y+BLOCK_HEIGHT*2),
-                                 camera.getScaledSize(BLOCK_WIDTH), camera.getScaledSize(BLOCK_HEIGHT)));
+            renderer.Copy(textures.getTexture(context.map.boxes_tex),
+                          SDL2pp::Rect(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT),
+                          SDL2pp::Rect(camera.getScreenX(object.pos.x),
+                                       camera.getScreenY(object.pos.y + BLOCK_HEIGHT * 2),
+                                       camera.getScaledSize(BLOCK_WIDTH),
+                                       camera.getScaledSize(BLOCK_HEIGHT)));
 
-        } else if(object.type == TypeDynamicObject::PROJECTILE){
+        } else if (object.type == TypeDynamicObject::PROJECTILE) {
             renderer.Copy(
                     textures.getTexture(TextureContainer::PISTOL_BULLET), SDL2pp::Rect(0, 0, 3, 8),
                     SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(object.pos.y),
                                  camera.getScaledSize(3), camera.getScaledSize(8)));
 
-        }
-        
-        else if (object.type == TypeDynamicObject::PISTOLA_COWBOY) {
+        } else if (object.type == TypeDynamicObject::PISTOLA_COWBOY) {
             renderer.Copy(
-                    textures.getTexture(TextureContainer::COWBOY_GUN), SDL2pp::Rect(0, 0, 22, 11),
+                    textures.getTexture(TextureContainer::COWBOY_GUN),
+                    SDL2pp::Rect(0, 0, COWBOY_GUN_WIDTH, COWBOY_GUN_HEIGHT),
                     SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(object.pos.y),
-                                 camera.getScaledSize(22 - 6), camera.getScaledSize(11 - 6)));
+                                 camera.getScaledSize(COWBOY_GUN_WIDTH - 6),
+                                 camera.getScaledSize(COWBOY_GUN_HEIGHT - 6)));
+        } else if (object.type == TypeDynamicObject::LASER) {
+            renderer.Copy(
+                    textures.getTexture(TextureContainer::LASER_BEAM), SDL2pp::Rect(0, 0, 1, 8),
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(object.pos.y),
+                                 camera.getScaledSize(1), camera.getScaledSize(8)));
         }
     }
 }
@@ -191,5 +203,46 @@ void Drawer::draw(const MatchDto& matchDto) {
     // Show rendered frame
     renderer.Present();
 }
+
+/*void Drawer::drawLeaderboard(const MatchStatsInfo& matchStats) {
+    renderer.Clear();
+
+    drawBackground();
+
+    static const std::unordered_map<int, std::string> duckTextures = {
+            {1, TextureContainer::YELLOW_DUCK},
+            {2, TextureContainer::GREY_DUCK},
+            {3, TextureContainer::ORANGE_DUCK},
+            {4, TextureContainer::WHITE_DUCK}};
+
+
+    renderer.Copy(textures.getTexture(TextureContainer::SCOREBOARD), SDL2pp::Rect(0, 0, 320, 200),
+                  SDL2pp::Rect(50, 50, 520, 400));
+
+    int y = 110;
+    int x = 8;
+
+    for (const PlayerStatDto& playerStat: matchStats.stats) {
+        std::cout << static_cast<int>(playerStat.id) << std::endl;
+        auto mappedTexture = duckTextures.find(static_cast<int>(playerStat.id));
+        if (mappedTexture != duckTextures.end()) {
+            const auto& playerTexture = mappedTexture->second;
+
+            renderer.Copy(  // jugador
+                    textures.getTexture(playerTexture),
+                    SDL2pp::Rect(1, 10, SPRITE_SIZE, SPRITE_SIZE), SDL2pp::Rect(165, y, 64, 64));
+
+            renderer.Copy(  // rondas ganadas
+                    textures.getTexture(TextureContainer::FONT),
+                    SDL2pp::Rect(x * (static_cast<int>(playerStat.wins)), 8, 8, 8),
+                    SDL2pp::Rect(320, y + 15, 20, 20));  // modificar x
+        }
+
+        y += 50;
+    }
+
+    // Show rendered frame
+    renderer.Present();
+}*/
 
 Drawer::~Drawer() = default;

@@ -1,12 +1,12 @@
 #ifndef TEXTURE_CONTAINER_H
 #define TEXTURE_CONTAINER_H
 
-#include <SDL2/SDL.h>
-#include <SDL2pp/SDL2pp.hh>
-
-#include <unordered_map>
 #include <filesystem>
 #include <string>
+#include <unordered_map>
+
+#include <SDL2/SDL.h>
+#include <SDL2pp/SDL2pp.hh>
 
 class TextureContainer {
 public:
@@ -21,6 +21,9 @@ public:
     /* WEAPONS */
     static constexpr const char* COWBOY_GUN = "/weapons/cowboyPistol.png";
     static constexpr const char* PISTOL_BULLET = "/weapons/chainBullet.png";
+    static constexpr const char* PEW_PEW_LASER = "/weapons/pewpewLaser.png";
+    static constexpr const char* LASER_BEAM = "/weapons/laserBeam.png";
+    static constexpr const char* MAGNUM = "/weapons/magnum.png";
 
     /* ARMORS */
     static constexpr const char* CHEST_ARMOR = "/armors/chestPlateAnim.png";
@@ -28,7 +31,7 @@ public:
 
     /* UI */
     static constexpr const char* PLAYER_INDICATOR = "/duck_sprites/playerIndicator.png";
-    static constexpr const char* SCOREBOARD = "/leaderboard/scoreboard.png";
+    static constexpr const char* SCOREBOARD = "/leaderboard/emptyScoreboard.png";
     static constexpr const char* FONT = "/font/biosFont.png";
 
 private:
@@ -45,7 +48,8 @@ public:
 private:
     void loadTextures(SDL2pp::Renderer& renderer, const std::string& root);
 
-    void recursiveLoadTextures(SDL2pp::Renderer& renderer, const std::string& root, const std::string& path);
+    void recursiveLoadTextures(SDL2pp::Renderer& renderer, const std::string& root,
+                               const std::string& path);
 };
 
 #endif
