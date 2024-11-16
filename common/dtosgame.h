@@ -126,7 +126,7 @@ public:
     const PlayerStatDto* getPlayerStat(const int id) const {
         for (const PlayerStatDto& player: stats) {
             // cppcheck-suppress useStlAlgorithm
-            if (player.player_id == id) {
+            if (player.id == id) {
                 return &player;
             }
         }
@@ -136,7 +136,7 @@ public:
     int addPlayerWin(const int id) {
         for (PlayerStatDto& player: stats) {
             // cppcheck-suppress useStlAlgorithm
-            if (player.player_id == id) {
+            if (player.id == id) {
                 player.wins++;
                 return player.wins;
             }

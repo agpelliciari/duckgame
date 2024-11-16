@@ -8,17 +8,18 @@
 
 using ::testing::InSequence;
 using ::testing::ThrowsMessage;
-/*
+
 TEST(IntegrationLogicTest, SendReceiveFirstState3players) {
 
 
     MatchDto state;
+    MatchStatsInfo stats;
 
     MockObserver observer(state, 3);
 
     MatchState match;
 
-    match.start_players(observer);
+    match.start_players(observer,stats);
 
     match.send_results(observer);
 
@@ -28,12 +29,13 @@ TEST(IntegrationLogicTest, SendReceiveFirstState3players) {
 
 TEST(IntegrationLogicTest, SendMoveOnlyPlayer3Right) {
     MatchDto state;
+    MatchStatsInfo stats;
 
     MockObserver observer(state, 3);
 
     MatchState match;
 
-    match.start_players(observer);
+    match.start_players(observer,stats);
 
     match.send_results(observer);
     observer.assertHasAllPlayers();
@@ -54,12 +56,13 @@ TEST(IntegrationLogicTest, SendMoveOnlyPlayer3Right) {
 
 TEST(IntegrationLogicTest, SendMoveOnlyPlayer3Left) {
     MatchDto state;
+    MatchStatsInfo stats;
 
     MockObserver observer(state, 3);
 
     MatchState match;
 
-    match.start_players(observer);
+    match.start_players(observer,stats);
 
     match.send_results(observer);
     observer.assertHasAllPlayers();
@@ -81,12 +84,13 @@ TEST(IntegrationLogicTest, SendMoveOnlyPlayer3Left) {
 
 TEST(IntegrationLogicTest, SendMoveOnlyPlayer3AirRight) {
     MatchDto state;
+    MatchStatsInfo stats;
 
     MockObserver observer(state, 3);
 
     MatchState match;
 
-    match.start_players(observer);
+    match.start_players(observer,stats);
 
     match.send_results(observer);
     observer.assertHasAllPlayers();
@@ -111,12 +115,13 @@ TEST(IntegrationLogicTest, SendMoveOnlyPlayer3AirRight) {
 
 TEST(IntegrationLogicTest, SendMoveOnlyPlayer3AirLeft) {
     MatchDto state;
+    MatchStatsInfo stats;
 
     MockObserver observer(state, 3);
 
     MatchState match;
 
-    match.start_players(observer);
+    match.start_players(observer,stats);
 
     match.send_results(observer);
     observer.assertHasAllPlayers();
@@ -141,12 +146,13 @@ TEST(IntegrationLogicTest, SendMoveOnlyPlayer3AirLeft) {
 
 TEST(IntegrationLogicTest, SendMoveOnlyPlayer3Jumps) {
     MatchDto state;
+    MatchStatsInfo stats;
 
     MockObserver observer(state, 3);
 
     MatchState match;
 
-    match.start_players(observer);
+    match.start_players(observer,stats);
 
     match.send_results(observer);
     observer.assertHasAllPlayers();
@@ -166,4 +172,3 @@ TEST(IntegrationLogicTest, SendMoveOnlyPlayer3Jumps) {
 
     observer.assertPlayerMovedHigher(playerGiven, playerBase);
 }
-*/

@@ -73,14 +73,14 @@ PlayerActionDTO ServerProtocol::recvaction() {
 #define stat_state(vl) (vl == INICIADA? MatchStateType::ROUND_END: vl) 
 void ServerProtocol::sendstats(const MatchStatsInfo& state) {
 
-    uint8_t general[3] = {(uint8_t)stat_state(state.state), state.numronda, state.champion_player};    
+    uint8_t general[3] = {(uint8_t)stat_state(state.state), (uint8_t)state.numronda, state.champion_player};    
     
     this->sendbytes(general, sizeof(general));
 
     this->sendbyte(state.stats.size());
 
     for (const PlayerStatDto& stat: state.stats) {
-        this->sendbyte(stat.player_id);
+        this->sendbyte(stat.id);
         this->sendbyte(stat.wins);
     }
 }

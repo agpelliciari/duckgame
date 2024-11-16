@@ -151,7 +151,7 @@ TEST(TestProtocolMocked, SendReceiveStatsPaused2PlayersFirstSecondWinner) {
     ASSERT_EQ(stats_recv.stats.size(), stats.stats.size());
     int count = stats_recv.stats.size();
     for (int ind = 0; ind < count; ind++) {
-        ASSERT_EQ(stats_recv.stats[ind].player_id, stats.stats[ind].player_id);
+        ASSERT_EQ(stats_recv.stats[ind].id, stats.stats[ind].id);
         ASSERT_EQ(stats_recv.stats[ind].wins, stats.stats[ind].wins);
     }
 }
@@ -247,7 +247,7 @@ TEST(TestProtocolMocked, SendReceiveStatsPaused2PlayersIntercaladosEnvios) {
     ASSERT_EQ(stats_recv.stats.size(), stats.stats.size());
     int count = stats_recv.stats.size();
     for (int ind = 0; ind < count; ind++) {
-        ASSERT_EQ(stats_recv.stats[ind].player_id, stats.stats[ind].player_id);
+        ASSERT_EQ(stats_recv.stats[ind].id, stats.stats[ind].id);
         ASSERT_EQ(stats_recv.stats[ind].wins, stats.stats[ind].wins);
     }
 
