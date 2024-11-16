@@ -33,6 +33,14 @@ void MatchState::playRound(MatchObserver& observer, MatchStatsInfo& stats) {
     std::cout << "FINISHED TICK COUNT OF 90!?" << clock.tickcount()<<std::endl;
 }
 
+void MatchState::reset_objects(const struct ObjectsInfo& objects_info){
+
+}
+void MatchState::reset_players(MatchObserver& observer){
+
+}
+
+
 void MatchState::calculate_game_results(MatchStatsInfo& stats, int actual_winner){
     int wins_curr = stats.addPlayerWin(actual_winner);
     //stats.stats.clear();

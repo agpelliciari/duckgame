@@ -37,6 +37,10 @@ public:
     void send_results(MatchObserver& observer);
     void start_players(MatchObserver& observer, MatchStatsInfo& stats);
     void add_objects(const struct ObjectsInfo& objects_info);
+    
+    void reset_objects(const struct ObjectsInfo& objects_info);
+    void reset_players(MatchObserver& observer);
+    
     void step();
     bool only_one_winner(MatchStatsInfo& stats, int &id_champion);
     void playRound(MatchObserver& observer, MatchStatsInfo& stats);

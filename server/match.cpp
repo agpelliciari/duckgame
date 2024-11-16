@@ -153,6 +153,8 @@ void Match::run() {
     while (_keep_running && handlePostRound()) {
         //looper.start_players(players, stats);
         // re envia info del mapa?
+        looper.reset_objects(objects);
+        looper.reset_players(players);
         
         looper.playRound(players, this->stats);
     }
