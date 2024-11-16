@@ -12,45 +12,44 @@ void PlayStateRecv::run() {
     try {
         MatchDto state;
         MatchStatsInfo stats;
-        
+
         while (_keep_running) {
-        
+
             // Actualiza ambas cosas
             // True si esta en un round
             // False si pausa/termino.
-            if(protocol.recvstate(stats, state)){
+            if (protocol.recvstate(stats, state)) {
                 for (PlayerDTO& player: state.players) {
 
-                    std::cerr << "-->player" << (int)player.id << " at " << player.pos.x << ","
-                          << player.pos.y << std::endl;
-                    
+                    // std::cerr << "-->player" << (int)player.id << " at " << player.pos.x << ","
+                    //       << player.pos.y << std::endl;
+
                     // inverti/escala
-                    // MAP_BLOCK_UNIT*
+                    // MAP_BLOCK_UNIT* // la pos.y es negativa! por alguna razon. de logica del
+                    // server
                     player.pos.y = (player.pos.y + context.map.height);
                     player.pos.x = (player.pos.x);
                 }
 
                 for (DynamicObjDTO& obj: state.objects) {
-                    std::cerr << "-->obj" << (int)obj.type << " at " << obj.pos.x << ","
-                          << obj.pos.y << std::endl;
-                    
+                    // std::cerr << "-->obj" << (int)obj.type << " at " << obj.pos.x << ","
+                    //       << obj.pos.y << std::endl;
+
                     // MAP_BLOCK_UNIT*
-                    if(obj.type == TypeDynamicObject::PROJECTILE){
-                       obj.pos.y = (context.map.height - obj.pos.y);  // Inverti!
-                       continue;
+                    if (obj.type == TypeDynamicObject::PROJECTILE) {
+                        obj.pos.y = (context.map.height - obj.pos.y);  // Inverti!
+                        continue;
                     }
-                    
+
                     obj.pos.y = (context.map.height - obj.pos.y * MAP_BLOCK_UNIT);  // Inverti!
                     obj.pos.x = (obj.pos.x);
                 }
-                listener.matchUpdated(state);            
-            } else{
-            
+                listener.matchUpdated(state);
+            } else {
+
                 // Chequea si finisheo?!
-                listener.statsUpdated(stats);            
+                listener.statsUpdated(stats);
             }
-            
-            
         }
     } catch (const LibError&
                      error) {  // No deberia pasara realmente, antes pasaria en el controller.

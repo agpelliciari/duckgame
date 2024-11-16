@@ -182,11 +182,11 @@ bool ClientProtocol::recvstate(MatchStatsInfo& outstats, MatchDto& outstate) {
     outstats.state = (MatchStateType)protocol.recvbyte();
 
     if (outstats.state == INICIADA) {  // Receive matchdto
-        std::cout << "---->RECV MATCH DTO!\n";
+        // std::cout << "---->RECV MATCH DTO!\n";
         recvmatch(outstate);
         return true;
     }
-    std::cout << "RECV STATS DTO!\n";
+    // std::cout << "RECV STATS DTO!\n";
     recvstats(outstats);
     return false;
 }
