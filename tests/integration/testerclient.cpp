@@ -93,7 +93,10 @@ uint8_t TesterClient::assertJoinLobbyDual(uint8_t id_lobby, uint8_t count, uint8
 }
 
 
-void TesterClient::startMatch() { client.sendlobbyaction({PLAYER_READY, 0}); }
+void TesterClient::startMatch(const std::string& map) {
+    client.sendlobbyaction({PLAYER_READY, 0});
+    client.sendmapname(map);
+}
 
 ClientProtocol& TesterClient::getClient() { return client; }
 
@@ -107,6 +110,9 @@ void TesterClient::close() {
 bool TesterClient::isReceiverOpen() { return receiver->isopen(); }
 
 void TesterClient::finish() {
-    sktclient.finish();
+    client.close();
+    // sktclient.finish();
     receiver.reset();
 }
+
+TesterClient::~TesterClient() { finish(); }
