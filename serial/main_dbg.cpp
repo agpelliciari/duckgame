@@ -4,7 +4,9 @@
 #include "./map_deserializer.h"
 #include "./map_loader.h"
 #include "./map_serializer.h"
+#include "./map_importer.h"
 #include "common/clock.h"
+#include "common/core/liberror.h"
 
 static void create(const std::string& file) {
 
@@ -13,13 +15,13 @@ static void create(const std::string& file) {
     std::string name1("OT");
     std::string name2("LAS");
 
-    for (int i = 0; i < 50; i += 3) {
+    for (int i = 0; i < 3; i += 3) {
         serial.addBlock(2, 3 + i, name);
     }
-    for (int i = 0; i < 25; i += 3) {
+    for (int i = 0; i < 2; i += 3) {
         serial.addBlock(5 + i, 3 + i, name1);
     }
-    for (int i = 50; i < 100; i += 3) {
+    for (int i = 50; i < 54; i += 3) {
         serial.addDecoration(2, 3 + i, 2, name2);
     }
 
@@ -46,6 +48,7 @@ int main(int argc, char* argv[]) {
 
     Clock clock(30);
     clock.resetnow();
+    
     std::string file("res/maps/");
     file.append(argv[1]);
     file.append(".yaml");
@@ -89,6 +92,12 @@ int main(int argc, char* argv[]) {
         std::cout << "tex = " << tex << std::endl;
     }
 
+    for (const struct BlockDTO& block: info.blocks) {
+        std::cout << "block at x: " << block.pos.x<<" y: " << block.pos.y << std::endl;
+    }
+
+    
+
     std::cout << "Map 2 item spawn count " << info2.item_spawns.size() << std::endl;
 
     for (const struct MapPoint& point: info2.item_spawns) {
@@ -98,7 +107,39 @@ int main(int argc, char* argv[]) {
     loader.removeLoader(info.map_id);
     std::cout << "DELETED MAP 1 " << info.map_id << std::endl;
     loader.removeLoader(load2.getMapName());
+    
+    try{
+        MapImporter serial(file.c_str());
+        
+        const std::string background = serial.getBackground();
+        
+        std::cout << "GOT BK "<< background << std::endl;
+        
+        const std::vector<MapObjectData> blocks = serial.getBlocks();
+        const std::vector<MapObjectData> spawnPlayers = serial.getPlayerSpawns();
+        const std::vector<MapObjectData> boxes = serial.getBoxes();
+        const std::vector<MapObjectData> decorations = serial.getDecorations();
+        
+        for(const MapObjectData& obj: blocks){
+            std::cout << "Block "<< obj.texture << " at " << obj.column <<", "<< obj.row << " z:"<< obj.zIndex<<std::endl;
+        }
+        for(const MapObjectData& obj: spawnPlayers){
+            std::cout << "Spawn player "<< obj.texture << " at " << obj.column <<", "<< obj.row << " z:"<< obj.zIndex<<std::endl;
+        }
 
+
+        for(const MapObjectData& obj: decorations){
+            std::cout << "Decoration "<< obj.texture << " at " << obj.column <<", "<< obj.row << " z:"<< obj.zIndex<<std::endl;
+        }
+        
+        for(const MapObjectData& obj: boxes){
+            std::cout << "Box "<< obj.texture << " at " << obj.column <<", "<< obj.row << " z:"<< obj.zIndex<<std::endl;
+        }
+
+        
+    } catch (const LibError& error) {
+        std::cerr << "Controller serial error:" << error.what() << std::endl;
+    }
 
     return 0;
 }

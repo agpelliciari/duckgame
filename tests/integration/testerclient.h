@@ -3,6 +3,7 @@
 
 
 #include <optional>
+#include <string>
 
 #include "common/clientprotocol.h"
 #include "common/core/socket.h"
@@ -37,11 +38,12 @@ public:
     LobbyErrorType assertLobbyError();
 
 
-    void startMatch();
+    void startMatch(const std::string& map);
     ClientProtocol& getClient();
     void close();
     void finish();
     bool isReceiverOpen();
+    ~TesterClient();
 };
 
 #endif

@@ -60,44 +60,43 @@ bool ControlNotifier::runLobby() {
 }
 
 
-bool ControlNotifier::runPostGame(MatchStateType state){
-    if(state == TERMINADA || state == CANCELADA){
+bool ControlNotifier::runPostGame(MatchStateType state) {
+    if (state == TERMINADA || state == CANCELADA) {
         std::cout << "NOTIFIER ENDED OR CANCELED MATCH!\n";
         protocol.close();  // Si no esta cerrado, cerralo, asi se sale el controller tambien.
-        return false;       // Se cerro el game
+        return false;      // Se cerro el game
     }
-    
-    if(state == INICIADA || state == ROUND_END){
-         return true;
+
+    if (state == INICIADA || state == ROUND_END) {
+        return true;
     }
-    
+
     try {
         std::cout << "NOTIFIER PAUSED MATCH FOR 5 seconds?!\n";
-            
+
         lobby_info info = player.popinfo();
         // its paused!
         while (_keep_running) {
 
 
-            std::cerr << "pause m " << (int)match.getID() << " info to " << player.toString() << "? "
-                      << (int)info.action << ", num: " << (int)info.data << std::endl;
+            std::cerr << "pause m " << (int)match.getID() << " info to " << player.toString()
+                      << "? " << (int)info.action << ", num: " << (int)info.data << std::endl;
 
-            //protocol.notifyevent(info);
+            // protocol.notifyevent(info);
 
             if (info.action == LobbyResponseType::MATCH_PAUSE_END) {
                 return true;  // Pause end... continue?!
             }
 
             info = player.popinfo();
-        }        
-        
+        }
+
         return false;
     } catch (const ClosedQueue& error) {
         std::cout << "CLOSED QUEUE AT POST ROUND/GAME??\n";
-        protocol.close();// Closed?
+        protocol.close();  // Closed?
         return false;
     }
-
 }
 MatchStateType ControlNotifier::runGame() {
     std::cerr << "#game notify for " << player.toString() << " at match " << (int)match.getID()
@@ -106,10 +105,11 @@ MatchStateType ControlNotifier::runGame() {
         while (_keep_running) {
             protocol.sendstate(player.popstate());
         }
-        
+
         return CANCELADA;
     } catch (const ClosedQueue& error) {
         const MatchStatsInfo& stats = match.getStats();
+        std::cout << "NOTIFIED OF STATS? " << stats.parse() << std::endl;
         protocol.sendstats(stats);
         return stats.state;
     }
@@ -122,9 +122,9 @@ void ControlNotifier::run() {
         }
 
         MatchStateType state = runGame();
-        
-        while(runPostGame(state)){
-             state = runGame();
+
+        while (runPostGame(state)) {
+            state = runGame();
         }
     } catch (const LibError&
                      error) {       // No deberia pasara realmente, antes pasaria en el controller.

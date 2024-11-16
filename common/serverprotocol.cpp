@@ -68,18 +68,32 @@ PlayerActionDTO ServerProtocol::recvaction() {
     return action;
 }
 
-void ServerProtocol::sendstats(const MatchStatsInfo& state){
-    
-    std::cout << "SEND STATS?" << state.parse() << std::endl;
+void ServerProtocol::sendstats(const MatchStatsInfo& state) {
+    std::cout << "SENDING STATSSS!\n";
+    uint8_t general[3] = {(uint8_t)state.state, state.numronda, state.champion_player};
+    this->sendbytes(general, sizeof(general));
+
+    this->sendbyte(state.stats.size());
+
+    for (const PlayerStatDto& stat: state.stats) {
+        this->sendbyte(stat.player_id);
+        this->sendbyte(stat.wins);
+    }
 }
 
 
 void ServerProtocol::sendstate(const MatchDto&& state) { sendstate(state); }
 
 void ServerProtocol::sendstate(const MatchDto& state) {
+    // Si se manda un state.. esta iniciada. Hay que avisar esta iniciada
+    // Ya que el state se usa para saber que info va a llegar.
+
+    // std::cout << "SENDING STATE DTO!\n";
+    this->sendbyte((uint8_t)MatchStateType::INICIADA);
+
 
     // Primero envia general info
-    //this->sendbytes(&state.info, sizeof(state.info));
+    // this->sendbytes(&state.info, sizeof(state.info));
     this->sendbyte(state.players.size());
 
     for (const PlayerDTO& player: state.players) {
