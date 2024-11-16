@@ -5,6 +5,10 @@
 #include <utility>
 
 #include "common/clock.h"
+
+#define FPS 30
+#define MS_FPS 1000 / FPS
+
 MatchState::MatchState(): running(false), match_logic(), acciones(match_logic) {}
 
 void MatchState::pushAction(const PlayerActionDTO& action) { acciones.push_command(action); }
@@ -12,17 +16,17 @@ void MatchState::pushAction(const PlayerActionDTO& action) { acciones.push_comma
 void MatchState::playRound(MatchObserver& observer, MatchStatsInfo& stats) {
     stats.state = INICIADA;
     // start_players(observer);
-    Clock clock(30);  // 16ms sleep == 60 frames por segundo aprox. 30 = 30 fps
+    Clock clock(MS_FPS);  // 16ms sleep == 60 frames por segundo aprox. 30 = 30 fps
     clock.resetnext();
-    while (running && clock.tickcount() < 600) {
-        //std::cout << "LOOP COUNT " << clock.tickcount()<< std::endl;
+    while (running && clock.tickcount() < FPS * 2) {
+        // std::cout << "LOOP COUNT " << clock.tickcount()<< std::endl;
         this->step();
         this->send_results(observer);
         clock.tickNoRest();
     }
-    std::cout << "FINISHED TICK COUNT OF 450 = 15s?!?" << clock.tickcount() << std::endl;
+    std::cout << "FINISHED TICK COUNT OF 2s?!?" << clock.tickcount() << std::endl;
 
-    if (stats.numronda >= 5) {  // Termino la partida!
+    if (stats.numronda >= 3) {  // Termino la partida!
         stats.state = TERMINADA;
         stats.champion_player = 1;
     } else {                    // Termino la ronda o asi. Podria seguir internamente. O no.

@@ -38,17 +38,16 @@ struct DynamicObjDTO {
 };
 
 
-
 class MatchDto {
 public:
-    //match_info_dto info;
+    // match_info_dto info;
     std::vector<PlayerDTO> players;      // cppcheck-suppress unusedStructMember
     std::vector<DynamicObjDTO> objects;  // cppcheck-suppress unusedStructMember
-    
-    MatchDto(){}
-    //explicit MatchDto(MatchStateType _estado, uint8_t _numronda): info({_estado, _numronda}) {}
-    //explicit MatchDto(match_info_dto _info): info(_info) {}
-    //MatchDto(): info({INICIADA, 0}) {}
+
+    MatchDto() {}
+    // explicit MatchDto(MatchStateType _estado, uint8_t _numronda): info({_estado, _numronda}) {}
+    // explicit MatchDto(match_info_dto _info): info(_info) {}
+    // MatchDto(): info({INICIADA, 0}) {}
 
     const PlayerDTO* getPlayer(const int id) const {
         for (const PlayerDTO& player: players) {
@@ -69,11 +68,11 @@ public:
 };
 
 struct PlayerStatDto {
-    uint8_t player_id;    // cppcheck-suppress unusedStructMember
-    uint8_t wins;  // cppcheck-suppress unusedStructMember
-    
-    PlayerStatDto():player_id(0), wins(0){}
-    PlayerStatDto(const uint8_t id, const uint8_t _wins):player_id(id), wins(_wins){}
+    uint8_t player_id;  // cppcheck-suppress unusedStructMember
+    uint8_t wins;       // cppcheck-suppress unusedStructMember
+
+    PlayerStatDto(): player_id(0), wins(0) {}
+    PlayerStatDto(const uint8_t id, const uint8_t _wins): player_id(id), wins(_wins) {}
 };
 
 enum MatchStateType : uint8_t {
@@ -91,27 +90,55 @@ public:
     MatchStateType state;
     uint8_t numronda;
     std::vector<PlayerStatDto> stats;  // cppcheck-suppress unusedStructMember
-    uint8_t champion_player; // cppcheck-suppress unusedStructMember
+    uint8_t champion_player;           // cppcheck-suppress unusedStructMember
 
-    explicit MatchStatsInfo(MatchStateType _estado, uint8_t _numronda, const uint8_t _champion_player):
-            state(_estado), numronda(_numronda),champion_player(_champion_player) {}
-            
-    MatchStatsInfo():state(PAUSADA), numronda(1),champion_player(0) {}
-    
-    std::string parse() const{
+    explicit MatchStatsInfo(MatchStateType _estado, uint8_t _numronda,
+                            const uint8_t _champion_player):
+            state(_estado), numronda(_numronda), champion_player(_champion_player) {}
+
+    MatchStatsInfo(): state(PAUSADA), numronda(1), champion_player(0) {}
+
+    std::string parse() const {
         std::stringstream result;
         result << (int)numronda;
         if (state == INICIADA) {
             result << " INICIADA ";
         } else if (state == TERMINADA) {
-            result << " TERMINADA WON "<< (int) champion_player;
+            result << " TERMINADA WON " << (int)champion_player;
         } else if (state == PAUSADA) {
-            result << " ROUND END :: WON "<< (int) champion_player;
+            result << " ROUND END :: WON " << (int)champion_player;
         } else if (state == CANCELADA) {
             result << " CANCELADA ";
         }
-        return result.str();    
+        return result.str();
     }
+
+    // Getters para facilidad!
+    const PlayerStatDto* getPlayerStat(const int id) const {
+        for (const PlayerStatDto& player: stats) {
+            // cppcheck-suppress useStlAlgorithm
+            if (player.player_id == id) {
+                return &player;
+            }
+        }
+
+        return NULL;
+    }
+    int addPlayerWin(const int id) {
+        for (PlayerStatDto& player: stats) {
+            // cppcheck-suppress useStlAlgorithm
+            if (player.player_id == id) {
+                player.wins++;
+                return player.wins;
+            }
+        }
+
+        return -1;
+    }
+
+    bool isFinished() const { return state == TERMINADA || state == CANCELADA; }
+
+    bool isPaused() const { return state == PAUSADA; }
 };
 
 

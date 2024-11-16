@@ -2,6 +2,9 @@
 
 #include <iostream>
 
+#define MS_SECOND 1000
+#define PAUSE_SECONDS 3
+
 #include "./gameerror.h"
 //#include <thread>
 #include "common/clock.h"
@@ -105,11 +108,11 @@ void Match::run() {
     players.finishGameMode();  // Notify/move players to lobby mode.
     // Notifier will check wether to send stats or so
 
-    Clock timer(1000);  // Timer de a pasos de 1 segundo.
+    Clock timer(MS_SECOND);  // Timer de a pasos de 1 segundo.
     while (_keep_running && this->stats.state == PAUSADA) {
         // Wait 5 seconds?
         timer.resetnext();
-        int mx = 1;
+        int mx = PAUSE_SECONDS;
 
         lobby_info info(MATCH_PAUSE_TICK, mx);
 
@@ -130,6 +133,13 @@ void Match::run() {
             players.finishGameMode();  // Notify/move players to lobby mode.
         }
     }
+
+    if (!_keep_running && !this->stats.isFinished()) {
+        std::cout << "SHOULD SEND ONE MORE STATS.. saying it was canceled!\n";
+        this->stats.state = CANCELADA;
+        players.finishGameMode();  // Notify/move players to lobby mode.
+    }
+
 
     // Checkea si el finish fue natural o forzado.
 

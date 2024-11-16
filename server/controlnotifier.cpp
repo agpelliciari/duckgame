@@ -62,7 +62,7 @@ bool ControlNotifier::runLobby() {
 
 bool ControlNotifier::runPostGame(MatchStateType state) {
     if (state == TERMINADA || state == CANCELADA) {
-        std::cout << "NOTIFIER ENDED OR CANCELED MATCH!\n";
+        std::cout << "------>NOTIFIER ENDED OR CANCELED MATCH!\n";
         protocol.close();  // Si no esta cerrado, cerralo, asi se sale el controller tambien.
         return false;      // Se cerro el game
     }
@@ -109,7 +109,7 @@ MatchStateType ControlNotifier::runGame() {
         return CANCELADA;
     } catch (const ClosedQueue& error) {
         const MatchStatsInfo& stats = match.getStats();
-        std::cout << "NOTIFIED OF STATS? " << stats.parse() << std::endl;
+        std::cout << "EXIT NOTIFY GAME STATS? " << stats.parse() << std::endl;
         protocol.sendstats(stats);
         return stats.state;
     }
