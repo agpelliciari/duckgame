@@ -5,7 +5,7 @@ PhysicalBullet::PhysicalBullet(int init_coord_x, int init_coord_y):
         PhysicalObject(init_coord_x, init_coord_y-23, 5, 5),
         impacted(false), impacted_in_player(false), id_impacted_player(0){
         
-        acceleration.y = -1;
+        acceleration.y = 0;
         }
 
 void PhysicalBullet::shoot_up(){

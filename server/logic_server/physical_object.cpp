@@ -81,7 +81,7 @@ void PhysicalObject::move(const MatchMap& colition_map) {
     }
 
     speed.y += acceleration.y * time_step;
-    if (speed.y <= 0) {
+    if (speed.y < 0) {
         for (int y = 0; y >= speed.y * time_step; y--) {
             bool colition_with_player = false;
             int id_colition_player = 0;
@@ -91,7 +91,7 @@ void PhysicalObject::move(const MatchMap& colition_map) {
                 position.y--;
             }
         }
-    } else {
+    } else if (speed.y > 0) {
         for (int y = 0; y <= speed.y * time_step; y++) {
             bool colition_with_player = false;
             int id_colition_player = 0;

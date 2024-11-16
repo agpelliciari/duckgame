@@ -14,8 +14,8 @@ void MatchState::playRound(MatchObserver& observer, MatchStatsInfo& stats) {
     // start_players(observer);
     Clock clock(30);  // 16ms sleep == 60 frames por segundo aprox. 30 = 30 fps
     clock.resetnext();
-    while (running && clock.tickcount() < 450) {
-        // std::cout << "LOOP COUNT " << clock.tickcount()<< std::endl;
+    while (running && clock.tickcount() < 600) {
+        //std::cout << "LOOP COUNT " << clock.tickcount()<< std::endl;
         this->step();
         this->send_results(observer);
         clock.tickNoRest();

@@ -39,9 +39,14 @@ void Player::still() {
 int Player::get_id() { return id; }
 
 void Player::update(const MatchMap& colition_map) {
-    object.move(colition_map);
-    object.update_action(move_action);
-    this->update_shooting_direction();
+    if (is_alive){
+        object.move(colition_map);
+        object.update_action(move_action);
+        this->update_shooting_direction();
+    } else {
+        this->stay_down_start();
+    }
+
 }
 
 void Player::update_shooting_direction(){
@@ -107,5 +112,16 @@ void Player::shoot(std::vector <PhysicalBullet> &bullets){
         weapon.shoot(this->shooting_direction, bullets, bullet_position);
     //}
 }
+
+void Player::stay_down_start(){
+    move_action = TypeMoveAction::STAY_DOWN;
+    object.stay_down_start();
+}
+
+void Player::stay_down_end(){
+    move_action = TypeMoveAction::NONE;
+    object.stay_down_end();
+}
+
 
 //Tuple Player::get_position() { return object.get_real_position(); }
