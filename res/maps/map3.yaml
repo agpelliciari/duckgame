@@ -1,22 +1,22 @@
 size_x: 50
 size_y: 40
-background: backgrounds/city.png
+background: /backgrounds/city.png
 blocks_z: 3
 boxes_z: 2
-box_texture: boxes/itemBox1.png
+box_texture: /boxes/itemBox1.png
 textures:
-  - blocks/Castle/38.png
-  - blocks/Castle/36.png
-  - blocks/Castle/37.png
-  - blocks/Castle/33.png
-  - blocks/Castle/32.png
-  - blocks/Castle/44.png
-  - blocks/Castle/46.png
-  - blocks/Castle/41.png
-  - blocks/Castle/43.png
-  - blocks/Castle/49.png
-  - blocks/Castle/48.png
-  - spawns/players/respawner.png
+  - /blocks/Castle/38.png
+  - /blocks/Castle/36.png
+  - /blocks/Castle/37.png
+  - /blocks/Castle/33.png
+  - /blocks/Castle/32.png
+  - /blocks/Castle/44.png
+  - /blocks/Castle/46.png
+  - /blocks/Castle/41.png
+  - /blocks/Castle/43.png
+  - /blocks/Castle/49.png
+  - /blocks/Castle/48.png
+  - /spawns/players/respawner.png
 blocks:
   - x: 24
     y: 6
