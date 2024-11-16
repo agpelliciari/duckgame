@@ -25,6 +25,8 @@ class PhysicalPlayer: public PhysicalObject {
         void react_to_sides_collision(bool is_player, int id_player) override;
         void react_to_down_collision(bool is_player, int id_player) override;
         void react_to_up_collision(bool is_player, int id_player) override;
+        void stay_down_start();
+        void stay_down_end();
         void update_action(TypeMoveAction& move_action);
         void stop_moving_x();
 

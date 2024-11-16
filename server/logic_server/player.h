@@ -44,8 +44,9 @@ public:
     void take_damage();
     void aim_up_start();
     void aim_up_end();
+    void stay_down_start();
+    void stay_down_end();
     void update_shooting_direction();
-    //Tuple get_position();
     Tuple get_map_position();
     Tuple get_dimension();
 };

@@ -24,10 +24,10 @@ MatchLogic::MatchLogic(): colition_map(800, 640) {
     this->command_map[PlayerActionType::JUMP] = [this](int index) {
         this->add_player_speed(index, 0, 50);
     };
-
+    /*
     this->command_map[PlayerActionType::STAY_DOWN] = [this](int index) {
         this->add_player_speed(index, 0, 0);
-    };
+    };*/
     this->command_map[PlayerActionType::STAY_DOWN_START] = [this](int index) {
         this->add_player_speed(index, 0, 0);
     };
@@ -35,22 +35,15 @@ MatchLogic::MatchLogic(): colition_map(800, 640) {
         this->add_player_speed(index, 0, 0);
     };
 
-    this->command_map[PlayerActionType::FLAPPING_END] = [this](int index) {
-        this->add_player_speed(index, 0, 0);
-    };
-
     this->command_map[PlayerActionType::AIM_UP_START] = [this](int index) {
-        this->add_player_speed(index, 0, 0);
+        this->player_aim_up_start(index);
     };
     this->command_map[PlayerActionType::AIM_UP_END] = [this](int index) {
-        this->add_player_speed(index, 0, 0);
+        this->player_aim_up_end(index);
     };
     this->command_map[PlayerActionType::SHOOT] = [this](int index) {
         this->player_shoot(index);
     };
-
-
-
 
     // this->command_map[3] = [this](int index) { this->add_player_speed(index, 0, 0); };
 
@@ -93,6 +86,24 @@ void MatchLogic::player_aim_up_end(int id) {
     for (Player& player: players) {
         if (player.same_id(id)) {
             player.aim_up_end();
+            return;
+        }
+    }
+}
+
+void MatchLogic::player_stay_down_start(int id) {
+    for (Player& player: players) {
+        if (player.same_id(id)) {
+            player.stay_down_start();
+            return;
+        }
+    }
+}
+
+void MatchLogic::player_stay_down_end(int id) {
+    for (Player& player: players) {
+        if (player.same_id(id)) {
+            player.stay_down_end();
             return;
         }
     }

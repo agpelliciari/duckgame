@@ -51,6 +51,8 @@ public:
     void player_shoot(int index);
     void player_aim_up_start(int index);
     void player_aim_up_end(int index);
+    void player_stay_down_start(int index);
+    void player_stay_down_end(int index);
     void damage_player(int id);
     ~MatchLogic();
 };

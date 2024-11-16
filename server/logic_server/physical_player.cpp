@@ -65,3 +65,10 @@ void PhysicalPlayer::stop_moving_x(){
 }
 
 
+void PhysicalPlayer::stay_down_start(){
+    dimension.y -= 15;
+}
+
+void PhysicalPlayer::stay_down_end(){
+    dimension.y += 15;
+}
