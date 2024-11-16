@@ -22,7 +22,13 @@ void EventHandler::handleKeyDown(SDL_Keycode key, PlayerActionDTO& action) {
             break;
         case SDLK_SPACE:
             setAction(action, JUMP, MAIN_PLAYER);
-            soundManager.playSound(SoundType::JUMP);
+            break;
+        case SDLK_UP:
+            setAction(action, AIM_UP_START, MAIN_PLAYER);
+            break;
+        case SDLK_p:
+            setAction(action, SHOOT, MAIN_PLAYER);
+            soundManager.playSound(SoundType::SHOT);
             break;
         case SDLK_m:
             soundManager.stopBackgroundMusic();
@@ -42,9 +48,11 @@ void EventHandler::handleKeyDown(SDL_Keycode key, PlayerActionDTO& action) {
                 break;
             case SDLK_w:
                 setAction(action, JUMP, SECOND_PLAYER);
-                soundManager.playSound(SoundType::JUMP);            
                 break;
             case SDLK_e:
+                setAction(action, AIM_UP_START, MAIN_PLAYER);
+                break;
+            case SDLK_g:
                 setAction(action, SHOOT, SECOND_PLAYER);
                 soundManager.playSound(SoundType::SHOT);
                 break;
@@ -66,6 +74,9 @@ void EventHandler::handleKeyUp(SDL_Keycode key, PlayerActionDTO& action) {
         case SDLK_SPACE:
             setAction(action, FLAPPING_END, MAIN_PLAYER);
             break;
+        case SDLK_UP:
+            setAction(action, AIM_UP_END, MAIN_PLAYER);
+            break;
     }
 
     if (dualPlay) {
@@ -81,6 +92,9 @@ void EventHandler::handleKeyUp(SDL_Keycode key, PlayerActionDTO& action) {
                 break;
             case SDLK_w:
                 setAction(action, FLAPPING_END, SECOND_PLAYER);
+                break;
+            case SDLK_e:
+                setAction(action, AIM_UP_END, SECOND_PLAYER);
                 break;
         }
     }
