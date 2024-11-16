@@ -102,42 +102,63 @@ void Match::notifyAction(const PlayerActionDTO& action) {
 
 const MatchStatsInfo& Match::getStats() const { return this->stats; }
 
+
+void Match::pausedMatch(){
+    Clock timer(MS_SECOND);  // Timer de a pasos de 1 segundo.
+    timer.resetnext();
+    int mx = PAUSE_SECONDS;
+
+    lobby_info info(MATCH_PAUSE_TICK, mx);
+
+    while (_keep_running && timer.tickcount() < mx) {
+        info.data = mx - timer.tickcount();
+        players.notifyInfo(info);
+        timer.tickRest();  // sleep for 1 second if so is needed
+    }
+    
+    //timer.tickcount() >= mx
+    // No se envia si se cancelo con la 'q' en el medio. Se handlea despues?
+    if (_keep_running) { 
+        info.action = MATCH_PAUSE_END;
+        info.data = 0;  // reset data
+
+        players.notifyInfo(info);
+    }
+}
+
+void Match::roundEnded(){
+    
+
+}
+
+void Match::handlePostRound(){
+    if(_keep_running){
+        players.finishGameMode();  // Notify/move players to lobby mode.
+        
+        if(this->stats.isPaused()){
+             pausedMatch();
+        } else{
+             roundEnded();
+        }
+        // Go back to game mode.. independientemente de si cancelo o no.
+        players.finishLobbyMode(); 
+    }
+}
+
 void Match::run() {
 
     looper.playRound(players, this->stats);
-    players.finishGameMode();  // Notify/move players to lobby mode.
-    // Notifier will check wether to send stats or so
-
-    Clock timer(MS_SECOND);  // Timer de a pasos de 1 segundo.
-    while (_keep_running && this->stats.state == PAUSADA) {
-        // Wait 5 seconds?
-        timer.resetnext();
-        int mx = PAUSE_SECONDS;
-
-        lobby_info info(MATCH_PAUSE_TICK, mx);
-
-        while (_keep_running && timer.tickcount() < mx) {
-            info.data = mx - timer.tickcount();
-            players.notifyInfo(info);
-            timer.tickRest();  // sleep for 1 second if so is needed
-        }
-
-        // Go next round/s
-        if (_keep_running) {
-            info.action = MATCH_PAUSE_END;
-            info.data = 0;  // reset data
-
-            players.notifyInfo(info);
-            players.finishLobbyMode();
-            looper.playRound(players, this->stats);
-            players.finishGameMode();  // Notify/move players to lobby mode.
-        }
+    handlePostRound();
+    
+    while (_keep_running && this->stats.isNotFinished()) {
+        looper.playRound(players, this->stats);
+        handlePostRound();
     }
 
-    if (!_keep_running && !this->stats.isFinished()) {
+    if (this->stats.isNotFinished()) {
         std::cout << "SHOULD SEND ONE MORE STATS.. saying it was canceled!\n";
         this->stats.state = CANCELADA;
-        players.finishGameMode();  // Notify/move players to lobby mode.
+        players.finishGameMode();
     }
 
 

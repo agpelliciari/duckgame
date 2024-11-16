@@ -58,8 +58,11 @@ protected:
     // Pero mejor explicitar. Reemplaza el stop.. que no se quiere permitir hacerlo sin hacer el
     // resto.
     void finish(MapLoader& maps);
-
-
+    
+    void pausedMatch();
+    void roundEnded();
+    
+    void handlePostRound();
 public:
     // Se tendra composicion con un unico observer de eventos al match.
     explicit Match(lobbyID _id);

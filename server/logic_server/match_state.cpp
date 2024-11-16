@@ -29,10 +29,13 @@ void MatchState::playRound(MatchObserver& observer, MatchStatsInfo& stats) {
     if (stats.numronda >= 3) {  // Termino la partida!
         stats.state = TERMINADA;
         stats.champion_player = 1;
-    } else {                    // Termino la ronda o asi. Podria seguir internamente. O no.
+    } else if (stats.numronda == 2){                    // Termino la ronda o asi. Podria seguir internamente. O no.
         stats.state = PAUSADA;  // Para probar.
         stats.numronda++;
         // stats.state = ROUND_END;  // Capaz a futuro para mandar las stats del round.
+    } else{                    // Termino la ronda o asi. Podria seguir internamente. O no.
+        stats.numronda++;
+        stats.state = PAUSADA;  // Capaz a futuro para mandar las stats del round.
     }
 }
 

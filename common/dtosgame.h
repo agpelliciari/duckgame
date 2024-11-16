@@ -136,8 +136,9 @@ public:
         return -1;
     }
 
-    bool isFinished() const { return state == TERMINADA || state == CANCELADA; }
+    bool isNotFinished() const { return state != TERMINADA && state != CANCELADA; }
 
+    bool isRoundEnd() const { return state == ROUND_END; }
     bool isPaused() const { return state == PAUSADA; }
 };
 
