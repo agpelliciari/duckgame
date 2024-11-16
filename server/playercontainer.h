@@ -35,7 +35,7 @@ public:
     void remove(const ControlledPlayer& player);
 
     void finishLobbyMode();
-    void finishGameMode();
+    void finishGameMode(const MatchStatsInfo& match_stats);
 
     void hostLobbyLeft(const ControlledPlayer& player);
     void cancelByError(LobbyErrorType error);

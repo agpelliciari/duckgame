@@ -27,9 +27,7 @@ void SimpleEventListener::matchUpdated(const MatchDto& state) {
 void SimpleEventListener::statsUpdated(const MatchStatsInfo& stats) {
     updates_stats.push(stats);
 
-    std::cout << "RECEIVED STATS .. state:: " << (int)stats.state
-              << " num round: " << (int)stats.numronda << "champion id? "
-              << (int)stats.champion_player << std::endl;
+    std::cout << "RECEIVED STATS .. state:: " << stats.parse() << std::endl;
 
     for (const PlayerStatDto& stat: stats.stats) {
         std::cout << "stat id: " << (int)stat.player_id << " wins: " << (int)stat.wins << std::endl;

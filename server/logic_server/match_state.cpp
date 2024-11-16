@@ -5,6 +5,10 @@
 #include <utility>
 
 #include "common/clock.h"
+
+#define FPS 30
+#define MS_FPS 1000 / FPS
+
 MatchState::MatchState(): running(false), match_logic(), acciones(match_logic) {}
 
 void MatchState::pushAction(const PlayerActionDTO& action) { acciones.push_command(action); }
@@ -12,9 +16,10 @@ void MatchState::pushAction(const PlayerActionDTO& action) { acciones.push_comma
 void MatchState::playRound(MatchObserver& observer, MatchStatsInfo& stats) {
     stats.state = INICIADA;
     // start_players(observer);
-    Clock clock(30);  // 16ms sleep == 60 frames por segundo aprox. 30 = 30 fps
+    Clock clock(MS_FPS);  // 16ms sleep == 60 frames por segundo aprox. 30 = 30 fps
     clock.resetnext();
-    while ((running && clock.tickcount() < 600) && id_alive_players.size() > 1) {
+
+    while ((running && clock.tickcount() < FPS * 20) && id_alive_players.size() > 1) {
         //std::cout << "LOOP COUNT " << clock.tickcount()<< std::endl;
         this->step();
         this->send_results(observer);

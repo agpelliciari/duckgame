@@ -2,6 +2,9 @@
 
 #include <iostream>
 
+#define MS_SECOND 1000
+#define PAUSE_SECONDS 3
+
 #include "./gameerror.h"
 //#include <thread>
 #include "common/clock.h"
@@ -40,7 +43,8 @@ bool Match::notifyDisconnect(ControlledPlayer& player) {
 void Match::init(MapLoader& maps, const char* mapname) {
     if (is_alive()) {
         throw GameError(LOBBY_ALREADY_STARTED, "Tried to start a match already started!!\n");
-    }
+    }    
+    
     MapDeserializer& deserial = maps.getLoader(mapname);
 
     deserial.loadMapInfo(map);
@@ -49,9 +53,8 @@ void Match::init(MapLoader& maps, const char* mapname) {
     looper.start_players(players, stats);
     players.finishLobbyMode();
 
-
     // Carga info para el server
-    struct ObjectsInfo objects;
+    struct ObjectsInfo objects(map.size.x,map.size.y);
 
     deserial.loadObjectsInfo(objects);
 
@@ -92,7 +95,7 @@ lobbyID Match::getID() const { return this->id; }
 
 // Metodos delegatorios.
 void Match::notifyAction(const PlayerActionDTO& action) {
-    if (_keep_running) {
+    if (stats.state == INICIADA) {
         looper.pushAction(action);
     }
 }
@@ -101,44 +104,71 @@ const MatchStatsInfo& Match::getStats() const{
      return this->stats;
 }
 
-void Match::run() {
-    stats.numronda = 1;
-    looper.playRound(players,this->stats);
-    players.finishGameMode(); // Notify/move players to lobby mode.
-    // Notifier will check wether to send stats or so
-    
-    Clock timer(1000); // Timer de a pasos de 1 segundo.
-    while(_keep_running && this->stats.state == PAUSADA){
-         // Wait 5 seconds?
-         timer.resetnext();
-         int mx = 5;
-         lobby_info info(MATCH_PAUSE_TICK, mx);
-         
-         while(_keep_running && timer.tickcount() < mx){
-             info.data = mx-timer.tickcount();
-             players.notifyInfo(info);
-             timer.tickRest(); // sleep for 1 second if so is needed
-         }
-         
-         // Go next round/s
-         if(_keep_running){
-             info.action = MATCH_PAUSE_END;
-             info.data = 0;// reset data 
-             
-             players.notifyInfo(info);
-             players.finishLobbyMode();
-             looper.playRound(players,this->stats);
-             players.finishGameMode(); // Notify/move players to lobby mode.
-         }
+bool Match::pausedMatch(){
+    Clock timer(MS_SECOND);  // Timer de a pasos de 1 segundo.
+    timer.resetnext();
+    int mx = PAUSE_SECONDS;
+
+    lobby_info info(MATCH_PAUSE_TICK, mx);
+
+    while (_keep_running && timer.tickcount() < mx) {
+        info.data = mx - timer.tickcount();
+        players.notifyInfo(info);
+        timer.tickRest();  // sleep for 1 second if so is needed
     }
     
+    //timer.tickcount() >= mx
+    // No se envia si se cancelo con la 'q' en el medio. Se handlea despues?
+    if (_keep_running) { 
+        info.action = MATCH_PAUSE_END;
+        info.data = 0;  // reset data
+
+        players.notifyInfo(info);
+        return true;
+    }
+    
+    return false;
+}
+
+bool Match::handlePostRound(){
+    if(this->stats.isRunning()){
+        //std::cout << "HANDLE POST ROUND ON MATCH!\n";
+        players.finishGameMode(this->stats);  // Notify/move players to lobby mode.
+        bool handled = true;
+        if(this->stats.isPaused()){
+             handled = pausedMatch();
+        }
+        // Go back to game mode.. independientemente de si cancelo o no.
+        players.finishLobbyMode(); 
+        //std::cout << "FINISHED HANDLE POST ROUND ON MATCH!\n";
+        return handled;
+    }
+    
+    return false;
+}
+
+void Match::run() {
+
+    looper.playRound(players, this->stats);
+    while (_keep_running && handlePostRound()) {
+        looper.playRound(players, this->stats);
+    }
+
+    if (this->stats.isRunning()) {
+        std::cout << "NOT FINISHED? FORCE CANCEL!\n";
+        this->stats.state = CANCELADA;
+    } else{
+        std::cout << "FINISHED MATCH? NOTIFY!!! "<< stats.parse()<<" \n";    
+    }
+    players.finishGameMode(this->stats);
+
     // Checkea si el finish fue natural o forzado.
 
     // notifica los playeres. Del final.
     players.forceDisconnectAll();
 }
 
-bool Match::isrunning() const { return _is_alive; }
+bool Match::isrunning() const { return stats.isRunning(); }
 
 const MapInfo& Match::getMap() const { return map; }
 
