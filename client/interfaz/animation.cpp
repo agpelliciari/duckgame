@@ -56,21 +56,21 @@ void Animation::updatePlayerAnimation(AnimationBuilder& builder, const PlayerDTO
                        (STARTING_SPRITE_X + SPRITE_SIZE * ((frameTicks / JUMPING_ANIMATION_SPEED) %
                                                            JUMPING_ANIMATION_FRAMES)),
                        JUMPING_SPRITE_Y, false);
-            // soundManager.playSound(SoundType::JUMP);
+            soundManager.playSound(SoundType::JUMP);
             break;
         case TypeMoveAction::AIR_RIGHT:
             setBuilder(builder,
                        (STARTING_SPRITE_X + SPRITE_SIZE * ((frameTicks / JUMPING_ANIMATION_SPEED) %
                                                            JUMPING_ANIMATION_FRAMES)),
                        JUMPING_SPRITE_Y, false);
-            // soundManager.playSound(SoundType::JUMP);
+            soundManager.playSound(SoundType::JUMP);
             break;
         case TypeMoveAction::AIR_LEFT:
             setBuilder(builder,
                        (STARTING_SPRITE_X + SPRITE_SIZE * ((frameTicks / JUMPING_ANIMATION_SPEED) %
                                                            JUMPING_ANIMATION_FRAMES)),
                        JUMPING_SPRITE_Y, true);
-            // soundManager.playSound(SoundType::JUMP);
+            soundManager.playSound(SoundType::JUMP);
             break;
         case TypeMoveAction::FLAP_NEUTRAL:
             setBuilder(builder, (STARTING_SPRITE_X + SPRITE_SIZE * FLAPPING_SPRITE_X_OFFSET),
