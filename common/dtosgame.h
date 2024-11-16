@@ -98,7 +98,7 @@ public:
                             const uint8_t _champion_player):
             state(_estado), numronda(_numronda), champion_player(_champion_player) {}
 
-    MatchStatsInfo(): state(LOADING), numronda(1), champion_player(0) {}
+    MatchStatsInfo(): state(LOADING), numronda(0), champion_player(0) {}
 
     std::string parse() const {
         std::stringstream result;

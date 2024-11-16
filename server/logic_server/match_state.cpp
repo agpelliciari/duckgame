@@ -15,11 +15,12 @@ void MatchState::pushAction(const PlayerActionDTO& action) { acciones.push_comma
 
 void MatchState::playRound(MatchObserver& observer, MatchStatsInfo& stats) {
     stats.state = INICIADA;
+    stats.numronda++;
     // start_players(observer);
     Clock clock(MS_FPS);  // 16ms sleep == 60 frames por segundo aprox. 30 = 30 fps
     clock.resetnext();
 
-    while ((running && clock.tickcount() < FPS * 20) && id_alive_players.size() > 1) {
+    while ((running && clock.tickcount() < FPS * 2) && id_alive_players.size() > 1) {
         //std::cout << "LOOP COUNT " << clock.tickcount()<< std::endl;
         this->step();
         this->send_results(observer);
@@ -50,7 +51,6 @@ void MatchState::calculate_game_results(MatchStatsInfo& stats, int actual_winner
     } else {
         stats.state = ROUND_END;
         stats.champion_player = actual_winner;
-        stats.numronda++;
     }
 }
 
