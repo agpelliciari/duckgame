@@ -112,20 +112,28 @@ void ClientProtocol::recvmapdata(struct MapData& data, const int unit) {
 void ClientProtocol::recvstats(MatchStatsInfo& outstats) {
     outstats.numronda = protocol.recvbyte();
     outstats.champion_player = protocol.recvbyte();
-    
+
     int count = protocol.recvbyte();
     outstats.stats.reserve(count);
-    
-    while(count > 0){
+
+    while (count > 0) {
         uint8_t id = protocol.recvbyte();
         uint8_t wins = protocol.recvbyte();
-        outstats.stats.emplace_back(id,wins);
+        outstats.stats.emplace_back(id, wins);
         count--;
     }
 }
 
 void ClientProtocol::recvmatch(MatchDto& outstate) {
     int playercount = (int)protocol.recvbyte();
+
+    outstate.players.reserve(playercount);
+    outstate.players.clear();
+    // Just in case.
+    auto iterPlayer = outstate.players.begin();
+
+    // std::cout << "CLIENT RECV PLAY COUNT" << playercount << " "<< outstate.players.size()<<
+    // std::endl;
 
     while (playercount > 0) {
         PlayerDTO player;
@@ -144,12 +152,18 @@ void ClientProtocol::recvmatch(MatchDto& outstate) {
         player.chest_armor = protocol.recvbyte();
         player.aiming_up = protocol.recvbyte();
 
-        outstate.players.push_back(player);
+
+        outstate.players.emplace(iterPlayer, player);
+
+        ++iterPlayer;
         playercount--;
     }
 
     int objcount = (int)protocol.recvshort();
-    // std::cout << "CLIENT RECV OBJ COUNT" << objcount << std::endl;
+    // std::cout << "CLIENT RECV OBJ COUNT" << objcount << "player size? "<< outstate.players.size()
+    // << std::endl;
+    outstate.objects.reserve(objcount);
+    outstate.objects.clear();
 
     while (objcount > 0) {
         DynamicObjDTO obj;
@@ -164,10 +178,10 @@ void ClientProtocol::recvmatch(MatchDto& outstate) {
 }
 
 bool ClientProtocol::recvstate(MatchStatsInfo& outstats, MatchDto& outstate) {
-    
-    outstats.state = (MatchStateType) protocol.recvbyte();
-    
-    if(outstats.state == INICIADA){ // Receive matchdto
+
+    outstats.state = (MatchStateType)protocol.recvbyte();
+
+    if (outstats.state == INICIADA) {  // Receive matchdto
         std::cout << "---->RECV MATCH DTO!\n";
         recvmatch(outstate);
         return true;

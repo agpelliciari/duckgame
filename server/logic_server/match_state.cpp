@@ -14,21 +14,21 @@ void MatchState::playRound(MatchObserver& observer, MatchStatsInfo& stats) {
     // start_players(observer);
     Clock clock(30);  // 16ms sleep == 60 frames por segundo aprox. 30 = 30 fps
     clock.resetnext();
-    while (running && clock.tickcount() < 150) {
-        //std::cout << "LOOP COUNT " << clock.tickcount()<< std::endl;
+    while (running && clock.tickcount() < 600) {
+        // std::cout << "LOOP COUNT " << clock.tickcount()<< std::endl;
         this->step();
         this->send_results(observer);
         clock.tickNoRest();
     }
-    std::cout << "FINISHED TICK COUNT OF 15!?" << clock.tickcount()<<std::endl;
-    
-    if(stats.numronda >= 5){ // Termino la partida!
+    std::cout << "FINISHED TICK COUNT OF 600!?" << clock.tickcount() << std::endl;
+
+    if (stats.numronda >= 5) {  // Termino la partida!
         stats.state = TERMINADA;
         stats.champion_player = 1;
-    } else{ // Termino la ronda o asi. Podria seguir internamente. O no.
-        stats.state = PAUSADA; // Para probar.
+    } else {                    // Termino la ronda o asi. Podria seguir internamente. O no.
+        stats.state = PAUSADA;  // Para probar.
         stats.numronda++;
-        //stats.state = ROUND_END;  // Capaz a futuro para mandar las stats del round.
+        // stats.state = ROUND_END;  // Capaz a futuro para mandar las stats del round.
     }
 }
 
