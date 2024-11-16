@@ -22,6 +22,7 @@ class ControlledPlayer {
 protected:
     // Manejo de ids. Y cantidad de players para la queue de mensajes.
     uint8_t count;  // cppcheck-suppress unusedStructMember
+    bool dirtyStats; // cppcheck-suppress unusedStructMember
 
     player_id ids[2];  // cppcheck-suppress unusedStructMember
 
@@ -31,6 +32,12 @@ protected:
 
     // bool _is_open;  // cppcheck-suppress unusedStructMember
     std::mutex mtx;
+    MatchStatsInfo match_stats;// cppcheck-suppress unusedStructMember
+    
+    
+    // Por si se notifico estadisticas pero se inicio sin que se llegara a mandar!
+    void checkdirty();
+
 
 public:
     explicit ControlledPlayer(player_id first);
@@ -55,8 +62,9 @@ public:
 
     // Abre la queue de lobby info del jugador, cierra la de matchdto, indicando esta activo en una
     // lobby.
-    bool setlobbymode();
-
+    bool setlobbymode(const MatchStatsInfo& match_stats);
+    
+    const MatchStatsInfo& getStats();
     // Abre la queue de matchdto, cierra le de lobby info. Indicando fase de juego.
     bool setgamemode();
 

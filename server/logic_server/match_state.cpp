@@ -18,7 +18,7 @@ void MatchState::playRound(MatchObserver& observer, MatchStatsInfo& stats) {
     // start_players(observer);
     Clock clock(MS_FPS);  // 16ms sleep == 60 frames por segundo aprox. 30 = 30 fps
     clock.resetnext();
-    while (running && clock.tickcount() < FPS * 2) {
+    while (running && clock.tickcount() < FPS * 5) {
         // std::cout << "LOOP COUNT " << clock.tickcount()<< std::endl;
         this->step();
         this->send_results(observer);
@@ -35,7 +35,7 @@ void MatchState::playRound(MatchObserver& observer, MatchStatsInfo& stats) {
         // stats.state = ROUND_END;  // Capaz a futuro para mandar las stats del round.
     } else{                    // Termino la ronda o asi. Podria seguir internamente. O no.
         stats.numronda++;
-        stats.state = PAUSADA;  // Capaz a futuro para mandar las stats del round.
+        stats.state = ROUND_END;  // Capaz a futuro para mandar las stats del round.
     }
 }
 

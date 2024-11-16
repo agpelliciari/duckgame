@@ -59,10 +59,10 @@ protected:
     // resto.
     void finish(MapLoader& maps);
     
-    void pausedMatch();
-    void roundEnded();
+    bool pausedMatch();
+    //bool roundEnded();
     
-    void handlePostRound();
+    bool handlePostRound();
 public:
     // Se tendra composicion con un unico observer de eventos al match.
     explicit Match(lobbyID _id);

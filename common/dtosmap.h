@@ -30,10 +30,15 @@ struct DecorationDTO {
 
 // For server deserial.
 struct ObjectsInfo {
+    int map_width;
+    int map_height;
     std::vector<struct MapPoint> blocks;         // cppcheck-suppress unusedStructMember
     std::vector<struct MapPoint> boxes;          // cppcheck-suppress unusedStructMember
     std::vector<struct MapPoint> player_spawns;  // cppcheck-suppress unusedStructMember
     std::vector<struct MapPoint> item_spawns;    // cppcheck-suppress unusedStructMember
+    
+    ObjectsInfo(const int width, const int height):map_width(width),map_height(height){}
+    ObjectsInfo():map_width(0),map_height(0){}
 };
 
 

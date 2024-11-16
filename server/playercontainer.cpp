@@ -99,9 +99,10 @@ void PlayerContainer::cancelByError(LobbyErrorType cancelError) {
 
 // Notifica que se empezo la partida. Y cambia a lobby mode.
 // El close/cambio de modo es suficiente para saber que empezo.
-void PlayerContainer::finishGameMode() {
+void PlayerContainer::finishGameMode(const MatchStatsInfo& match_stats) {
+    std::cout << "--------------FINISH GAME MODE stats: " << match_stats.parse() << std::endl;
     for (ControlledPlayer& player: players) {
-        player.setlobbymode();
+        player.setlobbymode(match_stats);
     }
 }
 

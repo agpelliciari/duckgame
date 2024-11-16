@@ -9,11 +9,12 @@ PlayStateRecv::PlayStateRecv(ClientProtocol& _protocol, EventListener& _listener
         protocol(_protocol), listener(_listener), context(_context) {}
 
 void PlayStateRecv::run() {
+    MatchStatsInfo stats;
+    stats.state = INICIADA;
     try {
         MatchDto state;
-        MatchStatsInfo stats;
 
-        while (_keep_running) {
+        while (_keep_running && stats.isRunning()) {
 
             // Actualiza ambas cosas
             // True si esta en un round
@@ -56,7 +57,11 @@ void PlayStateRecv::run() {
         }
     } catch (const LibError&
                      error) {  // No deberia pasara realmente, antes pasaria en el controller.
-        std::cerr << "game state receiver error " << error.what() << std::endl;
+        
+        std::cerr << "canceling.. play state receiver error, was server disconnected?" << std::endl;
+        stats.state = CANCELADA;
+        listener.statsUpdated(stats);
+        
     }
 }
 

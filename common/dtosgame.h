@@ -76,7 +76,7 @@ struct PlayerStatDto {
 };
 
 enum MatchStateType : uint8_t {
-    WAITING = 0x06,
+    LOADING = 0x06,
     INICIADA = 0x01,
     PAUSADA = 0x04,
     ROUND_END = 0x05,
@@ -96,7 +96,7 @@ public:
                             const uint8_t _champion_player):
             state(_estado), numronda(_numronda), champion_player(_champion_player) {}
 
-    MatchStatsInfo(): state(PAUSADA), numronda(1), champion_player(0) {}
+    MatchStatsInfo(): state(LOADING), numronda(1), champion_player(0) {}
 
     std::string parse() const {
         std::stringstream result;
@@ -106,10 +106,17 @@ public:
         } else if (state == TERMINADA) {
             result << " TERMINADA WON " << (int)champion_player;
         } else if (state == PAUSADA) {
-            result << " ROUND END :: WON " << (int)champion_player;
+            result << " PAUSED CHAMP? " << (int)champion_player;
         } else if (state == CANCELADA) {
             result << " CANCELADA ";
+        } else if (state == LOADING) {
+            result << " LOAADING ";
+        } else if (state == ROUND_END) {
+            result << " ROUND END!! ";
+        } else {
+            result << " UNKNOWNNN STATE!! ";
         }
+        
         return result.str();
     }
 
@@ -136,7 +143,7 @@ public:
         return -1;
     }
 
-    bool isNotFinished() const { return state != TERMINADA && state != CANCELADA; }
+    bool isRunning() const { return state != LOADING && state != TERMINADA && state != CANCELADA; }
 
     bool isRoundEnd() const { return state == ROUND_END; }
     bool isPaused() const { return state == PAUSADA; }
