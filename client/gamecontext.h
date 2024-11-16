@@ -8,8 +8,9 @@
 #include "common/clientprotocol.h"
 #include "common/dtosmap.h"
 
-#define MAP_BLOCK_UNIT 16
-
+//#define MAP_BLOCK_UNIT 16
+//#include <list>
+#include <vector>
 
 struct GameContext {
     unsigned int id_lobby;  // cppcheck-suppress unusedStructMember
@@ -23,7 +24,8 @@ struct GameContext {
 
     struct MapData map;  // cppcheck-suppress unusedStructMember
 
-    uint8_t cantidadjugadores;  // No hace falta? El dto match lo dira
+    uint8_t cantidadjugadores;
+    // std::vector<int> players;
 
     GameContext():
             id_lobby(0),

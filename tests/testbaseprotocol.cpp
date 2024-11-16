@@ -14,7 +14,7 @@ using ::testing::ThrowsMessage;
 static const char SIMPLE_MSG[] = "UN MENSAJE";
 
 
-TEST(BaseProtocolTest, ProtocolClosedSocket) {
+TEST(TestProtocolBase, ProtocolClosedSocket) {
     std::string msg(SIMPLE_MSG);
     QueueSocket messen(msg.length(), false);
     Protocol protocol(messen);  // El protocol deberia liberar el queue socket.
@@ -26,7 +26,7 @@ TEST(BaseProtocolTest, ProtocolClosedSocket) {
 }
 
 
-TEST(BaseProtocolTest, ProtocolSendsSimpleMsgString) {
+TEST(TestProtocolBase, ProtocolSendsSimpleMsgString) {
     std::string msg(SIMPLE_MSG);
     QueueSocket messen(msg.length(), true);
 
@@ -39,7 +39,7 @@ TEST(BaseProtocolTest, ProtocolSendsSimpleMsgString) {
     ASSERT_THAT(received, Eq(msg));
 }
 
-TEST(BaseProtocolTest, ProtocolSendsSimpleMsgBuffered) {
+TEST(TestProtocolBase, ProtocolSendsSimpleMsgBuffered) {
     int count = strlen(SIMPLE_MSG);
     QueueSocket messen(count, true);
 
@@ -54,7 +54,7 @@ TEST(BaseProtocolTest, ProtocolSendsSimpleMsgBuffered) {
 }
 
 
-TEST(BaseProtocolTest, ProtocolRecvsSimpleMsgStringFail) {
+TEST(TestProtocolBase, ProtocolRecvsSimpleMsgStringFail) {
     int count = strlen(SIMPLE_MSG);
     QueueSocket messen(count - 1, false);
     Protocol protocol(messen);

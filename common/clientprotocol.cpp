@@ -55,7 +55,7 @@ uint8_t ClientProtocol::recvIDDualPlayer(uint8_t* player1) {
 void ClientProtocol::sendlobbyaction(const lobby_action& action) { protocol.sendbyte(action.type); }
 void ClientProtocol::sendmapname(const std::string& mapname) { protocol.sendmsg(mapname); }
 
-void ClientProtocol::recvmapdata(struct MapData& data, const int unit) {
+void ClientProtocol::recvmapdata(struct MapData& data) {  //, const int unit) {
     data.width = protocol.recvuint();
     data.height = protocol.recvuint();
 
@@ -87,7 +87,7 @@ void ClientProtocol::recvmapdata(struct MapData& data, const int unit) {
 
         uint8_t ind_tex = protocol.recvbyte();
 
-        data.objects.emplace_back(unit * _x, (data.height - _y * unit)  //*unit // Inverti!
+        data.objects.emplace_back(_x, _y  //( data.height- _y * unit) // Inverti!
                                   ,
                                   data.blocks_z, data.textures[ind_tex], ind_tex);
 
@@ -101,7 +101,7 @@ void ClientProtocol::recvmapdata(struct MapData& data, const int unit) {
 
         uint8_t _z = protocol.recvshort();
 
-        data.objects.emplace_back(unit * _x, (data.height - _y * unit)  //*unit //Inverti!
+        data.objects.emplace_back(_x, _y  //(data.height - _y * unit)  //*unit //Inverti!
                                   ,
                                   _z, data.textures[ind_tex], ind_tex);
 
@@ -109,16 +109,31 @@ void ClientProtocol::recvmapdata(struct MapData& data, const int unit) {
     }
 }
 
+void ClientProtocol::recvstats(MatchStatsInfo& outstats) {
+    outstats.numronda = protocol.recvbyte();
+    outstats.champion_player = protocol.recvbyte();
 
-MatchDto ClientProtocol::recvstate() {
-    // Primero recibi info general
-    //match_info_dto out;
-    //protocol.recvbytes(&out, sizeof(out));
+    int count = protocol.recvbyte();
+    outstats.stats.reserve(count);
 
-    MatchDto res = MatchDto();
-    // std::cerr << "-----GOT UPDATE\n" << res.parse() << std::endl;
+    while (count > 0) {
+        uint8_t id = protocol.recvbyte();
+        uint8_t wins = protocol.recvbyte();
+        outstats.stats.emplace_back(id, wins);
+        count--;
+    }
+}
 
+void ClientProtocol::recvmatch(MatchDto& outstate) {
     int playercount = (int)protocol.recvbyte();
+
+    outstate.players.reserve(playercount);
+    outstate.players.clear();
+    // Just in case.
+    auto iterPlayer = outstate.players.begin();
+
+    // std::cout << "CLIENT RECV PLAY COUNT" << playercount << " "<< outstate.players.size()<<
+    // std::endl;
 
     while (playercount > 0) {
         PlayerDTO player;
@@ -137,12 +152,18 @@ MatchDto ClientProtocol::recvstate() {
         player.chest_armor = protocol.recvbyte();
         player.aiming_up = protocol.recvbyte();
 
-        res.players.push_back(player);
+
+        outstate.players.emplace(iterPlayer, player);
+
+        ++iterPlayer;
         playercount--;
     }
 
     int objcount = (int)protocol.recvshort();
-    // std::cout << "CLIENT RECV OBJ COUNT" << objcount << std::endl;
+    // std::cout << "CLIENT RECV OBJ COUNT" << objcount << "player size? "<< outstate.players.size()
+    // << std::endl;
+    outstate.objects.reserve(objcount);
+    outstate.objects.clear();
 
     while (objcount > 0) {
         DynamicObjDTO obj;
@@ -151,19 +172,32 @@ MatchDto ClientProtocol::recvstate() {
         obj.pos.y = protocol.recvuint();
         obj.type = (TypeDynamicObject)protocol.recvbyte();
 
-        res.objects.push_back(obj);
+        outstate.objects.push_back(obj);
         objcount--;
     }
+}
 
-    /*
-    for (auto playerit = state.players.begin(); playerit != state.players.end();) {
-        PlayerDTO player = *playerit;
-        std::cerr << "-->" << (int)player.id << " at " << player.coord_x << ","
-                  << player.coord_y << std::endl;
-        ++playerit;
+bool ClientProtocol::recvstate(MatchStatsInfo& outstats, MatchDto& outstate) {
+
+    outstats.state = (MatchStateType)protocol.recvbyte();
+
+    if (outstats.state == INICIADA) {  // Receive matchdto
+        // std::cout << "---->RECV MATCH DTO!\n";
+        recvmatch(outstate);
+        return true;
     }
-    */
-    return res;
+    // std::cout << "RECV STATS DTO!\n";
+    recvstats(outstats);
+    return false;
+}
+
+void ClientProtocol::recvplayers(std::vector<int>& players) {
+    int totalplayers = protocol.recvbyte();
+    players.reserve(totalplayers);
+    while (totalplayers > 0) {
+        players.push_back(protocol.recvbyte());
+        totalplayers--;
+    }
 }
 
 // Manejo de si esta abierto o no.

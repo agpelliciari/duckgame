@@ -23,6 +23,7 @@
 #include <map>
 
 #include "common/dtosmap.h"
+#include "./map_reader.h"
 
 typedef std::map<std::string, int> type_map_textures;
 
@@ -49,29 +50,6 @@ public:
 };
 
 class MapSerializer {
-public:
-    static const char* SIZE_X;       // cppcheck-suppress unusedStructMember
-    static const char* SIZE_Y;       // cppcheck-suppress unusedStructMember
-    static const char* BACKGROUND;   // cppcheck-suppress unusedStructMember
-    static const char* TEXTURES;     // cppcheck-suppress unusedStructMember
-    static const char* BLOCKS;       // cppcheck-suppress unusedStructMember
-    static const char* DECORATIONS;  // cppcheck-suppress unusedStructMember
-    static const char* BOXES;        // cppcheck-suppress unusedStructMember
-
-    static const char* ITEM_SPAWNS;    // cppcheck-suppress unusedStructMember
-    static const char* PLAYER_SPAWNS;  // cppcheck-suppress unusedStructMember
-
-
-    static const char* POINT_X;  // cppcheck-suppress unusedStructMember
-    static const char* POINT_Y;  // cppcheck-suppress unusedStructMember
-
-    static const char* BLOCK_Z;  // cppcheck-suppress unusedStructMember
-    static const char* BOX_Z;    // cppcheck-suppress unusedStructMember
-    static const char* BOX_TEX;  // cppcheck-suppress unusedStructMember
-
-    static const char* BLOCK_TEX;  // cppcheck-suppress unusedStructMember
-
-    static const char* DECORATION_Z;  // cppcheck-suppress unusedStructMember
 
 protected:
     int count_textures;    // cppcheck-suppress unusedStructMember

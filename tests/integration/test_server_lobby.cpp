@@ -9,37 +9,42 @@
 using ::testing::InSequence;
 using ::testing::ThrowsMessage;
 
-class ServerIntegrationTest: public ::testing::Test {
+class TestIntegrationLobby: public ::testing::Test {
 protected:
     Socket sktserver;
     LobbyContainer lobbies;
+    std::string mapusing;
 
-    inline ServerIntegrationTest(): sktserver("2048"), lobbies() {}
+    inline TestIntegrationLobby(): sktserver("2048"), lobbies(), mapusing("map3") {}
 
     Socket openClient() { return Socket(NULL, "2048"); }
 
-    virtual ~ServerIntegrationTest() {
+    virtual ~TestIntegrationLobby() {
         sktserver.shutdown(2);
         sktserver.close();
     }
 };
 
 
-TEST_F(ServerIntegrationTest, SimpleCreateLobbyDual) {
+TEST_F(TestIntegrationLobby, SimpleCreateLobbyDual) {
 
     TesterClient host(openClient(), sktserver, lobbies);
 
+    std::cout << "CREATE LOBBY DUAL?!\n";
     uint8_t id_lobby = host.createClientLobbyDual();
     ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
     ASSERT_EQ(lobbies.countMatches(), 1) << "Lobby was created";
 
-    host.startMatch();
+    std::cout << "START MATCH?!\n";
+    host.startMatch(mapusing);
 
+    std::cout << "ASSERT STARTED MATCH?!\n";
     // 2 is count of players.
     host.assertLobbyStarted(2);
+    std::cout << "END ?!?!\n";
 }
 
-TEST_F(ServerIntegrationTest, SimpleCreateLobbyDualInmediateDisconnect) {
+TEST_F(TestIntegrationLobby, SimpleCreateLobbyDualInmediateDisconnect) {
 
     TesterClient host(openClient(), sktserver, lobbies);
 
@@ -47,25 +52,25 @@ TEST_F(ServerIntegrationTest, SimpleCreateLobbyDualInmediateDisconnect) {
     ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
     ASSERT_EQ(lobbies.countMatches(), 1) << "Lobby was created";
 
-    host.startMatch();
+    host.startMatch(mapusing);
     host.close();
 }
 
 
-TEST_F(ServerIntegrationTest, SimpleCreateLobbySingle) {
+TEST_F(TestIntegrationLobby, SimpleCreateLobbySingle) {
 
     TesterClient host(openClient(), sktserver, lobbies);
 
     uint8_t id_lobby = host.createClientLobbySingle();
     ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
-    host.startMatch();
+    host.startMatch(mapusing);
 
     // 1 is count of players. Should not start maybe?
     host.assertLobbyStarted(1);
 }
 
 
-TEST_F(ServerIntegrationTest, SimpleCreateLobbyAndJoin) {
+TEST_F(TestIntegrationLobby, SimpleCreateLobbyAndJoin) {
     TesterClient host(openClient(), sktserver, lobbies);
 
     uint8_t id_lobby = host.createClientLobbySingle();
@@ -83,14 +88,14 @@ TEST_F(ServerIntegrationTest, SimpleCreateLobbyAndJoin) {
     host.assertLobbyInfoJoined(first);
     host.assertLobbyInfoJoined(second);
 
-    host.startMatch();
+    host.startMatch(mapusing);
 
     // 1 is count of players. Should not start maybe?
     host.assertLobbyStarted(3);
     joined1.assertLobbyStarted(3);
 }
 
-TEST_F(ServerIntegrationTest, JoinFailedNotFound) {
+TEST_F(TestIntegrationLobby, JoinFailedNotFound) {
     TesterClient joined1(openClient(), sktserver, lobbies);
 
     LobbyErrorType error = joined1.assertJoinLobbyFail(23);
@@ -99,7 +104,7 @@ TEST_F(ServerIntegrationTest, JoinFailedNotFound) {
 }
 
 
-TEST_F(ServerIntegrationTest, SimpleCreateLobbyAndJoinSingle) {
+TEST_F(TestIntegrationLobby, SimpleCreateLobbyAndJoinSingle) {
     TesterClient host(openClient(), sktserver, lobbies);
 
     uint8_t id_lobby = host.createClientLobbySingle();
@@ -113,7 +118,7 @@ TEST_F(ServerIntegrationTest, SimpleCreateLobbyAndJoinSingle) {
 
     host.assertLobbyInfoJoined(first);
 
-    host.startMatch();
+    host.startMatch(mapusing);
 
     // 1 is count of players. Should not start maybe?
     host.assertLobbyStarted(2);
@@ -121,7 +126,7 @@ TEST_F(ServerIntegrationTest, SimpleCreateLobbyAndJoinSingle) {
 }
 
 
-TEST_F(ServerIntegrationTest, SimpleCreateLobbyAndJoinButLeft) {
+TEST_F(TestIntegrationLobby, SimpleCreateLobbyAndJoinButLeft) {
     TesterClient host(openClient(), sktserver, lobbies);
 
     uint8_t id_lobby = host.createClientLobbyDual();
@@ -143,13 +148,13 @@ TEST_F(ServerIntegrationTest, SimpleCreateLobbyAndJoinButLeft) {
     host.assertLobbyInfoLeft(first);
     host.assertLobbyInfoLeft(second);
 
-    host.startMatch();
+    host.startMatch(mapusing);
 
     host.assertLobbyStarted(2);
 }
 
 
-TEST_F(ServerIntegrationTest, SimpleJoinMultiple) {
+TEST_F(TestIntegrationLobby, SimpleJoinMultiple) {
     TesterClient host(openClient(), sktserver, lobbies);
 
     uint8_t id_lobby = host.createClientLobbyDual();
@@ -170,7 +175,7 @@ TEST_F(ServerIntegrationTest, SimpleJoinMultiple) {
     host.assertLobbyInfoJoined(second);
     joined1.assertLobbyInfoJoined(second);
 
-    host.startMatch();
+    host.startMatch(mapusing);
 
     host.assertLobbyStarted(4);
     joined1.assertLobbyStarted(4);
@@ -178,7 +183,7 @@ TEST_F(ServerIntegrationTest, SimpleJoinMultiple) {
 }
 
 
-TEST_F(ServerIntegrationTest, SimpleJoinMultipleWithLeaves) {
+TEST_F(TestIntegrationLobby, SimpleJoinMultipleWithLeaves) {
     TesterClient host(openClient(), sktserver, lobbies);
 
     uint8_t id_lobby = host.createClientLobbyDual();
@@ -212,14 +217,14 @@ TEST_F(ServerIntegrationTest, SimpleJoinMultipleWithLeaves) {
     host.assertLobbyInfoJoined(fourth);
     joined2.assertLobbyInfoJoined(fourth);
 
-    host.startMatch();
+    host.startMatch(mapusing);
 
     host.assertLobbyStarted(4);
     joined2.assertLobbyStarted(4);
     joined3.assertLobbyStarted(4);
 }
 
-TEST_F(ServerIntegrationTest, SimpleCreateLobbyAndJoinCancel) {
+TEST_F(TestIntegrationLobby, SimpleCreateLobbyAndJoinCancel) {
     TesterClient host(openClient(), sktserver, lobbies);
 
     uint8_t id_lobby = host.createClientLobbySingle();
@@ -237,7 +242,7 @@ TEST_F(ServerIntegrationTest, SimpleCreateLobbyAndJoinCancel) {
     host.assertLobbyInfoJoined(first);
     host.assertLobbyInfoJoined(second);
 
-    // host.startMatch();
+    // host.startMatch(mapusing);
 
     // 1 is count of players. Should not start maybe?
     host.finish();
@@ -250,7 +255,7 @@ TEST_F(ServerIntegrationTest, SimpleCreateLobbyAndJoinCancel) {
     ASSERT_EQ(lobbies.countMatches(), 0) << "Lobby was deleted";
 }
 
-TEST_F(ServerIntegrationTest, SimpleJoinMultipleCancel) {
+TEST_F(TestIntegrationLobby, SimpleJoinMultipleCancel) {
     TesterClient host(openClient(), sktserver, lobbies);
 
     uint8_t id_lobby = host.createClientLobbyDual();
@@ -286,7 +291,7 @@ TEST_F(ServerIntegrationTest, SimpleJoinMultipleCancel) {
 }
 
 
-TEST_F(ServerIntegrationTest, SimpleMatchNoPlayersEnds) {
+TEST_F(TestIntegrationLobby, SimpleMatchNoPlayersEnds) {
     TesterClient host(openClient(), sktserver, lobbies);
 
     uint8_t id_lobby = host.createClientLobbyDual();
@@ -320,7 +325,7 @@ TEST_F(ServerIntegrationTest, SimpleMatchNoPlayersEnds) {
     host.assertLobbyInfoJoined(fourth);
     joined2.assertLobbyInfoJoined(fourth);
 
-    host.startMatch();
+    host.startMatch(mapusing);
 
     host.assertLobbyStarted(4);
     joined2.assertLobbyStarted(4);
@@ -343,7 +348,7 @@ TEST_F(ServerIntegrationTest, SimpleMatchNoPlayersEnds) {
     ASSERT_EQ(lobbies.countMatches(), 0) << "Lobby was deleted";
 }
 
-TEST_F(ServerIntegrationTest, IntegrationMultiMatchCreate) {
+TEST_F(TestIntegrationLobby, IntegrationMultiMatchCreate) {
 
     TesterClient host(openClient(), sktserver, lobbies);
     TesterClient host2(openClient(), sktserver, lobbies);
@@ -352,7 +357,7 @@ TEST_F(ServerIntegrationTest, IntegrationMultiMatchCreate) {
     ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
     ASSERT_EQ(lobbies.countMatches(), 1) << "Lobby was created";
 
-    host.startMatch();
+    host.startMatch(mapusing);
 
     uint8_t id_lobby2 = host2.createClientLobbyDual();
     ASSERT_EQ(id_lobby2, 2) << "ID lobby received by client is 2";
@@ -362,7 +367,7 @@ TEST_F(ServerIntegrationTest, IntegrationMultiMatchCreate) {
     host.assertLobbyStarted(2);
 }
 
-TEST_F(ServerIntegrationTest, IntegrationMultiMatchCreateOneCancel) {
+TEST_F(TestIntegrationLobby, IntegrationMultiMatchCreateOneCancel) {
 
     TesterClient host(openClient(), sktserver, lobbies);
     TesterClient host2(openClient(), sktserver, lobbies);
@@ -379,7 +384,7 @@ TEST_F(ServerIntegrationTest, IntegrationMultiMatchCreateOneCancel) {
     ASSERT_EQ(lobbies.countMatches(), 1) << "Lobby was created";
 }
 
-TEST_F(ServerIntegrationTest, IntegrationMultiMatchCreateOneCancelAfter) {
+TEST_F(TestIntegrationLobby, IntegrationMultiMatchCreateOneCancelAfter) {
     TesterClient host(openClient(), sktserver, lobbies);
     TesterClient host2(openClient(), sktserver, lobbies);
 
@@ -394,7 +399,7 @@ TEST_F(ServerIntegrationTest, IntegrationMultiMatchCreateOneCancelAfter) {
     ASSERT_FALSE(host.isReceiverOpen()) << "receiver protocol was not open";
 
     // Para asegurar sincronia...
-    host2.startMatch();
+    host2.startMatch(mapusing);
 
     ASSERT_EQ(lobbies.countMatches(), 1) << "Lobby was cancelled";
 
@@ -403,7 +408,7 @@ TEST_F(ServerIntegrationTest, IntegrationMultiMatchCreateOneCancelAfter) {
 }
 
 
-TEST_F(ServerIntegrationTest, IntegrationMultiMatchOneEnds) {
+TEST_F(TestIntegrationLobby, IntegrationMultiMatchOneEnds) {
     TesterClient host(openClient(), sktserver, lobbies);
 
     uint8_t id_lobby = host.createClientLobbyDual();
@@ -442,7 +447,7 @@ TEST_F(ServerIntegrationTest, IntegrationMultiMatchOneEnds) {
     host.assertLobbyInfoJoined(fourth);
     joined2.assertLobbyInfoJoined(fourth);
 
-    host.startMatch();
+    host.startMatch(mapusing);
 
     host.assertLobbyStarted(4);
     joined2.assertLobbyStarted(4);
@@ -464,7 +469,7 @@ TEST_F(ServerIntegrationTest, IntegrationMultiMatchOneEnds) {
 }
 
 
-TEST_F(ServerIntegrationTest, IntegrationMultiMatchForceFinish) {
+TEST_F(TestIntegrationLobby, IntegrationMultiMatchForceFinish) {
     TesterClient host(openClient(), sktserver, lobbies);
 
     uint8_t id_lobby = host.createClientLobbyDual();
@@ -503,7 +508,7 @@ TEST_F(ServerIntegrationTest, IntegrationMultiMatchForceFinish) {
     host.assertLobbyInfoJoined(fourth);
     joined2.assertLobbyInfoJoined(fourth);
 
-    host.startMatch();
+    host.startMatch(mapusing);
 
     host.assertLobbyStarted(4);
     joined2.assertLobbyStarted(4);
@@ -529,14 +534,14 @@ TEST_F(ServerIntegrationTest, IntegrationMultiMatchForceFinish) {
 }
 
 
-TEST_F(ServerIntegrationTest, SimpleCreateLobbyAndJoinAfterStartedFails) {
+TEST_F(TestIntegrationLobby, SimpleCreateLobbyAndJoinAfterStartedFails) {
     TesterClient host(openClient(), sktserver, lobbies);
 
     uint8_t id_lobby = host.createClientLobbyDual();
     ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
 
 
-    host.startMatch();
+    host.startMatch(mapusing);
 
     host.assertLobbyStarted(2);
 

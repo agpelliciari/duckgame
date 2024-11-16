@@ -13,6 +13,8 @@ struct BlockDTO {
 
     BlockDTO(const coordinate_t x, const coordinate_t y, const uint8_t _tex):
             texture_id(_tex), pos(x, y) {}
+            
+    BlockDTO(): texture_id(0), pos(0, 0) {}
 };
 
 struct DecorationDTO {
@@ -22,6 +24,7 @@ struct DecorationDTO {
 
     DecorationDTO(const coordinate_t x, const coordinate_t y, const uint8_t _tex, const uint16_t z):
             texture_id(_tex), pos(x, y), z_ind(z) {}
+    DecorationDTO():texture_id(0), pos(0, 0), z_ind(2){}
 };
 
 
