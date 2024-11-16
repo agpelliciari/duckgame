@@ -10,7 +10,7 @@ Player::Player(int id_, int initial_x, int initial_y):
         chest_armor(),
         move_action(TypeMoveAction::NONE),
         aim_up(false),
-        life_points(5),
+        life_points(1),
         shooting_direction(ShootingDirection::NONE),
         weapon(){}
 

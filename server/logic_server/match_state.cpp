@@ -30,24 +30,14 @@ void MatchState::playRound(MatchObserver& observer, MatchStatsInfo& stats) {
     this->calculate_game_results(stats, id_alive_players[0]);
 
     std::cout << "FINISHED TICK COUNT OF 90!?" << clock.tickcount()<<std::endl;
-    /*
-    if(stats.numronda >= 5){ // Termino la partida!
-        stats.state = TERMINADA;
-        stats.champion_player = 1; //buscar ganador
-    } else{ // Termino la ronda o asi. Podria seguir internamente. O no.
-        stats.state = PAUSADA; // Para probar.
-        stats.numronda++;
-        //stats.state = ROUND_END;  // Capaz a futuro para mandar las stats del round.
-    }*/
 }
 
 void MatchState::calculate_game_results(MatchStatsInfo& stats, int actual_winner){
-
-    for (PlayerStatDto player : stats.stats ) {
-        if (player.id == actual_winner){
-            player.wins ++;
-        }
-    }
+    int wins_curr = stats.addPlayerWin(actual_winner);
+    //stats.stats.clear();
+    //if(wins_curr < 0){ // No encontro el id!
+    //}
+    
     if (stats.numronda >= 5){
         int id_champion = 0;
         if (only_one_winner(stats, id_champion)){
@@ -55,9 +45,11 @@ void MatchState::calculate_game_results(MatchStatsInfo& stats, int actual_winner
             stats.champion_player = id_champion;
         } else {
             stats.state = PAUSADA;
+            stats.champion_player = actual_winner;
         }
     } else {
         stats.state = ROUND_END;
+        stats.champion_player = actual_winner;
         stats.numronda++;
     }
 }

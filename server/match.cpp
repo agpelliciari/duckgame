@@ -54,7 +54,7 @@ void Match::init(MapLoader& maps, const char* mapname) {
     players.finishLobbyMode();
 
     // Carga info para el server
-    struct ObjectsInfo objects(map.size.x,map.size.y);
+    objects = ObjectsInfo(map.size.x,map.size.y);
 
     deserial.loadObjectsInfo(objects);
 
@@ -151,6 +151,9 @@ void Match::run() {
 
     looper.playRound(players, this->stats);
     while (_keep_running && handlePostRound()) {
+        //looper.start_players(players, stats);
+        // re envia info del mapa?
+        
         looper.playRound(players, this->stats);
     }
 

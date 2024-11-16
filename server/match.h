@@ -33,10 +33,13 @@ private:
     PlayerContainer players;  // cppcheck-suppress unusedStructMember
     MatchState looper;        // cppcheck-suppress unusedStructMember
     int connectedplayers;     // cppcheck-suppress unusedStructMember
+    
+    // Para el cliente
     MapInfo map;              // cppcheck-suppress unusedStructMember
-    MatchStatsInfo stats;
-    // std::mutex mtx;
-    // std::condition_variable match_start;
+    MatchStatsInfo stats;// cppcheck-suppress unusedStructMember
+    
+    // Para el server
+    struct ObjectsInfo objects;// cppcheck-suppress unusedStructMember
 
     // Para el thread y en general el loopeado
     void run() override;
