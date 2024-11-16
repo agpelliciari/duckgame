@@ -19,6 +19,7 @@ void PlayStateRecv::run() {
             // True si esta en un round
             // False si pausa/termino.
             if (protocol.recvstate(stats, state)) {
+                /*
                 for (PlayerDTO& player: state.players) {
 
                     // std::cerr << "-->player" << (int)player.id << " at " << player.pos.x << ","
@@ -44,6 +45,8 @@ void PlayStateRecv::run() {
                     obj.pos.y = (context.map.height - obj.pos.y * MAP_BLOCK_UNIT);  // Inverti!
                     obj.pos.x = (obj.pos.x);
                 }
+                */
+
                 listener.matchUpdated(state);
             } else {
 

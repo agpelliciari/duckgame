@@ -78,15 +78,15 @@ public:
     void sendaction(PlayerActionDTO& action);
 
 
-    //Receiver del client.
+    // Receiver del client.
     bool recvstate(MatchStatsInfo& outstats, MatchDto& outstate);
-    
+
     void recvstats(MatchStatsInfo& outinfo);
     void recvmatch(MatchDto& outstate);
-    
-    
 
-    void recvmapdata(struct MapData& data, const int unit);
+    void recvplayers(std::vector<int>& players);  //, const int unit);
+
+    void recvmapdata(struct MapData& data);  //, const int unit);
 
     bool isopen();
     void close();

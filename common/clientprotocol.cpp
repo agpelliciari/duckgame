@@ -55,7 +55,7 @@ uint8_t ClientProtocol::recvIDDualPlayer(uint8_t* player1) {
 void ClientProtocol::sendlobbyaction(const lobby_action& action) { protocol.sendbyte(action.type); }
 void ClientProtocol::sendmapname(const std::string& mapname) { protocol.sendmsg(mapname); }
 
-void ClientProtocol::recvmapdata(struct MapData& data, const int unit) {
+void ClientProtocol::recvmapdata(struct MapData& data) {  //, const int unit) {
     data.width = protocol.recvuint();
     data.height = protocol.recvuint();
 
@@ -87,7 +87,7 @@ void ClientProtocol::recvmapdata(struct MapData& data, const int unit) {
 
         uint8_t ind_tex = protocol.recvbyte();
 
-        data.objects.emplace_back(unit * _x, (data.height - _y * unit)  //*unit // Inverti!
+        data.objects.emplace_back(_x, _y  //( data.height- _y * unit) // Inverti!
                                   ,
                                   data.blocks_z, data.textures[ind_tex], ind_tex);
 
@@ -101,7 +101,7 @@ void ClientProtocol::recvmapdata(struct MapData& data, const int unit) {
 
         uint8_t _z = protocol.recvshort();
 
-        data.objects.emplace_back(unit * _x, (data.height - _y * unit)  //*unit //Inverti!
+        data.objects.emplace_back(_x, _y  //(data.height - _y * unit)  //*unit //Inverti!
                                   ,
                                   _z, data.textures[ind_tex], ind_tex);
 
@@ -189,6 +189,15 @@ bool ClientProtocol::recvstate(MatchStatsInfo& outstats, MatchDto& outstate) {
     // std::cout << "RECV STATS DTO!\n";
     recvstats(outstats);
     return false;
+}
+
+void ClientProtocol::recvplayers(std::vector<int>& players) {
+    int totalplayers = protocol.recvbyte();
+    players.reserve(totalplayers);
+    while (totalplayers > 0) {
+        players.push_back(protocol.recvbyte());
+        totalplayers--;
+    }
 }
 
 // Manejo de si esta abierto o no.
