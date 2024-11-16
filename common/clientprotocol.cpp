@@ -115,6 +115,7 @@ void ClientProtocol::recvstats(MatchStatsInfo& outstats) {
 
     int count = protocol.recvbyte();
     outstats.stats.reserve(count);
+    outstats.stats.clear();
 
     while (count > 0) {
         uint8_t id = protocol.recvbyte();
