@@ -35,6 +35,10 @@ MatchLogic::MatchLogic(): colition_map(800, 640) {
         this->add_player_speed(index, 0, 0);
     };
 
+    this->command_map[PlayerActionType::FLAPPING_END] = [this](int index) {
+        //this->add_player_speed(index, 0, 0);
+    };
+
     this->command_map[PlayerActionType::AIM_UP_START] = [this](int index) {
         this->player_aim_up_start(index);
     };
