@@ -128,8 +128,8 @@ void Drawer::drawObjects(const MatchDto& matchDto) {
     for (const MapObject& object: context.map.objects) {
         renderer.Copy(
                 textures.getTexture(object.texture), SDL2pp::Rect(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT),
-                SDL2pp::Rect(camera.getScreenX(object.column),
-                             camera.getScreenY(object.row),
+                SDL2pp::Rect(camera.getScreenX(-object.row),
+                             camera.getScreenY(-object.column),
                              camera.getScaledSize(BLOCK_WIDTH),
                              camera.getScaledSize(BLOCK_HEIGHT)
                              ));

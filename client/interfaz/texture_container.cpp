@@ -1,6 +1,6 @@
 #include "texture_container.h"
 
-TextureContainer::TextureContainer(SDL2pp::Renderer& renderer): noTexture(SDL2pp::Texture(renderer, std::string(DATA_PATH) + "/notexture.png")) {
+TextureContainer::TextureContainer(SDL2pp::Renderer& renderer): noTexture(SDL2pp::Texture(renderer, std::string(DATA_PATH) + NO_TEXTURE)) {
     loadTextures(renderer, DATA_PATH);
 }
 
@@ -27,8 +27,8 @@ void TextureContainer::recursiveLoadTextures(SDL2pp::Renderer& renderer, const s
         if (entry.is_directory()) {
             recursiveLoadTextures(renderer, root, entry.path().string());
         } else if (entry.is_regular_file() && entry.path().extension() == ".png") {
-            std::string relative_path = entry.path().string().substr(root.size());
-            textures.emplace(relative_path, SDL2pp::Texture(renderer, entry.path().string()));
+            std::string relativePath = entry.path().string().substr(root.size());
+            textures.emplace(relativePath, SDL2pp::Texture(renderer, entry.path().string()));
         }
     }
 }
