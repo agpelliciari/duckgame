@@ -14,29 +14,76 @@ void MatchState::playRound(MatchObserver& observer, MatchStatsInfo& stats) {
     // start_players(observer);
     Clock clock(30);  // 16ms sleep == 60 frames por segundo aprox. 30 = 30 fps
     clock.resetnext();
-    while (running && clock.tickcount() < 600) {
+    while ((running && clock.tickcount() < 600) && id_alive_players.size() > 1) {
         //std::cout << "LOOP COUNT " << clock.tickcount()<< std::endl;
         this->step();
         this->send_results(observer);
         clock.tickNoRest();
+
     }
+
+    this->calculate_game_results(stats, id_alive_players[0]);
+
     std::cout << "FINISHED TICK COUNT OF 90!?" << clock.tickcount()<<std::endl;
-    
+    /*
     if(stats.numronda >= 5){ // Termino la partida!
         stats.state = TERMINADA;
-        stats.champion_player = 1;
+        stats.champion_player = 1; //buscar ganador
     } else{ // Termino la ronda o asi. Podria seguir internamente. O no.
         stats.state = PAUSADA; // Para probar.
         stats.numronda++;
         //stats.state = ROUND_END;  // Capaz a futuro para mandar las stats del round.
+    }*/
+}
+
+void MatchState::calculate_game_results(MatchStatsInfo& stats, int actual_winner){
+
+    for (PlayerStatDto player : stats.stats ) {
+        if (player.id == actual_winner){
+            player.wins ++;
+        }
+    }
+    if (stats.numronda >= 5){
+        int id_champion = 0;
+        if (only_one_winner(stats, id_champion)){
+            stats.state = TERMINADA;
+            stats.champion_player = id_champion;
+        } else {
+            stats.state = PAUSADA;
+        }
+    } else {
+        stats.state = ROUND_END;
+        stats.numronda++;
     }
 }
 
+bool MatchState::only_one_winner(MatchStatsInfo& stats, int &id_champion){
 
-void MatchState::start_players(MatchObserver& observer) {
+    bool only_one_winner = false;
+        int maximum_number_of_wins = 0;
+        int id_champion_player = 0;
+        for (PlayerStatDto player : stats.stats ) {
+            if (player.wins > maximum_number_of_wins){
+                only_one_winner = true;
+                maximum_number_of_wins = player.wins;
+                id_champion_player = player.id;
+            } else if (player.wins == maximum_number_of_wins){
+                only_one_winner = false;
+                id_champion_player = 0;
+            }
+        }
+    id_champion = id_champion_player;
+    return only_one_winner;
+}
 
+void MatchState::start_players(MatchObserver& observer, MatchStatsInfo& stats) {
+
+    stats.stats.clear();
+    id_alive_players.clear();
     std::vector<unsigned int> ids = observer.getPlayers();
     for (auto id = ids.begin(); id != ids.end();) {
+        stats.stats.push_back(PlayerStatDto(*id, 0));
+        id_alive_players.push_back(*id);
         match_logic.add_player(*id);
         std::cout << "New player added with id: " << *id << std::endl;
         ++id;
@@ -49,7 +96,7 @@ void MatchState::step() {
     this->receive_commands();
     this->execute_commands();
     match_logic.update_colition_map();
-    match_logic.update_players();
+    match_logic.update_players(this->id_alive_players);
     match_logic.update_bullets();
 }
 

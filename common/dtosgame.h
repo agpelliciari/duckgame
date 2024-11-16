@@ -68,10 +68,7 @@ public:
     }
 };
 
-struct PlayerStatDto {
-    uint8_t id;    // cppcheck-suppress unusedStructMember
-    uint8_t wins;  // cppcheck-suppress unusedStructMember
-};
+
 
 enum MatchStateType : uint8_t {
     INICIADA = 0x01,
@@ -81,11 +78,19 @@ enum MatchStateType : uint8_t {
     CANCELADA = 0x03,
 };
 
+struct PlayerStatDto {
+    uint8_t id;    // cppcheck-suppress unusedStructMember
+    uint8_t wins;  // cppcheck-suppress unusedStructMember
+
+    PlayerStatDto(uint8_t playerId, uint8_t playerWins)
+        : id(playerId), wins(playerWins) {}
+};
+
 // Info estadisticas
 class MatchStatsInfo {
 public:
     MatchStateType state;
-    uint8_t numronda;
+    int numronda;
     std::vector<PlayerStatDto> stats;  // cppcheck-suppress unusedStructMember
     uint8_t champion_player; // cppcheck-suppress unusedStructMember
 

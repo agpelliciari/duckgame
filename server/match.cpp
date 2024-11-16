@@ -46,7 +46,7 @@ void Match::init(MapLoader& maps, const char* mapname) {
     deserial.loadMapInfo(map);
 
     // Notify/start players. Ya podrian enviar la info del mapa.
-    looper.start_players(players);
+    looper.start_players(players, stats);
     players.finishLobbyMode();
 
 
@@ -102,7 +102,7 @@ const MatchStatsInfo& Match::getStats() const{
 }
 
 void Match::run() {
-
+    stats.numronda = 1;
     looper.playRound(players,this->stats);
     players.finishGameMode(); // Notify/move players to lobby mode.
     // Notifier will check wether to send stats or so

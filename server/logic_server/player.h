@@ -31,6 +31,7 @@ private:
 public:
     Player(int id, int initial_x, int initial_y);
     int get_id();
+    bool is_still_alive();
     bool same_id(unsigned int id);
 
     void get_data(int& id, int& x, int& y, TypeWeapon& weapon, const bool& helmet_equipped,

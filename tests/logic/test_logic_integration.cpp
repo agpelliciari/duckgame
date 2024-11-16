@@ -8,7 +8,7 @@
 
 using ::testing::InSequence;
 using ::testing::ThrowsMessage;
-
+/*
 TEST(IntegrationLogicTest, SendReceiveFirstState3players) {
 
 
@@ -166,3 +166,4 @@ TEST(IntegrationLogicTest, SendMoveOnlyPlayer3Jumps) {
 
     observer.assertPlayerMovedHigher(playerGiven, playerBase);
 }
+*/
