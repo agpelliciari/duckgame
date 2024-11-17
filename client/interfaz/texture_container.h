@@ -13,10 +13,10 @@ public:
     /* NO TEXTURE */
     static constexpr const char* NO_TEXTURE = "/notexture.png";
     /* DUCKS */
-    static constexpr const char* YELLOW_DUCK = "/duck_sprites/yellow_duck.png";
-    static constexpr const char* GREY_DUCK = "/duck_sprites/grey_duck.png";
-    static constexpr const char* ORANGE_DUCK = "/duck_sprites/orange_duck.png";
-    static constexpr const char* WHITE_DUCK = "/duck_sprites/white_duck.png";
+    static constexpr const char* YELLOW_DUCK = "/duck_sprites/duck_yellow.png";
+    static constexpr const char* GREY_DUCK = "/duck_sprites/duck_grey.png";
+    static constexpr const char* ORANGE_DUCK = "/duck_sprites/duck_orange.png";
+    static constexpr const char* WHITE_DUCK = "/duck_sprites/duck_white.png";
 
     /* WEAPONS */
     static constexpr const char* COWBOY_GUN = "/weapons/cowboyPistol.png";

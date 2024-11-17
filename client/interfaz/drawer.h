@@ -12,6 +12,9 @@
 #include "camera.h"
 #include "texture_container.h"
 
+#define X_PHYSICAL_OFFSET_PLAYER 8
+#define Y_PHYSICAL_OFFSET_PLAYER 1
+
 #define BLOCK_WIDTH 16
 #define BLOCK_HEIGHT 16
 
@@ -26,8 +29,8 @@
 #define INDICATOR_HEIGHT 33.5f
 #define INDICATOR_MAX_TIME 5
 
-#define GUN_FLIP_X -1
-#define GUN_UNFLIP_X 16
+#define GUN_FLIP_X 1
+#define GUN_UNFLIP_X 14
 #define HELMET_FLIP_X 3
 #define HELMET_UNFLIP_X -3
 

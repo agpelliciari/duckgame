@@ -3,7 +3,7 @@
 #include <iostream>
 
 PhysicalPlayer::PhysicalPlayer(int init_coord_x, int init_coord_y):
-        PhysicalObject(init_coord_x, init_coord_y, 10, 30),
+        PhysicalObject(init_coord_x, init_coord_y, 16, 22),
         initial_position{init_coord_x, init_coord_y},
         flap_attemps(10),
         on_air(true) {}
