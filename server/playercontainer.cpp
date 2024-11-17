@@ -4,13 +4,17 @@
 
 #include "./gameerror.h"
 
-PlayerContainer::PlayerContainer(): canceled(false), totalplayers(0), last_id(0) {}
+PlayerContainer::PlayerContainer(const int _max_players): canceled(false), max_players(_max_players), totalplayers(0), last_id(0) {}
 
 
 // Todo esto no hace falta sincronizar ya que es sincronico!
 ControlledPlayer& PlayerContainer::add(uint8_t countplayers) {
     if (canceled) {
         throw GameError(LOBBY_NOT_FOUND, "Tried to join to lobby already cancelled");
+    }
+    
+    if(totalplayers+countplayers > max_players){
+        throw GameError(LOBBY_NO_SPACE, "There was no capacity to join required count");
     }
 
     // totalplayers no es perse el id para el player

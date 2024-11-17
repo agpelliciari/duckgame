@@ -65,11 +65,12 @@ protected:
     
     bool pausedMatch();
     //bool roundEnded();
-    
+    void loadMap(MapDeserializer& deserial);
     bool handlePostRound();
 public:
     // Se tendra composicion con un unico observer de eventos al match.
     explicit Match(lobbyID _id);
+    explicit Match(lobbyID _id, const int max_players);
 
     // Asumamos por ahora que no se quiere permitir copias, ni mov.
     Match(const Match&) = delete;

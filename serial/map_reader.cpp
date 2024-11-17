@@ -42,7 +42,7 @@ const char* MapReader::DECORATION_Z = "z_ind";
 
 
 
-MapReader::MapReader(const std::string& src) {
+MapReader::MapReader(const std::string& src):root_id(0) {
 
     std::ifstream file(src, std::ios::binary | std::ios::ate);
     std::streamsize size = file.tellg();
@@ -55,6 +55,7 @@ MapReader::MapReader(const std::string& src) {
         map[size] = 0;
         tree = ryml::parse_in_arena(ryml::csubstr(map.data()));
         root = tree.rootref();
+        root_id = tree.root_id();
         // std::cout << "CONTENT:\n" << map.data() << "\n----------------------\n";
     } else {
         throw LibError(errno, "Failed to read the file to deserialize ");
@@ -79,11 +80,12 @@ void MapReader::readBoxesTexture(std::string& box_tex) {
 }
 
 void MapReader::readTextures(std::vector<std::string>& res) {
-    ryml::NodeRef textures = root[MapReader::TEXTURES];
-    if (!textures.is_seq()) {
+    size_t textures_id = tree.find_child(root_id, MapReader::TEXTURES);
+    if (list_id == -1 && !tree.is_seq(textures_id)) {
         std::cout << "NOT FOUND!! TEXTURES SEGMENT!\n";
         return;
     }
+    ryml::NodeRef textures = root[MapReader::TEXTURES];
 
     int size = textures.num_children();
     res.reserve(size);
@@ -152,6 +154,9 @@ read_seq_t MapReader::getBlocks() {
 }
 
 read_seq_t MapReader::getDecorations() {
+    size_t list_id = tree.find_child(root_id, MapReader::DECORATIONS);
+    std::cout << "GOT LIST ID?" << (int)(list_id) << std::endl;
+    
     read_seq_t list = root[MapReader::DECORATIONS];
     if (list.is_seq()) {
          return list;

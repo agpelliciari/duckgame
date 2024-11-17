@@ -9,7 +9,7 @@
 //#include <thread>
 #include "common/clock.h"
 
-Match::Match(lobbyID _id): id(_id), players(), looper(), connectedplayers(0), map() {}
+Match::Match(lobbyID _id, const int max_players): id(_id), players(max_players), looper(), connectedplayers(0), map() {}
 
 
 // Protected// friend accessed methods
@@ -40,18 +40,8 @@ bool Match::notifyDisconnect(ControlledPlayer& player) {
     return connectedplayers == 0;
 }
 
-void Match::init(MapLoader& maps, const char* mapname) {
-    if (is_alive()) {
-        throw GameError(LOBBY_ALREADY_STARTED, "Tried to start a match already started!!\n");
-    }    
-    
-    MapDeserializer& deserial = maps.getLoader(mapname);
-
+void Match::loadMap(MapDeserializer& deserial){
     deserial.loadMapInfo(map);
-
-    // Notify/start players. Ya podrian enviar la info del mapa.
-    looper.start_players(players, stats);
-    players.finishLobbyMode();
 
     // Carga info para el server
     objects = ObjectsInfo(map.size.x,map.size.y);
@@ -63,8 +53,22 @@ void Match::init(MapLoader& maps, const char* mapname) {
     for (const struct BlockDTO& block: map.blocks) {
         objects.blocks.emplace_back(block.pos.x, block.pos.y);
     }
+    //try{
+    //    return true;
+    //} catch()
+}
 
+void Match::init(MapLoader& maps, const char* mapname) {
+    if (is_alive()) {
+        throw GameError(LOBBY_ALREADY_STARTED, "Tried to start a match already started!!\n");
+    }    
+    
+    loadMap(maps.getLoader(mapname));
+    std::cout << "INIT MATCH AFTER LOAD MAP?\n";
+    // Notify/start players. Ya podrian enviar la info del mapa.
+    looper.start_players(players, stats);
     looper.add_objects(objects);
+    players.finishLobbyMode();
 
     start();
     // match_start.notify_all();

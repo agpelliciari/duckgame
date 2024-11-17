@@ -53,7 +53,9 @@ public:
     static const char* DECORATION_Z;  // cppcheck-suppress unusedStructMember
 
 protected:
+    size_t root_id;
     ryml::Tree tree;  // cppcheck-suppress unusedStructMember
+    
     ryml::NodeRef root;
 public:
     explicit MapReader(const std::string& src);

@@ -52,7 +52,7 @@ int main(int argc, char* argv[]) {
     std::string file("res/maps/");
     file.append(argv[1]);
     file.append(".yaml");
-    create(file);
+    //create(file);
     int ms = clock.measure();
 
 

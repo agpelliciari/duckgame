@@ -128,14 +128,14 @@ void MenuHandler::playerLeftLobby(int id) {
 void MenuHandler::createdLobbyDual(unsigned int id_lobby) {
     std::cout << "Lobby creada dual con id " << id_lobby << std::endl;
     setLobbyId(id_lobby);
-    std::vector<std::string> maps = {"MAPACHE"};
+    std::vector<std::string> maps = {"MAPACHE", "testmapinvalid", "does not exist"};
     setLobbyMaps(maps);
     addDuoToLobby();
 }
 void MenuHandler::createdLobbySolo(unsigned int id_lobby) {
     std::cout << "Lobby creada solo con id " << id_lobby << std::endl;
     setLobbyId(id_lobby);
-    std::vector<std::string> maps = {"MAPACHE"};
+    std::vector<std::string> maps = {"MAPACHE", "testmapinvalid", "does not exist"};
     setLobbyMaps(maps);
     addSoloToLobby();
 }

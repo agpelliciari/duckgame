@@ -15,7 +15,7 @@ protected:
     LobbyContainer lobbies;
     std::string mapusing;
 
-    inline TestIntegrationLobby(): sktserver("2048"), lobbies(), mapusing("maptest") {}
+    inline TestIntegrationLobby(): sktserver("2048"), lobbies(), mapusing("testmap") {}
 
     Socket openClient() { return Socket(NULL, "2048"); }
 
