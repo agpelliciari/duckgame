@@ -9,14 +9,15 @@ Player::Player(int id_, int initial_x, int initial_y):
         helmet(false),
         chest_armor(false),
         move_action(TypeMoveAction::NONE),
+        doing_action(TypeDoingAction::NONE),
         aim_up(false),
-        life_points(1),
+        life_points(3),
         shooting_direction(ShootingDirection::NONE),
         weapon(){}
 
 void Player::get_data(int& id, int& x, int& y, TypeWeapon& weapon_,
                       bool& helmet_equipped, bool& chest_armor_equipped,
-                      TypeMoveAction& move_action_) {
+                      TypeMoveAction& move_action_, TypeDoingAction& doing_action_) {
     id = this->id;
     this->object.get_real_position(x, y);
 
@@ -31,6 +32,7 @@ void Player::get_data(int& id, int& x, int& y, TypeWeapon& weapon_,
     //this->helmet.is_equipped(helmet_equipped);
     //this->chest_armor.is_equipped(chest_armor_equipped);
     move_action_ = this->move_action;
+    doing_action_ = this->doing_action;
 }
 
 bool Player::same_id(unsigned int id_) { return id == id_; }
@@ -43,6 +45,7 @@ int Player::get_id() { return id; }
 
 void Player::update(const MatchMap& colition_map) {
     if (is_alive){
+        doing_action = TypeDoingAction::NONE;
         object.move(colition_map);
         object.update_action(move_action);
         this->update_shooting_direction();
@@ -111,7 +114,9 @@ void Player::take_damage(){
             chest_armor = false;
             return;
         }
+
         life_points--;
+        doing_action = TypeDoingAction::DAMAGED;
         if (life_points == 0) {
             is_alive = false;
         }
@@ -123,18 +128,21 @@ void Player::shoot(std::vector <PhysicalBullet> &bullets){
         Tuple bullet_position = this->get_map_position();
         Tuple player_dimension = this->get_dimension();
         if (shooting_direction == ShootingDirection::UP){
+            doing_action = TypeDoingAction::SHOOTING_UP;
             bullet_position.x += player_dimension.x / 2;
             bullet_position.y += player_dimension.y  + 5;
         }
         if (shooting_direction == ShootingDirection::LEFT){
+            doing_action = TypeDoingAction::SHOOTING;
             bullet_position.x -= 5;
             bullet_position.y += player_dimension.y / 2;
         }
         if (shooting_direction == ShootingDirection::RIGHT){
+            doing_action = TypeDoingAction::SHOOTING;
             bullet_position.x += player_dimension.x + 5;
             bullet_position.y += player_dimension.y / 2;
         }
-        weapon.shoot(this->shooting_direction, bullets, bullet_position);
+        weapon.shoot(this->shooting_direction, bullets, bullet_position, this->object);
     //}
 }
 

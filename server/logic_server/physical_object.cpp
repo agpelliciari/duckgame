@@ -10,9 +10,9 @@ PhysicalObject::PhysicalObject(int position_x, int position_y, int dimension_x, 
 
 void PhysicalObject::add_speed(int speed_x, int speed_y) {
     // FIX RAPIDO PARA PROBAR VELOCIDAD CONSTANTE:
-    if (speed.x + speed_x <= 10 && speed.x + speed_x >= -10) {
+    //if (speed.x + speed_x <= 10 && speed.x + speed_x >= -10) {
         this->speed.x += speed_x;
-    }
+    //}
     if (speed.y == 0) {
         this->speed.y += speed_y;
     }
@@ -66,6 +66,7 @@ bool PhysicalObject::detect_y_collision(const MatchMap& colition_map, const int 
 
 void PhysicalObject::move(const MatchMap& colition_map) {
 
+    speed.x += acceleration.x * time_step;
     if (this->speed.x != 0) {
         int sign;
         speed.x > 0 ? sign = 1 : sign = -1;
@@ -74,10 +75,13 @@ void PhysicalObject::move(const MatchMap& colition_map) {
             int id_colition_player = 0;
             if (detect_x_collision(colition_map, sign, colition_with_player, id_colition_player)) {
                 this->react_to_sides_collision(colition_with_player, id_colition_player);
+                acceleration.x = 0;
             } else {
                 position.x += 1 * sign;
             }
         }
+    } else {
+        acceleration.x = 0;
     }
 
     speed.y += acceleration.y * time_step;

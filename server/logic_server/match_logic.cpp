@@ -172,7 +172,7 @@ void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos, std::vector<DynamicObjDT
 
         PlayerDTO dto = {0, false, 0, 0, TypeWeapon::NONE, false, false, TypeMoveAction::NONE};
         player.get_data(dto.id, dto.pos.x, dto.pos.y, dto.weapon, dto.helmet, dto.chest_armor,
-                        dto.move_action);
+                        dto.move_action, dto.doing_action);
 
         dtos.push_back(dto);
     }
@@ -192,9 +192,9 @@ void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos, std::vector<DynamicObjDT
     }
 
     for (PhysicalBullet bullet: bullets) {
-        Tuple position = bullet.get_position();
-        DynamicObjDTO dto = {position.x, position.y, TypeDynamicObject::PROJECTILE};
-        std::cout << "BULLET x: " << position.x << " y: " << position.y << std::endl;
+        DynamicObjDTO dto = {0, 0, TypeDynamicObject::PROJECTILE};
+        bullet.get_map_info(dto.pos.x, dto.pos.y, dto.type);
+        std::cout << "BULLET x: " << dto.pos.x << " y: " << dto.pos.y << std::endl;
         objects.push_back(dto);
     }
 }
