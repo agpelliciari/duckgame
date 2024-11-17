@@ -29,6 +29,8 @@ private:
     std::vector<Item> items;     // cppcheck-suppress unusedStructMember
     std::vector<PhysicalBullet> bullets; // cppcheck-suppress unusedStructMember
     std::vector<MapPoint> blocks;  // cppcheck-suppress unusedStructMember
+    std::vector<MapPoint> spawn_points; // cppcheck-suppress unusedStructMember
+
     // std::vector<std::vector<bool>> colition_map; // cppcheck-suppress unusedStructMember
 
 
@@ -38,7 +40,7 @@ private:
 public:
     MatchLogic();
     void execute_move_command(int action_type, int index);
-    void add_player(int id);
+    void add_player(int id, int spawn_point_index);
     void add_player_speed(int id, int x, int y);
     void still_player(int id);
     void get_dtos(std::vector<PlayerDTO>& dtos, std::vector<DynamicObjDTO>& objects);
@@ -49,6 +51,7 @@ public:
     void add_boxes(const std::vector<struct MapPoint>& boxes);
     void add_items(const std::vector<struct MapPoint>& items);
     void add_blocks(const std::vector<struct MapPoint>& blocks);
+    void add_spawn_points(const std::vector<struct MapPoint>& spawn_points);
     void add_bullet(PhysicalBullet bullet);
     void update_bullets();
     void player_shoot(int index);
