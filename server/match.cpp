@@ -49,9 +49,7 @@ void Match::init(MapLoader& maps, const char* mapname) {
 
     deserial.loadMapInfo(map);
 
-    // Notify/start players. Ya podrian enviar la info del mapa.
-    looper.start_players(players, stats);
-    players.finishLobbyMode();
+
 
     // Carga info para el server
     objects = ObjectsInfo(map.size.x,map.size.y);
@@ -65,6 +63,9 @@ void Match::init(MapLoader& maps, const char* mapname) {
     }
 
     looper.add_objects(objects);
+    // Notify/start players. Ya podrian enviar la info del mapa.
+    looper.start_players(players, stats);
+    players.finishLobbyMode();
 
     start();
     // match_start.notify_all();

@@ -57,8 +57,14 @@ MatchLogic::MatchLogic(): colition_map(800, 640) {
 
 }
 
-void MatchLogic::add_player(int id) {
-    players.push_back(Player(id, 10 + id * 50, 1));
+void MatchLogic::add_player(int id, int spawn_point_index) {
+    std::cout << "SPAWN POINT INDEX: "<< spawn_point_index << std::endl;
+    if (spawn_point_index < spawn_points.size()) {
+        players.push_back(Player(id, spawn_points[spawn_point_index].x  * 16, spawn_points[spawn_point_index].y  * 16));
+        std::cout << "spawn point x: " << spawn_points[spawn_point_index].x << ", y: " << spawn_points[spawn_point_index].y << std::endl;
+    } else {
+        players.push_back(Player(id, 10 + 50 * id, 1));
+    }
     colition_map.add_collision(players.back().get_map_position(), players.back().get_dimension(),
                                true, players.back().get_id());
 }
@@ -221,6 +227,13 @@ void MatchLogic::add_blocks(const std::vector<struct MapPoint>& blocks){
     }
 }
 
+void MatchLogic::add_spawn_points(const std::vector<struct MapPoint>& spawn_points){
+    std::cout << "spawn points: " << spawn_points.size() << std::endl;
+
+    for (const struct MapPoint& spawn_point: spawn_points) {
+        this->spawn_points.push_back(MapPoint(spawn_point.x, spawn_point.y));
+    }
+}
 
 void MatchLogic::add_bullet(PhysicalBullet bullet){
     this->bullets.push_back(bullet);
@@ -260,6 +273,7 @@ void MatchLogic::clear_players(){
 }
 
 void MatchLogic::clear_objects(){
+    spawn_points.clear();
     boxes.clear();
     items.clear();
     bullets.clear();

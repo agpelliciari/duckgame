@@ -43,11 +43,13 @@ void MatchState::reset_players(MatchObserver& observer){
     match_logic.clear_players();
     id_alive_players.clear();
     std::vector<unsigned int> ids = observer.getPlayers();
+    int spawn_point_index = 0;
     for (auto id = ids.begin(); id != ids.end();) {
         id_alive_players.push_back(*id);
-        match_logic.add_player(*id);
+        match_logic.add_player(*id, spawn_point_index);
         std::cout << "New player added with id: " << *id << std::endl;
         ++id;
+        spawn_point_index++;
     }
 
 }
@@ -99,12 +101,14 @@ void MatchState::start_players(MatchObserver& observer, MatchStatsInfo& stats) {
     stats.stats.clear();
     id_alive_players.clear();
     std::vector<unsigned int> ids = observer.getPlayers();
+    int spawn_point_index = 0;
     for (auto id = ids.begin(); id != ids.end();) {
         stats.stats.push_back(PlayerStatDto(*id, 0));
         id_alive_players.push_back(*id);
-        match_logic.add_player(*id);
+        match_logic.add_player(*id, spawn_point_index);
         std::cout << "New player added with id: " << *id << std::endl;
         ++id;
+        spawn_point_index ++;
     }
 
     running = true;
@@ -142,6 +146,7 @@ void MatchState::send_results(MatchObserver& observer) {
 }
 
 void MatchState::add_objects(const struct ObjectsInfo& objects_info) {
+    match_logic.add_spawn_points(objects_info.player_spawns);
     match_logic.add_blocks(objects_info.blocks);
     match_logic.add_boxes(objects_info.boxes);
     match_logic.add_items(objects_info.item_spawns);
