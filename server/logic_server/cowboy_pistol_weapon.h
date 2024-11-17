@@ -7,6 +7,7 @@
 #include "common/dtosplayer.h"
 #include "shooting_direction.h"
 #include "physical_bullet.h"
+#include "physical_player.h"
 
 class CowboyPistolWeapon: public Weapon{
 
@@ -17,7 +18,7 @@ class CowboyPistolWeapon: public Weapon{
         CowboyPistolWeapon();
         void get_weapon(TypeWeapon& type) override;
         void shoot(ShootingDirection direction,
-                   std::vector<PhysicalBullet> &bullets, Tuple bullet_position) override;
+                   std::vector<PhysicalBullet> &bullets, Tuple bullet_position, PhysicalPlayer &player) override;
 
 };
 

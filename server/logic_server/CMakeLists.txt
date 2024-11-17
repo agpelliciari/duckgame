@@ -16,6 +16,7 @@ target_sources(taller_server_logic
             physical_player.cpp
             cowboy_pistol_weapon.cpp
             physical_bullet.cpp
+            magnum_weapon.cpp
 
 
 
@@ -38,6 +39,7 @@ target_sources(taller_server_logic
             shooting_direction.h
             cowboy_pistol_weapon.h
             physical_bullet.h
+            magnum_weapon.h
 
 
 

@@ -3,7 +3,15 @@
 
 PhysicalBullet::PhysicalBullet(int init_coord_x, int init_coord_y):
         PhysicalObject(init_coord_x, init_coord_y, 5, 5),
-        impacted(false), impacted_in_player(false), id_impacted_player(0){
+        impacted(false), impacted_in_player(false), id_impacted_player(0),
+        type(TypeDynamicObject::PROJECTILE){
+        acceleration.y = 0;
+        }
+
+PhysicalBullet::PhysicalBullet(int init_coord_x, int init_coord_y, TypeDynamicObject type_):
+        PhysicalObject(init_coord_x, init_coord_y, 5, 5),
+        impacted(false), impacted_in_player(false), id_impacted_player(0),
+        type(type_){
         acceleration.y = 0;
         }
 

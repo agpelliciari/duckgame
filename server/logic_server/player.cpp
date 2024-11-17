@@ -134,7 +134,7 @@ void Player::shoot(std::vector <PhysicalBullet> &bullets){
             bullet_position.x += player_dimension.x + 5;
             bullet_position.y += player_dimension.y / 2;
         }
-        weapon.shoot(this->shooting_direction, bullets, bullet_position);
+        weapon.shoot(this->shooting_direction, bullets, bullet_position, this->object);
     //}
 }
 

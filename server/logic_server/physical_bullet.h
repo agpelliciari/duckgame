@@ -4,6 +4,7 @@
 #define PHYSICAL_BULLET_H
 
 #include "physical_object.h"
+#include "common/dtosobject.h"
 
 class PhysicalBullet: public PhysicalObject{
 
@@ -13,7 +14,12 @@ class PhysicalBullet: public PhysicalObject{
         bool impacted_in_player;
         int id_impacted_player;
 
+        //este atributo no deberia ser parte del cuerpo fisico, pero
+        //lo pongo aca de forma provisoria
+        TypeDynamicObject type;
+
     public:
+        PhysicalBullet(int init_coord_x, int init_coord_y, TypeDynamicObject type);
         PhysicalBullet(int init_coord_x, int init_coord_y);
 
         void react_to_sides_collision(bool is_player, int id_player) override;
