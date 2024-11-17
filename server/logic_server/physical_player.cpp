@@ -40,24 +40,24 @@ void PhysicalPlayer::update_action(TypeMoveAction& move_action) {
 
 
 void PhysicalPlayer::react_to_sides_collision(bool is_player, int id_player){
-    if (!is_player) {
+    //if (!is_player) {
         speed.x = 0;
-    }
+    //}
 
 }
 
 void PhysicalPlayer::react_to_down_collision(bool is_player, int id_player){
-    if (!is_player) {
+    //if (!is_player) {
         speed.y = 0;
-    }
+    //}
 }
 
 void PhysicalPlayer::react_to_up_collision(bool is_player, int id_player){
-    if (!is_player) {
+    //if (!is_player) {
         speed.y = 0;
         acceleration.y = -10;
         flap_attemps = 10;
-    }
+    //}
 }
 
 void PhysicalPlayer::stop_moving_x(){

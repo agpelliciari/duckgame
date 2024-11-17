@@ -9,7 +9,7 @@
 #define FPS 30
 #define MS_FPS 1000 / FPS
 
-MatchState::MatchState(): running(false), match_logic(), acciones(match_logic) {}
+MatchState::MatchState(): running(false), match_logic(), acciones(match_logic), max_rounds(5) {}
 
 void MatchState::pushAction(const PlayerActionDTO& action) { acciones.push_command(action); }
 
@@ -20,7 +20,7 @@ void MatchState::playRound(MatchObserver& observer, MatchStatsInfo& stats) {
     Clock clock(MS_FPS);  // 16ms sleep == 60 frames por segundo aprox. 30 = 30 fps
     clock.resetnext();
 
-    while ((running && clock.tickcount() < FPS * 2) && id_alive_players.size() > 1) {
+    while ((running /*&& clock.tickcount() < FPS * 2*/) && id_alive_players.size() > 1) {
         //std::cout << "LOOP COUNT " << clock.tickcount()<< std::endl;
         this->step();
         this->send_results(observer);
@@ -34,9 +34,21 @@ void MatchState::playRound(MatchObserver& observer, MatchStatsInfo& stats) {
 }
 
 void MatchState::reset_objects(const struct ObjectsInfo& objects_info){
-
+    match_logic.clear_objects();
+    match_logic.add_boxes(objects_info.boxes);
+    match_logic.add_items(objects_info.item_spawns);
 }
+
 void MatchState::reset_players(MatchObserver& observer){
+    match_logic.clear_players();
+    id_alive_players.clear();
+    std::vector<unsigned int> ids = observer.getPlayers();
+    for (auto id = ids.begin(); id != ids.end();) {
+        id_alive_players.push_back(*id);
+        match_logic.add_player(*id);
+        std::cout << "New player added with id: " << *id << std::endl;
+        ++id;
+    }
 
 }
 
@@ -47,7 +59,7 @@ void MatchState::calculate_game_results(MatchStatsInfo& stats, int actual_winner
     //if(wins_curr < 0){ // No encontro el id!
     //}
     
-    if (stats.numronda >= 5){
+    if (stats.numronda >= max_rounds){
         int id_champion = 0;
         if (only_one_winner(stats, id_champion)){
             stats.state = TERMINADA;
@@ -55,6 +67,7 @@ void MatchState::calculate_game_results(MatchStatsInfo& stats, int actual_winner
         } else {
             stats.state = PAUSADA;
             stats.champion_player = actual_winner;
+            max_rounds += 5;
         }
     } else {
         stats.state = ROUND_END;
@@ -129,6 +142,7 @@ void MatchState::send_results(MatchObserver& observer) {
 }
 
 void MatchState::add_objects(const struct ObjectsInfo& objects_info) {
+    match_logic.add_blocks(objects_info.blocks);
     match_logic.add_boxes(objects_info.boxes);
     match_logic.add_item_spawns(objects_info.item_spawns);
 }

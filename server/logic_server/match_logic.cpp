@@ -146,6 +146,13 @@ void MatchLogic::update_colition_map() {
             colition_map.add_collision(box.get_spawn_point(), box.get_dimension(), false, 0);
         }
     }
+
+    for (MapPoint& block: blocks) {
+        Tuple position = {block.x, block.y};
+        Tuple dimension = {16, 16};
+        colition_map.add_collision(position, dimension, false, 0);
+    }
+
 }
 
 /*void MatchLogic::add_colition(PhysicalObject &object) {
@@ -187,9 +194,9 @@ void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos, std::vector<DynamicObjDT
     for (PhysicalBullet bullet: bullets) {
         Tuple position = bullet.get_position();
         DynamicObjDTO dto = {position.x, position.y, TypeDynamicObject::PROJECTILE};
+        std::cout << "BULLET x: " << position.x << " y: " << position.y << std::endl;
         objects.push_back(dto);
     }
-
 }
 
 void MatchLogic::execute_move_command(int action_type, int index) {
@@ -208,6 +215,13 @@ void MatchLogic::add_item_spawns(const std::vector<struct MapPoint>& items_spawn
         this->items.push_back(Item(TypeDynamicObject::PISTOLA_COWBOY, spawn.x * Box::BOX_SIZE, spawn.y * Box::BOX_SIZE, 10, 10, 5, 0.025));
     }
 }
+
+void MatchLogic::add_blocks(const std::vector<struct MapPoint>& blocks){
+    for (const struct MapPoint& block: blocks) {
+        this->blocks.push_back(MapPoint(block.x, block.y));
+    }
+}
+
 
 void MatchLogic::add_bullet(PhysicalBullet bullet){
     this->bullets.push_back(bullet);
@@ -240,6 +254,16 @@ void MatchLogic::update_bullets(){
             ++bullet;
         }
     }
+}
+
+void MatchLogic::clear_players(){
+    players.clear();
+}
+
+void MatchLogic::clear_objects(){
+    boxes.clear();
+    items.clear();
+    bullets.clear();
 }
 
 MatchLogic::~MatchLogic() {}
