@@ -31,6 +31,7 @@ class PhysicalBullet: public PhysicalObject{
         void shoot_up();
 
         void get_data(bool &impacted, bool &impacted_in_player, int &id_impacted_player);
+        void get_map_info(int &pos_x, int &pos_y, TypeDynamicObject &type);
 
 };
 

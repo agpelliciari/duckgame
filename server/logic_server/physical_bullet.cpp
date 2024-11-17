@@ -49,3 +49,9 @@ void PhysicalBullet::get_data(bool &impacted_, bool &impacted_in_player_, int &i
     impacted_in_player_ = impacted_in_player;
     id_impacted_player_ = id_impacted_player;
 }
+
+void PhysicalBullet::get_map_info(int &pos_x, int &pos_y, TypeDynamicObject &type_){
+    pos_x = this->get_position().x;
+    pos_y = this->get_position().y;
+    type_ = type;
+}

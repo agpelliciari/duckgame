@@ -12,7 +12,9 @@
 #include "weapon.h"
 #include "cowboy_pistol_weapon.h"
 #include "magnum_weapon.h"
+#include "pewpew_laser_weapon.h"
 #include "physical_bullet.h"
+#include "duel_pistol.h"
 
 
 class Player {
@@ -27,7 +29,7 @@ private:
     bool aim_up;                 // cppcheck-suppress unusedStructMember
     int life_points;              // cppcheck-suppress unusedStructMember
     ShootingDirection shooting_direction;  // cppcheck-suppress unusedStructMember
-    MagnumWeapon weapon;               // cppcheck-suppress unusedStructMember
+    PewPewLaserWeapon weapon;               // cppcheck-suppress unusedStructMember
 
 public:
     Player(int id, int initial_x, int initial_y);
