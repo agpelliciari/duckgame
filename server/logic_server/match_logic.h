@@ -28,7 +28,7 @@ private:
     std::vector<Box> boxes;       // cppcheck-suppress unusedStructMember
     std::vector<Item> items;     // cppcheck-suppress unusedStructMember
     std::vector<PhysicalBullet> bullets; // cppcheck-suppress unusedStructMember
-
+    std::vector<MapPoint> blocks;  // cppcheck-suppress unusedStructMember
     // std::vector<std::vector<bool>> colition_map; // cppcheck-suppress unusedStructMember
 
 
@@ -47,6 +47,7 @@ public:
     //void add_colition(PhysicalObject &object);
     void add_boxes(const std::vector<struct MapPoint>& boxes);
     void add_items(const std::vector<struct MapPoint>& items);
+    void add_blocks(const std::vector<struct MapPoint>& blocks);
     void add_bullet(PhysicalBullet bullet);
     void update_bullets();
     void player_shoot(int index);
@@ -55,6 +56,8 @@ public:
     void player_stay_down_start(int index);
     void player_stay_down_end(int index);
     void damage_player(int id);
+    void clear_players();
+    void clear_objects();
     ~MatchLogic();
 };
 

@@ -6,8 +6,8 @@ Player::Player(int id_, int initial_x, int initial_y):
         id(id_),
         object(initial_x, initial_y),
         is_alive(true),
-        helmet(),
-        chest_armor(),
+        helmet(false),
+        chest_armor(false),
         move_action(TypeMoveAction::NONE),
         aim_up(false),
         life_points(1),
@@ -15,7 +15,7 @@ Player::Player(int id_, int initial_x, int initial_y):
         weapon(){}
 
 void Player::get_data(int& id, int& x, int& y, TypeWeapon& weapon_,
-                      const bool& helmet_equipped, const bool& chest_armor_equipped,
+                      bool& helmet_equipped, bool& chest_armor_equipped,
                       TypeMoveAction& move_action_) {
     id = this->id;
     this->object.get_real_position(x, y);
@@ -24,9 +24,12 @@ void Player::get_data(int& id, int& x, int& y, TypeWeapon& weapon_,
         this->weapon.get_weapon(weapon_);
     //}
 
+    helmet_equipped = this->helmet;
+    chest_armor_equipped = this->chest_armor;
+
     //this->weapon.get_weapon(weapon);
-    this->helmet.is_equipped(helmet_equipped);
-    this->chest_armor.is_equipped(chest_armor_equipped);
+    //this->helmet.is_equipped(helmet_equipped);
+    //this->chest_armor.is_equipped(chest_armor_equipped);
     move_action_ = this->move_action;
 }
 
@@ -100,6 +103,14 @@ bool Player::is_still_alive(){
 
 void Player::take_damage(){
     if (is_alive) {
+        if (helmet){
+            helmet = false;
+            return;
+        }
+        if (chest_armor){
+            chest_armor = false;
+            return;
+        }
         life_points--;
         if (life_points == 0) {
             is_alive = false;
@@ -120,7 +131,7 @@ void Player::shoot(std::vector <PhysicalBullet> &bullets){
             bullet_position.y += player_dimension.y / 2;
         }
         if (shooting_direction == ShootingDirection::RIGHT){
-            bullet_position.x += 5;
+            bullet_position.x += player_dimension.x + 5;
             bullet_position.y += player_dimension.y / 2;
         }
         weapon.shoot(this->shooting_direction, bullets, bullet_position);
