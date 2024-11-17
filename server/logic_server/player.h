@@ -26,6 +26,7 @@ private:
     bool helmet;                // cppcheck-suppress unusedStructMember
     bool chest_armor;           // cppcheck-suppress unusedStructMember
     TypeMoveAction move_action;  // cppcheck-suppress unusedStructMember
+    TypeDoingAction doing_action; // cppcheck-suppress unusedStructMember
     bool aim_up;                 // cppcheck-suppress unusedStructMember
     int life_points;              // cppcheck-suppress unusedStructMember
     ShootingDirection shooting_direction;  // cppcheck-suppress unusedStructMember
@@ -38,7 +39,7 @@ public:
     bool same_id(unsigned int id);
 
     void get_data(int& id, int& x, int& y, TypeWeapon& weapon, bool& helmet_equipped,
-                  bool& chest_armor_equipped, TypeMoveAction& move_action);
+                  bool& chest_armor_equipped, TypeMoveAction& move_action, TypeDoingAction& doing_action);
 
     void still();
     void add_speed(int speed_x, int speed_y);
