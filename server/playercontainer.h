@@ -45,7 +45,7 @@ public:
 
     int playercount() const override;
 
-    std::vector<player_id> getPlayers() override;
+    std::vector<player_id> getPlayers() const override;
 
     // Push/notifica eventos a los players, de forma no bloqueante! No tiene precondiciones perse
     // Devuelve los players que se desconectaron. Podrian ser notificados directamente

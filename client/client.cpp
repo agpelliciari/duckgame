@@ -61,7 +61,11 @@ int Client::execGame(GameManager& connector, const GameContext& context) {
               << "box_z:" << context.map.boxes_z << std::endl;
     std::cout << "BK:" << context.map.background << "box_tex:" << context.map.boxes_tex
               << std::endl;
-              
+
+    for (int id: context.players) {
+        std::cout << "match player:" << id << std::endl;
+    }
+
               /*
     for (const std::string& tex: context.map.textures) {
         std::cout << "map tex:" << tex << std::endl;
@@ -72,8 +76,6 @@ int Client::execGame(GameManager& connector, const GameContext& context) {
                   << "tex:" << obj.ind_texture << " " << obj.texture << std::endl;
     }
     */
-
-
     if (context.dualplay) {
         std::cout << "Dos jugadores!!! " << (int)context.first_player << " y "
                   << (int)context.second_player << " TOTAL " << (int)context.cantidadjugadores

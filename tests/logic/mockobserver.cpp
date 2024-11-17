@@ -97,7 +97,7 @@ MatchDto MockObserver::sendActionAndUpdate(MatchState& match, const PlayerAction
 
 int MockObserver::playercount() const { return players.size(); }
 
-std::vector<player_id> MockObserver::getPlayers() { return std::vector<player_id>(players); }
+std::vector<player_id> MockObserver::getPlayers() const { return std::vector<player_id>(players); }
 
 // Push/notifica eventos a los players, de forma no bloqueante! No tiene precondiciones perse
 // Devuelve los players que se desconectaron. Podrian ser notificados directamente

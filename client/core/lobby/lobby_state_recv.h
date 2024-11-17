@@ -24,7 +24,8 @@ protected:
     void handleNotify(const lobby_info& info);
     lobby_info listenUntilLobbyEnd();
 
-    void setInitedMatch(int totalplayers);
+    //void setInitedMatch(int totalplayers);
+    void setInitedMatch();
 
 public:
     explicit LobbyStateRecv(Messenger& _messenger, GameContext& _context, LobbyListener& _listener);

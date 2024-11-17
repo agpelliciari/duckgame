@@ -106,7 +106,7 @@ void PlayerContainer::finishGameMode(const MatchStatsInfo& match_stats) {
     }
 }
 
-std::vector<player_id> PlayerContainer::getPlayers() {
+std::vector<player_id> PlayerContainer::getPlayers() const {
     std::vector<player_id> connected;
     for (auto playerit = players.begin(); playerit != players.end();) {
         int mx = (*playerit).playercount();

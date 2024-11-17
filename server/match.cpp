@@ -177,6 +177,8 @@ bool Match::isrunning() const { return stats.isRunning(); }
 
 const MapInfo& Match::getMap() const { return map; }
 
+std::vector<player_id> Match::getPlayers() const { return players.getPlayers(); }
+
 
 void Match::finish(MapLoader& maps) {
     maps.removeLoader(map.map_id);

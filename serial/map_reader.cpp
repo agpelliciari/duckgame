@@ -4,6 +4,7 @@
 #include <iostream>
 #include <errno.h>
 
+#include "common/serialerror.h"
 #include "common/core/liberror.h"
 
 
@@ -122,7 +123,7 @@ read_seq_t MapReader::getBoxes() {
     if (list.is_seq()) {
          return list;
     }
-    throw LibError(1, "Did not find boxes segment");
+    throw SerialError("Did not find boxes segment");
 }
 
 read_seq_t MapReader::getItemSpawns() {
@@ -130,7 +131,7 @@ read_seq_t MapReader::getItemSpawns() {
     if (list.is_seq()) {
          return list;
     }
-    throw LibError(1, "Did not find item spawns segment");
+    throw SerialError("Did not find item spawns segment");
 }
 
 read_seq_t MapReader::getPlayerSpawns() {
@@ -138,7 +139,7 @@ read_seq_t MapReader::getPlayerSpawns() {
     if (list.is_seq()) {
          return list;
     }
-    throw LibError(1, "Did not find player spawns segment");
+    throw SerialError("Did not find player spawns segment");
 }
 
 
@@ -147,7 +148,7 @@ read_seq_t MapReader::getBlocks() {
     if (list.is_seq()) {
          return list;
     }
-    throw LibError(1, "Did not find player blocks segment");
+    throw SerialError("Did not find player blocks segment");
 }
 
 read_seq_t MapReader::getDecorations() {
@@ -155,6 +156,6 @@ read_seq_t MapReader::getDecorations() {
     if (list.is_seq()) {
          return list;
     }
-    throw LibError(1, "Did not find player blocks segment");
+    throw SerialError("Did not find player blocks segment");
 }
 

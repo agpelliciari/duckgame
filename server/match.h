@@ -4,6 +4,7 @@
 #include <condition_variable>
 #include <mutex>
 #include <optional>
+#include <vector>
 #include <queue>
 #include <utility>
 
@@ -84,6 +85,7 @@ public:
     const MatchStatsInfo& getStats() const;
     // void waitStart();
     int playercount() const;
+    std::vector<player_id> getPlayers() const;
 
     // Metodos publicos.. accesibles incluso a player controllers.
     // No hay precondiciones perse. Podria no haber empezado el match.

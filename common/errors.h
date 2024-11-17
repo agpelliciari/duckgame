@@ -9,7 +9,8 @@ enum LobbyErrorType : uint8_t {
     ANFITRION_LEFT = 3,
     LOBBY_NOT_FOUND = 4,
     LOBBY_ALREADY_STARTED = 5,
-    LOBBY_NO_SPACE = 6
+    LOBBY_NO_SPACE = 6,
+    MAP_INVALID = 7
 };
 
 #endif

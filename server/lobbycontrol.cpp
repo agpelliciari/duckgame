@@ -33,6 +33,12 @@ ControlledPlayer& LobbyControl::getJoinedPlayers(Match& match) {
 
     // Si no hubo error.. ahora notifica el join.
     protocol.notifyinfo(LobbyResponseType::JOINED_LOBBY, match.playercount());
+    
+    // Send current players.
+    for(player_id id: match.getPlayers()){
+        protocol.notifyid(id);    
+    }
+    
 
     protocol.notifyid(player.getid(0));
     if (player.playercount() == 2) {
