@@ -2,7 +2,7 @@
 
 #include <fstream>
 #include <iostream>
-#include <errno.h>
+//#include <errno.h>
 
 #include "common/serialerror.h"
 #include "common/core/liberror.h"
@@ -58,7 +58,8 @@ MapReader::MapReader(const std::string& src){ //:root_id(0) {
         //root_id = tree.root_id();
         // std::cout << "CONTENT:\n" << map.data() << "\n----------------------\n";
     } else {
-        throw LibError(errno, "Failed to read the file to deserialize ");
+        throw SerialError("Failed to read the file to deserialize ");
+        //throw LibError(errno, "Failed to read the file to deserialize ");
     }
 }
 

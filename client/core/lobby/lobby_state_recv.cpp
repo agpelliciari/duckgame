@@ -16,7 +16,7 @@ const char* LobbyStateRecv::ERRORS[] = {
         "Lobby had not enough space",
         "Map was invalid"};
 
-#define getErrorMsg(ind) ERRORS[(ind >= 7) ? 1 : ind]
+#define getErrorMsg(ind) ERRORS[(ind >= 8) ? 1 : ind]
 
 
 LobbyStateRecv::LobbyStateRecv(Messenger& _messenger, GameContext& _context,
