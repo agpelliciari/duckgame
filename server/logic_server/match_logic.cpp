@@ -202,9 +202,10 @@ void MatchLogic::add_boxes(const std::vector<struct MapPoint>& boxes){
     }
 }
 
-void MatchLogic::add_items(const std::vector<struct MapPoint>& items){
-    for (const struct MapPoint& item: items) {
-        this->items.push_back(Item(TypeDynamicObject::PISTOLA_COWBOY, item.x, item.y, 10, 10, 5, 0.025));
+void MatchLogic::add_item_spawns(const std::vector<struct MapPoint>& items_spawns){
+    // TODO randomizar los items que pueden aparecer en cada spawn
+    for (const struct MapPoint& spawn: items_spawns) {
+        this->items.push_back(Item(TypeDynamicObject::PISTOLA_COWBOY, spawn.x * Box::BOX_SIZE, spawn.y * Box::BOX_SIZE, 10, 10, 5, 0.025));
     }
 }
 

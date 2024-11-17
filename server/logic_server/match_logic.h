@@ -46,7 +46,7 @@ public:
     void update_colition_map();
     //void add_colition(PhysicalObject &object);
     void add_boxes(const std::vector<struct MapPoint>& boxes);
-    void add_items(const std::vector<struct MapPoint>& items);
+    void add_item_spawns(const std::vector<struct MapPoint>& items_spawns);
     void add_bullet(PhysicalBullet bullet);
     void update_bullets();
     void player_shoot(int index);
