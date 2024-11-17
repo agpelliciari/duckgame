@@ -3,8 +3,8 @@
 #include <iostream>
 
 
-MatchLogic::MatchLogic(): colition_map(800, 640) {
-    this->command_map[PlayerActionType::NONE] = [this](int index) {
+MatchLogic::MatchLogic(): colition_map(800, 640) { // TODO deberia venir del map, seria map.width * ancho de bloque y map.height * ancho de bloque
+    this->command_map[PlayerActionType::NONE] = [this](int index) {    // ahora esta en:       50 * 16                        40 * 16
         this->add_player_speed(index, 0, 0);
     };
     this->command_map[PlayerActionType::MOVE_LEFT] = [this](int index) {
@@ -198,7 +198,7 @@ void MatchLogic::execute_move_command(int action_type, int index) {
 
 void MatchLogic::add_boxes(const std::vector<struct MapPoint>& boxes){
     for (const struct MapPoint& box: boxes) {
-        this->boxes.push_back(Box(box.x, box.y));
+        this->boxes.push_back(Box(box.x * Box::BOX_SIZE, box.y * Box::BOX_SIZE));
     }
 }
 

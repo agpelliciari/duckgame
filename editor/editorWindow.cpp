@@ -1,5 +1,6 @@
 #include "editorWindow.h"
 #include "./ui_editorWindow.h"
+#include <iostream>
 
 EditorWindow::EditorWindow(QWidget *parent):
     QMainWindow(parent),
@@ -262,23 +263,23 @@ void EditorWindow::exportToFileSystem() {
     serial.setBackground(background.texture.substr(5));
 
     for (const auto& block : blocks) {
-        serial.addBlock(block.row, block.column, block.zIndex, block.texture.substr(5));
+        serial.addBlock(block.column, block.row, block.zIndex, block.texture.substr(5));
     }
 
     for (const auto& spawnPlayer : spawnPlayers) {
-        serial.addPlayerSpawn(spawnPlayer.row, spawnPlayer.column, spawnPlayer.zIndex, spawnPlayer.texture.substr(5));
+        serial.addPlayerSpawn(spawnPlayer.column, spawnPlayer.row, spawnPlayer.zIndex, spawnPlayer.texture.substr(5));
     }
 
     for (const auto& spawnWeapon : spawnWeapons) {
-        serial.addItemSpawn(spawnWeapon.row, spawnWeapon.column, spawnWeapon.zIndex, spawnWeapon.texture.substr(5));
+        serial.addItemSpawn(spawnWeapon.column, spawnWeapon.row, spawnWeapon.zIndex, spawnWeapon.texture.substr(5));
     }
 
     for (const auto& box : boxes) {
-        serial.addBox(box.row, box.column, box.zIndex, box.texture.substr(5));
+        serial.addBox(box.column, box.row, box.zIndex, box.texture.substr(5));
     }
 
     for (const auto& decoration : decorations) {
-        serial.addDecoration(decoration.row , decoration.column, decoration.zIndex, decoration.texture.substr(5));
+        serial.addDecoration(decoration.column , decoration.row, decoration.zIndex, decoration.texture.substr(5));
     }
 
     std::string file("./res/maps/MAPACHE.yaml");

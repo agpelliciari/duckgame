@@ -15,6 +15,10 @@ class MatchMap;
 class PhysicalPlayer: public PhysicalObject {
 
     private:
+        static constexpr int PLAYER_WIDTH = 16;
+        static constexpr int PLAYER_HEIGHT = 22;
+        static constexpr int FLAP_ATTEMPS = 10;
+
         Tuple initial_position;
         int flap_attemps;
         bool on_air;

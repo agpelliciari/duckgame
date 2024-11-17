@@ -41,9 +41,7 @@ void Animation::updatePlayerAnimation(AnimationBuilder& builder, const PlayerDTO
     switch (player.move_action) {
         case TypeMoveAction::MOVE_RIGHT:
             setBuilder(builder,
-                       (STARTING_SPRITE_X + SPRITE_SIZE * ((frameTicks / RUNNING_ANIMATION_SPEED) %
-                                                           RUNNING_ANIMATION_FRAMES)),
-                       STARTING_SPRITE_Y, false);
+                       (STARTING_SPRITE_X + SPRITE_SIZE * ((frameTicks / RUNNING_ANIMATION_SPEED) % RUNNING_ANIMATION_FRAMES)), STARTING_SPRITE_Y, false);
             break;
         case TypeMoveAction::MOVE_LEFT:
             setBuilder(builder,

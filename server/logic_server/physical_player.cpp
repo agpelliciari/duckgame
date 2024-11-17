@@ -3,9 +3,9 @@
 #include <iostream>
 
 PhysicalPlayer::PhysicalPlayer(int init_coord_x, int init_coord_y):
-        PhysicalObject(init_coord_x, init_coord_y, 10, 30),
+        PhysicalObject(init_coord_x, init_coord_y, PLAYER_WIDTH, PLAYER_HEIGHT),
         initial_position{init_coord_x, init_coord_y},
-        flap_attemps(10),
+        flap_attemps(FLAP_ATTEMPS),
         on_air(true) {}
 
 void PhysicalPlayer::update_action(TypeMoveAction& move_action) {
