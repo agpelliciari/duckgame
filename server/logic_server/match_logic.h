@@ -45,6 +45,7 @@ public:
     void update_players(std::vector<int> &id_alive_players);
     void update_colition_map();
     //void add_colition(PhysicalObject &object);
+    void add_item_spawns(const std::vector<struct MapPoint>& items_spawns);
     void add_boxes(const std::vector<struct MapPoint>& boxes);
     void add_items(const std::vector<struct MapPoint>& items);
     void add_blocks(const std::vector<struct MapPoint>& blocks);
