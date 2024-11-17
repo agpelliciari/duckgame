@@ -48,6 +48,8 @@ void MapDeserializer::readDecorations(std::vector<struct DecorationDTO>& res) {
 
     for (int i = 0; i < size; i++) {
         read_item_t item = decorations[i];
+        reader.assertIsMap(item);        
+        
         DecorationDTO& decoration = res.emplace_back();
         
         reader.readItemPosition(item, decoration.pos);
@@ -70,6 +72,8 @@ void MapDeserializer::readBlocks(std::vector<struct BlockDTO>& res) {
     
     for (int i = 0; i < size_blocks; i++) {
         read_item_t item = blocks[i];
+        reader.assertIsMap(item);        
+
         BlockDTO& block = res.emplace_back();
         reader.readItemPosition(item, block.pos);
         reader.readItemTexture(item, block.texture_id);
@@ -78,6 +82,9 @@ void MapDeserializer::readBlocks(std::vector<struct BlockDTO>& res) {
     // Ahora los spawns...
     for (int i = 0; i < size_itms; i++) {
         read_item_t item = spawns_items[i];
+        std::cout << "SHOWING ITEM " << i<< std::endl;
+        reader.assertIsMap(item);        
+        
         BlockDTO& block = res.emplace_back();
         reader.readItemPosition(item, block.pos);
         reader.readItemTexture(item, block.texture_id);
@@ -85,6 +92,8 @@ void MapDeserializer::readBlocks(std::vector<struct BlockDTO>& res) {
 
     for (int i = 0; i < size_players; i++) {
         read_item_t item = spawns_players[i];
+        reader.assertIsMap(item);
+        
         BlockDTO& block = res.emplace_back();
         reader.readItemPosition(item, block.pos);
         reader.readItemTexture(item, block.texture_id);

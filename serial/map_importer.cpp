@@ -43,6 +43,7 @@ std::vector<MapObjectData> MapImporter::getDecorations(){
         uint8_t tex_id;
         
         read_item_t item = decorations[i];
+        reader.assertIsMap(item);
         
         reader.readItemPosition(item, pos);
         reader.readItemTexture(item, tex_id);
@@ -66,7 +67,8 @@ std::vector<MapObjectData> MapImporter::getBoxes(){
         struct MapPoint pos;
         
         read_item_t item = boxes[i];
-        
+        reader.assertIsMap(item);
+
         reader.readItemPosition(item, pos);
         
         res.emplace_back(pos.y,pos.x, boxes_z, Box, boxes_tex);
@@ -82,6 +84,7 @@ void MapImporter::getBlockObjects(read_seq_t seq, const MapObjectType type, std:
         struct MapPoint pos;
         uint8_t tex_id;
         read_item_t item = seq[i];
+        reader.assertIsMap(item);
         
         reader.readItemPosition(item, pos);
         reader.readItemTexture(item, tex_id);

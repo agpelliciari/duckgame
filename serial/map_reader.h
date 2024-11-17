@@ -53,7 +53,7 @@ public:
     static const char* DECORATION_Z;  // cppcheck-suppress unusedStructMember
 
 protected:
-    size_t root_id;
+    //size_t root_id;
     ryml::Tree tree;  // cppcheck-suppress unusedStructMember
     
     ryml::NodeRef root;
@@ -66,7 +66,11 @@ public:
     // Permitamos el mov... por mas que no sea realmente eficiente.
     MapReader(MapReader&&) = delete;
     MapReader& operator=(MapReader&&) = delete;
-    
+
+    void assertIsMap(read_item_t& item);
+    bool checkInvalid(read_item_t& item);
+    bool checkIsSeq(read_item_t& item);
+
     // Loadings de datos en si.
     void readBackground(std::string& background);
     void readBlocksZ(uint16_t& blocks_z);
