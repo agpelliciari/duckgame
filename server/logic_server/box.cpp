@@ -1,7 +1,7 @@
 
 #include "box.h"
 
-Box::Box(int x, int y): spawn_point{x * 16, y * 16}, dimension{16, 16}, spawned(true) {}
+Box::Box(int x, int y): spawn_point{x, y}, dimension{BOX_SIZE, BOX_SIZE}, spawned(true) {}
 
 Tuple Box::get_spawn_point() {
     return spawn_point;

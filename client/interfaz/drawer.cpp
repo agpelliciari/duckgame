@@ -168,13 +168,15 @@ void Drawer::drawObjects(const MatchDto& matchDto) {
             renderer.Copy(
                     textures.getTexture(TextureContainer::COWBOY_GUN),
                     SDL2pp::Rect(0, 0, COWBOY_GUN_WIDTH, COWBOY_GUN_HEIGHT),
-                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(object.pos.y),
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x),
+                                 camera.getScreenY(-object.pos.y),
                                  camera.getScaledSize(COWBOY_GUN_WIDTH - 6),
                                  camera.getScaledSize(COWBOY_GUN_HEIGHT - 6)));
         } else if (object.type == TypeDynamicObject::LASER) {
             renderer.Copy(
                     textures.getTexture(TextureContainer::LASER_BEAM), SDL2pp::Rect(0, 0, 1, 8),
-                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(object.pos.y),
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x),
+                                 camera.getScreenY(-object.pos.y),
                                  camera.getScaledSize(1), camera.getScaledSize(8)));
         }
     }

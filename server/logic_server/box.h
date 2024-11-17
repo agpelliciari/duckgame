@@ -14,8 +14,9 @@ class Box {
 
 
     public:
+        static constexpr int BOX_SIZE = 16;
 
-        Box(int spawn_x, int spawn_y);
+        Box(int spawn_column, int spawn_row);
         Tuple get_spawn_point();
         Tuple get_dimension();
         bool is_spawned();

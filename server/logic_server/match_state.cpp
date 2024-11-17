@@ -130,7 +130,7 @@ void MatchState::send_results(MatchObserver& observer) {
 
 void MatchState::add_objects(const struct ObjectsInfo& objects_info) {
     match_logic.add_boxes(objects_info.boxes);
-    match_logic.add_items(objects_info.item_spawns);
+    match_logic.add_item_spawns(objects_info.item_spawns);
 }
 
 MatchState::~MatchState() {}
