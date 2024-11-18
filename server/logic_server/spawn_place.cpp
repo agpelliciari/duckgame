@@ -67,5 +67,5 @@ void SpawnPlace::get_data(int &position_x_, int &position_y_, TypeDynamicObject 
 
 bool SpawnPlace::is_on_range(int player_position_x, int player_position_y){
     return (player_position_x >= spawn_point.x && player_position_x <= spawn_point.x + dimension.x &&
-                player_position_y >= spawn_point.x && player_position_y <= spawn_point.x + dimension.y);
+                player_position_y >= spawn_point.y && player_position_y <= spawn_point.x + dimension.y);
 }

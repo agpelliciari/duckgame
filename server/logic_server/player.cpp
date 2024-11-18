@@ -160,7 +160,6 @@ void Player::pick_up_item(std::vector<SpawnPlace> &spawn_places){
     if (weapon != nullptr){
         return;
     }
-
     Tuple player_position = this->get_map_position();
     Tuple player_dimension = this->get_dimension();
 
@@ -168,7 +167,6 @@ void Player::pick_up_item(std::vector<SpawnPlace> &spawn_places){
         if (spawn_place.is_on_range(player_position.x + player_dimension.x / 2,
                                     player_position.y + player_dimension.y / 2)) {
             weapon = spawn_place.get_weapon();
-            std::cout << "weapon picked up"<< std::endl;
         }
     }
 }
