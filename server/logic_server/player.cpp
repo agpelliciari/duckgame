@@ -13,7 +13,7 @@ Player::Player(int id_, int initial_x, int initial_y):
         aim_up(false),
         life_points(3),
         shooting_direction(ShootingDirection::NONE),
-        weapon(){}
+        weapon(nullptr){}
 
 void Player::get_data(int& id, int& x, int& y, TypeWeapon& weapon_,
                       bool& helmet_equipped, bool& chest_armor_equipped,
@@ -21,9 +21,9 @@ void Player::get_data(int& id, int& x, int& y, TypeWeapon& weapon_,
     id = this->id;
     this->object.get_real_position(x, y);
 
-    //if (this->weapon != nullptr){
-        this->weapon.get_weapon(weapon_);
-    //}
+    if (this->weapon != nullptr){
+        this->weapon->get_weapon(weapon_);
+    }
 
     helmet_equipped = this->helmet;
     chest_armor_equipped = this->chest_armor;
@@ -33,6 +33,7 @@ void Player::get_data(int& id, int& x, int& y, TypeWeapon& weapon_,
     //this->chest_armor.is_equipped(chest_armor_equipped);
     move_action_ = this->move_action;
     doing_action_ = this->doing_action;
+    this->doing_action = TypeDoingAction::NONE;
 }
 
 bool Player::same_id(unsigned int id_) { return id == id_; }
@@ -45,7 +46,6 @@ int Player::get_id() { return id; }
 
 void Player::update(const MatchMap& colition_map) {
     if (is_alive){
-        doing_action = TypeDoingAction::NONE;
         object.move(colition_map);
         object.update_action(move_action);
         this->update_shooting_direction();
@@ -124,7 +124,7 @@ void Player::take_damage(){
 }
 
 void Player::shoot(std::vector <PhysicalBullet> &bullets){
-    //if (weapon != nullptr){
+    if (weapon != nullptr){
         Tuple bullet_position = this->get_map_position();
         Tuple player_dimension = this->get_dimension();
         if (shooting_direction == ShootingDirection::UP){
@@ -142,8 +142,8 @@ void Player::shoot(std::vector <PhysicalBullet> &bullets){
             bullet_position.x += player_dimension.x + 5;
             bullet_position.y += player_dimension.y / 2;
         }
-        weapon.shoot(this->shooting_direction, bullets, bullet_position, this->object);
-    //}
+        weapon->shoot(this->shooting_direction, bullets, bullet_position, this->object);
+    }
 }
 
 void Player::stay_down_start(){
@@ -156,5 +156,23 @@ void Player::stay_down_end(){
     object.stay_down_end();
 }
 
+void Player::pick_up_item(std::vector<SpawnPlace> &spawn_places){
+    if (weapon != nullptr){
+        return;
+    }
+
+    Tuple player_position = this->get_map_position();
+    Tuple player_dimension = this->get_dimension();
+
+    for (SpawnPlace &spawn_place : spawn_places) {
+        if (spawn_place.is_on_range(player_position.x + player_dimension.x / 2,
+                                    player_position.y + player_dimension.y / 2)) {
+            weapon = spawn_place.get_weapon();
+            std::cout << "weapon picked up"<< std::endl;
+        }
+    }
+}
+
+void Player::drop_item(){}
 
 //Tuple Player::get_position() { return object.get_real_position(); }

@@ -2,6 +2,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include <memory>
 #include <vector>
 #include "common/dtosplayer.h"
 #include "armor.h"
@@ -14,6 +15,7 @@
 #include "magnum_weapon.h"
 #include "pewpew_laser_weapon.h"
 #include "physical_bullet.h"
+#include "spawn_place.h"
 #include "duel_pistol.h"
 
 
@@ -30,7 +32,7 @@ private:
     bool aim_up;                 // cppcheck-suppress unusedStructMember
     int life_points;              // cppcheck-suppress unusedStructMember
     ShootingDirection shooting_direction;  // cppcheck-suppress unusedStructMember
-    PewPewLaserWeapon weapon;               // cppcheck-suppress unusedStructMember
+    std::unique_ptr<Weapon> weapon;               // cppcheck-suppress unusedStructMember
 
 public:
     Player(int id, int initial_x, int initial_y);
@@ -46,6 +48,8 @@ public:
     void update(const MatchMap& colition_map);
     void stop_moving_x();
     void shoot(std::vector <PhysicalBullet> &bullets);
+    void pick_up_item(std::vector<SpawnPlace> &spawn_places);
+    void drop_item();
     void take_damage();
     void aim_up_start();
     void aim_up_end();
