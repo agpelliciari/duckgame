@@ -33,6 +33,9 @@ void EventHandler::handleKeyDown(SDL_Keycode key, PlayerActionDTO& action) {
         case SDLK_o:
             setAction(action, PICK_UP_ITEM, MAIN_PLAYER);
             break;
+        case SDLK_l:
+            setAction(action, DROP_ITEM, MAIN_PLAYER);
+            break;
         case SDLK_m:
             soundManager.stopBackgroundMusic();
             break;
@@ -62,6 +65,9 @@ void EventHandler::handleKeyDown(SDL_Keycode key, PlayerActionDTO& action) {
             case SDLK_t:
                 setAction(action, PICK_UP_ITEM, SECOND_PLAYER);
                 break;
+            case SDLK_f:
+                setAction(action, DROP_ITEM, SECOND_PLAYER);
+                break;
         }
     }
 }
@@ -83,9 +89,6 @@ void EventHandler::handleKeyUp(SDL_Keycode key, PlayerActionDTO& action) {
         case SDLK_UP:
             setAction(action, AIM_UP_END, MAIN_PLAYER);
             break;
-        case SDLK_o:
-            setAction(action, DROP_ITEM, MAIN_PLAYER);
-            break;
     }
 
     if (dualPlay) {
@@ -104,9 +107,6 @@ void EventHandler::handleKeyUp(SDL_Keycode key, PlayerActionDTO& action) {
                 break;
             case SDLK_e:
                 setAction(action, AIM_UP_END, SECOND_PLAYER);
-                break;
-            case SDLK_t:
-                setAction(action, DROP_ITEM, SECOND_PLAYER);
                 break;
         }
     }
