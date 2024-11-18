@@ -4,6 +4,8 @@
 
 #include "match_map.h"
 #include "tuple.h"
+#include "collision.h"
+#include "type_collision.h"
 
 class MatchMap;
 
@@ -23,12 +25,12 @@ public:
     void add_acceleration(int acceleration_x, int acceleration_y);
 
     void move(const MatchMap& colition_map);
-    bool detect_x_collision(const MatchMap& colition_map, const int diff, bool &is_player, int &id_player);
-    bool detect_y_collision(const MatchMap& colition_map, const int diff, bool &is_player, int &id_player);
+    bool detect_x_collision(const MatchMap& colition_map, const int diff, Collision &collision);
+    bool detect_y_collision(const MatchMap& colition_map, const int diff, Collision &collision);
 
-    virtual void react_to_sides_collision(bool is_player, int id_player) = 0;
-    virtual void react_to_down_collision(bool is_player, int id_player) = 0;
-    virtual void react_to_up_collision(bool is_player, int id_player) = 0;
+    virtual void react_to_sides_collision(Collision collision) = 0;
+    virtual void react_to_down_collision(Collision collision) = 0;
+    virtual void react_to_up_collision(Collision collision) = 0;
 
     Tuple get_position();
     Tuple get_dimension();

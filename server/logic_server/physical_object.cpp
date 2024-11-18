@@ -23,7 +23,7 @@ void PhysicalObject::add_acceleration(int acceleration_x, int acceleration_y) {
     this->acceleration.y += acceleration_y;
 }
 
-bool PhysicalObject::detect_x_collision(const MatchMap& colition_map, const int diff, bool &is_player, int &id_player) {
+bool PhysicalObject::detect_x_collision(const MatchMap& colition_map, const int diff, Collision &collision) {
 
     if (colition_map.out_of_map_x(position.x + diff) ||
         colition_map.out_of_map_x(position.x + dimension.x + diff)) {
@@ -31,12 +31,12 @@ bool PhysicalObject::detect_x_collision(const MatchMap& colition_map, const int 
     }
 
     for (int y = 0; y <= dimension.y; y++) {
-        if (colition_map.check_collision(position.x + dimension.x + diff, position.y + y, is_player, id_player) &&
+        if (colition_map.check_collision(position.x + dimension.x + diff, position.y + y, collision.type, collision.id) &&
             diff > 0) {
             return true;
         }
 
-        if (colition_map.check_collision(position.x + diff, position.y + y, is_player, id_player) && diff < 0) {
+        if (colition_map.check_collision(position.x + diff, position.y + y, collision.type, collision.id) && diff < 0) {
             return true;
         }
     }
@@ -44,7 +44,7 @@ bool PhysicalObject::detect_x_collision(const MatchMap& colition_map, const int 
     return false;
 }
 
-bool PhysicalObject::detect_y_collision(const MatchMap& colition_map, const int diff, bool &is_player, int &id_player) {
+bool PhysicalObject::detect_y_collision(const MatchMap& colition_map, const int diff, Collision &collision) {
 
     if (colition_map.out_of_map_y(position.y + diff) ||
         colition_map.out_of_map_y(position.y + dimension.y + diff)) {
@@ -52,10 +52,10 @@ bool PhysicalObject::detect_y_collision(const MatchMap& colition_map, const int 
     }
 
     for (int x = 0; x <= dimension.x && (position.x + x) < colition_map.getWidth(); x++) {
-        if (colition_map.check_collision(position.x + x, position.y + diff, is_player, id_player) && diff <= 0) {
+        if (colition_map.check_collision(position.x + x, position.y + diff, collision.type, collision.id) && diff <= 0) {
             return true;
         }
-        if (colition_map.check_collision(position.x + x, position.y + dimension.y + diff, is_player, id_player) &&
+        if (colition_map.check_collision(position.x + x, position.y + dimension.y + diff, collision.type, collision.id) &&
             diff > 0) {
             return true;
         }
@@ -71,10 +71,9 @@ void PhysicalObject::move(const MatchMap& colition_map) {
         int sign;
         speed.x > 0 ? sign = 1 : sign = -1;
         for (int x = 0; x <= speed.x * time_step * sign; x++) {
-            bool colition_with_player = false;
-            int id_colition_player = 0;
-            if (detect_x_collision(colition_map, sign, colition_with_player, id_colition_player)) {
-                this->react_to_sides_collision(colition_with_player, id_colition_player);
+            Collision collision(0, CollisionTypeMap::NONE);
+            if (detect_x_collision(colition_map, sign, collision)) {
+                this->react_to_sides_collision(collision);
                 acceleration.x = 0;
             } else {
                 position.x += 1 * sign;
@@ -87,20 +86,18 @@ void PhysicalObject::move(const MatchMap& colition_map) {
     speed.y += acceleration.y * time_step;
     if (speed.y < 0) {
         for (int y = 0; y >= speed.y * time_step; y--) {
-            bool colition_with_player = false;
-            int id_colition_player = 0;
-            if (detect_y_collision(colition_map, -1, colition_with_player, id_colition_player)) {
-                this->react_to_down_collision(colition_with_player, id_colition_player);
+            Collision collision(0, CollisionTypeMap::NONE);
+            if (detect_y_collision(colition_map, -1, collision)) {
+                this->react_to_down_collision(collision);
             } else {
                 position.y--;
             }
         }
     } else if (speed.y > 0) {
         for (int y = 0; y <= speed.y * time_step; y++) {
-            bool colition_with_player = false;
-            int id_colition_player = 0;
-            if (detect_y_collision(colition_map, 1, colition_with_player, id_colition_player)) {
-                this->react_to_up_collision(colition_with_player, id_colition_player);
+            Collision collision(0, CollisionTypeMap::NONE);
+            if (detect_y_collision(colition_map, 1, collision)) {
+                this->react_to_up_collision(collision);
             } else {
                 position.y++;
             }

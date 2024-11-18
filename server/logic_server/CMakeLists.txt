@@ -45,6 +45,4 @@ target_sources(taller_server_logic
             duel_pistol.h
             pewpew_laser_weapon.h
 
-
-
     )
