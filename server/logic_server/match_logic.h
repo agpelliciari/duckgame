@@ -66,6 +66,8 @@ public:
     void damage_box(int id);
     void clear_players();
     void clear_objects();
+    void player_pick_up_item(int id);
+    void player_drop_item(int id);
     ~MatchLogic();
 };
 

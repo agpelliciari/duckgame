@@ -53,7 +53,22 @@ MatchLogic::MatchLogic(): colition_map(800, 640) {
         this->player_shoot(index);
     };
 
+    this->command_map[PlayerActionType::PICK_UP_ITEM] = [this](int index) {
+
+        this->player_pick_up_item(index);
+    };
+    this->command_map[PlayerActionType::DROP_ITEM] = [this](int index) {
+        this->player_drop_item(index);
+    };
     // this->command_map[3] = [this](int index) { this->add_player_speed(index, 0, 0); };
+
+}
+
+void MatchLogic::player_pick_up_item(int index) {
+
+}
+
+void MatchLogic::player_drop_item(int index) {
 
 }
 
