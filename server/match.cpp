@@ -112,19 +112,21 @@ const MatchStatsInfo& Match::getStats() const{
 bool Match::pauseMatch(int count_seconds){
     Clock timer(MS_SECOND);  // Timer de a pasos de 1 segundo.
     timer.resetnext();
-    lobby_info info(MATCH_PAUSE_TICK, count_seconds);
-
+    //lobby_info info(MATCH_PAUSE_TICK, count_seconds);
+    
+    // Se deja que todavia sea sleeps de 1 segundo. Por si se presiona 'q'.
     while (_keep_running && timer.tickcount() < count_seconds) {
-        info.data = count_seconds - timer.tickcount();
-        players.notifyInfo(info);
+        //info.data = count_seconds - timer.tickcount();
+        //players.notifyInfo(info);
         timer.tickRest();  // sleep for 1 second if so is needed
     }
     
     //timer.tickcount() >= mx
     // No se envia si se cancelo con la 'q' en el medio. Se handlea despues?
     if (_keep_running) { 
-        info.action = MATCH_PAUSE_END;
-        info.data = 0;  // reset data
+        lobby_info info(MATCH_PAUSE_END, 0);
+        //info.action = MATCH_PAUSE_END;
+        //info.data = 0;  // reset data
 
         players.notifyInfo(info);
         return true;

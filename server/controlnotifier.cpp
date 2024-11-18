@@ -71,29 +71,17 @@ bool ControlNotifier::runPostGame(MatchStateType state) {
         std::cerr << "Notifier go right back already started!! to " << (int)match.getID() << " " << player.toString()<<std::endl;
         return true;
     }
-    lobby_info info;
     try {
-        //std::cout << "NOTIFIER PAUSED MATCH FOR 5 seconds?!\n";
-
-        info = player.popinfo();
         // its paused!
-        while (_keep_running) {
-
-
-            std::cerr << "pause m " << (int)match.getID() << " info to " << player.toString()
+        lobby_info info = player.popinfo(); // Se recibe el unpause.
+        // El count down fue removido, ya que desde el cliente no les parecia util.
+        
+        std::cerr << "Despausada " << (int)match.getID() << " info to " << player.toString()
                       << "? " << (int)info.action << ", num: " << (int)info.data << std::endl;
-            // protocol.notifyevent(info);
-            info = player.popinfo();
-        }
-
-        return false;
+                      
+        return true;
     } catch (const ClosedQueue& error) {
-        if(match.isrunning()){
-            //std::cout << "------->NOT Finished game AT POST ROUND " << (int)info.action << "\n";
-            return true;
-        }
-        //std::cout << "------->Finished game while paused?\n";
-        protocol.close();  // Closed?
+        protocol.close();  // Closed server while in pause?
         return false;
     }
 }
