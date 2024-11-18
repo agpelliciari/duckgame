@@ -40,6 +40,10 @@ struct AnimationBuilder {
 
     bool facingLeft;  // cppcheck-suppress unusedStructMember
 
+    int doingActionSpriteX;  // cppcheck-suppress unusedStructMember
+
+    int doingActionSpriteY;  // cppcheck-suppress unusedStructMember
+
     AnimationBuilder() {
         spriteX = STARTING_SPRITE_X;
 
@@ -62,6 +66,8 @@ private:
     AnimationBuilder* getAnimationBuilder(int playerId);
 
     void updatePlayerAnimation(AnimationBuilder& builder, const PlayerDTO& player);
+
+    void updateDoingActionAnimation(AnimationBuilder& builder, const PlayerDTO& player);
 
     void setBuilder(AnimationBuilder& builder, int spriteX, int spriteY, bool facingLeft);
 

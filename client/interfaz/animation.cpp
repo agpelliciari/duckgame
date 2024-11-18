@@ -13,8 +13,39 @@ void Animation::updateSprite(const MatchDto& matchDto) {
     for (const PlayerDTO& player: matchDto.players) {
         AnimationBuilder* builder = getAnimationBuilder(player.id);
         if (builder) {
-            updatePlayerAnimation(*builder, player);
+            if (player.is_alive) {
+                setBuilder(*builder, STARTING_SPRITE_X + SPRITE_SIZE,
+                           LAY_DOWN_SPRITE_Y);  // animacion en caso de muerte
+            } else {
+                updatePlayerAnimation(*builder, player);
+
+                updateDoingActionAnimation(*builder, player);
+            }
         }
+    }
+}
+
+void Animation::updateDoingActionAnimation(AnimationBuilder& builder, const PlayerDTO& player) {
+    switch (player.doing_action) {
+        case TypeDoingAction::SHOOTING:
+            std::cout << "SHOOTING" << std::endl;
+            builder.doingActionSpriteX = 0;
+            builder.doingActionSpriteY = 0;
+            soundManager.playSound(SoundType::LASER);
+            break;
+        case TypeDoingAction::SHOOTING_UP:
+            std::cout << "SHOOTING UP" << std::endl;
+            break;
+        case TypeDoingAction::DAMAGED:
+            std::cout << "DAMAGED" << std::endl;
+            soundManager.playSound(SoundType::QUACK);
+            break;
+        case TypeDoingAction::PICK_UP:
+            std::cout << "PICK UP" << std::endl;
+            break;
+        case TypeDoingAction::NONE:
+            std::cout << "NONE" << std::endl;
+            break;
     }
 }
 
@@ -41,7 +72,9 @@ void Animation::updatePlayerAnimation(AnimationBuilder& builder, const PlayerDTO
     switch (player.move_action) {
         case TypeMoveAction::MOVE_RIGHT:
             setBuilder(builder,
-                       (STARTING_SPRITE_X + SPRITE_SIZE * ((frameTicks / RUNNING_ANIMATION_SPEED) % RUNNING_ANIMATION_FRAMES)), STARTING_SPRITE_Y, false);
+                       (STARTING_SPRITE_X + SPRITE_SIZE * ((frameTicks / RUNNING_ANIMATION_SPEED) %
+                                                           RUNNING_ANIMATION_FRAMES)),
+                       STARTING_SPRITE_Y, false);
             break;
         case TypeMoveAction::MOVE_LEFT:
             setBuilder(builder,
@@ -53,7 +86,7 @@ void Animation::updatePlayerAnimation(AnimationBuilder& builder, const PlayerDTO
             setBuilder(builder,
                        (STARTING_SPRITE_X + SPRITE_SIZE * ((frameTicks / JUMPING_ANIMATION_SPEED) %
                                                            JUMPING_ANIMATION_FRAMES)),
-                       JUMPING_SPRITE_Y, false);
+                       JUMPING_SPRITE_Y);
             soundManager.playSound(SoundType::JUMP);
             break;
         case TypeMoveAction::AIR_RIGHT:
@@ -72,7 +105,7 @@ void Animation::updatePlayerAnimation(AnimationBuilder& builder, const PlayerDTO
             break;
         case TypeMoveAction::FLAP_NEUTRAL:
             setBuilder(builder, (STARTING_SPRITE_X + SPRITE_SIZE * FLAPPING_SPRITE_X_OFFSET),
-                       FLAPPING_SPRITE_Y, false);
+                       FLAPPING_SPRITE_Y);
             break;
         case TypeMoveAction::FLAP_RIGHT:
             setBuilder(builder, (STARTING_SPRITE_X + SPRITE_SIZE * FLAPPING_SPRITE_X_OFFSET),
