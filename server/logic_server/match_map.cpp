@@ -22,14 +22,14 @@ void MatchMap::add_temp_collision(const int x, const int y) {
     // game_map[x][y] = true;
 }
 
-void MatchMap::add_collision(Tuple position, Tuple dimension, bool is_player, int id_player) {
-    objects.push_back(MapObjectServer(position, dimension, is_player, id_player));
+void MatchMap::add_collision(Tuple position, Tuple dimension, CollisionTypeMap type, int id) {
+    objects.push_back(MapObjectServer(position, dimension, type, id));
 }
 
 bool MatchMap::out_of_map_y(const int y) const { return y < 0 || y >= height; }
 bool MatchMap::out_of_map_x(const int x) const { return x < 0 || x >= width; }
 
-bool MatchMap::check_collision(const int other_object_x, const int other_object_y, bool &is_player, int &id_player) const {
+bool MatchMap::check_collision(const int other_object_x, const int other_object_y, CollisionTypeMap &type, int &id) const {
     if (out_of_map_y(other_object_y) || out_of_map_x(other_object_x) ||
         game_map[other_object_x][other_object_y]) {
         return true;
@@ -37,8 +37,8 @@ bool MatchMap::check_collision(const int other_object_x, const int other_object_
     for (auto& object: objects) {
         if (other_object_x >= object.map_point.x && other_object_x <= object.map_point.x + object.dimension.x &&
                 other_object_y >= object.map_point.y && other_object_y <= object.map_point.y + object.dimension.y) {
-            is_player = object.is_player;
-            id_player = object.id_player;
+            type = object.collision.type;
+            id = object.collision.id;
             return true;
         }
     }

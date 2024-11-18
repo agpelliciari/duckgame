@@ -12,7 +12,10 @@
 #include "match_map.h"
 #include "player.h"
 #include "tuple.h"
+#include "collision.h"
+#include "type_collision.h"
 #include "physical_bullet.h"
+
 
 #ifndef MATCH_LOGIC_H
 #define MATCH_LOGIC_H
@@ -59,6 +62,7 @@ public:
     void player_stay_down_start(int index);
     void player_stay_down_end(int index);
     void damage_player(int id);
+    void damage_box(int id);
     void clear_players();
     void clear_objects();
     ~MatchLogic();

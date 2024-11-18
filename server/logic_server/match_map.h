@@ -4,6 +4,8 @@
 #include <vector>
 #include "map_object.h"
 #include "tuple.h"
+#include "collision.h"
+#include "type_collision.h"
 
 class MatchMap {
 
@@ -18,7 +20,7 @@ public:
 
     void add_temp_collision(const int x, const int y);
 
-    void add_collision(Tuple position, Tuple dimension, bool is_player, int id_player);
+    void add_collision(Tuple position, Tuple dimension, CollisionTypeMap type, int id);
     void clear_objects();
 
     int getWidth() const;
@@ -27,7 +29,7 @@ public:
     bool out_of_map_y(const int y) const;
     bool out_of_map_x(const int x) const;
 
-    bool check_collision(const int x, const int y, bool &is_player, int &id_player) const;
+    bool check_collision(const int x, const int y, CollisionTypeMap &type, int &id) const;
     bool check_horizontal_collision(const int x, const int y) const;
     bool check_vertical_collision(const int x, const int y) const;
 };
