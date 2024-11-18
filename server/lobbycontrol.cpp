@@ -6,6 +6,7 @@
 #include "./gameerror.h"
 #include "common/core/liberror.h"
 #include "common/protocolerror.h"
+#include "common/serialerror.h"
 
 LobbyControl::LobbyControl(LobbyContainer& _lobbies, ServerProtocol& _protocol):
         lobbies(_lobbies), protocol(_protocol) {}
@@ -33,6 +34,12 @@ ControlledPlayer& LobbyControl::getJoinedPlayers(Match& match) {
 
     // Si no hubo error.. ahora notifica el join.
     protocol.notifyinfo(LobbyResponseType::JOINED_LOBBY, match.playercount());
+    
+    // Send current players.
+    for(player_id id: match.getPlayers()){
+        protocol.notifyid(id);    
+    }
+    
 
     protocol.notifyid(player.getid(0));
     if (player.playercount() == 2) {
@@ -101,6 +108,10 @@ bool LobbyControl::handleAnfitrionLobby(ControlledPlayer& host,
         }
         std::cerr << "Cancel lobby?:" << error.what() << std::endl;
         lobbies.hostLeft(match, host);
+        return true;
+    } catch (const SerialError& error) {
+        std::cerr << "Map load error?:" << error.what() << std::endl;
+        lobbies.errorOnLobby(match, MAP_INVALID);
         return true;
     } catch (const GameError& error) {
         // Fallo alguna accion. Sea el start u otra.

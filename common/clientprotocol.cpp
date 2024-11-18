@@ -22,16 +22,24 @@ void ClientProtocol::sendaction(PlayerActionDTO& action) {
     protocol.sendbytes(&action, sizeof(action));
 }
 
-lobby_info ClientProtocol::sendJoinLobby(const uint8_t id_match, const uint8_t count) {
+lobby_info ClientProtocol::sendJoinLobby(const uint8_t id_match,std::vector<int>& players, const uint8_t count) {
     uint8_t info[3] = {LobbyActionType::JOIN_LOBBY, id_match, count};
     protocol.sendbytes(&info, sizeof(info));
     lobby_info out;
+    
     recvlobbyinfo(out);
-
-    if (out.action != JOINED_LOBBY && out.action != GAME_ERROR) {
+    
+    if(out.action == JOINED_LOBBY){
+        int playercount = out.data;
+        players.reserve(playercount);
+        while (playercount> 0) {
+            players.push_back(protocol.recvbyte());
+            playercount--;
+        }
+    } else if (out.action != JOINED_LOBBY && out.action != GAME_ERROR) {
         out.action = GAME_ERROR;
         out.data = LobbyErrorType::UNKNOWN;
-    }
+    } 
 
     // Recibir true si fallo, false si fue exito.
     return out;
@@ -122,6 +130,15 @@ void ClientProtocol::recvstats(MatchStatsInfo& outstats) {
         uint8_t wins = protocol.recvbyte();
         outstats.stats.emplace_back(id, wins);
         count--;
+    }
+}
+
+void ClientProtocol::recvlobbyplayers(std::vector<int>& players){
+    int playercount = (int)protocol.recvbyte();
+    players.reserve(playercount);
+    while (playercount> 0) {
+        players.push_back(protocol.recvbyte());
+        playercount--;
     }
 }
 

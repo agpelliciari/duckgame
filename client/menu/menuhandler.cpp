@@ -128,33 +128,34 @@ void MenuHandler::playerLeftLobby(int id) {
 void MenuHandler::createdLobbyDual(unsigned int id_lobby) {
     std::cout << "Lobby creada dual con id " << id_lobby << std::endl;
     setLobbyId(id_lobby);
-    std::vector<std::string> maps = {"MAPACHE"};
+    std::vector<std::string> maps = {"MAPACHE", "testmapinvalid", "does not exist"};
     setLobbyMaps(maps);
     addDuoToLobby();
 }
 void MenuHandler::createdLobbySolo(unsigned int id_lobby) {
     std::cout << "Lobby creada solo con id " << id_lobby << std::endl;
     setLobbyId(id_lobby);
-    std::vector<std::string> maps = {"MAPACHE"};
+    std::vector<std::string> maps = {"MAPACHE", "testmapinvalid", "does not exist"};
     setLobbyMaps(maps);
     addSoloToLobby();
 }
 
 void MenuHandler::joinedLobbyDual(const GameContext& context) {
-    std::cout << "Lobby Join dual con id " << (int)context.id_lobby << " count there "
-              << context.cantidadjugadores << std::endl;
+    std::cout << "Lobby Join dual con id " << (int)context.id_lobby << " max capacity "
+              << context.players.size() << std::endl;
     setLobbyId(context.id_lobby);
-
-    for (int i = 0; i < context.cantidadjugadores; i++) {
+    int size = context.players.size();
+    for (int i = 0; i < size; i++) {
         addSoloToLobby();  // esto agrega los nuevos players que existen
     }
 }
 void MenuHandler::joinedLobbySolo(const GameContext& context) {
     std::cout << "Lobby Join solo con id " << (int)context.id_lobby << " count there "
-              << context.cantidadjugadores << std::endl;
+              << context.players.size() << std::endl;
     setLobbyId(context.id_lobby);
 
-    for (int i = 0; i < context.cantidadjugadores; i++) {
+    int size = context.players.size();
+    for (int i = 0; i < size; i++) {
         addSoloToLobby();  // esto agrega los nuevos players que existen
     }
 }

@@ -4,6 +4,7 @@
 #include <condition_variable>
 #include <mutex>
 #include <optional>
+#include <vector>
 #include <queue>
 #include <utility>
 
@@ -64,11 +65,12 @@ protected:
     
     bool pausedMatch();
     //bool roundEnded();
-    
+    void loadMap(MapDeserializer& deserial);
     bool handlePostRound();
 public:
     // Se tendra composicion con un unico observer de eventos al match.
     explicit Match(lobbyID _id);
+    explicit Match(lobbyID _id, const int max_players);
 
     // Asumamos por ahora que no se quiere permitir copias, ni mov.
     Match(const Match&) = delete;
@@ -84,6 +86,7 @@ public:
     const MatchStatsInfo& getStats() const;
     // void waitStart();
     int playercount() const;
+    std::vector<player_id> getPlayers() const;
 
     // Metodos publicos.. accesibles incluso a player controllers.
     // No hay precondiciones perse. Podria no haber empezado el match.

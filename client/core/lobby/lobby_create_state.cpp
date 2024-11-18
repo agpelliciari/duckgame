@@ -9,7 +9,7 @@
 #include "common/core/liberror.h"
 #include "common/protocolerror.h"
 
-#define getErrorMsg(ind) ERRORS[(ind >= 7) ? 1 : ind]
+#define getErrorMsg(ind) ERRORS[(ind >= 8) ? 1 : ind]
 
 
 LobbyCreateState::LobbyCreateState(Messenger& _messenger, GameContext& _context,
@@ -36,12 +36,21 @@ bool LobbyCreateState::checkcreatefail() {
             context.id_lobby = id_lobby;
 
             listener.createdLobbyDual(id_lobby);
+            
+            context.players.reserve(context.max_player_count);
+            context.addPlayer(context.first_player);
+            context.addPlayer(context.second_player);
+            
         } else {
             uint8_t id_lobby = protocol.sendCreateLobby(1);
 
             context.first_player = protocol.recvIDSinglePlayer();
             context.second_player = 0;
             context.id_lobby = id_lobby;
+            
+            context.players.reserve(context.max_player_count);
+            context.addPlayer(context.first_player);
+            
             listener.createdLobbySolo(id_lobby);
         }
         return false;
@@ -66,7 +75,7 @@ void LobbyCreateState::run() {
         lobby_info info = listenUntilLobbyEnd();
 
         if (info.action == LobbyResponseType::STARTED_LOBBY) {
-            setInitedMatch(info.data);
+            setInitedMatch();
         } else {
             context.started = false;
             listener.canceledLobby(getErrorMsg(info.data));

@@ -17,13 +17,14 @@ public:
 private:
     player_container players;  // cppcheck-suppress unusedStructMember
     bool canceled;             // cppcheck-suppress unusedStructMember
-
+    
+    int max_players;   // cppcheck-suppress unusedStructMember
     int totalplayers;  // cppcheck-suppress unusedStructMember
     // Por ahora player last id es la cantidad de total_players+1 basicamente.
     player_id last_id;  // cppcheck-suppress unusedStructMember
 public:
     // Default constructor
-    PlayerContainer();
+    PlayerContainer(const int _max_players);
     // No copy nor mov.
     PlayerContainer(const PlayerContainer&) = delete;
     PlayerContainer& operator=(const PlayerContainer&) = delete;
@@ -45,7 +46,7 @@ public:
 
     int playercount() const override;
 
-    std::vector<player_id> getPlayers() override;
+    std::vector<player_id> getPlayers() const override;
 
     // Push/notifica eventos a los players, de forma no bloqueante! No tiene precondiciones perse
     // Devuelve los players que se desconectaron. Podrian ser notificados directamente

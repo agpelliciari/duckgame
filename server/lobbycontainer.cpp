@@ -4,11 +4,13 @@
 
 #include "./gameerror.h"
 
+#define MAX_COUNT_MATCH 4
+
 LobbyContainer::LobbyContainer(): lastLobbyId(0) {}
 
 Match& LobbyContainer::newLobby() {
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on lobby.
-    return lobbies.emplace_back(++lastLobbyId);
+    return lobbies.emplace_back(++lastLobbyId, MAX_COUNT_MATCH);
 }
 
 int LobbyContainer::countMatches() {

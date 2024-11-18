@@ -4,6 +4,9 @@
 #include <cstdint>
 #include "./dtosobject.h"
 
+typedef unsigned int player_id;
+
+
 enum PlayerActionType : uint8_t {
     NONE = 0,
     MOVE_LEFT = 1,
