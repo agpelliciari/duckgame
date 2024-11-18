@@ -33,6 +33,7 @@ void Player::get_data(int& id, int& x, int& y, TypeWeapon& weapon_,
     //this->chest_armor.is_equipped(chest_armor_equipped);
     move_action_ = this->move_action;
     doing_action_ = this->doing_action;
+    doing_action = TypeDoingAction::NONE;
 }
 
 bool Player::same_id(unsigned int id_) { return id == id_; }
@@ -45,7 +46,7 @@ int Player::get_id() { return id; }
 
 void Player::update(const MatchMap& colition_map) {
     if (is_alive){
-        doing_action = TypeDoingAction::NONE;
+        //doing_action = TypeDoingAction::NONE;
         object.move(colition_map);
         object.update_action(move_action);
         this->update_shooting_direction();
