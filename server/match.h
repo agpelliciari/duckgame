@@ -63,7 +63,7 @@ protected:
     // resto.
     void finish(MapLoader& maps);
     
-    bool pausedMatch();
+    bool pauseMatch(int count_seconds);
     //bool roundEnded();
     void loadMap(MapDeserializer& deserial);
     bool handlePostRound();

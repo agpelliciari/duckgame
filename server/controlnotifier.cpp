@@ -67,8 +67,8 @@ bool ControlNotifier::runPostGame(MatchStateType state) {
         return false;      // Se cerro el game
     }
 
-    if (state == INICIADA || state == ROUND_END) {
-        std::cerr << "Notifier go right back! to " << (int)match.getID() << " " << player.toString()<<std::endl;
+    if (state == INICIADA) {
+        std::cerr << "Notifier go right back already started!! to " << (int)match.getID() << " " << player.toString()<<std::endl;
         return true;
     }
     lobby_info info;

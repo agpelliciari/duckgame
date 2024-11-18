@@ -3,7 +3,8 @@
 #include <iostream>
 
 #define MS_SECOND 1000
-#define PAUSE_SECONDS 3
+#define PAUSE_SECONDS 5
+#define AFTER_ROUND_SECONDS 3
 
 #include "./gameerror.h"
 //#include <thread>
@@ -108,15 +109,13 @@ const MatchStatsInfo& Match::getStats() const{
      return this->stats;
 }
 
-bool Match::pausedMatch(){
+bool Match::pauseMatch(int count_seconds){
     Clock timer(MS_SECOND);  // Timer de a pasos de 1 segundo.
     timer.resetnext();
-    int mx = PAUSE_SECONDS;
+    lobby_info info(MATCH_PAUSE_TICK, count_seconds);
 
-    lobby_info info(MATCH_PAUSE_TICK, mx);
-
-    while (_keep_running && timer.tickcount() < mx) {
-        info.data = mx - timer.tickcount();
+    while (_keep_running && timer.tickcount() < count_seconds) {
+        info.data = count_seconds - timer.tickcount();
         players.notifyInfo(info);
         timer.tickRest();  // sleep for 1 second if so is needed
     }
@@ -136,15 +135,11 @@ bool Match::pausedMatch(){
 
 bool Match::handlePostRound(){
     if(this->stats.isRunning()){
-        //std::cout << "HANDLE POST ROUND ON MATCH!\n";
         players.finishGameMode(this->stats);  // Notify/move players to lobby mode.
-        bool handled = true;
-        if(this->stats.isPaused()){
-             handled = pausedMatch();
-        }
-        // Go back to game mode.. independientemente de si cancelo o no.
+        
+        bool handled = pauseMatch(this->stats.isPaused()? PAUSE_SECONDS : AFTER_ROUND_SECONDS);
+        
         players.finishLobbyMode(); 
-        //std::cout << "FINISHED HANDLE POST ROUND ON MATCH!\n";
         return handled;
     }
     
