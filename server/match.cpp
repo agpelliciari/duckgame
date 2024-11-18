@@ -4,7 +4,7 @@
 
 #define MS_SECOND 1000
 #define PAUSE_SECONDS 5
-#define AFTER_ROUND_SECONDS 3
+#define AFTER_ROUND_SECONDS 2
 
 #include "./gameerror.h"
 //#include <thread>
@@ -121,29 +121,25 @@ bool Match::pauseMatch(int count_seconds){
         timer.tickRest();  // sleep for 1 second if so is needed
     }
     
-    //timer.tickcount() >= mx
-    // No se envia si se cancelo con la 'q' en el medio. Se handlea despues?
-    if (_keep_running) { 
-        lobby_info info(MATCH_PAUSE_END, 0);
-        //info.action = MATCH_PAUSE_END;
-        //info.data = 0;  // reset data
-
-        players.notifyInfo(info);
-        return true;
-    }
-    
-    return false;
+    return _keep_running;
 }
 
 bool Match::handlePostRound(){
     if(this->stats.isRunning()){
         players.finishGameMode(this->stats);  // Notify/move players to lobby mode.
         
+        /*
         bool handled = pauseMatch(this->stats.isPaused()? PAUSE_SECONDS : AFTER_ROUND_SECONDS);
+        if(!handled){
+            this->stats.state = CANCELADA;
+        }
+        */
         
-        players.finishLobbyMode(); 
-        return handled;
+        return pauseMatch(this->stats.isPaused()? PAUSE_SECONDS : AFTER_ROUND_SECONDS);
     }
+    
+    //std::cout << "FINISHED MATCH? NOTIFY!!! "<< stats.parse()<<" \n";
+    players.finishGameMode(this->stats);    
     
     return false;
 }
@@ -156,17 +152,16 @@ void Match::run() {
         // re envia info del mapa?
         looper.reset_objects(objects);
         looper.reset_players(players);
+                
+        players.finishWaitMode(); 
         
         looper.playRound(players, this->stats);
     }
 
     if (this->stats.isRunning()) {
-        std::cout << "NOT FINISHED? FORCE CANCEL!\n";
+        std::cout << "SHOULD HAPPEN? NOT FINISHED? FORCE CANCEL!\n";
         this->stats.state = CANCELADA;
-    } else{
-        std::cout << "FINISHED MATCH? NOTIFY!!! "<< stats.parse()<<" \n";    
     }
-    players.finishGameMode(this->stats);
 
     // Checkea si el finish fue natural o forzado.
 

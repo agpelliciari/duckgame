@@ -36,6 +36,7 @@ public:
     void remove(const ControlledPlayer& player);
 
     void finishLobbyMode();
+    void finishWaitMode();
     void finishGameMode(const MatchStatsInfo& match_stats);
 
     void hostLobbyLeft(const ControlledPlayer& player);

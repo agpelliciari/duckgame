@@ -72,20 +72,27 @@ bool ControlNotifier::runPostGame(MatchStateType state) {
         return true;
     }
     try {
-        // its paused!
-        lobby_info info = player.popinfo(); // Se recibe el unpause.
-        // El count down fue removido, ya que desde el cliente no les parecia util.
+        // Espera por la info ... de timer tick, que nunca sera recibida.
+        // El pause end no es pasado. Ya que abria una race condition. Hasta que se vuelva 
+        // game mode.
+        lobby_info info = player.popinfo(); 
         
-        std::cerr << "Despausada " << (int)match.getID() << " info to " << player.toString()
-                      << "? " << (int)info.action << ", num: " << (int)info.data << std::endl;
-                      
         return true;
     } catch (const ClosedQueue& error) {
+        
+        if(match.isrunning()){
+            std::cerr << "Despausada " << (int)match.getID() << " info to " << player.toString() << std::endl;
+            return true;
+        }
+        
+        std::cerr << "At Pause Cancelada " << (int)match.getID() << " info to " << player.toString() << std::endl;
         protocol.close();  // Closed server while in pause?
         return false;
     }
 }
 MatchStateType ControlNotifier::runGame() {
+
+    //std::cerr << player.toString() << " went to play mode!\n";
     //std::cerr << "#game notify for " << player.toString() << " at match " << (int)match.getID()
     //          << " start!" << std::endl;
     try {
@@ -96,7 +103,7 @@ MatchStateType ControlNotifier::runGame() {
         return CANCELADA;
     } catch (const ClosedQueue& error) {
         const MatchStatsInfo& stats = player.getStats();
-        //std::cout << "EXIT GAME MODE... STATS? " << stats.parse() << std::endl;
+        std::cout << player.toString() << " exited game mode...:: " << stats.parse() << std::endl;
         protocol.sendstats(stats);
         return stats.state;
     }

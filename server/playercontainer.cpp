@@ -78,8 +78,18 @@ void PlayerContainer::forceDisconnectAll() {
     */
 }
 
+
+
 void PlayerContainer::finishLobbyMode() {
     for (ControlledPlayer& player: players) {
+        player.setgamemode();
+    }
+}
+void PlayerContainer::finishWaitMode() {
+    //lobby_info info(MATCH_PAUSE_END, 0);
+    
+    for (ControlledPlayer& player: players) {
+        //notifyInfo(info);
         player.setgamemode();
     }
 }
