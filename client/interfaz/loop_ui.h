@@ -17,7 +17,6 @@
 
 #define INITIAL_SCREEN_WIDTH 640
 #define INITIAL_SCREEN_HEIGHT 480
-#define FRAME_DELAY 16
 
 class UILoop {
 private:
@@ -44,8 +43,6 @@ private:
     // This is where most of the game logic will go;
     // including: movement, AI, and animation updates.
     void update();
-
-    void frameDelay(unsigned int frameStart);
 
 public:
     UILoop(ActionListener& dtoSender, SimpleEventListener& _events, const GameContext& gameContext);

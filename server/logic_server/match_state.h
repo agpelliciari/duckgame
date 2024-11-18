@@ -24,6 +24,7 @@ private:
     MatchQueue acciones;                  // cppcheck-suppress unusedStructMember
     std::vector<ActionCommand> commands;  // cppcheck-suppress unusedStructMember
     std::vector<int> id_alive_players;    // cppcheck-suppress unusedStructMember
+    int max_rounds; // cppcheck-suppress unusedStructMember
 
 
 public:

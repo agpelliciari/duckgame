@@ -3,8 +3,8 @@
 #include <iostream>
 
 
-MatchLogic::MatchLogic(): colition_map(800, 640) { // TODO deberia venir del map, seria map.width * ancho de bloque y map.height * ancho de bloque
-    this->command_map[PlayerActionType::NONE] = [this](int index) {    // ahora esta en:       50 * 16                        40 * 16
+MatchLogic::MatchLogic(): colition_map(800, 640) {
+    this->command_map[PlayerActionType::NONE] = [this](int index) {
         this->add_player_speed(index, 0, 0);
     };
     this->command_map[PlayerActionType::MOVE_LEFT] = [this](int index) {
@@ -53,14 +53,35 @@ MatchLogic::MatchLogic(): colition_map(800, 640) { // TODO deberia venir del map
         this->player_shoot(index);
     };
 
+    this->command_map[PlayerActionType::PICK_UP_ITEM] = [this](int index) {
+
+        this->player_pick_up_item(index);
+    };
+    this->command_map[PlayerActionType::DROP_ITEM] = [this](int index) {
+        this->player_drop_item(index);
+    };
     // this->command_map[3] = [this](int index) { this->add_player_speed(index, 0, 0); };
 
 }
 
-void MatchLogic::add_player(int id) {
-    players.push_back(Player(id, 10 + id * 50, 1));
+void MatchLogic::player_pick_up_item(int index) {
+
+}
+
+void MatchLogic::player_drop_item(int index) {
+
+}
+
+void MatchLogic::add_player(int id, int spawn_point_index) {
+    std::cout << "SPAWN POINT INDEX: "<< spawn_point_index << std::endl;
+    if (spawn_point_index < spawn_points.size()) {
+        players.push_back(Player(id, spawn_points[spawn_point_index].x  * 16, spawn_points[spawn_point_index].y  * 16));
+        std::cout << "spawn point x: " << spawn_points[spawn_point_index].x << ", y: " << spawn_points[spawn_point_index].y << std::endl;
+    } else {
+        players.push_back(Player(id, 10 + 50 * id, 1));
+    }
     colition_map.add_collision(players.back().get_map_position(), players.back().get_dimension(),
-                               true, players.back().get_id());
+                               CollisionTypeMap::PLAYER, players.back().get_id());
 }
 
 void MatchLogic::add_player_speed(int id, int speed_x, int speed_y) {
@@ -139,13 +160,24 @@ void MatchLogic::update_players(std::vector<int> &id_alive_players) {
 void MatchLogic::update_colition_map() {
     colition_map.clear_objects();
     for (Player& player: players) {
-        colition_map.add_collision(player.get_map_position(), player.get_dimension(), true, player.get_id());
+        colition_map.add_collision(player.get_map_position(), player.get_dimension(), CollisionTypeMap::PLAYER, player.get_id());
     }
+    int box_index = 0;
     for (Box& box: boxes) {
         if (box.is_spawned()){
-            colition_map.add_collision(box.get_spawn_point(), box.get_dimension(), false, 0);
+            colition_map.add_collision(box.get_spawn_point(), box.get_dimension(), CollisionTypeMap::BOX, box_index);
+            box_index++;
         }
     }
+
+    int block_index = 0;
+    for (MapPoint& block: blocks) {
+        Tuple position = {block.x, block.y};
+        Tuple dimension = {16, 16};
+        colition_map.add_collision(position, dimension, CollisionTypeMap::BLOCK, block_index);
+        block_index ++;
+    }
+
 }
 
 /*void MatchLogic::add_colition(PhysicalObject &object) {
@@ -165,17 +197,19 @@ void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos, std::vector<DynamicObjDT
 
         PlayerDTO dto = {0, false, 0, 0, TypeWeapon::NONE, false, false, TypeMoveAction::NONE};
         player.get_data(dto.id, dto.pos.x, dto.pos.y, dto.weapon, dto.helmet, dto.chest_armor,
-                        dto.move_action);
+                        dto.move_action, dto.doing_action);
 
         dtos.push_back(dto);
     }
 
     for (Box box: boxes){
-        DynamicObjDTO dto = {0, 0, TypeDynamicObject::BOX};
-        Tuple position = box.get_spawn_point();
-        dto.pos.x = position.x;
-        dto.pos.y = position.y;
-        objects.push_back(dto);
+        if (box.is_spawned()){
+            DynamicObjDTO dto = {0, 0, TypeDynamicObject::BOX};
+            Tuple position = box.get_spawn_point();
+            dto.pos.x = position.x;
+            dto.pos.y = position.y;
+            objects.push_back(dto);
+        }
     }
 
     for (Item item: items) {
@@ -185,11 +219,11 @@ void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos, std::vector<DynamicObjDT
     }
 
     for (PhysicalBullet bullet: bullets) {
-        Tuple position = bullet.get_position();
-        DynamicObjDTO dto = {position.x, position.y, TypeDynamicObject::PROJECTILE};
+        DynamicObjDTO dto = {0, 0, TypeDynamicObject::PROJECTILE};
+        bullet.get_map_info(dto.pos.x, dto.pos.y, dto.type);
+        std::cout << "BULLET x: " << dto.pos.x << " y: " << dto.pos.y << std::endl;
         objects.push_back(dto);
     }
-
 }
 
 void MatchLogic::execute_move_command(int action_type, int index) {
@@ -197,15 +231,38 @@ void MatchLogic::execute_move_command(int action_type, int index) {
 }
 
 void MatchLogic::add_boxes(const std::vector<struct MapPoint>& boxes){
+    int id_box = 0;
     for (const struct MapPoint& box: boxes) {
-        this->boxes.push_back(Box(box.x * Box::BOX_SIZE, box.y * Box::BOX_SIZE));
+        this->boxes.push_back(Box(id_box, box.x, box.y));
+        id_box++;
+    }
+}
+
+void MatchLogic::add_items(const std::vector<struct MapPoint>& items){
+    for (const struct MapPoint& item: items) {
+        this->items.push_back(Item(TypeDynamicObject::PISTOLA_COWBOY, item.x, item.y, 10, 10, 5, 0.025));
+    }
+}
+
+void MatchLogic::add_blocks(const std::vector<struct MapPoint>& blocks){
+
+    for (const struct MapPoint& block: blocks) {
+        this->blocks.push_back(MapPoint(block.x, block.y));
+    }
+}
+
+void MatchLogic::add_spawn_points(const std::vector<struct MapPoint>& spawn_points){
+    std::cout << "spawn points: " << spawn_points.size() << std::endl;
+
+    for (const struct MapPoint& spawn_point: spawn_points) {
+        this->spawn_points.push_back(MapPoint(spawn_point.x, spawn_point.y));
     }
 }
 
 void MatchLogic::add_item_spawns(const std::vector<struct MapPoint>& items_spawns){
     // TODO randomizar los items que pueden aparecer en cada spawn
     for (const struct MapPoint& spawn: items_spawns) {
-        this->items.push_back(Item(TypeDynamicObject::PISTOLA_COWBOY, spawn.x * Box::BOX_SIZE, spawn.y * Box::BOX_SIZE, 10, 10, 5, 0.025));
+        this->items.push_back(Item(TypeDynamicObject::PISTOLA_COWBOY, spawn.x * 16, spawn.y *16, 10, 10, 5, 0.025));
     }
 }
 
@@ -222,15 +279,29 @@ void MatchLogic::damage_player(int id) {
     }
 }
 
+void MatchLogic::damage_box(int id) {
+    for (Box& box: boxes) {
+        if (box.same_id(id)) {
+            box.take_damage();
+            if (box.destroyed()){
+                Tuple position = box.get_spawn_point();
+                this->items.push_back(Item(box.get_item(), position.x, position.y, 10, 10, 5, 0.025));
+            }
+        }
+    }
+}
+
 void MatchLogic::update_bullets(){
     for (auto bullet = bullets.begin(); bullet!=bullets.end();) {
         bool impacted = false;
-        bool impacted_player = false;
-        int id_player = 0;
-        bullet->get_data(impacted, impacted_player, id_player);
+        Collision collision(0, CollisionTypeMap::NONE);
+        bullet->get_data(impacted, collision.type, collision.id);
         if (impacted) {
-            if (impacted_player) {
-                this->damage_player(id_player);
+            if (collision.type == CollisionTypeMap::PLAYER) {
+                this->damage_player(collision.id);
+            }
+            if (collision.type == CollisionTypeMap::BOX) {
+                this->damage_box(collision.id);
             }
             std::cout << "ERASING BULLET !!\n";
             bullet = bullets.erase(bullet);
@@ -240,6 +311,17 @@ void MatchLogic::update_bullets(){
             ++bullet;
         }
     }
+}
+
+void MatchLogic::clear_players(){
+    players.clear();
+}
+
+void MatchLogic::clear_objects(){
+    spawn_points.clear();
+    boxes.clear();
+    items.clear();
+    bullets.clear();
 }
 
 MatchLogic::~MatchLogic() {}

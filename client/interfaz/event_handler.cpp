@@ -30,6 +30,12 @@ void EventHandler::handleKeyDown(SDL_Keycode key, PlayerActionDTO& action) {
             setAction(action, SHOOT, MAIN_PLAYER);
             soundManager.playSound(SoundType::SHOT);
             break;
+        case SDLK_o:
+            setAction(action, PICK_UP_ITEM, MAIN_PLAYER);
+            break;
+        case SDLK_l:
+            setAction(action, DROP_ITEM, MAIN_PLAYER);
+            break;
         case SDLK_m:
             soundManager.stopBackgroundMusic();
             break;
@@ -55,6 +61,12 @@ void EventHandler::handleKeyDown(SDL_Keycode key, PlayerActionDTO& action) {
             case SDLK_g:
                 setAction(action, SHOOT, SECOND_PLAYER);
                 soundManager.playSound(SoundType::SHOT);
+                break;
+            case SDLK_t:
+                setAction(action, PICK_UP_ITEM, SECOND_PLAYER);
+                break;
+            case SDLK_f:
+                setAction(action, DROP_ITEM, SECOND_PLAYER);
                 break;
         }
     }

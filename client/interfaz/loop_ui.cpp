@@ -1,4 +1,5 @@
 #include "loop_ui.h"
+
 #include "common/clock.h"
 
 UILoop::UILoop(ActionListener& dtoSender, SimpleEventListener& _events,
@@ -18,19 +19,18 @@ UILoop::UILoop(ActionListener& dtoSender, SimpleEventListener& _events,
 void UILoop::exec() {
     try {
         soundManager.playBackgroundMusic();
-        Clock clock(16); // 16ms == 60fps
-        clock.resetnext();        
+        Clock clock(16);  // 16ms == 60fps
+        clock.resetnext();
         while (isRunning_) {
-            //unsigned int frameStart = SDL_GetTicks();
-
             eventHandler.handle(isRunning_);
 
             update();
 
-            drawer.draw(lastUpdate);
-            
+            if (isRunning_) {
+                drawer.draw(lastUpdate);
+            }
+
             clock.tickNoRest();
-            //frameDelay(frameStart);
         }
     } catch (const std::exception& e) {
         std::cerr << "Exception caught in UILoop" << e.what() << std::endl;
@@ -42,13 +42,33 @@ void UILoop::exec() {
 }
 
 void UILoop::update() {
-    
+
     MatchStatsInfo stats;
     while (isRunning_ && matchDtoQueue.update_stats(stats)) {
-        if(stats.state == TERMINADA || stats.state == CANCELADA){ // stats.state == PAUSADA? mostrar info, o round end.
+        auto start = std::chrono::steady_clock::now();
+        if (stats.state == TERMINADA ||
+            stats.state == CANCELADA) {  // stats.state == PAUSADA? mostrar info, o round end.
             isRunning_ = false;
+
+            // test leaderboard
+            while (std::chrono::steady_clock::now() - start < std::chrono::seconds(6)) {
+                drawer.drawLeaderboard(stats);
+            }
+
+        } else if (stats.state == PAUSADA) {
+            while (std::chrono::steady_clock::now() - start < std::chrono::seconds(6)) {
+                drawer.drawLeaderboard(stats);
+            }
+
+        } else if (stats.state == ROUND_END) {
+            while (std::chrono::steady_clock::now() - start < std::chrono::seconds(3)) {
+                drawer.drawWinner(stats, lastUpdate);
+            }
+            drawer.resetIndicatorFlag();
         }
     }
+
+    std::cout << "ronda: " << stats.numronda << std::endl;  // numero de ronda no se actualiza
 
     MatchDto matchUpdate;
 
@@ -61,13 +81,6 @@ void UILoop::update() {
     animation.updateFrame();
 
     animation.updateSprite(lastUpdate);
-}
-
-void UILoop::frameDelay(unsigned int frameStart) {
-    unsigned int frameTime = SDL_GetTicks() - frameStart;
-    if (FRAME_DELAY > frameTime) {
-        SDL_Delay(FRAME_DELAY - frameTime);
-    }
 }
 
 UILoop::~UILoop() = default;

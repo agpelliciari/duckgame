@@ -11,7 +11,10 @@
 #include "shooting_direction.h"
 #include "weapon.h"
 #include "cowboy_pistol_weapon.h"
+#include "magnum_weapon.h"
+#include "pewpew_laser_weapon.h"
 #include "physical_bullet.h"
+#include "duel_pistol.h"
 
 
 class Player {
@@ -20,13 +23,14 @@ private:
     int id;                      // cppcheck-suppress unusedStructMember
     PhysicalPlayer object;       // cppcheck-suppress unusedStructMember
     bool is_alive;               // cppcheck-suppress unusedStructMember
-    Armor helmet;                // cppcheck-suppress unusedStructMember
-    Armor chest_armor;           // cppcheck-suppress unusedStructMember
+    bool helmet;                // cppcheck-suppress unusedStructMember
+    bool chest_armor;           // cppcheck-suppress unusedStructMember
     TypeMoveAction move_action;  // cppcheck-suppress unusedStructMember
+    TypeDoingAction doing_action; // cppcheck-suppress unusedStructMember
     bool aim_up;                 // cppcheck-suppress unusedStructMember
     int life_points;              // cppcheck-suppress unusedStructMember
     ShootingDirection shooting_direction;  // cppcheck-suppress unusedStructMember
-    CowboyPistolWeapon weapon;               // cppcheck-suppress unusedStructMember
+    PewPewLaserWeapon weapon;               // cppcheck-suppress unusedStructMember
 
 public:
     Player(int id, int initial_x, int initial_y);
@@ -34,8 +38,8 @@ public:
     bool is_still_alive();
     bool same_id(unsigned int id);
 
-    void get_data(int& id, int& x, int& y, TypeWeapon& weapon, const bool& helmet_equipped,
-                  const bool& chest_armor_equipped, TypeMoveAction& move_action);
+    void get_data(int& id, int& x, int& y, TypeWeapon& weapon, bool& helmet_equipped,
+                  bool& chest_armor_equipped, TypeMoveAction& move_action, TypeDoingAction& doing_action);
 
     void still();
     void add_speed(int speed_x, int speed_y);

@@ -10,54 +10,44 @@ PhysicalPlayer::PhysicalPlayer(int init_coord_x, int init_coord_y):
 
 void PhysicalPlayer::update_action(TypeMoveAction& move_action) {
     move_action = TypeMoveAction::NONE;
-    if (speed.x > 0) {
+    if ((speed.x > 0 && acceleration.x == 0) || (speed.x < 0 && acceleration.x > 0)) {
         move_action = TypeMoveAction::MOVE_RIGHT;
     }
-    if (speed.x < 0) {
+    if ((speed.x < 0  && acceleration.x == 0) || (speed.x > 0 && acceleration.x < 0)) {
         move_action = TypeMoveAction::MOVE_LEFT;
     }
-    if (speed.y > 0) {
+    if ((speed.y > 0  && acceleration.x == 0) ) {
         move_action = TypeMoveAction::AIR_NEUTRAL;
     }
-    if (speed.y > 0 && speed.x > 0) {
+    if ((speed.y > 0 && speed.x > 0  && acceleration.x == 0) || (speed.y >0 && speed.x < 0 && acceleration.x > 0)) {
         move_action = TypeMoveAction::AIR_RIGHT;
     }
-    if (speed.y > 0 && speed.x < 0) {
+    if ((speed.y > 0 && speed.x < 0  && acceleration.x == 0) || (speed.y > 0 && speed.x > 0 && acceleration.x < 0)) {
         move_action = TypeMoveAction::AIR_LEFT;
     }
-    if (flap_attemps < 10 && flap_attemps > 0){
+    if ((flap_attemps < 10 && flap_attemps > 0  && acceleration.x == 0)){
         move_action = TypeMoveAction::FLAP_NEUTRAL;
     }
-    if (flap_attemps < 10 && flap_attemps > 0 && speed.x > 0) {
+    if ((flap_attemps < 10 && flap_attemps > 0 && speed.x > 0  && acceleration.x == 0)) {
         move_action = TypeMoveAction::FLAP_RIGHT;
     }
-    if (flap_attemps < 10 && flap_attemps > 0 && speed.x < 0) {
+    if ((flap_attemps < 10 && flap_attemps > 0 && speed.x < 0  && acceleration.x == 0)) {
         move_action = TypeMoveAction::FLAP_LEFT;
     }
 }
 
-
-
-
-void PhysicalPlayer::react_to_sides_collision(bool is_player, int id_player){
-    if (!is_player) {
+void PhysicalPlayer::react_to_sides_collision(Collision collision){
         speed.x = 0;
-    }
-
 }
 
-void PhysicalPlayer::react_to_down_collision(bool is_player, int id_player){
-    if (!is_player) {
+void PhysicalPlayer::react_to_down_collision(Collision collision){
         speed.y = 0;
-    }
 }
 
-void PhysicalPlayer::react_to_up_collision(bool is_player, int id_player){
-    if (!is_player) {
+void PhysicalPlayer::react_to_up_collision(Collision collision){
         speed.y = 0;
         acceleration.y = -10;
         flap_attemps = 10;
-    }
 }
 
 void PhysicalPlayer::stop_moving_x(){

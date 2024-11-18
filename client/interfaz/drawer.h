@@ -1,9 +1,12 @@
 #ifndef DRAWER_H
 #define DRAWER_H
 
+#include <algorithm>
 #include <chrono>
+#include <string>
 #include <tuple>
 #include <unordered_map>
+#include <vector>
 
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
@@ -55,9 +58,16 @@ private:
 
     bool showIndicators;  // cppcheck-suppress unusedStructMember
 
+    std::unordered_map<TypeWeapon, std::tuple<std::string, int, int>> weaponTextures;
+
+    std::unordered_map<int, std::string> duckTextures;
+
     void updateIndicatorFlag();
 
     void drawPlayer(const PlayerDTO& player);
+
+    // HOOD
+    void drawPlayerInfo(const PlayerDTO& player, const std::string color);
 
     void drawIndicator(const PlayerDTO& player, bool isMainPlayer);
 
@@ -71,6 +81,8 @@ private:
 
     void drawObjects(const MatchDto& matchDto);
 
+    void drawStatusBar();
+
 public:
     Drawer(SDL2pp::Window& window, Animation& animation, const GameContext& gameContext,
            Camera& camera);
@@ -81,7 +93,12 @@ public:
     void draw(const MatchDto& matchDto);
 
     // Draw the leaderboard at the end of 5 rounds.
-    // void drawLeaderboard(const MatchStatsInfo& stats);
+    void drawLeaderboard(const MatchStatsInfo& stats);
+
+    // Draw the winner of the round.
+    void drawWinner(const MatchStatsInfo& stats, const MatchDto& matchDto);
+
+    void resetIndicatorFlag();
 
     ~Drawer();
 };
