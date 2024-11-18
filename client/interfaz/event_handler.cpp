@@ -28,7 +28,6 @@ void EventHandler::handleKeyDown(SDL_Keycode key, PlayerActionDTO& action) {
             break;
         case SDLK_p:
             setAction(action, SHOOT, MAIN_PLAYER);
-            soundManager.playSound(SoundType::SHOT);
             break;
         case SDLK_o:
             setAction(action, PICK_UP_ITEM, MAIN_PLAYER);
@@ -56,11 +55,10 @@ void EventHandler::handleKeyDown(SDL_Keycode key, PlayerActionDTO& action) {
                 setAction(action, JUMP, SECOND_PLAYER);
                 break;
             case SDLK_e:
-                setAction(action, AIM_UP_START, MAIN_PLAYER);
+                setAction(action, AIM_UP_START, SECOND_PLAYER);
                 break;
             case SDLK_g:
                 setAction(action, SHOOT, SECOND_PLAYER);
-                soundManager.playSound(SoundType::SHOT);
                 break;
             case SDLK_t:
                 setAction(action, PICK_UP_ITEM, SECOND_PLAYER);
