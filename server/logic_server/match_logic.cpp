@@ -244,6 +244,13 @@ void MatchLogic::add_spawn_points(const std::vector<struct MapPoint>& spawn_poin
     }
 }
 
+void MatchLogic::add_item_spawns(const std::vector<struct MapPoint>& items_spawns){
+    // TODO randomizar los items que pueden aparecer en cada spawn
+    for (const struct MapPoint& spawn: items_spawns) {
+        this->items.push_back(Item(TypeDynamicObject::PISTOLA_COWBOY, spawn.x * 16, spawn.y *16, 10, 10, 5, 0.025));
+    }
+}
+
 void MatchLogic::add_bullet(PhysicalBullet bullet){
     this->bullets.push_back(bullet);
 }
