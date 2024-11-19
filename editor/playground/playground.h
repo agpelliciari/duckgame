@@ -61,6 +61,10 @@ private:
 public:
     explicit Playground(const PlaygroundHandler& handler, QWidget* parent = nullptr);
 
+    void zoomIn();
+
+    void zoomOut();
+
     void setBackground(Texture texture);
 
     void addBlock(QPoint position, TileSet tileSet);
@@ -76,24 +80,13 @@ public:
     void removeNonPhysicalObject(QPoint position);
 
     int maxWidthToExport();
-
     int maxHeightToExport();
-
     MapObjectData backgroundToExport();
-
     std::vector<MapObjectData> blocksToExport();
-
     std::vector<MapObjectData> spawnPlayersToExport();
-
     std::vector<MapObjectData> spawnWeaponsToExport();
-
     std::vector<MapObjectData> boxesToExport();
-
     std::vector<MapObjectData> decorationsToExport();
-
-    void zoomIn();
-
-    void zoomOut();
 
     ~Playground();
 

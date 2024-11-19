@@ -5,8 +5,19 @@ Playground::Playground(const PlaygroundHandler& handler, QWidget* parent): QGrap
     ui->setupUi(this);
     qRegisterMetaType<MapObjectData>("MapObjectData");
 
-
     initializeMap();
+}
+
+void Playground::zoomIn() {
+    if (scaleFactor < ZOOM_MAX)
+        scaleFactor += ZOOM_STEP;
+    zoom(scaleFactor);
+}
+
+void Playground::zoomOut() {
+    if (scaleFactor > ZOOM_MIN)
+        scaleFactor -= ZOOM_STEP;
+    zoom(scaleFactor);
 }
 
 void Playground::setBackground(Texture texture) {
@@ -113,18 +124,6 @@ std::vector<MapObjectData> Playground::boxesToExport() {
 
 std::vector<MapObjectData> Playground::decorationsToExport() {
     return mapObjectsFilter2(nonPhysicalObjects, MapObjectType::Decoration);
-}
-
-void Playground::zoomIn() {
-    if (scaleFactor < ZOOM_MAX)
-        scaleFactor += ZOOM_STEP;
-    zoom(scaleFactor);
-}
-
-void Playground::zoomOut() {
-    if (scaleFactor > ZOOM_MIN)
-        scaleFactor -= ZOOM_STEP;
-    zoom(scaleFactor);
 }
 
 Playground::~Playground() {
