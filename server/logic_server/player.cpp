@@ -188,4 +188,12 @@ void Player::drop_item(std::vector<DroppedItem> &dropped_items){
 
 }
 
+void Player::jump_start(){
+    object.jump_start();
+}
+
+void Player::jump_end(){
+    object.jump_end();
+}
+
 //Tuple Player::get_position() { return object.get_real_position(); }

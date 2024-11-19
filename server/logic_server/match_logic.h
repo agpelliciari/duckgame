@@ -69,6 +69,8 @@ public:
     void clear_objects();
     void player_pick_up_item(int id);
     void player_drop_item(int id);
+    void player_jump_start(int id);
+    void player_jump_end(int id);
     void update_dropped_items();
     ~MatchLogic();
 };
