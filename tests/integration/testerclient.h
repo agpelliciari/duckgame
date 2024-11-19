@@ -4,12 +4,12 @@
 
 #include <optional>
 #include <string>
+#include <vector>
 
 #include "common/clientprotocol.h"
 #include "common/core/socket.h"
 #include "server/controlreceiver.h"
 #include "server/lobbycontainer.h"
-
 class TesterClient {
 protected:
     Socket sktclient;
@@ -22,8 +22,8 @@ protected:
 public:
     explicit TesterClient(Socket&& _client, Socket& _serv, LobbyContainer& lobbies);
 
-    uint8_t createClientLobbyDual();
-    uint8_t createClientLobbySingle();
+    uint8_t createClientLobbyDual(const std::vector<std::string>& lobby_maps);
+    uint8_t createClientLobbySingle(const std::vector<std::string>& lobby_maps);
 
     LobbyErrorType assertJoinLobbyFail(uint8_t id_lobby);
 

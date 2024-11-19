@@ -44,10 +44,21 @@ lobby_info ClientProtocol::sendJoinLobby(const uint8_t id_match,std::vector<int>
     // Recibir true si fallo, false si fue exito.
     return out;
 }
-uint8_t ClientProtocol::sendCreateLobby(const uint8_t count) {
+uint8_t ClientProtocol::sendCreateLobby(const uint8_t count, std::vector<std::string>& list_maps) {
     uint8_t info[2] = {LobbyActionType::CREATE_LOBBY, count};
     protocol.sendbytes(&info, sizeof(info));
-    return protocol.recvbyte();
+    uint8_t id_lobby = protocol.recvbyte();
+    
+    int count_maps = protocol.recvuint();
+    list_maps.reserve(count_maps);
+    list_maps.clear();
+    
+    while (count_maps > 0) {
+        list_maps.push_back(protocol.recvmsgstr());
+        count_maps--;
+    }
+    
+    return id_lobby;
 }
 
 uint8_t ClientProtocol::recvIDSinglePlayer() {

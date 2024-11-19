@@ -125,17 +125,16 @@ void MenuHandler::playerLeftLobby(int id) {
 // METODOS PARA RECIBIR NOTIFICACIONES DEL PROTOCOLO!
 // Para recibir notificaciones de la lobby.
 // Notificacion inicial sobre si se pudo crear/unirse a una lobby.
-void MenuHandler::createdLobbyDual(unsigned int id_lobby) {
+void MenuHandler::createdLobbyDual(unsigned int id_lobby, const std::vector<std::string>& maps) {
     std::cout << "Lobby creada dual con id " << id_lobby << std::endl;
     setLobbyId(id_lobby);
-    std::vector<std::string> maps = {"MAPACHE", "parkour", "does not exist"};
     setLobbyMaps(maps);
     addDuoToLobby();
 }
-void MenuHandler::createdLobbySolo(unsigned int id_lobby) {
+void MenuHandler::createdLobbySolo(unsigned int id_lobby, const std::vector<std::string>& maps) {
     std::cout << "Lobby creada solo con id " << id_lobby << std::endl;
     setLobbyId(id_lobby);
-    std::vector<std::string> maps = {"MAPACHE", "parkour", "does not exist"};
+    //std::vector<std::string> maps = {"MAPACHE", "parkour", "does not exist"};
     setLobbyMaps(maps);
     addSoloToLobby();
 }

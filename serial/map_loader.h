@@ -2,8 +2,8 @@
 #define LIB_MAP_LOADER
 
 #include <list>
+#include <vector>
 #include <string>
-
 #include "./map_deserializer.h"
 
 
@@ -16,8 +16,9 @@ protected:
     };
 
     std::list<struct ReferencedMap> maps;  // cppcheck-suppress unusedStructMember
-
+    std::vector<std::string> list_maps;
 public:
+    MapLoader(const char* root_maps);
     MapLoader();
     // Asumamos por ahora que no se quiere permitir copias..
     MapLoader(const MapLoader&) = delete;
@@ -30,5 +31,8 @@ public:
     MapDeserializer& getLoader(const char* mapname);
 
     void removeLoader(const std::string& loader_id);
+
+    const std::vector<std::string>& registeredMaps() const;
+
 };
 #endif

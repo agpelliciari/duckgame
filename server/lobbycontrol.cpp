@@ -20,6 +20,8 @@ Match& LobbyControl::resolveMatch(bool* isanfitrion) {
         std::cerr << " created lobby id: " << (int)newlobby.getID() << std::endl;
         // Send back id...
         protocol.notifyid(newlobby.getID());
+        
+        protocol.sendmaplist(lobbies.registeredMaps());
 
         return newlobby;
     }

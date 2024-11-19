@@ -51,8 +51,8 @@ public:
 
 
     // Notificacion inicial sobre si se pudo crear/unirse a una lobby.
-    void createdLobbyDual(unsigned int id_lobby) override;
-    void createdLobbySolo(unsigned int id_lobby) override;
+    void createdLobbyDual(unsigned int id_lobby, const std::vector<std::string>& maps) override;
+    void createdLobbySolo(unsigned int id_lobby, const std::vector<std::string>& maps) override;
 
     void joinedLobbyDual(const GameContext& context) override;
     void joinedLobbySolo(const GameContext& context) override;
