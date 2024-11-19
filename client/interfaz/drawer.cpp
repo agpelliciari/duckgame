@@ -73,7 +73,7 @@ void Drawer::drawPlayerInfo(const PlayerDTO& player, const std::string color) {
         }
     } else {
         renderer.Copy(textures.getTexture("/ui/iconSheet.png"), SDL2pp::Rect(32, 16, 16, 16),
-                      SDL2pp::Rect(20 + 90 * (player.id - 1), 4, 16, 16));
+                      SDL2pp::Rect(40 + 90 * (player.id - 1), 6, 16, 16));
     }
 
     if (!player.helmet) {
@@ -182,43 +182,155 @@ void Drawer::drawBackground() {
 
 void Drawer::drawObjects(const MatchDto& matchDto) {
     for (const MapObject& object: context.map.objects) {
-        renderer.Copy(textures.getTexture(object.texture),
-                      SDL2pp::Rect(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT),
-                      SDL2pp::Rect(camera.getScreenX(object.column * BLOCK_WIDTH),
-                                   camera.getScreenY(-object.row * BLOCK_HEIGHT),
-                                   camera.getScaledSize(BLOCK_WIDTH),
-                                   camera.getScaledSize(BLOCK_HEIGHT)));
+        drawMapObject(object);
     }
 
-    for (const auto& object:
-         matchDto.objects) {  // modificar por switch cuando se agreguen todos los objetos
-        if (object.type == TypeDynamicObject::BOX) {
+    for (const DynamicObjDTO& object: matchDto.objects) {
+        drawDynamicObject(object);
+    }
+}
+
+void Drawer::drawMapObject(const MapObject& object) {
+    renderer.Copy(
+            textures.getTexture(object.texture), SDL2pp::Rect(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT),
+            SDL2pp::Rect(camera.getScreenX(object.column * BLOCK_WIDTH),
+                         camera.getScreenY(-object.row * BLOCK_HEIGHT),
+                         camera.getScaledSize(BLOCK_WIDTH), camera.getScaledSize(BLOCK_HEIGHT)));
+}
+
+void Drawer::drawDynamicObject(const DynamicObjDTO& object) {
+    switch (object.type) {
+        case TypeDynamicObject::BOX:
             renderer.Copy(
                     textures.getTexture(context.map.boxes_tex),
                     SDL2pp::Rect(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT),
                     SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y),
                                  camera.getScaledSize(BLOCK_WIDTH),
                                  camera.getScaledSize(BLOCK_HEIGHT)));
+            break;
 
-        } else if (object.type == TypeDynamicObject::PROJECTILE) {
+        case TypeDynamicObject::PROJECTILE:
             renderer.Copy(
-                    textures.getTexture(TextureContainer::PISTOL_BULLET), SDL2pp::Rect(0, 0, 3, 8),
+                    textures.getTexture("/weapons/chainBullet.png"), SDL2pp::Rect(0, 0, 3, 8),
                     SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(object.pos.y),
                                  camera.getScaledSize(3), camera.getScaledSize(8)));
+            break;
 
-        } else if (object.type == TypeDynamicObject::PISTOLA_COWBOY) {
+        case TypeDynamicObject::LASER:
             renderer.Copy(
-                    textures.getTexture(TextureContainer::COWBOY_GUN),
+                    textures.getTexture("/weapons/laserBeam.png"), SDL2pp::Rect(0, 0, 1, 8),
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y),
+                                 camera.getScaledSize(1), camera.getScaledSize(8)));
+            break;
+
+        case TypeDynamicObject::BURST:
+            // dibujado del burst, no lo encontre en res
+            renderer.Copy(
+                    textures.getTexture("/notexture.png"),
+                    SDL2pp::Rect(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT),
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y),
+                                 camera.getScaledSize(BLOCK_WIDTH),
+                                 camera.getScaledSize(BLOCK_HEIGHT)));
+            break;
+
+        case TypeDynamicObject::HELMET:
+            renderer.Copy(
+                    textures.getTexture("/armors/helmetPickup.png"), SDL2pp::Rect(0, 0, 16, 16),
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y),
+                                 camera.getScaledSize(16), camera.getScaledSize(16)));
+            break;
+
+        case TypeDynamicObject::ARMOR:
+            renderer.Copy(
+                    textures.getTexture("/armors/chestPlatePickup.png"), SDL2pp::Rect(0, 0, 16, 16),
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y),
+                                 camera.getScaledSize(16), camera.getScaledSize(16)));
+            break;
+
+        case TypeDynamicObject::GRANADA:
+            renderer.Copy(
+                    textures.getTexture("/weapons/grenade.png"), SDL2pp::Rect(0, 0, 16, 16),
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y),
+                                 camera.getScaledSize(16), camera.getScaledSize(16)));
+            break;
+
+        case TypeDynamicObject::BANANA:
+            renderer.Copy(
+                    textures.getTexture("/weapons/banana.png"), SDL2pp::Rect(0, 0, 16, 16),
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y),
+                                 camera.getScaledSize(16), camera.getScaledSize(16)));
+            break;
+
+        case TypeDynamicObject::PEW_PEW_LASER:
+            renderer.Copy(
+                    textures.getTexture("/weapons/pewpewLaser.png"),
+                    SDL2pp::Rect(0, 0, PEW_PEW_LASER_SIZE, PEW_PEW_LASER_SIZE),
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y),
+                                 camera.getScaledSize(PEW_PEW_LASER_SIZE),
+                                 camera.getScaledSize(PEW_PEW_LASER_SIZE)));
+            break;
+
+        case TypeDynamicObject::LASER_RIFLE:
+            renderer.Copy(
+                    textures.getTexture("/weapons/laserRifle.png"), SDL2pp::Rect(0, 0, 32, 32),
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y),
+                                 camera.getScaledSize(32), camera.getScaledSize(32)));
+            break;
+
+        case TypeDynamicObject::AK_47:
+            renderer.Copy(
+                    textures.getTexture("/weapons/ak47.png"), SDL2pp::Rect(0, 0, 32, 32),
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y),
+                                 camera.getScaledSize(32), camera.getScaledSize(32)));
+            break;
+
+        case TypeDynamicObject::PISTOLA_DE_DUELOS:
+            renderer.Copy(
+                    textures.getTexture("/weapons/pistol.png"), SDL2pp::Rect(0, 0, 18, 18),
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y),
+                                 camera.getScaledSize(18), camera.getScaledSize(18)));
+            break;
+
+        case TypeDynamicObject::PISTOLA_COWBOY:
+            renderer.Copy(
+                    textures.getTexture("/weapons/cowboyPistol.png"),
                     SDL2pp::Rect(0, 0, COWBOY_GUN_WIDTH, COWBOY_GUN_HEIGHT),
                     SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y),
                                  camera.getScaledSize(COWBOY_GUN_WIDTH - 6),
                                  camera.getScaledSize(COWBOY_GUN_HEIGHT - 6)));
-        } else if (object.type == TypeDynamicObject::LASER) {
+            break;
+
+        case TypeDynamicObject::MAGNUM:
             renderer.Copy(
-                    textures.getTexture(TextureContainer::LASER_BEAM), SDL2pp::Rect(0, 0, 1, 8),
+                    textures.getTexture("/weapons/magnum.png"),
+                    SDL2pp::Rect(0, 0, MAGNUM_SIZE, MAGNUM_SIZE),
                     SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y),
-                                 camera.getScaledSize(1), camera.getScaledSize(8)));
-        }
+                                 camera.getScaledSize(MAGNUM_SIZE),
+                                 camera.getScaledSize(MAGNUM_SIZE)));
+            break;
+
+        case TypeDynamicObject::ESCOPETA:
+            renderer.Copy(
+                    textures.getTexture("/weapons/shotgun.png"), SDL2pp::Rect(0, 0, 32, 32),
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y),
+                                 camera.getScaledSize(32), camera.getScaledSize(32)));
+            break;
+
+        case TypeDynamicObject::SNIPER:
+            renderer.Copy(
+                    textures.getTexture("/weapons/sniper.png"), SDL2pp::Rect(0, 0, 33, 9),
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y),
+                                 camera.getScaledSize(33), camera.getScaledSize(9)));
+            break;
+
+        default:
+            renderer.Copy(
+                    textures.getTexture("/notexture.png"),
+                    SDL2pp::Rect(0, 0, BLOCK_WIDTH, BLOCK_HEIGHT),
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y),
+                                 camera.getScaledSize(BLOCK_WIDTH),
+                                 camera.getScaledSize(BLOCK_HEIGHT)));
+            break;
     }
 }
 

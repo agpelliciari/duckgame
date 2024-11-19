@@ -66,7 +66,6 @@ private:
 
     void drawPlayer(const PlayerDTO& player);
 
-    // HOOD
     void drawPlayerInfo(const PlayerDTO& player, const std::string color);
 
     void drawIndicator(const PlayerDTO& player, bool isMainPlayer);
@@ -80,6 +79,10 @@ private:
     void drawBackground();
 
     void drawObjects(const MatchDto& matchDto);
+
+    void drawMapObject(const MapObject& object);
+
+    void drawDynamicObject(const DynamicObjDTO& object);
 
     void drawStatusBar();
 
