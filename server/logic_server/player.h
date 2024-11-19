@@ -17,6 +17,7 @@
 #include "physical_bullet.h"
 #include "spawn_place.h"
 #include "duel_pistol.h"
+#include "dropped_item.h"
 
 
 class Player {
@@ -48,8 +49,8 @@ public:
     void update(const MatchMap& colition_map);
     void stop_moving_x();
     void shoot(std::vector <PhysicalBullet> &bullets);
-    void pick_up_item(std::vector<SpawnPlace> &spawn_places);
-    void drop_item();
+    void pick_up_item(std::vector<SpawnPlace> &spawn_places, std::vector<DroppedItem> &dropped_items);
+    void drop_item(std::vector<DroppedItem> &dropped_items);
     void take_damage();
     void aim_up_start();
     void aim_up_end();

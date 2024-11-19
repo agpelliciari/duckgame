@@ -36,3 +36,8 @@ void MagnumWeapon::shoot(ShootingDirection direction,
         ammo --;
     }
 }
+
+void MagnumWeapon::get_type(TypeDynamicObject &type){
+    type = TypeDynamicObject::MAGNUM;
+}
+

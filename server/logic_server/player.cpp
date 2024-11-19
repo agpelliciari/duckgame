@@ -156,7 +156,7 @@ void Player::stay_down_end(){
     object.stay_down_end();
 }
 
-void Player::pick_up_item(std::vector<SpawnPlace> &spawn_places){
+void Player::pick_up_item(std::vector<SpawnPlace> &spawn_places, std::vector<DroppedItem> &dropped_items){
     if (weapon != nullptr){
         return;
     }
@@ -167,10 +167,25 @@ void Player::pick_up_item(std::vector<SpawnPlace> &spawn_places){
         if (spawn_place.is_on_range(player_position.x + player_dimension.x / 2,
                                     player_position.y + player_dimension.y / 2)) {
             weapon = spawn_place.get_weapon();
+            return;
+        }
+    }
+
+    for (DroppedItem &dropped_item : dropped_items) {
+        if (dropped_item.is_on_range(player_position.x + player_dimension.x / 2,
+                                    player_position.y + player_dimension.y / 2)){
+            weapon = dropped_item.get_weapon();
+            return;
         }
     }
 }
 
-void Player::drop_item(){}
+void Player::drop_item(std::vector<DroppedItem> &dropped_items){
+    if (weapon != nullptr){
+        dropped_items.push_back(DroppedItem(std::move(weapon), this->get_map_position().x, this->get_map_position().y, 16, 16));
+        weapon = nullptr;
+    }
+
+}
 
 //Tuple Player::get_position() { return object.get_real_position(); }
