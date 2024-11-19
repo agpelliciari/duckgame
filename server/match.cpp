@@ -69,6 +69,8 @@ void Match::init(MapLoader& maps, const char* mapname) {
     // Notify/start players. Ya podrian enviar la info del mapa.
     looper.start_players(players, stats);
     looper.add_objects(objects);
+    
+    this->stats.state = STARTED_ROUND;
     players.finishLobbyMode();
 
     start();
@@ -159,13 +161,14 @@ void Match::run() {
     }
 
     if (this->stats.isRunning()) {
-        std::cout << "SHOULD HAPPEN? NOT FINISHED? FORCE CANCEL!\n";
+        std::cout << "--->Unfinished Match FORCE CANCEL!\n";
         this->stats.state = CANCELADA;
     }
 
     // Checkea si el finish fue natural o forzado.
 
     // notifica los playeres. Del final.
+    std::cout << "Disconnect all players from match " << getID()<<std::endl;
     players.forceDisconnectAll();
 }
 
@@ -187,6 +190,8 @@ void Match::finish(MapLoader& maps) {
     }
     // El finish en caso de no estar corriendo.
     // Asume que se esta en lobby mode.
+    std::cout << "Disconnect all players from match at lobby " << getID()<<std::endl;
+    stats.state = CANCELADA;
     players.forceDisconnectAll();
 }
 

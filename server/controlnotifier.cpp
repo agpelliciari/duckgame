@@ -37,31 +37,28 @@ bool ControlNotifier::runLobby() {
         protocol.close();  // Si no esta cerrado, cerralo, asi se sale el controller tambien.
         return true;
     } catch (const ClosedQueue& error) {
-
-        if (!protocol.isactive()) {
-            // Se presiono la q. O es host.. ya se cerro el protocol.
+    
+        if (protocol.isactive()) {
+            if(match.isrunning()){
+                protocol.notifyinfo(LobbyResponseType::STARTED_LOBBY, match.playercount());
+                protocol.sendmapinfo(match.getMap());
+                return false;
+            }
+            std::cout << "Notifier lobby recv cancel match?\n";
+            protocol.close();
+            // Fue cancelada la partida?
             return true;
         }
-
-        // Si el player esta closed, es el host?
-        if (player.isclosed()) {
-            std::cout << "-------------------HOST NOTIFIER CLOSE!?\n";
-            protocol.notifyinfo(LobbyResponseType::GAME_ERROR, LobbyErrorType::SERVER_ERROR);
-            protocol.close();  // Si no esta cerrado, cerralo, asi se sale el controller tambien.
-            return true;
-        }
-
-        protocol.notifyinfo(LobbyResponseType::STARTED_LOBBY, match.playercount());
-
-        protocol.sendmapinfo(match.getMap());
-        return false;
+        
+        // El protocol ya fue cerrado, se desconecto el cliente. por ejemplo el host. Al cancelar
+        return true;
     }
 }
 
 
 bool ControlNotifier::runPostGame(MatchStateType state) {
-    if (state == TERMINADA || state == CANCELADA) {
-        //std::cout << "------>NOTIFIER ENDED OR CANCELED MATCH!\n";
+    if (state == TERMINADA || state == CANCELADA ) {
+        //std::cout << "------>NOTIFIER "<< player.toString() <<" ENDED OR CANCELED MATCH!\n";
         protocol.close();  // Si no esta cerrado, cerralo, asi se sale el controller tambien.
         return false;      // Se cerro el game
     }
@@ -71,21 +68,12 @@ bool ControlNotifier::runPostGame(MatchStateType state) {
         return true;
     }
     try {
-        // Espera por la info ... de timer tick, que nunca sera recibida.
-        // El pause end no es pasado. Ya que abria una race condition. Hasta que se vuelva 
-        // game mode.
-        lobby_info info = player.popinfo(); 
-        
+        player.waitgamemode();
+        std::cerr << "Despausada " << (int)match.getID() << " info to " << player.toString() << std::endl;            
+        protocol.sendstats(player.getStats());
         return true;
-    } catch (const ClosedQueue& error) {
-        
-        if(match.isrunning()){
-            //std::cerr << "Despausada " << (int)match.getID() << " info to " << player.toString() << std::endl;            
-            protocol.sendstats(player.getStats());
-            return true;
-        }
-        
-        //std::cerr << "At Pause Cancelada " << (int)match.getID() << " info to " << player.toString() << std::endl;
+    } catch (const ClosedQueue& error) {        
+        std::cerr << "At Pause Cancelada " << (int)match.getID() << " info to " << player.toString() << std::endl;
         protocol.close();  // Closed server while in pause?
         return false;
     }
@@ -103,8 +91,10 @@ MatchStateType ControlNotifier::runGame() {
         return CANCELADA;
     } catch (const ClosedQueue& error) {
         const MatchStatsInfo& stats = player.getStats();
-        //std::cout << player.toString() << " exited game mode...:: " << stats.parse() << std::endl;
-        protocol.sendstats(stats);
+        if(stats.state != CANCELADA){ // Si fue cancelada el close es suficiente
+            //std::cout << player.toString() << " exited game mode...:: " << stats.parse() << std::endl;
+            protocol.sendstats(stats);
+        }
         return stats.state;
     }
 }

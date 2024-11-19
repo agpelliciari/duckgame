@@ -33,6 +33,7 @@ private:
     const unsigned int max_size;
 
     bool closed;
+    bool dirty;
 
     std::mutex mtx;
     std::condition_variable is_not_full;
@@ -176,14 +177,44 @@ public:
     }
 
     void close() {
+        if(tryclose()){
+            return;
+        }
+        throw std::runtime_error("The queue is already closed.");
+    }
+    bool tryclose() {
         std::unique_lock<std::mutex> lck(mtx);
 
         if (closed) {
-            throw std::runtime_error("The queue is already closed.");
+             return false;
         }
 
         closed = true;
+        dirty = true;
         is_not_empty.notify_all();
+        
+        return true;
+    }
+    
+    void waitreopen(){
+        std::unique_lock<std::mutex> lck(mtx);
+        
+        while (closed) {
+            is_not_full.wait(lck);
+        }
+    }
+    
+    void resetdirty(){
+        std::unique_lock<std::mutex> lck(mtx);
+        dirty = false;
+    }
+    
+    void checkdirty(){
+        std::unique_lock<std::mutex> lck(mtx);
+        if(dirty){
+            dirty = false;
+            throw ClosedQueue();
+        }    
     }
 
     bool isclosed() {
@@ -198,6 +229,8 @@ public:
             std::queue<T, C> new_q;
             std::swap(q, new_q);
             closed = false;
+            
+            is_not_full.notify_all();
             return true;
         }
 
