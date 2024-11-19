@@ -105,6 +105,7 @@ void ControlNotifier::run() {
             return;
         }
         
+        //std::cout << "--------> SEND FIRST STATS" << player.toString() << " "<< player.getStats().parse() << "\n"; 
         // Send first stats..
         protocol.sendstats(player.getStats());
 

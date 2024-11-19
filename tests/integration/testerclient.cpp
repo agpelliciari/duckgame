@@ -2,6 +2,7 @@
 
 #include <utility>
 #include <vector>
+#include "common/dtosgame.h"
 
 #include "gtest/gtest.h"
 
@@ -69,6 +70,22 @@ void TesterClient::assertLobbyStarted(uint8_t count) {
     EXPECT_EQ((int)info.action, (int)LobbyResponseType::STARTED_LOBBY)
             << "INITED Match succesfully ";
     EXPECT_EQ(info.data, count) << "Total count at start is correct";
+    
+    
+    // Chequea map info
+    struct MapData map;
+    client.recvmapdata(map);
+    
+    
+    // Y tambien chequea el stats info para el primero
+    MatchDto upd;
+    MatchStatsInfo stats;
+    EXPECT_FALSE(client.recvstate(stats,upd));
+    
+    std::cout << "RECV S "<< stats.parse()<<std::endl;
+    EXPECT_EQ(stats.state, STARTED_ROUND);
+    EXPECT_EQ(stats.numronda, 1);
+    
 }
 
 void TesterClient::assertLobbyHostLeft() {

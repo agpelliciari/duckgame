@@ -116,6 +116,8 @@ public:
             result << " LOAADING ";
         } else if (state == ROUND_END) {
             result << " ROUND END!! ";
+        } else if (state == STARTED_ROUND) {
+            result << " ROUND START!! ";
         } else {
             result << " UNKNOWNNN STATE!! ";
         }
