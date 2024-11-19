@@ -38,7 +38,7 @@ void TesterClient::assertLobbyStarted(uint8_t count) {
     lobby_info info;
     client.recvlobbyinfo(info);
 
-    EXPECT_EQ(info.action, (uint8_t)LobbyResponseType::STARTED_LOBBY)
+    EXPECT_EQ((int)info.action, (int)LobbyResponseType::STARTED_LOBBY)
             << "INITED Match succesfully ";
     EXPECT_EQ(info.data, count) << "Total count at start is correct";
 }
@@ -51,21 +51,21 @@ LobbyErrorType TesterClient::assertLobbyError() {
     lobby_info info;
     client.recvlobbyinfo(info);
 
-    EXPECT_EQ(info.action, LobbyResponseType::GAME_ERROR) << "Type info is error";
+    EXPECT_EQ((int)info.action, (int)LobbyResponseType::GAME_ERROR) << "Type info is error";
     return (LobbyErrorType)info.data;
 }
 
 void TesterClient::assertLobbyInfoJoined(uint8_t id) {
     lobby_info info;
     client.recvlobbyinfo(info);
-    EXPECT_EQ(info.action, LobbyResponseType::PLAYER_NEW) << "client was notified about a join";
+    EXPECT_EQ((int)info.action, (int)LobbyResponseType::PLAYER_NEW) << "client was notified about a join";
     EXPECT_EQ(info.data, id) << "Id of joined is correct";
 }
 
 void TesterClient::assertLobbyInfoLeft(uint8_t id) {
     lobby_info info;
     client.recvlobbyinfo(info);
-    EXPECT_EQ(info.action, LobbyResponseType::PLAYER_LEFT) << "client was notified about a join";
+    EXPECT_EQ((int)info.action, (int)LobbyResponseType::PLAYER_LEFT) << "client was notified about a join";
     EXPECT_EQ(info.data, id) << "Id of joined is correct";
 }
 
@@ -75,7 +75,7 @@ uint8_t TesterClient::assertJoinLobbySingle(uint8_t id_lobby, uint8_t count) {
     std::vector<int> idsCurr;
     
     lobby_info info = client.sendJoinLobby(id_lobby, idsCurr, 1);
-    EXPECT_EQ(info.action, LobbyResponseType::JOINED_LOBBY) << "Joined Match succesfully ";
+    EXPECT_EQ((int)info.action, (int)LobbyResponseType::JOINED_LOBBY) << "Joined Match succesfully ";
     EXPECT_EQ(info.data, count) << "Total count is correct?";
     
     EXPECT_EQ(idsCurr.size(), count) << "players received count is correct?";
@@ -86,7 +86,7 @@ uint8_t TesterClient::assertJoinLobbySingle(uint8_t id_lobby, uint8_t count) {
 LobbyErrorType TesterClient::assertJoinLobbyFail(uint8_t id_lobby) {
     std::vector<int> idsCurr;
     lobby_info info = client.sendJoinLobby(id_lobby, idsCurr, 2);
-    EXPECT_EQ(info.action, LobbyResponseType::GAME_ERROR) << "Joined response is game error";
+    EXPECT_EQ((int)info.action, (int)LobbyResponseType::GAME_ERROR) << "Joined response is game error";
     return (LobbyErrorType)info.data;
 }
 
@@ -94,7 +94,7 @@ LobbyErrorType TesterClient::assertJoinLobbyFail(uint8_t id_lobby) {
 uint8_t TesterClient::assertJoinLobbyDual(uint8_t id_lobby, uint8_t count, uint8_t* first) {
     std::vector<int> idsCurr;
     lobby_info info = client.sendJoinLobby(id_lobby, idsCurr, 2);
-    EXPECT_EQ(info.action, LobbyResponseType::JOINED_LOBBY) << "Joined Match succesfully ";
+    EXPECT_EQ((int)info.action, (int)LobbyResponseType::JOINED_LOBBY) << "Joined Match succesfully ";
     EXPECT_EQ(info.data, count) << "Total count is correct?";
     EXPECT_EQ(idsCurr.size(), count) << "players received count is correct?";
 

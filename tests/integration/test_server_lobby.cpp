@@ -15,7 +15,7 @@ protected:
     LobbyContainer lobbies;
     std::string mapusing;
 
-    inline TestIntegrationLobby(): sktserver("2048"), lobbies(), mapusing("testmap") {}
+    inline TestIntegrationLobby(): sktserver("2048"), lobbies(), mapusing("test/testmap") {}
 
     Socket openClient() { return Socket(NULL, "2048"); }
 
@@ -56,7 +56,9 @@ TEST_F(TestIntegrationLobby, SimpleCreateLobbyDualInmediateDisconnect) {
     host.close();
 }
 
-
+/*
+// Ahora esto traeria problemas, ya que no esta full definido que se hace
+// definitivamente 1 player no se podria
 TEST_F(TestIntegrationLobby, SimpleCreateLobbySingle) {
 
     TesterClient host(openClient(), sktserver, lobbies);
@@ -68,6 +70,7 @@ TEST_F(TestIntegrationLobby, SimpleCreateLobbySingle) {
     // 1 is count of players. Should not start maybe?
     host.assertLobbyStarted(1);
 }
+*/
 
 
 TEST_F(TestIntegrationLobby, SimpleCreateLobbyAndJoin) {
