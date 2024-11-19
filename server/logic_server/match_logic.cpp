@@ -22,11 +22,11 @@ MatchLogic::MatchLogic(): colition_map(800, 640) {
     };
 
     this->command_map[PlayerActionType::JUMP] = [this](int index) {
-        this->add_player_speed(index, 0, 50);
+        this->player_jump_start(index);
     };
 
     this->command_map[PlayerActionType::FLAPPING_END] = [this](int index) {
-        this->add_player_speed(index, 0, 0);
+        this->player_jump_end(index);
     };
     /*
     this->command_map[PlayerActionType::STAY_DOWN] = [this](int index) {
@@ -54,11 +54,11 @@ MatchLogic::MatchLogic(): colition_map(800, 640) {
     };
 
     this->command_map[PlayerActionType::PICK_UP_ITEM] = [this](int index) {
-        std::cout<< "PICK UP ITEM" << std::endl;
+
         this->player_pick_up_item(index);
     };
     this->command_map[PlayerActionType::DROP_ITEM] = [this](int index) {
-        std::cout<< "DROP ITEM" << std::endl;
+
         this->player_drop_item(index);
     };
     // this->command_map[3] = [this](int index) { this->add_player_speed(index, 0, 0); };
@@ -92,6 +92,24 @@ void MatchLogic::player_shoot(int id) {
     for (Player& player: players) {
         if (player.same_id(id)) {
             player.shoot(this->bullets);
+            return;
+        }
+    }
+}
+
+void MatchLogic::player_jump_start(int id) {
+    for (Player& player: players) {
+        if (player.same_id(id)) {
+            player.jump_start();
+            return;
+        }
+    }
+}
+
+void MatchLogic::player_jump_end(int id) {
+    for (Player& player: players) {
+        if (player.same_id(id)) {
+            player.jump_end();
             return;
         }
     }

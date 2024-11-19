@@ -33,6 +33,8 @@ class PhysicalPlayer: public PhysicalObject {
         void react_to_up_collision(Collision collision) override;
         void stay_down_start();
         void stay_down_end();
+        void jump_start();
+        void jump_end();
         void update_action(TypeMoveAction& move_action);
         void stop_moving_x();
 

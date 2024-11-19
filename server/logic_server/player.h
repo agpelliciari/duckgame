@@ -56,6 +56,9 @@ public:
     void aim_up_end();
     void stay_down_start();
     void stay_down_end();
+    void jump_start();
+    void jump_end();
+
     void update_shooting_direction();
     Tuple get_map_position();
     Tuple get_dimension();

@@ -42,12 +42,14 @@ void PhysicalPlayer::react_to_sides_collision(Collision collision){
 
 void PhysicalPlayer::react_to_down_collision(Collision collision){
         speed.y = 0;
+        acceleration.y = -10;
+        flap_attemps = 10;
+        on_air = false;
 }
 
 void PhysicalPlayer::react_to_up_collision(Collision collision){
         speed.y = 0;
         acceleration.y = -10;
-        flap_attemps = 10;
 }
 
 void PhysicalPlayer::stop_moving_x(){
@@ -61,4 +63,21 @@ void PhysicalPlayer::stay_down_start(){
 
 void PhysicalPlayer::stay_down_end(){
     dimension.y += 15;
+}
+
+void PhysicalPlayer::jump_start(){
+    if (on_air) {
+        if (speed.y < 0 && flap_attemps > 0) {
+            this->add_speed(0, 10);
+            acceleration.y = -3;
+            flap_attemps --;
+        }
+    } else {
+        add_speed(0, 50);
+        on_air = true;
+    }
+}
+
+void PhysicalPlayer::jump_end(){
+    acceleration.y = -10;
 }
