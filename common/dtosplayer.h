@@ -2,6 +2,7 @@
 #define LIB_DTOS_PLAYER_H
 
 #include <cstdint>
+#include <vector>
 #include "./dtosobject.h"
 
 typedef unsigned int player_id;
@@ -79,7 +80,7 @@ struct PlayerDTO {
     bool is_alive;
     TypeWeapon weapon;
     TypeMoveAction move_action;
-    TypeDoingAction doing_action;
+    std::vector<TypeDoingAction> doing_actions;
 
     bool helmet;
     bool chest_armor;
@@ -92,7 +93,7 @@ struct PlayerDTO {
             is_alive(alive),
             weapon(w),
             move_action(action),
-            doing_action(TypeDoingAction::NONE),
+            doing_actions(),
             helmet(h),
             chest_armor(armor),
             aiming_up(false) {}
@@ -103,7 +104,7 @@ struct PlayerDTO {
             is_alive(alive),
             weapon(TypeWeapon::NONE),
             move_action(state),
-            doing_action(TypeDoingAction::NONE),
+            doing_actions(),
             helmet(false),
             chest_armor(false),
             aiming_up(false) {}

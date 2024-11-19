@@ -124,7 +124,12 @@ void ServerProtocol::sendplayer(const PlayerDTO& player) {
 
     this->sendbyte((uint8_t)player.weapon);
     this->sendbyte((uint8_t)player.move_action);
-    this->sendbyte((uint8_t)player.doing_action);
+    
+    this->sendbyte((uint8_t)player.doing_actions.size());
+    
+    for(const TypeDoingAction& action: player.doing_actions){
+        this->sendbyte((uint8_t)action);
+    }
 
     // Se podria juntar en 1 solo byte. Por ahora no?
     this->sendbyte((uint8_t)player.is_alive);

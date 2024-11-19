@@ -153,6 +153,28 @@ void ClientProtocol::recvlobbyplayers(std::vector<int>& players){
     }
 }
 
+
+void ClientProtocol::recvplayer(PlayerDTO& player){
+    player.id = protocol.recvuint();
+    player.pos.x = protocol.recvuint();
+    player.pos.y = protocol.recvuint();
+
+    player.weapon = (TypeWeapon)protocol.recvbyte();
+    player.move_action = (TypeMoveAction)protocol.recvbyte();
+    
+    int size_actions = protocol.recvbyte();
+    player.doing_actions.reserve(size_actions);
+    
+    while(size_actions > 0){
+         player.doing_actions.push_back((TypeDoingAction)protocol.recvbyte());
+         size_actions--;
+    }        
+
+    player.is_alive = protocol.recvbyte();
+    player.helmet = protocol.recvbyte();
+    player.chest_armor = protocol.recvbyte();
+    player.aiming_up = protocol.recvbyte();
+}
 void ClientProtocol::recvmatch(MatchDto& outstate) {
     int playercount = (int)protocol.recvbyte();
 
@@ -166,21 +188,7 @@ void ClientProtocol::recvmatch(MatchDto& outstate) {
 
     while (playercount > 0) {
         PlayerDTO player;
-
-        player.id = protocol.recvuint();
-        player.pos.x = protocol.recvuint();
-        player.pos.y = protocol.recvuint();
-
-        player.weapon = (TypeWeapon)protocol.recvbyte();
-        player.move_action = (TypeMoveAction)protocol.recvbyte();
-        player.doing_action = (TypeDoingAction)protocol.recvbyte();
-
-
-        player.is_alive = protocol.recvbyte();
-        player.helmet = protocol.recvbyte();
-        player.chest_armor = protocol.recvbyte();
-        player.aiming_up = protocol.recvbyte();
-
+        recvplayer(player);
 
         outstate.players.emplace(iterPlayer, player);
 

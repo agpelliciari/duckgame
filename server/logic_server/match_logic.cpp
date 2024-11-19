@@ -224,9 +224,11 @@ void MatchLogic::update_colition_map() {
 void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos, std::vector<DynamicObjDTO>& objects) {
     for (Player &player: players) {
 
-        PlayerDTO dto = {0, false, 0, 0, TypeWeapon::NONE, false, false, TypeMoveAction::NONE};
+        PlayerDTO dto;
+        
+        dto.doing_actions.push_back(TypeDoingAction::NONE);
         player.get_data(dto.id, dto.pos.x, dto.pos.y, dto.weapon, dto.helmet, dto.chest_armor,
-                        dto.move_action, dto.doing_action);
+                        dto.move_action, dto.doing_actions[0]);
 
         dtos.push_back(dto);
     }
@@ -287,8 +289,9 @@ void MatchLogic::add_items(const std::vector<struct MapPoint>& items){
 
 void MatchLogic::add_blocks(const std::vector<struct MapPoint>& blocks){
 
+    // MULTIPLICA POR EL SIZE!
     for (const struct MapPoint& block: blocks) {
-        this->blocks.push_back(MapPoint(block.x, block.y));
+        this->blocks.push_back(MapPoint(16*block.x, 16*block.y));
     }
 }
 

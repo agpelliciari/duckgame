@@ -26,7 +26,7 @@ void Animation::updateSprite(const MatchDto& matchDto) {
 }
 
 void Animation::updateDoingActionAnimation(AnimationBuilder& builder, const PlayerDTO& player) {
-    switch (player.doing_action) {
+    switch (player.doing_actions[0]) {
         case TypeDoingAction::SHOOTING:
             std::cout << "SHOOTING" << std::endl;
             builder.doingActionSpriteX = 0;

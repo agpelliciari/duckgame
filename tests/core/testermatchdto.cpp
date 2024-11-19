@@ -16,11 +16,23 @@ void TesterMatchDTO::assertPlayerAreEq(const PlayerDTO& expected, const PlayerDT
     ASSERT_EQ(given.pos.y, expected.pos.y) << "Players y are the same";
     ASSERT_EQ(given.weapon, expected.weapon) << "Players weapon are the same";
     ASSERT_EQ(given.move_action, expected.move_action) << "Players move_action are the same";
-    ASSERT_EQ(given.doing_action, expected.doing_action) << "Players doing_action are the same";
     ASSERT_EQ(given.is_alive, expected.is_alive) << "Players is alive are the same";
     ASSERT_EQ(given.helmet, expected.helmet) << "Players helmet are the same";
     ASSERT_EQ(given.chest_armor, expected.chest_armor) << "Players chest armor are the same";
     ASSERT_EQ(given.aiming_up, expected.aiming_up) << "Players aiming up are the same";
+
+    ASSERT_EQ(given.doing_actions.size(), expected.doing_actions.size()) << "Players doing_action are the same";
+    
+    auto iterRecv = given.doing_actions.begin();
+    auto iterExp  = expected.doing_actions.begin();
+    int ind = 0;
+    while(iterExp != expected.doing_actions.end()){
+        EXPECT_EQ(*iterRecv, *iterExp) << "Action at "<< ind <<" is the same";
+        ++iterRecv;
+        ++iterExp;
+        ind++;
+    }    
+    
 }
 
 

@@ -85,6 +85,7 @@ public:
 
     void recvstats(MatchStatsInfo& outinfo);
     void recvmatch(MatchDto& outstate);
+    void recvplayer(PlayerDTO& outplayer);
 
     void recvplayers(std::vector<int>& players);  //, const int unit);
 
