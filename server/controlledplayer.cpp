@@ -11,13 +11,13 @@
 
 // Snapshots esta cerrada inicialmente. Events esta abierta.
 ControlledPlayer::ControlledPlayer(player_id first):
-        count(1),dirtyStats(false), ids(), events(SIZE_EVENTS, false), snapshots(SIZE_SNAPSHOTS, true) {
+        count(1), ids(), events(SIZE_EVENTS, false), snapshots(SIZE_SNAPSHOTS, true) {
     ids[0] = first;
     ids[1] = first;
 }
 
 ControlledPlayer::ControlledPlayer(player_id first, player_id second):
-        count(2),dirtyStats(false), ids(), events(SIZE_EVENTS, false), snapshots(SIZE_SNAPSHOTS, true) {
+        count(2), ids(), events(SIZE_EVENTS, false), snapshots(SIZE_SNAPSHOTS, true) {
     ids[0] = first;
     ids[1] = second;
 }
@@ -34,102 +34,66 @@ player_id ControlledPlayer::getid(const uint8_t ind) const { return this->ids[in
 
 // Switch del player. Participando en una partida. No mas events de lobby, ahora snapshots.
 bool ControlledPlayer::setgamemode() {
-    std::unique_lock<std::mutex> lck(mtx);
-    if(events.isclosed()){
-       return false;
-    }
-    
     if (snapshots.reopen()) {
-        dirtyStats = true;
         match_stats.state = STARTED_ROUND;
         match_stats.numronda++;
-        //std::cout << "STARTED GAME MODE CONTROOLL\n";
-        events.close();
-        return true;
+        // Antes... para evitar una race condition
+        if(events.tryclose()){
+            return true;
+        }
+        throw GameError(SERVER_ERROR, "Inconsistent state on player, tried set game mode but was disconnected");
     }
     return false;
 }
 
+void ControlledPlayer::waitgamemode(){
+     snapshots.waitreopen();
+}
+void ControlledPlayer::waitlobbymode(){
+     events.waitreopen();
+}
+
+
 const MatchStatsInfo& ControlledPlayer::getStats(){
-      dirtyStats = false;
+      snapshots.resetdirty(); // Saca el dirty para notificar que se vio las stats.
       return match_stats;
 }
 
 // Switch del player. Participando a la lobby. No mas snapshots ahora events de lobby.
-bool ControlledPlayer::setlobbymode(const MatchStatsInfo& new_stats) {
-    std::unique_lock<std::mutex> lck(mtx);
-    if(snapshots.isclosed()){
-       return false;
-    }
-    
+bool ControlledPlayer::setlobbymode(const MatchStatsInfo& new_stats) {    
     if (events.reopen()) {
-        dirtyStats = true;    
-        match_stats = new_stats;
-        snapshots.close();
-        return true;
+        if(snapshots.tryclose()){
+            match_stats = new_stats;
+            return true;
+        }
+        throw GameError(SERVER_ERROR, "Inconsistent state on player, tried set lobby mode but was disconnected");
     }
     return false;
 }
 
-/*
-// Capaz por ahora no hace falta sincronizar
-// Pero mejor ser precavido sobre posibles race conditions.
-bool ControlledPlayer::islobbymode() {
-    std::unique_lock<std::mutex> lck(mtx);
-    return !(events.isclosed());
-}
 
-bool ControlledPlayer::isgamemode() {
-    std::unique_lock<std::mutex> lck(mtx);
-    return !(snapshots.isclosed());
-}
-*/
 
-bool ControlledPlayer::isclosed() {
-    std::unique_lock<std::mutex> lck(mtx);
-    return snapshots.isclosed() && events.isclosed();
-}
-
+// Se asume a lo sumo una de las dos queues estaria abierta.
 bool ControlledPlayer::disconnect() {
-    std::unique_lock<std::mutex> lck(mtx);
-    if (snapshots.isclosed()) {
-        if (events.isclosed()) {
-            return false;
-        }
-        
-        events.close();
-        return true;
-    }
-    
-    snapshots.close();
-    return true;
+    match_stats.state = CANCELADA;
+    return snapshots.tryclose() || events.tryclose();
 }
 
 // No hace falta sincronizar/lockear ya que si se llama a este metodo
 // La queue sigue abierta. Y no nos importa en todo caso mandar un evento extra o no.
 // O eso se dio a
 bool ControlledPlayer::recvstate(const MatchDto& state) {
-    std::unique_lock<std::mutex> lck(mtx);
-    if (snapshots.isclosed()) {
+    try{
+        snapshots.try_push(state);
+        return true;
+    } catch(const ClosedQueue& error){
         return false;
-    }
-
-    snapshots.try_push(state);
-    return true;
-}
-
-void ControlledPlayer::checkdirty(){
-    std::unique_lock<std::mutex> lck(mtx);
-    if(dirtyStats){
-        dirtyStats = false;
-        std::cout << "CHECKED DIRTY !!! IT ISS!\n";
-        throw ClosedQueue();
     }
 }
 
 // Se podria hacer de forma polimorfica/delegatoria seguro.
 MatchDto ControlledPlayer::popstate() {
-    checkdirty();
+    snapshots.checkdirty();
     return snapshots.pop(); 
 }
 
@@ -149,13 +113,12 @@ std::string ControlledPlayer::toString() {
 // recveinfo es no bloqueante! Recibe el lobby info con try_push a la queue del player
 // Todo es "bloqueante" por posibles locks... pero bueno
 bool ControlledPlayer::recvinfo(const lobby_info& dto) {
-    std::unique_lock<std::mutex> lck(mtx);
-    if (events.isclosed()) {
+    try{
+        events.try_push(dto);
+        return true;
+    } catch(const ClosedQueue& error){
         return false;
     }
-
-    events.try_push(dto);
-    return true;
 }
 
 // Pop lobby info. Bloqueante. Si no hay eventos espera a uno.

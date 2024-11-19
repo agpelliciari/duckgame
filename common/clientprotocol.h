@@ -64,7 +64,7 @@ public:
     ClientProtocol& operator=(const ClientProtocol&) = delete;
 
     lobby_info sendJoinLobby(const uint8_t id_match, std::vector<int>& players, const uint8_t count);
-    uint8_t sendCreateLobby(const uint8_t count);
+    uint8_t sendCreateLobby(const uint8_t count, std::vector<std::string>& list_maps);
 
     uint8_t recvIDSinglePlayer();
     uint8_t recvIDDualPlayer(uint8_t* player1);

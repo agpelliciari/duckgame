@@ -2,6 +2,8 @@
 #define Lobby_LISTENER_H
 
 #include "client/gamecontext.h"
+#include <string>
+#include <vector>
 
 // Clase que encapsula al protocol y mantendria el estado del juego
 // Proporcionado una interfaz para acciones del usuario.
@@ -16,8 +18,8 @@ public:
     virtual void failedCreate(const char* message) = 0;
 
 
-    virtual void createdLobbyDual(unsigned int id_lobby) = 0;
-    virtual void createdLobbySolo(unsigned int id_lobby) = 0;
+    virtual void createdLobbyDual(unsigned int id_lobby, const std::vector<std::string>& maps) = 0;
+    virtual void createdLobbySolo(unsigned int id_lobby, const std::vector<std::string>& maps) = 0;
     virtual void joinedLobbyDual(const GameContext& context) = 0;
     virtual void joinedLobbySolo(const GameContext& context) = 0;
 

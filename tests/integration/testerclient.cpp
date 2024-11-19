@@ -2,6 +2,7 @@
 
 #include <utility>
 #include <vector>
+#include "common/dtosgame.h"
 
 #include "gtest/gtest.h"
 
@@ -15,21 +16,49 @@ TesterClient::TesterClient(Socket&& _client, Socket& _serv, LobbyContainer& lobb
     receiver.value().init();
 }
 
-uint8_t TesterClient::createClientLobbyDual() {
-    uint8_t id_lobby = client.sendCreateLobby(2);
+uint8_t TesterClient::createClientLobbyDual(const std::vector<std::string>& lobby_maps) {
+    std::vector<std::string> maps;
+    uint8_t id_lobby = client.sendCreateLobby(2,maps);
 
     uint8_t first = 0;
     uint8_t second = client.recvIDDualPlayer(&first);
 
     EXPECT_EQ(first, 1) << "ID first player is 1, since its the first on the match";
     EXPECT_EQ(second, 2) << "ID first player is 2, since its the second on the match";
+    
+    EXPECT_EQ(maps.size(), lobby_maps.size()) << "Client received all maps";
+    auto iterRecv = maps.begin();
+    auto iterMap  = lobby_maps.begin();
+    int ind = 0;
+    while(iterMap != lobby_maps.end()){
+        EXPECT_EQ(*iterRecv, *iterMap) << "Map id "<< ind << "is the same";
+        ++iterRecv;
+        ++iterMap;
+        ind++;
+    }
+    
+    
     return id_lobby;
 }
 
-uint8_t TesterClient::createClientLobbySingle() {
-    uint8_t id_lobby = client.sendCreateLobby(1);
+uint8_t TesterClient::createClientLobbySingle(const std::vector<std::string>& lobby_maps) {
+    std::vector<std::string> maps;
+    uint8_t id_lobby = client.sendCreateLobby(1,maps);
     uint8_t first = client.recvIDSinglePlayer();
     EXPECT_EQ(first, 1) << "ID first player is 1, since its the first on the match";
+
+    EXPECT_EQ(maps.size(), lobby_maps.size()) << "Client received all maps";
+    auto iterRecv = maps.begin();
+    auto iterMap  = lobby_maps.begin();
+    int ind = 0;
+    while(iterMap != lobby_maps.end()){
+        EXPECT_EQ(*iterRecv, *iterMap) << "Map id "<< ind << "is the same";
+        ++iterRecv;
+        ++iterMap;
+        ind++;
+    }
+
+    
     return id_lobby;
 }
 
@@ -41,6 +70,22 @@ void TesterClient::assertLobbyStarted(uint8_t count) {
     EXPECT_EQ((int)info.action, (int)LobbyResponseType::STARTED_LOBBY)
             << "INITED Match succesfully ";
     EXPECT_EQ(info.data, count) << "Total count at start is correct";
+    
+    
+    // Chequea map info
+    struct MapData map;
+    client.recvmapdata(map);
+    
+    
+    // Y tambien chequea el stats info para el primero
+    MatchDto upd;
+    MatchStatsInfo stats;
+    EXPECT_FALSE(client.recvstate(stats,upd));
+    
+    std::cout << "RECV S "<< stats.parse()<<std::endl;
+    EXPECT_EQ(stats.state, STARTED_ROUND);
+    EXPECT_EQ(stats.numronda, 1);
+    
 }
 
 void TesterClient::assertLobbyHostLeft() {

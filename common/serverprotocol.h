@@ -4,6 +4,7 @@
 #define BUFF_LEN_CLIENT 128
 #include <atomic>
 #include <string>
+#include <vector>
 #include <utility>
 
 #include "common/core/protocol.h"
@@ -58,6 +59,7 @@ public:
     void sendplayer(const PlayerDTO& player);
 
     void sendmapinfo(const MapInfo& map);
+    void sendmaplist(const std::vector<std::string>& maps);
 
     // metodos generales para is active.
     using Protocol::close;

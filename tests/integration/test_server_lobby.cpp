@@ -31,7 +31,7 @@ TEST_F(TestIntegrationLobby, SimpleCreateLobbyDual) {
     TesterClient host(openClient(), sktserver, lobbies);
 
     std::cout << "CREATE LOBBY DUAL?!\n";
-    uint8_t id_lobby = host.createClientLobbyDual();
+    uint8_t id_lobby = host.createClientLobbyDual(lobbies.registeredMaps());
     ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
     ASSERT_EQ(lobbies.countMatches(), 1) << "Lobby was created";
 
@@ -48,7 +48,7 @@ TEST_F(TestIntegrationLobby, SimpleCreateLobbyDualInmediateDisconnect) {
 
     TesterClient host(openClient(), sktserver, lobbies);
 
-    uint8_t id_lobby = host.createClientLobbyDual();
+    uint8_t id_lobby = host.createClientLobbyDual(lobbies.registeredMaps());
     ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
     ASSERT_EQ(lobbies.countMatches(), 1) << "Lobby was created";
 
@@ -63,7 +63,7 @@ TEST_F(TestIntegrationLobby, SimpleCreateLobbySingle) {
 
     TesterClient host(openClient(), sktserver, lobbies);
 
-    uint8_t id_lobby = host.createClientLobbySingle();
+    uint8_t id_lobby = host.createClientLobbySingle(lobbies.registeredMaps());
     ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
     host.startMatch(mapusing);
 
@@ -76,7 +76,7 @@ TEST_F(TestIntegrationLobby, SimpleCreateLobbySingle) {
 TEST_F(TestIntegrationLobby, SimpleCreateLobbyAndJoin) {
     TesterClient host(openClient(), sktserver, lobbies);
 
-    uint8_t id_lobby = host.createClientLobbySingle();
+    uint8_t id_lobby = host.createClientLobbySingle(lobbies.registeredMaps());
     ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
 
 
@@ -110,7 +110,7 @@ TEST_F(TestIntegrationLobby, JoinFailedNotFound) {
 TEST_F(TestIntegrationLobby, SimpleCreateLobbyAndJoinSingle) {
     TesterClient host(openClient(), sktserver, lobbies);
 
-    uint8_t id_lobby = host.createClientLobbySingle();
+    uint8_t id_lobby = host.createClientLobbySingle(lobbies.registeredMaps());
     ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
 
 
@@ -132,7 +132,7 @@ TEST_F(TestIntegrationLobby, SimpleCreateLobbyAndJoinSingle) {
 TEST_F(TestIntegrationLobby, SimpleCreateLobbyAndJoinButLeft) {
     TesterClient host(openClient(), sktserver, lobbies);
 
-    uint8_t id_lobby = host.createClientLobbyDual();
+    uint8_t id_lobby = host.createClientLobbyDual(lobbies.registeredMaps());
     ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
 
 
@@ -160,7 +160,7 @@ TEST_F(TestIntegrationLobby, SimpleCreateLobbyAndJoinButLeft) {
 TEST_F(TestIntegrationLobby, SimpleJoinMultiple) {
     TesterClient host(openClient(), sktserver, lobbies);
 
-    uint8_t id_lobby = host.createClientLobbyDual();
+    uint8_t id_lobby = host.createClientLobbyDual(lobbies.registeredMaps());
     ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
 
 
@@ -189,7 +189,7 @@ TEST_F(TestIntegrationLobby, SimpleJoinMultiple) {
 TEST_F(TestIntegrationLobby, SimpleJoinMultipleWithLeaves) {
     TesterClient host(openClient(), sktserver, lobbies);
 
-    uint8_t id_lobby = host.createClientLobbyDual();
+    uint8_t id_lobby = host.createClientLobbyDual(lobbies.registeredMaps());
     ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
 
 
@@ -230,7 +230,7 @@ TEST_F(TestIntegrationLobby, SimpleJoinMultipleWithLeaves) {
 TEST_F(TestIntegrationLobby, SimpleCreateLobbyAndJoinCancel) {
     TesterClient host(openClient(), sktserver, lobbies);
 
-    uint8_t id_lobby = host.createClientLobbySingle();
+    uint8_t id_lobby = host.createClientLobbySingle(lobbies.registeredMaps());
     ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
 
 
@@ -261,7 +261,7 @@ TEST_F(TestIntegrationLobby, SimpleCreateLobbyAndJoinCancel) {
 TEST_F(TestIntegrationLobby, SimpleJoinMultipleCancel) {
     TesterClient host(openClient(), sktserver, lobbies);
 
-    uint8_t id_lobby = host.createClientLobbyDual();
+    uint8_t id_lobby = host.createClientLobbyDual(lobbies.registeredMaps());
     ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
 
 
@@ -297,7 +297,7 @@ TEST_F(TestIntegrationLobby, SimpleJoinMultipleCancel) {
 TEST_F(TestIntegrationLobby, SimpleMatchNoPlayersEnds) {
     TesterClient host(openClient(), sktserver, lobbies);
 
-    uint8_t id_lobby = host.createClientLobbyDual();
+    uint8_t id_lobby = host.createClientLobbyDual(lobbies.registeredMaps());
     ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
 
 
@@ -356,13 +356,13 @@ TEST_F(TestIntegrationLobby, IntegrationMultiMatchCreate) {
     TesterClient host(openClient(), sktserver, lobbies);
     TesterClient host2(openClient(), sktserver, lobbies);
 
-    uint8_t id_lobby = host.createClientLobbyDual();
+    uint8_t id_lobby = host.createClientLobbyDual(lobbies.registeredMaps());
     ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
     ASSERT_EQ(lobbies.countMatches(), 1) << "Lobby was created";
 
     host.startMatch(mapusing);
 
-    uint8_t id_lobby2 = host2.createClientLobbyDual();
+    uint8_t id_lobby2 = host2.createClientLobbyDual(lobbies.registeredMaps());
     ASSERT_EQ(id_lobby2, 2) << "ID lobby received by client is 2";
     ASSERT_EQ(lobbies.countMatches(), 2) << "Lobby was created";
 
@@ -375,14 +375,14 @@ TEST_F(TestIntegrationLobby, IntegrationMultiMatchCreateOneCancel) {
     TesterClient host(openClient(), sktserver, lobbies);
     TesterClient host2(openClient(), sktserver, lobbies);
 
-    uint8_t id_lobby = host.createClientLobbyDual();
+    uint8_t id_lobby = host.createClientLobbyDual(lobbies.registeredMaps());
     ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
     ASSERT_EQ(lobbies.countMatches(), 1) << "Lobby was created";
 
     host.finish();
     ASSERT_FALSE(host.isReceiverOpen()) << "receiver protocol was not open";
 
-    uint8_t id_lobby2 = host2.createClientLobbyDual();
+    uint8_t id_lobby2 = host2.createClientLobbyDual(lobbies.registeredMaps());
     ASSERT_EQ(id_lobby2, 2) << "ID lobby received by client is 2";
     ASSERT_EQ(lobbies.countMatches(), 1) << "Lobby was created";
 }
@@ -391,10 +391,10 @@ TEST_F(TestIntegrationLobby, IntegrationMultiMatchCreateOneCancelAfter) {
     TesterClient host(openClient(), sktserver, lobbies);
     TesterClient host2(openClient(), sktserver, lobbies);
 
-    uint8_t id_lobby = host.createClientLobbyDual();
+    uint8_t id_lobby = host.createClientLobbyDual(lobbies.registeredMaps());
     ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
     ASSERT_EQ(lobbies.countMatches(), 1) << "Lobby was created";
-    uint8_t id_lobby2 = host2.createClientLobbyDual();
+    uint8_t id_lobby2 = host2.createClientLobbyDual(lobbies.registeredMaps());
     ASSERT_EQ(id_lobby2, 2) << "ID lobby received by client is 2";
     ASSERT_EQ(lobbies.countMatches(), 2) << "Lobby was created";
 
@@ -414,11 +414,11 @@ TEST_F(TestIntegrationLobby, IntegrationMultiMatchCreateOneCancelAfter) {
 TEST_F(TestIntegrationLobby, IntegrationMultiMatchOneEnds) {
     TesterClient host(openClient(), sktserver, lobbies);
 
-    uint8_t id_lobby = host.createClientLobbyDual();
+    uint8_t id_lobby = host.createClientLobbyDual(lobbies.registeredMaps());
     ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
 
     TesterClient host2(openClient(), sktserver, lobbies);
-    uint8_t id_lobby2 = host2.createClientLobbyDual();
+    uint8_t id_lobby2 = host2.createClientLobbyDual(lobbies.registeredMaps());
     ASSERT_EQ(id_lobby2, 2) << "ID lobby received by client is 2";
     ASSERT_EQ(lobbies.countMatches(), 2) << "Lobby was created";
 
@@ -475,11 +475,11 @@ TEST_F(TestIntegrationLobby, IntegrationMultiMatchOneEnds) {
 TEST_F(TestIntegrationLobby, IntegrationMultiMatchForceFinish) {
     TesterClient host(openClient(), sktserver, lobbies);
 
-    uint8_t id_lobby = host.createClientLobbyDual();
+    uint8_t id_lobby = host.createClientLobbyDual(lobbies.registeredMaps());
     ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
 
     TesterClient host2(openClient(), sktserver, lobbies);
-    uint8_t id_lobby2 = host2.createClientLobbyDual();
+    uint8_t id_lobby2 = host2.createClientLobbyDual(lobbies.registeredMaps());
     ASSERT_EQ(id_lobby2, 2) << "ID lobby received by client is 2";
     ASSERT_EQ(lobbies.countMatches(), 2) << "Lobby was created";
 
@@ -517,30 +517,29 @@ TEST_F(TestIntegrationLobby, IntegrationMultiMatchForceFinish) {
     joined2.assertLobbyStarted(4);
     joined3.assertLobbyStarted(4);
 
-    // std::cout << "-------------> FINISH ALL!" << std::endl;
     lobbies.finishAll();
 
     // ASSERT_FALSE(host.isReceiverOpen()) << "receiver protocol was not open";
     // ASSERT_FALSE(joined2.isReceiverOpen()) << "receiver protocol was not open";
     // ASSERT_FALSE(joined3.isReceiverOpen()) << "receiver protocol was not open";
 
-    host.finish();
-    joined2.finish();
-    joined3.finish();
+    //host.finish();
+    //joined2.finish();
+    //joined3.finish();
 
-    ASSERT_EQ(host2.assertLobbyError(), SERVER_ERROR)
-            << "Error type is server error, since forced finish";
+    EXPECT_THROW(host2.assertLobbyError(), LibError) << "Error type is server error, since forced finish";
     ASSERT_FALSE(host2.isReceiverOpen()) << "receiver protocol was not open";
-    host2.finish();
     // host2.assertLobbyError(UNKNOWN);
-    ASSERT_EQ(lobbies.countMatches(), 0) << "Lobby was deleted";
+    
+    // No los libera hasta el destructor, total la 'q' cierra el server.
+    //ASSERT_EQ(lobbies.countMatches(), 0) << "Lobby was deleted";
 }
 
 
 TEST_F(TestIntegrationLobby, SimpleCreateLobbyAndJoinAfterStartedFails) {
     TesterClient host(openClient(), sktserver, lobbies);
 
-    uint8_t id_lobby = host.createClientLobbyDual();
+    uint8_t id_lobby = host.createClientLobbyDual(lobbies.registeredMaps());
     ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
 
 

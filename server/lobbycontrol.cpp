@@ -20,6 +20,8 @@ Match& LobbyControl::resolveMatch(bool* isanfitrion) {
         std::cerr << " created lobby id: " << (int)newlobby.getID() << std::endl;
         // Send back id...
         protocol.notifyid(newlobby.getID());
+        
+        protocol.sendmaplist(lobbies.registeredMaps());
 
         return newlobby;
     }
@@ -98,15 +100,17 @@ bool LobbyControl::handleAnfitrionLobby(ControlledPlayer& host,
         return false;
     } catch (const ProtocolError& error) {
         // EOF of player. No muestres nada.
-        std::cerr << "CANCELED MATCH ID: " << error.what() << " " << (int)match.getID()
-                  << std::endl;
+        std::cerr << "CANCELED MATCH ID: " << error.what() << " " << (int)match.getID()<< std::endl;
+                  
+        protocol.close();
         lobbies.hostLeft(match, host);
         return true;
     } catch (const LibError& error) {
         if (protocol.isactive()) {  // Si debiera estar activo. Error interno del protocol.
             std::cerr << "Lobby control error:" << error.what() << std::endl;
+            protocol.close();
         }
-        std::cerr << "Cancel lobby?:" << error.what() << std::endl;
+        std::cerr << "Cancel lobby?:" << error.what()<< std::endl;
         lobbies.hostLeft(match, host);
         return true;
     } catch (const SerialError& error) {
@@ -116,7 +120,6 @@ bool LobbyControl::handleAnfitrionLobby(ControlledPlayer& host,
     } catch (const GameError& error) {
         // Fallo alguna accion. Sea el start u otra.
         std::cerr << "Game error at host lobby recv: " << error.what() << std::endl;
-        // protocol.notifyinfo(LobbyResponseType::GAME_ERROR, error.get_code());
         lobbies.errorOnLobby(match, error.get_code());
         return true;
     }

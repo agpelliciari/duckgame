@@ -3,6 +3,7 @@
 #include <cstring>
 #include <iostream>
 #include <string>
+#include <vector>
 #include <utility>
 
 #include "./lobby_action_sender.h"
@@ -30,19 +31,23 @@ bool LobbyCreateState::checkcreatefail() {
     try {
 
         if (context.dualplay) {
-            uint8_t id_lobby = protocol.sendCreateLobby(2);
+            std::vector<std::string> maps;
+            uint8_t id_lobby = protocol.sendCreateLobby(2,maps);
 
             context.second_player = protocol.recvIDDualPlayer(&context.first_player);
             context.id_lobby = id_lobby;
 
-            listener.createdLobbyDual(id_lobby);
-            
             context.players.reserve(context.max_player_count);
             context.addPlayer(context.first_player);
             context.addPlayer(context.second_player);
             
+            // Para probar!
+            maps.push_back("does not exist");
+            
+            listener.createdLobbyDual(id_lobby,maps);
         } else {
-            uint8_t id_lobby = protocol.sendCreateLobby(1);
+            std::vector<std::string> maps;
+            uint8_t id_lobby = protocol.sendCreateLobby(1,maps);
 
             context.first_player = protocol.recvIDSinglePlayer();
             context.second_player = 0;
@@ -50,8 +55,11 @@ bool LobbyCreateState::checkcreatefail() {
             
             context.players.reserve(context.max_player_count);
             context.addPlayer(context.first_player);
-            
-            listener.createdLobbySolo(id_lobby);
+
+            // Para probar!
+            maps.push_back("does not exist");
+
+            listener.createdLobbySolo(id_lobby,maps);
         }
         return false;
     } catch (const LibError& error) {

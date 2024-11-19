@@ -3,6 +3,8 @@
 
 
 #include <list>
+#include <vector>
+#include <string>
 #include <mutex>
 
 #include "./match.h"
@@ -22,12 +24,15 @@ private:
 public:
     // Default constructor
     LobbyContainer();
+    LobbyContainer(const char* maps_root);
+    
     // No copy nor mov.
     LobbyContainer(const LobbyContainer&) = delete;
     LobbyContainer& operator=(const LobbyContainer&) = delete;
     LobbyContainer(LobbyContainer&&) = delete;
     LobbyContainer& operator=(LobbyContainer&&) = delete;
 
+    const std::vector<std::string>& registeredMaps() const;
     // Es necesrio trabajar con punteros al ser una coleccion
     Match& newLobby();
 

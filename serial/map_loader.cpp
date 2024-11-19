@@ -1,11 +1,35 @@
 #include "./map_loader.h"
 
 #include <iostream>
+#include <filesystem>
 static const char* DIR_MAPS = "res/maps/";
 static const char* EXT = ".yaml";
 
 
-MapLoader::MapLoader() {}
+MapLoader::MapLoader(const char * root_maps) {
+     for (const auto& entry: std::filesystem::directory_iterator(root_maps)){
+           if(entry.is_regular_file()){
+               auto path = entry.path();
+               
+               if(path.extension() == EXT){
+                    list_maps.push_back(path.filename().replace_extension().string());
+               }
+           }
+     }
+     
+     for(const std::string& map: list_maps){
+         std::cout << "REGISTERED MAP: " << map<<std::endl;
+     }
+}
+
+const std::vector<std::string>& MapLoader::registeredMaps() const{
+      return list_maps;
+}
+
+
+MapLoader::MapLoader() : MapLoader(DIR_MAPS){
+
+}
 
 MapDeserializer& MapLoader::getLoader(const char* mapname) {
 

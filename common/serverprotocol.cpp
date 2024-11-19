@@ -134,6 +134,13 @@ void ServerProtocol::sendplayer(const PlayerDTO& player) {
 }
 
 
+void ServerProtocol::sendmaplist(const std::vector<std::string>& maps){
+    this->senduint(maps.size());
+    for(const std::string& map: maps){
+         this->sendmsg(map);
+    }
+}
+
 void ServerProtocol::sendmapinfo(const MapInfo& map) {
 
     // Send Map size

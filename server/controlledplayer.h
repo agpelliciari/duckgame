@@ -1,7 +1,6 @@
 #ifndef LIB_ControlledPlayer_H
 #define LIB_ControlledPlayer_H
 
-#include <mutex>
 #include <string>
 #include <utility>
 
@@ -22,7 +21,6 @@ class ControlledPlayer {
 protected:
     // Manejo de ids. Y cantidad de players para la queue de mensajes.
     uint8_t count;  // cppcheck-suppress unusedStructMember
-    bool dirtyStats; // cppcheck-suppress unusedStructMember
 
     player_id ids[2];  // cppcheck-suppress unusedStructMember
 
@@ -31,13 +29,7 @@ protected:
     match_snapshots snapshots;  // cppcheck-suppress unusedStructMember
 
     // bool _is_open;  // cppcheck-suppress unusedStructMember
-    std::mutex mtx;
     MatchStatsInfo match_stats;// cppcheck-suppress unusedStructMember
-    
-    
-    // Por si se notifico estadisticas pero se inicio sin que se llegara a mandar!
-    void checkdirty();
-
 
 public:
     explicit ControlledPlayer(player_id first);
@@ -67,11 +59,15 @@ public:
     const MatchStatsInfo& getStats();
     // Abre la queue de matchdto, cierra le de lobby info. Indicando fase de juego.
     bool setgamemode();
+    
+    void waitgamemode();
+    void waitlobbymode();
+
 
     // Desconecta/cierra el player. Si esta abierto.
     // Devuelve false si ya estaba cerrado.
     bool disconnect();
-    bool isclosed();
+    //bool isclosed();
 
     // Checkea si el player esta.
     // bool isgamemode();
