@@ -7,7 +7,7 @@
 #include "common/dtosmap.h"
 #include "common/dtosgame.h"
 #include "common/dtosobject.h"
-#include "item.h"
+#include "spawn_place.h"
 #include "box.h"
 #include "match_map.h"
 #include "player.h"
@@ -15,7 +15,7 @@
 #include "collision.h"
 #include "type_collision.h"
 #include "physical_bullet.h"
-
+#include "dropped_item.h"
 
 #ifndef MATCH_LOGIC_H
 #define MATCH_LOGIC_H
@@ -29,10 +29,11 @@ private:
     std::vector<Player> players;  // cppcheck-suppress unusedStructMember
     //std::vector<int> id_alive_players;    // cppcheck-suppress unusedStructMember
     std::vector<Box> boxes;       // cppcheck-suppress unusedStructMember
-    std::vector<Item> items;     // cppcheck-suppress unusedStructMember
+    std::vector<SpawnPlace> spawn_places;     // cppcheck-suppress unusedStructMember
     std::vector<PhysicalBullet> bullets; // cppcheck-suppress unusedStructMember
     std::vector<MapPoint> blocks;  // cppcheck-suppress unusedStructMember
     std::vector<MapPoint> spawn_points; // cppcheck-suppress unusedStructMember
+    std::vector<DroppedItem> dropped_items; // cppcheck-suppress unusedStructMember
 
     // std::vector<std::vector<bool>> colition_map; // cppcheck-suppress unusedStructMember
 
@@ -68,6 +69,7 @@ public:
     void clear_objects();
     void player_pick_up_item(int id);
     void player_drop_item(int id);
+    void update_dropped_items();
     ~MatchLogic();
 };
 

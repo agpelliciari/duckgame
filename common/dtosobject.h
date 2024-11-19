@@ -14,6 +14,7 @@ struct MapPoint {
 // Objetos dinamicos!
 enum class TypeDynamicObject : uint8_t {
     // Generales
+    NONE,
     BOX,
     PROJECTILE,
     LASER,

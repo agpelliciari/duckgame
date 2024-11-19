@@ -23,3 +23,7 @@ void CowboyPistolWeapon::shoot(ShootingDirection direction,
     }
 
 }
+
+void CowboyPistolWeapon::get_type(TypeDynamicObject &type){
+    type = TypeDynamicObject::PISTOLA_COWBOY;
+}

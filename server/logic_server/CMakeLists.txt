@@ -10,7 +10,7 @@ target_sources(taller_server_logic
             match_state.cpp
             match_map.cpp
             box.cpp
-            item.cpp
+            spawn_place.cpp
             action_command.cpp
             physical_object.cpp
             physical_player.cpp
@@ -19,7 +19,7 @@ target_sources(taller_server_logic
             magnum_weapon.cpp
             duel_pistol.cpp
             pewpew_laser_weapon.cpp
-
+            dropped_item.cpp
 
 
     PUBLIC
@@ -31,7 +31,7 @@ target_sources(taller_server_logic
             match_map.h
             weapon.h
             box.h
-            item.h
+            spawn_place.h
             armor.h
             command.h
             action_command.h
@@ -44,5 +44,5 @@ target_sources(taller_server_logic
             magnum_weapon.h
             duel_pistol.h
             pewpew_laser_weapon.h
-
+            dropped_item.h
     )

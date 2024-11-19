@@ -15,6 +15,7 @@ class MagnumWeapon: public Weapon {
     public:
         MagnumWeapon();
         void get_weapon(TypeWeapon& type) override;
+        void get_type(TypeDynamicObject &type) override;
         void shoot(ShootingDirection direction,
                    std::vector<PhysicalBullet> &bullets, Tuple bullet_position, PhysicalPlayer &player) override;
 

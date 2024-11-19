@@ -120,6 +120,7 @@ void MatchState::step() {
     match_logic.update_colition_map();
     match_logic.update_players(this->id_alive_players);
     match_logic.update_bullets();
+    match_logic.update_dropped_items();
 }
 
 
