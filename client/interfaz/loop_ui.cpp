@@ -45,6 +45,7 @@ void UILoop::update() {
 
     MatchStatsInfo stats;
     while (isRunning_ && matchDtoQueue.update_stats(stats)) {
+        lastStatsUpdate = stats;
         auto start = std::chrono::steady_clock::now();
         if (stats.state == TERMINADA ||
             stats.state == CANCELADA) {  // stats.state == PAUSADA? mostrar info, o round end.
@@ -68,7 +69,7 @@ void UILoop::update() {
         }
     }
 
-    std::cout << "ronda: " << stats.numronda << std::endl;  // numero de ronda no se actualiza
+    std::cout << "ronda: " << lastStatsUpdate.numronda << std::endl;  // numero de ronda no se actualiza
 
     MatchDto matchUpdate;
 
@@ -76,11 +77,11 @@ void UILoop::update() {
         lastUpdate = matchUpdate;
     }
 
-    camera.update(lastUpdate);
-
     animation.updateFrame();
 
     animation.updateSprite(lastUpdate);
+
+    camera.update(lastUpdate);
 }
 
 UILoop::~UILoop() = default;

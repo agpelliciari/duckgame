@@ -38,6 +38,8 @@ private:
 
     MatchDto lastUpdate;
 
+    MatchStatsInfo lastStatsUpdate;
+
     bool isRunning_;  // cppcheck-suppress unusedStructMember
 
     // This is where most of the game logic will go;

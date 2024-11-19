@@ -316,8 +316,7 @@ void Drawer::drawWinner(const MatchStatsInfo& matchStats, const MatchDto& matchD
 
     drawObjects(matchDto);
 
-    renderer.Copy(textures.getTexture("/ui/statusBar.png"), SDL2pp::Rect(0, 0, 260, 13),
-                  SDL2pp::Rect(0, 0, window.GetWidth(), 26));
+    drawStatusBar();
 
     const PlayerDTO* winner = matchDto.getPlayer((int)matchStats.champion_player);
 

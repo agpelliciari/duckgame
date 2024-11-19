@@ -31,3 +31,8 @@ void DuelPistol::shoot(ShootingDirection direction,
         ammo --;
     }
 }
+
+
+void DuelPistol::get_type(TypeDynamicObject &type){
+    type = TypeDynamicObject::PISTOLA_DE_DUELOS;
+}
