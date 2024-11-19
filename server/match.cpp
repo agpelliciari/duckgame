@@ -145,8 +145,8 @@ bool Match::handlePostRound(){
 }
 
 void Match::run() {
-
     looper.playRound(players, this->stats);
+    
     while (_keep_running && handlePostRound()) {
         //looper.start_players(players, stats);
         // re envia info del mapa?

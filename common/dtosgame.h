@@ -68,6 +68,7 @@ public:
 };
 
 enum MatchStateType : uint8_t {
+    STARTED_ROUND = 0x07,
     LOADING = 0x06,
     INICIADA = 0x01,
     PAUSADA = 0x04,

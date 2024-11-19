@@ -23,6 +23,12 @@ void PlayStateRecv::run() {
                 listener.matchUpdated(state);
             } else {
                 // Chequea si finisheo?!
+                
+                if(stats.state == STARTED_ROUND){
+                    // Si se esta cargando el round siguiente.
+                    stats.state = INICIADA;// Para la ui es como si hubiera empezado.
+                }
+                
                 listener.statsUpdated(stats);
             }
         }

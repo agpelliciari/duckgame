@@ -40,6 +40,10 @@ bool ControlledPlayer::setgamemode() {
     }
     
     if (snapshots.reopen()) {
+        dirtyStats = true;
+        match_stats.state = STARTED_ROUND;
+        match_stats.numronda++;
+        //std::cout << "STARTED GAME MODE CONTROOLL\n";
         events.close();
         return true;
     }
@@ -118,6 +122,7 @@ void ControlledPlayer::checkdirty(){
     std::unique_lock<std::mutex> lck(mtx);
     if(dirtyStats){
         dirtyStats = false;
+        std::cout << "CHECKED DIRTY !!! IT ISS!\n";
         throw ClosedQueue();
     }
 }
