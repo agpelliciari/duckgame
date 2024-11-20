@@ -1,16 +1,25 @@
-target_sources(taller_server
+target_sources(taller_server_logic
     PRIVATE
     # .cpp files
-            coordinates.cpp
-            action.cpp
+
             match_logic.cpp
             player.cpp
             armor.cpp
             weapon.cpp
             match_queue.cpp
             match_state.cpp
+            match_map.cpp
             box.cpp
+            spawn_place.cpp
             action_command.cpp
+            physical_object.cpp
+            physical_player.cpp
+            cowboy_pistol_weapon.cpp
+            physical_bullet.cpp
+            magnum_weapon.cpp
+            duel_pistol.cpp
+            pewpew_laser_weapon.cpp
+            dropped_item.cpp
 
 
     PUBLIC
@@ -18,14 +27,22 @@ target_sources(taller_server
             player.h
             match_logic.h
             match_queue.h
-            action.h
             match_state.h
+            match_map.h
             weapon.h
-            coordinates.h
             box.h
+            spawn_place.h
             armor.h
             command.h
             action_command.h
-
-
+            matchobserver.h
+            physical_object.h
+            physical_player.h
+            shooting_direction.h
+            cowboy_pistol_weapon.h
+            physical_bullet.h
+            magnum_weapon.h
+            duel_pistol.h
+            pewpew_laser_weapon.h
+            dropped_item.h
     )

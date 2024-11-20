@@ -25,7 +25,12 @@
 
 #include <errno.h>
 
-GameError::GameError(const char* fmt, ...) noexcept {
+
+game_error_type GameError::get_code() const { return this->err_code; }
+
+GameError::GameError(game_error_type err, const char* fmt, ...) noexcept: err_code(err) {
+    // err_code = err;
+
     /* Aquí empieza la magia arcana proveniente de C.
      *
      * En C (y en C++) las funciones y métodos pueden recibir un número

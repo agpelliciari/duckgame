@@ -1,14 +1,17 @@
 #ifndef LIB_MATCH_H
 #define LIB_MATCH_H
 
+#include <condition_variable>
 #include <mutex>
+#include <optional>
+#include <vector>
 #include <queue>
 #include <utility>
 
 #include "common/dtosplayer.h"
 #include "common/queue.h"
 #include "common/thread.h"
-
+#include "serial/map_loader.h"
 
 // Descomentar si ya son usables.
 #include "server/logic_server/match_state.h"
@@ -30,26 +33,44 @@ private:
     lobbyID id;               // cppcheck-suppress unusedStructMember
     PlayerContainer players;  // cppcheck-suppress unusedStructMember
     MatchState looper;        // cppcheck-suppress unusedStructMember
+    int connectedplayers;     // cppcheck-suppress unusedStructMember
+    
+    // Para el cliente
+    MapInfo map;              // cppcheck-suppress unusedStructMember
+    MatchStatsInfo stats;// cppcheck-suppress unusedStructMember
+    
+    // Para el server
+    struct ObjectsInfo objects;// cppcheck-suppress unusedStructMember
 
     // Para el thread y en general el loopeado
     void run() override;
 
+
 protected:
     friend class LobbyContainer;
-    void addPlayer(ControlledPlayer* player);
+
+    ControlledPlayer& addPlayers(uint8_t countplayers);
+
+    bool notifyDisconnect(ControlledPlayer& player);
 
     // Metodos analogos a los de thread. expuestos a friend nada mas.
-    void init();
+    void init(MapLoader& maps, const char* mapname);
+    bool hostLobbyLeft(ControlledPlayer& host);
+    void cancelByError(LobbyErrorType error);
 
     // Libera, bien podria prescindirse y usar un destructor.
     // Pero mejor explicitar. Reemplaza el stop.. que no se quiere permitir hacerlo sin hacer el
     // resto.
-    void finish();
-
-
+    void finish(MapLoader& maps);
+    
+    bool pauseMatch(int count_seconds);
+    //bool roundEnded();
+    void loadMap(MapDeserializer& deserial);
+    bool handlePostRound();
 public:
     // Se tendra composicion con un unico observer de eventos al match.
     explicit Match(lobbyID _id);
+    explicit Match(lobbyID _id, const int max_players);
 
     // Asumamos por ahora que no se quiere permitir copias, ni mov.
     Match(const Match&) = delete;
@@ -61,6 +82,11 @@ public:
     bool operator==(const Match& other) const;
 
     lobbyID getID() const;
+    const MapInfo& getMap() const;
+    const MatchStatsInfo& getStats() const;
+    // void waitStart();
+    int playercount() const;
+    std::vector<player_id> getPlayers() const;
 
     // Metodos publicos.. accesibles incluso a player controllers.
     // No hay precondiciones perse. Podria no haber empezado el match.

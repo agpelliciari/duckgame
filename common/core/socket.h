@@ -20,6 +20,13 @@ private:
 
     void chk_skt_or_fail() const;
 
+    // Wrappers para syscalls de recv y send. Que intentan recibir/enviar a lo sumo sz.
+    // Pero pueden ser menos. Siempre mas que 0, 0 si hay un EPIPE. Si hubiera un error distinto,
+    // tira excepcion. No se devuelve negativos.
+    int sendsome(const void* data, unsigned int sz);
+    unsigned int recvsome(void* data,
+                          unsigned int sz);  // En caso de error tira excepcion.
+
 public:
     // Constructor para un socket que busca conectarse al host y serv. Si hay error al conectar tira
     // excepcion.
@@ -38,21 +45,15 @@ public:
     Socket& operator=(Socket&&);
 
 
-    // Wrappers para syscalls de recv y send. Que intentan recibir/enviar a lo sumo sz.
-    // Pero pueden ser menos. Siempre mas que 0, 0 si hay un EPIPE. Si hubiera un error distinto,
-    // tira excepcion. No se devuelve negativos.
-    int sendsome(const void* data, unsigned int sz) override;
-    unsigned int recvsome(void* data,
-                          unsigned int sz) override;  // En caso de error -1.. Tira excepcion.
-
     // Send all itera hasta que, exactamente sz bytes fueron enviados. Si se envian menos queda en
     // el caller decidir
     unsigned int trysendall(const void* data, unsigned int sz) override;
+    unsigned int tryrecvall(void* data, unsigned int sz) override;
+
     void sendall(const void* data,
                  unsigned int sz) override;  // Intenta enviar todo. Sino tira excepcion.
 
     // Intenta leer lo maximo que pueda, a lo sumo sz. Retorna la cantidad leida.
-    unsigned int tryrecvall(void* data, unsigned int sz) override;
 
     // Intenta leer sz bytes. Tira excepcion sino lee todo.
     void recvall(void* data, unsigned int sz) override;
@@ -61,10 +62,12 @@ public:
     Socket accept();
 
     // Cierra parcial o completamente. Es no except. Devuelve -1 si fallo.
-    int shutdown(int how) override;
+    int shutdown(int how);
 
     // Cierra el socket. Aunque no necesariamente haria el shutdown.
-    int close() override;
+    int close();
+
+    int finish() override;
 
     // Destructor, se encarga de llamar al shutdown si no lo fue.
     ~Socket();

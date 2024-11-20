@@ -4,27 +4,20 @@
 #define BUFF_LEN_CLIENT 128
 #include <atomic>
 #include <string>
+#include <vector>
 #include <utility>
 
 #include "common/core/protocol.h"
-#include "common/dtos.h"
-#include "common/dtosplayer.h"
+#include "common/dtosgame.h"
+#include "common/dtoslobby.h"
+#include "common/dtosmap.h"
+
 
 // Extension del protocolo base a usar.
-class ServerProtocol {
-
-protected:
-    Protocol protocol;  // Composicion con el protocolo base para la conexion
-
-    std::atomic<bool> isactive;  // Simple manejo de si ya se cerro o no.
-
+class ServerProtocol: public Protocol {
 public:
     // El default a partir de la abstraccion de socket..
-    explicit ServerProtocol(Socket& messenger);
-    explicit ServerProtocol(Messenger* messenger);
-
-    // Permitamos el mov para mayor flexibilidad
-    explicit ServerProtocol(Protocol&& prot);
+    explicit ServerProtocol(Messenger& messenger);
 
     // Asumamos por ahora que no se quiere permitir copias, ni mov.
     ServerProtocol(const ServerProtocol&) = delete;
@@ -33,21 +26,44 @@ public:
     ServerProtocol(ServerProtocol&&) = delete;
     ServerProtocol& operator=(ServerProtocol&&) = delete;
 
-    bool recvplayercount(uint8_t* count);
-    lobby_action recvlobbyaction();
+    // Lobby protocol..
+    // Filtra el tipo de accion. Si bien se podrian tener separadas.
+    LobbyActionType recvresolveinfo();
+    // Para el join
+    uint8_t recvlobbyid();
 
-    bool recvsignalstart();
+    // Para ambos, create o join.
+    uint8_t recvplayercount();
 
+    // Para el create
+    void notifyid(uint8_t id);
 
-    // Attempts to receive pickup action.
-    // If failed throws either LibError or GameError.
+    // Acciones/Respuestas
+    LobbyActionType recvlobbyaction();
+    std::string recvmapname();
+
+    void notifyaction(const LobbyResponseType response);
+    void notifyinfo(const LobbyResponseType response, const uint8_t data);
+    void notifyevent(const lobby_info& info);
+
+    // Info nivel
+    // void sendlevel(const LevelInfo& level);
+
+    // Game protocol
     PlayerActionDTO recvaction();
 
     void sendstate(const MatchDto&& state);
     void sendstate(const MatchDto& state);
+    void sendstats(const MatchStatsInfo& state);
+    
+    void sendplayer(const PlayerDTO& player);
 
-    bool isopen();
-    void close();
+    void sendmapinfo(const MapInfo& map);
+    void sendmaplist(const std::vector<std::string>& maps);
+
+    // metodos generales para is active.
+    using Protocol::close;
+    using Protocol::isactive;
 };
 
 #endif

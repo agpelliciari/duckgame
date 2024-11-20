@@ -54,6 +54,13 @@ if(TALLER_CLIENT OR TALLER_EDITOR)
         URL https://github.com/libSDL2pp/libSDL2pp/archive/cc198c9a5657048bee67ece82de620b2d5661084.zip
     )
 
+    set(SDL2PP_WITH_IMAGE ON) # if you need SDL_image support
+    set(SDL2PP_WITH_MIXER ON) # if you need SDL_mixer support
+    set(SDL2PP_WITH_TTF ON) # if you need SDL_ttf support
+    find_package(SDL2pp REQUIRED)
+    
+    add_definitions(-DDATA_PATH="${PROJECT_SOURCE_DIR}/res")
+    
     FetchContent_MakeAvailable(libSDL2pp)
 
     # Activa la generación automática de archivos de encabezado a partir de archivos .ui
@@ -65,6 +72,49 @@ if(TALLER_CLIENT OR TALLER_EDITOR)
     find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
     find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 endif()
+
+if(TALLER_EDITOR OR TALLER_SERVER OR TALLER_TESTS)
+	# Fetch rapid yaml	
+	include(FetchContent)
+
+	FetchContent_Declare(ryml #yaml-cpp
+	    GIT_REPOSITORY https://github.com/biojppm/rapidyaml.git
+	    GIT_TAG master
+	    GIT_SHALLOW FALSE  # ensure submodules are checked out
+	    #GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git # yaml version...
+	)
+	FetchContent_MakeAvailable(ryml)
+	
+	
+	# Create serial lib
+	add_library(taller_serial)
+	add_subdirectory(serial/)
+	
+	#add_dependencies(taller_serial yaml-cpp::yaml-cpp)
+	target_link_libraries(taller_serial PUBLIC taller_common ryml::ryml)#yaml-cpp::yaml-cpp) 
+	
+	add_executable(taller_dbg serial/main_dbg.cpp)
+	add_dependencies(taller_dbg taller_serial)
+	target_link_libraries(taller_dbg taller_serial)
+	
+	
+	# Si es el server o tests. Entonces separa la lib de logica del server       
+	if(TALLER_SERVER OR TALLER_TESTS)
+	    # Lets load logic of server.
+	    add_library(taller_server_logic)
+	    add_subdirectory(server/)
+	    #add_subdirectory(server/logic_server/)
+
+	    # Make them depend on taller_common lib
+	    add_dependencies(taller_server_logic taller_common taller_serial)
+	    target_link_libraries(taller_server_logic taller_common taller_serial)
+	endif()
+	
+endif()
+
+
+
+
 
 # Program section
 # ---------------
@@ -91,21 +141,25 @@ if(TALLER_CLIENT)
     )
 endif()
 
+
+
 if(TALLER_SERVER)
     # HEY!! TODO XXX: Change the name of the executable to the one you like!
-    add_executable(taller_server)
+    add_executable(taller_server server/main.cpp)
 
     # Make them depend on taller_common lib
-    add_dependencies(taller_server taller_common)
+    add_dependencies(taller_server taller_common taller_server_logic)
 
     # Add source files and enable warnings
     # HEY!! TODO XXX: add more subfolders here
-    add_subdirectory(server)
+    
+    # Only executable is main.cpp, allows for using server folder as library.. for testing.
+    #add_subdirectory(server)
 
     set_project_warnings(taller_server ${TALLER_MAKE_WARNINGS_AS_ERRORS} FALSE)
 
     # Link the taller_common lib target
-    target_link_libraries(taller_server taller_common)
+    target_link_libraries(taller_server taller_common taller_server_logic)
 endif()
 
 if(TALLER_EDITOR)
@@ -113,7 +167,7 @@ if(TALLER_EDITOR)
     add_executable(taller_editor)
 
     # Make them depend on taller_common lib
-    add_dependencies(taller_editor taller_common SDL2pp::SDL2pp)
+    add_dependencies(taller_editor taller_common taller_serial SDL2pp::SDL2pp)
 
     # Add source files and enable warnings
     # HEY!! TODO XXX: add more subfolders here
@@ -125,7 +179,7 @@ if(TALLER_EDITOR)
     target_include_directories(taller_editor PRIVATE ${libSDL2pp_SOURCE_DIR})
 
     # Link the taller_common lib target
-    target_link_libraries(taller_editor taller_common SDL2pp::SDL2pp)
+    target_link_libraries(taller_editor taller_common taller_serial SDL2pp::SDL2pp Qt${QT_VERSION_MAJOR}::Widgets)
 endif()
 
 
@@ -152,7 +206,7 @@ if(TALLER_TESTS)
 
     # HEY!! TODO XXX: I'm assuming that the code under testing is in taller_common
     # Change this if you have to.
-    add_dependencies(taller_tests taller_common)
+    add_dependencies(taller_tests taller_common taller_server_logic)
 
     # Say where to find the xoz headers
     # HEY!! TODO XXX: add more subfolders here
@@ -176,6 +230,7 @@ if(TALLER_TESTS)
     # Change this if you have to.
     target_link_libraries(taller_tests
         taller_common
+        taller_server_logic
         GTest::gtest_main
         gmock_main
     )

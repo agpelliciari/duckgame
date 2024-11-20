@@ -6,14 +6,19 @@ target_sources(taller_common
         clientprotocol.cpp
         serverprotocol.cpp
         protocolerror.cpp
+        serialerror.cpp
     PUBLIC
     # .h files
         clientprotocol.h
         serverprotocol.h
         protocolerror.h
-        dtos.h
+        dtosobject.h
+        dtosmap.h
+        dtoslobby.h
+        dtosgame.h
         dtosplayer.h
         thread.h
         queue.h
-        
+        errors.h
+        serialerror.h
     )

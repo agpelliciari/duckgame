@@ -211,7 +211,9 @@ unsigned int Socket::tryrecvall(void* data, unsigned int sz) {
 }
 
 void Socket::recvall(void* data, unsigned int sz) {
-    if (tryrecvall(data, sz) < sz) {  // No se leyo todo.
+    unsigned int read = tryrecvall(data, sz);
+
+    if (read < sz) {  // No se leyo todo.
         throw LibError(EPIPE, "socket received only %d of %d bytes", read, sz);
     }
 }
@@ -282,6 +284,15 @@ int Socket::close() {
     this->closed = true;
     return ::close(this->skt);
 }
+
+int Socket::finish() {
+    chk_skt_or_fail();
+    ::shutdown(this->skt, 2);  // 2 == ambas cosas, read and write.
+    this->closed = true;
+
+    return ::close(this->skt);
+}
+
 
 Socket::~Socket() {
     if (not this->closed) {

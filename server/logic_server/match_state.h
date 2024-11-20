@@ -5,9 +5,10 @@
 #include "./box.h"
 #include "./match_logic.h"
 #include "./match_queue.h"
-#include "common/dtos.h"
+#include "./matchobserver.h"
+#include "common/dtosgame.h"
+#include "common/dtosmap.h"
 #include "common/dtosplayer.h"
-#include "server/playercontainer.h"
 
 #include "action_command.h"
 #include "player.h"
@@ -22,14 +23,29 @@ private:
     MatchLogic match_logic;               // cppcheck-suppress unusedStructMember
     MatchQueue acciones;                  // cppcheck-suppress unusedStructMember
     std::vector<ActionCommand> commands;  // cppcheck-suppress unusedStructMember
+    std::vector<int> id_alive_players;    // cppcheck-suppress unusedStructMember
+    int max_rounds; // cppcheck-suppress unusedStructMember
+
+
 public:
     MatchState();
+    MatchState(struct MapPoint size, std::vector<struct MapObject>& objects);
     void pushAction(const PlayerActionDTO& action);
     // void add_player(Player player);
     void receive_commands();
     void execute_commands();
-    void send_results();
-    void loop(PlayerContainer& observer);
+
+    void send_results(MatchObserver& observer);
+    void start_players(MatchObserver& observer, MatchStatsInfo& stats);
+    void add_objects(const struct ObjectsInfo& objects_info);
+    
+    void reset_objects(const struct ObjectsInfo& objects_info);
+    void reset_players(MatchObserver& observer);
+    
+    void step();
+    bool only_one_winner(MatchStatsInfo& stats, int &id_champion);
+    void playRound(MatchObserver& observer, MatchStatsInfo& stats);
+    void calculate_game_results(MatchStatsInfo& stats, int actual_winner);
     void stop();
     ~MatchState();
 };

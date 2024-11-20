@@ -13,16 +13,14 @@
 
 class ActionCommand: public Command {
 
-private:
-    PlayerActionDTO action;                            // cppcheck-suppress unusedStructMember
-    MatchLogic* match_logic;                           // cppcheck-suppress unusedStructMember
-    std::map<int, std::function<void()>> command_map;  // cppcheck-suppress unusedStructMember
+    private:
+        PlayerActionDTO action;                            // cppcheck-suppress unusedStructMember
+        MatchLogic* match_logic;                           // cppcheck-suppress unusedStructMember
 
-public:
-    ActionCommand(PlayerActionDTO action, MatchLogic* match_logic);
-
-    void execute() override;
-    virtual ~ActionCommand() {}
+    public:
+        ActionCommand(PlayerActionDTO action, MatchLogic* match_logic);
+        void execute() override;
+        virtual ~ActionCommand() {}
 };
 
 

@@ -4,20 +4,119 @@
 
 #include "common/core/liberror.h"
 
-ControlNotifier::ControlNotifier(ControlledPlayer& _player, ServerProtocol& _protocol):
-        player(_player), protocol(_protocol) {}
+ControlNotifier::ControlNotifier(Match& _match, ControlledPlayer& _player,
+                                 ServerProtocol& _protocol):
+        match(_match), player(_player), protocol(_protocol) {}
 
-void ControlNotifier::run() {
+bool ControlNotifier::runLobby() {
+    std::cerr << "#lobby notify for " << player.toString() << " at match " << (int)match.getID()
+              << " start!" << std::endl;
+    try {
+        lobby_info info = player.popinfo();
+
+        // El start se envia con un close asi que solo si ocurre un error
+        while (_keep_running) {
+
+
+            std::cerr << "match " << (int)match.getID() << " info to " << player.toString() << "? "
+                      << (int)info.action << ", num: " << (int)info.data << std::endl;
+
+            protocol.notifyevent(info);
+
+            if (info.action == LobbyResponseType::GAME_ERROR) {
+                // std::cout << "----> IF NOTIFY ERROR FROM HERE THEN CUSTOM/LOGIC ERROR??\n";
+                protocol.close();
+                return true;  // Si fue un error el notificado entonces sali.
+            }
+
+            info = player.popinfo();
+        }
+
+        std::cerr << "Closed notifier before match start, why?" << std::endl;
+        protocol.notifyinfo(LobbyResponseType::GAME_ERROR, LobbyErrorType::UNKNOWN);
+        protocol.close();  // Si no esta cerrado, cerralo, asi se sale el controller tambien.
+        return true;
+    } catch (const ClosedQueue& error) {
+    
+        if (protocol.isactive()) {
+            if(match.isrunning()){
+                protocol.notifyinfo(LobbyResponseType::STARTED_LOBBY, match.playercount());
+                protocol.sendmapinfo(match.getMap());
+                return false;
+            }
+            std::cout << "Notifier lobby recv cancel match?\n";
+            protocol.close();
+            // Fue cancelada la partida?
+            return true;
+        }
+        
+        // El protocol ya fue cerrado, se desconecto el cliente. por ejemplo el host. Al cancelar
+        return true;
+    }
+}
+
+
+bool ControlNotifier::runPostGame(MatchStateType state) {
+    if (state == TERMINADA || state == CANCELADA ) {
+        //std::cout << "------>NOTIFIER "<< player.toString() <<" ENDED OR CANCELED MATCH!\n";
+        protocol.close();  // Si no esta cerrado, cerralo, asi se sale el controller tambien.
+        return false;      // Se cerro el game
+    }
+
+    if (state == INICIADA) {
+        //std::cerr << "Notifier go right back already started!! to " << (int)match.getID() << " " << player.toString()<<std::endl;
+        return true;
+    }
+    try {
+        player.waitgamemode();
+        std::cerr << "Despausada " << (int)match.getID() << " info to " << player.toString() << std::endl;            
+        protocol.sendstats(player.getStats());
+        return true;
+    } catch (const ClosedQueue& error) {        
+        std::cerr << "At Pause Cancelada " << (int)match.getID() << " info to " << player.toString() << std::endl;
+        protocol.close();  // Closed server while in pause?
+        return false;
+    }
+}
+MatchStateType ControlNotifier::runGame() {
+
+    //std::cerr << player.toString() << " went to play mode!\n";
+    //std::cerr << "#game notify for " << player.toString() << " at match " << (int)match.getID()
+    //          << " start!" << std::endl;
     try {
         while (_keep_running) {
             protocol.sendstate(player.popstate());
         }
 
+        return CANCELADA;
     } catch (const ClosedQueue& error) {
-        protocol.close();  // Si no esta cerrado, cerralo, asi se sale el controller tambien.
+        const MatchStatsInfo& stats = player.getStats();
+        if(stats.state != CANCELADA){ // Si fue cancelada el close es suficiente
+            //std::cout << player.toString() << " exited game mode...:: " << stats.parse() << std::endl;
+            protocol.sendstats(stats);
+        }
+        return stats.state;
+    }
+}
+
+void ControlNotifier::run() {
+    try {
+        if (runLobby()) {  // Devuelve si se cancelo la partida/no deberia seguir.
+            return;
+        }
+        
+        //std::cout << "--------> SEND FIRST STATS" << player.toString() << " "<< player.getStats().parse() << "\n"; 
+        // Send first stats..
+        protocol.sendstats(player.getStats());
+
+        MatchStateType state = runGame();
+
+        while (runPostGame(state)) {
+            state = runGame();
+        }
     } catch (const LibError&
-                     error) {     // No deberia pasara realmente, antes pasaria en el controller.
-        if (protocol.isopen()) {  // Si en teoria esta abierto...
+                     error) {       // No deberia pasara realmente, antes pasaria en el controller.
+        if (protocol.isactive()) {  // Si en teoria esta abierto...
             std::cerr << "player " << player.getid(0) << " notify error: " << error.what()
                       << std::endl;
 
@@ -26,8 +125,9 @@ void ControlNotifier::run() {
     }
 }
 
+
 ControlNotifier::~ControlNotifier() {
     stop();
-    player.disconnect();  // Por si no se cerro, cerra la queue.
+    // player.disconnect();  // Por si no se cerro, cerra la queue.
     join();
 }

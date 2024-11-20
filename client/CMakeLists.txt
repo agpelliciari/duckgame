@@ -1,18 +1,19 @@
 add_subdirectory(menu/)
+add_subdirectory(core/)
+add_subdirectory(interfaz/)
 
 target_sources(taller_client
     PRIVATE
     # .cpp files
-       client.cpp
-       game_loop.cpp
-       lobbycreatemode.cpp    
-       joinlobbymode.cpp
-       main.cpp
+          client.cpp
+          main.cpp
+          simpleeventlistener.cpp
+
     PUBLIC
     # .h files
-       client.h
-       game_loop.h
-       lobbymode.h    
-       lobbycreatemode.h    
-       joinlobbymode.h    
+          actionlistener.h
+          client.h
+          eventlistener.h
+          simpleeventlistener.h
+          gamecontext.h
     )

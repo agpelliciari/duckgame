@@ -5,59 +5,238 @@
 #include <utility>
 
 #include "common/core/liberror.h"
-#include "common/dtos.h"
 
-ClientProtocol::ClientProtocol(Messenger* conn): protocol(conn) {}
-ClientProtocol::ClientProtocol(Socket& conn): protocol(conn) {}
-ClientProtocol::ClientProtocol(Socket&& conn): protocol(conn) {}
 
-ClientProtocol::ClientProtocol(Protocol&& prot): protocol(std::move(prot)) {}
+ClientProtocol::ClientProtocol(Messenger& conn): protocol(conn) {}
+
+
+void ClientProtocol::recvlobbyinfo(lobby_info& out) {
+    // Podria tirar cast error.
+    out.action = (LobbyResponseType)protocol.recvbyte();
+    out.data = protocol.recvbyte();
+    // throw ProtocolError("Invalid lobby info action!");
+}
+
 
 void ClientProtocol::sendaction(PlayerActionDTO& action) {
     protocol.sendbytes(&action, sizeof(action));
 }
 
-void ClientProtocol::joinLobby(const uint8_t playercount, const uint8_t id_match) {
-
-    protocol.sendbyte(playercount);  // Primero se envia el player count.
-
-    // Despues info de la lobby.
-    lobby_action info = {LobbyActionType::JOIN_LOBBY, id_match};
+lobby_info ClientProtocol::sendJoinLobby(const uint8_t id_match,std::vector<int>& players, const uint8_t count) {
+    uint8_t info[3] = {LobbyActionType::JOIN_LOBBY, id_match, count};
     protocol.sendbytes(&info, sizeof(info));
-}
-void ClientProtocol::createLobby(const uint8_t playercount) {
-    protocol.sendbyte(playercount);
+    lobby_info out;
+    
+    recvlobbyinfo(out);
+    
+    if(out.action == JOINED_LOBBY){
+        int playercount = out.data;
+        players.reserve(playercount);
+        while (playercount> 0) {
+            players.push_back(protocol.recvbyte());
+            playercount--;
+        }
+    } else if (out.action != JOINED_LOBBY && out.action != GAME_ERROR) {
+        out.action = GAME_ERROR;
+        out.data = LobbyErrorType::UNKNOWN;
+    } 
 
-    // Default 0 como mapa... que es reservado para que sea al azar.
-    lobby_action info = {LobbyActionType::NEW_LOBBY, 0};
+    // Recibir true si fallo, false si fue exito.
+    return out;
+}
+uint8_t ClientProtocol::sendCreateLobby(const uint8_t count, std::vector<std::string>& list_maps) {
+    uint8_t info[2] = {LobbyActionType::CREATE_LOBBY, count};
     protocol.sendbytes(&info, sizeof(info));
+    uint8_t id_lobby = protocol.recvbyte();
+    
+    int count_maps = protocol.recvuint();
+    list_maps.reserve(count_maps);
+    list_maps.clear();
+    
+    while (count_maps > 0) {
+        list_maps.push_back(protocol.recvmsgstr());
+        count_maps--;
+    }
+    
+    return id_lobby;
 }
 
-void ClientProtocol::startlobby() { protocol.sendbyte(LobbyActionType::STARTED_LOBBY); }
+uint8_t ClientProtocol::recvIDSinglePlayer() {
+    return protocol.recvbyte();  // id player 1
+}
+
+uint8_t ClientProtocol::recvIDDualPlayer(uint8_t* player1) {
+    *player1 = protocol.recvbyte();
+    return protocol.recvbyte();
+}
 
 
-MatchDto ClientProtocol::recvstate() {
-    // Primero recibi info general
-    match_info_dto out;
-    protocol.recvbytes(&out, sizeof(out));
+void ClientProtocol::sendlobbyaction(const lobby_action& action) { protocol.sendbyte(action.type); }
+void ClientProtocol::sendmapname(const std::string& mapname) { protocol.sendmsg(mapname); }
 
-    MatchDto res = MatchDto(out);
+void ClientProtocol::recvmapdata(struct MapData& data) {  //, const int unit) {
+    data.width = protocol.recvuint();
+    data.height = protocol.recvuint();
 
+    // Recv constant z inds.
+    data.blocks_z = protocol.recvshort();
+    data.boxes_z = protocol.recvshort();
+
+    // Recv constant 'textures'/'resources'
+    data.background = protocol.recvmsgstr();
+    data.boxes_tex = protocol.recvmsgstr();
+
+    // Populate textures to load.
+    int count_textures = protocol.recvuint();
+    data.textures.reserve(count_textures);
+    while (count_textures > 0) {
+        data.textures.push_back(protocol.recvmsgstr());
+        count_textures--;
+    }
+
+    // Read sizes.
+    int count_blocks = protocol.recvuint();
+    int count_decorations = protocol.recvuint();
+
+    data.objects.reserve(count_blocks + count_decorations);
+
+    while (count_blocks > 0) {
+        coordinate_t _x = protocol.recvuint();
+        coordinate_t _y = protocol.recvuint();
+
+        uint8_t ind_tex = protocol.recvbyte();
+
+        data.objects.emplace_back(_x, _y  //( data.height- _y * unit) // Inverti!
+                                  ,
+                                  data.blocks_z, data.textures[ind_tex], ind_tex);
+
+        count_blocks--;
+    }
+
+    while (count_decorations > 0) {
+        coordinate_t _x = protocol.recvuint();
+        coordinate_t _y = protocol.recvuint();
+        uint8_t ind_tex = protocol.recvbyte();
+
+        uint8_t _z = protocol.recvshort();
+
+        data.objects.emplace_back(_x, _y  //(data.height - _y * unit)  //*unit //Inverti!
+                                  ,
+                                  _z, data.textures[ind_tex], ind_tex);
+
+        count_decorations--;
+    }
+}
+
+void ClientProtocol::recvstats(MatchStatsInfo& outstats) {
+    outstats.numronda = protocol.recvbyte();
+    outstats.champion_player = protocol.recvbyte();
+
+    int count = protocol.recvbyte();
+    outstats.stats.reserve(count);
+    outstats.stats.clear();
+
+    while (count > 0) {
+        uint8_t id = protocol.recvbyte();
+        uint8_t wins = protocol.recvbyte();
+        outstats.stats.emplace_back(id, wins);
+        count--;
+    }
+}
+
+void ClientProtocol::recvlobbyplayers(std::vector<int>& players){
     int playercount = (int)protocol.recvbyte();
-    std::cout << "----> RECV PLAYER COUNT" << playercount << std::endl;
+    players.reserve(playercount);
+    while (playercount> 0) {
+        players.push_back(protocol.recvbyte());
+        playercount--;
+    }
+}
+
+
+void ClientProtocol::recvplayer(PlayerDTO& player){
+    player.id = protocol.recvuint();
+    player.pos.x = protocol.recvuint();
+    player.pos.y = protocol.recvuint();
+
+    player.weapon = (TypeWeapon)protocol.recvbyte();
+    player.move_action = (TypeMoveAction)protocol.recvbyte();
+    
+    int size_actions = protocol.recvbyte();
+    player.doing_actions.reserve(size_actions);
+    
+    while(size_actions > 0){
+         player.doing_actions.push_back((TypeDoingAction)protocol.recvbyte());
+         size_actions--;
+    }        
+
+    player.is_alive = protocol.recvbyte();
+    player.helmet = protocol.recvbyte();
+    player.chest_armor = protocol.recvbyte();
+    player.aiming_up = protocol.recvbyte();
+}
+void ClientProtocol::recvmatch(MatchDto& outstate) {
+    int playercount = (int)protocol.recvbyte();
+
+    outstate.players.reserve(playercount);
+    outstate.players.clear();
+    // Just in case.
+    auto iterPlayer = outstate.players.begin();
+
+    // std::cout << "CLIENT RECV PLAY COUNT" << playercount << " "<< outstate.players.size()<<
+    // std::endl;
 
     while (playercount > 0) {
         PlayerDTO player;
+        recvplayer(player);
 
-        protocol.recvbytes(&player, sizeof(player));
+        outstate.players.emplace(iterPlayer, player);
 
-        std::cout << "RECV PLAYER: " << player.id << "at:" << player.coord_x << ","
-                  << player.coord_y << std::endl;
-
-        res.players.push_back(player);
+        ++iterPlayer;
         playercount--;
     }
-    return res;
+
+    int objcount = (int)protocol.recvshort();
+    // std::cout << "CLIENT RECV OBJ COUNT" << objcount << "player size? "<< outstate.players.size()
+    // << std::endl;
+    outstate.objects.reserve(objcount);
+    outstate.objects.clear();
+
+    while (objcount > 0) {
+        DynamicObjDTO obj;
+
+        obj.pos.x = protocol.recvuint();
+        obj.pos.y = protocol.recvuint();
+        obj.type = (TypeDynamicObject)protocol.recvbyte();
+
+        outstate.objects.push_back(obj);
+        objcount--;
+    }
 }
+
+bool ClientProtocol::recvstate(MatchStatsInfo& outstats, MatchDto& outstate) {
+
+    uint8_t code = protocol.recvbyte();
+    if (code == MatchStateType::INICIADA) {  // Receive matchdto
+        recvmatch(outstate);
+        return true;
+    }
+    
+    outstats.state = (MatchStateType) code;
+    recvstats(outstats);
+    return false;
+}
+
+void ClientProtocol::recvplayers(std::vector<int>& players) {
+    int totalplayers = protocol.recvbyte();
+    players.reserve(totalplayers);
+    while (totalplayers > 0) {
+        players.push_back(protocol.recvbyte());
+        totalplayers--;
+    }
+}
+
+// Manejo de si esta abierto o no.
+bool ClientProtocol::isopen() { return protocol.isactive(); }
 
 void ClientProtocol::close() { protocol.close(); }

@@ -7,58 +7,187 @@
 //#include "./gameerror.h"
 #include "common/protocolerror.h"
 
+// ServerProtocol::ServerProtocol(Socket& messenger): Protocol(messenger) {}
+ServerProtocol::ServerProtocol(Messenger& messenger): Protocol(messenger) {}
 
-ServerProtocol::ServerProtocol(Socket& messenger): protocol(messenger), isactive(true) {}
-ServerProtocol::ServerProtocol(Messenger* messenger): protocol(messenger), isactive(true) {}
-ServerProtocol::ServerProtocol(Protocol&& prot): protocol(std::move(prot)), isactive(true) {}
+uint8_t ServerProtocol::recvplayercount() { return this->recvbyte(); }
 
-
-bool ServerProtocol::recvplayercount(uint8_t* count) { return protocol.tryrecvbyte(count); }
-
-bool ServerProtocol::recvsignalstart() {
+LobbyActionType ServerProtocol::recvlobbyaction() {
     uint8_t sign;
-    if (protocol.tryrecvbyte(&sign)) {
-        return (LobbyActionType)(sign) == LobbyActionType::STARTED_LOBBY;
+    if (this->tryrecvbyte(&sign)) {
+        return (LobbyActionType)sign;  // Podria fallar el casteo? la verificacion es posterior.
     }
 
-    return false;
+    throw ProtocolError("Did not receive a lobby action");
 }
+std::string ServerProtocol::recvmapname() { return this->recvmsgstr(); }
 
 
-lobby_action ServerProtocol::recvlobbyaction() {
-    lobby_action out;
-    protocol.recvbytes(&out, sizeof(out));
-    return out;
+void ServerProtocol::notifyaction(const LobbyResponseType response) { this->sendbyte(response); }
+
+void ServerProtocol::notifyinfo(const LobbyResponseType response, const uint8_t data) {
+    uint8_t bytes[2] = {response, data};
+    this->sendbytes(&bytes, 2);
 }
+void ServerProtocol::notifyevent(const lobby_info& info) {
+    uint8_t bytes[2] = {info.action, info.data};
+    this->sendbytes(&bytes, 2);
+}
+
+uint8_t ServerProtocol::recvlobbyid() { return this->recvbyte(); }
+
+LobbyActionType ServerProtocol::recvresolveinfo() {
+    uint8_t sign;
+    if (!this->tryrecvbyte(&sign)) {
+        throw ProtocolError("Did not receive lobby resolve info.");
+    }
+    if (LobbyActionType::CREATE_LOBBY == sign) {
+        return CREATE_LOBBY;
+    }
+
+    if (LobbyActionType::JOIN_LOBBY == sign) {
+        return JOIN_LOBBY;
+    }
+
+    throw ProtocolError("Invalid lobby resolve action!");
+}
+
+void ServerProtocol::notifyid(uint8_t id) { this->sendbyte(id); }
+
 
 PlayerActionDTO ServerProtocol::recvaction() {
     PlayerActionDTO action;
-    if (!protocol.tryrecvbytes(&action, sizeof(action))) {
-        isactive = false;
+    if (!this->tryrecvbytes(&action, sizeof(action))) {
+        active = false;
         throw ProtocolError("Did not receive action!");
     }
+
+    // std::cout << "Receiving action from: " << (int)action.playerind << "= " << (int)action.type
+    //<< std::endl;
+
     return action;
 }
+
+
+// Garantiza que sea un state de estadistica.
+#define stat_state(vl) (vl == INICIADA? MatchStateType::ROUND_END: vl) 
+void ServerProtocol::sendstats(const MatchStatsInfo& state) {
+
+    uint8_t general[3] = {(uint8_t)stat_state(state.state), (uint8_t)state.numronda, state.champion_player};    
+    
+    this->sendbytes(general, sizeof(general));
+
+    this->sendbyte(state.stats.size());
+
+    for (const PlayerStatDto& stat: state.stats) {
+        this->sendbyte(stat.id);
+        this->sendbyte(stat.wins);
+    }
+}
+
+
 void ServerProtocol::sendstate(const MatchDto&& state) { sendstate(state); }
 
 void ServerProtocol::sendstate(const MatchDto& state) {
+    // Si se manda un state.. esta iniciada. Hay que avisar esta iniciada
+    // Ya que el state se usa para saber que info va a llegar.
+
+    // std::cout << "SENDING STATE DTO!\n";
+    this->sendbyte((uint8_t)MatchStateType::INICIADA);
+
 
     // Primero envia general info
-    protocol.sendbytes(&state.info, sizeof(state.info));
-    protocol.sendbyte(state.players.size());
+    // this->sendbytes(&state.info, sizeof(state.info));
+    this->sendbyte(state.players.size());
 
-    for (auto playerit = state.players.begin(); playerit != state.players.end();) {
-        PlayerDTO player = *playerit;
-        protocol.sendbytes(&player, sizeof(player));
-        ++playerit;
+    for (const PlayerDTO& player: state.players) {
+        sendplayer(player);
+    }
+
+
+    this->sendshort(state.objects.size());
+    // std::cout << "SERVER SENDING OBJ COUNT" << state.objects.size() << std::endl;
+
+    for (const DynamicObjDTO& obj: state.objects) {
+        this->senduint(obj.pos.x);
+        this->senduint(obj.pos.y);
+        this->sendbyte((uint8_t)obj.type);
+    }
+}
+
+// Para mayor flexibilidad.. por ahora.
+void ServerProtocol::sendplayer(const PlayerDTO& player) {
+
+    this->senduint(player.id);
+    this->senduint(player.pos.x);
+    this->senduint(player.pos.y);
+
+    this->sendbyte((uint8_t)player.weapon);
+    this->sendbyte((uint8_t)player.move_action);
+    
+    this->sendbyte((uint8_t)player.doing_actions.size());
+    
+    for(const TypeDoingAction& action: player.doing_actions){
+        this->sendbyte((uint8_t)action);
+    }
+
+    // Se podria juntar en 1 solo byte. Por ahora no?
+    this->sendbyte((uint8_t)player.is_alive);
+    this->sendbyte((uint8_t)player.helmet);
+    this->sendbyte((uint8_t)player.chest_armor);
+    this->sendbyte((uint8_t)player.aiming_up);
+}
+
+
+void ServerProtocol::sendmaplist(const std::vector<std::string>& maps){
+    this->senduint(maps.size());
+    for(const std::string& map: maps){
+         this->sendmsg(map);
+    }
+}
+
+void ServerProtocol::sendmapinfo(const MapInfo& map) {
+
+    // Send Map size
+    this->senduint(map.size.x);
+    this->senduint(map.size.y);
+
+    // Send constant z inds
+    this->sendshort(map.blocks_z);
+    this->sendshort(map.boxes_z);
+
+    // Send constant 'textures'/'resources'
+    this->sendmsg(map.background);
+    this->sendmsg(map.boxes_tex);
+
+    // Send textures.
+    this->senduint(map.textures.size());
+    for (const std::string& tex: map.textures) {
+        this->sendmsg(tex);
+    }
+
+    // Send objects sizes.
+    this->senduint(map.blocks.size());
+    this->senduint(map.decorations.size());
+
+    // Send blocks
+    for (const BlockDTO& block: map.blocks) {
+        this->senduint(block.pos.x);
+        this->senduint(block.pos.y);
+        this->sendbyte(block.texture_id);
+    }
+
+    // Send decorations
+    for (const DecorationDTO& decoration: map.decorations) {
+        this->senduint(decoration.pos.x);
+        this->senduint(decoration.pos.y);
+        this->sendbyte(decoration.texture_id);
+
+        this->sendshort(decoration.z_ind);
     }
 }
 
 
-bool ServerProtocol::isopen() { return isactive.load(); }
+// bool ServerProtocol::isopen() { return this->isactive(); }
 
-void ServerProtocol::close() {
-    if (isactive.exchange(false)) {
-        protocol.close();
-    }
-}
+// void ServerProtocol::close() { this->close(); }

@@ -33,6 +33,7 @@ private:
     const unsigned int max_size;
 
     bool closed;
+    bool dirty;
 
     std::mutex mtx;
     std::condition_variable is_not_full;
@@ -64,8 +65,13 @@ private:
     }
 
 public:
-    Queue(): max_size(UINT_MAX - 1), closed(false) {}
-    explicit Queue(const unsigned int max_size): max_size(max_size), closed(false) {}
+    // Permiti empezarla inicialmente cerrada y que se reabra despues.
+    // explicit Queue(const bool _closed): max_size(UINT_MAX - 1), closed(_closed) {}
+    explicit Queue(const unsigned int max_size, const bool _closed):
+            max_size(max_size), closed(_closed) {}
+
+    Queue(): Queue(UINT_MAX - 1) {}
+    explicit Queue(const unsigned int max_size): Queue(max_size, false) {}
 
 
     bool try_push(T const& val) {
@@ -171,14 +177,44 @@ public:
     }
 
     void close() {
+        if(tryclose()){
+            return;
+        }
+        throw std::runtime_error("The queue is already closed.");
+    }
+    bool tryclose() {
         std::unique_lock<std::mutex> lck(mtx);
 
         if (closed) {
-            throw std::runtime_error("The queue is already closed.");
+             return false;
         }
 
         closed = true;
+        dirty = true;
         is_not_empty.notify_all();
+        
+        return true;
+    }
+    
+    void waitreopen(){
+        std::unique_lock<std::mutex> lck(mtx);
+        
+        while (closed) {
+            is_not_full.wait(lck);
+        }
+    }
+    
+    void resetdirty(){
+        std::unique_lock<std::mutex> lck(mtx);
+        dirty = false;
+    }
+    
+    void checkdirty(){
+        std::unique_lock<std::mutex> lck(mtx);
+        if(dirty){
+            dirty = false;
+            throw ClosedQueue();
+        }    
     }
 
     bool isclosed() {
@@ -186,12 +222,19 @@ public:
         return closed;
     }
 
-    void reopen() {
+    bool reopen() {
         std::unique_lock<std::mutex> lck(mtx);
-        // Aseguremosnos esta vacia la queue.
-        std::queue<T, C> new_q;
-        std::swap(q, new_q);
-        closed = false;
+        if (closed) {
+            // Aseguremosnos esta vacia la queue.
+            std::queue<T, C> new_q;
+            std::swap(q, new_q);
+            closed = false;
+            
+            is_not_full.notify_all();
+            return true;
+        }
+
+        return false;
     }
 
 private:
