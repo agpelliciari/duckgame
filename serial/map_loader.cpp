@@ -6,7 +6,7 @@ static const char* DIR_MAPS = "res/maps/";
 static const char* EXT = ".yaml";
 
 
-MapLoader::MapLoader(const char * root_maps) {
+MapLoader::MapLoader(const char * root_maps): root(root_maps){
      for (const auto& entry: std::filesystem::directory_iterator(root_maps)){
            if(entry.is_regular_file()){
                auto path = entry.path();
@@ -33,7 +33,7 @@ MapLoader::MapLoader() : MapLoader(DIR_MAPS){
 
 MapDeserializer& MapLoader::getLoader(const char* mapname) {
 
-    std::string name(DIR_MAPS);
+    std::string name(root);
     name.append(mapname);
     name.append(EXT);
 

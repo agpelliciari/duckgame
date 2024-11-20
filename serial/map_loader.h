@@ -14,7 +14,8 @@ protected:
         int count;
         explicit ReferencedMap(const std::string& name): deserial(name), count(1) {}
     };
-
+    
+    std::string root;
     std::list<struct ReferencedMap> maps;  // cppcheck-suppress unusedStructMember
     std::vector<std::string> list_maps;
 public:
