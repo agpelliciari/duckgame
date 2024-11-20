@@ -56,7 +56,7 @@ std::vector<ImportedMapObjectData> MapImporter::getDecorations(){
 }
 
 std::vector<ImportedMapObjectData> MapImporter::getBoxes(){
-    read_seq_t boxes = reader.getBlocks();
+    read_seq_t boxes = reader.getBoxes();
     std::vector<ImportedMapObjectData> res;
     
     

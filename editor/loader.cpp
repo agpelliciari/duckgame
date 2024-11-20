@@ -136,7 +136,7 @@ Texture Loader::loadNoTexture(const std::string& root) {
 
     Texture texture;
     texture.name = "notexture";
-    texture.source = filePath.toStdString();
+    texture.source = filePath.toStdString().substr(root.length());
     texture.mapObjectType = MapObjectType::Empty;
     texture.pixelMap = pixelMap;
 
@@ -212,7 +212,7 @@ void Loader::load(const std::string& root, const std::string& path, MapObjectTyp
 
         Texture texture;
         texture.name = fileInfo.baseName().toStdString();
-        texture.source = fileInfo.filePath().toStdString();
+        texture.source = fileInfo.filePath().toStdString().substr(root.length());
         texture.mapObjectType = mapObjectType;
         texture.pixelMap = pixelMap;
 

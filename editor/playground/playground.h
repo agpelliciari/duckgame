@@ -88,11 +88,17 @@ public:
     std::vector<MapObjectData> boxesToExport();
     std::vector<MapObjectData> decorationsToExport();
 
+    void cleanMap();
+
+    QPoint position(int column, int row);
+
     ~Playground();
 
 private:
     void initializeMap();
     void createMapLayerFor(std::vector<QGraphicsRectItem*>& mapObjects, int zIndex);
+
+    void cleanMapObjects(const std::vector<QGraphicsRectItem*>& mapObjects);
 
     void wheelEvent(QWheelEvent */*event*/) override {};
     void mousePressEvent(QMouseEvent* event) override;
@@ -100,6 +106,10 @@ private:
     void mouseMoveEvent(QMouseEvent* event) override;
 
     void zoom(int scaleFactor);
+
+    void addMapObject(QPoint position, const std::vector<QGraphicsRectItem*>& mapObjects, MapObjectType mapObjectType, Texture texture);
+
+    void removeMapObject(QPoint position, const std::vector<QGraphicsRectItem*>& mapObjects);
 
     void setMapObjectData(QGraphicsRectItem* mapObject, MapObjectType mapObjectType, const std::string& texture);
 
@@ -113,7 +123,7 @@ private:
 
     std::vector<MapObjectData> mapObjectsFilter(const std::vector<QGraphicsRectItem*>& mapObjects, MapObjectType mapObjectType);
 
-    std::vector<MapObjectData> mapObjectsData(const std::vector<QGraphicsRectItem*>& rectItems);
+    std::vector<MapObjectData> mapObjectsDataToExport(const std::vector<MapObjectData>& mapObjects);
 };
 
 #endif

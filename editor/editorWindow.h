@@ -11,7 +11,7 @@
 
 #undef emit
 #include "../serial/map_serializer.h"
-//#include "../serial/map_importer.h"
+#include "../serial/map_importer.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {

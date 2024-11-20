@@ -17,7 +17,7 @@ TileSet::TileSet(Loader& loader, QDir directory): loader(loader), _name(director
 
         Texture texture;
         texture.name = fileInfo.baseName().toStdString();
-        texture.source = fileInfo.filePath().toStdString();
+        texture.source = fileInfo.filePath().toStdString().substr(5);
         texture.mapObjectType = MapObjectType::Block;
         texture.pixelMap = pixelMap;
 
