@@ -11,6 +11,9 @@ class LobbyControl {
 protected:
     LobbyContainer& lobbies;   // cppcheck-suppress unusedStructMember
     ServerProtocol& protocol;  // cppcheck-suppress unusedStructMember
+
+    Match& resolveJoin(ControlId& outPlayer);
+    Match& resolveHost(ControlId& outPlayer);
 public:
     // Crea el player con el ide pasado e inicia el protocolo
     explicit LobbyControl(LobbyContainer& _lobbies, ServerProtocol& _protocol);
@@ -23,10 +26,8 @@ public:
     LobbyControl(const LobbyControl&) = delete;
     LobbyControl& operator=(const LobbyControl&) = delete;
 
-    Match& resolveMatch(bool* isanfitrion);
+    Match& resolveMatch(bool& isanfitrion, ControlId& outPlayer);
 
-    ControlledPlayer& getJoinedPlayers(Match& match);
-    ControlledPlayer& getHostPlayers(Match& match);
 
     bool handleAnfitrionLobby(ControlledPlayer& host, Match& match);  // ControlledPlayer& player,
     // void handleJoinedLobby(ControlledPlayer& player, Match& match);

@@ -7,7 +7,7 @@
 #include "common/dtosgame.h"
 #include "common/dtoslobby.h"
 #include "common/queue.h"
-#include "server/logic_server/matchobserver.h"
+#include "./controlid.h"
 
 typedef Queue<lobby_info> lobby_events;
 typedef Queue<MatchDto> match_snapshots;
@@ -20,10 +20,8 @@ class ControlledPlayer {
 
 protected:
     // Manejo de ids. Y cantidad de players para la queue de mensajes.
-    uint8_t count;  // cppcheck-suppress unusedStructMember
-
-    player_id ids[2];  // cppcheck-suppress unusedStructMember
-
+    const ControlId id;
+    
     // For notifying actions and/or exit.
     lobby_events events;        // cppcheck-suppress unusedStructMember
     match_snapshots snapshots;  // cppcheck-suppress unusedStructMember
@@ -32,9 +30,8 @@ protected:
     MatchStatsInfo match_stats;// cppcheck-suppress unusedStructMember
 
 public:
-    explicit ControlledPlayer(player_id first);
-    explicit ControlledPlayer(player_id first, player_id second);
-
+    explicit ControlledPlayer(const ControlId& _id);
+    
     // Por ahora tambien nos escapamos del move.
     ControlledPlayer(ControlledPlayer&&) = delete;
 
@@ -49,7 +46,9 @@ public:
     bool operator==(const ControlledPlayer& other) const;
 
     uint8_t playercount() const;
-
+    
+    const ControlId& getcontrolid() const;
+    
     player_id getid(const uint8_t ind) const;
 
     // Abre la queue de lobby info del jugador, cierra la de matchdto, indicando esta activo en una

@@ -77,13 +77,16 @@ TEST_F(TestIntegrationLobby, SimpleCreateLobbyAndJoin) {
     TesterClient host(openClient(), sktserver, lobbies);
 
     uint8_t id_lobby = host.createClientLobbySingle(lobbies.registeredMaps());
+    std::cout << "CREATED?!\n";
     ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
 
 
     TesterClient joined1(openClient(), sktserver, lobbies);
 
     uint8_t first = 0;
+    std::cout << "BFR JOINED?!\n";
     uint8_t second = joined1.assertJoinLobbyDual(id_lobby, 3, &first);
+    std::cout << "JOINED?!\n";
 
     ASSERT_EQ(first, 2) << "ID joined first is correct";
     ASSERT_EQ(second, 3) << "ID joined second is correct";
@@ -92,10 +95,13 @@ TEST_F(TestIntegrationLobby, SimpleCreateLobbyAndJoin) {
     host.assertLobbyInfoJoined(second);
 
     host.startMatch(mapusing);
+    std::cout << "STARTED?!\n";
 
     // 1 is count of players. Should not start maybe?
     host.assertLobbyStarted(3);
     joined1.assertLobbyStarted(3);
+    
+    std::cout << "FINISHED TEST?!\n";
 }
 
 TEST_F(TestIntegrationLobby, JoinFailedNotFound) {

@@ -138,7 +138,9 @@ LobbyErrorType TesterClient::assertJoinLobbyFail(uint8_t id_lobby) {
 
 uint8_t TesterClient::assertJoinLobbyDual(uint8_t id_lobby, uint8_t count, uint8_t* first) {
     std::vector<int> idsCurr;
+    std::cout << "SHOULD JOIN DUAL\n";
     lobby_info info = client.sendJoinLobby(id_lobby, idsCurr, 2);
+    std::cout << "SENT AND RECEIVED JOIN RSPS\n";
     EXPECT_EQ((int)info.action, (int)LobbyResponseType::JOINED_LOBBY) << "Joined Match succesfully ";
     EXPECT_EQ(info.data, count) << "Total count is correct?";
     EXPECT_EQ(idsCurr.size(), count) << "players received count is correct?";

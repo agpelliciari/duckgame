@@ -10,26 +10,20 @@
 #define SIZE_EVENTS 30
 
 // Snapshots esta cerrada inicialmente. Events esta abierta.
-ControlledPlayer::ControlledPlayer(player_id first):
-        count(1), ids(), events(SIZE_EVENTS, false), snapshots(SIZE_SNAPSHOTS, true) {
-    ids[0] = first;
-    ids[1] = first;
-}
-
-ControlledPlayer::ControlledPlayer(player_id first, player_id second):
-        count(2), ids(), events(SIZE_EVENTS, false), snapshots(SIZE_SNAPSHOTS, true) {
-    ids[0] = first;
-    ids[1] = second;
-}
+ControlledPlayer::ControlledPlayer(const ControlId& _id):id(_id), 
+events(SIZE_EVENTS, false), snapshots(SIZE_SNAPSHOTS, true){}
 
 bool ControlledPlayer::operator==(const ControlledPlayer& other) const {
-    return this->ids[0] == other.ids[0] && this->ids[1] == other.ids[1];
+    return this->id == other.id;
 }
 
-uint8_t ControlledPlayer::playercount() const { return this->count; }
+uint8_t ControlledPlayer::playercount() const { return id.getcount(); }
 
+const ControlId& ControlledPlayer::getcontrolid() const{
+    return id;
+}
 
-player_id ControlledPlayer::getid(const uint8_t ind) const { return this->ids[ind]; }
+player_id ControlledPlayer::getid(const uint8_t ind) const { return id.get(ind); }
 
 
 // Switch del player. Participando en una partida. No mas events de lobby, ahora snapshots.
@@ -100,10 +94,10 @@ MatchDto ControlledPlayer::popstate() {
 
 std::string ControlledPlayer::toString() {
     std::stringstream result;
-    if (count == 1) {
-        result << "Player " << (int)ids[0];
+    if (id.getcount() == 1) {
+        result << "Player " << (int)id.get(0);
     } else {
-        result << "Players " << (int)ids[0] << " and " << (int)ids[1];
+        result << "Players " << (int)id.get(0) << " and " << (int)id.get(1);
     }
 
     return result.str();

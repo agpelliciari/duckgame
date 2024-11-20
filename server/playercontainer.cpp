@@ -8,12 +8,12 @@ PlayerContainer::PlayerContainer(const int _max_players): canceled(false), max_p
 
 
 // Todo esto no hace falta sincronizar ya que es sincronico!
-ControlledPlayer& PlayerContainer::add(uint8_t countplayers) {
+void PlayerContainer::add(ControlId& out) {
     if (canceled) {
         throw GameError(LOBBY_NOT_FOUND, "Tried to join to lobby already cancelled");
     }
     
-    if(totalplayers+countplayers > max_players){
+    if(totalplayers+out.getcount() > max_players){
         throw GameError(LOBBY_NO_SPACE, "There was no capacity to join required count");
     }
 
@@ -22,39 +22,62 @@ ControlledPlayer& PlayerContainer::add(uint8_t countplayers) {
     // Por ahora pareceria es lo mismo que el id.
     // Pero a la hora de remove. No parece correcto. Si bien por ahora no se necesita se puedan
     // conectar.
-    if (countplayers == 2) {  // Two in the machine!
+    if (out.getcount() == 2) {  // Two in the machine!
         totalplayers += 2;
-        player_id first = ++last_id;
-        lobby_info info(PLAYER_NEW, first);
+        lobby_info info(PLAYER_NEW, ++last_id);
         notifyInfo(info);
+        
+        out.set(0, last_id); // Set first 
+        
         info.data = ++last_id;
         notifyInfo(info);
+        out.set(1, last_id); // Set second 
+        
 
-        return players.emplace_back(first, last_id);
+        players.emplace_back(out);
+        
+        return;
     }
 
     // Por default es 1 solo.
     totalplayers += 1;
     lobby_info info(PLAYER_NEW, ++last_id);
     notifyInfo(info);
-    return players.emplace_back(last_id);
+    out.set(0, last_id); // Set first 
+    
+    players.emplace_back(out);
 }
 
-void PlayerContainer::remove(const ControlledPlayer& player) {
-    int mx = player.playercount();
-    totalplayers -= mx;
-
-    std::vector<lobby_info> disconnected;
-    disconnected.reserve(mx);
-    for (int ind = 0; ind < mx; ind++) {
-        disconnected.emplace_back(PLAYER_LEFT, player.getid(ind));
+player_container::iterator PlayerContainer::findit(const ControlId& id){
+    auto playerit = players.begin();
+    while (playerit != players.end()) {
+        if(playerit->getcontrolid() == id){
+             return playerit;
+        }
+        ++playerit;
     }
+    throw GameError(SERVER_ERROR, "Not found id player on container");
+}
 
-    players.remove(player);
+ControlledPlayer& PlayerContainer::get(const ControlId& id) {
+    return *findit(id);
+}
 
-    for (const lobby_info& info: disconnected) {
+void PlayerContainer::remove(const ControlId& id) {
+
+    ControlId idcopy(id); // Por si las moscas. Si se usa el player.getcontrolid()
+    players.erase(findit(idcopy));
+    
+    int count = idcopy.getcount();
+    totalplayers -= count;
+
+    lobby_info info(PLAYER_LEFT, idcopy.get(0));
+    notifyInfo(info);
+    for (int ind = 1; ind < count; ind++) {
+        info.data = idcopy.get(ind);
         notifyInfo(info);
     }
+    
 }
 
 // Actualmente el player acceptor se cierra primero.
@@ -94,8 +117,8 @@ void PlayerContainer::finishWaitMode() {
     }
 }
 
-void PlayerContainer::hostLobbyLeft(const ControlledPlayer& host) {
-    players.remove(host);
+void PlayerContainer::hostLobbyLeft(const ControlId& host) {
+    players.erase(findit(host));
     cancelByError(ANFITRION_LEFT);
 }
 void PlayerContainer::cancelByError(LobbyErrorType cancelError) {
@@ -120,16 +143,22 @@ void PlayerContainer::finishGameMode(const MatchStatsInfo& match_stats) {
     }
 }
 
-std::vector<player_id> PlayerContainer::getPlayers() const {
-    std::vector<player_id> connected;
+
+void PlayerContainer::putPlayers(std::vector<player_id>& out) const{
     for (auto playerit = players.begin(); playerit != players.end();) {
         int mx = (*playerit).playercount();
         for (int ind = 0; ind < mx; ind++) {
-            connected.push_back((*playerit).getid(ind));
+            out.push_back((*playerit).getid(ind));
         }
 
         ++playerit;
     }
+}
+
+std::vector<player_id> PlayerContainer::getPlayers() const {
+    std::vector<player_id> connected;
+    
+    putPlayers(connected);
 
     return connected;
 }
