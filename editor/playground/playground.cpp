@@ -35,31 +35,47 @@ void Playground::addBlock(QPoint position, TileSet tileSet) {
 
     setMapObjectData(block, MapObjectType::Block, "") ;
     
-    repainAllBlocksWith(tileSet);
+    repainBlocksWith(tileSet);
 }
 
-void Playground::addPhysicalObject(QPoint position, Texture texture) {
-    QGraphicsRectItem* physicalObject = mapObjectAt(physicalObjects, position);
+void Playground::addSpawnPlayer(QPoint position, Texture texture) {
+    QGraphicsRectItem* spawnPlayer = mapObjectAt(spawnPlayers, position);
 
-    if (!physicalObject)
+    if (!spawnPlayer)
         return;
 
     QBrush brush(texture.pixelMap);
-    physicalObject->setBrush(brush);
-
-    setMapObjectData(physicalObject, texture.mapObjectType, texture.source);
+    spawnPlayer->setBrush(brush);
 }
 
-void Playground::addNonPhysicalObject(QPoint position, Texture texture) {
-    QGraphicsRectItem* nonPhysicalObject = mapObjectAt(nonPhysicalObjects, position);
+void Playground::addSpawnWeapon(QPoint position, Texture texture) {
+    QGraphicsRectItem* spawnWeapon = mapObjectAt(spawnWeapons, position);
 
-    if (!nonPhysicalObject)
+    if (!spawnWeapon)
         return;
-
+    
     QBrush brush(texture.pixelMap);
-    nonPhysicalObject->setBrush(brush);
+    spawnWeapon->setBrush(brush);
+}
 
-    setMapObjectData(nonPhysicalObject, texture.mapObjectType, texture.source);
+void Playground::addBox(QPoint position, Texture texture) {
+    QGraphicsRectItem* box = mapObjectAt(boxes, position);
+
+    if (!box)
+        return;
+    
+    QBrush brush(texture.pixelMap);
+    box->setBrush(brush);
+}
+
+void Playground::addDecoration(QPoint position, Texture texture) {
+    QGraphicsRectItem* decoration = mapObjectAt(decorations, position);
+
+    if (!decoration)
+        return;
+    
+    QBrush brush(texture.pixelMap);
+    decoration->setBrush(brush);
 }
 
 void Playground::removeBlock(QPoint position, TileSet tileSet) {
@@ -71,27 +87,47 @@ void Playground::removeBlock(QPoint position, TileSet tileSet) {
     block->setBrush(Qt::NoBrush);
     cleanObjectData(block);
 
-    repainAllBlocksWith(tileSet);
+    repainBlocksWith(tileSet);
 }
 
-void Playground::removePhysicalObject(QPoint position) {
-    QGraphicsRectItem* physicalObject = mapObjectAt(physicalObjects, position);
+void Playground::removeSpawnPlayer(QPoint position) {
+    QGraphicsRectItem* spawnPlayer = mapObjectAt(spawnPlayers, position);
 
-    if (!physicalObject)
+    if (!spawnPlayer)
         return;
 
-    physicalObject->setBrush(Qt::NoBrush);
-    cleanObjectData(physicalObject);
+    spawnPlayer->setBrush(Qt::NoBrush);
+    cleanObjectData(spawnPlayer);
 }
 
-void Playground::removeNonPhysicalObject(QPoint position) {
-    QGraphicsRectItem* nonPhysicalObject = mapObjectAt(nonPhysicalObjects, position);
+void Playground::removeSpawnWeapon(QPoint position) {
+    QGraphicsRectItem* spawnWeapon = mapObjectAt(spawnWeapons, position);
 
-    if (!nonPhysicalObject)
+    if (!spawnWeapon)
         return;
 
-    nonPhysicalObject->setBrush(Qt::NoBrush);
-    cleanObjectData(nonPhysicalObject);
+    spawnWeapon->setBrush(Qt::NoBrush);
+    cleanObjectData(spawnWeapon);
+}
+
+void Playground::removeBox(QPoint position) {
+    QGraphicsRectItem* box = mapObjectAt(boxes, position);
+
+    if (!box)
+        return;
+
+    box->setBrush(Qt::NoBrush);
+    cleanObjectData(box);
+}
+
+void Playground::removeDecoration(QPoint position) {
+    QGraphicsRectItem* decoration = mapObjectAt(decorations, position);
+
+    if (!decoration)
+        return;
+
+    decoration->setBrush(Qt::NoBrush);
+    cleanObjectData(decoration);
 }
 
 int Playground::maxWidthToExport() {
@@ -107,23 +143,23 @@ MapObjectData Playground::backgroundToExport() {
 }
 
 std::vector<MapObjectData> Playground::blocksToExport() {
-    return mapObjectsFilter2(blocks, MapObjectType::Block);
+    return mapObjectsFilter(blocks, MapObjectType::Block);
 }
 
 std::vector<MapObjectData> Playground::spawnPlayersToExport() {
-    return mapObjectsFilter2(nonPhysicalObjects, MapObjectType::SpawnPlayer);
+    return mapObjectsFilter(spawnPlayers, MapObjectType::SpawnPlayer);
 }
 
 std::vector<MapObjectData> Playground::spawnWeaponsToExport() {
-    return mapObjectsFilter2(nonPhysicalObjects, MapObjectType::SpawnWeapon);
+    return mapObjectsFilter(spawnWeapons, MapObjectType::SpawnWeapon);
 }
 
 std::vector<MapObjectData> Playground::boxesToExport() {
-    return mapObjectsFilter2(physicalObjects, MapObjectType::Box);
+    return mapObjectsFilter(boxes, MapObjectType::Box);
 }
 
 std::vector<MapObjectData> Playground::decorationsToExport() {
-    return mapObjectsFilter2(nonPhysicalObjects, MapObjectType::Decoration);
+    return mapObjectsFilter(decorations, MapObjectType::Decoration);
 }
 
 Playground::~Playground() {
@@ -141,9 +177,25 @@ void Playground::initializeMap() {
     background->setData(0, QVariant::fromValue(MapObjectData{ 1, 1, 1, MapObjectType::Empty, "" }));
     map->addItem(background);
 
-    createMapLayerFor(blocks, 1);
-    createMapLayerFor(physicalObjects, 2);
-    createMapLayerFor(nonPhysicalObjects, 3);
+    createMapLayerFor(decorations, 1);
+    createMapLayerFor(blocks, 2);
+    createMapLayerFor(boxes, 3);
+    createMapLayerFor(spawnPlayers, 4);
+    createMapLayerFor(spawnWeapons, 5);
+}
+
+void Playground::createMapLayerFor(std::vector<QGraphicsRectItem*>& mapObjects, int zIndex) {
+    for (int row = 0; row < MAX_HEIGHT; ++row) {
+        for (int col = 0; col < MAX_WIDTH; ++col) {
+            QGraphicsRectItem* mapObject = map->addRect(
+                col * TEXTURE_SIZE, row * TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE,
+                QPen(Qt::NoPen), Qt::NoBrush
+            );
+            mapObject->setZValue(zIndex);
+            mapObject->setData(0, QVariant::fromValue(MapObjectData{ row, col, zIndex, MapObjectType::Empty, "" }));
+            mapObjects.push_back(mapObject);
+        }
+    }
 }
 
 void Playground::mousePressEvent(QMouseEvent* event) {
@@ -202,21 +254,7 @@ void Playground::cleanObjectData(QGraphicsRectItem* mapObject) {
     setMapObjectData(mapObject, MapObjectType::Empty, "");
 }
 
-void Playground::createMapLayerFor(std::vector<QGraphicsRectItem*>& mapObjects, int zIndex) {
-    for (int row = 0; row < MAX_HEIGHT; ++row) {
-        for (int col = 0; col < MAX_WIDTH; ++col) {
-            QGraphicsRectItem* mapObject = map->addRect(
-                col * TEXTURE_SIZE, row * TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE,
-                QPen(Qt::NoPen), Qt::NoBrush
-            );
-            mapObject->setZValue(zIndex);
-            mapObject->setData(0, QVariant::fromValue(MapObjectData{ row, col, zIndex, MapObjectType::Empty, "" }));
-            mapObjects.push_back(mapObject);
-        }
-    }
-}
-
-void Playground::repainAllBlocksWith(TileSet tileSet) {
+void Playground::repainBlocksWith(TileSet tileSet) {
     std::vector<MapObjectData> allMapObjectBlocks = mapObjectsFilter(blocks, MapObjectType::Block);
 
     for (QGraphicsRectItem* block : blocks) {
@@ -261,6 +299,18 @@ std::string Playground::stringRepresentationOfAdyacentsBlocks(MapObjectData cent
     return result;
 }
 
+std::vector<MapObjectData> Playground::mapObjectsFilter(const std::vector<QGraphicsRectItem*>& mapObjects, MapObjectType mapObjectType) {
+    std::vector<MapObjectData> result;
+
+    for (QGraphicsRectItem* mapObject : mapObjects) {
+        MapObjectData mapObjectData = mapObject->data(0).value<MapObjectData>();
+        if (mapObjectData.mapObjectType == mapObjectType)
+            result.push_back(mapObjectData);
+    }
+
+    return result;
+}
+
 QGraphicsRectItem* Playground::mapObjectAt(std::vector<QGraphicsRectItem*> mapObjects, QPoint position) {
     int column = static_cast<int>(position.x()) / TEXTURE_SIZE;
     int row = static_cast<int>(position.y()) / TEXTURE_SIZE;
@@ -278,33 +328,19 @@ QGraphicsRectItem* Playground::mapObjectAt(std::vector<QGraphicsRectItem*> mapOb
     throw std::runtime_error("MapObject was not found inside the map");
 }
 
-std::vector<MapObjectData> Playground::mapObjectsFilter(const std::vector<QGraphicsRectItem*>& mapObjects, MapObjectType mapObjectType) {
+std::vector<MapObjectData> Playground::mapObjectsData(const std::vector<QGraphicsRectItem*>& rectItems) {
     std::vector<MapObjectData> result;
 
-    for (QGraphicsRectItem* mapObject : mapObjects) {
-        MapObjectData mapObjectData = mapObject->data(0).value<MapObjectData>();
-        if (mapObjectData.mapObjectType == mapObjectType)
-            result.push_back(mapObjectData);
-    }
-
-    return result;
-}
-
-std::vector<MapObjectData> Playground::mapObjectsFilter2(const std::vector<QGraphicsRectItem*>& mapObjects, MapObjectType mapObjectType) {
-    std::vector<MapObjectData> result;
-
-    for (QGraphicsRectItem* mapObject : mapObjects) {
-        MapObjectData mapObjectData = mapObject->data(0).value<MapObjectData>();
-        if (mapObjectData.mapObjectType == mapObjectType) {
-            MapObjectData newMapObjectData = {
-                MAX_HEIGHT - mapObjectData.row - 1,
-                mapObjectData.column,
-                mapObjectData.zIndex,
-                mapObjectData.mapObjectType,
-                mapObjectData.texture,
-            };
-            result.push_back(newMapObjectData);
-        }
+    for (QGraphicsRectItem* rectItem : rectItems) {
+        MapObjectData mapObjectData = rectItem->data(0).value<MapObjectData>();
+        MapObjectData newMapObjectData = {
+            MAX_HEIGHT - mapObjectData.row - 1,
+            mapObjectData.column,
+            mapObjectData.zIndex,
+            mapObjectData.mapObjectType,
+            mapObjectData.texture,
+        };
+        result.push_back(newMapObjectData);
     }
 
     return result;

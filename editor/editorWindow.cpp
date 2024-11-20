@@ -46,16 +46,16 @@ EditorWindow::EditorWindow(QWidget *parent):
                     playground->addBlock(position, loader.blockAt(selectedBlockIndex));
                     break;
                 case MapObjectType::SpawnPlayer:
-                    playground->addNonPhysicalObject(position, loader.spawnPlayerAt(selectedSpawnPlayerIndex));
+                    playground->addSpawnPlayer(position, loader.spawnPlayerAt(selectedSpawnPlayerIndex));
                     break;
                 case MapObjectType::SpawnWeapon:
-                    playground->addNonPhysicalObject(position, loader.spawnWeaponAt(selectedSpawnWeaponIndex));
+                    playground->addSpawnWeapon(position, loader.spawnWeaponAt(selectedSpawnWeaponIndex));
                     break;
                 case MapObjectType::Box:
-                    playground->addPhysicalObject(position, loader.boxAt(selectedBoxIndex));
+                    playground->addBox(position, loader.boxAt(selectedBoxIndex));
                     break;
                 case MapObjectType::Decoration:
-                    playground->addNonPhysicalObject(position, loader.decorationAt(selectedDecorationIndex));
+                    playground->addDecoration(position, loader.decorationAt(selectedDecorationIndex));
                     break;
                 default:
                     break;
@@ -69,16 +69,16 @@ EditorWindow::EditorWindow(QWidget *parent):
                     playground->removeBlock(position, loader.blockAt(selectedBlockIndex));
                     break;
                 case MapObjectType::SpawnPlayer:
-                    playground->removeNonPhysicalObject(position);
+                    playground->removeSpawnPlayer(position);
                     break;
                 case MapObjectType::SpawnWeapon:
-                    playground->removeNonPhysicalObject(position);
+                    playground->removeSpawnWeapon(position);
                     break;
                 case MapObjectType::Box:
-                    playground->removePhysicalObject(position);
+                    playground->removeBox(position);
                     break;
                 case MapObjectType::Decoration:
-                    playground->removeNonPhysicalObject(position);
+                    playground->removeDecoration(position);
                     break;
                 default:
                     break;
