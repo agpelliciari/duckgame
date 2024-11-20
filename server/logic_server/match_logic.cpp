@@ -331,8 +331,8 @@ void MatchLogic::damage_box(int id) {
             box.take_damage();
             if (box.destroyed()){
                 Tuple position = box.get_spawn_point();
-                this->spawn_places.push_back(SpawnPlace(position.x, position.y, 10, 10, 5, 0.025));
-                spawn_places.back().spawn_item();
+                //this->spawn_places.push_back(SpawnPlace(position.x, position.y, 10, 10, 5, 0.025));
+                //spawn_places.back().spawn_item();
             }
         }
     }
@@ -376,10 +376,16 @@ void MatchLogic::clear_players(){
     players.clear();
 }
 
+void MatchLogic::update_spawn_places(){
+    for (SpawnPlace &spawn: this->spawn_places) {
+        spawn.spawn_item();
+    }
+}
+
 void MatchLogic::clear_objects(){
     spawn_points.clear();
     boxes.clear();
-    spawn_places.clear();
+    //spawn_places.clear();
     dropped_items.clear();
     bullets.clear();
 }

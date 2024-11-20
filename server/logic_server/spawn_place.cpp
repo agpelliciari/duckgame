@@ -1,7 +1,7 @@
 
 
 #include "spawn_place.h"
-
+#include <iostream>
 #include <cstdlib>
 #include <ctime>
 
@@ -15,34 +15,42 @@ SpawnPlace::SpawnPlace(int position_x_, int position_y_,
 
 void SpawnPlace::spawn_item() {
     // TODO refactorizar este switch
-
+    if (possible_weapon != nullptr) {
+        return;
+    }
+    std::cout<<"Spawn Item"<<std::endl;
     std::srand(std::time(nullptr));
     int random_weapon = 0 + std::rand() % 4;
     switch (random_weapon){
         case 0:
             possible_weapon = std::make_unique<CowboyPistolWeapon>();
-            item = TypeDynamicObject::PISTOLA_COWBOY;
+            std::cout<<"Spawn Cowboypistol"<<std::endl;
+            //item = TypeDynamicObject::PISTOLA_COWBOY;
             spawned = true;
             break;
         case 1:
             possible_weapon = std::make_unique<MagnumWeapon>();
+            std::cout<<"Spawn Magnum"<<std::endl;
             //item = TypeDynamicObject::MAGNUM;
-            item = TypeDynamicObject::PISTOLA_COWBOY;
+            //item = TypeDynamicObject::PISTOLA_COWBOY;
             spawned = true;
             break;
         case 2:
             possible_weapon = std::make_unique<DuelPistol>();
+            std::cout<<"spawn duel pistol"<<std::endl;
             //item = TypeDynamicObject::PISTOLA_DE_DUELOS;
-            item = TypeDynamicObject::PISTOLA_COWBOY;
+            //item = TypeDynamicObject::PISTOLA_COWBOY;
             spawned = true;
             break;
         case 3:
             possible_weapon = std::make_unique<PewPewLaserWeapon>();
+            std::cout<<"spawn pew pew laser"<<std::endl;
             //item = TypeDynamicObject::PEW_PEW_LASER;
-            item = TypeDynamicObject::PISTOLA_COWBOY;
+            //item = TypeDynamicObject::PISTOLA_COWBOY;
             spawned = true;
             break;
         default:
+
             spawned = false;
     }
 
