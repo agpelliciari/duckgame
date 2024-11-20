@@ -1,6 +1,12 @@
 #include "tileset.h"
 #include "loader.h"
 
+TileSet::TileSet(Loader& loader): loader(loader), _name("notileset") {
+    for (int i = 0; i < 54; i++) {
+        textures.emplace(std::to_string(i), loader.getNoTexture());
+    }
+}
+
 TileSet::TileSet(Loader& loader, QDir directory): loader(loader), _name(directory.dirName().toStdString()) {
     QFileInfoList fileList = directory.entryInfoList(QDir::Files);
 
