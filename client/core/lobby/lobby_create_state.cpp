@@ -95,3 +95,8 @@ void LobbyCreateState::run() {
         }
     }
 }
+
+LobbyCreateState::~LobbyCreateState(){
+    close();
+}
+

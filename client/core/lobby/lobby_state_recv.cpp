@@ -75,7 +75,7 @@ bool LobbyStateRecv::endstate() {
     return context.started;
 }
 
-LobbyStateRecv::~LobbyStateRecv() {
+void LobbyStateRecv::close(){
     if (_keep_running) {
         stop();
         if (!context.started) {
@@ -83,4 +83,8 @@ LobbyStateRecv::~LobbyStateRecv() {
         }
         join();
     }
+}
+    
+LobbyStateRecv::~LobbyStateRecv() {
+    close();
 }

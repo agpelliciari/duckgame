@@ -26,6 +26,7 @@ protected:
 
     //void setInitedMatch(int totalplayers);
     void setInitedMatch();
+    void close();
 
 public:
     explicit LobbyStateRecv(Messenger& _messenger, GameContext& _context, LobbyListener& _listener);
@@ -39,6 +40,7 @@ public:
 
     // Termina forzosamente de ser necesario y retorna si deberia continuar al play state.
     bool endstate() override;
+    
 
     virtual ~LobbyStateRecv();
 };
