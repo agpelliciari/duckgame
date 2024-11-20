@@ -48,14 +48,16 @@ private:
 
 protected:
     friend class LobbyContainer;
-
-    ControlledPlayer& addPlayers(uint8_t countplayers);
+    
+    //Returns ids on out.
+    void addPlayers(ControlId& out);
+    ControlledPlayer& getPlayer(const ControlId& id);
 
     bool notifyDisconnect(ControlledPlayer& player);
+    bool hostLobbyLeft(ControlledPlayer& host);
 
     // Metodos analogos a los de thread. expuestos a friend nada mas.
     void init(MapLoader& maps, const char* mapname);
-    bool hostLobbyLeft(ControlledPlayer& host);
     void cancelByError(LobbyErrorType error);
 
     // Libera, bien podria prescindirse y usar un destructor.
@@ -86,13 +88,14 @@ public:
     const MatchStatsInfo& getStats() const;
     // void waitStart();
     int playercount() const;
-    std::vector<player_id> getPlayers() const;
+    void putPlayers(std::vector<player_id>& out) const;
 
     // Metodos publicos.. accesibles incluso a player controllers.
     // No hay precondiciones perse. Podria no haber empezado el match.
     // Metodos delegatorios
     void notifyAction(const PlayerActionDTO& action);
     bool isrunning() const;
+    bool canaddplayer() const;
     ~Match();
 };
 

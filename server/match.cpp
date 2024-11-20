@@ -14,16 +14,18 @@ Match::Match(lobbyID _id, const int max_players): id(_id), players(max_players),
 
 
 // Protected// friend accessed methods
-ControlledPlayer& Match::addPlayers(uint8_t count) {
-    ControlledPlayer& player = players.add(count);
+void Match::addPlayers(ControlId& id) {
+    players.add(id);
 
     // Se suma despues porque el add puede fallar!
     // Por capacidad o por que esta cancelada!
     connectedplayers++;  // Solo importa la cantidad de conectados...
-
-
-    return player;
 }
+
+ControlledPlayer& Match::getPlayer(const ControlId& id) {
+     return players.get(id);
+}
+
 int Match::playercount() const { return players.playercount(); }
 
 
@@ -36,7 +38,7 @@ bool Match::notifyDisconnect(ControlledPlayer& player) {
             return connectedplayers == 0;
         }
 
-        players.remove(player);
+        players.remove(player.getcontrolid());
     }
     return connectedplayers == 0;
 }
@@ -54,9 +56,6 @@ void Match::loadMap(MapDeserializer& deserial){
     for (const struct BlockDTO& block: map.blocks) {
         objects.blocks.emplace_back(block.pos.x, block.pos.y);
     }
-    //try{
-    //    return true;
-    //} catch()
 }
 
 void Match::init(MapLoader& maps, const char* mapname) {
@@ -85,7 +84,7 @@ bool Match::hostLobbyLeft(ControlledPlayer& host) {
     }
     // Notifica a los otros ademas del disconnect.
     host.disconnect();
-    players.hostLobbyLeft(host);
+    players.hostLobbyLeft(host.getcontrolid());
 
     return false;
 }
@@ -174,9 +173,13 @@ void Match::run() {
 
 bool Match::isrunning() const { return stats.isRunning(); }
 
+bool Match::canaddplayer() const { return stats.state == LOADING; }
+
 const MapInfo& Match::getMap() const { return map; }
 
-std::vector<player_id> Match::getPlayers() const { return players.getPlayers(); }
+void Match::putPlayers(std::vector<player_id>& out) const { 
+     players.putPlayers(out); 
+}
 
 
 void Match::finish(MapLoader& maps) {

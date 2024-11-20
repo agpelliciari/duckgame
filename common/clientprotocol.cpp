@@ -23,7 +23,7 @@ void ClientProtocol::sendaction(PlayerActionDTO& action) {
 }
 
 lobby_info ClientProtocol::sendJoinLobby(const uint8_t id_match,std::vector<int>& players, const uint8_t count) {
-    uint8_t info[3] = {LobbyActionType::JOIN_LOBBY, id_match, count};
+    uint8_t info[3] = {LobbyActionType::JOIN_LOBBY, count, id_match};
     protocol.sendbytes(&info, sizeof(info));
     lobby_info out;
     

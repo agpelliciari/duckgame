@@ -87,3 +87,8 @@ void LobbyJoinState::run() {
         }
     }
 }
+
+LobbyJoinState::~LobbyJoinState(){
+    close();
+}
+

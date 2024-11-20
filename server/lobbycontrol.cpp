@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <utility>
+#include <vector>
 
 #include "./gameerror.h"
 #include "common/core/liberror.h"
@@ -11,74 +12,53 @@
 LobbyControl::LobbyControl(LobbyContainer& _lobbies, ServerProtocol& _protocol):
         lobbies(_lobbies), protocol(_protocol) {}
 
-Match& LobbyControl::resolveMatch(bool* isanfitrion) {
-    LobbyActionType action = protocol.recvresolveinfo();
-    if (action == CREATE_LOBBY) {
-        *isanfitrion = true;
 
-        Match& newlobby = lobbies.newLobby();
-        std::cerr << " created lobby id: " << (int)newlobby.getID() << std::endl;
-        // Send back id...
-        protocol.notifyid(newlobby.getID());
-        
-        protocol.sendmaplist(lobbies.registeredMaps());
 
-        return newlobby;
-    }
-    *isanfitrion = false;
-    return lobbies.findLobby(protocol.recvlobbyid());
-}
+Match& LobbyControl::resolveJoin(ControlId& outPlayer){
+    
+    // Todo en un metodo para que sea thread safe.
+    std::vector<player_id> players;
+    Match& joined = lobbies.joinLobby(protocol.recvlobbyid(), outPlayer, players);
 
-ControlledPlayer& LobbyControl::getJoinedPlayers(Match& match) {
-    uint8_t playercount = protocol.recvplayercount();
-
-    ControlledPlayer& player = lobbies.joinLobby(playercount, match);
-
-    // Si no hubo error.. ahora notifica el join.
-    protocol.notifyinfo(LobbyResponseType::JOINED_LOBBY, match.playercount());
+    // Si no hubo error.. ahora notifica el join. El player_id no es conocido por protocol.
+    protocol.notifyinfo(LobbyResponseType::JOINED_LOBBY, players.size());
     
     // Send current players.
-    for(player_id id: match.getPlayers()){
+    for(player_id id: players){
         protocol.notifyid(id);    
     }
     
+    return joined;
+}
 
-    protocol.notifyid(player.getid(0));
-    if (player.playercount() == 2) {
-        protocol.notifyid(player.getid(1));
-    }
-    return player;
+Match& LobbyControl::resolveHost(ControlId& outPlayer){
+    Match& newlobby = lobbies.newLobby(outPlayer);
+    std::cerr << " created lobby id: " << (int)newlobby.getID() << std::endl;
+    // Send back id...
+    protocol.notifyid(newlobby.getID());
+    
+    protocol.sendmaplist(lobbies.registeredMaps());
+    
+    return newlobby;
 }
 
 
-ControlledPlayer& LobbyControl::getHostPlayers(Match& match) {
-    uint8_t playercount = protocol.recvplayercount();
-
-    ControlledPlayer& player = lobbies.joinLobby(playercount, match);
-    protocol.notifyid(player.getid(0));
-    if (player.playercount() == 2) {
-        protocol.notifyid(player.getid(1));
+Match& LobbyControl::resolveMatch(bool& ishost,ControlId& outPlayer) {
+    LobbyActionType action = protocol.recvresolveinfo();
+    ishost = action == CREATE_LOBBY; 
+    
+    // Primero se envia el playercount, sea join o no.
+    outPlayer.setcount(protocol.recvplayercount()); 
+    
+    Match& res = ishost? resolveHost(outPlayer) : resolveJoin(outPlayer);
+    
+    protocol.notifyid(outPlayer.get(0));
+    if (outPlayer.getcount() == 2) {
+        protocol.notifyid(outPlayer.get(1));
     }
-    return player;
+    
+    return res;
 }
-
-
-/*
-// Por ahora no hay logica de configuracion que haga el joined
-// Solo puede irse.
-void LobbyControl::handleJoinedLobby(ControlledPlayer& player, Match& match) {
-
-
-    if (match.isrunning()) {
-        // se empezo.
-        protocol.notifyinfo(LobbyActionType::STARTED_LOBBY, match.playercount());
-    } else {
-        // se cancelo.
-        protocol.notifyinfo(LobbyActionType::CANCEL_LOBBY, LobbyCancelType::ANFITRION_LEFT);
-    }
-    return player;
-}
-*/
 
 
 bool LobbyControl::handleAnfitrionLobby(ControlledPlayer& host,

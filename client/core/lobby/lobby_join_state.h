@@ -27,6 +27,8 @@ public:
     void joinLobby();
 
     bool isrunning();
+    
+    ~LobbyJoinState();
 };
 
 #endif

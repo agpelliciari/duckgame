@@ -24,11 +24,7 @@ void GameManager::setHostnamePort(const std::string& newhost, const std::string&
 
 
 void GameManager::clear() {
-
-    skt.value().finish();
-    // Al hacer close si el state esperando por respuesta del socket
-    // Tira exception.
-    // No se libera... por que podria traer problemas.
+    // El state deberia encargarse de cerrar el protocol/skt si esta bloqueado por este.
     state.reset(NULL);  // El destructor del state actual se encarga si hace falta un join.
 
     skt.reset();

@@ -35,6 +35,7 @@ public:
 
     // Inicia el thread, y hace lo necesario para que se cree la partida.
     void createLobby();
+    ~LobbyCreateState();
 };
 
 #endif

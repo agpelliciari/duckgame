@@ -44,6 +44,7 @@ void PlayStateSender::end() {
         std::cout << "ENDING GAME SENDER!!\n";
         stop();
         actions.close();
+        protocol.close();
         join();
     }
 }
