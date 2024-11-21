@@ -77,19 +77,16 @@ TEST_F(TestIntegrationLobby, SimpleCreateLobbyAndJoin) {
     TesterClient host(openClient(), sktserver, lobbies);
 
     uint8_t id_lobby = host.createClientLobbySingle(lobbies.registeredMaps());
-    std::cout << "CREATED?!\n";
     ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
 
 
     TesterClient joined1(openClient(), sktserver, lobbies);
 
     uint8_t first = 0;
-    std::cout << "BFR JOINED?!\n";
     uint8_t second = joined1.assertJoinLobbyDual(id_lobby, 3, &first);
-    std::cout << "JOINED?!\n";
 
-    ASSERT_EQ(first, 2) << "ID joined first is correct";
-    ASSERT_EQ(second, 3) << "ID joined second is correct";
+    ASSERT_EQ(first, 1) << "ID joined first is correct";
+    ASSERT_EQ(second, 2) << "ID joined second is correct";
 
     host.assertLobbyInfoJoined(first);
     host.assertLobbyInfoJoined(second);
@@ -123,7 +120,7 @@ TEST_F(TestIntegrationLobby, SimpleCreateLobbyAndJoinSingle) {
     TesterClient joined1(openClient(), sktserver, lobbies);
 
     uint8_t first = joined1.assertJoinLobbySingle(id_lobby, 2);
-    ASSERT_EQ(first, 2) << "ID joined first is correct";
+    ASSERT_EQ(first, 1) << "ID joined first is correct";
 
     host.assertLobbyInfoJoined(first);
 
@@ -147,19 +144,22 @@ TEST_F(TestIntegrationLobby, SimpleCreateLobbyAndJoinButLeft) {
     uint8_t first = 0;
     uint8_t second = joined1.assertJoinLobbyDual(id_lobby, 4, &first);
 
-    ASSERT_EQ(first, 3) << "ID joined first is correct";
-    ASSERT_EQ(second, 4) << "ID joined second is correct";
+    ASSERT_EQ(first, 2) << "ID joined first is correct";
+    ASSERT_EQ(second, 3) << "ID joined second is correct";
 
     host.assertLobbyInfoJoined(first);
     host.assertLobbyInfoJoined(second);
-
+    std::cout << "----------------------> ASSERTED JOINED\n";
     joined1.close();
     host.assertLobbyInfoLeft(first);
     host.assertLobbyInfoLeft(second);
 
+    std::cout << "----------------------> ASSERTED LEFT\n";
     host.startMatch(mapusing);
 
     host.assertLobbyStarted(2);
+    std::cout << "----------------------> ASSERTED STARTED\n";
+    
 }
 
 
@@ -175,8 +175,8 @@ TEST_F(TestIntegrationLobby, SimpleJoinMultiple) {
 
     uint8_t first = joined1.assertJoinLobbySingle(id_lobby, 3);
     uint8_t second = joined2.assertJoinLobbySingle(id_lobby, 4);
-    ASSERT_EQ(first, 3) << "ID joined first is correct";
-    ASSERT_EQ(second, 4) << "ID joined second is correct";
+    ASSERT_EQ(first, 2) << "ID joined first is correct";
+    ASSERT_EQ(second, 3) << "ID joined second is correct";
 
 
     host.assertLobbyInfoJoined(first);
@@ -204,8 +204,8 @@ TEST_F(TestIntegrationLobby, SimpleJoinMultipleWithLeaves) {
 
     uint8_t first = joined1.assertJoinLobbySingle(id_lobby, 3);
     uint8_t second = joined2.assertJoinLobbySingle(id_lobby, 4);
-    ASSERT_EQ(first, 3) << "ID joined first is correct";
-    ASSERT_EQ(second, 4) << "ID joined second is correct";
+    ASSERT_EQ(first, 2) << "ID joined first is correct";
+    ASSERT_EQ(second, 3) << "ID joined second is correct";
 
 
     host.assertLobbyInfoJoined(first);
@@ -221,7 +221,7 @@ TEST_F(TestIntegrationLobby, SimpleJoinMultipleWithLeaves) {
     TesterClient joined3(openClient(), sktserver, lobbies);
 
     uint8_t fourth = joined3.assertJoinLobbySingle(id_lobby, 4);
-    ASSERT_EQ(fourth, 5) << "ID joined fifth is correct";
+    ASSERT_EQ(fourth, 3) << "ID joined fifth is correct, third since one left";
 
     host.assertLobbyInfoJoined(fourth);
     joined2.assertLobbyInfoJoined(fourth);
@@ -245,8 +245,8 @@ TEST_F(TestIntegrationLobby, SimpleCreateLobbyAndJoinCancel) {
     uint8_t first = 0;
     uint8_t second = joined1.assertJoinLobbyDual(id_lobby, 3, &first);
 
-    ASSERT_EQ(first, 2) << "ID joined first is correct";
-    ASSERT_EQ(second, 3) << "ID joined second is correct";
+    ASSERT_EQ(first, 1) << "ID joined first is correct";
+    ASSERT_EQ(second, 2) << "ID joined second is correct";
 
     host.assertLobbyInfoJoined(first);
     host.assertLobbyInfoJoined(second);
@@ -276,8 +276,8 @@ TEST_F(TestIntegrationLobby, SimpleJoinMultipleCancel) {
 
     uint8_t first = joined1.assertJoinLobbySingle(id_lobby, 3);
     uint8_t second = joined2.assertJoinLobbySingle(id_lobby, 4);
-    ASSERT_EQ(first, 3) << "ID joined first is correct";
-    ASSERT_EQ(second, 4) << "ID joined second is correct";
+    ASSERT_EQ(first, 2) << "ID joined first is correct";
+    ASSERT_EQ(second, 3) << "ID joined second is correct";
 
 
     host.assertLobbyInfoJoined(first);
@@ -312,8 +312,8 @@ TEST_F(TestIntegrationLobby, SimpleMatchNoPlayersEnds) {
 
     uint8_t first = joined1.assertJoinLobbySingle(id_lobby, 3);
     uint8_t second = joined2.assertJoinLobbySingle(id_lobby, 4);
-    ASSERT_EQ(first, 3) << "ID joined first is correct";
-    ASSERT_EQ(second, 4) << "ID joined second is correct";
+    ASSERT_EQ(first, 2) << "ID joined first is correct";
+    ASSERT_EQ(second, 3) << "ID joined second is correct";
 
 
     host.assertLobbyInfoJoined(first);
@@ -329,7 +329,7 @@ TEST_F(TestIntegrationLobby, SimpleMatchNoPlayersEnds) {
     TesterClient joined3(openClient(), sktserver, lobbies);
 
     uint8_t fourth = joined3.assertJoinLobbySingle(id_lobby, 4);
-    ASSERT_EQ(fourth, 5) << "ID joined fifth is correct";
+    ASSERT_EQ(fourth, 3) << "ID joined fifth is correct";
 
     host.assertLobbyInfoJoined(fourth);
     joined2.assertLobbyInfoJoined(fourth);
@@ -353,7 +353,6 @@ TEST_F(TestIntegrationLobby, SimpleMatchNoPlayersEnds) {
     ASSERT_EQ(lobbies.countMatches(), 1) << "Lobby was not deleted before it has to";
     // ASSERT_FALSE(joined3.isReceiverOpen()) << "receiver protocol was not open";
     joined3.finish();
-
     ASSERT_EQ(lobbies.countMatches(), 0) << "Lobby was deleted";
 }
 
@@ -434,8 +433,8 @@ TEST_F(TestIntegrationLobby, IntegrationMultiMatchOneEnds) {
 
     uint8_t first = joined1.assertJoinLobbySingle(id_lobby, 3);
     uint8_t second = joined2.assertJoinLobbySingle(id_lobby, 4);
-    ASSERT_EQ(first, 3) << "ID joined first is correct";
-    ASSERT_EQ(second, 4) << "ID joined second is correct";
+    ASSERT_EQ(first, 2) << "ID joined first is correct";
+    ASSERT_EQ(second, 3) << "ID joined second is correct";
 
 
     host.assertLobbyInfoJoined(first);
@@ -451,7 +450,7 @@ TEST_F(TestIntegrationLobby, IntegrationMultiMatchOneEnds) {
     TesterClient joined3(openClient(), sktserver, lobbies);
 
     uint8_t fourth = joined3.assertJoinLobbySingle(id_lobby, 4);
-    ASSERT_EQ(fourth, 5) << "ID joined fifth is correct";
+    ASSERT_EQ(fourth, 3) << "ID joined fifth is correct";
 
     host.assertLobbyInfoJoined(fourth);
     joined2.assertLobbyInfoJoined(fourth);
@@ -495,8 +494,8 @@ TEST_F(TestIntegrationLobby, IntegrationMultiMatchForceFinish) {
 
     uint8_t first = joined1.assertJoinLobbySingle(id_lobby, 3);
     uint8_t second = joined2.assertJoinLobbySingle(id_lobby, 4);
-    ASSERT_EQ(first, 3) << "ID joined first is correct";
-    ASSERT_EQ(second, 4) << "ID joined second is correct";
+    ASSERT_EQ(first, 2) << "ID joined first is correct";
+    ASSERT_EQ(second, 3) << "ID joined second is correct";
 
 
     host.assertLobbyInfoJoined(first);
@@ -512,7 +511,7 @@ TEST_F(TestIntegrationLobby, IntegrationMultiMatchForceFinish) {
     TesterClient joined3(openClient(), sktserver, lobbies);
 
     uint8_t fourth = joined3.assertJoinLobbySingle(id_lobby, 4);
-    ASSERT_EQ(fourth, 5) << "ID joined fifth is correct";
+    ASSERT_EQ(fourth, 3) << "ID joined fifth is correct";
 
     host.assertLobbyInfoJoined(fourth);
     joined2.assertLobbyInfoJoined(fourth);

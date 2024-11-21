@@ -75,14 +75,16 @@ ControlledPlayer& LobbyContainer::getPlayerOn(Match& lobby,  const ControlId& id
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on container.
     return lobby.getPlayer(id);
 }
+
 void LobbyContainer::disconnectFrom(Match& lobby, ControlledPlayer& player) {
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on container.
-    // std::cerr << ">disconnecting " << player.toString() << std::endl;
+    //std::cerr << ">lobby container disconnecting " << player.toString() << std::endl;
 
+    // Los receivers/notifiers notifican, si la lobby se le desconectaron todos.
+    // Se libera.
     if (lobby.notifyDisconnect(player)) {  // Habria que liberar. No hay mas players.
         std::cerr << ">removing lobby " << lobby.getID() << std::endl;
         lobby.finish(maps);
-
         lobbies.remove(lobby);  // el destructor hace el finish.
     }
 }
@@ -102,10 +104,9 @@ void LobbyContainer::hostLeft(Match& lobby, ControlledPlayer& host) {
         throw GameError(LOBBY_ALREADY_STARTED, "Tried to cancel already started lobby %d",
                         lobby.getID());
     }
-    if (lobby.hostLobbyLeft(host)) {
-        std::cerr << ">removing lobby " << lobby.getID() << " cancel" << std::endl;
-        lobbies.remove(lobby);  // el destructor hace el finish.
-    }
+    
+    // Los receivers/notifiers notifican por medio de disconnectFrom para la liberacion
+    lobby.hostLobbyLeft(host); 
 }
 void LobbyContainer::errorOnLobby(Match& lobby, LobbyErrorType error) {
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on container.
@@ -113,6 +114,8 @@ void LobbyContainer::errorOnLobby(Match& lobby, LobbyErrorType error) {
         throw GameError(LOBBY_ALREADY_STARTED,
                         "Tried to notify lobby error on already started lobby %d", lobby.getID());
     }
+    
+    // Los receivers/notifiers notifican por medio de disconnectFrom para la liberacion
     lobby.cancelByError(error);
 }
 

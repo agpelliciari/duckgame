@@ -38,7 +38,7 @@ public:
 
     // Push/notifica eventos a los players, de forma no bloqueante! No tiene precondiciones perse
     // Devuelve los players que se desconectaron. Podrian ser notificados directamente
-    std::vector<player_id> updateState(const MatchDto& state) override;
+    std::vector<player_id> updateState( MatchDto& state) override;
 };
 
 #endif

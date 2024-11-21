@@ -27,7 +27,7 @@ public:
     LobbyControl& operator=(const LobbyControl&) = delete;
 
     Match& resolveMatch(bool& isanfitrion, ControlId& outPlayer);
-
+    void notifyPlayer(const ControlledPlayer& player);
 
     bool handleAnfitrionLobby(ControlledPlayer& host, Match& match);  // ControlledPlayer& player,
     // void handleJoinedLobby(ControlledPlayer& player, Match& match);

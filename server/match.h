@@ -54,7 +54,7 @@ protected:
     ControlledPlayer& getPlayer(const ControlId& id);
 
     bool notifyDisconnect(ControlledPlayer& player);
-    bool hostLobbyLeft(ControlledPlayer& host);
+    void hostLobbyLeft(ControlledPlayer& host);
 
     // Metodos analogos a los de thread. expuestos a friend nada mas.
     void init(MapLoader& maps, const char* mapname);

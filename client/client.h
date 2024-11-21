@@ -19,7 +19,9 @@ private:
     char** argv;  // cppcheck-suppress unusedStructMember
 
     int execMenu(GameManager& connector);
-    int execGame(GameManager& connector, const GameContext& context);
+    
+    int execMenuSingle(GameManager& connector, const GameContext& context);
+    bool execGame(GameManager& connector, const GameContext& context);
 
 public:
     explicit Client(int argc, char* argv[]);

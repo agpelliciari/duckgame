@@ -1,6 +1,7 @@
 #include "./playercontainer.h"
 
 #include <iostream>
+#include <iterator>
 
 #include "./gameerror.h"
 
@@ -17,66 +18,105 @@ void PlayerContainer::add(ControlId& out) {
         throw GameError(LOBBY_NO_SPACE, "There was no capacity to join required count");
     }
 
-    // totalplayers no es perse el id para el player
-    // conceptualmente es distinto.
-    // Por ahora pareceria es lo mismo que el id.
-    // Pero a la hora de remove. No parece correcto. Si bien por ahora no se necesita se puedan
-    // conectar.
     if (out.getcount() == 2) {  // Two in the machine!
-        totalplayers += 2;
-        lobby_info info(PLAYER_NEW, ++last_id);
+        int& pos = ids_positions.emplace_back(totalplayers);    
+        totalplayers += 2;        
+        
+        // Antes de agregar el nuevo player. Notifica
+        lobby_info info(PLAYER_NEW, pos);
+        notifyInfo(info);
+        info.data++;
         notifyInfo(info);
         
-        out.set(0, last_id); // Set first 
-        
-        info.data = ++last_id;
-        notifyInfo(info);
-        out.set(1, last_id); // Set second 
+        out.set(0, ++last_id); // Set first 
+        out.set(1, ++last_id); // Set second
+        players.emplace_back(out, pos);
         
 
-        players.emplace_back(out);
-        
         return;
     }
 
     // Por default es 1 solo.
+    int& pos = ids_positions.emplace_back(totalplayers);    
     totalplayers += 1;
-    lobby_info info(PLAYER_NEW, ++last_id);
-    notifyInfo(info);
-    out.set(0, last_id); // Set first 
     
-    players.emplace_back(out);
+    // Antes de agregar el nuevo player. Notifica
+    lobby_info info(PLAYER_NEW, pos);
+    notifyInfo(info);
+    
+    out.set(0, ++last_id); // Set first 
+    players.emplace_back(out, pos);
+    
 }
 
 player_container::iterator PlayerContainer::findit(const ControlId& id){
     auto playerit = players.begin();
-    while (playerit != players.end()) {
-        if(playerit->getcontrolid() == id){
-             return playerit;
-        }
+    while (playerit->getcontrolid() != id && playerit != players.end()){
         ++playerit;
-    }
-    throw GameError(SERVER_ERROR, "Not found id player on container");
+    }    
+    return playerit;
 }
 
 ControlledPlayer& PlayerContainer::get(const ControlId& id) {
-    return *findit(id);
+    auto playerit = findit(id);
+    
+    if(playerit == players.end()){
+         throw GameError(SERVER_ERROR, "Not found id player on container");
+    }
+    
+    return *playerit;
 }
 
-void PlayerContainer::remove(const ControlId& id) {
+bool PlayerContainer::remove(const ControlId& id) {
 
-    ControlId idcopy(id); // Por si las moscas. Si se usa el player.getcontrolid()
-    players.erase(findit(idcopy));
+    auto playerit = findit(id);
     
-    int count = idcopy.getcount();
+    if(playerit == players.end()){
+        std::cerr << "warning.. At remove, not found player\n";
+        return false;
+    }
+    
+    int pos = playerit->getpos();
+    int count = id.getcount();
+    
+    // Look for position to.
+    auto posit = ids_positions.begin();
+    while (posit != ids_positions.end() && *posit != pos) {
+         ++posit;
+    }
+    if(posit == ids_positions.end()){
+         std::cerr << "warning.. At remove, not found player at position\n";
+         return false;
+    }
+    
+    // Remove!
+    players.erase(playerit);
+    posit = ids_positions.erase(posit); // Erase id. So now next one is on curr pos.
+    
     totalplayers -= count;
 
-    lobby_info info(PLAYER_LEFT, idcopy.get(0));
-    notifyInfo(info);
-    for (int ind = 1; ind < count; ind++) {
-        info.data = idcopy.get(ind);
-        notifyInfo(info);
+    if(canceled){
+        return true; 
     }
+
+    // Update positions after se fueron 'count' por lo que a la pos le restas ese count. 
+    while (posit != ids_positions.end()) {
+         *posit -= count; 
+         ++posit;
+    }
+        
+    
+    // Tras actualizar cosas... notifica el remove.
+    lobby_info info(PLAYER_LEFT, pos);
+    notifyInfo(info);
+    count--;
+    while(count>0) {
+        info.data = ++pos;
+        notifyInfo(info);
+        count--;
+    }
+    
+    return true;
     
 }
 
@@ -84,42 +124,30 @@ void PlayerContainer::remove(const ControlId& id) {
 // Lo que haria que al llegar aca la lista perse debiera estar vacia.
 // Pero siempre es bueno verificar.
 void PlayerContainer::forceDisconnectAll() {
+    canceled = true;
     for (ControlledPlayer& player: players) {
-        if (player.disconnect()) {
+        if (player.canceled()) {
             std::cerr << "force disconnect " << player.toString() << " from match" << std::endl;
         }
     }
-    /*
-    for (auto playerit = players.begin(); playerit != players.end();) {
-        if ((*playerit).disconnect()) {
-            std::cerr << "force disconnect " << (*playerit).toString() << " from match"
-                      << std::endl;
-        }
-        playerit = players.erase(playerit);
-    }
-
-    */
 }
 
 
-
-void PlayerContainer::finishLobbyMode() {
-    for (ControlledPlayer& player: players) {
-        player.setgamemode();
-    }
-}
-void PlayerContainer::finishWaitMode() {
-    //lobby_info info(MATCH_PAUSE_END, 0);
-    
-    for (ControlledPlayer& player: players) {
-        //notifyInfo(info);
-        player.setgamemode();
-    }
-}
 
 void PlayerContainer::hostLobbyLeft(const ControlId& host) {
-    players.erase(findit(host));
-    cancelByError(ANFITRION_LEFT);
+    //players.erase(findit(host)); // Evitemos borrarlo de memoria ahora.
+    
+    canceled = true;
+    lobby_info info(GAME_ERROR, ANFITRION_LEFT);
+
+    // Cuando se va el host no se notifica el disconnect... sino se los desconecta.
+    for (ControlledPlayer& player: players) {
+        if(player.getcontrolid() == host){
+            continue;
+        }
+        player.recvinfo(info);
+        player.canceled();
+    }
 }
 void PlayerContainer::cancelByError(LobbyErrorType cancelError) {
     canceled = true;
@@ -128,27 +156,56 @@ void PlayerContainer::cancelByError(LobbyErrorType cancelError) {
     // Cuando se va el host no se notifica el disconnect... sino se los desconecta.
     for (ControlledPlayer& player: players) {
         player.recvinfo(info);
-        player.disconnect();
+        player.canceled();
     }
     totalplayers = 0;
 }
 
 
+
+void PlayerContainer::finishLobbyMode() {
+    for (auto player = players.begin(); player != players.end();) {
+          if(player->setgamemode()){
+              ++player;
+          } else{
+              std::cerr << "container should remove " << player->toString() << " at finish lobby mode from match" << std::endl;
+              player = players.erase(player); // Elimina los que no esten
+          }
+    }
+}
+void PlayerContainer::finishWaitMode() {
+    for (auto player = players.begin(); player != players.end();) {
+          if(player->setgamemode()){
+              ++player;
+          } else{
+              std::cerr << "container should remove " << player->toString() << " at finish waitmode from match" << std::endl;
+              player = players.erase(player); // Elimina los que no esten
+          }
+    }
+}
+
 // Notifica que se empezo la partida. Y cambia a lobby mode.
 // El close/cambio de modo es suficiente para saber que empezo.
 void PlayerContainer::finishGameMode(const MatchStatsInfo& match_stats) {
     std::cout << "--------------FINISH GAME MODE stats: " << match_stats.parse() << std::endl;
-    for (ControlledPlayer& player: players) {
-        player.setlobbymode(match_stats);
+    for (auto player = players.begin(); player != players.end();) {
+          if(player->setlobbymode(match_stats)){
+              ++player;
+          } else{
+              std::cerr << "container should remove " << player->toString() << " at finish gamemode from match" << std::endl;
+              player = players.erase(player); // Elimina los que no esten
+          }
     }
 }
 
 
 void PlayerContainer::putPlayers(std::vector<player_id>& out) const{
     for (auto playerit = players.begin(); playerit != players.end();) {
-        int mx = (*playerit).playercount();
+        int mx = playerit->playercount();
+        int base = playerit->getpos();
         for (int ind = 0; ind < mx; ind++) {
-            out.push_back((*playerit).getid(ind));
+            out.push_back(base+ind+1);
+            //out.push_back((*playerit).getid(ind));
         }
 
         ++playerit;
@@ -173,21 +230,29 @@ void PlayerContainer::notifyInfo(const lobby_info& info) {
     }
 }
 
-std::vector<player_id> PlayerContainer::updateState(const MatchDto& matchdto) {
+std::vector<player_id> PlayerContainer::updateState(MatchDto& matchdto) {
     std::vector<player_id> disconnected;
-
+    //int ind = 0;
+    
+    //for (PlayerDTO& player: matchdto.players){
+    //     player.id =++ind;
+    //}
+    
     for (auto playerit = players.begin(); playerit != players.end();) {
         if ((*playerit).recvstate(matchdto)) {
             ++playerit;
             continue;
         }
         // Agrega/ notifica desconectados.
-        int mx = (*playerit).playercount();
+        int mx = playerit->playercount();
+        int base = playerit->getpos();
         for (int ind = 0; ind < mx; ind++) {
-            disconnected.push_back((*playerit).getid(ind));
+            disconnected.push_back(base+ind);
+            //disconnected.push_back((*playerit).getid(ind));
         }
 
-        std::cerr << "disconnected " << (*playerit).toString() << " from match" << std::endl;
+
+        std::cerr << "container should remove  " << playerit->toString() << " from match" << std::endl;
 
         playerit = players.erase(playerit);
     }

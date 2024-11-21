@@ -8,6 +8,7 @@ target_sources(taller_client
           client.cpp
           main.cpp
           simpleeventlistener.cpp
+          gamecontext.cpp
 
     PUBLIC
     # .h files

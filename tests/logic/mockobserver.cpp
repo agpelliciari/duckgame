@@ -101,7 +101,7 @@ std::vector<player_id> MockObserver::getPlayers() const { return std::vector<pla
 
 // Push/notifica eventos a los players, de forma no bloqueante! No tiene precondiciones perse
 // Devuelve los players que se desconectaron. Podrian ser notificados directamente
-std::vector<player_id> MockObserver::updateState(const MatchDto& state) {
+std::vector<player_id> MockObserver::updateState(MatchDto& state) {
     curr_state = state;
     return std::vector<player_id>();
 }
