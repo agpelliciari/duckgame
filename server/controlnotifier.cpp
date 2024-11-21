@@ -24,12 +24,18 @@ bool ControlNotifier::runLobby() {
             if (info.action == LobbyResponseType::GAME_ERROR) {
                 // std::cout << "----> IF NOTIFY ERROR FROM HERE THEN CUSTOM/LOGIC ERROR??\n";
                 protocol.close();
-                return true;  // Si fue un error el notificado entonces sali.
+                return false;  // Si fue un error el notificado entonces sali.
             }
 
             info = player.popinfo();
         }
-
+        if(info.action == LobbyResponseType::GAME_ERROR){
+             std::cerr << "Final error at _keep = false??" << std::endl;
+             protocol.notifyevent(info);
+             protocol.close(); 
+             return false;
+        }
+        
         std::cerr << "Closed notifier before match start, why?" << std::endl;
         protocol.notifyinfo(LobbyResponseType::GAME_ERROR, LobbyErrorType::UNKNOWN);
         protocol.close();  // Si no esta cerrado, cerralo, asi se sale el controller tambien.
@@ -43,7 +49,8 @@ bool ControlNotifier::runLobby() {
                 protocol.sendmapinfo(match.getMap());
                 return true;
             }
-            std::cout << "Notifier lobby recv cancel match?\n";
+            std::cout << "----Notifier lobby recv cancel match?\n";
+            //protocol.notifyinfo(LobbyResponseType::GAME_ERROR, LobbyErrorType::UNKNOWN);
             protocol.close();
             // Fue cancelada la partida?
             return false;
@@ -109,7 +116,7 @@ void ControlNotifier::run() {
               }
         }
         
-        std::cout << "------>ENDED NOTIFIER RUN!\n";
+        //std::cout << "------>ENDED NOTIFIER RUN!\n";
         // El protocol ya fue cerrado, se desconecto el cliente. por ejemplo el host al cancel, o se fue el joined.
         if(player.trydisconnect()){
              //std::cout << "-------Not Disconnected player so let receiver notify!??\n";

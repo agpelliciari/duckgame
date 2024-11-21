@@ -35,9 +35,12 @@ void PlayStateRecv::run() {
     } catch (const LibError&
                      error) {  // No deberia pasara realmente, antes pasaria en el controller.
         
-        std::cerr << "canceling.. play state receiver error, was server disconnected?" << std::endl;
-        stats.state = CANCELADA;
-        listener.statsUpdated(stats);
+        if(stats.isRunning()){
+            std::cerr << "canceling.. play state receiver error, was server disconnected?" << std::endl;
+            stats.state = CANCELADA;
+            listener.statsUpdated(stats);
+        }
+        
         
     }
 }

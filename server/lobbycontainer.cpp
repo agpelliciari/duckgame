@@ -78,7 +78,7 @@ ControlledPlayer& LobbyContainer::getPlayerOn(Match& lobby,  const ControlId& id
 
 void LobbyContainer::disconnectFrom(Match& lobby, ControlledPlayer& player) {
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on container.
-    std::cerr << ">lobby container disconnecting " << player.toString() << std::endl;
+    //std::cerr << ">lobby container disconnecting " << player.toString() << std::endl;
 
     // Los receivers/notifiers notifican, si la lobby se le desconectaron todos.
     // Se libera.

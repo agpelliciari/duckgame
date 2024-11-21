@@ -33,7 +33,7 @@ void ControlReceiver::playOn(const ControlledPlayer& player, Match& match) {
                 std::cerr << "Invalid action from client!!\n";
                 continue;
             }
-            action.playerind = player.getid(action.playerind);
+            action.playerind = player.getpos()+ action.playerind+1;
             match.notifyAction(action);
         }
     } catch (const ProtocolError& error) {

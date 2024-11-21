@@ -30,20 +30,6 @@ int ControlledPlayer::getpos() const{
 player_id ControlledPlayer::getid(const uint8_t ind) const { return id.get(ind); }
 
 
-// Switch del player. Participando en una partida. No mas events de lobby, ahora snapshots.
-bool ControlledPlayer::setgamemode() {
-    if (snapshots.reopen()) {
-        match_stats.state = STARTED_ROUND;
-        match_stats.numronda++;
-        // Antes... para evitar una race condition
-        if(events.tryclose()){
-            return true;
-        }
-        throw GameError(SERVER_ERROR, "Inconsistent state on player, tried set game mode but was disconnected");
-    }
-    return false;
-}
-
 void ControlledPlayer::waitgamemode(){
      snapshots.waitreopen();
 }
@@ -58,13 +44,28 @@ const MatchStatsInfo& ControlledPlayer::getStats(){
 }
 
 // Switch del player. Participando a la lobby. No mas snapshots ahora events de lobby.
-bool ControlledPlayer::setlobbymode(const MatchStatsInfo& new_stats) {    
+bool ControlledPlayer::setlobbymode(const MatchStatsInfo& new_stats) {
     if (events.reopen()) {
         if(snapshots.tryclose()){
             match_stats = new_stats;
             return true;
         }
-        throw GameError(SERVER_ERROR, "Inconsistent state on player, tried set lobby mode but was disconnected");
+        // Por ahora.. que retorne false.
+        //throw GameError(SERVER_ERROR, "Inconsistent state on player, tried set lobby mode but was disconnected");
+    }
+    return false;
+}
+
+// Switch del player. Participando en una partida. No mas events de lobby, ahora snapshots.
+bool ControlledPlayer::setgamemode() {
+    if (snapshots.reopen()) {
+        match_stats.state = STARTED_ROUND;
+        match_stats.numronda++;
+        // Antes... para evitar una race condition
+        if(events.tryclose()){
+            return true;
+        }
+        //throw GameError(SERVER_ERROR, "Inconsistent state on player, tried set game mode but was disconnected");
     }
     return false;
 }
@@ -72,7 +73,9 @@ bool ControlledPlayer::setlobbymode(const MatchStatsInfo& new_stats) {
 
 // Para cuando el match se cancela.
 bool ControlledPlayer::canceled(){
-    match_stats.state = CANCELADA;
+    if(match_stats.isRunning()){
+        match_stats.state = CANCELADA;
+    }
     return snapshots.tryclose() || events.tryclose();
 }
 
