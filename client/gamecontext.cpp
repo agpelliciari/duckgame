@@ -26,7 +26,17 @@ void GameContext::addPlayer(uint8_t pos){
 int GameContext::countPlayers() const{
     return cantidadjugadores;
 }
-
+void GameContext::reset(){
+    id_lobby = 0;
+    started = false;
+    dualplay = true;
+    map = MapData();
+    max_player_count = 4;
+    first_player = 0;
+    second_player = 0;
+    cantidadjugadores = 0;
+    
+}
 
 GameContext::GameContext():
             id_lobby(0),

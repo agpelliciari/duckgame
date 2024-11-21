@@ -23,6 +23,8 @@ public:
     int countPlayers() const;
     void removePlayer(uint8_t pos);
     void addPlayer(uint8_t pos);
+    
+    void reset();
     GameContext();
 };
 
