@@ -21,6 +21,7 @@ class ControlledPlayer {
 protected:
     // Manejo de ids. Y cantidad de players para la queue de mensajes.
     const ControlId id;
+    const int& pos;
     
     // For notifying actions and/or exit.
     lobby_events events;        // cppcheck-suppress unusedStructMember
@@ -30,7 +31,7 @@ protected:
     MatchStatsInfo match_stats;// cppcheck-suppress unusedStructMember
 
 public:
-    explicit ControlledPlayer(const ControlId& _id);
+    explicit ControlledPlayer(const ControlId& _id, const int& pos);
     
     // Por ahora tambien nos escapamos del move.
     ControlledPlayer(ControlledPlayer&&) = delete;
@@ -50,6 +51,8 @@ public:
     const ControlId& getcontrolid() const;
     
     player_id getid(const uint8_t ind) const;
+    
+    int getpos() const;
 
     // Abre la queue de lobby info del jugador, cierra la de matchdto, indicando esta activo en una
     // lobby.

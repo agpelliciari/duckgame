@@ -58,8 +58,8 @@ bool GameManager::cangonext() { return state.get() != NULL && state->endstate();
 LobbyActionQueue* GameManager::setLobbyCreator(LobbyListener& listener, bool dual) {
     std::cout << "Should set state to lobby create " << std::endl;
     context.dualplay = dual;
-    context.players.clear();
-    //context.cantidadjugadores = dual ? 2 : 1;
+    context.cantidadjugadores = 0;
+    //context.players.clear();
 
 
     LobbyCreateState* creator = new LobbyCreateState(skt.value(), context, listener);
@@ -74,8 +74,9 @@ LobbyActionQueue* GameManager::setLobbyCreator(LobbyListener& listener, bool dua
 void GameManager::setLobbyJoin(LobbyListener& listener, bool dual, unsigned int lobbyid) {
     std::cout << "Should set state to lobby join " << lobbyid << std::endl;
     context.dualplay = dual;
+    context.cantidadjugadores = 0;
     context.id_lobby = lobbyid;
-    context.players.clear();
+    //context.players.clear();
 
     LobbyJoinState* joiner = new LobbyJoinState(skt.value(), context, listener);
     state.reset(joiner);
@@ -86,7 +87,12 @@ void GameManager::setLobbyJoin(LobbyListener& listener, bool dual, unsigned int 
 
 // Utiliza el protocol del sender, le quita el
 PlayStateSender* GameManager::initGame(EventListener& listener) {
-    context.cantidadjugadores = context.players.size();
+    
+    // No se le deberia tener que sumar.. por compatibilidad.
+    context.first_player++;
+    if(context.dualplay){
+        context.second_player++;
+    }
 
     PlayStateSender* game = new PlayStateSender(skt.value(), listener, context);
     state.reset(game);
@@ -102,6 +108,6 @@ GameManager::~GameManager() {
 
 // Metodos getters para la configuracion.
 
-int GameManager::getTotalPlayers() const { return context.players.size(); }
+int GameManager::getTotalPlayers() const { return context.countPlayers(); }
 
 bool GameManager::isdual() const { return context.dualplay; }

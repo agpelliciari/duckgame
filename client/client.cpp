@@ -62,9 +62,6 @@ int Client::execGame(GameManager& connector, const GameContext& context) {
     std::cout << "BK:" << context.map.background << "box_tex:" << context.map.boxes_tex
               << std::endl;
 
-    for (int id: context.players) {
-        std::cout << "match player:" << id << std::endl;
-    }
 
               /*
     for (const std::string& tex: context.map.textures) {

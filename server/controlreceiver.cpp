@@ -61,7 +61,8 @@ void ControlReceiver::run() {
         Match& match = lobby.resolveMatch(isanfitrion, idPlayer);
 
         ControlledPlayer& player = lobbies.getPlayerOn(match, idPlayer);
-
+        lobby.notifyPlayer(player);
+        
         // Inicia notifier.
         ControlNotifier notifier(match, player, protocol);
         notifier.start();

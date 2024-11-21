@@ -17,16 +17,12 @@ LobbyControl::LobbyControl(LobbyContainer& _lobbies, ServerProtocol& _protocol):
 Match& LobbyControl::resolveJoin(ControlId& outPlayer){
     
     // Todo en un metodo para que sea thread safe.
+    // Podria tener info extra. Ahora es medio lo mismo que el size nada mas.
     std::vector<player_id> players;
     Match& joined = lobbies.joinLobby(protocol.recvlobbyid(), outPlayer, players);
 
     // Si no hubo error.. ahora notifica el join. El player_id no es conocido por protocol.
     protocol.notifyinfo(LobbyResponseType::JOINED_LOBBY, players.size());
-    
-    // Send current players.
-    for(player_id id: players){
-        protocol.notifyid(id);    
-    }
     
     return joined;
 }
@@ -50,14 +46,16 @@ Match& LobbyControl::resolveMatch(bool& ishost,ControlId& outPlayer) {
     // Primero se envia el playercount, sea join o no.
     outPlayer.setcount(protocol.recvplayercount()); 
     
-    Match& res = ishost? resolveHost(outPlayer) : resolveJoin(outPlayer);
-    
-    protocol.notifyid(outPlayer.get(0));
-    if (outPlayer.getcount() == 2) {
-        protocol.notifyid(outPlayer.get(1));
-    }
-    
-    return res;
+    return ishost? resolveHost(outPlayer) : resolveJoin(outPlayer);
+}
+
+void LobbyControl::notifyPlayer(const ControlledPlayer& player){
+     int pos = player.getpos();
+     protocol.notifyid(pos);
+     
+     if(player.playercount() == 2){
+         protocol.notifyid(pos+1);
+     }
 }
 
 

@@ -1,6 +1,7 @@
 #include "./playercontainer.h"
 
 #include <iostream>
+#include <iterator>
 
 #include "./gameerror.h"
 
@@ -17,35 +18,35 @@ void PlayerContainer::add(ControlId& out) {
         throw GameError(LOBBY_NO_SPACE, "There was no capacity to join required count");
     }
 
-    // totalplayers no es perse el id para el player
-    // conceptualmente es distinto.
-    // Por ahora pareceria es lo mismo que el id.
-    // Pero a la hora de remove. No parece correcto. Si bien por ahora no se necesita se puedan
-    // conectar.
     if (out.getcount() == 2) {  // Two in the machine!
-        totalplayers += 2;
-        lobby_info info(PLAYER_NEW, ++last_id);
+        int& pos = ids_positions.emplace_back(totalplayers);    
+        totalplayers += 2;        
+        
+        // Antes de agregar el nuevo player. Notifica
+        lobby_info info(PLAYER_NEW, pos);
+        notifyInfo(info);
+        info.data++;
         notifyInfo(info);
         
-        out.set(0, last_id); // Set first 
-        
-        info.data = ++last_id;
-        notifyInfo(info);
-        out.set(1, last_id); // Set second 
+        out.set(0, ++last_id); // Set first 
+        out.set(1, ++last_id); // Set second
+        players.emplace_back(out, pos);
         
 
-        players.emplace_back(out);
-        
         return;
     }
 
     // Por default es 1 solo.
+    int& pos = ids_positions.emplace_back(totalplayers);    
     totalplayers += 1;
-    lobby_info info(PLAYER_NEW, ++last_id);
-    notifyInfo(info);
-    out.set(0, last_id); // Set first 
     
-    players.emplace_back(out);
+    // Antes de agregar el nuevo player. Notifica
+    lobby_info info(PLAYER_NEW, pos);
+    notifyInfo(info);
+    
+    out.set(0, ++last_id); // Set first 
+    players.emplace_back(out, pos);
+    
 }
 
 player_container::iterator PlayerContainer::findit(const ControlId& id){
@@ -65,17 +66,42 @@ ControlledPlayer& PlayerContainer::get(const ControlId& id) {
 
 void PlayerContainer::remove(const ControlId& id) {
 
-    ControlId idcopy(id); // Por si las moscas. Si se usa el player.getcontrolid()
-    players.erase(findit(idcopy));
+    auto playerit = findit(id);
+    int pos = playerit->getpos();
+    int count = id.getcount();
     
-    int count = idcopy.getcount();
+    // Remove
+    players.erase(playerit);
+    
+    // Look/remove removed.
+    auto posit = ids_positions.begin();
+    
+    while (posit != ids_positions.end() && *posit != pos) {
+         ++posit;
+    }
+    if(posit == ids_positions.end()){
+         std::cerr << "warning.. At remove, not found player at position\n";
+         return;
+    }
+    
+    posit = ids_positions.erase(posit); // Erase id. So now next one is on curr pos.
+    
+    // Update positions after se fueron 'count' por lo que a la pos le restas ese count. 
+    while (posit != ids_positions.end()) {
+         *posit -= count; 
+         ++posit;
+    }    
     totalplayers -= count;
-
-    lobby_info info(PLAYER_LEFT, idcopy.get(0));
+    
+    
+    // Tras actualizar cosas... notifica el remove.
+    lobby_info info(PLAYER_LEFT, pos);
     notifyInfo(info);
-    for (int ind = 1; ind < count; ind++) {
-        info.data = idcopy.get(ind);
+    count--;
+    while(count>0) {
+        info.data = ++pos;
         notifyInfo(info);
+        count--;
     }
     
 }
@@ -89,16 +115,6 @@ void PlayerContainer::forceDisconnectAll() {
             std::cerr << "force disconnect " << player.toString() << " from match" << std::endl;
         }
     }
-    /*
-    for (auto playerit = players.begin(); playerit != players.end();) {
-        if ((*playerit).disconnect()) {
-            std::cerr << "force disconnect " << (*playerit).toString() << " from match"
-                      << std::endl;
-        }
-        playerit = players.erase(playerit);
-    }
-
-    */
 }
 
 
@@ -173,9 +189,14 @@ void PlayerContainer::notifyInfo(const lobby_info& info) {
     }
 }
 
-std::vector<player_id> PlayerContainer::updateState(const MatchDto& matchdto) {
+std::vector<player_id> PlayerContainer::updateState(MatchDto& matchdto) {
     std::vector<player_id> disconnected;
-
+    int ind = 0;
+    
+    for (PlayerDTO& player: matchdto.players){
+         player.id =++ind;
+    }
+    
     for (auto playerit = players.begin(); playerit != players.end();) {
         if ((*playerit).recvstate(matchdto)) {
             ++playerit;

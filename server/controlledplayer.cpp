@@ -10,7 +10,7 @@
 #define SIZE_EVENTS 30
 
 // Snapshots esta cerrada inicialmente. Events esta abierta.
-ControlledPlayer::ControlledPlayer(const ControlId& _id):id(_id), 
+ControlledPlayer::ControlledPlayer(const ControlId& _id, const int& _pos):id(_id),pos(_pos), 
 events(SIZE_EVENTS, false), snapshots(SIZE_SNAPSHOTS, true){}
 
 bool ControlledPlayer::operator==(const ControlledPlayer& other) const {
@@ -22,6 +22,10 @@ uint8_t ControlledPlayer::playercount() const { return id.getcount(); }
 const ControlId& ControlledPlayer::getcontrolid() const{
     return id;
 }
+int ControlledPlayer::getpos() const{
+    return this->pos;
+}
+
 
 player_id ControlledPlayer::getid(const uint8_t ind) const { return id.get(ind); }
 
