@@ -11,10 +11,14 @@ private:
     
 public:    
     ControlId(uint8_t _count):count(_count){}
-    ControlId():count(0){}
+    ControlId():count(0){
+          ids[0] = 0;
+          ids[1] = 0;
+    }
     
     ControlId(player_id first):count(1){
           ids[0] = first;
+          ids[1] = first;
     }
     ControlId(player_id first,player_id second):count(2){
           ids[0] = first;

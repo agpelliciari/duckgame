@@ -41,7 +41,7 @@ public:
 
     // Es necesrio trabajar con punteros al ser una coleccion
     void add(ControlId& id_out);
-    void remove(const ControlId& player);
+    bool remove(const ControlId& player);
     ControlledPlayer& get(const ControlId& id);
 
     void finishLobbyMode();

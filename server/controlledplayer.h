@@ -2,6 +2,7 @@
 #define LIB_ControlledPlayer_H
 
 #include <string>
+#include <atomic>
 #include <utility>
 
 #include "common/dtosgame.h"
@@ -22,7 +23,7 @@ protected:
     // Manejo de ids. Y cantidad de players para la queue de mensajes.
     const ControlId id;
     const int& pos;
-    
+    std::atomic<bool> isactive;
     // For notifying actions and/or exit.
     lobby_events events;        // cppcheck-suppress unusedStructMember
     match_snapshots snapshots;  // cppcheck-suppress unusedStructMember
@@ -66,16 +67,14 @@ public:
     void waitlobbymode();
 
 
-    // Desconecta/cierra el player. Si esta abierto.
-    // Devuelve false si ya estaba cerrado.
-    bool disconnect();
-    //bool isclosed();
-
-    // Checkea si el player esta.
-    // bool isgamemode();
-    // bool islobbymode();
-
-
+    // Desconecta/cierra el player, las queues. Y setea como cancelada las stats.
+    // Para el server
+    bool canceled();
+    
+    // Retorna false si esta inactivo. True si esta activo y cierra las queues.
+    // Para los notifiers/control receivers. Que reciben del cliente
+    bool trydisconnect();
+    
     // recveinfo es no bloqueante! Recibe el lobby info con try_push a la queue del player
     // Todo es "bloqueante" por posibles locks... pero bueno
     bool recvinfo(const lobby_info& dto);

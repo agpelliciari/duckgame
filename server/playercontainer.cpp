@@ -51,48 +51,60 @@ void PlayerContainer::add(ControlId& out) {
 
 player_container::iterator PlayerContainer::findit(const ControlId& id){
     auto playerit = players.begin();
-    while (playerit != players.end()) {
-        if(playerit->getcontrolid() == id){
-             return playerit;
-        }
+    while (playerit->getcontrolid() != id && playerit != players.end()){
         ++playerit;
-    }
-    throw GameError(SERVER_ERROR, "Not found id player on container");
+    }    
+    return playerit;
 }
 
 ControlledPlayer& PlayerContainer::get(const ControlId& id) {
-    return *findit(id);
+    auto playerit = findit(id);
+    
+    if(playerit == players.end()){
+         throw GameError(SERVER_ERROR, "Not found id player on container");
+    }
+    
+    return *playerit;
 }
 
-void PlayerContainer::remove(const ControlId& id) {
+bool PlayerContainer::remove(const ControlId& id) {
 
     auto playerit = findit(id);
+    
+    if(playerit == players.end()){
+        std::cerr << "warning.. At remove, not found player\n";
+        return false;
+    }
+    
     int pos = playerit->getpos();
     int count = id.getcount();
     
-    // Remove
-    players.erase(playerit);
-    
-    // Look/remove removed.
+    // Look for position to.
     auto posit = ids_positions.begin();
-    
     while (posit != ids_positions.end() && *posit != pos) {
          ++posit;
     }
     if(posit == ids_positions.end()){
          std::cerr << "warning.. At remove, not found player at position\n";
-         return;
+         return false;
     }
     
+    // Remove!
+    players.erase(playerit);
     posit = ids_positions.erase(posit); // Erase id. So now next one is on curr pos.
     
+    totalplayers -= count;
+
+    if(canceled){
+        return true; 
+    }
+
     // Update positions after se fueron 'count' por lo que a la pos le restas ese count. 
     while (posit != ids_positions.end()) {
          *posit -= count; 
          ++posit;
-    }    
-    totalplayers -= count;
-    
+    }
+        
     
     // Tras actualizar cosas... notifica el remove.
     lobby_info info(PLAYER_LEFT, pos);
@@ -104,14 +116,17 @@ void PlayerContainer::remove(const ControlId& id) {
         count--;
     }
     
+    return true;
+    
 }
 
 // Actualmente el player acceptor se cierra primero.
 // Lo que haria que al llegar aca la lista perse debiera estar vacia.
 // Pero siempre es bueno verificar.
 void PlayerContainer::forceDisconnectAll() {
+    canceled = true;
     for (ControlledPlayer& player: players) {
-        if (player.disconnect()) {
+        if (player.canceled()) {
             std::cerr << "force disconnect " << player.toString() << " from match" << std::endl;
         }
     }
@@ -134,8 +149,19 @@ void PlayerContainer::finishWaitMode() {
 }
 
 void PlayerContainer::hostLobbyLeft(const ControlId& host) {
-    players.erase(findit(host));
-    cancelByError(ANFITRION_LEFT);
+    //players.erase(findit(host)); // Evitemos borrarlo de memoria ahora.
+    
+    canceled = true;
+    lobby_info info(GAME_ERROR, ANFITRION_LEFT);
+
+    // Cuando se va el host no se notifica el disconnect... sino se los desconecta.
+    for (ControlledPlayer& player: players) {
+        if(player.getcontrolid() == host){
+            continue;
+        }
+        player.recvinfo(info);
+        player.canceled();
+    }
 }
 void PlayerContainer::cancelByError(LobbyErrorType cancelError) {
     canceled = true;
@@ -144,7 +170,7 @@ void PlayerContainer::cancelByError(LobbyErrorType cancelError) {
     // Cuando se va el host no se notifica el disconnect... sino se los desconecta.
     for (ControlledPlayer& player: players) {
         player.recvinfo(info);
-        player.disconnect();
+        player.canceled();
     }
     totalplayers = 0;
 }

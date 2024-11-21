@@ -10,7 +10,7 @@
 #define SIZE_EVENTS 30
 
 // Snapshots esta cerrada inicialmente. Events esta abierta.
-ControlledPlayer::ControlledPlayer(const ControlId& _id, const int& _pos):id(_id),pos(_pos), 
+ControlledPlayer::ControlledPlayer(const ControlId& _id, const int& _pos):id(_id),pos(_pos),isactive(true), 
 events(SIZE_EVENTS, false), snapshots(SIZE_SNAPSHOTS, true){}
 
 bool ControlledPlayer::operator==(const ControlledPlayer& other) const {
@@ -70,11 +70,21 @@ bool ControlledPlayer::setlobbymode(const MatchStatsInfo& new_stats) {
 }
 
 
-
-// Se asume a lo sumo una de las dos queues estaria abierta.
-bool ControlledPlayer::disconnect() {
+// Para cuando el match se cancela.
+bool ControlledPlayer::canceled(){
     match_stats.state = CANCELADA;
     return snapshots.tryclose() || events.tryclose();
+}
+
+// Se asume a lo sumo una de las dos queues estaria abierta.
+bool ControlledPlayer::trydisconnect() {
+    if(isactive.exchange(false)){
+        snapshots.tryclose();
+        events.tryclose();
+        return true;
+    }
+    
+    return false;
 }
 
 // No hace falta sincronizar/lockear ya que si se llama a este metodo

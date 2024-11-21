@@ -149,14 +149,17 @@ TEST_F(TestIntegrationLobby, SimpleCreateLobbyAndJoinButLeft) {
 
     host.assertLobbyInfoJoined(first);
     host.assertLobbyInfoJoined(second);
-
+    std::cout << "----------------------> ASSERTED JOINED\n";
     joined1.close();
     host.assertLobbyInfoLeft(first);
     host.assertLobbyInfoLeft(second);
 
+    std::cout << "----------------------> ASSERTED LEFT\n";
     host.startMatch(mapusing);
 
     host.assertLobbyStarted(2);
+    std::cout << "----------------------> ASSERTED STARTED\n";
+    
 }
 
 
@@ -350,7 +353,6 @@ TEST_F(TestIntegrationLobby, SimpleMatchNoPlayersEnds) {
     ASSERT_EQ(lobbies.countMatches(), 1) << "Lobby was not deleted before it has to";
     // ASSERT_FALSE(joined3.isReceiverOpen()) << "receiver protocol was not open";
     joined3.finish();
-
     ASSERT_EQ(lobbies.countMatches(), 0) << "Lobby was deleted";
 }
 

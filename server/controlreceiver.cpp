@@ -64,16 +64,20 @@ void ControlReceiver::run() {
         lobby.notifyPlayer(player);
         
         // Inicia notifier.
-        ControlNotifier notifier(match, player, protocol);
+        ControlNotifier notifier(match,lobbies, player, protocol);
         notifier.start();
 
-        if (isanfitrion && lobby.handleAnfitrionLobby(player, match)) {
-            return;  // No se empezo la partida.
+        if (!isanfitrion || lobby.handleAnfitrionLobby(player, match)) {
+              // Si no es el anfitrion que ya asuma empezo. Total no deberia mandar nada
+              // En la fase de lobby, solo podria irse. Para lo que esta disconnect despues
+              playOn(player, match);
         }
 
-        // Si no es el anfitrion que ya asuma empezo. Total no deberia mandar nada
-        // En la fase de lobby, solo podria irse. Para lo que esta disconnect despues
-        playOn(player, match);
+        if(player.trydisconnect()){
+             //std::cout << "Player "<<player.toString()<<" was active... so should let notifier notify?!\n";
+             return;
+        }
+        //std::cout << "--> "<<player.toString()<<"receiver Player was inactive so DISCONNECT to lobbies?!\n";
         lobbies.disconnectFrom(match, player);
 
     } catch (const GameError& error) {
