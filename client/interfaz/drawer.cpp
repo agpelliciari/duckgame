@@ -62,7 +62,7 @@ void Drawer::drawPlayerInfo(const PlayerDTO& player, const std::string color) {
             int x, y;
             if (player.weapon == TypeWeapon::PISTOLA_COWBOY) {
                 x = 30;
-                y = 2;
+                y = 5;
             } else {
                 x = 22;
                 y = -3;

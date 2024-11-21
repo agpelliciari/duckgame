@@ -13,14 +13,11 @@ void Animation::updateSprite(const MatchDto& matchDto) {
     for (const PlayerDTO& player: matchDto.players) {
         AnimationBuilder* builder = getAnimationBuilder(player.id);
         if (builder) {
-            if (player.is_alive) {
-                setBuilder(*builder, STARTING_SPRITE_X + SPRITE_SIZE,
-                           LAY_DOWN_SPRITE_Y);  // animacion en caso de muerte
-            } else {
+                //setBuilder(*builder, STARTING_SPRITE_X + SPRITE_SIZE, LAY_DOWN_SPRITE_Y);  animacion en caso de muerte
                 updatePlayerAnimation(*builder, player);
 
                 updateDoingActionAnimation(*builder, player);
-            }
+        
         }
     }
 }
@@ -28,23 +25,27 @@ void Animation::updateSprite(const MatchDto& matchDto) {
 void Animation::updateDoingActionAnimation(AnimationBuilder& builder, const PlayerDTO& player) {
     switch (player.doing_actions[0]) {
         case TypeDoingAction::SHOOTING:
-            std::cout << "SHOOTING" << std::endl;
-            builder.doingActionSpriteX = 0;
-            builder.doingActionSpriteY = 0;
-            soundManager.playSound(SoundType::LASER);
+            //std::cout << "SHOOTING" << std::endl;
+            if (player.weapon == TypeWeapon::PEW_PEW_LASER) {
+                soundManager.playSound(SoundType::LASER);
+            } else {
+                soundManager.playSound(SoundType::SHOT);
+            }
+            builder.doingActionSpriteX = 0;  // cuando se envien bien las acciones
             break;
         case TypeDoingAction::SHOOTING_UP:
-            std::cout << "SHOOTING UP" << std::endl;
+            //std::cout << "SHOOTING UP" << std::endl;
             break;
         case TypeDoingAction::DAMAGED:
-            std::cout << "DAMAGED" << std::endl;
+            //std::cout << "DAMAGED" << std::endl;
             soundManager.playSound(SoundType::QUACK);
             break;
         case TypeDoingAction::PICK_UP:
-            std::cout << "PICK UP" << std::endl;
+            //std::cout << "PICK UP" << std::endl;
+            soundManager.playSound(SoundType::PICK_UP);
             break;
         case TypeDoingAction::NONE:
-            std::cout << "NONE" << std::endl;
+            //std::cout << "NONE" << std::endl;
             break;
     }
 }
