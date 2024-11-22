@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo apt-get --yes install update
+sudo apt-get --yes update
 
 #SDL2
 echo Instalando paquetes necesarios para SDL2...
