@@ -68,10 +68,10 @@ MatchLogic::MatchLogic(): colition_map(800, 640) {
 
 
 void MatchLogic::add_player(int id, int spawn_point_index) {
-    std::cout << "SPAWN POINT INDEX: "<< spawn_point_index << std::endl;
-    std::cout << "SPAWN POINT SIZE: " << spawn_points.size() << std::endl;
+    //std::cout << "SPAWN POINT INDEX: "<< spawn_point_index << std::endl;
+    //std::cout << "SPAWN POINT SIZE: " << spawn_points.size() << std::endl;
     if (spawn_point_index < spawn_points.size()) {
-        players.push_back(Player(id, spawn_points[spawn_point_index].x  * 16, spawn_points[spawn_point_index].y  * 16));
+        players.push_back(Player(id, spawn_points[spawn_point_index].x  * 16, spawn_points[spawn_point_index].y  * 16 + 1));
         std::cout << "spawn point x: " << spawn_points[spawn_point_index].x << ", y: " << spawn_points[spawn_point_index].y << std::endl;
     } else {
         players.push_back(Player(id, 10 + 50 * id, 1));
