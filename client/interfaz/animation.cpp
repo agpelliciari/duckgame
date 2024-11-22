@@ -13,11 +13,13 @@ void Animation::updateSprite(const MatchDto& matchDto) {
     for (const PlayerDTO& player: matchDto.players) {
         AnimationBuilder* builder = getAnimationBuilder(player.id);
         if (builder) {
-                //setBuilder(*builder, STARTING_SPRITE_X + SPRITE_SIZE, LAY_DOWN_SPRITE_Y);  animacion en caso de muerte
+            if (player.is_alive) {
                 updatePlayerAnimation(*builder, player);
 
                 updateDoingActionAnimation(*builder, player);
-        
+            } else {
+                setBuilder(*builder, STARTING_SPRITE_X + SPRITE_SIZE, LAY_DOWN_SPRITE_Y);
+            }
         }
     }
 }
