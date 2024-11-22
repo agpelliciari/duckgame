@@ -9,14 +9,24 @@
 #include "common/errors.h"
 #include "common/protocolerror.h"
 
+#define COUNT_ERRORS 9
 const char LobbyStateRecv::CLIENT_CONN_ERROR[] = "Client connection error";
 const char* LobbyStateRecv::ERRORS[] = {
-        "Unknown client error",        "Unknown server error", "Server closed the connection",
-        "Match's host left the lobby", "Lobby was not found",  "Lobby was already started",
+        "Unknown client error", 
+        "Unknown server error", 
+        "Server closed the connection",
+        "Match's host left the lobby",
+        "Lobby was not found",
+        "Lobby was already started",
         "Lobby had not enough space",
-        "Map was invalid"};
+        "Map was invalid", 
+        "Not enough players"
+        };
 
-#define getErrorMsg(ind) ERRORS[(ind >= 8) ? 1 : ind]
+
+const char * LobbyStateRecv::getErrorMsg(int ind) const{
+     return ERRORS[(ind >= COUNT_ERRORS) ? 1 : ind];
+}
 
 
 LobbyStateRecv::LobbyStateRecv(Messenger& _messenger, GameContext& _context,

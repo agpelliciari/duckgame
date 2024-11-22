@@ -79,10 +79,13 @@ void Match::loadMap(MapDeserializer& deserial){
 void Match::init(MapLoader& maps, const char* mapname) {
     if (is_alive()) {
         throw GameError(LOBBY_ALREADY_STARTED, "Tried to start a match already started!!\n");
-    }    
+    }
+    if(players.playercount() <= 1){
+        throw GameError(NOT_ENOUGH_PLAYERS, "There was not enough players");
+    }
+    std::cout << "INIT MATCH AFTER with count "<< players.playercount()<<" ?\n";
     
     loadMap(maps.getLoader(mapname));
-    std::cout << "INIT MATCH AFTER LOAD MAP?\n";
     // Notify/start players. Ya podrian enviar la info del mapa.
     looper.add_objects(objects);
     looper.start_players(players, stats);

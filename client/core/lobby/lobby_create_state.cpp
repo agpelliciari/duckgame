@@ -10,7 +10,6 @@
 #include "common/core/liberror.h"
 #include "common/protocolerror.h"
 
-#define getErrorMsg(ind) ERRORS[(ind >= 8) ? 1 : ind]
 
 
 LobbyCreateState::LobbyCreateState(Messenger& _messenger, GameContext& _context,

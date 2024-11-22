@@ -27,7 +27,8 @@ protected:
     //void setInitedMatch(int totalplayers);
     void setInitedMatch();
     void close();
-
+    
+    const char * getErrorMsg(int ind) const;
 public:
     explicit LobbyStateRecv(Messenger& _messenger, GameContext& _context, LobbyListener& _listener);
 

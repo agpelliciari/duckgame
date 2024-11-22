@@ -1,0 +1,172 @@
+size_x: 50
+size_y: 40
+background: /backgrounds/office.png
+blocks_z: 5
+boxes_z: 3
+box_texture: /boxes/itemBox1.png
+textures:
+  - /blocks/Castle/38.png
+  - /blocks/Castle/32.png
+  - /blocks/Castle/36.png
+  - /blocks/Castle/33.png
+  - /blocks/Castle/44.png
+  - /blocks/Castle/47.png
+  - /blocks/Castle/40.png
+  - /blocks/Castle/48.png
+  - /blocks/Castle/41.png
+  - /spawns/players/respawner.png
+  - /spawns/weapons/gunSpawner1.png
+  - /decorations/barrel.png
+blocks:
+  - x: 8
+    y: 9
+    ind_tex: 0
+  - x: 9
+    y: 9
+    ind_tex: 1
+  - x: 10
+    y: 9
+    ind_tex: 1
+  - x: 11
+    y: 9
+    ind_tex: 2
+  - x: 17
+    y: 7
+    ind_tex: 0
+  - x: 18
+    y: 7
+    ind_tex: 3
+  - x: 19
+    y: 7
+    ind_tex: 1
+  - x: 20
+    y: 7
+    ind_tex: 1
+  - x: 21
+    y: 7
+    ind_tex: 1
+  - x: 22
+    y: 7
+    ind_tex: 1
+  - x: 23
+    y: 7
+    ind_tex: 2
+  - x: 18
+    y: 6
+    ind_tex: 4
+  - x: 18
+    y: 5
+    ind_tex: 5
+  - x: 19
+    y: 5
+    ind_tex: 6
+  - x: 18
+    y: 4
+    ind_tex: 4
+  - x: 18
+    y: 3
+    ind_tex: 4
+  - x: 4
+    y: 2
+    ind_tex: 0
+  - x: 5
+    y: 2
+    ind_tex: 3
+  - x: 6
+    y: 2
+    ind_tex: 1
+  - x: 7
+    y: 2
+    ind_tex: 1
+  - x: 8
+    y: 2
+    ind_tex: 1
+  - x: 9
+    y: 2
+    ind_tex: 1
+  - x: 10
+    y: 2
+    ind_tex: 1
+  - x: 11
+    y: 2
+    ind_tex: 1
+  - x: 12
+    y: 2
+    ind_tex: 1
+  - x: 13
+    y: 2
+    ind_tex: 1
+  - x: 14
+    y: 2
+    ind_tex: 1
+  - x: 15
+    y: 2
+    ind_tex: 1
+  - x: 16
+    y: 2
+    ind_tex: 1
+  - x: 17
+    y: 2
+    ind_tex: 1
+  - x: 18
+    y: 2
+    ind_tex: 7
+  - x: 19
+    y: 2
+    ind_tex: 6
+  - x: 5
+    y: 1
+    ind_tex: 8
+decorations:
+  - x: 10
+    y: 10
+    z_ind: 1
+    ind_tex: 11
+  - x: 14
+    y: 3
+    z_ind: 1
+    ind_tex: 11
+boxes:
+  - x: 5
+    y: 7
+  - x: 5
+    y: 6
+  - x: 5
+    y: 5
+  - x: 5
+    y: 4
+  - x: 8
+    y: 4
+  - x: 5
+    y: 3
+  - x: 8
+    y: 3
+spawns_item:
+  - x: 9
+    y: 10
+    ind_tex: 10
+  - x: 18
+    y: 8
+    ind_tex: 10
+  - x: 23
+    y: 8
+    ind_tex: 10
+  - x: 12
+    y: 3
+    ind_tex: 10
+  - x: 16
+    y: 3
+    ind_tex: 10
+spawns_player:
+  - x: 8
+    y: 10
+    ind_tex: 9
+  - x: 11
+    y: 10
+    ind_tex: 9
+  - x: 20
+    y: 8
+    ind_tex: 9
+  - x: 10
+    y: 3
+    ind_tex: 9

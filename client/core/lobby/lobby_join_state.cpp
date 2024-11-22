@@ -8,8 +8,6 @@
 #include "common/core/liberror.h"
 #include "common/protocolerror.h"
 
-#define getErrorMsg(ind) ERRORS[(ind >= 8) ? 1 : ind]
-
 
 LobbyJoinState::LobbyJoinState(Messenger& _messenger, GameContext& _context,
                                LobbyListener& _listener):
