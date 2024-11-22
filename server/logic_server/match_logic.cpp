@@ -69,6 +69,7 @@ MatchLogic::MatchLogic(): colition_map(800, 640) {
 
 void MatchLogic::add_player(int id, int spawn_point_index) {
     std::cout << "SPAWN POINT INDEX: "<< spawn_point_index << std::endl;
+    std::cout << "SPAWN POINT SIZE: " << spawn_points.size() << std::endl;
     if (spawn_point_index < spawn_points.size()) {
         players.push_back(Player(id, spawn_points[spawn_point_index].x  * 16, spawn_points[spawn_point_index].y  * 16));
         std::cout << "spawn point x: " << spawn_points[spawn_point_index].x << ", y: " << spawn_points[spawn_point_index].y << std::endl;
@@ -305,9 +306,9 @@ void MatchLogic::add_spawn_points(const std::vector<struct MapPoint>& spawn_poin
 }
 
 void MatchLogic::add_item_spawns(const std::vector<struct MapPoint>& items_spawns){
-    // TODO randomizar los items que pueden aparecer en cada spawn
+
     for (const struct MapPoint& spawn: items_spawns) {
-        this->spawn_places.push_back(SpawnPlace(spawn.x * 16, spawn.y *16, 16, 16, 5, 0.025));
+        this->spawn_places.push_back(SpawnPlace(spawn.x * 16, spawn.y *16, 16, 5, 10, 1000/30));
         spawn_places.back().spawn_item();
     }
 }
@@ -382,8 +383,14 @@ void MatchLogic::update_spawn_places(){
     }
 }
 
+void MatchLogic::update_spawn_points(){
+    for (SpawnPlace &spawn: this->spawn_places) {
+        spawn.pass_time();
+    }
+}
+
 void MatchLogic::clear_objects(){
-    spawn_points.clear();
+    //spawn_points.clear();
     boxes.clear();
     //spawn_places.clear();
     dropped_items.clear();

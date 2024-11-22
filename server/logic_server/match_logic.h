@@ -73,6 +73,8 @@ public:
     void player_jump_end(int id);
     void update_dropped_items();
     void update_spawn_places();
+    void update_spawn_points();
+
     ~MatchLogic();
 };
 

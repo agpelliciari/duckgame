@@ -50,8 +50,11 @@ void SpawnPlace::spawn_item() {
             spawned = true;
             break;
         default:
-
-            spawned = false;
+            possible_weapon = std::make_unique<CowboyPistolWeapon>();
+            std::cout<<"Spawn Cowboypistol"<<std::endl;
+            //item = TypeDynamicObject::PISTOLA_COWBOY;
+            spawned = true;
+            break;
     }
 
 }
@@ -59,7 +62,8 @@ void SpawnPlace::spawn_item() {
 std::unique_ptr<Weapon> SpawnPlace::get_weapon(){
     if (spawned){
         spawned = false;
-        timer = this->time_respawn / this->time_sleep;
+        //TODO cambiar el timer
+        timer = 200;
         auto weapon = std::move(possible_weapon);
         possible_weapon = nullptr;
         return weapon;
@@ -83,11 +87,13 @@ bool SpawnPlace::is_spawned() {
 
 void SpawnPlace::pass_time(){
     if (!spawned && time_respawn > 0) {
-        time_respawn--;
+        timer--;
+        //std::cout << "TIMER SPAWNER: "<< timer <<std::endl;
+        if (timer <= 0) {
+            this->spawn_item();
+        }
     }
-    if (time_respawn == 0) {
-        this->spawn_item();
-    }
+
 }
 
 void SpawnPlace::take_item(TypeDynamicObject &item_) {
@@ -98,14 +104,14 @@ void SpawnPlace::take_item(TypeDynamicObject &item_) {
 
 void SpawnPlace::get_data(int &position_x_, int &position_y_, TypeDynamicObject &object_) {
     position_x_ = this->spawn_point.x;
-    position_y_ = this->spawn_point.y;
+    position_y_ = this->spawn_point.y + 10;
     if (possible_weapon != nullptr){
         possible_weapon->get_type(object_);
     }
 }
 
 bool SpawnPlace::is_on_range(int player_position_x, int player_position_y){
-    return (player_position_x >= spawn_point.x && player_position_x <= spawn_point.x + dimension.x &&
+    return (player_position_x >= spawn_point.x - 8 && player_position_x <= spawn_point.x + dimension.x  + 8&&
                 player_position_y >= spawn_point.y && player_position_y <= spawn_point.x + dimension.y);
 }
 

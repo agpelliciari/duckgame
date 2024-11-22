@@ -102,6 +102,7 @@ void MatchState::start_players(MatchObserver& observer, MatchStatsInfo& stats) {
     stats.stats.clear();
     id_alive_players.clear();
     std::vector<unsigned int> ids = observer.getPlayers();
+
     int spawn_point_index = 0;
     for (auto id = ids.begin(); id != ids.end();) {
         stats.stats.push_back(PlayerStatDto(*id, 0));
@@ -122,7 +123,7 @@ void MatchState::step() {
     match_logic.update_players(this->id_alive_players);
     match_logic.update_bullets();
     match_logic.update_dropped_items();
-    //match_logic.update_spawn_points();
+    match_logic.update_spawn_points();
 }
 
 
