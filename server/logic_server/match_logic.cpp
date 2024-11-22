@@ -116,17 +116,17 @@ void MatchLogic::player_jump_end(int id) {
     }
 }
 
-void MatchLogic::player_pick_up_item(int index) {
+void MatchLogic::player_pick_up_item(int id) {
     for (Player& player: players) {
-        if (player.same_id(player.get_id())) {
+        if (player.same_id(id)) {
             player.pick_up_item(this->spawn_places, this->dropped_items);
         }
     }
 }
 
-void MatchLogic::player_drop_item(int index) {
+void MatchLogic::player_drop_item(int id) {
     for (Player& player: players) {
-        if (player.same_id(player.get_id())) {
+        if (player.same_id(id)) {
             player.drop_item(this->dropped_items);
         }
     }
