@@ -20,6 +20,11 @@ void PlayStateRecv::run() {
             // True si esta en un round
             // False si pausa/termino.
             if (protocol.recvstate(stats, state)) {
+                // No es ideal pero he aqui.
+                for(PlayerDTO& player: state.players){
+                     player.pos.x-= 3; // Para centrar. Ya que 16 mide un bloque.
+                }
+                
                 listener.matchUpdated(state);
             } else {
                 // Chequea si finisheo?!
