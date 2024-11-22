@@ -21,6 +21,8 @@ private:
     lobby_container lobbies;  // cppcheck-suppress unusedStructMember
     std::mutex mtx;
 
+    // Unirse a la lobby/match tira error si no existe. No espera a que se empieze.
+    Match& findLobby(lobbyID id);
 public:
     // Default constructor
     LobbyContainer();
@@ -33,20 +35,21 @@ public:
     LobbyContainer& operator=(LobbyContainer&&) = delete;
 
     const std::vector<std::string>& registeredMaps() const;
-    // Es necesrio trabajar con punteros al ser una coleccion
-    Match& newLobby();
-
-    // Unirse a la lobby/match tira error si no existe. No espera a que se empieze.
-    Match& findLobby(lobbyID id);
-
-    ControlledPlayer& joinLobby(uint8_t count, Match& match);
-
+    
+    // Acciones para create vs join lobby. Encapsuladas en un metodo
+    // con el join de players para hacerlo thread safe.
+    Match& newLobby(ControlId& out);
+    Match& joinLobby(lobbyID id, ControlId& out, std::vector<player_id>& players);
+    
+    
     int countMatches();
+    int countPlayers(Match& match);
 
     // Una vez empezada no se aceptan mas.
     void startLobby(Match& match, const char* mapname);
 
 
+    ControlledPlayer& getPlayerOn(Match& match, const ControlId& id);
     void disconnectFrom(Match& match, ControlledPlayer& player);
 
     // Si se esta en la lobby y el anfitrion se va. Se cancela.

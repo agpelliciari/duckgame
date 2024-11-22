@@ -6,7 +6,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2pp/SDL2pp.hh>
 
-enum class SoundType { JUMP, SHOT, QUACK, LASER };
+enum class SoundType { JUMP, SHOT, QUACK, LASER, PICK_UP };
 
 class SoundContainer {
 private:

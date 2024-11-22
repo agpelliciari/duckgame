@@ -115,24 +115,24 @@ int main(int argc, char* argv[]) {
         
         std::cout << "GOT BK "<< background << std::endl;
         
-        const std::vector<MapObjectData> blocks = serial.getBlocks();
-        const std::vector<MapObjectData> spawnPlayers = serial.getPlayerSpawns();
-        const std::vector<MapObjectData> boxes = serial.getBoxes();
-        const std::vector<MapObjectData> decorations = serial.getDecorations();
+        const std::vector<ImportedMapObjectData> blocks = serial.getBlocks();
+        const std::vector<ImportedMapObjectData> spawnPlayers = serial.getPlayerSpawns();
+        const std::vector<ImportedMapObjectData> boxes = serial.getBoxes();
+        const std::vector<ImportedMapObjectData> decorations = serial.getDecorations();
         
-        for(const MapObjectData& obj: blocks){
+        for(const ImportedMapObjectData& obj: blocks){
             std::cout << "Block "<< obj.texture << " at " << obj.column <<", "<< obj.row << " z:"<< obj.zIndex<<std::endl;
         }
-        for(const MapObjectData& obj: spawnPlayers){
+        for(const ImportedMapObjectData& obj: spawnPlayers){
             std::cout << "Spawn player "<< obj.texture << " at " << obj.column <<", "<< obj.row << " z:"<< obj.zIndex<<std::endl;
         }
 
 
-        for(const MapObjectData& obj: decorations){
+        for(const ImportedMapObjectData& obj: decorations){
             std::cout << "Decoration "<< obj.texture << " at " << obj.column <<", "<< obj.row << " z:"<< obj.zIndex<<std::endl;
         }
         
-        for(const MapObjectData& obj: boxes){
+        for(const ImportedMapObjectData& obj: boxes){
             std::cout << "Box "<< obj.texture << " at " << obj.column <<", "<< obj.row << " z:"<< obj.zIndex<<std::endl;
         }
 

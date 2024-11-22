@@ -29,9 +29,9 @@ int Client::execMenu(GameManager& connector) {
     menu.show();
     return application.exec();
 }
-int Client::exec() {
-    GameContext context;
-    GameManager connector(context);
+
+
+int Client::execMenuSingle(GameManager& connector, const GameContext& context) {
     if (execMenu(connector) != 0) {
         return 1;
     }
@@ -41,16 +41,26 @@ int Client::exec() {
         std::cerr << "Did not start a match, exiting..." << std::endl;
         return 1;
     }
-
-    // if (execGame(gameLoop) != 0) {
-    //     return 1;
-    // }
-
-    return execGame(connector, context);
+    
+    return 0;
+}
+int Client::exec() {
+    GameContext context;
+    GameManager connector(context);
+    if(execMenuSingle(connector, context) != 0){
+         return 1;
+    }
+    while(execGame(connector, context)){
+        context.reset();
+        if(execMenuSingle(connector, context) != 0){
+             return 1;
+        }
+    }
+    return 0;
 }
 
 
-int Client::execGame(GameManager& connector, const GameContext& context) {
+bool Client::execGame(GameManager& connector, const GameContext& context) {
     // Crear event queue iniciar action listener y exec del uiloop!
     SimpleEventListener listener;
 
@@ -62,9 +72,6 @@ int Client::execGame(GameManager& connector, const GameContext& context) {
     std::cout << "BK:" << context.map.background << "box_tex:" << context.map.boxes_tex
               << std::endl;
 
-    for (int id: context.players) {
-        std::cout << "match player:" << id << std::endl;
-    }
 
               /*
     for (const std::string& tex: context.map.textures) {
@@ -92,7 +99,7 @@ int Client::execGame(GameManager& connector, const GameContext& context) {
     uiLoop.exec();
 
 
-    return connector.cangonext() ? 0 : -1;
+    return connector.cangonext();
 }
 
 Client::~Client() {}

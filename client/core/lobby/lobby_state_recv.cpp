@@ -28,11 +28,10 @@ void LobbyStateRecv::handleNotify(const lobby_info& info) {
     // Un map para esto... no vale la pena.
     if (info.action == PLAYER_NEW) {
         context.addPlayer(info.data);
-        //context.cantidadjugadores++;
         listener.playerJoinedLobby(info.data);
     } else if (info.action == PLAYER_LEFT) {
         context.removePlayer(info.data);
-        //context.cantidadjugadores--;
+        
         listener.playerLeftLobby(info.data);
     }
 }
@@ -75,7 +74,7 @@ bool LobbyStateRecv::endstate() {
     return context.started;
 }
 
-LobbyStateRecv::~LobbyStateRecv() {
+void LobbyStateRecv::close(){
     if (_keep_running) {
         stop();
         if (!context.started) {
@@ -83,4 +82,8 @@ LobbyStateRecv::~LobbyStateRecv() {
         }
         join();
     }
+}
+    
+LobbyStateRecv::~LobbyStateRecv() {
+    close();
 }

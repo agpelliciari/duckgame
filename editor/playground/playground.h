@@ -51,8 +51,10 @@ private:
 
     QGraphicsRectItem* background;
     std::vector<QGraphicsRectItem*> blocks;
-    std::vector<QGraphicsRectItem*> physicalObjects;
-    std::vector<QGraphicsRectItem*> nonPhysicalObjects;
+    std::vector<QGraphicsRectItem*> spawnPlayers;
+    std::vector<QGraphicsRectItem*> spawnWeapons;
+    std::vector<QGraphicsRectItem*> boxes;
+    std::vector<QGraphicsRectItem*> decorations;
 
     int scaleFactor = ZOOM_MIN;
     bool isDragging = false;
@@ -61,62 +63,57 @@ private:
 public:
     explicit Playground(const PlaygroundHandler& handler, QWidget* parent = nullptr);
 
+    void zoomIn();
+    void zoomOut();
+
     void setBackground(Texture texture);
-
     void addBlock(QPoint position, TileSet tileSet);
-
-    void addPhysicalObject(QPoint position, Texture texture);
-
-    void addNonPhysicalObject(QPoint position, Texture texture);
+    void addSpawnPlayer(QPoint position, Texture texture);
+    void addSpawnWeapon(QPoint position, Texture texture);
+    void addBox(QPoint position, Texture texture);
+    void addDecoration(QPoint position, Texture texture);
 
     void removeBlock(QPoint position, TileSet tileSet);
-
-    void removePhysicalObject(QPoint position);
-
-    void removeNonPhysicalObject(QPoint position);
+    void removeSpawnPlayer(QPoint position);
+    void removeSpawnWeapon(QPoint position);
+    void removeBox(QPoint position);
+    void removeDecoration(QPoint position);
 
     int maxWidthToExport();
-
     int maxHeightToExport();
-
     MapObjectData backgroundToExport();
-
     std::vector<MapObjectData> blocksToExport();
-
     std::vector<MapObjectData> spawnPlayersToExport();
-
     std::vector<MapObjectData> spawnWeaponsToExport();
-
     std::vector<MapObjectData> boxesToExport();
-
     std::vector<MapObjectData> decorationsToExport();
 
-    void zoomIn();
+    void cleanMap();
 
-    void zoomOut();
+    QPoint position(int column, int row);
 
     ~Playground();
 
 private:
     void initializeMap();
+    void createMapLayerFor(std::vector<QGraphicsRectItem*>& mapObjects, int zIndex);
+
+    void cleanMapObjects(const std::vector<QGraphicsRectItem*>& mapObjects);
 
     void wheelEvent(QWheelEvent */*event*/) override {};
-
     void mousePressEvent(QMouseEvent* event) override;
-
     void mouseReleaseEvent(QMouseEvent* event) override;
-
     void mouseMoveEvent(QMouseEvent* event) override;
 
     void zoom(int scaleFactor);
 
+    void addMapObject(QPoint position, const std::vector<QGraphicsRectItem*>& mapObjects, MapObjectType mapObjectType, Texture texture);
+
+    void removeMapObject(QPoint position, const std::vector<QGraphicsRectItem*>& mapObjects);
+
     void setMapObjectData(QGraphicsRectItem* mapObject, MapObjectType mapObjectType, const std::string& texture);
 
     void cleanObjectData(QGraphicsRectItem* mapObject);
-
-    void createMapLayerFor(std::vector<QGraphicsRectItem*>& mapObjects, int zIndex);
-
-    void repainAllBlocksWith(TileSet tileSet);
 
     void repainBlocksWith(TileSet tileSet);
 
@@ -125,7 +122,8 @@ private:
     QGraphicsRectItem* mapObjectAt(std::vector<QGraphicsRectItem*> mapObjects, QPoint position);
 
     std::vector<MapObjectData> mapObjectsFilter(const std::vector<QGraphicsRectItem*>& mapObjects, MapObjectType mapObjectType);
-    std::vector<MapObjectData> mapObjectsFilter2(const std::vector<QGraphicsRectItem*>& mapObjects, MapObjectType mapObjectType);
+
+    std::vector<MapObjectData> mapObjectsDataToExport(const std::vector<MapObjectData>& mapObjects);
 };
 
 #endif

@@ -29,4 +29,5 @@ target_sources(taller_server_logic
         controlreceiver.h
         controlledplayer.h
         controlnotifier.h
+        controlid.h
     )

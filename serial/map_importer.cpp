@@ -29,9 +29,9 @@ std::string MapImporter::getBackground() {
 
 
 
-std::vector<MapObjectData> MapImporter::getDecorations(){
+std::vector<ImportedMapObjectData> MapImporter::getDecorations(){
     read_seq_t decorations = reader.getDecorations();
-    std::vector<MapObjectData> res;
+    std::vector<ImportedMapObjectData> res;
     
     
     int size = decorations.num_children();
@@ -49,15 +49,15 @@ std::vector<MapObjectData> MapImporter::getDecorations(){
         reader.readItemTexture(item, tex_id);
         reader.readItemZInd(item, zIndex);
         
-        res.emplace_back(pos.y,pos.x, zIndex, Decoration, textures[tex_id]);
+        res.emplace_back(pos.y,pos.x, zIndex, ImportedDecoration, textures[tex_id]);
     }
     
     return res;
 }
 
-std::vector<MapObjectData> MapImporter::getBoxes(){
-    read_seq_t boxes = reader.getBlocks();
-    std::vector<MapObjectData> res;
+std::vector<ImportedMapObjectData> MapImporter::getBoxes(){
+    read_seq_t boxes = reader.getBoxes();
+    std::vector<ImportedMapObjectData> res;
     
     
     int size = boxes.num_children();
@@ -71,13 +71,13 @@ std::vector<MapObjectData> MapImporter::getBoxes(){
 
         reader.readItemPosition(item, pos);
         
-        res.emplace_back(pos.y,pos.x, boxes_z, Box, boxes_tex);
+        res.emplace_back(pos.y,pos.x, boxes_z, ImportedBox, boxes_tex);
     }
     
     return res;
 }
 
-void MapImporter::getBlockObjects(read_seq_t seq, const MapObjectType type, std::vector<MapObjectData>& res){
+void MapImporter::getBlockObjects(read_seq_t seq, const ImportedMapObjectType type, std::vector<ImportedMapObjectData>& res){
     int size = seq.num_children();
     res.reserve(size);
     for (int i = 0; i < size; i++) {
@@ -94,21 +94,21 @@ void MapImporter::getBlockObjects(read_seq_t seq, const MapObjectType type, std:
 }
 
 
-std::vector<MapObjectData> MapImporter::getPlayerSpawns(){
-    std::vector<MapObjectData> res;
-    getBlockObjects(reader.getPlayerSpawns(), SpawnPlayer, res);
+std::vector<ImportedMapObjectData> MapImporter::getPlayerSpawns(){
+    std::vector<ImportedMapObjectData> res;
+    getBlockObjects(reader.getPlayerSpawns(), ImportedSpawnPlayer, res);
     return res;
 }
 
-std::vector<MapObjectData> MapImporter::getItemSpawns(){
-    std::vector<MapObjectData> res;
-    getBlockObjects(reader.getItemSpawns(), SpawnWeapon, res);
+std::vector<ImportedMapObjectData> MapImporter::getItemSpawns(){
+    std::vector<ImportedMapObjectData> res;
+    getBlockObjects(reader.getItemSpawns(), ImportedSpawnWeapon, res);
     return res;
 }
 
-std::vector<MapObjectData> MapImporter::getBlocks(){
-    std::vector<MapObjectData> res;
-    getBlockObjects(reader.getBlocks(), Block, res);
+std::vector<ImportedMapObjectData> MapImporter::getBlocks(){
+    std::vector<ImportedMapObjectData> res;
+    getBlockObjects(reader.getBlocks(), ImportedBlock, res);
     return res;
 }
 

@@ -2,6 +2,8 @@
 #define EDITORWINDOW_H
 
 #include <QMainWindow>
+#include <QFileDialog>
+#include <QMessageBox>
 
 #include "loader.h"
 #include "interface/interface.h"
@@ -9,7 +11,7 @@
 
 #undef emit
 #include "../serial/map_serializer.h"
-#include "../serial/map_deserializer.h"
+#include "../serial/map_importer.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -21,6 +23,11 @@ class EditorWindow : public QMainWindow {
     Q_OBJECT
 
 private:
+    static constexpr const char* IMPORT = "Import";
+    static constexpr const char* EXPORT = "Export";
+    static constexpr const char* MAPS_SOURCE = "/maps";
+    static constexpr const char* FILE_FILTERS = "Archivos YAML (*.yaml);;Todos los archivos (*)";
+
     Ui::EditorWindow *ui;
 
     Loader loader;
@@ -60,7 +67,7 @@ private:
 
     void exportToFileSystem();
 
-    //void importFromFileSystem();
+    void importFromFileSystem();
 };
 
 #endif

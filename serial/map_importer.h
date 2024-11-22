@@ -23,39 +23,25 @@
 
 #include "./map_reader.h"
 
-enum MapObjectType {
-    Block,
-    SpawnPlayer,
-    SpawnWeapon,
-    Box,
-    Decoration
+enum ImportedMapObjectType {
+    ImportedBlock,
+    ImportedSpawnPlayer,
+    ImportedSpawnWeapon,
+    ImportedBox,
+    ImportedDecoration
 };
 
-struct MapObjectData {
+struct ImportedMapObjectData {
     int row;
     int column;
     int zIndex;
-    MapObjectType mapObjectType;
+    ImportedMapObjectType importedMapObjectType;
     std::string texture;
     
-    MapObjectData(const int _row, const int _col, const int _z,const MapObjectType type, const std::string& tex)
-    :row(_row),column(_col), zIndex(_z), mapObjectType(type), texture(tex){}
+    ImportedMapObjectData(const int _row, const int _col, const int _z,const ImportedMapObjectType type, const std::string& tex)
+    :row(_row),column(_col), zIndex(_z), importedMapObjectType(type), texture(tex){}
 };
 
-/*
-void EditorWindow::importFromFileSystem() {
-    MapImporter deserial("./res/maps/map3.yaml");
-
-    const std::string background = serial.getBackground();
-
-    const std::vector<MapObjectData> blocks = serial.getBlocks();
-    const std::vector<MapObjectData> spawnPlayers = serial.getPlayerSpawns();
-    const std::vector<MapObjectData> spawnWeapons = serial.getItemSpawns();
-    const std::vector<MapObjectData> boxes = serial.getBoxes();
-    const std::vector<MapObjectData> decorations = serial.getDecorations();
-}
-
-*/
 class MapImporter {
 protected:
     
@@ -69,7 +55,7 @@ protected:
 
     std::vector<std::string> textures;              // cppcheck-suppress unusedStructMember
     
-    void getBlockObjects(read_seq_t seq, const MapObjectType type, std::vector<MapObjectData>& out);
+    void getBlockObjects(read_seq_t seq, const ImportedMapObjectType type, std::vector<ImportedMapObjectData>& out);
     
 public:
     explicit MapImporter(const std::string& src);
@@ -88,11 +74,11 @@ public:
     int getHeight() const;
     
     std::string getBackground() ;
-    std::vector<MapObjectData> getBlocks();
-    std::vector<MapObjectData> getDecorations() ;
+    std::vector<ImportedMapObjectData> getBlocks();
+    std::vector<ImportedMapObjectData> getDecorations() ;
     
-    std::vector<MapObjectData> getPlayerSpawns();
-    std::vector<MapObjectData> getItemSpawns();
-    std::vector<MapObjectData> getBoxes();
+    std::vector<ImportedMapObjectData> getPlayerSpawns();
+    std::vector<ImportedMapObjectData> getItemSpawns();
+    std::vector<ImportedMapObjectData> getBoxes();
 };
 #endif

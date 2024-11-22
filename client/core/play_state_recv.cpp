@@ -23,21 +23,18 @@ void PlayStateRecv::run() {
                 listener.matchUpdated(state);
             } else {
                 // Chequea si finisheo?!
-                
-                if(stats.state == STARTED_ROUND){
-                    // Si se esta cargando el round siguiente.
-                    stats.state = INICIADA;// Para la ui es como si hubiera empezado.
-                }
-                
                 listener.statsUpdated(stats);
             }
         }
     } catch (const LibError&
                      error) {  // No deberia pasara realmente, antes pasaria en el controller.
         
-        std::cerr << "canceling.. play state receiver error, was server disconnected?" << std::endl;
-        stats.state = CANCELADA;
-        listener.statsUpdated(stats);
+        if(stats.isRunning()){
+            std::cerr << "canceling.. play state receiver error, was server disconnected?" << std::endl;
+            stats.state = CANCELADA;
+            listener.statsUpdated(stats);
+        }
+        
         
     }
 }

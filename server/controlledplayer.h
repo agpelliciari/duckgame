@@ -2,12 +2,13 @@
 #define LIB_ControlledPlayer_H
 
 #include <string>
+#include <atomic>
 #include <utility>
 
 #include "common/dtosgame.h"
 #include "common/dtoslobby.h"
 #include "common/queue.h"
-#include "server/logic_server/matchobserver.h"
+#include "./controlid.h"
 
 typedef Queue<lobby_info> lobby_events;
 typedef Queue<MatchDto> match_snapshots;
@@ -20,10 +21,9 @@ class ControlledPlayer {
 
 protected:
     // Manejo de ids. Y cantidad de players para la queue de mensajes.
-    uint8_t count;  // cppcheck-suppress unusedStructMember
-
-    player_id ids[2];  // cppcheck-suppress unusedStructMember
-
+    const ControlId id;
+    const int& pos;
+    std::atomic<bool> isactive;
     // For notifying actions and/or exit.
     lobby_events events;        // cppcheck-suppress unusedStructMember
     match_snapshots snapshots;  // cppcheck-suppress unusedStructMember
@@ -32,9 +32,8 @@ protected:
     MatchStatsInfo match_stats;// cppcheck-suppress unusedStructMember
 
 public:
-    explicit ControlledPlayer(player_id first);
-    explicit ControlledPlayer(player_id first, player_id second);
-
+    explicit ControlledPlayer(const ControlId& _id, const int& pos);
+    
     // Por ahora tambien nos escapamos del move.
     ControlledPlayer(ControlledPlayer&&) = delete;
 
@@ -49,8 +48,12 @@ public:
     bool operator==(const ControlledPlayer& other) const;
 
     uint8_t playercount() const;
-
+    
+    const ControlId& getcontrolid() const;
+    
     player_id getid(const uint8_t ind) const;
+    
+    int getpos() const;
 
     // Abre la queue de lobby info del jugador, cierra la de matchdto, indicando esta activo en una
     // lobby.
@@ -64,16 +67,14 @@ public:
     void waitlobbymode();
 
 
-    // Desconecta/cierra el player. Si esta abierto.
-    // Devuelve false si ya estaba cerrado.
-    bool disconnect();
-    //bool isclosed();
-
-    // Checkea si el player esta.
-    // bool isgamemode();
-    // bool islobbymode();
-
-
+    // Desconecta/cierra el player, las queues. Y setea como cancelada las stats.
+    // Para el server
+    bool canceled();
+    
+    // Retorna false si esta inactivo. True si esta activo y cierra las queues.
+    // Para los notifiers/control receivers. Que reciben del cliente
+    bool trydisconnect();
+    
     // recveinfo es no bloqueante! Recibe el lobby info con try_push a la queue del player
     // Todo es "bloqueante" por posibles locks... pero bueno
     bool recvinfo(const lobby_info& dto);

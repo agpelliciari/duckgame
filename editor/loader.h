@@ -15,6 +15,12 @@
 
 class Loader {
 private:
+    /* NO TEXTURE */
+    static constexpr const char* NO_TEXTURE = "/notexture.png";
+
+    Texture noTexture;
+    TileSet noTileSet;
+
     std::vector<Texture> backgrounds;
     std::vector<TileSet> blocks;
     std::vector<Texture> boxes;
@@ -41,6 +47,13 @@ public:
     Texture spawnWeaponAt(size_t index);
     Texture decorationAt(size_t index);
 
+    Texture background(const std::string& source);
+    TileSet block(const std::string& source);
+    Texture box(const std::string& source);
+    Texture spawnPlayer(const std::string& source);
+    Texture spawnWeapon(const std::string& source);
+    Texture decoration(const std::string& source);
+
     size_t backgroundsSize();
     size_t blocksSize();
     size_t boxesSize();
@@ -53,23 +66,23 @@ public:
     ~Loader();
 
 private:
+    Texture loadNoTexture(const std::string& root);
     void loadBackgrounds(const std::string& root);
-
     void loadBlocks(const std::string& root);
-
     void loadBoxes(const std::string& root);
-
     void loadSpawnPlayers(const std::string& root);
-
     void loadSpawnWeapons(const std::string& root);
-
     void loadDecorations(const std::string& root);
-
     void loadTileSetMap(const std::string& root);
 
     void load(const std::string& root, const std::string& path, MapObjectType mapObjectType, std::vector<Texture>& textures);
 
     std::vector<std::string> names(const std::vector<Texture>& textures);
+
+    Texture texture(const std::string& source, const std::vector<Texture>& textures);
+
+    Texture getNoTexture();
+    friend class TileSet;
 };
 
 #endif

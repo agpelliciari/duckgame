@@ -26,10 +26,6 @@ void UILoop::exec() {
 
             update();
 
-            if (isRunning_) {
-                drawer.draw(lastUpdate);
-            }
-
             clock.tickNoRest();
         }
     } catch (const std::exception& e) {
@@ -46,30 +42,32 @@ void UILoop::update() {
     MatchStatsInfo stats;
     while (isRunning_ && matchDtoQueue.update_stats(stats)) {
         lastStatsUpdate = stats;
-        auto start = std::chrono::steady_clock::now();
-        if (stats.state == TERMINADA ||
-            stats.state == CANCELADA) {  // stats.state == PAUSADA? mostrar info, o round end.
-            isRunning_ = false;
-
-            // test leaderboard
-            while (std::chrono::steady_clock::now() - start < std::chrono::seconds(6)) {
-                drawer.drawLeaderboard(stats);
-            }
-
-        } else if (stats.state == PAUSADA) {
-            while (std::chrono::steady_clock::now() - start < std::chrono::seconds(6)) {
-                drawer.drawLeaderboard(stats);
-            }
-
-        } else if (stats.state == ROUND_END) {
-            while (std::chrono::steady_clock::now() - start < std::chrono::seconds(3)) {
-                drawer.drawWinner(stats, lastUpdate);
-            }
-            drawer.resetIndicatorFlag();
-        }
     }
+    
+    if (lastStatsUpdate.state == TERMINADA ||
+        lastStatsUpdate.state == CANCELADA) {  // stats.state == PAUSADA? mostrar info, o round end.
+        //isRunning_ = false;
+        drawer.drawLeaderboard(lastStatsUpdate);
+        return;
+    } else if (lastStatsUpdate.state == PAUSADA) {
+        drawer.drawLeaderboard(lastStatsUpdate);
+        return;
+    } else if (lastStatsUpdate.state == ROUND_END) {
+        drawer.drawWinner(lastStatsUpdate, lastUpdate);
+        return;
+    } else if(lastStatsUpdate.state == STARTED_ROUND){
+        #ifdef LOG_DBG // Serviria para filtrar logs.
+        std::cout << "RESETED AT INIT ROUND\n";
+        #endif
+        std::cout << "ronda: " << lastStatsUpdate.numronda << std::endl;  // numero de ronda no se actualiza
+        
+        drawer.resetIndicatorFlag();
+        
+        //  Asi ya recibe matchdtos..
+        lastStatsUpdate.state = INICIADA; 
+        return;
+    } 
 
-    std::cout << "ronda: " << lastStatsUpdate.numronda << std::endl;  // numero de ronda no se actualiza
 
     MatchDto matchUpdate;
 
@@ -82,6 +80,7 @@ void UILoop::update() {
     animation.updateSprite(lastUpdate);
 
     camera.update(lastUpdate);
+    drawer.draw(lastUpdate);
 }
 
 UILoop::~UILoop() = default;

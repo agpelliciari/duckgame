@@ -14,32 +14,52 @@ Match::Match(lobbyID _id, const int max_players): id(_id), players(max_players),
 
 
 // Protected// friend accessed methods
-ControlledPlayer& Match::addPlayers(uint8_t count) {
-    ControlledPlayer& player = players.add(count);
+void Match::addPlayers(ControlId& id) {
+    players.add(id);
 
     // Se suma despues porque el add puede fallar!
     // Por capacidad o por que esta cancelada!
     connectedplayers++;  // Solo importa la cantidad de conectados...
-
-
-    return player;
 }
+
+ControlledPlayer& Match::getPlayer(const ControlId& id) {
+     return players.get(id);
+}
+
 int Match::playercount() const { return players.playercount(); }
 
 
 bool Match::notifyDisconnect(ControlledPlayer& player) {
     connectedplayers--;  // Solo importa la cantidad de conectados
-    if (player.disconnect()) {
-        // Si se esta desconectando ahora entonces notifica.
-        std::cout << "Disconnected player from match? now " << connectedplayers << std::endl;
-        if (_keep_running) {
-            return connectedplayers == 0;
-        }
-
-        players.remove(player);
+    if (_keep_running) {
+        std::cout << "Match notify Disconnected while playing,left in match:" << connectedplayers << std::endl;
+        return connectedplayers == 0;
     }
+    
+    std::cout << "Match notify disconnected on lobby left in lobby: " << connectedplayers << std::endl;
+    players.remove(player.getcontrolid());
+    
     return connectedplayers == 0;
 }
+
+void Match::cancelByError(LobbyErrorType error) { players.cancelByError(error); }
+
+void Match::hostLobbyLeft(ControlledPlayer& host) {
+    // El manejo de connected es a la hora de notificar.
+    //connectedplayers--;
+    //if (connectedplayers == 0) {
+    //    host.disconnect();
+    //    return;
+    //}
+    
+    // Notifica a los otros ademas del disconnect.
+    //host.disconnect();
+    players.hostLobbyLeft(host.getcontrolid());
+
+    //return;
+}
+
+
 
 void Match::loadMap(MapDeserializer& deserial){
     deserial.loadMapInfo(map);
@@ -54,9 +74,6 @@ void Match::loadMap(MapDeserializer& deserial){
     for (const struct BlockDTO& block: map.blocks) {
         objects.blocks.emplace_back(block.pos.x, block.pos.y);
     }
-    //try{
-    //    return true;
-    //} catch()
 }
 
 void Match::init(MapLoader& maps, const char* mapname) {
@@ -76,21 +93,6 @@ void Match::init(MapLoader& maps, const char* mapname) {
     start();
     // match_start.notify_all();
 }
-
-bool Match::hostLobbyLeft(ControlledPlayer& host) {
-    connectedplayers--;
-    if (connectedplayers == 0) {
-        host.disconnect();
-        return true;
-    }
-    // Notifica a los otros ademas del disconnect.
-    host.disconnect();
-    players.hostLobbyLeft(host);
-
-    return false;
-}
-
-void Match::cancelByError(LobbyErrorType error) { players.cancelByError(error); }
 
 
 // General/public methods.
@@ -174,9 +176,13 @@ void Match::run() {
 
 bool Match::isrunning() const { return stats.isRunning(); }
 
+bool Match::canaddplayer() const { return stats.state == LOADING; }
+
 const MapInfo& Match::getMap() const { return map; }
 
-std::vector<player_id> Match::getPlayers() const { return players.getPlayers(); }
+void Match::putPlayers(std::vector<player_id>& out) const { 
+     players.putPlayers(out); 
+}
 
 
 void Match::finish(MapLoader& maps) {

@@ -18,6 +18,7 @@ private:
     std::map<std::string, Texture> textures;
 
 public:
+    explicit TileSet(Loader& loader);
     explicit TileSet(Loader& loader, QDir directory);
 
     std::string name() const;
