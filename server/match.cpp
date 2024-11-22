@@ -84,8 +84,9 @@ void Match::init(MapLoader& maps, const char* mapname) {
     loadMap(maps.getLoader(mapname));
     std::cout << "INIT MATCH AFTER LOAD MAP?\n";
     // Notify/start players. Ya podrian enviar la info del mapa.
-    looper.start_players(players, stats);
     looper.add_objects(objects);
+    looper.start_players(players, stats);
+
     
     this->stats.state = STARTED_ROUND;
     players.finishLobbyMode();
