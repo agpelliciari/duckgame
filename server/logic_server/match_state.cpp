@@ -36,7 +36,8 @@ void MatchState::playRound(MatchObserver& observer, MatchStatsInfo& stats) {
 void MatchState::reset_objects(const struct ObjectsInfo& objects_info){
     match_logic.clear_objects();
     match_logic.add_boxes(objects_info.boxes);
-    match_logic.add_items(objects_info.item_spawns);
+    match_logic.update_spawn_places();
+    //match_logic.add_items(objects_info.item_spawns);
 }
 
 void MatchState::reset_players(MatchObserver& observer){
@@ -101,6 +102,7 @@ void MatchState::start_players(MatchObserver& observer, MatchStatsInfo& stats) {
     stats.stats.clear();
     id_alive_players.clear();
     std::vector<unsigned int> ids = observer.getPlayers();
+
     int spawn_point_index = 0;
     for (auto id = ids.begin(); id != ids.end();) {
         stats.stats.push_back(PlayerStatDto(*id, 0));
@@ -121,6 +123,7 @@ void MatchState::step() {
     match_logic.update_players(this->id_alive_players);
     match_logic.update_bullets();
     match_logic.update_dropped_items();
+    match_logic.update_spawn_points();
 }
 
 
