@@ -46,9 +46,13 @@ int Player::get_id() { return id; }
 
 void Player::update(const MatchMap& colition_map) {
     if (is_alive){
-        object.move(colition_map);
-        object.update_action(move_action);
-        this->update_shooting_direction();
+        if(object.is_out_of_map()){
+            is_alive = false;
+        } else {
+            object.move(colition_map);
+            object.update_action(move_action);
+            this->update_shooting_direction();
+        }
     } else {
         this->stay_down_start();
     }

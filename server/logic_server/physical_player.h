@@ -24,6 +24,7 @@ class PhysicalPlayer: public PhysicalObject {
         Tuple initial_position;
         int flap_attemps;
         bool on_air;
+        bool out_of_map;
 
     public:
         PhysicalPlayer(int init_coord_x, int init_coord_y);
@@ -31,6 +32,8 @@ class PhysicalPlayer: public PhysicalObject {
         void react_to_sides_collision(Collision collision) override;
         void react_to_down_collision(Collision collision) override;
         void react_to_up_collision(Collision collision) override;
+        void react_to_out_of_map() override;
+        bool is_out_of_map();
         void stay_down_start();
         void stay_down_end();
         void jump_start();

@@ -41,6 +41,11 @@ void PhysicalBullet::react_to_up_collision(Collision collision) {
         impacted_collision = collision;
 }
 
+void PhysicalBullet::react_to_out_of_map(){
+        impacted = true;
+        impacted_collision = Collision(0, CollisionTypeMap::BLOCK);
+}
+
 void PhysicalBullet::get_data(bool &impacted_, CollisionTypeMap &type_, int &id_){
     impacted_ = impacted;
     type_ = impacted_collision.type;

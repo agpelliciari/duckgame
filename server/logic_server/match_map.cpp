@@ -54,3 +54,11 @@ bool MatchMap::check_horizontal_collision(const int x, const int y) const {
 bool MatchMap::check_vertical_collision(const int x, const int y) const {
     return !out_of_map_x(x) && (out_of_map_y(y) || game_map[x][y]);
 }
+
+bool MatchMap::out_of_map(int position_x, int position_y, int dimension_x, int dimension_y) const{
+
+    return (position_y <= 0 || position_y + dimension_y >= height -1
+            || position_x <= 0 || position_x + dimension_x >= width - 1);
+
+
+}
