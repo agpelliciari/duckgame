@@ -221,6 +221,10 @@ public:
         std::unique_lock<std::mutex> lck(mtx);
         return closed;
     }
+    
+    void notifyopen(){
+         is_not_full.notify_all();    
+    }
 
     bool reopen() {
         std::unique_lock<std::mutex> lck(mtx);
@@ -228,9 +232,7 @@ public:
             // Aseguremosnos esta vacia la queue.
             std::queue<T, C> new_q;
             std::swap(q, new_q);
-            closed = false;
-            
-            is_not_full.notify_all();
+            closed = false;            
             return true;
         }
 
