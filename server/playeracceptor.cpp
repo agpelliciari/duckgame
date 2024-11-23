@@ -47,8 +47,9 @@ void PlayerAcceptor::run() {
             newPlayer(sktacceptor.accept());
             cleanself();
         }
+        std::cerr << "Closed server acceptor gracefully" << std::endl;
     } catch (const LibError& error) {
-        std::cerr << "Closing server: " << error.what() << std::endl;
+        std::cerr << "Closing server acceptor: " << error.what() << std::endl;
     }
 }
 void PlayerAcceptor::init() { start(); }
@@ -60,8 +61,7 @@ void PlayerAcceptor::finish() {
         return;
     }
     stop();
-    sktacceptor.shutdown(2);
-    sktacceptor.close();
+    sktacceptor.finish();
     join();
     disconnectAll();
 }

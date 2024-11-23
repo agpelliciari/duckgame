@@ -23,7 +23,10 @@ void Server::waitclose() {
 
     while (isrunning() && std::cin >> out) {
         if (out.length() == 1 && *(out.data()) == EXIT_SIGN) {
+            std::cout << "Pressed 'q' ... should close server\n";
             break;
+        } else{
+            std::cout << "Stdin: '"<< out <<"' not 'q'!\n";
         }
     }
     // Se deja el close para despues el close.. o para el destructor.
@@ -32,7 +35,9 @@ void Server::waitclose() {
 void Server::close() {
     // Mejor hacer las cosas explicitas.
     // Ya que podria haber problemas si el match se destruye primero y se invalida la referencia.
+    std::cout << "----Finishing server acceptor\n";
     acceptor.finish();
+    std::cout << "----Finishing server lobbies \n";
     lobbies.finishAll();
 }
 Server::~Server() { close(); }
