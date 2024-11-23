@@ -16,3 +16,4 @@ taller_*
 manualtest/
 
 Makefile
+SDL2pp/
