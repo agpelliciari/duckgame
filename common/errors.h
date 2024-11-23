@@ -8,6 +8,7 @@ enum LobbyErrorType : uint8_t {
     SERVER_ERROR = 2,  // For internal errors on server... or shutdowns of it, 'q'
     ANFITRION_LEFT = 3,
     LOBBY_NOT_FOUND = 4,
+    NOT_ENOUGH_PLAYERS = 8,
     LOBBY_ALREADY_STARTED = 5,
     LOBBY_NO_SPACE = 6,
     MAP_INVALID = 7

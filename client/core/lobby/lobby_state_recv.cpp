@@ -9,14 +9,24 @@
 #include "common/errors.h"
 #include "common/protocolerror.h"
 
+#define COUNT_ERRORS 9
 const char LobbyStateRecv::CLIENT_CONN_ERROR[] = "Client connection error";
 const char* LobbyStateRecv::ERRORS[] = {
-        "Unknown client error",        "Unknown server error", "Server closed the connection",
-        "Match's host left the lobby", "Lobby was not found",  "Lobby was already started",
+        "Unknown client error", 
+        "Unknown server error", 
+        "Server closed the connection",
+        "Match's host left the lobby",
+        "Lobby was not found",
+        "Lobby was already started",
         "Lobby had not enough space",
-        "Map was invalid"};
+        "Map was invalid", 
+        "Not enough players"
+        };
 
-#define getErrorMsg(ind) ERRORS[(ind >= 8) ? 1 : ind]
+
+const char * LobbyStateRecv::getErrorMsg(int ind) const{
+     return ERRORS[(ind >= COUNT_ERRORS) ? 1 : ind];
+}
 
 
 LobbyStateRecv::LobbyStateRecv(Messenger& _messenger, GameContext& _context,
@@ -28,11 +38,10 @@ void LobbyStateRecv::handleNotify(const lobby_info& info) {
     // Un map para esto... no vale la pena.
     if (info.action == PLAYER_NEW) {
         context.addPlayer(info.data);
-        //context.cantidadjugadores++;
         listener.playerJoinedLobby(info.data);
     } else if (info.action == PLAYER_LEFT) {
         context.removePlayer(info.data);
-        //context.cantidadjugadores--;
+        
         listener.playerLeftLobby(info.data);
     }
 }
@@ -75,7 +84,7 @@ bool LobbyStateRecv::endstate() {
     return context.started;
 }
 
-LobbyStateRecv::~LobbyStateRecv() {
+void LobbyStateRecv::close(){
     if (_keep_running) {
         stop();
         if (!context.started) {
@@ -83,4 +92,8 @@ LobbyStateRecv::~LobbyStateRecv() {
         }
         join();
     }
+}
+    
+LobbyStateRecv::~LobbyStateRecv() {
+    close();
 }

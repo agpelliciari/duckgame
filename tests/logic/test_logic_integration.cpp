@@ -4,21 +4,44 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "server/logic_server/match_state.h"
+#include "common/dtosmap.h"
 
 
 using ::testing::InSequence;
 using ::testing::ThrowsMessage;
 
+#define WIDTH 20
+#define HEIGHT 20
+static void buildMapSimple(struct ObjectsInfo& info){
+    for(int x = 0; x < info.map_width;x++){
+        info.blocks.emplace_back(x, 0); // x, y.
+    }
+    
+    for(int x = 0; x < 20;x++){
+        info.blocks.emplace_back(x, 10); // x, y.
+    }
+
+    info.player_spawns.emplace_back(1,1);
+    info.player_spawns.emplace_back(1,11);
+    info.player_spawns.emplace_back(19,1);
+    info.player_spawns.emplace_back(19,11);
+    
+}
+
 TEST(IntegrationLogicTest, SendReceiveFirstState3players) {
-
-
+    struct ObjectsInfo objs(WIDTH,HEIGHT);
+    buildMapSimple(objs);
+    
     MatchDto state;
     MatchStatsInfo stats;
+    
+    
 
     MockObserver observer(state, 3);
 
     MatchState match;
-
+    
+    match.add_objects(objs);
     match.start_players(observer,stats);
 
     match.send_results(observer);
@@ -28,6 +51,9 @@ TEST(IntegrationLogicTest, SendReceiveFirstState3players) {
 
 
 TEST(IntegrationLogicTest, SendMoveOnlyPlayer3Right) {
+    struct ObjectsInfo objs(WIDTH,HEIGHT);
+    buildMapSimple(objs);
+    
     MatchDto state;
     MatchStatsInfo stats;
 
@@ -35,6 +61,7 @@ TEST(IntegrationLogicTest, SendMoveOnlyPlayer3Right) {
 
     MatchState match;
 
+    match.add_objects(objs);
     match.start_players(observer,stats);
 
     match.send_results(observer);
@@ -55,6 +82,9 @@ TEST(IntegrationLogicTest, SendMoveOnlyPlayer3Right) {
 }
 
 TEST(IntegrationLogicTest, SendMoveOnlyPlayer3Left) {
+    struct ObjectsInfo objs(WIDTH,HEIGHT);
+    buildMapSimple(objs);
+    
     MatchDto state;
     MatchStatsInfo stats;
 
@@ -62,6 +92,7 @@ TEST(IntegrationLogicTest, SendMoveOnlyPlayer3Left) {
 
     MatchState match;
 
+    match.add_objects(objs);
     match.start_players(observer,stats);
 
     match.send_results(observer);
@@ -83,6 +114,9 @@ TEST(IntegrationLogicTest, SendMoveOnlyPlayer3Left) {
 
 
 TEST(IntegrationLogicTest, SendMoveOnlyPlayer3AirRight) {
+    struct ObjectsInfo objs(WIDTH,HEIGHT);
+    buildMapSimple(objs);
+
     MatchDto state;
     MatchStatsInfo stats;
 
@@ -90,6 +124,7 @@ TEST(IntegrationLogicTest, SendMoveOnlyPlayer3AirRight) {
 
     MatchState match;
 
+    match.add_objects(objs);
     match.start_players(observer,stats);
 
     match.send_results(observer);
@@ -114,6 +149,9 @@ TEST(IntegrationLogicTest, SendMoveOnlyPlayer3AirRight) {
 
 
 TEST(IntegrationLogicTest, SendMoveOnlyPlayer3AirLeft) {
+    struct ObjectsInfo objs(WIDTH,HEIGHT);
+    buildMapSimple(objs);
+    
     MatchDto state;
     MatchStatsInfo stats;
 
@@ -121,6 +159,7 @@ TEST(IntegrationLogicTest, SendMoveOnlyPlayer3AirLeft) {
 
     MatchState match;
 
+    match.add_objects(objs);
     match.start_players(observer,stats);
 
     match.send_results(observer);
@@ -145,13 +184,17 @@ TEST(IntegrationLogicTest, SendMoveOnlyPlayer3AirLeft) {
 
 
 TEST(IntegrationLogicTest, SendMoveOnlyPlayer3Jumps) {
+    struct ObjectsInfo objs(WIDTH,HEIGHT);
+    buildMapSimple(objs);
+    
     MatchDto state;
     MatchStatsInfo stats;
 
     MockObserver observer(state, 3);
 
     MatchState match;
-
+    
+    match.add_objects(objs);
     match.start_players(observer,stats);
 
     match.send_results(observer);

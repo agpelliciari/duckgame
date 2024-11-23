@@ -26,6 +26,7 @@ class PhysicalBullet: public PhysicalObject{
         void react_to_sides_collision(Collision collision) override;
         void react_to_down_collision(Collision collision) override;
         void react_to_up_collision(Collision collision) override;
+        void react_to_out_of_map() override;
 
         void shoot_right();
         void shoot_left();

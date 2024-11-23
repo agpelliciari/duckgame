@@ -1,0 +1,902 @@
+size_x: 50
+size_y: 40
+background: /backgrounds/kingdomSky.png
+blocks_z: 5
+boxes_z: 3
+box_texture: /boxes/itemBox1.png
+textures:
+  - /blocks/Nature/2.png
+  - /blocks/Nature/13.png
+  - /blocks/Nature/4.png
+  - /blocks/Nature/38.png
+  - /blocks/Nature/32.png
+  - /blocks/Nature/25.png
+  - /blocks/Nature/27.png
+  - /blocks/Nature/29.png
+  - /blocks/Nature/36.png
+  - /blocks/Nature/46.png
+  - /blocks/Nature/33.png
+  - /blocks/Nature/45.png
+  - /blocks/Nature/44.png
+  - /blocks/Nature/47.png
+  - /blocks/Nature/42.png
+  - /blocks/Nature/49.png
+  - /blocks/Nature/51.png
+  - /blocks/Nature/43.png
+  - /blocks/Nature/18.png
+  - /blocks/Nature/19.png
+  - /blocks/Nature/20.png
+  - /spawns/players/respawner.png
+  - /spawns/weapons/gunSpawner1.png
+  - /decorations/graveyard.png
+  - /decorations/barrel.png
+  - /decorations/crate.png
+  - /decorations/yellow_barrel.png
+  - /decorations/suitcase.png
+  - /decorations/danger_barrel.png
+  - /decorations/red_barrel.png
+blocks:
+  - x: 13
+    y: 37
+    ind_tex: 0
+  - x: 14
+    y: 37
+    ind_tex: 1
+  - x: 15
+    y: 37
+    ind_tex: 1
+  - x: 16
+    y: 37
+    ind_tex: 1
+  - x: 17
+    y: 37
+    ind_tex: 1
+  - x: 18
+    y: 37
+    ind_tex: 1
+  - x: 19
+    y: 37
+    ind_tex: 1
+  - x: 20
+    y: 37
+    ind_tex: 1
+  - x: 21
+    y: 37
+    ind_tex: 1
+  - x: 22
+    y: 37
+    ind_tex: 1
+  - x: 23
+    y: 37
+    ind_tex: 1
+  - x: 24
+    y: 37
+    ind_tex: 1
+  - x: 25
+    y: 37
+    ind_tex: 1
+  - x: 26
+    y: 37
+    ind_tex: 1
+  - x: 27
+    y: 37
+    ind_tex: 1
+  - x: 28
+    y: 37
+    ind_tex: 1
+  - x: 29
+    y: 37
+    ind_tex: 1
+  - x: 30
+    y: 37
+    ind_tex: 1
+  - x: 31
+    y: 37
+    ind_tex: 1
+  - x: 32
+    y: 37
+    ind_tex: 1
+  - x: 33
+    y: 37
+    ind_tex: 1
+  - x: 34
+    y: 37
+    ind_tex: 1
+  - x: 35
+    y: 37
+    ind_tex: 1
+  - x: 36
+    y: 37
+    ind_tex: 2
+  - x: 5
+    y: 36
+    ind_tex: 3
+  - x: 6
+    y: 36
+    ind_tex: 4
+  - x: 7
+    y: 36
+    ind_tex: 4
+  - x: 8
+    y: 36
+    ind_tex: 4
+  - x: 9
+    y: 36
+    ind_tex: 4
+  - x: 10
+    y: 36
+    ind_tex: 4
+  - x: 11
+    y: 36
+    ind_tex: 4
+  - x: 12
+    y: 36
+    ind_tex: 4
+  - x: 13
+    y: 36
+    ind_tex: 5
+  - x: 14
+    y: 36
+    ind_tex: 6
+  - x: 15
+    y: 36
+    ind_tex: 6
+  - x: 16
+    y: 36
+    ind_tex: 6
+  - x: 17
+    y: 36
+    ind_tex: 6
+  - x: 18
+    y: 36
+    ind_tex: 6
+  - x: 19
+    y: 36
+    ind_tex: 6
+  - x: 20
+    y: 36
+    ind_tex: 6
+  - x: 21
+    y: 36
+    ind_tex: 6
+  - x: 22
+    y: 36
+    ind_tex: 6
+  - x: 23
+    y: 36
+    ind_tex: 6
+  - x: 24
+    y: 36
+    ind_tex: 6
+  - x: 25
+    y: 36
+    ind_tex: 6
+  - x: 26
+    y: 36
+    ind_tex: 6
+  - x: 27
+    y: 36
+    ind_tex: 6
+  - x: 28
+    y: 36
+    ind_tex: 6
+  - x: 29
+    y: 36
+    ind_tex: 6
+  - x: 30
+    y: 36
+    ind_tex: 6
+  - x: 31
+    y: 36
+    ind_tex: 6
+  - x: 32
+    y: 36
+    ind_tex: 6
+  - x: 33
+    y: 36
+    ind_tex: 6
+  - x: 34
+    y: 36
+    ind_tex: 6
+  - x: 35
+    y: 36
+    ind_tex: 6
+  - x: 36
+    y: 36
+    ind_tex: 7
+  - x: 37
+    y: 36
+    ind_tex: 4
+  - x: 38
+    y: 36
+    ind_tex: 4
+  - x: 39
+    y: 36
+    ind_tex: 4
+  - x: 40
+    y: 36
+    ind_tex: 4
+  - x: 41
+    y: 36
+    ind_tex: 4
+  - x: 42
+    y: 36
+    ind_tex: 4
+  - x: 43
+    y: 36
+    ind_tex: 4
+  - x: 44
+    y: 36
+    ind_tex: 8
+  - x: 6
+    y: 30
+    ind_tex: 3
+  - x: 7
+    y: 30
+    ind_tex: 4
+  - x: 8
+    y: 30
+    ind_tex: 4
+  - x: 9
+    y: 30
+    ind_tex: 4
+  - x: 10
+    y: 30
+    ind_tex: 4
+  - x: 11
+    y: 30
+    ind_tex: 4
+  - x: 12
+    y: 30
+    ind_tex: 4
+  - x: 13
+    y: 30
+    ind_tex: 9
+  - x: 21
+    y: 30
+    ind_tex: 3
+  - x: 22
+    y: 30
+    ind_tex: 4
+  - x: 23
+    y: 30
+    ind_tex: 10
+  - x: 24
+    y: 30
+    ind_tex: 4
+  - x: 25
+    y: 30
+    ind_tex: 4
+  - x: 26
+    y: 30
+    ind_tex: 10
+  - x: 27
+    y: 30
+    ind_tex: 4
+  - x: 28
+    y: 30
+    ind_tex: 8
+  - x: 36
+    y: 30
+    ind_tex: 11
+  - x: 37
+    y: 30
+    ind_tex: 4
+  - x: 38
+    y: 30
+    ind_tex: 4
+  - x: 39
+    y: 30
+    ind_tex: 4
+  - x: 40
+    y: 30
+    ind_tex: 4
+  - x: 41
+    y: 30
+    ind_tex: 4
+  - x: 42
+    y: 30
+    ind_tex: 4
+  - x: 43
+    y: 30
+    ind_tex: 8
+  - x: 13
+    y: 29
+    ind_tex: 12
+  - x: 23
+    y: 29
+    ind_tex: 12
+  - x: 26
+    y: 29
+    ind_tex: 12
+  - x: 36
+    y: 29
+    ind_tex: 12
+  - x: 13
+    y: 28
+    ind_tex: 12
+  - x: 23
+    y: 28
+    ind_tex: 12
+  - x: 26
+    y: 28
+    ind_tex: 12
+  - x: 36
+    y: 28
+    ind_tex: 12
+  - x: 13
+    y: 27
+    ind_tex: 13
+  - x: 14
+    y: 27
+    ind_tex: 4
+  - x: 15
+    y: 27
+    ind_tex: 8
+  - x: 23
+    y: 27
+    ind_tex: 12
+  - x: 26
+    y: 27
+    ind_tex: 12
+  - x: 34
+    y: 27
+    ind_tex: 3
+  - x: 35
+    y: 27
+    ind_tex: 4
+  - x: 36
+    y: 27
+    ind_tex: 14
+  - x: 13
+    y: 26
+    ind_tex: 12
+  - x: 23
+    y: 26
+    ind_tex: 15
+  - x: 24
+    y: 26
+    ind_tex: 4
+  - x: 25
+    y: 26
+    ind_tex: 4
+  - x: 26
+    y: 26
+    ind_tex: 16
+  - x: 36
+    y: 26
+    ind_tex: 12
+  - x: 11
+    y: 25
+    ind_tex: 3
+  - x: 12
+    y: 25
+    ind_tex: 4
+  - x: 13
+    y: 25
+    ind_tex: 16
+  - x: 36
+    y: 25
+    ind_tex: 15
+  - x: 37
+    y: 25
+    ind_tex: 4
+  - x: 38
+    y: 25
+    ind_tex: 8
+  - x: 22
+    y: 21
+    ind_tex: 0
+  - x: 23
+    y: 21
+    ind_tex: 1
+  - x: 24
+    y: 21
+    ind_tex: 1
+  - x: 25
+    y: 21
+    ind_tex: 1
+  - x: 26
+    y: 21
+    ind_tex: 1
+  - x: 27
+    y: 21
+    ind_tex: 2
+  - x: 13
+    y: 20
+    ind_tex: 17
+  - x: 22
+    y: 20
+    ind_tex: 18
+  - x: 23
+    y: 20
+    ind_tex: 19
+  - x: 24
+    y: 20
+    ind_tex: 19
+  - x: 25
+    y: 20
+    ind_tex: 19
+  - x: 26
+    y: 20
+    ind_tex: 19
+  - x: 27
+    y: 20
+    ind_tex: 20
+  - x: 36
+    y: 20
+    ind_tex: 17
+  - x: 11
+    y: 19
+    ind_tex: 3
+  - x: 12
+    y: 19
+    ind_tex: 4
+  - x: 13
+    y: 19
+    ind_tex: 16
+  - x: 22
+    y: 19
+    ind_tex: 18
+  - x: 23
+    y: 19
+    ind_tex: 19
+  - x: 24
+    y: 19
+    ind_tex: 19
+  - x: 25
+    y: 19
+    ind_tex: 19
+  - x: 26
+    y: 19
+    ind_tex: 19
+  - x: 27
+    y: 19
+    ind_tex: 20
+  - x: 36
+    y: 19
+    ind_tex: 15
+  - x: 37
+    y: 19
+    ind_tex: 4
+  - x: 38
+    y: 19
+    ind_tex: 8
+  - x: 19
+    y: 18
+    ind_tex: 3
+  - x: 20
+    y: 18
+    ind_tex: 4
+  - x: 21
+    y: 18
+    ind_tex: 4
+  - x: 22
+    y: 18
+    ind_tex: 5
+  - x: 23
+    y: 18
+    ind_tex: 6
+  - x: 24
+    y: 18
+    ind_tex: 6
+  - x: 25
+    y: 18
+    ind_tex: 6
+  - x: 26
+    y: 18
+    ind_tex: 6
+  - x: 27
+    y: 18
+    ind_tex: 7
+  - x: 28
+    y: 18
+    ind_tex: 4
+  - x: 29
+    y: 18
+    ind_tex: 4
+  - x: 30
+    y: 18
+    ind_tex: 8
+  - x: 3
+    y: 15
+    ind_tex: 17
+  - x: 46
+    y: 15
+    ind_tex: 17
+  - x: 3
+    y: 14
+    ind_tex: 12
+  - x: 46
+    y: 14
+    ind_tex: 12
+  - x: 3
+    y: 13
+    ind_tex: 15
+  - x: 4
+    y: 13
+    ind_tex: 4
+  - x: 5
+    y: 13
+    ind_tex: 8
+  - x: 9
+    y: 13
+    ind_tex: 3
+  - x: 10
+    y: 13
+    ind_tex: 4
+  - x: 11
+    y: 13
+    ind_tex: 4
+  - x: 12
+    y: 13
+    ind_tex: 4
+  - x: 13
+    y: 13
+    ind_tex: 4
+  - x: 14
+    y: 13
+    ind_tex: 4
+  - x: 15
+    y: 13
+    ind_tex: 4
+  - x: 16
+    y: 13
+    ind_tex: 4
+  - x: 17
+    y: 13
+    ind_tex: 4
+  - x: 18
+    y: 13
+    ind_tex: 4
+  - x: 19
+    y: 13
+    ind_tex: 4
+  - x: 20
+    y: 13
+    ind_tex: 4
+  - x: 21
+    y: 13
+    ind_tex: 8
+  - x: 28
+    y: 13
+    ind_tex: 3
+  - x: 29
+    y: 13
+    ind_tex: 4
+  - x: 30
+    y: 13
+    ind_tex: 4
+  - x: 31
+    y: 13
+    ind_tex: 4
+  - x: 32
+    y: 13
+    ind_tex: 4
+  - x: 33
+    y: 13
+    ind_tex: 4
+  - x: 34
+    y: 13
+    ind_tex: 4
+  - x: 35
+    y: 13
+    ind_tex: 4
+  - x: 36
+    y: 13
+    ind_tex: 4
+  - x: 37
+    y: 13
+    ind_tex: 4
+  - x: 38
+    y: 13
+    ind_tex: 4
+  - x: 39
+    y: 13
+    ind_tex: 4
+  - x: 40
+    y: 13
+    ind_tex: 8
+  - x: 44
+    y: 13
+    ind_tex: 3
+  - x: 45
+    y: 13
+    ind_tex: 4
+  - x: 46
+    y: 13
+    ind_tex: 16
+  - x: 3
+    y: 7
+    ind_tex: 3
+  - x: 4
+    y: 7
+    ind_tex: 4
+  - x: 5
+    y: 7
+    ind_tex: 4
+  - x: 6
+    y: 7
+    ind_tex: 4
+  - x: 7
+    y: 7
+    ind_tex: 4
+  - x: 8
+    y: 7
+    ind_tex: 4
+  - x: 9
+    y: 7
+    ind_tex: 4
+  - x: 10
+    y: 7
+    ind_tex: 4
+  - x: 11
+    y: 7
+    ind_tex: 4
+  - x: 12
+    y: 7
+    ind_tex: 4
+  - x: 13
+    y: 7
+    ind_tex: 4
+  - x: 14
+    y: 7
+    ind_tex: 4
+  - x: 15
+    y: 7
+    ind_tex: 4
+  - x: 16
+    y: 7
+    ind_tex: 4
+  - x: 17
+    y: 7
+    ind_tex: 4
+  - x: 18
+    y: 7
+    ind_tex: 4
+  - x: 19
+    y: 7
+    ind_tex: 4
+  - x: 20
+    y: 7
+    ind_tex: 4
+  - x: 21
+    y: 7
+    ind_tex: 4
+  - x: 22
+    y: 7
+    ind_tex: 4
+  - x: 23
+    y: 7
+    ind_tex: 4
+  - x: 24
+    y: 7
+    ind_tex: 4
+  - x: 25
+    y: 7
+    ind_tex: 4
+  - x: 26
+    y: 7
+    ind_tex: 4
+  - x: 27
+    y: 7
+    ind_tex: 4
+  - x: 28
+    y: 7
+    ind_tex: 4
+  - x: 29
+    y: 7
+    ind_tex: 4
+  - x: 30
+    y: 7
+    ind_tex: 4
+  - x: 31
+    y: 7
+    ind_tex: 4
+  - x: 32
+    y: 7
+    ind_tex: 4
+  - x: 33
+    y: 7
+    ind_tex: 4
+  - x: 34
+    y: 7
+    ind_tex: 4
+  - x: 35
+    y: 7
+    ind_tex: 4
+  - x: 36
+    y: 7
+    ind_tex: 4
+  - x: 37
+    y: 7
+    ind_tex: 4
+  - x: 38
+    y: 7
+    ind_tex: 4
+  - x: 39
+    y: 7
+    ind_tex: 4
+  - x: 40
+    y: 7
+    ind_tex: 4
+  - x: 41
+    y: 7
+    ind_tex: 4
+  - x: 42
+    y: 7
+    ind_tex: 4
+  - x: 43
+    y: 7
+    ind_tex: 4
+  - x: 44
+    y: 7
+    ind_tex: 4
+  - x: 45
+    y: 7
+    ind_tex: 4
+  - x: 46
+    y: 7
+    ind_tex: 8
+decorations:
+  - x: 15
+    y: 38
+    z_ind: 1
+    ind_tex: 23
+  - x: 17
+    y: 38
+    z_ind: 1
+    ind_tex: 23
+  - x: 21
+    y: 38
+    z_ind: 1
+    ind_tex: 23
+  - x: 22
+    y: 38
+    z_ind: 1
+    ind_tex: 23
+  - x: 11
+    y: 37
+    z_ind: 1
+    ind_tex: 24
+  - x: 38
+    y: 37
+    z_ind: 1
+    ind_tex: 24
+  - x: 39
+    y: 37
+    z_ind: 1
+    ind_tex: 24
+  - x: 10
+    y: 32
+    z_ind: 1
+    ind_tex: 25
+  - x: 39
+    y: 32
+    z_ind: 1
+    ind_tex: 25
+  - x: 12
+    y: 31
+    z_ind: 1
+    ind_tex: 24
+  - x: 24
+    y: 31
+    z_ind: 1
+    ind_tex: 26
+  - x: 37
+    y: 31
+    z_ind: 1
+    ind_tex: 24
+  - x: 24
+    y: 27
+    z_ind: 1
+    ind_tex: 24
+  - x: 25
+    y: 27
+    z_ind: 1
+    ind_tex: 27
+  - x: 24
+    y: 22
+    z_ind: 1
+    ind_tex: 28
+  - x: 25
+    y: 22
+    z_ind: 1
+    ind_tex: 29
+  - x: 12
+    y: 14
+    z_ind: 1
+    ind_tex: 24
+  - x: 13
+    y: 14
+    z_ind: 1
+    ind_tex: 29
+  - x: 36
+    y: 14
+    z_ind: 1
+    ind_tex: 24
+  - x: 37
+    y: 14
+    z_ind: 1
+    ind_tex: 24
+  - x: 5
+    y: 9
+    z_ind: 1
+    ind_tex: 25
+  - x: 44
+    y: 9
+    z_ind: 1
+    ind_tex: 25
+  - x: 9
+    y: 8
+    z_ind: 1
+    ind_tex: 24
+  - x: 10
+    y: 8
+    z_ind: 1
+    ind_tex: 24
+  - x: 17
+    y: 8
+    z_ind: 1
+    ind_tex: 29
+  - x: 29
+    y: 8
+    z_ind: 1
+    ind_tex: 28
+  - x: 30
+    y: 8
+    z_ind: 1
+    ind_tex: 26
+  - x: 39
+    y: 8
+    z_ind: 1
+    ind_tex: 26
+boxes:
+  - x: 22
+    y: 31
+  - x: 27
+    y: 31
+  - x: 20
+    y: 19
+  - x: 29
+    y: 19
+  - x: 16
+    y: 14
+  - x: 33
+    y: 14
+  - x: 15
+    y: 8
+  - x: 34
+    y: 8
+spawns_item:
+  - x: 7
+    y: 31
+    ind_tex: 22
+  - x: 42
+    y: 31
+    ind_tex: 22
+  - x: 12
+    y: 26
+    ind_tex: 22
+  - x: 37
+    y: 26
+    ind_tex: 22
+  - x: 4
+    y: 14
+    ind_tex: 22
+  - x: 45
+    y: 14
+    ind_tex: 22
+spawns_player:
+  - x: 9
+    y: 31
+    ind_tex: 21
+  - x: 40
+    y: 31
+    ind_tex: 21
+  - x: 4
+    y: 8
+    ind_tex: 21
+  - x: 45
+    y: 8
+    ind_tex: 21

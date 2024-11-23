@@ -23,6 +23,7 @@ public:
     void add_collision(Tuple position, Tuple dimension, CollisionTypeMap type, int id);
     void clear_objects();
 
+    bool out_of_map(int position_x, int position_y, int dimension_x, int dimension_y) const;
     int getWidth() const;
     int getHeight() const;
 

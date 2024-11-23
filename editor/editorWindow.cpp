@@ -34,7 +34,8 @@ EditorWindow::EditorWindow(QWidget *parent):
                     break;
             }
         },
-        .onExport = [this]() { exportToFileSystem(); }
+        .onExport = [this]() { exportToFileSystem(); },
+        .onImport = [this]() { importFromFileSystem(); }
     }, this)),
     playground(new Playground(PlaygroundHandler{
         .onLeftClick = [this](QPoint position) {
@@ -45,16 +46,16 @@ EditorWindow::EditorWindow(QWidget *parent):
                     playground->addBlock(position, loader.blockAt(selectedBlockIndex));
                     break;
                 case MapObjectType::SpawnPlayer:
-                    playground->addNonPhysicalObject(position, loader.spawnPlayerAt(selectedSpawnPlayerIndex));
+                    playground->addSpawnPlayer(position, loader.spawnPlayerAt(selectedSpawnPlayerIndex));
                     break;
                 case MapObjectType::SpawnWeapon:
-                    playground->addNonPhysicalObject(position, loader.spawnWeaponAt(selectedSpawnWeaponIndex));
+                    playground->addSpawnWeapon(position, loader.spawnWeaponAt(selectedSpawnWeaponIndex));
                     break;
                 case MapObjectType::Box:
-                    playground->addPhysicalObject(position, loader.boxAt(selectedBoxIndex));
+                    playground->addBox(position, loader.boxAt(selectedBoxIndex));
                     break;
                 case MapObjectType::Decoration:
-                    playground->addNonPhysicalObject(position, loader.decorationAt(selectedDecorationIndex));
+                    playground->addDecoration(position, loader.decorationAt(selectedDecorationIndex));
                     break;
                 default:
                     break;
@@ -68,16 +69,16 @@ EditorWindow::EditorWindow(QWidget *parent):
                     playground->removeBlock(position, loader.blockAt(selectedBlockIndex));
                     break;
                 case MapObjectType::SpawnPlayer:
-                    playground->removeNonPhysicalObject(position);
+                    playground->removeSpawnPlayer(position);
                     break;
                 case MapObjectType::SpawnWeapon:
-                    playground->removeNonPhysicalObject(position);
+                    playground->removeSpawnWeapon(position);
                     break;
                 case MapObjectType::Box:
-                    playground->removePhysicalObject(position);
+                    playground->removeBox(position);
                     break;
                 case MapObjectType::Decoration:
-                    playground->removeNonPhysicalObject(position);
+                    playground->removeDecoration(position);
                     break;
                 default:
                     break;
@@ -250,51 +251,96 @@ void EditorWindow::selectDecorationTexture(size_t index) {
 }
 
 void EditorWindow::exportToFileSystem() {
-    const int maxWidth = playground->maxWidthToExport();
-    const int maxHeight = playground->maxHeightToExport();
-    const MapObjectData background = playground->backgroundToExport();
-    const std::vector<MapObjectData> blocks = playground->blocksToExport();
-    const std::vector<MapObjectData> spawnPlayers = playground->spawnPlayersToExport();
-    const std::vector<MapObjectData> spawnWeapons = playground->spawnWeaponsToExport();
-    const std::vector<MapObjectData> boxes = playground->boxesToExport();
-    const std::vector<MapObjectData> decorations = playground->decorationsToExport();
+    QString filePath = QFileDialog::getSaveFileName(this, EditorWindow::EXPORT, QString(DATA_PATH) + EditorWindow::MAPS_SOURCE, EditorWindow::FILE_FILTERS);
 
-    MapSerializer serial(maxWidth, maxHeight);
-    serial.setBackground(background.texture.substr(5));
+    if (filePath.isEmpty() || filePath.isNull())
+        return;
 
-    for (const auto& block : blocks) {
-        serial.addBlock(block.column, block.row, block.zIndex, block.texture.substr(5));
+    try {
+        const int maxWidth = playground->maxWidthToExport();
+        const int maxHeight = playground->maxHeightToExport();
+
+        const MapObjectData background = playground->backgroundToExport();
+    
+        const std::vector<MapObjectData> blocks = playground->blocksToExport();
+        const std::vector<MapObjectData> spawnPlayers = playground->spawnPlayersToExport();
+        const std::vector<MapObjectData> spawnWeapons = playground->spawnWeaponsToExport();
+        const std::vector<MapObjectData> boxes = playground->boxesToExport();
+        const std::vector<MapObjectData> decorations = playground->decorationsToExport();
+
+        MapSerializer serial(maxWidth, maxHeight);
+        serial.setBackground(background.texture);
+
+        for (const auto& block : blocks) {
+            serial.addBlock(block.column, block.row, block.zIndex, block.texture);
+        }
+
+        for (const auto& spawnPlayer : spawnPlayers) {
+            serial.addPlayerSpawn(spawnPlayer.column, spawnPlayer.row, spawnPlayer.zIndex, spawnPlayer.texture);
+        }
+
+        for (const auto& spawnWeapon : spawnWeapons) {
+            serial.addItemSpawn(spawnWeapon.column, spawnWeapon.row, spawnWeapon.zIndex, spawnWeapon.texture);
+        }
+
+        for (const auto& box : boxes) {
+            serial.addBox(box.column, box.row, box.zIndex, box.texture);
+        }
+
+        for (const auto& decoration : decorations) {
+            serial.addDecoration(decoration.column , decoration.row, decoration.zIndex, decoration.texture);
+        }
+
+        serial.save(filePath.toStdString());
+        interface->displayNotificationSuccess("The map was exported successfully");
+    } catch (const std::exception& err) {
+        interface->displayNotificationError(std::string("Error: ") + err.what());
     }
-
-    for (const auto& spawnPlayer : spawnPlayers) {
-        serial.addPlayerSpawn(spawnPlayer.column, spawnPlayer.row, spawnPlayer.zIndex, spawnPlayer.texture.substr(5));
-    }
-
-    for (const auto& spawnWeapon : spawnWeapons) {
-        serial.addItemSpawn(spawnWeapon.column, spawnWeapon.row, spawnWeapon.zIndex, spawnWeapon.texture.substr(5));
-    }
-
-    for (const auto& box : boxes) {
-        serial.addBox(box.column, box.row, box.zIndex, box.texture.substr(5));
-    }
-
-    for (const auto& decoration : decorations) {
-        serial.addDecoration(decoration.column , decoration.row, decoration.zIndex, decoration.texture.substr(5));
-    }
-
-    std::string file("./res/maps/MAPACHE.yaml");
-    serial.save(file);
 }
-/*
+
 void EditorWindow::importFromFileSystem() {
-    MapDeserializer deserial("./res/maps/map3.yaml");
+    try {
+        QString filePath = QFileDialog::getOpenFileName(this, EditorWindow::IMPORT, QString(DATA_PATH) + EditorWindow::MAPS_SOURCE, EditorWindow::FILE_FILTERS);
 
-    const std::string background = serial.getBackground();
+        if (filePath.isEmpty() || filePath.isNull())
+            return;
 
-    const std::vector<MapObjectData> blocks = serial.getBlocks();
-    const std::vector<MapObjectData> spawnPlayers = serial.getPlayerSpawns();
-    const std::vector<MapObjectData> spawnWeapons = serial.getItemSpawns();
-    const std::vector<MapObjectData> boxes = serial.getBoxes();
-    const std::vector<MapObjectData> decorations = serial.getDecorations();
+        MapImporter importer(filePath.toStdString());
+        
+        playground->cleanMap();
+
+        //int width = importer.getWidth();
+        //int height = importer.getHeight();
+
+        playground->setBackground(loader.background(importer.getBackground()));
+
+        for (const ImportedMapObjectData& block : importer.getBlocks()) {
+            QPoint position = playground->position(block.column, block.row);
+            playground->addBlock(position, loader.block(block.texture));
+        }
+    
+        for (const ImportedMapObjectData& spawnPlayer : importer.getPlayerSpawns()) {
+            QPoint position = playground->position(spawnPlayer.column, spawnPlayer.row);
+            playground->addSpawnPlayer(position, loader.spawnPlayer(spawnPlayer.texture));
+        }
+    
+        for (const ImportedMapObjectData& spawnWeapon : importer.getItemSpawns()) {
+            QPoint position = playground->position(spawnWeapon.column, spawnWeapon.row);
+            playground->addSpawnWeapon(position, loader.spawnWeapon(spawnWeapon.texture));
+        }
+
+        for (const ImportedMapObjectData& box : importer.getBoxes()) {
+            QPoint position = playground->position(box.column, box.row);
+            playground->addBox(position, loader.box(box.texture));
+        }
+
+        for (const ImportedMapObjectData& decoration : importer.getDecorations()) {
+            QPoint position = playground->position(decoration.column, decoration.row);
+            playground->addDecoration(position, loader.decoration(decoration.texture));
+        }
+        
+        interface->displayNotificationSuccess("The map was imported successfully");
+    } catch (const std::exception& err) {
+        interface->displayNotificationError(std::string("Error: ") + err.what());
+    }
 }
-*/

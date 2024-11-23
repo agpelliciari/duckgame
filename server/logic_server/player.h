@@ -42,7 +42,8 @@ public:
     bool same_id(unsigned int id);
 
     void get_data(int& id, int& x, int& y, TypeWeapon& weapon, bool& helmet_equipped,
-                  bool& chest_armor_equipped, TypeMoveAction& move_action, TypeDoingAction& doing_action);
+                  bool& chest_armor_equipped, TypeMoveAction& move_action,
+                  TypeDoingAction& doing_action, bool &is_alive);
 
     void still();
     void add_speed(int speed_x, int speed_y);

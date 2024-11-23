@@ -1,6 +1,6 @@
 #include "loader.h"
 
-Loader::Loader(const std::string& root) {
+Loader::Loader(const std::string& root): noTexture(loadNoTexture(root)), noTileSet(*this)  {
     loadBackgrounds(root);
     loadBlocks(root);
     loadBoxes(root);
@@ -61,6 +61,39 @@ Texture Loader::decorationAt(size_t index) {
     return decorations.at(index);
 }
 
+Texture Loader::background(const std::string& source) {
+    return texture(source, backgrounds);
+}
+
+TileSet Loader::block(const std::string& source) {
+    std::vector<TileSet>::const_iterator iterator = std::find_if(blocks.begin(), blocks.end(),
+        [&source](const TileSet& tileSet) {
+            return source.find(tileSet.name()) != std::string::npos;
+        });
+
+    if (iterator != blocks.end()) {
+        return *iterator;
+    } else {
+        return noTileSet;
+    }
+}
+
+Texture Loader::box(const std::string& source) {
+    return texture(source, boxes);
+}
+
+Texture Loader::spawnPlayer(const std::string& source) {
+    return texture(source, spawnPlayers);
+}
+
+Texture Loader::spawnWeapon(const std::string& source) {
+    return texture(source, spawnWeapons);
+}
+
+Texture Loader::decoration(const std::string& source) {
+    return texture(source, decorations);
+}
+
 size_t Loader::backgroundsSize() {
     return backgrounds.size();
 }
@@ -94,6 +127,21 @@ std::string Loader::textureNameFor(const std::string& stringRepresentationOfAdya
 }
 
 Loader::~Loader() {}
+
+Texture Loader::loadNoTexture(const std::string& root) {
+    QString filePath = QString::fromStdString(root + NO_TEXTURE);
+    QPixmap pixelMap;
+    if (!pixelMap.load(filePath))
+        throw std::runtime_error("There is no notexture file");
+
+    Texture texture;
+    texture.name = "notexture";
+    texture.source = filePath.toStdString().substr(root.length());
+    texture.mapObjectType = MapObjectType::Empty;
+    texture.pixelMap = pixelMap;
+
+    return texture;
+}
 
 void Loader::loadBackgrounds(const std::string& root) {
     load(root, "/backgrounds", MapObjectType::Background, backgrounds);
@@ -164,7 +212,7 @@ void Loader::load(const std::string& root, const std::string& path, MapObjectTyp
 
         Texture texture;
         texture.name = fileInfo.baseName().toStdString();
-        texture.source = fileInfo.filePath().toStdString();
+        texture.source = fileInfo.filePath().toStdString().substr(root.length());
         texture.mapObjectType = mapObjectType;
         texture.pixelMap = pixelMap;
 
@@ -192,8 +240,6 @@ void Loader::load(const std::string& root, const std::string& path, MapObjectTyp
             return getNumber(a.name) < getNumber(b.name);
         });
     }
-
-    
 }
 
 std::vector<std::string> Loader::names(const std::vector<Texture>& textures) {
@@ -201,4 +247,21 @@ std::vector<std::string> Loader::names(const std::vector<Texture>& textures) {
     for (const Texture& texture : textures)
         names.push_back(texture.name);
     return names;
+}
+
+Texture Loader::texture(const std::string& source, const std::vector<Texture>& textures) {
+    std::vector<Texture>::const_iterator iterator = std::find_if(textures.begin(), textures.end(),
+        [&source](const Texture& tileSet) {
+            return tileSet.source == source;
+        });
+
+    if (iterator != textures.end()) {
+        return *iterator;
+    } else {
+        return noTexture;
+    }
+}
+
+Texture Loader::getNoTexture() {
+    return noTexture;
 }

@@ -6,7 +6,7 @@ PhysicalPlayer::PhysicalPlayer(int init_coord_x, int init_coord_y):
         PhysicalObject(init_coord_x, init_coord_y, PLAYER_WIDTH, PLAYER_HEIGHT),
         initial_position{init_coord_x, init_coord_y},
         flap_attemps(FLAP_ATTEMPS),
-        on_air(true) {}
+        on_air(true), out_of_map(false) {}
 
 void PhysicalPlayer::update_action(TypeMoveAction& move_action) {
     move_action = TypeMoveAction::NONE;
@@ -50,6 +50,14 @@ void PhysicalPlayer::react_to_down_collision(Collision collision){
 void PhysicalPlayer::react_to_up_collision(Collision collision){
         speed.y = 0;
         acceleration.y = -10;
+}
+
+void PhysicalPlayer::react_to_out_of_map() {
+    out_of_map = true;
+}
+
+bool PhysicalPlayer::is_out_of_map() {
+    return out_of_map;
 }
 
 void PhysicalPlayer::stop_moving_x(){

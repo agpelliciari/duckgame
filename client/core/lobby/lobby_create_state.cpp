@@ -10,7 +10,6 @@
 #include "common/core/liberror.h"
 #include "common/protocolerror.h"
 
-#define getErrorMsg(ind) ERRORS[(ind >= 8) ? 1 : ind]
 
 
 LobbyCreateState::LobbyCreateState(Messenger& _messenger, GameContext& _context,
@@ -37,9 +36,9 @@ bool LobbyCreateState::checkcreatefail() {
             context.second_player = protocol.recvIDDualPlayer(&context.first_player);
             context.id_lobby = id_lobby;
 
-            context.players.reserve(context.max_player_count);
-            context.addPlayer(context.first_player);
-            context.addPlayer(context.second_player);
+            context.cantidadjugadores = 2;
+            //context.addPlayer(context.first_player);
+            //context.addPlayer(context.second_player);
             
             // Para probar!
             maps.push_back("does not exist");
@@ -53,8 +52,8 @@ bool LobbyCreateState::checkcreatefail() {
             context.second_player = 0;
             context.id_lobby = id_lobby;
             
-            context.players.reserve(context.max_player_count);
-            context.addPlayer(context.first_player);
+            context.cantidadjugadores = 1;
+            //context.addPlayer(context.first_player);
 
             // Para probar!
             maps.push_back("does not exist");
@@ -95,3 +94,8 @@ void LobbyCreateState::run() {
         }
     }
 }
+
+LobbyCreateState::~LobbyCreateState(){
+    close();
+}
+

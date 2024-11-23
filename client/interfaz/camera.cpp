@@ -19,23 +19,26 @@ void Camera::updatePosition(int minX, int minY, int boxWidth, int boxHeight) {
 }
 
 void Camera::update(const MatchDto& matchDto) {
-    int firstPlayerX = matchDto.players[0].pos.x;
-    int firstPlayerY = matchDto.players[0].pos.y;
-
-    int minX = firstPlayerX;
-    int maxX = firstPlayerX;
-    int minY = firstPlayerY;
-    int maxY = firstPlayerY;
+    bool firstAlivePlayerFound = false;
+    int minX, maxX, minY, maxY;
 
     for (const PlayerDTO& player: matchDto.players) {
-        if (player.pos.x < minX)
-            minX = player.pos.x;
-        if (player.pos.x > maxX)
-            maxX = player.pos.x;
-        if (player.pos.y < minY)
-            minY = player.pos.y;
-        if (player.pos.y > maxY)
-            maxY = player.pos.y;
+        if (player.is_alive) {
+            if (!firstAlivePlayerFound) {
+                minX = maxX = player.pos.x;
+                minY = maxY = player.pos.y;
+                firstAlivePlayerFound = true;
+            } else {
+                if (player.pos.x < minX)
+                    minX = player.pos.x;
+                if (player.pos.x > maxX)
+                    maxX = player.pos.x;
+                if (player.pos.y < minY)
+                    minY = player.pos.y;
+                if (player.pos.y > maxY)
+                    maxY = player.pos.y;
+            }
+        }
     }
 
     // bounding box dimensions

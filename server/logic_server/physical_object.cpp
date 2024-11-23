@@ -1,5 +1,6 @@
 
 #include "physical_object.h"
+#include <iostream>
 
 PhysicalObject::PhysicalObject(int position_x, int position_y, int dimension_x, int dimension_y):
         position{position_x, position_y},
@@ -72,7 +73,10 @@ void PhysicalObject::move(const MatchMap& colition_map) {
         speed.x > 0 ? sign = 1 : sign = -1;
         for (int x = 0; x <= speed.x * time_step * sign; x++) {
             Collision collision(0, CollisionTypeMap::NONE);
-            if (detect_x_collision(colition_map, sign, collision)) {
+            if (colition_map.out_of_map(position.x, position.y, dimension.x, dimension.y)) {
+                std::cout << "out of map " << std::endl;
+                this->react_to_out_of_map();
+            } else if (detect_x_collision(colition_map, sign, collision)) {
                 this->react_to_sides_collision(collision);
                 acceleration.x = 0;
             } else {
@@ -87,8 +91,12 @@ void PhysicalObject::move(const MatchMap& colition_map) {
     if (speed.y < 0) {
         for (int y = 0; y >= speed.y * time_step; y--) {
             Collision collision(0, CollisionTypeMap::NONE);
-            if (detect_y_collision(colition_map, -1, collision)) {
+            if (colition_map.out_of_map(position.x, position.y, dimension.x, dimension.y)) {
+                std::cout << "out of map " << std::endl;
+                this->react_to_out_of_map();
+            } else if (detect_y_collision(colition_map, -1, collision)) {
                 this->react_to_down_collision(collision);
+
             } else {
                 position.y--;
             }
@@ -96,7 +104,10 @@ void PhysicalObject::move(const MatchMap& colition_map) {
     } else if (speed.y > 0) {
         for (int y = 0; y <= speed.y * time_step; y++) {
             Collision collision(0, CollisionTypeMap::NONE);
-            if (detect_y_collision(colition_map, 1, collision)) {
+            if (colition_map.out_of_map(position.x, position.y, dimension.x, dimension.y)) {
+                std::cout << "out of map " << std::endl;
+                this->react_to_out_of_map();
+            } else if (detect_y_collision(colition_map, 1, collision)) {
                 this->react_to_up_collision(collision);
             } else {
                 position.y++;

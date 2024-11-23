@@ -5,6 +5,7 @@ SoundContainer::SoundContainer(): backgroundMusic(DATA_PATH "/music/DuckGame-cha
     sounds.emplace(SoundType::SHOT, SDL2pp::Chunk(DATA_PATH "/sounds/cowboyPistol.wav"));
     sounds.emplace(SoundType::QUACK, SDL2pp::Chunk(DATA_PATH "/sounds/quack.wav"));
     sounds.emplace(SoundType::LASER, SDL2pp::Chunk(DATA_PATH "/sounds/pewpewLaser.mp3"));
+    sounds.emplace(SoundType::PICK_UP, SDL2pp::Chunk(DATA_PATH "/sounds/equip.wav"));
 }
 
 SDL2pp::Music& SoundContainer::getBackgroundMusic() { return backgroundMusic; }

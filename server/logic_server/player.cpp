@@ -17,7 +17,7 @@ Player::Player(int id_, int initial_x, int initial_y):
 
 void Player::get_data(int& id, int& x, int& y, TypeWeapon& weapon_,
                       bool& helmet_equipped, bool& chest_armor_equipped,
-                      TypeMoveAction& move_action_, TypeDoingAction& doing_action_) {
+                      TypeMoveAction& move_action_, TypeDoingAction& doing_action_, bool &is_alive_) {
     id = this->id;
     this->object.get_real_position(x, y);
 
@@ -34,6 +34,7 @@ void Player::get_data(int& id, int& x, int& y, TypeWeapon& weapon_,
     move_action_ = this->move_action;
     doing_action_ = this->doing_action;
     this->doing_action = TypeDoingAction::NONE;
+    is_alive_ = this->is_alive;
 }
 
 bool Player::same_id(unsigned int id_) { return id == id_; }
@@ -46,9 +47,13 @@ int Player::get_id() { return id; }
 
 void Player::update(const MatchMap& colition_map) {
     if (is_alive){
-        object.move(colition_map);
-        object.update_action(move_action);
-        this->update_shooting_direction();
+        if(object.is_out_of_map()){
+            is_alive = false;
+        } else {
+            object.move(colition_map);
+            object.update_action(move_action);
+            this->update_shooting_direction();
+        }
     } else {
         this->stay_down_start();
     }

@@ -1,43 +1,97 @@
-# Ejemplo de CMAKE para el TP Final
+<p align="center">
+    <img src="/res/duckGameTitle.png" alt="Logo del Juego" width="250" />
+</p>
 
-**Importante:** el primer commit de este repositorio tiene el setup
-básico para el TP Final que incluye la instalación de la lib
-`libSDL2pp` (el wrapper de C++).
+Repositorio para el Trabajo Práctico grupal de la materia "Taller de Programacion", Cátedra Veiga, 2do Cuatrimestre 2024.
 
-El resto de los commits son a modo de ejemplo de como se pueden
-agregar mas código fuente al proyecto.
+<hr/>
 
-Este ejemplo **no** incluye instalarse la librería `SDL2` ni tampoco
-instala otras librerías que puedan ser necesarias ni tampoco un
-instalador (aunque **si** incluye Google Tests)
+## Integrantes
 
-**Se deben agregar las librerias necesarias y el instalador.**
+| <center>Alumno</center>          | <center>Padrón</center> | <center>Mail</center>  | <center>GitHub</center>                                                                                                                                                          |
+| :------------------------------- | :---------------------: | :--------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Marcelo Agustin Origoni**      |         109903          | morigoni@fi.uba.ar     | <img align="center" src="https://github.com/MarceloAgustinOrigoniGuillaume.png" height=32 width=32 /> [MarceloAgustinOrigoni](https://github.com/MarceloAgustinOrigoniGuillaume) |
+| **Alejandro Schamun**            |         108545          | aschamun@fi.uba.ar     | <img align="center" src="https://github.com/AleSchamun.png" height=32 width=32 /> [AleSchamun](https://github.com/AleSchamun)                                                    |
+| **Sebastian Mauricio Vintoñuke** |         106063          | svintonuke@fi.uba.ar         | <img align="center" src="https://github.com/SebastianVintonuke.png" height=32 width=32 /> [SebastianVintonuke](https://github.com/SebastianVintonuke)                            |
+| **Agustin Pelliciari**           |         108172          | apelliciari@fi.uba.ar  | <img align="center" src="https://github.com/agpelliciari.png" height=32 width=32 /> [agpelliciari](https://github.com/agpelliciari)                                              |
 
-También el ejemplo usa una estructura de carpetas muy simple:
+<hr width="100%" align="left" />
 
+<hr/>
+
+## Compilacion y buildeo
+```sh
+./build_game.sh
 ```
-client/
-server/
-editor/
-common/
+
+<hr width="100%" align="left" />
+
+<hr/>
+
+## Ejecucion del juego
+
+Servidor:
+
+```sh
+./taller_server 2048
 ```
 
-Bien se puede mejorar (cambiando el cmakefile) agregando mas
-sub-carpetas.
+Cliente:
 
-Asi tambien **deben** ser cambiados los *targets* del cmake (`taller_client`,
-`taller_server`, ...) por nombres mas acordes al TP que se este
-haciendo.
+```sh
+./taller_client
+```
 
-Tambien, por default solo se compila una version *debug* sin
-optimizar. Si se quiere compilar binarios optimizados
-(lo que cmake llama *release*) se puede, solo hay modificar
-cmake.
+Editor de mapas:
 
-Aprender del ejemplo para saber como extenderlo!
+```sh
+./taller_editor
+```
 
-**Importante:** este repositorio **no** incluye pre-commits hooks,
-ni scripts adicionales (como correr valgrind).
+<hr width="100%" align="left" />
 
-**Eso esta a cargo de los estudiantes,** tal como fue mostrado
-en los tps individuales, recaps y hands-on.
+<hr/>
+
+## Comandos
+- Jugador 1:
+  - `→` : Moverse a la derecha
+  - `←` : Moverse a la izquierda
+  - `↑` : Apuntar hacia arriba
+  - `↓` : Agacharse
+  - `Espacio` : Saltar
+  - `P` : Disparar
+  - `O` : Agarrar un objeto (arma/casco/armadura)
+  - `L` : Soltar un objeto
+  - `M` : Apagar musica
+
+- Jugador 2 (en caso de seleccionar duos):
+  - `D` : Moverse a la derecha
+  - `A` : Moverse a la izquierda
+  - `E` : Apuntar hacia arriba
+  - `S` : Agacharse
+  - `W` : Saltar
+  - `G` : Disparar
+  - `T` : Agarrar un objeto (arma/casco/armadura)
+  - `F` : Soltar un objeto
+
+<hr width="100%" align="left" />
+
+<hr/>
+
+## Creditos
+
+Los siguientes archivos:
+
+- socket.cpp y socket.h
+- resolver.cpp y resolver.h
+- resolvererror.cpp y resolvererror.h
+- liberror.cpp y liberror.h
+
+fueron tomados del repositorio [hands-on-sockets](https://github.com/eldipa/hands-on-sockets-in-cpp) con licencia: **GPL v2**
+
+Los siguientes archivos:
+
+- thread.h
+- queue.h
+
+fueron tomados del repositorio [hands-on-threads](https://github.com/eldipa/hands-on-threads) con licencia: **GPL v2**

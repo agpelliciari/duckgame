@@ -8,8 +8,6 @@
 #include "common/core/liberror.h"
 #include "common/protocolerror.h"
 
-#define getErrorMsg(ind) ERRORS[(ind >= 8) ? 1 : ind]
-
 
 LobbyJoinState::LobbyJoinState(Messenger& _messenger, GameContext& _context,
                                LobbyListener& _listener):
@@ -27,7 +25,7 @@ bool LobbyJoinState::isrunning() { return _is_alive; }
 bool LobbyJoinState::tryJoinLobbyFail() {
     try {
         if (context.dualplay) {
-            lobby_info infojoin = protocol.sendJoinLobby(context.id_lobby, context.players, 2);
+            lobby_info infojoin = protocol.sendJoinLobby(context.id_lobby, 2);
             if (infojoin.action != JOINED_LOBBY) {
                 std::cerr << "Failed join dual code: " << (int)infojoin.data << std::endl;
                 listener.failedJoin(getErrorMsg(infojoin.data));
@@ -36,12 +34,13 @@ bool LobbyJoinState::tryJoinLobbyFail() {
 
             context.second_player = protocol.recvIDDualPlayer(&context.first_player);
 
-            //context.cantidadjugadores = infojoin.data;  // + 2;
+            context.cantidadjugadores = infojoin.data;
+            
             listener.joinedLobbyDual(context);
             return false;
         }
 
-        lobby_info infojoin = protocol.sendJoinLobby(context.id_lobby, context.players, 1);
+        lobby_info infojoin = protocol.sendJoinLobby(context.id_lobby, 1);
         if (infojoin.action != JOINED_LOBBY) {
             std::cerr << "Failed join single error code: " << (int)infojoin.data << std::endl;
             listener.failedJoin(getErrorMsg(infojoin.data));
@@ -51,7 +50,7 @@ bool LobbyJoinState::tryJoinLobbyFail() {
         context.first_player = protocol.recvIDSinglePlayer();
         context.second_player = 0;
 
-        //context.cantidadjugadores = infojoin.data;  // + 1;
+        context.cantidadjugadores = infojoin.data;
         listener.joinedLobbySolo(context);
 
         return false;
@@ -87,3 +86,8 @@ void LobbyJoinState::run() {
         }
     }
 }
+
+LobbyJoinState::~LobbyJoinState(){
+    close();
+}
+

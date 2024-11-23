@@ -141,19 +141,19 @@ void MenuHandler::createdLobbySolo(unsigned int id_lobby, const std::vector<std:
 
 void MenuHandler::joinedLobbyDual(const GameContext& context) {
     std::cout << "Lobby Join dual con id " << (int)context.id_lobby << " max capacity "
-              << context.players.size() << std::endl;
+              << context.cantidadjugadores << std::endl;
     setLobbyId(context.id_lobby);
-    int size = context.players.size();
+    int size = context.cantidadjugadores;
     for (int i = 0; i < size; i++) {
         addSoloToLobby();  // esto agrega los nuevos players que existen
     }
 }
 void MenuHandler::joinedLobbySolo(const GameContext& context) {
     std::cout << "Lobby Join solo con id " << (int)context.id_lobby << " count there "
-              << context.players.size() << std::endl;
+              << context.cantidadjugadores << std::endl;
     setLobbyId(context.id_lobby);
 
-    int size = context.players.size();
+    int size = context.cantidadjugadores;
     for (int i = 0; i < size; i++) {
         addSoloToLobby();  // esto agrega los nuevos players que existen
     }

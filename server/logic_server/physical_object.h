@@ -31,6 +31,7 @@ public:
     virtual void react_to_sides_collision(Collision collision) = 0;
     virtual void react_to_down_collision(Collision collision) = 0;
     virtual void react_to_up_collision(Collision collision) = 0;
+    virtual void react_to_out_of_map() = 0;
 
     Tuple get_position();
     Tuple get_dimension();

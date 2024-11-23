@@ -15,11 +15,13 @@ Drawer::Drawer(SDL2pp::Window& window, Animation& animation, const GameContext& 
                     {2, "/duck_sprites/duck_yellow.png"},
                     {3, "/duck_sprites/duck_grey.png"},
                     {4, "/duck_sprites/duck_orange.png"}};
+                    
     weaponTextures = {{TypeWeapon::PISTOLA_COWBOY,
                        {"/weapons/cowboyPistol.png", COWBOY_GUN_WIDTH, COWBOY_GUN_HEIGHT}},
                       {TypeWeapon::PEW_PEW_LASER,
                        {"/weapons/pewpewLaser.png", PEW_PEW_LASER_SIZE, PEW_PEW_LASER_SIZE}},
-                      {TypeWeapon::MAGNUM, {"/weapons/magnum.png", MAGNUM_SIZE, MAGNUM_SIZE}}};
+                      {TypeWeapon::MAGNUM, {"/weapons/magnum.png", MAGNUM_SIZE, MAGNUM_SIZE}},
+                      {TypeWeapon::PISTOLA_DE_DUELOS, {"/weapons/pistol.png", 18, 18}}};
 }
 
 void Drawer::drawPlayer(const PlayerDTO& player) {
@@ -46,13 +48,15 @@ void Drawer::drawPlayer(const PlayerDTO& player) {
 
         drawArmor(player, flip);
 
-        drawPlayerInfo(player, playerTexture);
+        if (player.is_alive) {
+            drawPlayerInfo(player, playerTexture);
+        }
     }
 }
 
 void Drawer::drawPlayerInfo(const PlayerDTO& player, const std::string color) {
     renderer.Copy(textures.getTexture(color), SDL2pp::Rect(1, 10, 32, 10),
-                  SDL2pp::Rect(4 + 90 * (player.id - 1), 8, 32, 14));
+                  SDL2pp::Rect(12 + 90 * (player.id - 1), 8, 32, 14));
 
     if (player.weapon != TypeWeapon::NONE) {
         auto weaponTexture = weaponTextures.find(player.weapon);
@@ -62,7 +66,7 @@ void Drawer::drawPlayerInfo(const PlayerDTO& player, const std::string color) {
             int x, y;
             if (player.weapon == TypeWeapon::PISTOLA_COWBOY) {
                 x = 30;
-                y = 2;
+                y = 7;
             } else {
                 x = 22;
                 y = -3;
@@ -148,7 +152,7 @@ void Drawer::drawWeapon(const PlayerDTO& player, SDL_RendererFlip flip) {
             x = camera.getScreenX(player.pos.x +
                                   getTextureFlipValue(flip, GUN_FLIP_X, GUN_UNFLIP_X) -
                                   X_PHYSICAL_OFFSET_PLAYER);
-            y = camera.getScreenY(player.pos.y + 4);
+            y = camera.getScreenY(player.pos.y + 2);
         } else {
             x = camera.getScreenX(player.pos.x - X_PHYSICAL_OFFSET_PLAYER +
                                   getTextureFlipValue(flip, -3, 9));
@@ -212,14 +216,14 @@ void Drawer::drawDynamicObject(const DynamicObjDTO& object) {
         case TypeDynamicObject::PROJECTILE:
             renderer.Copy(
                     textures.getTexture("/weapons/chainBullet.png"), SDL2pp::Rect(0, 0, 3, 8),
-                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(object.pos.y),
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y + 8),
                                  camera.getScaledSize(3), camera.getScaledSize(8)));
             break;
 
         case TypeDynamicObject::LASER:
             renderer.Copy(
                     textures.getTexture("/weapons/laserBeam.png"), SDL2pp::Rect(0, 0, 1, 8),
-                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y),
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y + 7),
                                  camera.getScaledSize(1), camera.getScaledSize(8)));
             break;
 
@@ -265,55 +269,53 @@ void Drawer::drawDynamicObject(const DynamicObjDTO& object) {
             renderer.Copy(
                     textures.getTexture("/weapons/pewpewLaser.png"),
                     SDL2pp::Rect(0, 0, PEW_PEW_LASER_SIZE, PEW_PEW_LASER_SIZE),
-                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y),
-                                 camera.getScaledSize(PEW_PEW_LASER_SIZE),
-                                 camera.getScaledSize(PEW_PEW_LASER_SIZE)));
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x - 3), camera.getScreenY(-object.pos.y),
+                                 camera.getScaledSize(PEW_PEW_LASER_SIZE - 6),
+                                 camera.getScaledSize(PEW_PEW_LASER_SIZE - 6)));
             break;
 
         case TypeDynamicObject::LASER_RIFLE:
             renderer.Copy(
                     textures.getTexture("/weapons/laserRifle.png"), SDL2pp::Rect(0, 0, 32, 32),
-                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y),
-                                 camera.getScaledSize(32), camera.getScaledSize(32)));
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x - 3), camera.getScreenY(-object.pos.y),
+                                 camera.getScaledSize(32 - 6), camera.getScaledSize(32 - 6)));
             break;
 
         case TypeDynamicObject::AK_47:
             renderer.Copy(
                     textures.getTexture("/weapons/ak47.png"), SDL2pp::Rect(0, 0, 32, 32),
-                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y),
-                                 camera.getScaledSize(32), camera.getScaledSize(32)));
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x - 3), camera.getScreenY(-object.pos.y),
+                                 camera.getScaledSize(32 - 6), camera.getScaledSize(32 - 6)));
             break;
 
-        case TypeDynamicObject::PISTOLA_DE_DUELOS:
-            renderer.Copy(
-                    textures.getTexture("/weapons/pistol.png"), SDL2pp::Rect(0, 0, 18, 18),
-                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y),
-                                 camera.getScaledSize(18), camera.getScaledSize(18)));
-            break;
+        //case TypeDynamicObject::PISTOLA_DE_DUELOS:
+            //renderer.Copy(textures.getTexture("/weapons/pistol.png"), SDL2pp::Rect(0, 0, 18, 18), SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y), camera.getScaledSize(18 - 4), camera.getScaledSize(18 - 4)));
+            //break;
 
         case TypeDynamicObject::PISTOLA_COWBOY:
             renderer.Copy(
                     textures.getTexture("/weapons/cowboyPistol.png"),
                     SDL2pp::Rect(0, 0, COWBOY_GUN_WIDTH, COWBOY_GUN_HEIGHT),
-                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y),
-                                 camera.getScaledSize(COWBOY_GUN_WIDTH - 6),
-                                 camera.getScaledSize(COWBOY_GUN_HEIGHT - 6)));
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x + 3), camera.getScreenY(-object.pos.y + 5),
+                                 camera.getScaledSize(COWBOY_GUN_WIDTH - 3),
+                                 camera.getScaledSize(COWBOY_GUN_HEIGHT - 3)));
             break;
-
+        
+        case TypeDynamicObject::PISTOLA_DE_DUELOS:
         case TypeDynamicObject::MAGNUM:
             renderer.Copy(
                     textures.getTexture("/weapons/magnum.png"),
                     SDL2pp::Rect(0, 0, MAGNUM_SIZE, MAGNUM_SIZE),
-                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y),
-                                 camera.getScaledSize(MAGNUM_SIZE),
-                                 camera.getScaledSize(MAGNUM_SIZE)));
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x - 3), camera.getScreenY(-object.pos.y),
+                                 camera.getScaledSize(MAGNUM_SIZE - 6),
+                                 camera.getScaledSize(MAGNUM_SIZE - 6)));
             break;
 
         case TypeDynamicObject::ESCOPETA:
             renderer.Copy(
                     textures.getTexture("/weapons/shotgun.png"), SDL2pp::Rect(0, 0, 32, 32),
-                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y),
-                                 camera.getScaledSize(32), camera.getScaledSize(32)));
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x - 3), camera.getScreenY(-object.pos.y),
+                                 camera.getScaledSize(32 - 6), camera.getScaledSize(32 - 6)));
             break;
 
         case TypeDynamicObject::SNIPER:

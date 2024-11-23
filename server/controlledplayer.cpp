@@ -10,41 +10,25 @@
 #define SIZE_EVENTS 30
 
 // Snapshots esta cerrada inicialmente. Events esta abierta.
-ControlledPlayer::ControlledPlayer(player_id first):
-        count(1), ids(), events(SIZE_EVENTS, false), snapshots(SIZE_SNAPSHOTS, true) {
-    ids[0] = first;
-    ids[1] = first;
-}
-
-ControlledPlayer::ControlledPlayer(player_id first, player_id second):
-        count(2), ids(), events(SIZE_EVENTS, false), snapshots(SIZE_SNAPSHOTS, true) {
-    ids[0] = first;
-    ids[1] = second;
-}
+ControlledPlayer::ControlledPlayer(const ControlId& _id, const int& _pos):id(_id),pos(_pos),isactive(true), 
+events(SIZE_EVENTS, false), snapshots(SIZE_SNAPSHOTS, true){}
 
 bool ControlledPlayer::operator==(const ControlledPlayer& other) const {
-    return this->ids[0] == other.ids[0] && this->ids[1] == other.ids[1];
+    return this->id == other.id;
 }
 
-uint8_t ControlledPlayer::playercount() const { return this->count; }
+uint8_t ControlledPlayer::playercount() const { return id.getcount(); }
 
-
-player_id ControlledPlayer::getid(const uint8_t ind) const { return this->ids[ind]; }
-
-
-// Switch del player. Participando en una partida. No mas events de lobby, ahora snapshots.
-bool ControlledPlayer::setgamemode() {
-    if (snapshots.reopen()) {
-        match_stats.state = STARTED_ROUND;
-        match_stats.numronda++;
-        // Antes... para evitar una race condition
-        if(events.tryclose()){
-            return true;
-        }
-        throw GameError(SERVER_ERROR, "Inconsistent state on player, tried set game mode but was disconnected");
-    }
-    return false;
+const ControlId& ControlledPlayer::getcontrolid() const{
+    return id;
 }
+int ControlledPlayer::getpos() const{
+    return this->pos;
+}
+
+
+player_id ControlledPlayer::getid(const uint8_t ind) const { return id.get(ind); }
+
 
 void ControlledPlayer::waitgamemode(){
      snapshots.waitreopen();
@@ -60,23 +44,50 @@ const MatchStatsInfo& ControlledPlayer::getStats(){
 }
 
 // Switch del player. Participando a la lobby. No mas snapshots ahora events de lobby.
-bool ControlledPlayer::setlobbymode(const MatchStatsInfo& new_stats) {    
+bool ControlledPlayer::setlobbymode(const MatchStatsInfo& new_stats) {
     if (events.reopen()) {
         if(snapshots.tryclose()){
             match_stats = new_stats;
             return true;
         }
-        throw GameError(SERVER_ERROR, "Inconsistent state on player, tried set lobby mode but was disconnected");
+        // Por ahora.. que retorne false.
+        //throw GameError(SERVER_ERROR, "Inconsistent state on player, tried set lobby mode but was disconnected");
+    }
+    return false;
+}
+
+// Switch del player. Participando en una partida. No mas events de lobby, ahora snapshots.
+bool ControlledPlayer::setgamemode() {
+    if (snapshots.reopen()) {
+        match_stats.state = STARTED_ROUND;
+        match_stats.numronda++;
+        // Antes... para evitar una race condition
+        if(events.tryclose()){
+            return true;
+        }
+        //throw GameError(SERVER_ERROR, "Inconsistent state on player, tried set game mode but was disconnected");
     }
     return false;
 }
 
 
+// Para cuando el match se cancela.
+bool ControlledPlayer::canceled(){
+    if(match_stats.isRunning()){
+        match_stats.state = CANCELADA;
+    }
+    return snapshots.tryclose() || events.tryclose();
+}
 
 // Se asume a lo sumo una de las dos queues estaria abierta.
-bool ControlledPlayer::disconnect() {
-    match_stats.state = CANCELADA;
-    return snapshots.tryclose() || events.tryclose();
+bool ControlledPlayer::trydisconnect() {
+    if(isactive.exchange(false)){
+        snapshots.tryclose();
+        events.tryclose();
+        return true;
+    }
+    
+    return false;
 }
 
 // No hace falta sincronizar/lockear ya que si se llama a este metodo
@@ -100,10 +111,10 @@ MatchDto ControlledPlayer::popstate() {
 
 std::string ControlledPlayer::toString() {
     std::stringstream result;
-    if (count == 1) {
-        result << "Player " << (int)ids[0];
+    if (id.getcount() == 1) {
+        result << "Player " << (int)id.get(0);
     } else {
-        result << "Players " << (int)ids[0] << " and " << (int)ids[1];
+        result << "Players " << (int)id.get(0) << " and " << (int)id.get(1);
     }
 
     return result.str();

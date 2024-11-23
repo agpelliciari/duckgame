@@ -27,6 +27,11 @@ option(TALLER_MAKE_WARNINGS_AS_ERRORS "Enable / disable warnings as errors." ON)
 
 message(CMAKE_CXX_COMPILER_ID="${CMAKE_CXX_COMPILER_ID}")
 
+#option(DBG_LOG "Enable / disable tests." ON)
+#if(DBG_LOG)
+#     SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -DLOG_DBG")
+#endif()
+
 # Define target: lib common between client, server and editor programs
 # HEY TODO XXX: change the name to something that you like
 add_library(taller_common STATIC)
