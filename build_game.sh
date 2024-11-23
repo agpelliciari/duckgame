@@ -7,6 +7,7 @@ echo Instalando paquetes generales necesarios...
 sudo apt-get --yes install cmake
 sudo apt-get --yes install g++
 sudo apt-get --yes install curl
+sudo apt-get --yes install git # Para el ryml que se hace a partir del repositorio.
 sudo apt-get --yes install build-essential libgl1-mesa-dev libclang-16-dev
 
 #SDL2PP
