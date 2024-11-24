@@ -17,7 +17,8 @@ Player::Player(int id_, int initial_x, int initial_y):
 
 void Player::get_data(int& id, int& x, int& y, TypeWeapon& weapon_,
                       bool& helmet_equipped, bool& chest_armor_equipped,
-                      TypeMoveAction& move_action_, std::vector<TypeDoingAction> &doing_action_, bool &is_alive_) {
+                      TypeMoveAction& move_action_, std::vector<TypeDoingAction> &doing_action_,
+                      bool &is_alive_, bool &aim_up_) {
     id = this->id;
     this->object.get_real_position(x, y);
 
@@ -36,7 +37,9 @@ void Player::get_data(int& id, int& x, int& y, TypeWeapon& weapon_,
         doing_action_ = this->doing_action;
     }
     is_alive_ = this->is_alive;
+    aim_up_ = this->aim_up;
     this->doing_action.clear();
+
 }
 
 bool Player::same_id(unsigned int id_) { return id == id_; }
