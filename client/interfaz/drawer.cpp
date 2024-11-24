@@ -56,7 +56,7 @@ void Drawer::drawPlayer(const PlayerDTO& player) {
 
 void Drawer::drawPlayerInfo(const PlayerDTO& player, const std::string color) {
     renderer.Copy(textures.getTexture(color), SDL2pp::Rect(1, 10, 32, 10),
-                  SDL2pp::Rect(12 + 90 * (player.id - 1), 8, 32, 14));
+                  SDL2pp::Rect(8 + 90 * (player.id - 1), 8, 32, 14));
 
     if (player.weapon != TypeWeapon::NONE) {
         auto weaponTexture = weaponTextures.find(player.weapon);
@@ -148,6 +148,13 @@ void Drawer::drawWeapon(const PlayerDTO& player, SDL_RendererFlip flip) {
         const auto& [textureType, width, height] = weaponTexture->second;
 
         int x, y;  // ajusto medidas de dibujado
+
+        double angle = 0.0;
+        if (player.aiming_up) {
+            std::cout << player.id << " :Aiming up" << std::endl;
+            angle = 90.0;
+        }
+
         if (player.weapon == TypeWeapon::PISTOLA_COWBOY) {
             x = camera.getScreenX(player.pos.x +
                                   getTextureFlipValue(flip, GUN_FLIP_X, GUN_UNFLIP_X) -
@@ -162,7 +169,7 @@ void Drawer::drawWeapon(const PlayerDTO& player, SDL_RendererFlip flip) {
         renderer.Copy(textures.getTexture(textureType), SDL2pp::Rect(0, 0, width, height),
                       SDL2pp::Rect(x, y, camera.getScaledSize(width - 6),
                                    camera.getScaledSize(height - 6)),
-                      0.0, SDL2pp::Point(0, 0), flip);
+                      angle, SDL2pp::Point(0, 0), flip);
     }
 }
 
