@@ -56,7 +56,7 @@ void Drawer::drawPlayer(const PlayerDTO& player) {
 
 void Drawer::drawPlayerInfo(const PlayerDTO& player, const std::string color) {
     renderer.Copy(textures.getTexture(color), SDL2pp::Rect(1, 10, 32, 10),
-                  SDL2pp::Rect(8 + 90 * (player.id - 1), 8, 32, 14));
+                  SDL2pp::Rect(12 + 64 * (player.id - 1), 8, 32, 14));
 
     if (player.weapon != TypeWeapon::NONE) {
         auto weaponTexture = weaponTextures.find(player.weapon);
@@ -65,36 +65,27 @@ void Drawer::drawPlayerInfo(const PlayerDTO& player, const std::string color) {
 
             int x, y;
             if (player.weapon == TypeWeapon::PISTOLA_COWBOY) {
-                x = 30;
+                x = 39;
                 y = 7;
             } else {
-                x = 22;
+                x = 34;
                 y = -3;
             }
 
             renderer.Copy(textures.getTexture(textureType), SDL2pp::Rect(0, 0, width, height),
-                          SDL2pp::Rect(x + 90 * (player.id - 1), y, width, height));
+                          SDL2pp::Rect(x + 64 * (player.id - 1), y, width, height));
         }
-    } else {
-        renderer.Copy(textures.getTexture("/ui/iconSheet.png"), SDL2pp::Rect(32, 16, 16, 16),
-                      SDL2pp::Rect(40 + 90 * (player.id - 1), 6, 16, 16));
     }
 
-    if (!player.helmet) {
-        renderer.Copy(textures.getTexture("/ui/iconSheet.png"), SDL2pp::Rect(32, 16, 16, 16),
-                      SDL2pp::Rect(57 + 90 * (player.id - 1), 6, 16, 16));
-    } else {
-        renderer.Copy(textures.getTexture("/armors/helmetPickup.png"), SDL2pp::Rect(0, 0, 16, 16),
-                      SDL2pp::Rect(52 + 90 * (player.id - 1), 3, 16, 16));
+    if (player.helmet) {
+        renderer.Copy(textures.getTexture("/armors/helmet.png"), SDL2pp::Rect(0, 0, 32, 32),
+                      SDL2pp::Rect(8 + 64 * (player.id - 1), -9, 32, 32));
     }
 
-    if (!player.chest_armor) {
-        renderer.Copy(textures.getTexture("/ui/iconSheet.png"), SDL2pp::Rect(32, 16, 16, 16),
-                      SDL2pp::Rect(73 + 90 * (player.id - 1), 6, 16, 16));
-    } else {
-        renderer.Copy(textures.getTexture("/armors/chestPlatePickup.png"),
-                      SDL2pp::Rect(0, 0, 16, 16),
-                      SDL2pp::Rect(68 + 90 * (player.id - 1), 6, 16, 16));
+    if (player.chest_armor) {
+        renderer.Copy(textures.getTexture("/armors/chestPlateAnim.png"),
+                      SDL2pp::Rect(0, 0, 32, 16),
+                      SDL2pp::Rect(10 + 64 * (player.id - 1), -6, 32, 32));
     }
 }
 
@@ -148,22 +139,35 @@ void Drawer::drawWeapon(const PlayerDTO& player, SDL_RendererFlip flip) {
         const auto& [textureType, width, height] = weaponTexture->second;
 
         int x, y;  // ajusto medidas de dibujado
-
         double angle = 0.0;
-        if (player.aiming_up) {
-            std::cout << player.id << " :Aiming up" << std::endl;
-            angle = 90.0;
-        }
 
         if (player.weapon == TypeWeapon::PISTOLA_COWBOY) {
-            x = camera.getScreenX(player.pos.x +
-                                  getTextureFlipValue(flip, GUN_FLIP_X, GUN_UNFLIP_X) -
-                                  X_PHYSICAL_OFFSET_PLAYER);
-            y = camera.getScreenY(player.pos.y + 2);
+            if (player.aiming_up) {
+                angle = getTextureFlipValue(flip, 90.0, -90.0);
+                x = camera.getScreenX(player.pos.x +
+                                    getTextureFlipValue(flip, 20, GUN_UNFLIP_X) -
+                                    X_PHYSICAL_OFFSET_PLAYER);
+                y = camera.getScreenY(player.pos.y + getTextureFlipValue(flip, -12, 6));
+
+            } else {
+                x = camera.getScreenX(player.pos.x +
+                            getTextureFlipValue(flip, GUN_FLIP_X, GUN_UNFLIP_X) -
+                            X_PHYSICAL_OFFSET_PLAYER);
+                y = camera.getScreenY(player.pos.y + 2); 
+            }
         } else {
-            x = camera.getScreenX(player.pos.x - X_PHYSICAL_OFFSET_PLAYER +
+            if (player.aiming_up) {
+                angle = getTextureFlipValue(flip, 90.0, -90.0);
+                x = camera.getScreenX(player.pos.x +
+                                    getTextureFlipValue(flip, 28, 2) -
+                                    X_PHYSICAL_OFFSET_PLAYER);
+                y = camera.getScreenY(player.pos.y + getTextureFlipValue(flip, -15, 10));
+
+            } else {
+                x = camera.getScreenX(player.pos.x - X_PHYSICAL_OFFSET_PLAYER +
                                   getTextureFlipValue(flip, -3, 9));
-            y = camera.getScreenY(player.pos.y - 6);
+                y = camera.getScreenY(player.pos.y - 6);
+            }
         }
 
         renderer.Copy(textures.getTexture(textureType), SDL2pp::Rect(0, 0, width, height),
@@ -223,7 +227,7 @@ void Drawer::drawDynamicObject(const DynamicObjDTO& object) {
         case TypeDynamicObject::PROJECTILE:
             renderer.Copy(
                     textures.getTexture("/weapons/chainBullet.png"), SDL2pp::Rect(0, 0, 3, 8),
-                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y + 8),
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y + 10),
                                  camera.getScaledSize(3), camera.getScaledSize(8)));
             break;
 
