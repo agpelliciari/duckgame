@@ -29,7 +29,8 @@ void Animation::updateSprite(const MatchDto& matchDto) {
 void Animation::updateDoingActionAnimation(AnimationBuilder& builder, const PlayerDTO& player, const TypeDoingAction& action) {
     switch (action) {
         case TypeDoingAction::SHOOTING:
-            std::cout << "SHOOTING" << std::endl;
+        case TypeDoingAction::SHOOTING_UP:
+            std::cout << "PLAYER [" << player.id << "]: SHOOTING/UP" << std::endl;
             if (player.weapon == TypeWeapon::PEW_PEW_LASER) {
                 soundManager.playSound(SoundType::LASER);
             } else {
@@ -37,19 +38,15 @@ void Animation::updateDoingActionAnimation(AnimationBuilder& builder, const Play
             }
             builder.doingActionSpriteX = 0;  // cuando se envien bien las acciones
             break;
-        case TypeDoingAction::SHOOTING_UP:
-            std::cout << "SHOOTING UP" << std::endl;
-            break;
         case TypeDoingAction::DAMAGED:
-            std::cout << "DAMAGED" << std::endl;
+            std::cout << "PLAYER [" << player.id << "]: DAMAGED" << std::endl;
             soundManager.playSound(SoundType::QUACK);
             break;
         case TypeDoingAction::PICK_UP:
-            std::cout << "PICK UP" << std::endl;
+            std::cout << "PLAYER [" << player.id << "]: PICK UP" << std::endl;
             soundManager.playSound(SoundType::PICK_UP);
             break;
         case TypeDoingAction::NONE:
-            std::cout << "NONE" << std::endl;
             break;
     }
 }
