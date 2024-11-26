@@ -163,9 +163,9 @@ void PlayerContainer::cancelByError(LobbyErrorType cancelError) {
 
 
 
-void PlayerContainer::finishLobbyMode() {
+void PlayerContainer::finishLobbyMode(const MatchStatsInfo& match_stats) {
     for (auto player = players.begin(); player != players.end();) {
-          if(player->setgamemode()){
+          if(player->setgamemode(match_stats)){
               ++player;
           } else{
               std::cerr << "container should remove " << player->toString() << " at finish lobby mode from match" << std::endl;
@@ -173,9 +173,9 @@ void PlayerContainer::finishLobbyMode() {
           }
     }
 }
-void PlayerContainer::finishWaitMode() {
+void PlayerContainer::finishWaitMode(const MatchStatsInfo& match_stats) {
     for (auto player = players.begin(); player != players.end();) {
-          if(player->setgamemode()){
+          if(player->setgamemode(match_stats)){
               ++player;
           } else{
               std::cerr << "container should remove " << player->toString() << " at finish waitmode from match" << std::endl;

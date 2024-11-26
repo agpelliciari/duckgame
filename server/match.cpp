@@ -92,7 +92,8 @@ void Match::init(MapLoader& maps, const char* mapname) {
 
     
     this->stats.state = STARTED_ROUND;
-    players.finishLobbyMode();
+    this->stats.numronda++;
+    players.finishLobbyMode(this->stats);
 
     start();
     // match_start.notify_all();
@@ -160,8 +161,10 @@ void Match::run() {
         // re envia info del mapa?
         looper.reset_objects(objects);
         looper.reset_players(players);
-                
-        players.finishWaitMode(); 
+
+        this->stats.state = STARTED_ROUND;
+        this->stats.numronda++;
+        players.finishWaitMode(this->stats);
         
         looper.playRound(players, this->stats);
     }

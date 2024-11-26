@@ -15,8 +15,7 @@ void MatchState::pushAction(const PlayerActionDTO& action) { acciones.push_comma
 
 void MatchState::playRound(MatchObserver& observer, MatchStatsInfo& stats) {
     stats.state = INICIADA;
-    stats.numronda++;
-    // start_players(observer);
+    
     Clock clock(MS_FPS);  // 16ms sleep == 60 frames por segundo aprox. 30 = 30 fps
     clock.resetnext();
 

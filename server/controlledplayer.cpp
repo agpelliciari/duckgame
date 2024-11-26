@@ -46,11 +46,12 @@ const MatchStatsInfo& ControlledPlayer::getStats(){
 // Switch del player. Participando a la lobby. No mas snapshots ahora events de lobby.
 bool ControlledPlayer::setlobbymode(const MatchStatsInfo& new_stats) {
     if (events.reopen()) {
+        match_stats = new_stats;
         if(snapshots.tryclose()){
-            match_stats = new_stats;
             events.notifyopen();
             return true;
         }
+        events.notifyopen();
         // Por ahora.. que retorne false.
         //throw GameError(SERVER_ERROR, "Inconsistent state on player, tried set lobby mode but was disconnected");
     }
@@ -58,16 +59,19 @@ bool ControlledPlayer::setlobbymode(const MatchStatsInfo& new_stats) {
 }
 
 // Switch del player. Participando en una partida. No mas events de lobby, ahora snapshots.
-bool ControlledPlayer::setgamemode() {
+bool ControlledPlayer::setgamemode(const MatchStatsInfo& new_stats) {
 
     if (snapshots.reopen()) {
+        
+        // Antes... para evitar una race condition
+        match_stats = new_stats;
+        
         if(events.tryclose()){
-            // Antes... para evitar una race condition
-            match_stats.state = STARTED_ROUND;
-            match_stats.numronda++;
             snapshots.notifyopen();
             return true;
         }
+        snapshots.notifyopen();
+        
         //throw GameError(SERVER_ERROR, "Inconsistent state on player, tried set game mode but was disconnected");
     }
     return false;
