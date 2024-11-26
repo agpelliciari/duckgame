@@ -121,6 +121,17 @@ void ServerProtocol::sendstate(const MatchDto& state) {
         this->senduint(event.pos.y);
         this->sendbyte((uint8_t)event.type);
     }
+    
+    
+    this->sendbyte(state.sounds.size());
+    
+    // No hace falta iterar?
+    this->sendbytes(state.sounds.data(),
+                    state.sounds.size());
+    
+    //for (const SoundEventType& sound: state.events) {
+    //    this->sendbyte((uint8_t)sound);
+    //}
 
 
 }
@@ -133,19 +144,22 @@ void ServerProtocol::sendplayer(const PlayerDTO& player) {
     this->senduint(player.pos.y);
 
     this->sendbyte((uint8_t)player.weapon);
+    
+    
     this->sendbyte((uint8_t)player.move_action);
     
-    this->sendbyte((uint8_t)player.doing_actions.size());
+    this->sendbyte((uint8_t)player.doing_action);
     
-    for(const TypeDoingAction& action: player.doing_actions){
-        this->sendbyte((uint8_t)action);
-    }
-
     // Se podria juntar en 1 solo byte. Por ahora no?
+    this->sendbyte((uint8_t)player.aiming_up);
+    
     this->sendbyte((uint8_t)player.is_alive);
+    this->sendbyte((uint8_t)player.hp);
+
+    this->sendbyte((uint8_t)player.munition);
+    
     this->sendbyte((uint8_t)player.helmet);
     this->sendbyte((uint8_t)player.chest_armor);
-    this->sendbyte((uint8_t)player.aiming_up);
 }
 
 

@@ -44,6 +44,8 @@ public:
     // match_info_dto info;
     std::vector<PlayerDTO> players;      // cppcheck-suppress unusedStructMember
     std::vector<DynamicObjDTO> objects;  // cppcheck-suppress unusedStructMember
+    
+    std::vector<SoundEventType> sounds;  // cppcheck-suppress unusedStructMember
     std::vector<GameEvent> events;       // cppcheck-suppress unusedStructMember
 
     MatchDto() {}
