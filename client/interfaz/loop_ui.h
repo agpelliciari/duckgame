@@ -15,9 +15,6 @@
 #include "drawer.h"
 #include "sound_manager.h"
 
-#define INITIAL_SCREEN_WIDTH 640
-#define INITIAL_SCREEN_HEIGHT 480
-
 class UILoop {
 private:
     SDL2pp::SDL sdlLib;

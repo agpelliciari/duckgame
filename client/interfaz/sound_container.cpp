@@ -6,6 +6,7 @@ SoundContainer::SoundContainer(): backgroundMusic(DATA_PATH "/music/DuckGame-cha
     sounds.emplace(SoundType::QUACK, SDL2pp::Chunk(DATA_PATH "/sounds/quack.wav"));
     sounds.emplace(SoundType::LASER, SDL2pp::Chunk(DATA_PATH "/sounds/pewpewLaser.mp3"));
     sounds.emplace(SoundType::PICK_UP, SDL2pp::Chunk(DATA_PATH "/sounds/equip.wav"));
+    sounds.emplace(SoundType::ROUND_END, SDL2pp::Chunk(DATA_PATH "/sounds/challengeWin.wav"));
 }
 
 SDL2pp::Music& SoundContainer::getBackgroundMusic() { return backgroundMusic; }

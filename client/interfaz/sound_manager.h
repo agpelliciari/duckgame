@@ -11,6 +11,8 @@ private:
 
     SoundContainer sounds;
 
+    bool roundEndSoundAvailable;
+
 public:
     SoundManager();
 
@@ -19,6 +21,10 @@ public:
     void stopBackgroundMusic();
 
     void playSound(SoundType sound);
+
+    bool isRoundEndSoundAvailable() const;
+
+    void setRoundEndSoundAvailability(bool availability);
 
     ~SoundManager();
 };

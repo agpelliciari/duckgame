@@ -44,29 +44,28 @@ void UILoop::update() {
         lastStatsUpdate = stats;
     }
     
-    if (lastStatsUpdate.state == TERMINADA ||
-        lastStatsUpdate.state == CANCELADA) {  // stats.state == PAUSADA? mostrar info, o round end.
-        //isRunning_ = false;
+    if ((lastStatsUpdate.state == TERMINADA) || (lastStatsUpdate.state == CANCELADA)) {
         drawer.drawLeaderboard(lastStatsUpdate);
         return;
+
     } else if (lastStatsUpdate.state == PAUSADA) {
         drawer.drawLeaderboard(lastStatsUpdate);
         return;
+
     } else if (lastStatsUpdate.state == ROUND_END) {
+        if (soundManager.isRoundEndSoundAvailable()) {
+            soundManager.playSound(SoundType::ROUND_END);
+            soundManager.setRoundEndSoundAvailability(false);
+        }
         drawer.drawWinner(lastStatsUpdate, lastUpdate);
         return;
-    } else if(lastStatsUpdate.state == STARTED_ROUND){
-        #ifdef LOG_DBG // Serviria para filtrar logs.
-        std::cout << "RESETED AT INIT ROUND\n";
-        #endif
-        std::cout << "ronda: " << lastStatsUpdate.numronda << std::endl;  // numero de ronda no se actualiza
-        
+
+    } else if(lastStatsUpdate.state == STARTED_ROUND){       
         drawer.resetIndicatorFlag();
-        
-        //  Asi ya recibe matchdtos..
-        lastStatsUpdate.state = INICIADA; 
+        soundManager.setRoundEndSoundAvailability(true);
+        lastStatsUpdate.state = INICIADA;
         return;
-    } 
+    }
 
 
     MatchDto matchUpdate;
@@ -80,7 +79,7 @@ void UILoop::update() {
     animation.updateSprite(lastUpdate);
 
     camera.update(lastUpdate);
-    drawer.draw(lastUpdate);
+    drawer.draw(lastUpdate, lastStatsUpdate);
 }
 
 UILoop::~UILoop() = default;
