@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <vector>
 #include "./dtosobject.h"
+#include "./gameevents.h"
 
 typedef unsigned int player_id;
 

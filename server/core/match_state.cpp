@@ -127,7 +127,7 @@ void MatchState::step() {
 
 
 void MatchState::receive_commands() {
-    ActionCommand command({PlayerActionType::NONE, 0, 0}, &this->match_logic);
+    ActionCommand command(PlayerActionDTO(NONE, 0), &this->match_logic);
     while (acciones.pop_command(command)) {
         commands.push_back(command);
     }
@@ -144,7 +144,7 @@ void MatchState::stop() { running = false; }
 
 void MatchState::send_results(MatchObserver& observer) {
     MatchDto dto;
-    match_logic.get_dtos(dto.players, dto.objects);
+    match_logic.get_dtos(dto.players, dto.objects, dto.sounds);
     observer.updateState(dto);
 }
 

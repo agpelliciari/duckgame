@@ -47,7 +47,7 @@ public:
     void add_player(int id, int spawn_point_index);
     void add_player_speed(int id, int x, int y);
     void still_player(int id);
-    void get_dtos(std::vector<PlayerDTO>& dtos, std::vector<DynamicObjDTO>& objects);
+    void get_dtos(std::vector<PlayerDTO>& dtos, std::vector<DynamicObjDTO>& objects, std::vector<SoundEventType>& sounds);
     void update_players(std::vector<int> &id_alive_players);
     void update_colition_map();
     //void add_colition(PhysicalObject &object);

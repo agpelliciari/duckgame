@@ -222,14 +222,13 @@ void MatchLogic::update_colition_map() {
     // }
 }*/
 
-void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos, std::vector<DynamicObjDTO>& objects) {
+void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos, std::vector<DynamicObjDTO>& objects, std::vector<SoundEventType>& sounds) {
     for (Player &player: players) {
 
         PlayerDTO dto;
         
-        dto.doing_actions.push_back(TypeDoingAction::NONE);
         player.get_data(dto.id, dto.pos.x, dto.pos.y, dto.weapon, dto.helmet, dto.chest_armor,
-                        dto.move_action, dto.doing_actions, dto.is_alive, dto.aiming_up);
+                        dto.move_action, sounds, dto.is_alive, dto.aiming_up);
 
         dtos.push_back(dto);
     }
