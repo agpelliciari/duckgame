@@ -15,10 +15,10 @@ void Animation::updateSprite(const MatchDto& matchDto) {
         if (builder) {
             if (player.is_alive) {
                 updatePlayerAnimation(*builder, player);
-
-                for (const TypeDoingAction& action: player.doing_actions) {
-                    updateDoingActionAnimation(*builder, player, action);
-                }
+                
+                updateDoingActionAnimation(*builder, player, player.doing_action);
+                //for (const TypeDoingAction& action: player.doing_actions) {
+                //}
             } else {
                 setBuilder(*builder, STARTING_SPRITE_X + SPRITE_SIZE, LAY_DOWN_SPRITE_Y);
             }
