@@ -2,6 +2,7 @@
 
 Drawer::Drawer(SDL2pp::Window& window, Animation& animation, const GameContext& gameContext,
                Camera& camera):
+        font(DATA_PATH "/font/pixelFont.ttf", 20),
         window(window),
         renderer(window, -1, SDL_RENDERER_ACCELERATED),
         textures(renderer),
@@ -133,49 +134,49 @@ void Drawer::drawArmor(const PlayerDTO& player, SDL_RendererFlip flip) {
     }
 }
 
+void Drawer::getWeaponParameters(const PlayerDTO& player, SDL_RendererFlip flip, int& x, int& y, double& angle) {
+    if (player.weapon == TypeWeapon::PISTOLA_COWBOY) {
+        if (player.aiming_up) {
+            angle = getTextureFlipValue(flip, 90.0, -90.0);
+            x = camera.getScreenX(player.pos.x + getTextureFlipValue(flip, 20, 14) - 8);
+            y = camera.getScreenY(player.pos.y + getTextureFlipValue(flip, -12, 6));
+        } else {
+            angle = 0.0;
+            x = camera.getScreenX(player.pos.x + getTextureFlipValue(flip, 1, 14) - 8);
+            y = camera.getScreenY(player.pos.y + 2);
+        }
+    } else {
+        if (player.aiming_up) {
+            angle = getTextureFlipValue(flip, 90.0, -90.0);
+            x = camera.getScreenX(player.pos.x + getTextureFlipValue(flip, 28, 2) - 8);
+            y = camera.getScreenY(player.pos.y + getTextureFlipValue(flip, -15, 10));
+        } else {
+            angle = 0.0;
+            x = camera.getScreenX(player.pos.x - 8 + getTextureFlipValue(flip, -3, 9));
+            y = camera.getScreenY(player.pos.y - 6);
+        }
+    }
+}
+
 void Drawer::drawWeapon(const PlayerDTO& player, SDL_RendererFlip flip) {
     auto weaponTexture = weaponTextures.find(player.weapon);
     if (weaponTexture != weaponTextures.end()) {
         const auto& [textureType, width, height] = weaponTexture->second;
 
-        int x, y;  // ajusto medidas de dibujado
-        double angle = 0.0;
+        int x, y;
+        double angle;
 
-        if (player.weapon == TypeWeapon::PISTOLA_COWBOY) {
-            if (player.aiming_up) {
-                angle = getTextureFlipValue(flip, 90.0, -90.0);
-                x = camera.getScreenX(player.pos.x +
-                                    getTextureFlipValue(flip, 20, GUN_UNFLIP_X) -
-                                    X_PHYSICAL_OFFSET_PLAYER);
-                y = camera.getScreenY(player.pos.y + getTextureFlipValue(flip, -12, 6));
+        getWeaponParameters(player, flip, x, y, angle);
 
-            } else {
-                x = camera.getScreenX(player.pos.x +
-                            getTextureFlipValue(flip, GUN_FLIP_X, GUN_UNFLIP_X) -
-                            X_PHYSICAL_OFFSET_PLAYER);
-                y = camera.getScreenY(player.pos.y + 2); 
-            }
-        } else {
-            if (player.aiming_up) {
-                angle = getTextureFlipValue(flip, 90.0, -90.0);
-                x = camera.getScreenX(player.pos.x +
-                                    getTextureFlipValue(flip, 28, 2) -
-                                    X_PHYSICAL_OFFSET_PLAYER);
-                y = camera.getScreenY(player.pos.y + getTextureFlipValue(flip, -15, 10));
-
-            } else {
-                x = camera.getScreenX(player.pos.x - X_PHYSICAL_OFFSET_PLAYER +
-                                  getTextureFlipValue(flip, -3, 9));
-                y = camera.getScreenY(player.pos.y - 6);
-            }
-        }
-
-        renderer.Copy(textures.getTexture(textureType), SDL2pp::Rect(0, 0, width, height),
-                      SDL2pp::Rect(x, y, camera.getScaledSize(width - 6),
-                                   camera.getScaledSize(height - 6)),
-                      angle, SDL2pp::Point(0, 0), flip);
+        renderer.Copy(
+            textures.getTexture(textureType), 
+            SDL2pp::Rect(0, 0, width, height),
+            SDL2pp::Rect(x, y, camera.getScaledSize(width - 6), camera.getScaledSize(height - 6)),
+            angle, SDL2pp::Point(0, 0), flip
+        );
     }
 }
+
 
 int Drawer::getTextureFlipValue(SDL_RendererFlip flip, int flipValue, int unflipValue) {
     return flip == SDL_FLIP_HORIZONTAL ? flipValue : unflipValue;
@@ -359,12 +360,100 @@ void Drawer::resetIndicatorFlag() {
     showIndicators = true;
 }
 
-void Drawer::drawStatusBar() {
+void Drawer::drawStatusBar(const MatchStatsInfo& stats) {
+    int screenWidth = window.GetWidth();
     renderer.Copy(textures.getTexture("/ui/statusBar.png"), SDL2pp::Rect(0, 0, 260, 13),
-                  SDL2pp::Rect(0, 0, window.GetWidth(), 30));
+                  SDL2pp::Rect(0, 0, screenWidth, 30));
+
+    std::string text;
+    SDL2pp::Rect destRect;
+
+    if (stats.state == INICIADA) {
+        text += "ROUND " + std::to_string(stats.numronda);
+        destRect = SDL2pp::Rect(screenWidth - 120, 10, 60, 12);
+
+    } else if ((stats.state == CANCELADA) || (stats.state == TERMINADA)) {
+        text += "GAME OVER - PRESS Q OR CLOSE THE WINDOW TO RETURN TO THE LOBBY";
+        destRect = SDL2pp::Rect(screenWidth/2 - 180, 10, 390, 12);
+
+    } else if (stats.state == PAUSADA) {
+        text += "THERE'S A TIE, 5 MORE ROUNDS TO PLAY";
+        destRect = SDL2pp::Rect(screenWidth/2 - 180, 10, 390, 12);
+
+    } else if (stats.state == ROUND_END) {
+        text += "PLAYER " + std::to_string(stats.champion_player) + " WON ROUND " + std::to_string(stats.numronda);
+        destRect = SDL2pp::Rect(screenWidth - 200, 10, 170, 12);
+
+    }
+
+    SDL2pp::Texture text_sprite(renderer, font.RenderText_Blended(text, SDL_Color{255, 255, 255, 255}));
+
+	renderer.Copy(text_sprite, SDL2pp::NullOpt, destRect);
 }
 
-void Drawer::draw(const MatchDto& matchDto) {
+void Drawer::drawLeaderboardBackground(double scaleX, double scaleY) {
+    int leaderboardX = static_cast<int>(50 * scaleX);
+    int leaderboardY = static_cast<int>(50 * scaleY);
+    int leaderboardWidth = static_cast<int>(520 * scaleX);
+    int leaderboardHeight = static_cast<int>(400 * scaleY);
+
+    renderer.Copy(
+        textures.getTexture("/leaderboard/emptyScoreboard.png"),
+        SDL2pp::Rect(0, 0, 320, 200),
+        SDL2pp::Rect(leaderboardX, leaderboardY, leaderboardWidth, leaderboardHeight)
+    );
+}
+
+void Drawer::drawTrophy(double scaleX, double scaleY) {
+    int trophyX = static_cast<int>(350 * scaleX);
+    int trophyY = static_cast<int>(125 * scaleY);
+    int trophySize = static_cast<int>(32 * scaleX);
+
+    renderer.Copy(
+        textures.getTexture("/leaderboard/trophy.png"),
+        SDL2pp::Rect(0, 0, 17, 20),
+        SDL2pp::Rect(trophyX, trophyY + 15, trophySize, trophySize)
+    );
+}
+
+void Drawer::drawPlayerStats(const MatchStatsInfo& matchStats, double scaleX, double scaleY) {
+    std::vector<PlayerStatDto> sortedStats = matchStats.stats;
+    std::sort(sortedStats.begin(), sortedStats.end(),
+              [](const PlayerStatDto& a, const PlayerStatDto& b) { return a.wins > b.wins; });
+
+    int y = static_cast<int>(125 * scaleY);
+    int rowSpacing = static_cast<int>(50 * scaleY);
+    for (const PlayerStatDto& playerStat : sortedStats) {
+        auto mappedTexture = duckTextures.find(static_cast<int>(playerStat.id));
+        if (mappedTexture != duckTextures.end()) {
+            const auto& playerTexture = mappedTexture->second;
+
+            int playerSpriteX = static_cast<int>(165 * scaleX);
+            int playerSpriteSizeWidth = static_cast<int>(64 * scaleX);
+            int playerSpriteSizeHeight = static_cast<int>(64 * scaleY);
+
+            renderer.Copy(
+                textures.getTexture(playerTexture),
+                SDL2pp::Rect(1, 10, SPRITE_SIZE, SPRITE_SIZE),
+                SDL2pp::Rect(playerSpriteX, y, playerSpriteSizeWidth, playerSpriteSizeHeight)
+            );
+
+            int winsX = static_cast<int>(250 * scaleX);
+            int winsSizeWidth = static_cast<int>(20 * scaleX);
+            int winsSizeHeight = static_cast<int>(20 * scaleY);
+
+            std::string text = std::to_string(static_cast<int>(playerStat.wins));
+
+            SDL2pp::Texture text_sprite(renderer, font.RenderText_Blended(text, SDL_Color{255, 255, 255, 255}));
+
+		    renderer.Copy(text_sprite, SDL2pp::NullOpt, SDL2pp::Rect(winsX, y + 15, winsSizeWidth, winsSizeHeight));
+        }
+
+        y += rowSpacing;
+    }
+}
+
+void Drawer::draw(const MatchDto& matchDto, const MatchStatsInfo& stats) {
     renderer.Clear();
 
     drawBackground();
@@ -373,7 +462,7 @@ void Drawer::draw(const MatchDto& matchDto) {
 
     updateIndicatorFlag();
 
-    drawStatusBar();
+    drawStatusBar(stats);
 
     for (const PlayerDTO& player: matchDto.players) {
 
@@ -393,44 +482,26 @@ void Drawer::draw(const MatchDto& matchDto) {
 }
 
 void Drawer::drawLeaderboard(const MatchStatsInfo& matchStats) {
+    int screenWidth = window.GetWidth();
+    int screenHeight = window.GetHeight();
+
+    double scaleX = static_cast<double>(screenWidth) / INITIAL_SCREEN_WIDTH;
+    double scaleY = static_cast<double>(screenHeight) / INITIAL_SCREEN_HEIGHT;
+
     renderer.Clear();
 
     drawBackground();
 
-    renderer.Copy(textures.getTexture("/leaderboard/emptyScoreboard.png"),
-                  SDL2pp::Rect(0, 0, 320, 200), SDL2pp::Rect(50, 50, 520, 400));
+    drawStatusBar(matchStats);
 
-    int y = 125;
+    drawLeaderboardBackground(scaleX, scaleY);
 
     if (matchStats.state == TERMINADA) {
-        renderer.Copy(textures.getTexture("/leaderboard/trophy.png"), SDL2pp::Rect(0, 0, 17, 20),
-                      SDL2pp::Rect(350, y + 15, 32, 32));
+        drawTrophy(scaleX, scaleY);
     }
 
-    // ordenar el vector en orden ascendiente
-    std::vector<PlayerStatDto> sortedStats = matchStats.stats;
-    std::sort(sortedStats.begin(), sortedStats.end(),
-              [](const PlayerStatDto& a, const PlayerStatDto& b) { return a.wins > b.wins; });
+    drawPlayerStats(matchStats, scaleX, scaleY);
 
-    for (const PlayerStatDto& playerStat: sortedStats) {
-        auto mappedTexture = duckTextures.find(static_cast<int>(playerStat.id));
-        if (mappedTexture != duckTextures.end()) {
-            const auto& playerTexture = mappedTexture->second;
-
-            renderer.Copy(  // jugador
-                    textures.getTexture(playerTexture),
-                    SDL2pp::Rect(1, 10, SPRITE_SIZE, SPRITE_SIZE), SDL2pp::Rect(165, y, 64, 64));
-
-            renderer.Copy(  // rondas ganadas
-                    textures.getTexture(TextureContainer::FONT),
-                    SDL2pp::Rect(8 * (static_cast<int>(playerStat.wins)), 8, 8, 8),
-                    SDL2pp::Rect(250, y + 15, 20, 20));
-        }
-
-        y += 50;
-    }
-
-    // Show rendered frame
     renderer.Present();
 }
 
@@ -441,7 +512,7 @@ void Drawer::drawWinner(const MatchStatsInfo& matchStats, const MatchDto& matchD
 
     drawObjects(matchDto);
 
-    drawStatusBar();
+    drawStatusBar(matchStats);
 
     const PlayerDTO* winner = matchDto.getPlayer((int)matchStats.champion_player);
 

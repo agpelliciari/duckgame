@@ -15,6 +15,9 @@
 #include "camera.h"
 #include "texture_container.h"
 
+#define INITIAL_SCREEN_WIDTH 640
+#define INITIAL_SCREEN_HEIGHT 480
+
 #define X_PHYSICAL_OFFSET_PLAYER 8
 #define Y_PHYSICAL_OFFSET_PLAYER 1
 
@@ -42,6 +45,10 @@
 
 class Drawer {
 private:
+    SDL2pp::SDLTTF ttf;
+
+    SDL2pp::Font font;    
+
     SDL2pp::Window& window;
 
     SDL2pp::Renderer renderer;
@@ -69,6 +76,8 @@ private:
     void drawPlayerInfo(const PlayerDTO& player, const std::string color);
 
     void drawIndicator(const PlayerDTO& player, bool isMainPlayer);
+    
+    void getWeaponParameters(const PlayerDTO& player, SDL_RendererFlip flip, int& x, int& y, double& angle);
 
     void drawWeapon(const PlayerDTO& player, SDL_RendererFlip flip);
 
@@ -84,7 +93,13 @@ private:
 
     void drawDynamicObject(const DynamicObjDTO& object);
 
-    void drawStatusBar();
+    void drawStatusBar(const MatchStatsInfo& stats);
+
+    void drawLeaderboardBackground(double scaleX, double scaleY);
+
+    void drawTrophy(double scaleX, double scaleY);
+
+    void drawPlayerStats(const MatchStatsInfo& matchStats, double scaleX, double scaleY);
 
 public:
     Drawer(SDL2pp::Window& window, Animation& animation, const GameContext& gameContext,
@@ -93,7 +108,7 @@ public:
     // Once all the entities have been updated, we draw them to the screen.
     // This method will be responsible for drawing everything, including the games
     // UI.
-    void draw(const MatchDto& matchDto);
+    void draw(const MatchDto& matchDto, const MatchStatsInfo& stats);
 
     // Draw the leaderboard at the end of 5 rounds.
     void drawLeaderboard(const MatchStatsInfo& stats);
