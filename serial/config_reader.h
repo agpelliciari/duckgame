@@ -54,7 +54,7 @@ protected:
     ryml::NodeRef root;    
     
     bool checkInvalid(config_item_t& item);
-    void readU16(config_item_t& item,uint16_t& out);
+    void readU16(config_item_t item,uint16_t& out);
 public:
     explicit ConfigReader(const std::string& src);
     // Asumamos por ahora que no se quiere permitir copias..

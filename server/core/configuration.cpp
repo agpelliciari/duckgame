@@ -27,28 +27,39 @@ Configuration::Configuration():
 
 Configuration::Configuration(const char* config): Configuration() {
         std::cout << "Loading configs from " << config<<std::endl;
-        /*
         try{    
             ConfigReader reader(config);
             
             reader.readBaseDmgMunition(base_dmg, base_munition);
+            // Dejenme usar printf!!!!
+            printf("Base dmg: %u base munition: %u\n",base_dmg, base_munition);
+            
             reader.readMagnumInfo(magnum_dmg, magnum_munition);
+            printf("magnum dmg: %u magnum munition: %u\n",magnum_dmg, magnum_munition);
 
             reader.readPlayerInfo(player_health, player_speed,player_jmp_force);
+            printf("player hp: %u speed: %u jmp force: %u\n",player_health, player_speed,player_jmp_force);
+            
+            
             reader.readDefenseInfo(armor_health, helmet_health);
+            printf("armor hp: %u helmet_hp: %u\n",armor_health, helmet_health);
             
             reader.readExpRadius(explosion_radius);
+            printf("exp radius: %u\n",explosion_radius);
+            
             reader.readMSDelay(frame_delay);
+            printf("delay frame: %ums\n",frame_delay);
             reader.readGravity(gravity);
+            printf("gravity : %u\n",gravity);
 
             reader.readRoundsPerSet(rounds_per_set);
+            printf("rounds per set : %u\n",rounds_per_set);
             
             reader.readWinsNeeded(wins_needed);
+            printf("wins needed : %u\n",wins_needed);
             
         } catch(const SerialError& error){
             std::cerr << "Failed read of configurations! " << error.what() << std::endl;
-        }
-        */
-        
+        }        
     }
 

@@ -31,7 +31,7 @@ ConfigReader::ConfigReader(const std::string& src){
 bool ConfigReader::checkInvalid(config_item_t& item){
      return item.invalid() || item.is_seed();     
 }
-void ConfigReader::readU16(config_item_t& item, uint16_t& out){
+void ConfigReader::readU16(config_item_t item, uint16_t& out){
     if(checkInvalid(item)){
         return;
     }
@@ -50,7 +50,7 @@ const char* ConfigReader::BASE_GRAVITY = "gravity";
 const char* ConfigReader::EXPLOSION_RADIUS = "explosion_radius";  
 const char* ConfigReader::PLAYER_SPEED = "duck_speed";        
 const char* ConfigReader::PLAYER_HEALTH = "duck_health";     
-const char* ConfigReader::PLAYER_JUMP_FORCE = "duck_jump_force";     
+const char* ConfigReader::PLAYER_JMP_FORCE = "duck_jump_force";     
 
 const char* ConfigReader::FPS = "fps";               
 const char* ConfigReader::ROUNDS_PER_SET = "rounds_per_set";    
@@ -72,7 +72,7 @@ void ConfigReader::readBaseDmgMunition(uint16_t& dmg_base,uint16_t& base_munitio
     readU16(root[ConfigReader::DMG_BASE], dmg_base);
     readU16(root[ConfigReader::MUNITION_BASE], base_munition);
 }
-void ConfigReader::readDmgMagnum(uint16_t& dmg_magnum,uint16_t& munition_magnum){
+void ConfigReader::readMagnumInfo(uint16_t& dmg_magnum,uint16_t& munition_magnum){
     readU16(root[ConfigReader::MAGNUM_DMG], dmg_magnum);
     readU16(root[ConfigReader::MAGNUM_MUNITION], munition_magnum);
 }
@@ -89,7 +89,7 @@ void ConfigReader::readDefenseInfo(uint16_t& armor_health,uint16_t& helmet_healt
 }
 
 void ConfigReader::readMSDelay(uint16_t& delay){
-    read_item_t vl = root[ConfigReader::FPS];
+    config_item_t vl = root[ConfigReader::FPS];
     if(checkInvalid(vl)){
         return;
     }
