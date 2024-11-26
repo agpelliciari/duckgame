@@ -1,5 +1,5 @@
 #Se removio mientras no ese usable
-add_subdirectory(logic_server/)
+add_subdirectory(logic/)
 add_subdirectory(core/)
 
 target_sources(taller_server_logic

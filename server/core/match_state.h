@@ -2,14 +2,14 @@
 #include <list>
 #include <vector>
 
-#include "server/logic_server/match_logic.h"
-#include "server/logic_server/match_queue.h"
+#include "server/logic/match_logic.h"
+#include "server/logic/match_queue.h"
 #include "server/core/matchobserver.h"
 #include "common/dtosgame.h"
 #include "common/dtosmap.h"
 #include "common/dtosplayer.h"
 
-#include "server/logic_server/action_command.h"
+#include "server/logic/action_command.h"
 
 #ifndef MATCH_STATE_H
 #define MATCH_STATE_H
