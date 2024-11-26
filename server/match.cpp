@@ -10,7 +10,11 @@
 //#include <thread>
 #include "common/clock.h"
 
-Match::Match(lobbyID _id, const int max_players): id(_id), players(max_players), looper(), connectedplayers(0), map() {}
+Match::Match(lobbyID _id, const int max_players, const Configuration& configs): 
+        id(_id),
+        players(max_players),
+        looper(configs),
+        connectedplayers(0), map() {}
 
 
 // Protected// friend accessed methods

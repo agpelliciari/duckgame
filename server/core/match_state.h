@@ -4,12 +4,14 @@
 
 #include "server/logic/match_logic.h"
 #include "server/logic/match_queue.h"
-#include "server/core/matchobserver.h"
 #include "common/dtosgame.h"
 #include "common/dtosmap.h"
 #include "common/dtosplayer.h"
 
 #include "server/logic/action_command.h"
+
+#include "server/core/matchobserver.h"
+#include "server/core/configuration.h"
 
 #ifndef MATCH_STATE_H
 #define MATCH_STATE_H
@@ -23,11 +25,11 @@ private:
     std::vector<ActionCommand> commands;  // cppcheck-suppress unusedStructMember
     std::vector<int> id_alive_players;    // cppcheck-suppress unusedStructMember
     int max_rounds; // cppcheck-suppress unusedStructMember
-
+    
+    const Configuration& configs;
 
 public:
-    MatchState();
-    MatchState(struct MapPoint size, std::vector<struct MapObject>& objects);
+    MatchState(const Configuration& _configs);
     void pushAction(const PlayerActionDTO& action);
     void receive_commands();
     void execute_commands();

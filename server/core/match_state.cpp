@@ -6,17 +6,15 @@
 
 #include "common/clock.h"
 
-#define FPS 30
-#define MS_FPS 1000 / FPS
 
-MatchState::MatchState(): running(false), match_logic(), acciones(match_logic), max_rounds(5) {}
+MatchState::MatchState(const Configuration& _configs): running(false), match_logic(), acciones(match_logic), max_rounds(_configs.rounds_per_set), configs(_configs) {}
 
 void MatchState::pushAction(const PlayerActionDTO& action) { acciones.push_command(action); }
 
 void MatchState::playRound(MatchObserver& observer, MatchStatsInfo& stats) {
     stats.state = INICIADA;
     
-    Clock clock(MS_FPS);  // 16ms sleep == 60 frames por segundo aprox. 30 = 30 fps
+    Clock clock(configs.frame_delay);  // 16ms sleep == 60 frames por segundo aprox. 30 = 30 fps
     clock.resetnext();
 
     while ((running /*&& clock.tickcount() < FPS * 2*/) && id_alive_players.size() > 1) {
@@ -28,8 +26,6 @@ void MatchState::playRound(MatchObserver& observer, MatchStatsInfo& stats) {
     }
 
     this->calculate_game_results(stats, id_alive_players[0]);
-
-    std::cout << "FINISHED TICK COUNT OF 90!?" << clock.tickcount()<<std::endl;
 }
 
 void MatchState::reset_objects(const struct ObjectsInfo& objects_info){
@@ -69,7 +65,7 @@ void MatchState::calculate_game_results(MatchStatsInfo& stats, int actual_winner
         } else {
             stats.state = PAUSADA;
             stats.champion_player = actual_winner;
-            max_rounds += 5;
+            max_rounds += configs.rounds_per_set;
         }
     } else {
         stats.state = ROUND_END;
@@ -80,18 +76,22 @@ void MatchState::calculate_game_results(MatchStatsInfo& stats, int actual_winner
 bool MatchState::only_one_winner(MatchStatsInfo& stats, int &id_champion){
 
     bool only_one_winner = false;
-        int maximum_number_of_wins = 0;
-        int id_champion_player = 0;
-        for (PlayerStatDto player : stats.stats ) {
-            if (player.wins > maximum_number_of_wins){
-                only_one_winner = true;
-                maximum_number_of_wins = player.wins;
-                id_champion_player = player.id;
-            } else if (player.wins == maximum_number_of_wins){
-                only_one_winner = false;
-                id_champion_player = 0;
-            }
+    
+    // Almenos alguien debe tener esta cantidad sino siempre es false!
+    int maximum_number_of_wins = configs.wins_needed-1; // -1 para que si es == lo ponga de ganador.  
+    
+    int id_champion_player = -1;
+    for (const PlayerStatDto& player : stats.stats ) {
+        if (player.wins > maximum_number_of_wins){
+            only_one_winner = true;
+            maximum_number_of_wins = player.wins;
+            id_champion_player = player.id;
+        } else if (player.wins == maximum_number_of_wins){
+            only_one_winner = false;
+            id_champion_player = -1;
         }
+    }
+    
     id_champion = id_champion_player;
     return only_one_winner;
 }

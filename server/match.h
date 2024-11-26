@@ -15,6 +15,7 @@
 
 // Descomentar si ya son usables.
 #include "server/core/match_state.h"
+#include "server/core/configuration.h"
 
 // Logica sencilla del tp de threads
 #include "./playercontainer.h"
@@ -70,9 +71,7 @@ protected:
     void loadMap(MapDeserializer& deserial);
     bool handlePostRound();
 public:
-    // Se tendra composicion con un unico observer de eventos al match.
-    explicit Match(lobbyID _id);
-    explicit Match(lobbyID _id, const int max_players);
+    explicit Match(lobbyID _id, const int max_players, const Configuration& configs);
 
     // Asumamos por ahora que no se quiere permitir copias, ni mov.
     Match(const Match&) = delete;

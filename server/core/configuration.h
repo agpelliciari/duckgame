@@ -5,8 +5,37 @@
 
 class Configuration {    
 public:
-    Configuration(){
+    uint16_t base_dmg;
+    uint16_t base_munition;
+    uint16_t gravity;
     
-    }
+
+    uint16_t player_speed;
+    uint16_t player_health;
+    uint16_t player_jmp_force;
+
+
+    uint16_t explosion_radius;
+    uint16_t frame_delay;
+    uint16_t rounds_per_set;
+    uint16_t wins_needed;
+    
+    uint16_t magnum_dmg;
+    uint16_t magnum_munition;
+    
+    uint16_t armor_health;
+    uint16_t helmet_health;
+    
+    Configuration(const char* config);
+    Configuration();
+
+
+    // Asumamos por ahora que no se quiere permitir copias, ni mov.
+    Configuration(const Configuration&) = delete;
+    Configuration& operator=(const Configuration&) = delete;
+
+    Configuration(Configuration&&) = delete;
+    Configuration& operator=(Configuration&&) = delete;
+    
 };
 #endif

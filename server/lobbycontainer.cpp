@@ -7,7 +7,7 @@
 #define MAX_COUNT_MATCH 4
 
 LobbyContainer::LobbyContainer(): lastLobbyId(0) {}
-LobbyContainer::LobbyContainer(const char* maps_root): lastLobbyId(0),maps(maps_root) {}
+LobbyContainer::LobbyContainer(const char* maps_root,const char* configs): lastLobbyId(0),maps(maps_root),config(configs){}
 
 
 const std::vector<std::string>& LobbyContainer::registeredMaps() const{
@@ -38,7 +38,7 @@ Match& LobbyContainer::findLobby(lobbyID id) {
 
 Match& LobbyContainer::newLobby(ControlId& out) {
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on lobby.
-    Match& lobby = lobbies.emplace_back(++lastLobbyId, MAX_COUNT_MATCH);
+    Match& lobby = lobbies.emplace_back(++lastLobbyId, MAX_COUNT_MATCH, config);
     lobby.addPlayers(out);
     return lobby;
 }

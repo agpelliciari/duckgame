@@ -2,11 +2,14 @@
 
 #include <iostream>
 
+#define MAPS_ROOT "res/maps/"
+#define CONFIGS "res/configs.yaml"
+
 static const char EXIT_SIGN = 'q';
 
 // Se entiende es mas ajustado a lo que se pidio.
 // El match y acceptor son miembros para denotar que el service/socket es usable solo una vez.
-Server::Server(const char* service): lobbies(), acceptor(service, lobbies) {}
+Server::Server(const char* service): lobbies(MAPS_ROOT,CONFIGS), acceptor(service, lobbies) {}
 
 
 // Inicia el match y tambien el acceptor en si.
