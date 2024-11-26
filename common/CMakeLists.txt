@@ -14,6 +14,7 @@ target_sources(taller_common
         protocolerror.h
         dtosobject.h
         dtosmap.h
+        gameevents.h
         dtoslobby.h
         dtosgame.h
         dtosplayer.h

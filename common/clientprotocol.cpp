@@ -205,6 +205,19 @@ void ClientProtocol::recvmatch(MatchDto& outstate) {
         outstate.objects.push_back(obj);
         objcount--;
     }
+
+    int eventcount = (int)protocol.recvbyte();
+    outstate.events.reserve(eventcount);
+    outstate.events.clear();
+
+    while (eventcount > 0) {
+        coordinate_t x = protocol.recvuint();
+        coordinate_t y = protocol.recvuint();
+        GameEventType type = (GameEventType)protocol.recvbyte();
+        outstate.events.emplace_back(x,y, type);
+        eventcount--;
+    }
+
 }
 
 bool ClientProtocol::recvstate(MatchStatsInfo& outstats, MatchDto& outstate) {

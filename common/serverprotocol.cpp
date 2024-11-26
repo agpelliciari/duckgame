@@ -113,6 +113,16 @@ void ServerProtocol::sendstate(const MatchDto& state) {
         this->senduint(obj.pos.y);
         this->sendbyte((uint8_t)obj.type);
     }
+
+    this->sendbyte(state.events.size());
+
+    for (const GameEvent& event: state.events) {
+        this->senduint(event.pos.x);
+        this->senduint(event.pos.y);
+        this->sendbyte((uint8_t)event.type);
+    }
+
+
 }
 
 // Para mayor flexibilidad.. por ahora.

@@ -234,6 +234,9 @@ std::vector<player_id> PlayerContainer::updateState(MatchDto& matchdto) {
     std::vector<player_id> disconnected;
     //int ind = 0;
     
+    //matchdto.events.emplace_back(1,2, BOX_DESTROYED);
+    //matchdto.events.emplace_back(2,4, NO_EVENT);
+    
     //for (PlayerDTO& player: matchdto.players){
     //     player.id =++ind;
     //}
