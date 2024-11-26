@@ -2,16 +2,14 @@
 #include <list>
 #include <vector>
 
-#include "./box.h"
-#include "./match_logic.h"
-#include "./match_queue.h"
-#include "./matchobserver.h"
+#include "server/logic_server/match_logic.h"
+#include "server/logic_server/match_queue.h"
+#include "server/core/matchobserver.h"
 #include "common/dtosgame.h"
 #include "common/dtosmap.h"
 #include "common/dtosplayer.h"
 
-#include "action_command.h"
-#include "player.h"
+#include "server/logic_server/action_command.h"
 
 #ifndef MATCH_STATE_H
 #define MATCH_STATE_H
@@ -31,7 +29,6 @@ public:
     MatchState();
     MatchState(struct MapPoint size, std::vector<struct MapObject>& objects);
     void pushAction(const PlayerActionDTO& action);
-    // void add_player(Player player);
     void receive_commands();
     void execute_commands();
 

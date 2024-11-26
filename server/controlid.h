@@ -2,7 +2,7 @@
 #define LIB_ControlId_H
 
 #include <cstdint>
-#include "server/logic_server/matchobserver.h"
+#include "server/core/matchobserver.h"
 
 class ControlId {
 private:

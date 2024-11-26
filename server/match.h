@@ -14,7 +14,7 @@
 #include "serial/map_loader.h"
 
 // Descomentar si ya son usables.
-#include "server/logic_server/match_state.h"
+#include "server/core/match_state.h"
 
 // Logica sencilla del tp de threads
 #include "./playercontainer.h"

@@ -8,7 +8,7 @@
 
 #include "./controlledplayer.h"
 #include "common/dtosgame.h"
-#include "server/logic_server/matchobserver.h"
+#include "server/core/matchobserver.h"
 
 // Contenedor/monitor de los players activos en el match.
 typedef std::list<ControlledPlayer> player_container;

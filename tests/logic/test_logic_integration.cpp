@@ -3,7 +3,7 @@
 #include "./mockobserver.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include "server/logic_server/match_state.h"
+#include "server/core/match_state.h"
 #include "common/dtosmap.h"
 
 

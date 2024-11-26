@@ -3,8 +3,8 @@
 
 #include <vector>
 
-#include "server/logic_server/match_state.h"
-#include "server/logic_server/matchobserver.h"
+#include "server/core/match_state.h"
+#include "server/core/matchobserver.h"
 #include "tests/core/testermatchdto.h"
 
 
