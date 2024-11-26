@@ -16,7 +16,9 @@ void Animation::updateSprite(const MatchDto& matchDto) {
             if (player.is_alive) {
                 updatePlayerAnimation(*builder, player);
 
-                updateDoingActionAnimation(*builder, player);
+                for (const TypeDoingAction& action: player.doing_actions) {
+                    updateDoingActionAnimation(*builder, player, action);
+                }
             } else {
                 setBuilder(*builder, STARTING_SPRITE_X + SPRITE_SIZE, LAY_DOWN_SPRITE_Y);
             }
@@ -24,10 +26,10 @@ void Animation::updateSprite(const MatchDto& matchDto) {
     }
 }
 
-void Animation::updateDoingActionAnimation(AnimationBuilder& builder, const PlayerDTO& player) {
-    switch (player.doing_actions[0]) {
+void Animation::updateDoingActionAnimation(AnimationBuilder& builder, const PlayerDTO& player, const TypeDoingAction& action) {
+    switch (action) {
         case TypeDoingAction::SHOOTING:
-            //std::cout << "SHOOTING" << std::endl;
+            std::cout << "SHOOTING" << std::endl;
             if (player.weapon == TypeWeapon::PEW_PEW_LASER) {
                 soundManager.playSound(SoundType::LASER);
             } else {
@@ -36,18 +38,18 @@ void Animation::updateDoingActionAnimation(AnimationBuilder& builder, const Play
             builder.doingActionSpriteX = 0;  // cuando se envien bien las acciones
             break;
         case TypeDoingAction::SHOOTING_UP:
-            //std::cout << "SHOOTING UP" << std::endl;
+            std::cout << "SHOOTING UP" << std::endl;
             break;
         case TypeDoingAction::DAMAGED:
-            //std::cout << "DAMAGED" << std::endl;
+            std::cout << "DAMAGED" << std::endl;
             soundManager.playSound(SoundType::QUACK);
             break;
         case TypeDoingAction::PICK_UP:
-            //std::cout << "PICK UP" << std::endl;
+            std::cout << "PICK UP" << std::endl;
             soundManager.playSound(SoundType::PICK_UP);
             break;
         case TypeDoingAction::NONE:
-            //std::cout << "NONE" << std::endl;
+            std::cout << "NONE" << std::endl;
             break;
     }
 }

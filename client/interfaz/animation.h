@@ -67,7 +67,7 @@ private:
 
     void updatePlayerAnimation(AnimationBuilder& builder, const PlayerDTO& player);
 
-    void updateDoingActionAnimation(AnimationBuilder& builder, const PlayerDTO& player);
+    void updateDoingActionAnimation(AnimationBuilder& builder, const PlayerDTO& player, const TypeDoingAction& action);
 
     void setBuilder(AnimationBuilder& builder, int spriteX, int spriteY, bool facingLeft);
 
