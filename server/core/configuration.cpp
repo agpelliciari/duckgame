@@ -22,7 +22,9 @@ Configuration::Configuration():
     magnum_dmg(1),
     magnum_munition(1),
     armor_health(1),
-    helmet_health(1){}
+    box_health(1),
+    item_spawn_time(1)
+    {}
 
 
 Configuration::Configuration(const char* config): Configuration() {
@@ -47,6 +49,12 @@ Configuration::Configuration(const char* config): Configuration() {
             reader.readExpRadius(explosion_radius);
             printf("exp radius: %u\n",explosion_radius);
             
+            reader.readBoxHealth(box_health);
+            printf("box health: %u\n",box_health);
+
+            reader.readItemSpawnTime(item_spawn_time);
+            printf("item spawn time: %u\n",item_spawn_time);
+
             reader.readMSDelay(frame_delay);
             printf("delay frame: %ums\n",frame_delay);
             reader.readGravity(gravity);

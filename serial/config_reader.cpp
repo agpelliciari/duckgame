@@ -62,11 +62,16 @@ const char* ConfigReader::MAGNUM_MUNITION = "magnum_munition";
 const char* ConfigReader::ARMOR_HEALTH = "armor_health";       
 const char* ConfigReader::HELMET_HEALTH= "helmet_health";      
 
+const char* ConfigReader::ITEM_SPAWN_TIME= "item_respawn_time";      
+const char* ConfigReader::BOX_HEALTH= "box_health";      
 
 void ConfigReader::readGravity(uint16_t& out){ readU16(root[ConfigReader::BASE_GRAVITY], out); }
 void ConfigReader::readExpRadius(uint16_t& out){ readU16(root[ConfigReader::EXPLOSION_RADIUS], out); }
 void ConfigReader::readRoundsPerSet(uint16_t& out){ readU16(root[ConfigReader::ROUNDS_PER_SET], out);}
 void ConfigReader::readWinsNeeded(uint16_t& out){ readU16(root[ConfigReader::WINS_NEEDED], out); }
+
+void ConfigReader::readItemSpawnTime(uint16_t& out){ readU16(root[ConfigReader::ITEM_SPAWN_TIME], out); }
+void ConfigReader::readBoxHealth(uint16_t& out){ readU16(root[ConfigReader::BOX_HEALTH], out); }
 
 void ConfigReader::readBaseDmgMunition(uint16_t& dmg_base,uint16_t& base_munition){
     readU16(root[ConfigReader::DMG_BASE], dmg_base);

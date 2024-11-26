@@ -15,6 +15,9 @@ duck_speed: 2
 duck_health: 3    
 duck_jump_force: 15     
 
+item_respawn_time: 2
+box_health: 2
+
 fps: 60
 rounds_per_set: 5  
 wins_needed: 10 
@@ -22,8 +25,5 @@ wins_needed: 10
 ## Todavia no tomados en cuenta.
 max_flaps : 9
 flap_gravity: 2
-
-box_health: 5
-item_respawn_time: 2
 
 duck_hitbox_size: 2 

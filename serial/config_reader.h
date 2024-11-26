@@ -46,7 +46,10 @@ public:
     
     static const char* ARMOR_HEALTH;      // cppcheck-suppress unusedStructMember
     static const char* HELMET_HEALTH;      // cppcheck-suppress unusedStructMember
-
+    
+    static const char* ITEM_SPAWN_TIME;      // cppcheck-suppress unusedStructMember
+    static const char* BOX_HEALTH;      // cppcheck-suppress unusedStructMember
+    
 protected:
     //size_t root_id;
     ryml::Tree tree;  // cppcheck-suppress unusedStructMember
@@ -77,5 +80,8 @@ public:
     void readMSDelay(uint16_t& delay);
     void readRoundsPerSet(uint16_t& out);
     void readWinsNeeded(uint16_t& out);    
+    void readItemSpawnTime(uint16_t& out);    
+    void readBoxHealth(uint16_t& out);    
+    
 };
 #endif

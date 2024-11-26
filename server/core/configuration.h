@@ -25,7 +25,10 @@ public:
     
     uint16_t armor_health;
     uint16_t helmet_health;
-    
+
+    uint16_t box_health;
+    uint16_t item_spawn_time;
+
     Configuration(const char* config);
     Configuration();
 
