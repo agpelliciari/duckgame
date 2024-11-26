@@ -47,6 +47,11 @@ Editor de mapas:
 ```sh
 ./taller_editor
 ```
+Tests:
+
+```sh
+./taller_tests
+```
 
 <hr width="100%" align="left" />
 
