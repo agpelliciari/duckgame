@@ -166,14 +166,16 @@ void Playground::cleanMapObjects(const std::vector<QGraphicsRectItem*>& mapObjec
 
 void Playground::mousePressEvent(QMouseEvent* event) {
     QPointF position = mapToScene(event->pos());
+    isDragging = true;
+    lastMousePosition = event->pos();
 
     if (event->button() == Qt::LeftButton) {
         handler.onLeftClick(position.toPoint());
+        event->accept();
     } else if (event->button() == Qt::RightButton) {
         handler.onRightClick(position.toPoint());
+        event->accept();
     } else if (event->button() == Qt::MiddleButton) {
-        isDragging = true;
-        lastMousePosition = event->pos();
         setCursor(Qt::ClosedHandCursor);
         event->accept();
     } else {
@@ -183,10 +185,17 @@ void Playground::mousePressEvent(QMouseEvent* event) {
 
 void Playground::mouseMoveEvent(QMouseEvent* event) {
     if (isDragging) {
-        QPoint delta = event->pos() - lastMousePosition;
+        QPointF position = mapToScene(event->pos());
+        if (event->buttons() & Qt::LeftButton) {
+            handler.onLeftClick(position.toPoint());
+        } else if (event->buttons() & Qt::RightButton) {
+            handler.onRightClick(position.toPoint());
+        } else {
+            QPoint delta = event->pos() - lastMousePosition;
+            horizontalScrollBar()->setValue(horizontalScrollBar()->value() - delta.x());
+            verticalScrollBar()->setValue(verticalScrollBar()->value() - delta.y());
+        }
         lastMousePosition = event->pos();
-        horizontalScrollBar()->setValue(horizontalScrollBar()->value() - delta.x());
-        verticalScrollBar()->setValue(verticalScrollBar()->value() - delta.y());
         event->accept();
     } else {
         QGraphicsView::mouseMoveEvent(event);
@@ -194,8 +203,8 @@ void Playground::mouseMoveEvent(QMouseEvent* event) {
 }
 
 void Playground::mouseReleaseEvent(QMouseEvent* event) {
+    isDragging = false;
     if (event->button() == Qt::MiddleButton) {
-        isDragging = false;
         setCursor(Qt::ArrowCursor);
         event->accept();
     } else {
