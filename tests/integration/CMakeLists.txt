@@ -6,6 +6,7 @@ target_sources(taller_tests
     PRIVATE
     # .cpp files
     test_server_lobby.cpp
+    benchmark_server.cpp
     testerclient.cpp
     PUBLIC
     # .h files
