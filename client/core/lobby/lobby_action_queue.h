@@ -18,6 +18,8 @@ public:
     lobby_action popaction();
 
     const std::string& getMapName() const;
+    
+    const char * randomMapLabel() const;
 
     ~LobbyActionQueue() {}
 };

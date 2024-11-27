@@ -1,5 +1,7 @@
 #include "./lobby_action_queue.h"
 
+static const char * RANDOM_MAP = "random map";
+
 
 LobbyActionQueue::LobbyActionQueue() {}
 
@@ -10,6 +12,10 @@ void LobbyActionQueue::doaction(const lobby_action& action) { actions.push(actio
 
 lobby_action LobbyActionQueue::popaction() { return actions.pop(); }
 
+
+const char * LobbyActionQueue::randomMapLabel() const{
+     return RANDOM_MAP;
+}
 
 const std::string& LobbyActionQueue::getMapName() const { return mapname; }
 

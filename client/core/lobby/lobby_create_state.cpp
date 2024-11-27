@@ -25,6 +25,7 @@ void LobbyCreateState::createLobby() {
 
 LobbyActionQueue& LobbyCreateState::getSender() { return sender; }
 
+
 bool LobbyCreateState::checkcreatefail() {
 
     try {
@@ -39,13 +40,12 @@ bool LobbyCreateState::checkcreatefail() {
             context.cantidadjugadores = 2;
             //context.addPlayer(context.first_player);
             //context.addPlayer(context.second_player);
-            
-            // Para probar!
-            maps.push_back("does not exist");
+            maps.emplace_back(sender.randomMapLabel());
             
             listener.createdLobbyDual(id_lobby,maps);
         } else {
             std::vector<std::string> maps;
+            
             uint8_t id_lobby = protocol.sendCreateLobby(1,maps);
 
             context.first_player = protocol.recvIDSinglePlayer();
@@ -54,9 +54,8 @@ bool LobbyCreateState::checkcreatefail() {
             
             context.cantidadjugadores = 1;
             //context.addPlayer(context.first_player);
+            maps.emplace_back(sender.randomMapLabel());
 
-            // Para probar!
-            maps.push_back("does not exist");
 
             listener.createdLobbySolo(id_lobby,maps);
         }
@@ -94,6 +93,7 @@ void LobbyCreateState::run() {
         }
     }
 }
+
 
 LobbyCreateState::~LobbyCreateState(){
     close();
