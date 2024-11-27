@@ -1,5 +1,5 @@
-#ifndef MOCK_QUEUE_SOCKET
-#define MOCK_QUEUE_SOCKET
+#ifndef SIMPLE_MESSENGER
+#define SIMPLE_MESSENGER
 
 #include <cstdint>
 #include <string>
@@ -7,14 +7,14 @@
 
 #include "common/core/messenger.h"
 
-class QueueSocket: public Messenger {
+class SimpleMessenger: public Messenger {
 private:
     std::vector<char> buffer;  // cppcheck-suppress unusedStructMember
 
 
     bool closed;     // cppcheck-suppress unusedStructMember
     bool canexpand;  // cppcheck-suppress unusedStructMember
-    int size;        // cppcheck-suppress unusedStructMember
+    int cap;        // cppcheck-suppress unusedStructMember
 
     int offsetRead;   // cppcheck-suppress unusedStructMember
     int offsetWrite;  // cppcheck-suppress unusedStructMember
@@ -26,7 +26,12 @@ private:
     void chktOpen() const;
 
 public:
-    QueueSocket(int size, bool _canexpand);
+    SimpleMessenger(int size, bool _canexpand);
+    
+    // Metodos utilitarios para hacer de como si fuera un builder/ pre envio por socket.
+    int size() const;
+    const char * first() const;
+
 
     void seek(int offset);  // Setea el offset del read.
     void reset();           // Resetea 'borra' toda la informacion. Setea ambos offsets a 0.
@@ -45,7 +50,7 @@ public:
     int finish() override;
 
     // Destructor, se encarga de llamar al shutdown si no lo fue.
-    ~QueueSocket();
+    ~SimpleMessenger();
 };
 
 #endif

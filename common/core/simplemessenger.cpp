@@ -1,17 +1,24 @@
-#include "./queuesocket.h"
+#include "./simplemessenger.h"
 
 #include <cstring>
 #include <iostream>
 
 #include "common/core/liberror.h"
 
-QueueSocket::QueueSocket(int _size, bool _canexpand):
-        buffer(), closed(false), canexpand(_canexpand), size(_size), offsetRead(0), offsetWrite(0) {
-    buffer.reserve(size);
+SimpleMessenger::SimpleMessenger(int _cap, bool _canexpand):
+        buffer(), closed(false), canexpand(_canexpand), cap(_cap), offsetRead(0), offsetWrite(0) {
+    buffer.reserve(cap);
 }
 
 
-void QueueSocket::chktOpen() const {
+int SimpleMessenger::size() const{
+     return offsetWrite - offsetRead;
+}
+const char * SimpleMessenger::first() const{
+     return buffer.data()+offsetRead;
+}
+
+void SimpleMessenger::chktOpen() const {
     if (closed) {
         throw std::runtime_error("socket with invalid file descriptor (-1), "
                                  "perhaps you are using a *previously moved* "
@@ -19,15 +26,15 @@ void QueueSocket::chktOpen() const {
     }
 }
 
-void QueueSocket::seek(int pos) { this->offsetRead = pos; }
-void QueueSocket::reset() {  // Resetea 'borra' toda la informacion. Setea ambos offsets a 0.
+void SimpleMessenger::seek(int pos) { this->offsetRead = pos; }
+void SimpleMessenger::reset() {  // Resetea 'borra' toda la informacion. Setea ambos offsets a 0.
     this->offsetRead = 0;
     this->offsetWrite = 0;
 }
 
 // Enviar la cantidad especificada, pero puede que mande/reciba menos.
-int QueueSocket::sendsome(const void* data, unsigned int sz) {
-    unsigned int canSend = size - offsetWrite;
+int SimpleMessenger::sendsome(const void* data, unsigned int sz) {
+    unsigned int canSend = cap - offsetWrite;
 
     if (sz < canSend) {
         canSend = sz;
@@ -43,7 +50,7 @@ int QueueSocket::sendsome(const void* data, unsigned int sz) {
     offsetWrite += canSend;
     return canSend;
 }
-unsigned int QueueSocket::recvsome(void* data, unsigned int sz) {
+unsigned int SimpleMessenger::recvsome(void* data, unsigned int sz) {
     unsigned int canRecv = offsetWrite - offsetRead;  // Solo puede leer hasta donde se escribio!
     if (sz < canRecv) {
         canRecv = sz;
@@ -61,24 +68,24 @@ unsigned int QueueSocket::recvsome(void* data, unsigned int sz) {
 }
 
 // Intenta enviar todo y devuelve lo que envio/ tira excepcion
-unsigned int QueueSocket::trysendall(const void* data, unsigned int sz) {
+unsigned int SimpleMessenger::trysendall(const void* data, unsigned int sz) {
     chktOpen();
 
-    int overflow = sz - (size - offsetWrite);
+    int overflow = sz - (cap - offsetWrite);
     if (overflow > 0 && canexpand) {
         // No se puede usar ni resize ni reserve... ya que tiran la data actual...
         // Por lo que no queda otra, que crear uno nuevo, copiar lo existente y swapear.
 
         std::vector<char> newone;
-        newone.reserve(size + overflow);  // Expand buffer.
-        std::memcpy(newone.data(), buffer.data(), size);
-        size += overflow;
+        newone.reserve(cap + overflow);  // Expand buffer.
+        std::memcpy(newone.data(), buffer.data(), cap);
+        cap += overflow;
         std::swap(buffer, newone);
     }
 
     return sendsome(data, sz);
 }
-void QueueSocket::sendall(const void* data, unsigned int sz) {
+void SimpleMessenger::sendall(const void* data, unsigned int sz) {
     unsigned int sent = trysendall(data, sz);
     if (sent != sz) {
         throw LibError(EPIPE, "socket sent only %d of %d bytes", sent, sz);
@@ -86,13 +93,13 @@ void QueueSocket::sendall(const void* data, unsigned int sz) {
 }
 
 // Intenta leer lo maximo que pueda, a lo sumo sz. Retorna la cantidad leida.
-unsigned int QueueSocket::tryrecvall(void* data, unsigned int sz) {
+unsigned int SimpleMessenger::tryrecvall(void* data, unsigned int sz) {
     chktOpen();
     return recvsome(data, sz);  // No hay logica para 'esperar' a que llege mas data.
 }
 
 // Intenta leer sz bytes. Tira excepcion sino lee todo.
-void QueueSocket::recvall(void* data, unsigned int sz) {
+void SimpleMessenger::recvall(void* data, unsigned int sz) {
     unsigned int read = tryrecvall(data, sz);
 
     if (read < sz) {  // No se leyo todo.
@@ -101,7 +108,7 @@ void QueueSocket::recvall(void* data, unsigned int sz) {
 }
 
 // Cierra el socket
-int QueueSocket::finish() {
+int SimpleMessenger::finish() {
     if (closed) {
         return -1;
     }
@@ -110,4 +117,4 @@ int QueueSocket::finish() {
     return 0;
 }
 
-QueueSocket::~QueueSocket() {}
+SimpleMessenger::~SimpleMessenger() {}

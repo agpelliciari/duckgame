@@ -159,7 +159,7 @@ void ClientProtocol::recvplayer(PlayerDTO& player){
     
     player.hp = protocol.recvbyte();
     player.munition = protocol.recvbyte();
-    //*
+
     uint8_t packed = protocol.recvbyte();
 
     player.chest_armor = (bool)(packed & 1);
@@ -172,16 +172,6 @@ void ClientProtocol::recvplayer(PlayerDTO& player){
     packed = packed>>1;
     
     player.aiming_up = (bool)(packed & 1);
-    //*/
-    
-    /*
-    player.aiming_up = protocol.recvbyte();
-
-    player.is_alive = protocol.recvbyte();
-    
-    player.helmet = protocol.recvbyte();
-    player.chest_armor = protocol.recvbyte();
-    //*/
     
 }
 void ClientProtocol::recvmatch(MatchDto& outstate) {

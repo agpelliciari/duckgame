@@ -6,7 +6,7 @@
 #include "common/core/protocol.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include "tests/core/queuesocket.h"
+#include "common/core/simplemessenger.h"
 
 using ::testing::Eq;
 using ::testing::ThrowsMessage;
@@ -16,7 +16,7 @@ static const char SIMPLE_MSG[] = "UN MENSAJE";
 
 TEST(TestProtocolBase, ProtocolClosedSocket) {
     std::string msg(SIMPLE_MSG);
-    QueueSocket messen(msg.length(), false);
+    SimpleMessenger messen(msg.length(), false);
     Protocol protocol(messen);  // El protocol deberia liberar el queue socket.
 
     protocol.close();
@@ -28,7 +28,7 @@ TEST(TestProtocolBase, ProtocolClosedSocket) {
 
 TEST(TestProtocolBase, ProtocolSendsSimpleMsgString) {
     std::string msg(SIMPLE_MSG);
-    QueueSocket messen(msg.length(), true);
+    SimpleMessenger messen(msg.length(), true);
 
 
     Protocol protocol(messen);
@@ -41,7 +41,7 @@ TEST(TestProtocolBase, ProtocolSendsSimpleMsgString) {
 
 TEST(TestProtocolBase, ProtocolSendsSimpleMsgBuffered) {
     int count = strlen(SIMPLE_MSG);
-    QueueSocket messen(count, true);
+    SimpleMessenger messen(count, true);
 
 
     Protocol protocol(messen);
@@ -56,7 +56,7 @@ TEST(TestProtocolBase, ProtocolSendsSimpleMsgBuffered) {
 
 TEST(TestProtocolBase, ProtocolRecvsSimpleMsgStringFail) {
     int count = strlen(SIMPLE_MSG);
-    QueueSocket messen(count - 1, false);
+    SimpleMessenger messen(count - 1, false);
     Protocol protocol(messen);
 
     EXPECT_THROW(protocol.sendmsg(SIMPLE_MSG, count), LibError);
