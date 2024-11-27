@@ -1,7 +1,7 @@
 #include "animation.h"
 
 Animation::Animation(const GameContext& context, SoundManager& soundManager):
-        animationBuilders(), soundManager(soundManager), frameTicks(0) {
+        animationBuilders(), soundManager(soundManager), frameTicks(0), lastUpdateTicks(0) {
     for (int i = 1; i <= static_cast<int>(context.cantidadjugadores); i++) {
         animationBuilders.emplace(i, AnimationBuilder());
     }
@@ -9,7 +9,30 @@ Animation::Animation(const GameContext& context, SoundManager& soundManager):
 
 void Animation::updateFrame() { frameTicks = SDL_GetTicks(); }
 
+float Animation::updateDeltaTime() {
+    unsigned int currentTicks = SDL_GetTicks();
+    float deltaTime = 0.0f;
+    if (lastUpdateTicks > 0) {
+        deltaTime = (currentTicks - lastUpdateTicks) / 1000.0f;
+    }
+    lastUpdateTicks = currentTicks;
+    return deltaTime;
+}
+
+void Animation::updateExplosionsVector(AnimationBuilder& builder, float deltaTime) {
+    for (Explosion& explosion: builder.explosions) {
+        explosion.update(deltaTime);
+    }
+
+    builder.explosions.erase(
+        std::remove_if(builder.explosions.begin(), builder.explosions.end(), [](const Explosion& explosion) { return explosion.isFinished(); }),
+        builder.explosions.end()
+    );
+}
+
 void Animation::updateSprite(const MatchDto& matchDto) {
+    float deltaTime = updateDeltaTime();
+
     for (const PlayerDTO& player: matchDto.players) {
         AnimationBuilder* builder = getAnimationBuilder(player.id);
         if (builder) {
@@ -17,8 +40,13 @@ void Animation::updateSprite(const MatchDto& matchDto) {
                 updatePlayerAnimation(*builder, player);
 
                 for (const TypeDoingAction& action: player.doing_actions) {
-                    updateDoingActionAnimation(*builder, player, action);
+                    if (action != TypeDoingAction::NONE) {
+                        updateDoingActionAnimation(*builder, player, action);
+                    }
                 }
+
+                updateExplosionsVector(*builder, deltaTime);
+
             } else {
                 setBuilder(*builder, STARTING_SPRITE_X + SPRITE_SIZE, LAY_DOWN_SPRITE_Y);
             }
@@ -27,27 +55,20 @@ void Animation::updateSprite(const MatchDto& matchDto) {
 }
 
 void Animation::updateDoingActionAnimation(AnimationBuilder& builder, const PlayerDTO& player, const TypeDoingAction& action) {
-    switch (action) {
-        case TypeDoingAction::SHOOTING:
-        case TypeDoingAction::SHOOTING_UP:
-            std::cout << "PLAYER [" << player.id << "]: SHOOTING/UP" << std::endl;
-            if (player.weapon == TypeWeapon::PEW_PEW_LASER) {
-                soundManager.playSound(SoundType::LASER);
-            } else {
-                soundManager.playSound(SoundType::SHOT);
-            }
-            builder.doingActionSpriteX = 0;  // cuando se envien bien las acciones
-            break;
-        case TypeDoingAction::DAMAGED:
-            std::cout << "PLAYER [" << player.id << "]: DAMAGED" << std::endl;
-            soundManager.playSound(SoundType::QUACK);
-            break;
-        case TypeDoingAction::PICK_UP:
-            std::cout << "PLAYER [" << player.id << "]: PICK UP" << std::endl;
-            soundManager.playSound(SoundType::PICK_UP);
-            break;
-        case TypeDoingAction::NONE:
-            break;
+    if (action == TypeDoingAction::SHOOTING || action == TypeDoingAction::SHOOTING_UP) {
+        if (player.weapon == TypeWeapon::PEW_PEW_LASER) {
+            soundManager.playSound(SoundType::LASER);
+            builder.addExplosion("/weapons/laserFlare.png", 16, 0.3f, 2);
+        } else {
+            soundManager.playSound(SoundType::SHOT);
+            builder.addExplosion("/weapons/smallFlare.png", 11, 0.3f, 1);
+        }
+
+    } else if (action == TypeDoingAction::DAMAGED) {
+        soundManager.playSound(SoundType::QUACK);
+
+    } else if (action == TypeDoingAction::PICK_UP) {
+        soundManager.playSound(SoundType::PICK_UP);
     }
 }
 
@@ -148,6 +169,16 @@ int Animation::getSpriteY(int playerId) {
         return builder->spriteY;
     }
     return 0;
+}
+
+std::vector<Explosion>& Animation::getExplosions(int playerId) {
+    AnimationBuilder* builder = getAnimationBuilder(playerId);
+    if (builder) {
+        return builder->explosions;
+    }
+
+    static std::vector<Explosion> noExplosions;
+    return noExplosions;
 }
 
 float Animation::getIndicatorSprite(float width) {
