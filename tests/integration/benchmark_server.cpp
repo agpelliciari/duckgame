@@ -7,6 +7,9 @@
 #include "gtest/gtest.h"
 #include "server/lobbycontainer.h"
 
+#include "common/clientprotocol.h"
+#include "common/serverprotocol.h"
+
 using ::testing::InSequence;
 using ::testing::ThrowsMessage;
 
@@ -27,6 +30,17 @@ protected:
         sktserver.close();
     }
 };
+
+
+
+
+
+
+
+
+
+
+
 
 TEST_F(BenchmarkServer, SimpleJoinMultiple) {
     TesterClient host(openClient(), sktserver, lobbies);
@@ -70,50 +84,53 @@ TEST_F(BenchmarkServer, SimpleJoinMultiple) {
 
 
     int ms = clock.measure();
+    std::cout << "--->TOOK MS " << ms << "ms "<< std::endl;
+
+}
+
+
+
+TEST_F(BenchmarkServer, ProtocolMatchdtoSend) {
+    MatchDto state;
+
+    //                      id,alive, x , y, move_action
+    state.players.emplace_back(3, true, 10, 5, TypeMoveAction::MOVE_LEFT);
+    PlayerDTO& player2 = state.players.emplace_back(2, false, 5, 0, TypeMoveAction::AIR_LEFT);
+    
+    state.players.emplace_back(4, true, 50, 5, TypeMoveAction::MOVE_LEFT);
+    state.players.emplace_back(5, true, 13, 5, TypeMoveAction::MOVE_LEFT);
+
+    state.objects.emplace_back(5, 5, TypeDynamicObject::BOX);
+    state.objects.emplace_back(10, 5, TypeDynamicObject::BOX);
+    player2.pos.x = 10;
+    player2.pos.y = 15;
+
+    // Los protocols se encargan. De liberar el shared socket.
+    Socket client_skt = openClient();
+    Socket server_skt = sktserver.accept();
+    
+    ClientProtocol client(client_skt);
+    ServerProtocol server(server_skt);
+
+    MatchDto state_recv;
+    MatchStatsInfo stats_recv;
+    
+    int count = 240;
+    Clock clock(30);
+    clock.resetnow();
+    
+    while(count > 0){
+        server.sendstate(state);
+        
+        player2.pos.x++;
+        player2.pos.y++;
+
+        ASSERT_TRUE(client.recvstate(stats_recv, state_recv));
+        count--;
+    }
+    
+
+    int ms = clock.measure();
     std::cout << "--->TOOK " << ms << "ms "<< std::endl;
-
+    
 }
-
-/*
-TEST_F(BenchmarkServer, SimpleJoinMultipleWithLeaves) {
-    TesterClient host(openClient(), sktserver, lobbies);
-
-    uint8_t id_lobby = host.createClientLobbyDual(lobbies.registeredMaps());
-    ASSERT_EQ(id_lobby, 1) << "ID lobby received by client is 1, since its the first match";
-
-
-    TesterClient joined1(openClient(), sktserver, lobbies);
-    TesterClient joined2(openClient(), sktserver, lobbies);
-
-    uint8_t first = joined1.assertJoinLobbySingle(id_lobby, 3);
-    uint8_t second = joined2.assertJoinLobbySingle(id_lobby, 4);
-    ASSERT_EQ(first, 2) << "ID joined first is correct";
-    ASSERT_EQ(second, 3) << "ID joined second is correct";
-
-
-    host.assertLobbyInfoJoined(first);
-
-    host.assertLobbyInfoJoined(second);
-    joined1.assertLobbyInfoJoined(second);
-
-    joined1.close();
-
-    host.assertLobbyInfoLeft(first);
-    joined2.assertLobbyInfoLeft(first);
-
-    TesterClient joined3(openClient(), sktserver, lobbies);
-
-    uint8_t fourth = joined3.assertJoinLobbySingle(id_lobby, 4);
-    ASSERT_EQ(fourth, 3) << "ID joined fifth is correct, third since one left";
-
-    host.assertLobbyInfoJoined(fourth);
-    joined2.assertLobbyInfoJoined(fourth);
-
-    host.startMatch(mapusing);
-
-    host.assertLobbyStarted(4);
-    joined2.assertLobbyStarted(4);
-    joined3.assertLobbyStarted(4);
-}
-
-*/
