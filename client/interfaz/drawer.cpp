@@ -164,6 +164,34 @@ void Drawer::getWeaponParameters(const PlayerDTO& player, SDL_RendererFlip flip,
     }
 }
 
+void Drawer::getShotExplosionParameters(const PlayerDTO& player, SDL_RendererFlip flip, int x, int y, int& explosionX, int& explosionY) {
+    if (player.weapon == TypeWeapon::PISTOLA_COWBOY) {
+        if (player.aiming_up) {
+            explosionX = x + getTextureFlipValue(flip, 8, -8);
+            explosionY = y + getTextureFlipValue(flip, -20, -30);
+        } else {
+            explosionX = x + getTextureFlipValue(flip, -20, 30);
+            explosionY = y - 8;
+        }
+    } else if (player.weapon == TypeWeapon::PEW_PEW_LASER) {
+        if (player.aiming_up) {
+            explosionX = x + getTextureFlipValue(flip, -6, 6);
+            explosionY = y + getTextureFlipValue(flip, -25, -45);
+        } else {
+            explosionX = x + getTextureFlipValue(flip, -25, 45);
+            explosionY = y + 8;
+        }
+    } else {
+        if (player.aiming_up) {
+            explosionX = x + getTextureFlipValue(flip, -8, 8);
+            explosionY = y + getTextureFlipValue(flip, -15, -42);
+        } else {
+            explosionX = x + getTextureFlipValue(flip, -12, 43);
+            explosionY = y + 8;
+        }
+    }
+}
+
 void Drawer::drawWeapon(const PlayerDTO& player, SDL_RendererFlip flip) {
     auto weaponTexture = weaponTextures.find(player.weapon);
     if (weaponTexture != weaponTextures.end()) {
@@ -180,9 +208,21 @@ void Drawer::drawWeapon(const PlayerDTO& player, SDL_RendererFlip flip) {
             SDL2pp::Rect(x, y, camera.getScaledSize(width - 6), camera.getScaledSize(height - 6)),
             angle, SDL2pp::Point(0, 0), flip
         );
+
+        for (const auto& explosion : animation.getExplosions(player.id)) {
+            int explosionX, explosionY;
+            int size = explosion.spriteSize;
+            
+            getShotExplosionParameters(player, flip, x, y, explosionX, explosionY);
+            
+            renderer.Copy(
+                textures.getTexture(explosion.texture),
+                SDL2pp::Rect(explosion.currentFrame * size, 0, size, size),
+                SDL2pp::Rect(explosionX, explosionY, camera.getScaledSize(size), camera.getScaledSize(size)),
+                angle, SDL2pp::Point(0, 0), flip);
+        }
     }
 }
-
 
 int Drawer::getTextureFlipValue(SDL_RendererFlip flip, int flipValue, int unflipValue) {
     return flip == SDL_FLIP_HORIZONTAL ? flipValue : unflipValue;
@@ -241,7 +281,7 @@ void Drawer::drawDynamicObject(const DynamicObjDTO& object) {
         case TypeDynamicObject::LASER:
             renderer.Copy(
                     textures.getTexture("/weapons/laserBeam.png"), SDL2pp::Rect(0, 0, 1, 8),
-                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y + 7),
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y + 10),
                                  camera.getScaledSize(1), camera.getScaledSize(8)));
             break;
 

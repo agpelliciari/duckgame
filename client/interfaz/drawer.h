@@ -87,6 +87,8 @@ private:
     
     void getWeaponParameters(const PlayerDTO& player, SDL_RendererFlip flip, int& x, int& y, double& angle);
 
+    void getShotExplosionParameters(const PlayerDTO& player, SDL_RendererFlip flip, int x, int y, int& explosionX, int& explosionY);
+
     void drawWeapon(const PlayerDTO& player, SDL_RendererFlip flip);
 
     int getTextureFlipValue(SDL_RendererFlip flip, int flipValue, int unflipValue);
