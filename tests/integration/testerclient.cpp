@@ -41,6 +41,11 @@ uint8_t TesterClient::createClientLobbyDual(const std::vector<std::string>& lobb
     return id_lobby;
 }
 
+void TesterClient::assertRecvState(MatchStatsInfo& stats, MatchDto& state){
+    client.recvstate(stats, state);
+}
+
+
 uint8_t TesterClient::createClientLobbySingle(const std::vector<std::string>& lobby_maps) {
     std::vector<std::string> maps;
     uint8_t id_lobby = client.sendCreateLobby(1,maps);

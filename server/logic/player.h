@@ -43,7 +43,7 @@ public:
 
     void get_data(int& id, int& x, int& y, TypeWeapon& weapon, bool& helmet_equipped,
                   bool& chest_armor_equipped, TypeMoveAction& move_action,
-                  std::vector<TypeDoingAction> &doing_action, bool &is_alive, bool &aim_up);
+                  std::vector<SoundEventType>& sounds, bool &is_alive, bool &aim_up,TypeDoingAction& doing);
 
     void still();
     void add_speed(int speed_x, int speed_y);

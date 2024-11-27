@@ -17,8 +17,8 @@ Player::Player(int id_, int initial_x, int initial_y):
 
 void Player::get_data(int& id, int& x, int& y, TypeWeapon& weapon_,
                       bool& helmet_equipped, bool& chest_armor_equipped,
-                      TypeMoveAction& move_action_, std::vector<TypeDoingAction> &doing_action_,
-                      bool &is_alive_, bool &aim_up_) {
+                      TypeMoveAction& move_action_, std::vector<SoundEventType>& sounds,
+                      bool &is_alive_, bool &aim_up_,TypeDoingAction& doing) {
     id = this->id;
     this->object.get_real_position(x, y);
 
@@ -33,12 +33,14 @@ void Player::get_data(int& id, int& x, int& y, TypeWeapon& weapon_,
     //this->helmet.is_equipped(helmet_equipped);
     //this->chest_armor.is_equipped(chest_armor_equipped);
     move_action_ = this->move_action;
-    if (doing_action.size() > 0){
-        doing_action_ = this->doing_action;
+    if (this->doing_action.size() > 0){
+        sounds.push_back(PLAYER_JUMPED);
+        doing =doing_action[0];
+        
+        this->doing_action.clear();
     }
     is_alive_ = this->is_alive;
     aim_up_ = this->aim_up;
-    this->doing_action.clear();
 
 }
 

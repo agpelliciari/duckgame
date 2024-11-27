@@ -154,19 +154,18 @@ void ClientProtocol::recvplayer(PlayerDTO& player){
 
     player.weapon = (TypeWeapon)protocol.recvbyte();
     player.move_action = (TypeMoveAction)protocol.recvbyte();
-    
-    int size_actions = protocol.recvbyte();
-    player.doing_actions.reserve(size_actions);
-    
-    while(size_actions > 0){
-         player.doing_actions.push_back((TypeDoingAction)protocol.recvbyte());
-         size_actions--;
-    }        
+
+    player.doing_action = (TypeDoingAction)protocol.recvbyte();
+
+    player.aiming_up = protocol.recvbyte();
 
     player.is_alive = protocol.recvbyte();
+    player.hp = protocol.recvbyte();
+    
+    player.munition = protocol.recvbyte();
+    
     player.helmet = protocol.recvbyte();
     player.chest_armor = protocol.recvbyte();
-    player.aiming_up = protocol.recvbyte();
 }
 void ClientProtocol::recvmatch(MatchDto& outstate) {
     int playercount = (int)protocol.recvbyte();
@@ -194,7 +193,8 @@ void ClientProtocol::recvmatch(MatchDto& outstate) {
     // << std::endl;
     outstate.objects.reserve(objcount);
     outstate.objects.clear();
-
+    
+    // Objs
     while (objcount > 0) {
         DynamicObjDTO obj;
 
@@ -206,6 +206,7 @@ void ClientProtocol::recvmatch(MatchDto& outstate) {
         objcount--;
     }
 
+    // Game events
     int eventcount = (int)protocol.recvbyte();
     outstate.events.reserve(eventcount);
     outstate.events.clear();
@@ -217,6 +218,17 @@ void ClientProtocol::recvmatch(MatchDto& outstate) {
         outstate.events.emplace_back(x,y, type);
         eventcount--;
     }
+
+    // Sounds
+    eventcount = (int)protocol.recvbyte();
+    outstate.sounds.reserve(eventcount);
+    outstate.sounds.clear();
+
+    while (eventcount > 0) {
+        outstate.sounds.push_back((SoundEventType)protocol.recvbyte());
+        eventcount--;
+    }
+
 
 }
 
