@@ -142,24 +142,26 @@ void ServerProtocol::sendplayer(const PlayerDTO& player) {
     this->senduint(player.id);
     this->senduint(player.pos.x);
     this->senduint(player.pos.y);
-
-    this->sendbyte((uint8_t)player.weapon);
     
     
-    this->sendbyte((uint8_t)player.move_action);
+    // Pack things.
+    uint8_t info[5] = {
+         (uint8_t)player.weapon,
+         (uint8_t)player.move_action,
+         (uint8_t)player.doing_action,
+         (uint8_t)player.hp,
+         (uint8_t)player.munition
+    };    
     
-    this->sendbyte((uint8_t)player.doing_action);
+    this->sendbytes(&info[0], 5);
     
-    // Se podria juntar en 1 solo byte. Por ahora no?
-    this->sendbyte((uint8_t)player.aiming_up);
+    uint8_t res = (uint8_t)player.aiming_up;
     
-    this->sendbyte((uint8_t)player.is_alive);
-    this->sendbyte((uint8_t)player.hp);
-
-    this->sendbyte((uint8_t)player.munition);
+    res = res<<1 | (uint8_t)player.is_alive;
+    res = res<<1 | (uint8_t)player.helmet;
+    res = res<<1 | (uint8_t)player.chest_armor;
     
-    this->sendbyte((uint8_t)player.helmet);
-    this->sendbyte((uint8_t)player.chest_armor);
+    this->sendbyte(res);
 }
 
 
