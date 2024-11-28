@@ -11,6 +11,7 @@
 #include "pewpew_laser_weapon.h"
 #include "duel_pistol.h"
 #include "sniper_weapon.h"
+#include "shotgun_weapon.h"
 
 class DroppedItem {
 
