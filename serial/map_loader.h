@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include "./map_deserializer.h"
+#include <random>
 
 
 class MapLoader {
@@ -16,6 +17,10 @@ protected:
     };
     
     std::string root;
+    std::random_device dev;
+    std::mt19937 map_gen;
+    std::uniform_int_distribution<std::mt19937::result_type> distribute;
+    
     std::list<struct ReferencedMap> maps;  // cppcheck-suppress unusedStructMember
     std::vector<std::string> list_maps;
 public:
