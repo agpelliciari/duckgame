@@ -3,19 +3,19 @@
 #include <iostream>
 
 
-MatchLogic::MatchLogic(): colition_map(800, 640) {
+MatchLogic::MatchLogic(const Configuration& _configs): colition_map(100, 100), configs(_configs) {
     this->command_map[PlayerActionType::NONE] = [this](int index) {
         this->add_player_speed(index, 0, 0);
     };
     this->command_map[PlayerActionType::MOVE_LEFT] = [this](int index) {
-        this->add_player_speed(index, -10, 0);
+        this->add_player_speed(index, -configs.player_speed, 0);
     };
     this->command_map[PlayerActionType::MOVE_LEFT_END] = [this](int index) {
         this->still_player(index);
     };
 
     this->command_map[PlayerActionType::MOVE_RIGHT] = [this](int index) {
-        this->add_player_speed(index, 10, 0);
+        this->add_player_speed(index, configs.player_speed, 0);
     };
     this->command_map[PlayerActionType::MOVE_RIGHT_END] = [this](int index) {
         this->still_player(index);
@@ -28,10 +28,7 @@ MatchLogic::MatchLogic(): colition_map(800, 640) {
     this->command_map[PlayerActionType::FLAPPING_END] = [this](int index) {
         this->player_jump_end(index);
     };
-    /*
-    this->command_map[PlayerActionType::STAY_DOWN] = [this](int index) {
-        this->add_player_speed(index, 0, 0);
-    };*/
+    
     this->command_map[PlayerActionType::STAY_DOWN_START] = [this](int index) {
         this->player_stay_down_start(index);
     };
@@ -68,15 +65,16 @@ MatchLogic::MatchLogic(): colition_map(800, 640) {
 
 
 void MatchLogic::add_player(int id, int spawn_point_index) {
-    std::cout << "player SPAWN POINT INDEX: "<< spawn_point_index << std::endl;
-    std::cout << "player SPAWN POINT pos: " << spawn_points[spawn_point_index].x*16
-   <<", "<< spawn_points[spawn_point_index].y*16
-   << std::endl;
+    //std::cout << "player SPAWN POINT INDEX: "<< spawn_point_index << std::endl;
+    //std::cout << "player SPAWN POINT pos: " << spawn_points[spawn_point_index].x*16
+    //<<", "<< spawn_points[spawn_point_index].y*16
+    //<< std::endl;
+    
     if (spawn_point_index < spawn_points.size()) {
-        players.push_back(Player(id, spawn_points[spawn_point_index].x  * 16, spawn_points[spawn_point_index].y  * 16 + 1));
+        players.push_back(Player(id, spawn_points[spawn_point_index].x  * 16, spawn_points[spawn_point_index].y  * 16 + 1, configs));
         std::cout << "spawn point x: " << spawn_points[spawn_point_index].x << ", y: " << spawn_points[spawn_point_index].y << std::endl;
     } else {
-        players.push_back(Player(id, 10 + 50 * id, 1));
+        players.push_back(Player(id, 10 + 50 * id, 1, configs));
     }
     colition_map.add_collision(players.back().get_map_position(), players.back().get_dimension(),
                                CollisionTypeMap::PLAYER, players.back().get_id());

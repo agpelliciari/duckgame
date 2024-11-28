@@ -2,16 +2,16 @@
 
 #include <iostream>
 
-Player::Player(int id_, int initial_x, int initial_y):
+Player::Player(int id_, int initial_x, int initial_y, const Configuration& configs):
         id(id_),
-        object(initial_x, initial_y),
+        object(initial_x, initial_y, configs),
         is_alive(true),
         helmet(false),
         chest_armor(false),
         move_action(TypeMoveAction::NONE),
         doing_action(),
         aim_up(false),
-        life_points(3),
+        life_points(configs.player_health),
         shooting_direction(ShootingDirection::NONE),
         previous_shooting_direction(shooting_direction),
         weapon(nullptr), is_stay_down(false) {}

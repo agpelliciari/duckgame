@@ -7,7 +7,7 @@
 #include "common/clock.h"
 
 
-MatchState::MatchState(const Configuration& _configs): running(false), match_logic(), acciones(match_logic), max_rounds(_configs.rounds_per_set), configs(_configs) {}
+MatchState::MatchState(const Configuration& _configs): running(false), match_logic(_configs), acciones(match_logic), max_rounds(_configs.rounds_per_set), configs(_configs) {}
 
 void MatchState::pushAction(const PlayerActionDTO& action) { acciones.push_command(action); }
 
