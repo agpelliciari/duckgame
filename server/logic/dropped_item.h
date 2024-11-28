@@ -10,6 +10,7 @@
 #include "magnum_weapon.h"
 #include "pewpew_laser_weapon.h"
 #include "duel_pistol.h"
+#include "sniper_weapon.h"
 
 class DroppedItem {
 

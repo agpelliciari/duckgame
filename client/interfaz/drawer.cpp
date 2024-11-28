@@ -63,7 +63,11 @@ void Drawer::drawPlayer(const PlayerDTO& player) {
 
 void Drawer::drawPlayerInfo(const PlayerDTO& player, const std::string color) {
     renderer.Copy(textures.getTexture(color), SDL2pp::Rect(1, 10, 32, 10),
-                  SDL2pp::Rect(12 + 64 * (player.id - 1), 8, 32, 14));
+                  SDL2pp::Rect(12 + 115 * (player.id - 1), 8, 32, 14));
+    
+    int health = (5 * player.hp) + 1;
+    renderer.Copy(textures.getTexture("/ui/hp.png"), SDL2pp::Rect(0, 0, health, 16),
+                        SDL2pp::Rect(40 + 115 * (player.id - 1), 5, health, 20));
 
     if (player.weapon != TypeWeapon::NONE) {
         auto weaponTexture = weaponTextures.find(player.weapon);
@@ -72,27 +76,33 @@ void Drawer::drawPlayerInfo(const PlayerDTO& player, const std::string color) {
 
             int x, y;
             if (player.weapon == TypeWeapon::PISTOLA_COWBOY) {
-                x = 39;
+                x = 59;
                 y = 7;
             } else {
-                x = 34;
+                x = 54;
                 y = -3;
             }
 
             renderer.Copy(textures.getTexture(textureType), SDL2pp::Rect(0, 0, width, height),
-                          SDL2pp::Rect(x + 64 * (player.id - 1), y, width, height));
+                          SDL2pp::Rect(x + 115 * (player.id - 1), y, width, height));
+            
+            std::string text = std::to_string(player.munition);
+            SDL2pp::Texture text_sprite(renderer, font.RenderText_Blended(text, SDL_Color{255, 255, 255, 255}));
+
+            renderer.Copy(text_sprite, SDL2pp::NullOpt,
+                        SDL2pp::Rect(x + 35 + 115 * (player.id - 1), 9, 12, 12));
         }
     }
 
     if (player.helmet) {
         renderer.Copy(textures.getTexture("/armors/helmet.png"), SDL2pp::Rect(0, 0, 32, 32),
-                      SDL2pp::Rect(8 + 64 * (player.id - 1), -9, 32, 32));
+                      SDL2pp::Rect(8 + 115 * (player.id - 1), -9, 32, 32));
     }
 
     if (player.chest_armor) {
         renderer.Copy(textures.getTexture("/armors/chestPlateAnim.png"),
                       SDL2pp::Rect(0, 0, 32, 16),
-                      SDL2pp::Rect(10 + 64 * (player.id - 1), -6, 32, 32));
+                      SDL2pp::Rect(10 + 115 * (player.id - 1), -6, 32, 32));
     }
 }
 
@@ -107,7 +117,7 @@ void Drawer::drawIndicator(const PlayerDTO& player, bool isMainPlayer) {
         indicatorType = SDL2pp::Rect(spriteX, INDICATOR_HEIGHT, INDICATOR_WIDTH, INDICATOR_HEIGHT);
     }
 
-    renderer.Copy(textures.getTexture(TextureContainer::PLAYER_INDICATOR), indicatorType,
+    renderer.Copy(textures.getTexture("/duck_sprites/playerIndicator.png"), indicatorType,
                   SDL2pp::Rect(camera.getScreenX(player.pos.x - X_PHYSICAL_OFFSET_PLAYER + 9),
                                camera.getScreenY(player.pos.y + Y_PHYSICAL_OFFSET_PLAYER - 40),
                                camera.getScaledSize(INDICATOR_WIDTH_RESIZED),
@@ -118,7 +128,7 @@ void Drawer::drawArmor(const PlayerDTO& player, SDL_RendererFlip flip) {
 
     if (player.helmet) {
         renderer.Copy(
-                textures.getTexture(TextureContainer::HELMET_ARMOR),
+                textures.getTexture("/armors/helmet.png"),
                 SDL2pp::Rect(0, 0, SPRITE_SIZE, SPRITE_SIZE),
                 SDL2pp::Rect(
                         camera.getScreenX(player.pos.x + getTextureFlipValue(flip, HELMET_FLIP_X,
@@ -131,7 +141,7 @@ void Drawer::drawArmor(const PlayerDTO& player, SDL_RendererFlip flip) {
 
     if (player.chest_armor) {
         renderer.Copy(
-                textures.getTexture(TextureContainer::CHEST_ARMOR),
+                textures.getTexture("/armors/chestPlateAnim.png"),
                 SDL2pp::Rect(0, 0, SPRITE_SIZE, SPRITE_SIZE),
                 SDL2pp::Rect(camera.getScreenX(player.pos.x),
                              camera.getScreenY(player.pos.y + Y_PHYSICAL_OFFSET_PLAYER + 3),
