@@ -5,7 +5,7 @@ add_subdirectory(core/)
 add_subdirectory(logic/)
 add_subdirectory(integration/)
 
-target_sources(taller_tests
+target_sources(tester_protocol
     PRIVATE
     # .cpp files
     testbaseprotocol.cpp

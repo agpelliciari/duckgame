@@ -26,8 +26,13 @@ void PlayStateRecv::run() {
                 }
                 
                 listener.matchUpdated(state);
-            } else {
-                // Chequea si finisheo?!
+            } else if(stats.state == MatchStateType::LOADING){
+                // Esta recargando el mapa!?!
+                std::cout << "---->RELOADING MAP DATA!\n";
+                context.map = MapData();
+                protocol.recvmapdata(context.map);
+                
+            } else{
                 listener.statsUpdated(stats);
             }
         }

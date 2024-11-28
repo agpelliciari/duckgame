@@ -82,6 +82,8 @@ void ClientProtocol::recvmapdata(struct MapData& data) {  //, const int unit) {
     // Populate textures to load.
     int count_textures = protocol.recvuint();
     data.textures.reserve(count_textures);
+    data.textures.clear();
+    
     while (count_textures > 0) {
         data.textures.push_back(protocol.recvmsgstr());
         count_textures--;
@@ -92,7 +94,8 @@ void ClientProtocol::recvmapdata(struct MapData& data) {  //, const int unit) {
     int count_decorations = protocol.recvuint();
 
     data.objects.reserve(count_blocks + count_decorations);
-
+    data.objects.clear();
+    
     while (count_blocks > 0) {
         coordinate_t _x = protocol.recvuint();
         coordinate_t _y = protocol.recvuint();
@@ -248,6 +251,11 @@ bool ClientProtocol::recvstate(MatchStatsInfo& outstats, MatchDto& outstate) {
     }
     
     outstats.state = (MatchStateType) code;
+    
+    if(outstats.state == MatchStateType::LOADING){
+        return false; // Esta recargando el mapa! 
+    }
+    
     recvstats(outstats);
     return false;
 }
