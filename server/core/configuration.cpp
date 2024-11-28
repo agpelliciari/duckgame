@@ -42,8 +42,8 @@ Configuration::Configuration(const char* config): Configuration() {
             printf("magnum dmg: %u magnum munition: %u\n",magnum_dmg, magnum_munition);
 
             reader.readPlayerInfo(player_health, player_speed,player_jmp_force,player_flap_force,player_flaps);
-            printf("player hp: %u speed: %u jmp force: %u\n",player_health, player_speed,player_jmp_force);
-            printf("player flap_force: %u flap_count: %u\n",player_flap_force,player_flaps);
+            printf("player hp: %u speed: %u jmp force: %d\n",player_health, player_speed,player_jmp_force);
+            printf("player flap_force: %d flap_count: %u\n",player_flap_force,player_flaps);
             
             
             

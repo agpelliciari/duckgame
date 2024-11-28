@@ -12,6 +12,10 @@ PhysicalPlayer::PhysicalPlayer(int init_coord_x, int init_coord_y, const Configu
         acceleration.y = -configs.gravity;
         
         }
+        
+bool PhysicalPlayer::isOnAir() const{
+     return on_air;
+}
 
 void PhysicalPlayer::update_action(TypeMoveAction& move_action) {
     move_action = TypeMoveAction::NONE;
@@ -86,6 +90,7 @@ void PhysicalPlayer::jump_start(){
             flap_attemps --;
         }
     } else {
+        //std::cout << "JMP FORCE ES " << configs.player_jmp_force<< std::endl;
         add_speed(0, configs.player_jmp_force);
         on_air = true;
     }

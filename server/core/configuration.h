@@ -12,8 +12,8 @@ public:
 
     uint16_t player_speed;
     uint16_t player_health;
-    uint16_t player_jmp_force;
-    uint16_t player_flap_force;
+    short player_jmp_force;
+    short player_flap_force;
     uint16_t player_flaps;
 
 

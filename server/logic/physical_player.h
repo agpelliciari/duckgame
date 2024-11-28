@@ -31,7 +31,8 @@ class PhysicalPlayer: public PhysicalObject {
 
     public:
         PhysicalPlayer(int init_coord_x, int init_coord_y, const Configuration& _configs);
-
+        
+        bool isOnAir() const;
         void react_to_sides_collision(Collision collision) override;
         void react_to_down_collision(Collision collision) override;
         void react_to_up_collision(Collision collision) override;

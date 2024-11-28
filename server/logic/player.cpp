@@ -185,12 +185,21 @@ void Player::shoot(std::vector <PhysicalBullet> &bullets){
 }
 
 void Player::stay_down_start(){
+    if(object.isOnAir()){
+       return;
+    }
+    
     is_stay_down = true;
+    
     move_action = TypeMoveAction::STAY_DOWN;
     object.stay_down_start();
 }
 
 void Player::stay_down_end(){
+    if(object.isOnAir()){
+       return;
+    }
+    
     is_stay_down = false;
     move_action = TypeMoveAction::NONE;
     object.stay_down_end();

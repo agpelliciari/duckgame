@@ -12,10 +12,10 @@ helmet_health: 10
 
 
 duck_speed: 3
-duck_health: 3    
-duck_jump_force: 40     
-duck_flap_force: 15
-duck_max_flaps : 9
+duck_health: 1    
+duck_jump_force: 35     
+duck_flap_force: 20
+duck_max_flaps : 5
 
 item_respawn_time: 2
 box_health: 2

@@ -75,7 +75,7 @@ public:
     void readBaseDmgMunition(uint16_t& dmg_base,uint16_t& munition_info);
     void readMagnumInfo(uint16_t& dmg_magnum,uint16_t& munition_magnum);
     
-    void readPlayerInfo(uint16_t& health,uint16_t& speed,uint16_t& jmp_force,uint16_t& flap_force,uint16_t& flaps);
+    void readPlayerInfo(uint16_t& health,uint16_t& speed,short& jmp_force,short& flap_force,uint16_t& flaps);
     void readDefenseInfo(uint16_t& armor_health,uint16_t& helmet_health);
     
     void readGravity(short& out);

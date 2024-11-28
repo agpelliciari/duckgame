@@ -94,12 +94,12 @@ void ConfigReader::readMagnumInfo(uint16_t& dmg_magnum,uint16_t& munition_magnum
     readU16(root[ConfigReader::MAGNUM_MUNITION], munition_magnum);
 }
 
-void ConfigReader::readPlayerInfo(uint16_t& health,uint16_t& speed,uint16_t& jmp_force,
-                                  uint16_t& flap_force,uint16_t& flaps){
+void ConfigReader::readPlayerInfo(uint16_t& health,uint16_t& speed,short& jmp_force,
+                                  short& flap_force,uint16_t& flaps){
     readU16(root[ConfigReader::PLAYER_HEALTH], health);
     readU16(root[ConfigReader::PLAYER_SPEED], speed);
-    readU16(root[ConfigReader::PLAYER_JMP_FORCE], jmp_force);
-    readU16(root[ConfigReader::PLAYER_FLAP_FORCE], flap_force);
+    readShort(root[ConfigReader::PLAYER_JMP_FORCE], jmp_force);
+    readShort(root[ConfigReader::PLAYER_FLAP_FORCE], flap_force);
     readU16(root[ConfigReader::PLAYER_FLAPS], flaps);
     
 }
