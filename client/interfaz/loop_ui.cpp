@@ -51,6 +51,7 @@ void UILoop::updateMatchDto() {
     MatchDto matchUpdate;
     while (isRunning_ && matchDtoQueue.try_update(matchUpdate)) {
         lastUpdate = matchUpdate;
+        animation.update(lastUpdate);
     }
 }
 
@@ -90,8 +91,6 @@ void UILoop::update() {
     }
 
     updateMatchDto();
-
-    animation.update(lastUpdate);
 
     camera.update(lastUpdate);
 
