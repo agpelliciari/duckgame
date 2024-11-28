@@ -20,7 +20,8 @@ void SpawnPlace::spawn_item() {
     }
     //std::cout<<"Spawn Item"<<std::endl;
     std::srand(std::time(nullptr));
-    int random_weapon = 0 + std::rand() % 4;
+    //int random_weapon = 0 + std::rand() % 4;
+    int random_weapon = 4;
     switch (random_weapon){
         case 0:
             possible_weapon = std::make_unique<CowboyPistolWeapon>();
@@ -49,6 +50,13 @@ void SpawnPlace::spawn_item() {
             //item = TypeDynamicObject::PISTOLA_COWBOY;
             spawned = true;
             break;
+        case 4:
+            possible_weapon = std::make_unique<SniperWeapon>();
+            std::cout<<"spawn sniper weapon"<<std::endl;
+            //item = TypeDynamicObject::PEW_PEW_LASER;
+            //item = TypeDynamicObject::PISTOLA_COWBOY;
+            spawned = true;
+        break;
         default:
             possible_weapon = std::make_unique<CowboyPistolWeapon>();
             //std::cout<<"Spawn Cowboypistol"<<std::endl;
