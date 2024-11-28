@@ -1,4 +1,4 @@
-target_sources(taller_tests
+target_sources(testers_core
     PRIVATE
     # .cpp files
     testermatchdto.cpp

@@ -17,3 +17,7 @@ manualtest/
 
 Makefile
 SDL2pp/
+
+*_autogen/
+
+tester_*
