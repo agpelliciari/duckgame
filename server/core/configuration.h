@@ -7,12 +7,14 @@ class Configuration {
 public:
     uint16_t base_dmg;
     uint16_t base_munition;
-    uint16_t gravity;
+    short gravity;
     
 
     uint16_t player_speed;
     uint16_t player_health;
     uint16_t player_jmp_force;
+    uint16_t player_flap_force;
+    uint16_t player_flaps;
 
 
     uint16_t explosion_radius;

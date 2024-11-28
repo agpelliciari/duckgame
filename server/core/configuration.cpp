@@ -15,7 +15,9 @@ Configuration::Configuration():
     explosion_radius(1),
     player_speed(1),
     player_health(3),
-    player_jmp_force(5),
+    player_jmp_force(40),
+    player_flap_force(10),
+    player_flaps(9),
     frame_delay(MS_FPS),
     rounds_per_set(5),
     wins_needed(10),
@@ -39,8 +41,10 @@ Configuration::Configuration(const char* config): Configuration() {
             reader.readMagnumInfo(magnum_dmg, magnum_munition);
             printf("magnum dmg: %u magnum munition: %u\n",magnum_dmg, magnum_munition);
 
-            reader.readPlayerInfo(player_health, player_speed,player_jmp_force);
+            reader.readPlayerInfo(player_health, player_speed,player_jmp_force,player_flap_force,player_flaps);
             printf("player hp: %u speed: %u jmp force: %u\n",player_health, player_speed,player_jmp_force);
+            printf("player flap_force: %u flap_count: %u\n",player_flap_force,player_flaps);
+            
             
             
             reader.readDefenseInfo(armor_health, helmet_health);
@@ -58,7 +62,7 @@ Configuration::Configuration(const char* config): Configuration() {
             reader.readMSDelay(frame_delay);
             printf("delay frame: %ums\n",frame_delay);
             reader.readGravity(gravity);
-            printf("gravity : %u\n",gravity);
+            printf("gravity : %d\n",gravity);
 
             reader.readRoundsPerSet(rounds_per_set);
             printf("rounds per set : %u\n",rounds_per_set);

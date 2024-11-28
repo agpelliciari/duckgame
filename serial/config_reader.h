@@ -40,6 +40,8 @@ public:
     static const char* PLAYER_SPEED;        // cppcheck-suppress unusedStructMember
     static const char* PLAYER_HEALTH;     // cppcheck-suppress unusedStructMember
     static const char* PLAYER_JMP_FORCE;     // cppcheck-suppress unusedStructMember
+    static const char* PLAYER_FLAP_FORCE;     // cppcheck-suppress unusedStructMember
+    static const char* PLAYER_FLAPS;     // cppcheck-suppress unusedStructMember
     
     static const char* MAGNUM_DMG;        // cppcheck-suppress unusedStructMember
     static const char* MAGNUM_MUNITION;   // cppcheck-suppress unusedStructMember
@@ -58,6 +60,7 @@ protected:
     
     bool checkInvalid(config_item_t& item);
     void readU16(config_item_t item,uint16_t& out);
+    void readShort(config_item_t item,short& out);
 public:
     explicit ConfigReader(const std::string& src);
     // Asumamos por ahora que no se quiere permitir copias..
@@ -72,10 +75,10 @@ public:
     void readBaseDmgMunition(uint16_t& dmg_base,uint16_t& munition_info);
     void readMagnumInfo(uint16_t& dmg_magnum,uint16_t& munition_magnum);
     
-    void readPlayerInfo(uint16_t& health,uint16_t& speed,uint16_t& jmp_force);
+    void readPlayerInfo(uint16_t& health,uint16_t& speed,uint16_t& jmp_force,uint16_t& flap_force,uint16_t& flaps);
     void readDefenseInfo(uint16_t& armor_health,uint16_t& helmet_health);
     
-    void readGravity(uint16_t& out);
+    void readGravity(short& out);
     void readExpRadius(uint16_t& out);
     void readMSDelay(uint16_t& delay);
     void readRoundsPerSet(uint16_t& out);

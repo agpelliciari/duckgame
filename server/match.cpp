@@ -129,6 +129,9 @@ void Match::init(const char* mapname) {
     
     this->stats.state = STARTED_ROUND;
     this->stats.numronda++;
+    //for(int i = 1; i < players.playercount(); i++){
+    //     this->stats.stats.emplace_back(i,0);
+    //}
     players.finishLobbyMode(this->stats);
 
     start();
