@@ -18,6 +18,7 @@
 #include "spawn_place.h"
 #include "duel_pistol.h"
 #include "dropped_item.h"
+#include "sniper_weapon.h"
 
 
 class Player {
