@@ -65,7 +65,13 @@ void Drawer::drawPlayerInfo(const PlayerDTO& player, const std::string color) {
     renderer.Copy(textures.getTexture(color), SDL2pp::Rect(1, 10, 32, 10),
                   SDL2pp::Rect(12 + 115 * (player.id - 1), 8, 32, 14));
     
-    int health = (5 * player.hp) + 1;
+    int health;
+    if (player.hp > 3) {
+        health = 16;
+    } else {
+        health = (5 * player.hp) + 1;
+    }
+    
     renderer.Copy(textures.getTexture("/ui/hp.png"), SDL2pp::Rect(0, 0, health, 16),
                         SDL2pp::Rect(40 + 115 * (player.id - 1), 5, health, 20));
 
@@ -206,6 +212,14 @@ void Drawer::getShotExplosionParameters(const PlayerDTO& player, SDL_RendererFli
         } else {
             explosionX = x + getTextureFlipValue(flip, -25, 45);
             explosionY = y + 8;
+        }
+    } else if (player.weapon == TypeWeapon::ESCOPETA) {
+        if (player.aiming_up) {
+            explosionX = x + getTextureFlipValue(flip, -12, 14);
+            explosionY = y + getTextureFlipValue(flip, -25, -57);
+        } else {
+            explosionX = x + getTextureFlipValue(flip, -25, 56);
+            explosionY = y + 12;
         }
     } else if (player.weapon == TypeWeapon::SNIPER) {
         if (player.aiming_up) {
