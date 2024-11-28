@@ -261,3 +261,134 @@ TEST(TestProtocolMocked, SendReceiveStatsPaused2PlayersIntercaladosEnvios) {
 
     TesterMatchDTO(state_recv2).assertEquals(state2);
 }
+
+
+
+static void simpleMap(struct MapInfo& info){
+    info.size.x = 20;
+    info.size.y = 30;
+    info.background = "somebk1";
+    
+    info.textures.reserve(6);
+    info.textures.emplace_back("b1");
+    info.textures.emplace_back("b2");
+    info.textures.emplace_back("b3");
+    info.textures.emplace_back("d1");
+    info.textures.emplace_back("d2");
+    info.textures.emplace_back("d3");
+    
+    for(int x = 0; x < info.size.x;x++){
+        info.blocks.emplace_back(x, 10, x%3); // x, y.
+    }
+
+    for(int x = 0; x < info.size.x;x++){
+        info.decorations.emplace_back(x, 11, 3+ x%3, 1); // x, y.
+    }
+    
+}
+
+TEST(TestProtocolMocked, SendReceiveReceiveMapInfo) {
+    SimpleMessenger msgbase(20, true);
+
+    // Los protocols se encargan. De liberar el shared socket.
+    ServerProtocol server(msgbase);
+    ClientProtocol client(msgbase);
+    
+    struct MapInfo info; 
+    simpleMap(info);
+    
+    server.sendmapinfo(info);
+    
+    
+    struct MapData data;
+    client.recvmapdata(data);
+    
+    
+    ASSERT_EQ(data.background , info.background) << "background is correct";
+    ASSERT_EQ(data.textures.size(), info.textures.size()) << "count textures is the same";
+    int countBlocks = info.blocks.size();
+    int countDec = info.decorations.size();
+    
+    ASSERT_EQ(data.objects.size(), countBlocks+countDec);
+}
+
+
+
+
+TEST(TestProtocolMocked, SendReceiveReceiveMapInfoAtsendAgain) {
+    SimpleMessenger msgbase(20, true);
+
+    // Los protocols se encargan. De liberar el shared socket.
+    ServerProtocol server(msgbase);
+    ClientProtocol client(msgbase);
+    
+    struct MapInfo info; 
+    simpleMap(info);
+    
+    server.sendmapinfo(info);
+    
+    
+    struct MapData data;
+    client.recvmapdata(data);
+    
+    info.background = "nuevo bk";
+    info.textures[2] = "block new";
+    
+    info.blocks.erase(info.blocks.begin()+1);
+    
+    
+    server.sendmapinfo(info);
+    client.recvmapdata(data);
+    
+    ASSERT_EQ(data.background , info.background) << "background is not correct";
+    ASSERT_EQ(data.textures.size(), info.textures.size()) << "count textures is not the same";
+    int countBlocks = info.blocks.size();
+    int countDec = info.decorations.size();
+    
+    ASSERT_EQ(data.objects.size(), countBlocks+countDec) << "count objects received is not the same! the sum of blocks and decorations";
+}
+
+
+
+TEST(TestProtocolMocked, SendReceiveReceiveMapInfoAtResend) {
+    SimpleMessenger msgbase(20, true);
+
+    // Los protocols se encargan. De liberar el shared socket.
+    ServerProtocol server(msgbase);
+    ClientProtocol client(msgbase);
+    
+    struct MapInfo info; 
+    simpleMap(info);
+    
+    server.sendmapinfo(info);
+    
+    
+    struct MapData data;
+    client.recvmapdata(data);
+    
+    info.background = "nuevo bk";
+    info.textures[2] = "block new";
+    
+    info.blocks.erase(info.blocks.begin()+1);
+    
+    
+    server.resendmapinfo(info);
+    
+
+    MatchDto state_recv;
+    MatchStatsInfo stats_recv;
+
+    // Assert que se mando/se esta jugando.
+    ASSERT_FALSE(client.recvstate(stats_recv, state_recv));
+    
+    ASSERT_EQ(stats_recv.state, LOADING);
+    
+    client.recvmapdata(data);
+    
+    ASSERT_EQ(data.background , info.background) << "background is not correct";
+    ASSERT_EQ(data.textures.size(), info.textures.size()) << "count textures is not the same";
+    int countBlocks = info.blocks.size();
+    int countDec = info.decorations.size();
+    
+    ASSERT_EQ(data.objects.size(), countBlocks+countDec) << "count objects received is not the same! the sum of blocks and decorations";
+}
