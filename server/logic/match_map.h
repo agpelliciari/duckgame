@@ -12,7 +12,7 @@ class MatchMap {
 private:
     int width;                                // cppcheck-suppress unusedStructMember
     int height;                               // cppcheck-suppress unusedStructMember
-    std::vector<std::vector<bool>> game_map;  // cppcheck-suppress unusedStructMember
+    //std::vector<std::vector<bool>> game_map;  // cppcheck-suppress unusedStructMember
     std::vector<MapObjectServer> objects;     // cppcheck-suppress unusedStructMember
 
 public:
@@ -21,7 +21,7 @@ public:
     void add_temp_collision(const int x, const int y);
 
     void add_collision(Tuple position, Tuple dimension, CollisionTypeMap type, int id);
-    void clear_objects();
+    void clear_map();
 
     bool out_of_map(int position_x, int position_y, int dimension_x, int dimension_y) const;
     int getWidth() const;

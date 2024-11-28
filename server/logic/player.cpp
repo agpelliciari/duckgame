@@ -38,6 +38,7 @@ void Player::get_data(int& id, int& x, int& y, TypeWeapon& weapon_,
         doing_action_ = this->doing_action;
     }*/
     doing_action_ = this->doing_action;
+    this->doing_action = TypeDoingAction::NONE;
     is_alive_ = this->is_alive;
     aim_up_ = this->aim_up;
     //this->doing_action.clear();
@@ -53,7 +54,7 @@ void Player::still() {
 int Player::get_id() { return id; }
 
 void Player::update(const MatchMap& colition_map) {
-    this->doing_action = TypeDoingAction::NONE;
+
     if (is_alive){
         if(object.is_out_of_map()){
             is_alive = false;

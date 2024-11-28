@@ -188,7 +188,7 @@ void MatchLogic::update_players(std::vector<int> &id_alive_players) {
 }
 
 void MatchLogic::update_colition_map() {
-    colition_map.clear_objects();
+    colition_map.clear_map();
     for (Player& player: players) {
         colition_map.add_collision(player.get_map_position(), player.get_dimension(), CollisionTypeMap::PLAYER, player.get_id());
     }
@@ -395,6 +395,15 @@ void MatchLogic::clear_objects(){
     //spawn_places.clear();
     dropped_items.clear();
     bullets.clear();
+}
+
+void MatchLogic::reset_map(){
+    spawn_places.clear();
+    spawn_points.clear();
+    dropped_items.clear();
+    boxes.clear();
+    bullets.clear();
+    colition_map.clear_map();
 }
 
 MatchLogic::~MatchLogic() {}
