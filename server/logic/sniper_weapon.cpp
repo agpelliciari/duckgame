@@ -3,17 +3,18 @@
 #include <ctime>
 #include <iostream>
 
-SniperWeapon::SniperWeapon(): ammo(3), charging_time(2),
+SniperWeapon::SniperWeapon(): ammo(2), charging_time(2),
         init_charging_time(0), final_charging_time(0),charged(false){};
 
 void SniperWeapon::get_type(TypeDynamicObject &type){
-    type = TypeDynamicObject::PEW_PEW_LASER;
+    type = TypeDynamicObject::SNIPER;
 }
 
 void SniperWeapon::shoot_sniper(ShootingDirection direction,
                                 std::vector <PhysicalBullet> &bullets,
                                Tuple bullet_position){
     bullets.push_back(PhysicalBullet(bullet_position.x, bullet_position.y));
+
     if (direction == ShootingDirection::UP){
         bullets.back().shoot_up();
     } else if (direction == ShootingDirection::LEFT){
@@ -21,6 +22,7 @@ void SniperWeapon::shoot_sniper(ShootingDirection direction,
     } else if (direction == ShootingDirection::RIGHT){
         bullets.back().shoot_right();
     }
+
     ammo --;
     charged = false;
 }
