@@ -17,6 +17,9 @@ bool MatchQueue::pop_command(ActionCommand& action) {
     std::unique_lock<std::mutex> lock(mutex);
     return queue.try_pop(action);
 }
+std::vector<ActionCommand> MatchQueue::pop_commands(){
+    return queue.pop_batch();
+}
 
 
 void MatchQueue::close() {}

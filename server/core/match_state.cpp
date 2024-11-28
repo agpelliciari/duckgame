@@ -136,8 +136,12 @@ bool MatchState::only_one_winner(MatchStatsInfo& stats, int &id_champion){
 
 
 void MatchState::step() {
-    this->receive_commands();
-    this->execute_commands();
+    std::vector<ActionCommand> curr_commands = acciones.pop_commands();
+    for (ActionCommand& command: curr_commands) {
+        command.execute();
+    }
+    
+    
     match_logic.update_colition_map();
     match_logic.update_players(this->id_alive_players);
     match_logic.update_bullets();

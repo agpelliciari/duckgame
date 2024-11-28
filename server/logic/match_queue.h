@@ -3,6 +3,7 @@
 #define MATCH_QUEUE_H
 
 #include <mutex>
+#include <vector>
 
 #include "common/dtosplayer.h"
 #include "common/queue.h"
@@ -22,6 +23,8 @@ public:
     explicit MatchQueue(MatchLogic& match_logic);
     void push_command(const PlayerActionDTO& action);
     bool pop_command(ActionCommand& action);
+    
+    std::vector<ActionCommand> pop_commands();
     void close();
 };
 
