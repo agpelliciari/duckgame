@@ -6,6 +6,7 @@
 
 //#include "./gameerror.h"
 #include "common/protocolerror.h"
+#include "common/core/simplemessenger.h"
 
 // ServerProtocol::ServerProtocol(Socket& messenger): Protocol(messenger) {}
 ServerProtocol::ServerProtocol(Messenger& messenger): Protocol(messenger) {}
@@ -89,77 +90,77 @@ void ServerProtocol::sendstats(const MatchStatsInfo& state) {
 void ServerProtocol::sendstate(const MatchDto&& state) { sendstate(state); }
 
 void ServerProtocol::sendstate(const MatchDto& state) {
-    // Si se manda un state.. esta iniciada. Hay que avisar esta iniciada
-    // Ya que el state se usa para saber que info va a llegar.
 
     // std::cout << "SENDING STATE DTO!\n";
     this->sendbyte((uint8_t)MatchStateType::INICIADA);
-
-
-    // Primero envia general info
-    // this->sendbytes(&state.info, sizeof(state.info));
-    this->sendbyte(state.players.size());
-
+    
+    // Un msg builder basicamente.
+    
+    SimpleMessenger auxmsg(128, true);
+    Protocol auxprot(auxmsg);
+    
+    // Envio de players.
+    auxprot.sendbyte(state.players.size());
     for (const PlayerDTO& player: state.players) {
-        sendplayer(player);
+        sendplayer(auxprot, player);
     }
+    this->sendbytes(auxmsg.first(), auxmsg.size());    
+    auxmsg.reset(); // Reset tras envio del mensaje.
 
 
-    this->sendshort(state.objects.size());
-    // std::cout << "SERVER SENDING OBJ COUNT" << state.objects.size() << std::endl;
-
+    auxprot.sendshort(state.objects.size());
     for (const DynamicObjDTO& obj: state.objects) {
-        this->senduint(obj.pos.x);
-        this->senduint(obj.pos.y);
-        this->sendbyte((uint8_t)obj.type);
+        auxprot.senduint(obj.pos.x);
+        auxprot.senduint(obj.pos.y);
+        auxprot.sendbyte((uint8_t)obj.type);
     }
+    
+    this->sendbytes(auxmsg.first(), auxmsg.size());    
+    auxmsg.reset(); // Reset tras envio del mensaje.
+    
 
-    this->sendbyte(state.events.size());
+    auxprot.sendbyte(state.events.size());
 
     for (const GameEvent& event: state.events) {
-        this->senduint(event.pos.x);
-        this->senduint(event.pos.y);
-        this->sendbyte((uint8_t)event.type);
+        auxprot.senduint(event.pos.x);
+        auxprot.senduint(event.pos.y);
+        auxprot.sendbyte((uint8_t)event.type);
     }
     
+    this->sendbytes(auxmsg.first(), auxmsg.size());    
+    auxmsg.reset(); // Reset tras envio del mensaje.
     
+    
+    // No hace falta usar por ahora ya que son uint8_t
     this->sendbyte(state.sounds.size());
-    
-    // No hace falta iterar?
     this->sendbytes(state.sounds.data(),
                     state.sounds.size());
-    
-    //for (const SoundEventType& sound: state.events) {
-    //    this->sendbyte((uint8_t)sound);
-    //}
-
 
 }
 
 // Para mayor flexibilidad.. por ahora.
-void ServerProtocol::sendplayer(const PlayerDTO& player) {
+void ServerProtocol::sendplayer(Protocol& protocol, const PlayerDTO& player) {
 
-    this->senduint(player.id);
-    this->senduint(player.pos.x);
-    this->senduint(player.pos.y);
-
-    this->sendbyte((uint8_t)player.weapon);
+    protocol.senduint(player.id);
+    protocol.senduint(player.pos.x);
+    protocol.senduint(player.pos.y);
     
+    protocol.sendbyte((uint8_t)player.weapon);
+    protocol.sendbyte((uint8_t)player.move_action);
+    protocol.sendbyte((uint8_t)player.doing_action);
+    protocol.sendbyte((uint8_t)player.hp);
+    protocol.sendbyte((uint8_t)player.munition);
     
-    this->sendbyte((uint8_t)player.move_action);
+    // Al user un builder temporal en memoria. No hace falta. optimizar a mandar 1 send.
     
-    this->sendbyte((uint8_t)player.doing_action);
+    // Pack things.    
+    uint8_t res = (uint8_t)player.aiming_up;
     
-    // Se podria juntar en 1 solo byte. Por ahora no?
-    this->sendbyte((uint8_t)player.aiming_up);
+    res = res<<1 | (uint8_t)player.is_alive;
+    res = res<<1 | (uint8_t)player.helmet;
+    res = res<<1 | (uint8_t)player.chest_armor;
     
-    this->sendbyte((uint8_t)player.is_alive);
-    this->sendbyte((uint8_t)player.hp);
-
-    this->sendbyte((uint8_t)player.munition);
-    
-    this->sendbyte((uint8_t)player.helmet);
-    this->sendbyte((uint8_t)player.chest_armor);
+    protocol.sendbyte(res);
 }
 
 
@@ -215,3 +216,14 @@ void ServerProtocol::sendmapinfo(const MapInfo& map) {
 // bool ServerProtocol::isopen() { return this->isactive(); }
 
 // void ServerProtocol::close() { this->close(); }
+
+
+    //uint8_t info[5] = {
+    //     (uint8_t)player.weapon,
+    //     (uint8_t)player.move_action,
+    //     (uint8_t)player.doing_action,
+    //     (uint8_t)player.hp,
+    //     (uint8_t)player.munition
+    //};    
+    //this->sendbytes(&info[0], 5);
+

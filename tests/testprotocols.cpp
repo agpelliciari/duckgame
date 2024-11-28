@@ -5,7 +5,7 @@
 #include "common/serverprotocol.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include "tests/core/queuesocket.h"
+#include "common/core/simplemessenger.h"
 #include "tests/core/testermatchdto.h"
 
 using ::testing::InSequence;
@@ -13,7 +13,7 @@ using ::testing::ThrowsMessage;
 
 TEST(TestProtocolMocked, SendReceiveStateNoPlayer) {
 
-    QueueSocket msgbase(20, true);
+    SimpleMessenger msgbase(20, true);
 
     MatchDto state;
 
@@ -36,7 +36,7 @@ TEST(TestProtocolMocked, SendReceiveStateNoPlayer) {
 
 TEST(TestProtocolMocked, SendReceiveState1PlayerMoveLeft) {
 
-    QueueSocket msgbase(20, true);
+    SimpleMessenger msgbase(20, true);
 
     MatchDto state;
     PlayerDTO player1(3, true, 10, 5,
@@ -65,7 +65,7 @@ TEST(TestProtocolMocked, SendReceiveState1PlayerMoveLeft) {
 
 TEST(TestProtocolMocked, SendReceiveState2PlayerMoveLeftAndAirLeft) {
 
-    QueueSocket msgbase(20, true);
+    SimpleMessenger msgbase(20, true);
 
     MatchDto state;
 
@@ -93,7 +93,7 @@ TEST(TestProtocolMocked, SendReceiveState2PlayerMoveLeftAndAirLeft) {
 
 TEST(TestProtocolMocked, SendReceiveStatsPausedNoPlayer) {
 
-    QueueSocket msgbase(20, true);
+    SimpleMessenger msgbase(20, true);
 
     MatchStatsInfo stats;
 
@@ -120,7 +120,7 @@ TEST(TestProtocolMocked, SendReceiveStatsPausedNoPlayer) {
 
 TEST(TestProtocolMocked, SendReceiveStatsPaused2PlayersFirstSecondWinner) {
 
-    QueueSocket msgbase(20, true);
+    SimpleMessenger msgbase(20, true);
 
     MatchStatsInfo stats;
 
@@ -158,7 +158,7 @@ TEST(TestProtocolMocked, SendReceiveStatsPaused2PlayersFirstSecondWinner) {
 
 
 TEST(TestProtocolMocked, SendReceiveMatchDtoMultipleTimes) {
-    QueueSocket msgbase(20, true);
+    SimpleMessenger msgbase(20, true);
 
     MatchDto state;
 
@@ -191,7 +191,7 @@ TEST(TestProtocolMocked, SendReceiveMatchDtoMultipleTimes) {
 
 TEST(TestProtocolMocked, SendReceiveStatsPaused2PlayersIntercaladosEnvios) {
 
-    QueueSocket msgbase(20, true);
+    SimpleMessenger msgbase(20, true);
 
     MatchStatsInfo stats;
 

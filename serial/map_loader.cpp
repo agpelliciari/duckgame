@@ -2,11 +2,12 @@
 
 #include <iostream>
 #include <filesystem>
+
 static const char* DIR_MAPS = "res/maps/";
 static const char* EXT = ".yaml";
 
 
-MapLoader::MapLoader(const char * root_maps): root(root_maps){
+MapLoader::MapLoader(const char * root_maps): root(root_maps), dev(), map_gen(dev()){
      for (const auto& entry: std::filesystem::directory_iterator(root_maps)){
            if(entry.is_regular_file()){
                auto path = entry.path();
@@ -19,7 +20,9 @@ MapLoader::MapLoader(const char * root_maps): root(root_maps){
      
      for(const std::string& map: list_maps){
          std::cout << "REGISTERED MAP: " << map<<std::endl;
-     }
+     }     
+     
+     distribute = std::uniform_int_distribution<std::mt19937::result_type>(0, list_maps.size()-1);
 }
 
 const std::vector<std::string>& MapLoader::registeredMaps() const{
@@ -34,7 +37,16 @@ MapLoader::MapLoader() : MapLoader(DIR_MAPS){
 MapDeserializer& MapLoader::getLoader(const char* mapname) {
 
     std::string name(root);
-    name.append(mapname);
+    
+    if(strlen(mapname) == 0){ // Hint para seleccionar random
+       int ind = distribute(map_gen);     
+       std::cout<< "Should select random map! DID ?"<< ind<< "\n";
+       name.append(list_maps[ind]);
+       
+    } else{
+        name.append(mapname);
+    }
+    
     name.append(EXT);
 
     for (ReferencedMap& ref: maps) {

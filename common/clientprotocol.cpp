@@ -156,16 +156,23 @@ void ClientProtocol::recvplayer(PlayerDTO& player){
     player.move_action = (TypeMoveAction)protocol.recvbyte();
 
     player.doing_action = (TypeDoingAction)protocol.recvbyte();
-
-    player.aiming_up = protocol.recvbyte();
-
-    player.is_alive = protocol.recvbyte();
+    
     player.hp = protocol.recvbyte();
-    
     player.munition = protocol.recvbyte();
+
+    uint8_t packed = protocol.recvbyte();
+
+    player.chest_armor = (bool)(packed & 1);
+    packed = packed>>1;
     
-    player.helmet = protocol.recvbyte();
-    player.chest_armor = protocol.recvbyte();
+    player.helmet = (bool)(packed & 1);
+    packed = packed>>1;
+    
+    player.is_alive = (bool)(packed & 1);
+    packed = packed>>1;
+    
+    player.aiming_up = (bool)(packed & 1);
+    
 }
 void ClientProtocol::recvmatch(MatchDto& outstate) {
     int playercount = (int)protocol.recvbyte();
