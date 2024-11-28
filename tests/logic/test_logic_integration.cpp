@@ -21,10 +21,10 @@ static void buildMapSimple(struct ObjectsInfo& info){
         info.blocks.emplace_back(x, 10); // x, y.
     }
 
-    info.player_spawns.emplace_back(1,1);
-    info.player_spawns.emplace_back(1,11);
-    info.player_spawns.emplace_back(19,1);
-    info.player_spawns.emplace_back(19,11);
+    info.player_spawns.emplace_back(5,1);
+    info.player_spawns.emplace_back(5,11);
+    info.player_spawns.emplace_back(15,1);
+    info.player_spawns.emplace_back(15,11);
     
 }
 

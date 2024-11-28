@@ -34,6 +34,10 @@ private:
 
     void setBuilder(AnimationBuilder& builder, int spriteX, int spriteY);
 
+    // Timing: calculate difference between this and previous frame in
+    // milliseconds
+    void updateFrame();
+
     float updateDeltaTime();
 
     void updateExplosionsVector(AnimationBuilder& builder, float deltaTime);
@@ -41,12 +45,8 @@ private:
 public:
     Animation(const GameContext& context, SoundManager& soundManager);
 
-    // Timing: calculate difference between this and previous frame in
-    // milliseconds
-    void updateFrame();
-
     // Set sprite coordinates based on the character's state
-    void updateSprite(const MatchDto& matchDto);
+    void update(const MatchDto& matchDto);
 
     bool isFacingLeft(int playerId);
 

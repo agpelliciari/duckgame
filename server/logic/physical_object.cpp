@@ -92,7 +92,7 @@ void PhysicalObject::move(const MatchMap& colition_map) {
         for (int y = 0; y >= speed.y * time_step; y--) {
             Collision collision(0, CollisionTypeMap::NONE);
             if (colition_map.out_of_map(position.x, position.y, dimension.x, dimension.y)) {
-                std::cout << "out of map " << std::endl;
+                //std::cout << "out of map " << std::endl;
                 this->react_to_out_of_map();
             } else if (detect_y_collision(colition_map, -1, collision)) {
                 this->react_to_down_collision(collision);
@@ -105,7 +105,7 @@ void PhysicalObject::move(const MatchMap& colition_map) {
         for (int y = 0; y <= speed.y * time_step; y++) {
             Collision collision(0, CollisionTypeMap::NONE);
             if (colition_map.out_of_map(position.x, position.y, dimension.x, dimension.y)) {
-                std::cout << "out of map " << std::endl;
+                //std::cout << "out of map " << std::endl;
                 this->react_to_out_of_map();
             } else if (detect_y_collision(colition_map, 1, collision)) {
                 this->react_to_up_collision(collision);

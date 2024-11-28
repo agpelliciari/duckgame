@@ -16,10 +16,9 @@ MatchMap::MatchMap(int size_x, int size_y): width(size_x), height(size_y) {
 int MatchMap::getWidth() const { return width; }
 int MatchMap::getHeight() const { return height; }
 
-void MatchMap::add_temp_collision(const int x, const int y) {
-
-    std::cout << "Add temp col at " << x << ", " << y << std::endl;
-    // game_map[x][y] = true;
+void MatchMap::setSize(const int width,const int height){
+    this->width = width;
+    this->height = height;
 }
 
 void MatchMap::add_collision(Tuple position, Tuple dimension, CollisionTypeMap type, int id) {

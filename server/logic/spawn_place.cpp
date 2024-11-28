@@ -18,34 +18,34 @@ void SpawnPlace::spawn_item() {
     if (possible_weapon != nullptr) {
         return;
     }
-    std::cout<<"Spawn Item"<<std::endl;
+    //std::cout<<"Spawn Item"<<std::endl;
     std::srand(std::time(nullptr));
     //int random_weapon = 0 + std::rand() % 4;
     int random_weapon = 4;
     switch (random_weapon){
         case 0:
             possible_weapon = std::make_unique<CowboyPistolWeapon>();
-            std::cout<<"Spawn Cowboypistol"<<std::endl;
+            //std::cout<<"Spawn Cowboypistol"<<std::endl;
             //item = TypeDynamicObject::PISTOLA_COWBOY;
             spawned = true;
             break;
         case 1:
             possible_weapon = std::make_unique<MagnumWeapon>();
-            std::cout<<"Spawn Magnum"<<std::endl;
+            //std::cout<<"Spawn Magnum"<<std::endl;
             //item = TypeDynamicObject::MAGNUM;
             //item = TypeDynamicObject::PISTOLA_COWBOY;
             spawned = true;
             break;
         case 2:
             possible_weapon = std::make_unique<DuelPistol>();
-            std::cout<<"spawn duel pistol"<<std::endl;
+            //std::cout<<"spawn duel pistol"<<std::endl;
             //item = TypeDynamicObject::PISTOLA_DE_DUELOS;
             //item = TypeDynamicObject::PISTOLA_COWBOY;
             spawned = true;
             break;
         case 3:
             possible_weapon = std::make_unique<PewPewLaserWeapon>();
-            std::cout<<"spawn pew pew laser"<<std::endl;
+            //std::cout<<"spawn pew pew laser"<<std::endl;
             //item = TypeDynamicObject::PEW_PEW_LASER;
             //item = TypeDynamicObject::PISTOLA_COWBOY;
             spawned = true;
@@ -59,7 +59,7 @@ void SpawnPlace::spawn_item() {
         break;
         default:
             possible_weapon = std::make_unique<CowboyPistolWeapon>();
-            std::cout<<"Spawn Cowboypistol"<<std::endl;
+            //std::cout<<"Spawn Cowboypistol"<<std::endl;
             //item = TypeDynamicObject::PISTOLA_COWBOY;
             spawned = true;
             break;

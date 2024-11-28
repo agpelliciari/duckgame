@@ -34,19 +34,17 @@ MapLoader::MapLoader() : MapLoader(DIR_MAPS){
 
 }
 
+MapDeserializer& MapLoader::getRandomMap(){
+       int ind = distribute(map_gen);     
+       std::cout<< "Should select random map! DID ?"<< ind<< "\n";
+       
+       return getLoader(list_maps[ind].c_str());
+}
+
 MapDeserializer& MapLoader::getLoader(const char* mapname) {
 
     std::string name(root);
-    
-    if(strlen(mapname) == 0){ // Hint para seleccionar random
-       int ind = distribute(map_gen);     
-       std::cout<< "Should select random map! DID ?"<< ind<< "\n";
-       name.append(list_maps[ind]);
-       
-    } else{
-        name.append(mapname);
-    }
-    
+    name.append(mapname);    
     name.append(EXT);
 
     for (ReferencedMap& ref: maps) {
@@ -58,15 +56,7 @@ MapDeserializer& MapLoader::getLoader(const char* mapname) {
     }
 
     std::cout << "LOADING NEW MAP " << name << std::endl;
-
-    // Por ahora pone uno default ... por tema espacios?
-    //name = std::string(DIR_MAPS);
-    //name.append("map3");
-    //name.append(EXT);
-
-
-    // No estaba.
-
+    
     ReferencedMap& ref = maps.emplace_back(name);
     return ref.deserial;
 }

@@ -59,7 +59,9 @@ public:
     void sendstate(const MatchDto& state);
     void sendstats(const MatchStatsInfo& state);
     
-    void sendmapinfo(const MapInfo& map);
+    void sendmapinfo(const MapInfo& map); // For first time!
+    void resendmapinfo(const MapInfo& map); // If resend is needed!
+    
     void sendmaplist(const std::vector<std::string>& maps);
 
     // metodos generales para is active.

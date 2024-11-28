@@ -7,7 +7,7 @@
 #include "common/clock.h"
 
 
-MatchState::MatchState(const Configuration& _configs): running(false), match_logic(), acciones(match_logic), max_rounds(_configs.rounds_per_set), configs(_configs) {}
+MatchState::MatchState(const Configuration& _configs): running(false), match_logic(_configs), acciones(match_logic), max_rounds(_configs.rounds_per_set), configs(_configs) {}
 
 void MatchState::pushAction(const PlayerActionDTO& action) { acciones.push_command(action); }
 
@@ -28,6 +28,13 @@ void MatchState::playRound(MatchObserver& observer, MatchStatsInfo& stats) {
     this->calculate_game_results(stats, id_alive_players[0]);
 }
 
+void MatchState::reset_map(const struct ObjectsInfo& info){
+    
+    match_logic.reset_map();
+    match_logic.clear_objects();
+    add_objects(info);
+}
+
 void MatchState::reset_objects(const struct ObjectsInfo& objects_info){
     match_logic.clear_objects();
     match_logic.add_boxes(objects_info.boxes);
@@ -35,15 +42,46 @@ void MatchState::reset_objects(const struct ObjectsInfo& objects_info){
     //match_logic.add_items(objects_info.item_spawns);
 }
 
+
+
+void MatchState::add_objects(const struct ObjectsInfo& objects_info) {
+    match_logic.resize_map(objects_info.map_width,objects_info.map_height);
+    
+    match_logic.add_spawn_points(objects_info.player_spawns);
+    match_logic.add_blocks(objects_info.blocks);
+    match_logic.add_boxes(objects_info.boxes);
+    match_logic.add_item_spawns(objects_info.item_spawns);
+}
+
+
+void MatchState::start_players(MatchObserver& observer, MatchStatsInfo& stats) {
+
+    stats.stats.clear();
+    id_alive_players.clear();
+    std::vector<unsigned int> ids = observer.getPlayers();
+
+    int spawn_point_index = 0;
+    for (auto id = ids.begin(); id != ids.end();) {
+        stats.stats.push_back(PlayerStatDto(*id, 0));
+        id_alive_players.push_back(*id);
+        match_logic.add_player(*id, spawn_point_index);
+        std::cout << "New player added with id: " << *id << "ind is " << spawn_point_index<< std::endl;
+        ++id;
+        spawn_point_index ++;
+    }
+
+    running = true;
+}
 void MatchState::reset_players(MatchObserver& observer){
     match_logic.clear_players();
     id_alive_players.clear();
     std::vector<unsigned int> ids = observer.getPlayers();
     int spawn_point_index = 0;
+    
     for (auto id = ids.begin(); id != ids.end();) {
         id_alive_players.push_back(*id);
         match_logic.add_player(*id, spawn_point_index);
-        std::cout << "New player added with id: " << *id << std::endl;
+        std::cout << "Reset player added with id: " << *id << "ind is " << spawn_point_index<< std::endl;
         ++id;
         spawn_point_index++;
     }
@@ -96,24 +134,6 @@ bool MatchState::only_one_winner(MatchStatsInfo& stats, int &id_champion){
     return only_one_winner;
 }
 
-void MatchState::start_players(MatchObserver& observer, MatchStatsInfo& stats) {
-
-    stats.stats.clear();
-    id_alive_players.clear();
-    std::vector<unsigned int> ids = observer.getPlayers();
-
-    int spawn_point_index = 0;
-    for (auto id = ids.begin(); id != ids.end();) {
-        stats.stats.push_back(PlayerStatDto(*id, 0));
-        id_alive_players.push_back(*id);
-        match_logic.add_player(*id, spawn_point_index);
-        std::cout << "New player added with id: " << *id << std::endl;
-        ++id;
-        spawn_point_index ++;
-    }
-
-    running = true;
-}
 
 void MatchState::step() {
     this->receive_commands();
@@ -146,13 +166,6 @@ void MatchState::send_results(MatchObserver& observer) {
     MatchDto dto;
     match_logic.get_dtos(dto.players, dto.objects, dto.sounds);
     observer.updateState(dto);
-}
-
-void MatchState::add_objects(const struct ObjectsInfo& objects_info) {
-    match_logic.add_spawn_points(objects_info.player_spawns);
-    match_logic.add_blocks(objects_info.blocks);
-    match_logic.add_boxes(objects_info.boxes);
-    match_logic.add_item_spawns(objects_info.item_spawns);
 }
 
 MatchState::~MatchState() {}

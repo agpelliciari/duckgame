@@ -191,7 +191,37 @@ endif()
 # Testing section
 # ---------------
 
+
+
 if(TALLER_TESTS)
+
+function(
+  link_to_gtest
+  target_name)
+    message("---Linking gtest to " ${target_name})
+    
+    # Say where to find the xoz headers
+    # HEY!! TODO XXX: add more subfolders here
+    target_include_directories(${target_name} PUBLIC .)
+
+    # Set the compiler warnings to the tests target (but be a little lesser strict)
+    set_project_warnings(${target_name} ${TALLER_MAKE_WARNINGS_AS_ERRORS} TRUE)
+
+    # Say where googletest headers can be found
+    target_include_directories(${target_name}
+        PUBLIC
+        ${gtest_SOURCE_DIR}/include
+        ${gmock_SOURCE_DIR}/include
+        )
+
+    # HEY!! TODO XXX: I'm assuming that the code under testing is in taller_common
+    # Change this if you have to.
+    target_link_libraries(${target_name}
+        GTest::gtest_main
+        gmock_main
+    )  
+endfunction()  
+
     # Let's use google test
     include(FetchContent)
     FetchContent_Declare(
@@ -204,42 +234,36 @@ if(TALLER_TESTS)
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
     FetchContent_MakeAvailable(googletest)
     include(GoogleTest)
+    
+    
+    add_library(testers_core STATIC)
 
     # target for testing
     # HEY!! TODO XXX: Change the name of the executable to the one you like!
-    add_executable(taller_tests)
+    add_executable(tester_protocol)
+    add_executable(tester_logic)
+    add_executable(tester_integration)
 
-    # HEY!! TODO XXX: I'm assuming that the code under testing is in taller_common
-    # Change this if you have to.
-    add_dependencies(taller_tests taller_common taller_server_logic)
-
-    # Say where to find the xoz headers
-    # HEY!! TODO XXX: add more subfolders here
-    target_include_directories(taller_tests PUBLIC .)
-
-    # Add the source files to the taller_tests target
-    # HEY!! TODO XXX: add more subfolders here
     add_subdirectory(tests/)
-
-    # Set the compiler warnings to the tests target (but be a little lesser strict)
-    set_project_warnings(taller_tests ${TALLER_MAKE_WARNINGS_AS_ERRORS} TRUE)
-
-    # Say where googletest headers can be found
-    target_include_directories(taller_tests
-        PUBLIC
-        ${gtest_SOURCE_DIR}/include
-        ${gmock_SOURCE_DIR}/include
-        )
-
-    # HEY!! TODO XXX: I'm assuming that the code under testing is in taller_common
-    # Change this if you have to.
-    target_link_libraries(taller_tests
-        taller_common
-        taller_server_logic
-        GTest::gtest_main
-        gmock_main
-    )
     
-    #include(GoogleTest)
-    #gtest_discover_tests(taller_tests)
+    # Add depedencies to respective items
+    add_dependencies(testers_core taller_common taller_serial)
+    target_link_libraries(testers_core taller_common taller_serial)
+    
+    
+    add_dependencies(tester_protocol testers_core)
+    add_dependencies(tester_logic testers_core taller_server_logic)
+    add_dependencies(tester_integration testers_core taller_server_logic)
+
+    link_to_gtest(testers_core)
+
+    link_to_gtest(tester_protocol)
+    target_link_libraries(tester_protocol testers_core)
+    
+    link_to_gtest(tester_logic)
+    target_link_libraries(tester_logic testers_core taller_server_logic)
+
+    link_to_gtest(tester_integration)
+    target_link_libraries(tester_integration testers_core taller_server_logic)
+    
 endif()

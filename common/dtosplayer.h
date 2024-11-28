@@ -24,7 +24,11 @@ enum PlayerActionType : uint8_t {
     AIM_UP_END = 11,
     SHOOT = 12,
     PICK_UP_ITEM = 13,
-    DROP_ITEM = 14
+    DROP_ITEM = 14,
+    
+    TOGGLE_DBG_MODE = 20,
+    EQUIP_ARMOR = 21,
+    EQUIP_HELMET = 22,
 };
 
 struct PlayerActionDTO {

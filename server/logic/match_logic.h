@@ -15,6 +15,7 @@
 #include "type_collision.h"
 #include "physical_bullet.h"
 #include "dropped_item.h"
+#include "server/core/configuration.h"
 
 #ifndef MATCH_LOGIC_H
 #define MATCH_LOGIC_H
@@ -24,7 +25,8 @@ class MatchLogic {
 
 private:
     MatchMap colition_map;  // cppcheck-suppress unusedStructMember
-
+    const Configuration& configs;
+    
     std::vector<Player> players;  // cppcheck-suppress unusedStructMember
     //std::vector<int> id_alive_players;    // cppcheck-suppress unusedStructMember
     std::vector<Box> boxes;       // cppcheck-suppress unusedStructMember
@@ -41,7 +43,7 @@ private:
 
 
 public:
-    MatchLogic();
+    MatchLogic(const Configuration& _configs);
     void execute_move_command(int action_type, int index);
     void add_player(int id, int spawn_point_index);
     void add_player_speed(int id, int x, int y);
@@ -73,6 +75,8 @@ public:
     void update_dropped_items();
     void update_spawn_places();
     void update_spawn_points();
+    
+    void resize_map(const int width, const int height);
     void reset_map();
 
     ~MatchLogic();

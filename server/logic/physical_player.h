@@ -11,6 +11,7 @@
 #include "shooting_direction.h"
 #include "collision.h"
 #include "type_collision.h"
+#include "server/core/configuration.h"
 
 class MatchMap;
 
@@ -22,13 +23,16 @@ class PhysicalPlayer: public PhysicalObject {
         static constexpr int FLAP_ATTEMPS = 10;
 
         Tuple initial_position;
+        const Configuration& configs;
         int flap_attemps;
+        
         bool on_air;
         bool out_of_map;
 
     public:
-        PhysicalPlayer(int init_coord_x, int init_coord_y);
-
+        PhysicalPlayer(int init_coord_x, int init_coord_y, const Configuration& _configs);
+        
+        bool isOnAir() const;
         void react_to_sides_collision(Collision collision) override;
         void react_to_down_collision(Collision collision) override;
         void react_to_up_collision(Collision collision) override;

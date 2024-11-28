@@ -1,6 +1,6 @@
 base_dmg: 1
 base_munition: 1          
-gravity: 10        
+gravity: 5
 
 explosion_radius: 1  
 
@@ -11,9 +11,11 @@ armor_health:  5
 helmet_health: 10    
 
 
-duck_speed: 2
-duck_health: 3    
-duck_jump_force: 15     
+duck_speed: 3
+duck_health: 1    
+duck_jump_force: 35     
+duck_flap_force: 20
+duck_max_flaps : 5
 
 item_respawn_time: 2
 box_health: 2
@@ -23,7 +25,5 @@ rounds_per_set: 5
 wins_needed: 10 
 
 ## Todavia no tomados en cuenta.
-max_flaps : 9
-flap_gravity: 2
 
 duck_hitbox_size: 2 

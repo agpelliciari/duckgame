@@ -18,7 +18,7 @@
 #include "spawn_place.h"
 #include "duel_pistol.h"
 #include "dropped_item.h"
-#include "sniper_weapon.h"
+#include "server/core/configuration.h"
 
 
 class Player {
@@ -40,7 +40,7 @@ private:
     bool is_stay_down;  // cppcheck-suppress unusedStructMember
 
 public:
-    Player(int id, int initial_x, int initial_y);
+    Player(int id, int initial_x, int initial_y,const Configuration& configs);
     int get_id();
     bool is_still_alive();
     bool same_id(unsigned int id);

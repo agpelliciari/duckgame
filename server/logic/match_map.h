@@ -18,14 +18,15 @@ private:
 public:
     MatchMap(int size_x, int size_y);
 
-    void add_temp_collision(const int x, const int y);
+    int getWidth() const;
+    int getHeight() const;
+    void setSize(const int width,const int height);
 
     void add_collision(Tuple position, Tuple dimension, CollisionTypeMap type, int id);
+    
     void clear_map();
 
     bool out_of_map(int position_x, int position_y, int dimension_x, int dimension_y) const;
-    int getWidth() const;
-    int getHeight() const;
 
     bool out_of_map_y(const int y) const;
     bool out_of_map_x(const int x) const;

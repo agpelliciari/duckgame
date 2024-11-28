@@ -5,17 +5,16 @@ add_subdirectory(core/)
 target_sources(taller_server_logic
     PRIVATE
     # .cpp files
-        server.cpp
-        #main.cpp
         gameerror.cpp
+        controlledplayer.cpp
+        match.cpp
+        playercontainer.cpp
         lobbycontainer.cpp
         lobbycontrol.cpp
-        match.cpp
-        playeracceptor.cpp
-        playercontainer.cpp
-        controlledplayer.cpp
         controlreceiver.cpp
         controlnotifier.cpp
+        playeracceptor.cpp
+        server.cpp
          
 
     PUBLIC
