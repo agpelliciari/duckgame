@@ -171,6 +171,10 @@ void ServerProtocol::sendmaplist(const std::vector<std::string>& maps){
     }
 }
 
+void ServerProtocol::resendmapinfo(const MapInfo& map){ // If resend is needed!
+    this->sendbyte((uint8_t)MatchStateType::LOADING);    
+    sendmapinfo(map);
+}
 void ServerProtocol::sendmapinfo(const MapInfo& map) {
 
     // Send Map size

@@ -248,6 +248,11 @@ bool ClientProtocol::recvstate(MatchStatsInfo& outstats, MatchDto& outstate) {
     }
     
     outstats.state = (MatchStateType) code;
+    
+    if(outstats.state == MatchStateType::LOADING){
+        return false; // Esta recargando el mapa! 
+    }
+    
     recvstats(outstats);
     return false;
 }

@@ -48,10 +48,11 @@ struct MapInfo {
 
     uint16_t blocks_z;  // cppcheck-suppress unusedStructMember
     uint16_t boxes_z;   // cppcheck-suppress unusedStructMember
-
+    bool is_random;
+    
     std::string background;  // cppcheck-suppress unusedStructMember
     std::string boxes_tex;   // cppcheck-suppress unusedStructMember
-
+    
     std::string map_id;  // cppcheck-suppress unusedStructMember
 
     std::vector<std::string> textures;              // cppcheck-suppress unusedStructMember
@@ -61,8 +62,8 @@ struct MapInfo {
 
     MapInfo(const coordinate_t width, const coordinate_t height, const uint16_t block_z,
             const uint16_t box_z):
-            size(width, height), blocks_z(block_z), boxes_z(box_z) {}
+            size(width, height), blocks_z(block_z), boxes_z(box_z),is_random(false) {}
 
-    MapInfo(): size(0, 0), blocks_z(0), boxes_z(0) {}
+    MapInfo(): size(0, 0), blocks_z(0), boxes_z(0), is_random(false) {}
 };
 #endif

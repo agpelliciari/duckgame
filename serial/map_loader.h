@@ -33,6 +33,8 @@ public:
     // Permitamos el mov... por mas que no sea realmente eficiente.
     MapLoader(MapLoader&&) = delete;
     MapLoader& operator=(MapLoader&&) = delete;
+    
+    MapDeserializer& getRandomMap();
 
     MapDeserializer& getLoader(const char* mapname);
 

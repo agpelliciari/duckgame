@@ -72,7 +72,18 @@ bool ControlNotifier::runPostGame(MatchStateType state) {
     }
     try {
         player.waitgamemode();
-        std::cerr << "Despausada " << (int)match.getID() << " info to " << player.toString() << std::endl;            
+        std::cerr << "Despausada " << (int)match.getID() << " info to " << player.toString() << std::endl;
+        
+        const MapInfo& mapinfo = match.getMap();
+        
+        if(mapinfo.is_random){
+            std::cout << "MAP WAS random... resend.\n";
+            protocol.resendmapinfo(mapinfo);
+            //protocol.sendmapinfo();
+        }
+
+        
+        
         protocol.sendstats(player.getStats());
         return true;
     } catch (const ClosedQueue& error) {        

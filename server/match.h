@@ -31,21 +31,30 @@ typedef unsigned int lobbyID;
 // Delega el manejo del estado, notificado de eventos y recepcion de acciones
 class Match: private Thread {
 private:
+    typedef void (Match::* round_resetter)();
+    
     lobbyID id;               // cppcheck-suppress unusedStructMember
     PlayerContainer players;  // cppcheck-suppress unusedStructMember
     MatchState looper;        // cppcheck-suppress unusedStructMember
     int connectedplayers;     // cppcheck-suppress unusedStructMember
+    MapLoader& maps; // cppcheck-suppress unusedStructMember
+    round_resetter reset_round;// cppcheck-suppress unusedStructMember
     
     // Para el cliente
     MapInfo map;              // cppcheck-suppress unusedStructMember
     MatchStatsInfo stats;// cppcheck-suppress unusedStructMember
+    
+    
     
     // Para el server
     struct ObjectsInfo objects;// cppcheck-suppress unusedStructMember
 
     // Para el thread y en general el loopeado
     void run() override;
-
+    
+    
+    void resetFixedMap();
+    void resetRandomMap();
 
 protected:
     friend class LobbyContainer;
@@ -58,20 +67,20 @@ protected:
     void hostLobbyLeft(ControlledPlayer& host);
 
     // Metodos analogos a los de thread. expuestos a friend nada mas.
-    void init(MapLoader& maps, const char* mapname);
+    void init(const char* mapname);
     void cancelByError(LobbyErrorType error);
 
     // Libera, bien podria prescindirse y usar un destructor.
     // Pero mejor explicitar. Reemplaza el stop.. que no se quiere permitir hacerlo sin hacer el
     // resto.
-    void finish(MapLoader& maps);
+    void finish();
     
     bool pauseMatch(int count_seconds);
     //bool roundEnded();
     void loadMap(MapDeserializer& deserial);
     bool handlePostRound();
 public:
-    explicit Match(lobbyID _id, const int max_players, const Configuration& configs);
+    explicit Match(lobbyID _id, const int max_players, const Configuration& configs, MapLoader& _maps);
 
     // Asumamos por ahora que no se quiere permitir copias, ni mov.
     Match(const Match&) = delete;
