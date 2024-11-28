@@ -51,7 +51,12 @@ void UILoop::updateMatchDto() {
     MatchDto matchUpdate;
     while (isRunning_ && matchDtoQueue.try_update(matchUpdate)) {
         lastUpdate = matchUpdate;
+
         animation.update(lastUpdate);
+        
+        for (const SoundEventType& soundType: lastUpdate.sounds) {
+            soundManager.addMatchSound(soundType);
+        }
     }
 }
 
@@ -91,6 +96,8 @@ void UILoop::update() {
     }
 
     updateMatchDto();
+
+    soundManager.playSounds();
 
     camera.update(lastUpdate);
 
