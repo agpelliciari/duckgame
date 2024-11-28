@@ -50,22 +50,11 @@ void Animation::update(const MatchDto& matchDto) {
 
 void Animation::updateDoingActionAnimation(AnimationBuilder& builder, const PlayerDTO& player, const TypeDoingAction& action) {
     if (action == TypeDoingAction::SHOOTING || action == TypeDoingAction::SHOOTING_UP) {
-        std::cout << "Player [" << player.id << "] Action: SHOOTING" << std::endl;
         if (player.weapon == TypeWeapon::PEW_PEW_LASER) {
-            soundManager.playSound(SoundType::LASER);
             builder.addExplosion("/weapons/laserFlare.png", 16, 0.3f, 2);
         } else {
-            soundManager.playSound(SoundType::SHOT);
             builder.addExplosion("/weapons/smallFlare.png", 11, 0.3f, 1);
         }
-
-    } else if (action == TypeDoingAction::DAMAGED) {
-        std::cout << "Player [" << player.id << "] Action: DAMAGED" << std::endl;
-        soundManager.playSound(SoundType::QUACK);
-
-    } else if (action == TypeDoingAction::PICK_UP) {
-        std::cout << "Player [" << player.id << "] Action: PICK_UP" << std::endl;
-        soundManager.playSound(SoundType::PICK_UP);
     }
 }
 
@@ -107,21 +96,18 @@ void Animation::updatePlayerAnimation(AnimationBuilder& builder, const PlayerDTO
                        (STARTING_SPRITE_X + SPRITE_SIZE * ((frameTicks / JUMPING_ANIMATION_SPEED) %
                                                            JUMPING_ANIMATION_FRAMES)),
                        JUMPING_SPRITE_Y);
-            soundManager.playSound(SoundType::JUMP);
             break;
         case TypeMoveAction::AIR_RIGHT:
             setBuilder(builder,
                        (STARTING_SPRITE_X + SPRITE_SIZE * ((frameTicks / JUMPING_ANIMATION_SPEED) %
                                                            JUMPING_ANIMATION_FRAMES)),
                        JUMPING_SPRITE_Y, false);
-            soundManager.playSound(SoundType::JUMP);
             break;
         case TypeMoveAction::AIR_LEFT:
             setBuilder(builder,
                        (STARTING_SPRITE_X + SPRITE_SIZE * ((frameTicks / JUMPING_ANIMATION_SPEED) %
                                                            JUMPING_ANIMATION_FRAMES)),
                        JUMPING_SPRITE_Y, true);
-            soundManager.playSound(SoundType::JUMP);
             break;
         case TypeMoveAction::FLAP_NEUTRAL:
             setBuilder(builder, (STARTING_SPRITE_X + SPRITE_SIZE * FLAPPING_SPRITE_X_OFFSET),

@@ -10,6 +10,21 @@ void SoundManager::playBackgroundMusic() {
 
 void SoundManager::stopBackgroundMusic() { mixer.HaltMusic(); }
 
+void SoundManager::addMatchSound(SoundEventType soundType) { sounds.addSound(soundType); }
+
+void SoundManager::playSounds() {
+    int soundsPlayed = 0;
+    for (SoundType sound: sounds.getMatchSounds()) {
+        if (soundsPlayed > MAX_SOUNDS_PER_FRAME) {
+            break;
+        }
+        playSound(sound);
+        soundsPlayed++;
+    }
+
+    sounds.clearMatchSounds();
+}
+
 void SoundManager::playSound(SoundType sound) { mixer.PlayChannel(1, sounds.getSound(sound), 0); }
 
 bool SoundManager::isRoundEndSoundAvailable() const { return roundEndSoundAvailable; }
