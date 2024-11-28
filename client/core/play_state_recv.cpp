@@ -31,11 +31,13 @@ void PlayStateRecv::run() {
                 std::cout << "---->RELOADING MAP DATA!\n";
                 context.map = MapData();
                 protocol.recvmapdata(context.map);
+                stats.state = PAUSADA; // Para que no se salga! del loop
                 
             } else{
                 listener.statsUpdated(stats);
             }
         }
+        std::cerr << "finsihed.. play state received finish, close" << std::endl;
     } catch (const LibError&
                      error) {  // No deberia pasara realmente, antes pasaria en el controller.
         

@@ -38,6 +38,8 @@ public:
     void start_players(MatchObserver& observer, MatchStatsInfo& stats);
     void add_objects(const struct ObjectsInfo& objects_info);
     
+    void reset_map(const struct ObjectsInfo& objects_info);
+    
     void reset_objects(const struct ObjectsInfo& objects_info);
     void reset_players(MatchObserver& observer);
     

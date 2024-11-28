@@ -89,14 +89,14 @@ void Match::resetFixedMap(){
 }
 
 void Match::resetRandomMap(){
-    std::cout << "-->Map is random at refresh !\n";
     
     maps.removeLoader(map.map_id);
     
     map = MapInfo(); // Resetea    
     loadMap(maps.getRandomMap());
     
-    looper.reset_objects(objects);
+    std::cout << "-->Map is random at refresh !\n";
+    looper.reset_map(objects);
     looper.reset_players(players);
     
     map.is_random = true;

@@ -20,4 +20,6 @@ SDL2pp/
 
 *_autogen/
 
-tester_*
+tester_protocol
+tester_logic
+tester_integration

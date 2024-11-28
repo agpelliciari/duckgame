@@ -68,8 +68,10 @@ MatchLogic::MatchLogic(): colition_map(800, 640) {
 
 
 void MatchLogic::add_player(int id, int spawn_point_index) {
-    //std::cout << "SPAWN POINT INDEX: "<< spawn_point_index << std::endl;
-    //std::cout << "SPAWN POINT SIZE: " << spawn_points.size() << std::endl;
+    std::cout << "player SPAWN POINT INDEX: "<< spawn_point_index << std::endl;
+    std::cout << "player SPAWN POINT pos: " << spawn_points[spawn_point_index].x*16
+   <<", "<< spawn_points[spawn_point_index].y*16
+   << std::endl;
     if (spawn_point_index < spawn_points.size()) {
         players.push_back(Player(id, spawn_points[spawn_point_index].x  * 16, spawn_points[spawn_point_index].y  * 16 + 1));
         std::cout << "spawn point x: " << spawn_points[spawn_point_index].x << ", y: " << spawn_points[spawn_point_index].y << std::endl;
@@ -397,12 +399,19 @@ void MatchLogic::clear_objects(){
     bullets.clear();
 }
 
+void MatchLogic::resize_map(const int width, const int height){
+    colition_map.setSize(16*width, 16*height);
+}
+
 void MatchLogic::reset_map(){
+    
     spawn_places.clear();
     spawn_points.clear();
     dropped_items.clear();
     boxes.clear();
+    blocks.clear();
     bullets.clear();
+    
     colition_map.clear_map();
 }
 

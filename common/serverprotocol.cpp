@@ -73,6 +73,7 @@ PlayerActionDTO ServerProtocol::recvaction() {
 // Garantiza que sea un state de estadistica.
 #define stat_state(vl) (vl == INICIADA? MatchStateType::ROUND_END: vl) 
 void ServerProtocol::sendstats(const MatchStatsInfo& state) {
+    std::cout << "Sending stats!! " << state.parse() << std::endl;
 
     uint8_t general[3] = {(uint8_t)stat_state(state.state), (uint8_t)state.numronda, state.champion_player};    
     

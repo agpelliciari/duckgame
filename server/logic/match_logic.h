@@ -74,6 +74,8 @@ public:
     void update_dropped_items();
     void update_spawn_places();
     void update_spawn_points();
+    
+    void resize_map(const int width, const int height);
     void reset_map();
 
     ~MatchLogic();
