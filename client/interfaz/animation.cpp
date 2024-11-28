@@ -30,7 +30,8 @@ void Animation::updateExplosionsVector(AnimationBuilder& builder, float deltaTim
     );
 }
 
-void Animation::updateSprite(const MatchDto& matchDto) {
+void Animation::update(const MatchDto& matchDto) {
+    updateFrame();
     float deltaTime = updateDeltaTime();
 
     for (const PlayerDTO& player: matchDto.players) {
@@ -38,12 +39,6 @@ void Animation::updateSprite(const MatchDto& matchDto) {
         if (builder) {
             if (player.is_alive) {
                 updatePlayerAnimation(*builder, player);
-                //for (const TypeDoingAction& action: player.doing_actions) {
-                //    if (action != TypeDoingAction::NONE) {
-                //        updateDoingActionAnimation(*builder, player, action);
-                //    }
-                //}
-
                 updateDoingActionAnimation(*builder, player, player.doing_action);
                 updateExplosionsVector(*builder, deltaTime);
             } else {
@@ -55,6 +50,7 @@ void Animation::updateSprite(const MatchDto& matchDto) {
 
 void Animation::updateDoingActionAnimation(AnimationBuilder& builder, const PlayerDTO& player, const TypeDoingAction& action) {
     if (action == TypeDoingAction::SHOOTING || action == TypeDoingAction::SHOOTING_UP) {
+        std::cout << "Player [" << player.id << "] Action: SHOOTING" << std::endl;
         if (player.weapon == TypeWeapon::PEW_PEW_LASER) {
             soundManager.playSound(SoundType::LASER);
             builder.addExplosion("/weapons/laserFlare.png", 16, 0.3f, 2);
@@ -64,9 +60,11 @@ void Animation::updateDoingActionAnimation(AnimationBuilder& builder, const Play
         }
 
     } else if (action == TypeDoingAction::DAMAGED) {
+        std::cout << "Player [" << player.id << "] Action: DAMAGED" << std::endl;
         soundManager.playSound(SoundType::QUACK);
 
     } else if (action == TypeDoingAction::PICK_UP) {
+        std::cout << "Player [" << player.id << "] Action: PICK_UP" << std::endl;
         soundManager.playSound(SoundType::PICK_UP);
     }
 }

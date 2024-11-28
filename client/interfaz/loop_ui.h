@@ -15,6 +15,10 @@
 #include "drawer.h"
 #include "sound_manager.h"
 
+#define MS_PER_FRAME 16  // 16ms == 60fps
+#define UPDATED true
+#define NOT_UPDATED false
+
 class UILoop {
 private:
     SDL2pp::SDL sdlLib;
@@ -38,6 +42,12 @@ private:
     MatchStatsInfo lastStatsUpdate;
 
     bool isRunning_;  // cppcheck-suppress unusedStructMember
+
+    void updateMatchStats();
+
+    void updateMatchDto();
+
+    bool updateMatchState();
 
     // This is where most of the game logic will go;
     // including: movement, AI, and animation updates.

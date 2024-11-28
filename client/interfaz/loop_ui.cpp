@@ -19,8 +19,11 @@ UILoop::UILoop(ActionListener& dtoSender, SimpleEventListener& _events,
 void UILoop::exec() {
     try {
         soundManager.playBackgroundMusic();
-        Clock clock(16);  // 16ms == 60fps
+
+        Clock clock(MS_PER_FRAME);
+
         clock.resetnext();
+
         while (isRunning_) {
             eventHandler.handle(isRunning_);
 
@@ -37,20 +40,28 @@ void UILoop::exec() {
     }
 }
 
-void UILoop::update() {
-
+void UILoop::updateMatchStats() {
     MatchStatsInfo stats;
     while (isRunning_ && matchDtoQueue.update_stats(stats)) {
         lastStatsUpdate = stats;
     }
-    
+}
+
+void UILoop::updateMatchDto() {
+    MatchDto matchUpdate;
+    while (isRunning_ && matchDtoQueue.try_update(matchUpdate)) {
+        lastUpdate = matchUpdate;
+    }
+}
+
+bool UILoop::updateMatchState() {
     if ((lastStatsUpdate.state == TERMINADA) || (lastStatsUpdate.state == CANCELADA)) {
         drawer.drawLeaderboard(lastStatsUpdate);
-        return;
+        return UPDATED;
 
     } else if (lastStatsUpdate.state == PAUSADA) {
         drawer.drawLeaderboard(lastStatsUpdate);
-        return;
+        return UPDATED;
 
     } else if (lastStatsUpdate.state == ROUND_END) {
         if (soundManager.isRoundEndSoundAvailable()) {
@@ -58,27 +69,32 @@ void UILoop::update() {
             soundManager.setRoundEndSoundAvailability(false);
         }
         drawer.drawWinner(lastStatsUpdate, lastUpdate);
-        return;
+        return UPDATED;
 
     } else if(lastStatsUpdate.state == STARTED_ROUND){       
         drawer.resetIndicatorFlag();
         soundManager.setRoundEndSoundAvailability(true);
         lastStatsUpdate.state = INICIADA;
+        return UPDATED;
+    }
+
+    return NOT_UPDATED;
+}
+
+void UILoop::update() {
+
+    updateMatchStats();
+    
+    if (updateMatchState()) {
         return;
     }
 
+    updateMatchDto();
 
-    MatchDto matchUpdate;
-
-    while (isRunning_ && matchDtoQueue.try_update(matchUpdate)) {
-        lastUpdate = matchUpdate;
-    }
-
-    animation.updateFrame();
-
-    animation.updateSprite(lastUpdate);
+    animation.update(lastUpdate);
 
     camera.update(lastUpdate);
+
     drawer.draw(lastUpdate, lastStatsUpdate);
 }
 
