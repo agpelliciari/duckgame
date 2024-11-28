@@ -78,6 +78,9 @@ void Drawer::drawPlayerInfo(const PlayerDTO& player, const std::string color) {
             if (player.weapon == TypeWeapon::PISTOLA_COWBOY) {
                 x = 59;
                 y = 7;
+            } else if (player.weapon == TypeWeapon::SNIPER) {
+                x = 60;
+                y = 7;
             } else {
                 x = 54;
                 y = -3;
@@ -90,7 +93,7 @@ void Drawer::drawPlayerInfo(const PlayerDTO& player, const std::string color) {
             SDL2pp::Texture text_sprite(renderer, font.RenderText_Blended(text, SDL_Color{255, 255, 255, 255}));
 
             renderer.Copy(text_sprite, SDL2pp::NullOpt,
-                        SDL2pp::Rect(x + 35 + 115 * (player.id - 1), 9, 12, 12));
+                        SDL2pp::Rect(x + 45 + 115 * (player.id - 1), 9, 12, 12));
         }
     }
 
@@ -150,7 +153,7 @@ void Drawer::drawArmor(const PlayerDTO& player, SDL_RendererFlip flip) {
     }
 }
 
-void Drawer::getWeaponParameters(const PlayerDTO& player, SDL_RendererFlip flip, int& x, int& y, double& angle) {
+void Drawer::getWeaponParameters(const PlayerDTO& player, SDL_RendererFlip flip, int& x, int& y, double& angle, int& sizeAdjustment) {
     if (player.weapon == TypeWeapon::PISTOLA_COWBOY) {
         if (player.aiming_up) {
             angle = getTextureFlipValue(flip, 90.0, -90.0);
@@ -161,6 +164,18 @@ void Drawer::getWeaponParameters(const PlayerDTO& player, SDL_RendererFlip flip,
             x = camera.getScreenX(player.pos.x + getTextureFlipValue(flip, 1, 14) - 8);
             y = camera.getScreenY(player.pos.y + 2);
         }
+        sizeAdjustment = 4;  // cambiar por 6 en caso de que se vea mal
+    } else if (player.weapon == TypeWeapon::SNIPER) {
+        if (player.aiming_up) {
+            angle = getTextureFlipValue(flip, 90.0, -90.0);
+            x = camera.getScreenX(player.pos.x + getTextureFlipValue(flip, 20, 14) - 8);
+            y = camera.getScreenY(player.pos.y + getTextureFlipValue(flip, -24, 6));
+        } else {
+            angle = 0.0;
+            x = camera.getScreenX(player.pos.x + getTextureFlipValue(flip, -10, 8) - 8);
+            y = camera.getScreenY(player.pos.y + 2);
+        }
+        sizeAdjustment = 0;
     } else {
         if (player.aiming_up) {
             angle = getTextureFlipValue(flip, 90.0, -90.0);
@@ -171,6 +186,7 @@ void Drawer::getWeaponParameters(const PlayerDTO& player, SDL_RendererFlip flip,
             x = camera.getScreenX(player.pos.x - 8 + getTextureFlipValue(flip, -3, 9));
             y = camera.getScreenY(player.pos.y - 6);
         }
+        sizeAdjustment = 6;
     }
 }
 
@@ -191,6 +207,14 @@ void Drawer::getShotExplosionParameters(const PlayerDTO& player, SDL_RendererFli
             explosionX = x + getTextureFlipValue(flip, -25, 45);
             explosionY = y + 8;
         }
+    } else if (player.weapon == TypeWeapon::SNIPER) {
+        if (player.aiming_up) {
+            explosionX = x + getTextureFlipValue(flip, 3, -4);
+            explosionY = y + getTextureFlipValue(flip, -25, -68);
+        } else {
+            explosionX = x + getTextureFlipValue(flip, -27, 65);
+            explosionY = y - 4;
+        }
     } else {
         if (player.aiming_up) {
             explosionX = x + getTextureFlipValue(flip, -8, 8);
@@ -207,15 +231,15 @@ void Drawer::drawWeapon(const PlayerDTO& player, SDL_RendererFlip flip) {
     if (weaponTexture != weaponTextures.end()) {
         const auto& [textureType, width, height] = weaponTexture->second;
 
-        int x, y;
+        int x, y, sizeAdjustment;
         double angle;
 
-        getWeaponParameters(player, flip, x, y, angle);
+        getWeaponParameters(player, flip, x, y, angle, sizeAdjustment);
 
         renderer.Copy(
             textures.getTexture(textureType), 
             SDL2pp::Rect(0, 0, width, height),
-            SDL2pp::Rect(x, y, camera.getScaledSize(width - 6), camera.getScaledSize(height - 6)),
+            SDL2pp::Rect(x, y, camera.getScaledSize(width - sizeAdjustment), camera.getScaledSize(height - sizeAdjustment)),
             angle, SDL2pp::Point(0, 0), flip
         );
 
@@ -389,7 +413,7 @@ void Drawer::drawDynamicObject(const DynamicObjDTO& object) {
         case TypeDynamicObject::SNIPER:
             renderer.Copy(
                     textures.getTexture("/weapons/sniper.png"), SDL2pp::Rect(0, 0, SNIPER_WIDTH, SNIPER_HEIGHT),
-                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y),
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x - 5), camera.getScreenY(-object.pos.y + 10),
                                  camera.getScaledSize(SNIPER_WIDTH), camera.getScaledSize(SNIPER_HEIGHT)));
             break;
 

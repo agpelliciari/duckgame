@@ -85,7 +85,7 @@ private:
 
     void drawIndicator(const PlayerDTO& player, bool isMainPlayer);
     
-    void getWeaponParameters(const PlayerDTO& player, SDL_RendererFlip flip, int& x, int& y, double& angle);
+    void getWeaponParameters(const PlayerDTO& player, SDL_RendererFlip flip, int& x, int& y, double& angle, int& sizeAdjustment);
 
     void getShotExplosionParameters(const PlayerDTO& player, SDL_RendererFlip flip, int x, int y, int& explosionX, int& explosionY);
 
