@@ -11,7 +11,7 @@ void DuelPistol::get_weapon(TypeWeapon& type){
     type = TypeWeapon::MAGNUM;
 }
 
-void DuelPistol::shoot(ShootingDirection direction,
+bool DuelPistol::shoot(ShootingDirection direction,
                                std::vector <PhysicalBullet> &bullets, Tuple bullet_position, PhysicalPlayer &player){
 
     if (ammo > 0){
@@ -29,7 +29,9 @@ void DuelPistol::shoot(ShootingDirection direction,
             bullets.back().add_speed(-dispersion_index, dispersion_index);
         }
         ammo --;
+        return true;
     }
+    return false;
 }
 
 

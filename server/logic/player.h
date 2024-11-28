@@ -29,11 +29,14 @@ private:
     bool helmet;                // cppcheck-suppress unusedStructMember
     bool chest_armor;           // cppcheck-suppress unusedStructMember
     TypeMoveAction move_action;  // cppcheck-suppress unusedStructMember
-    std::vector<TypeDoingAction> doing_action; // cppcheck-suppress unusedStructMember
+    TypeDoingAction doing_action; // cppcheck-suppress unusedStructMember
     bool aim_up;                 // cppcheck-suppress unusedStructMember
     int life_points;              // cppcheck-suppress unusedStructMember
     ShootingDirection shooting_direction;  // cppcheck-suppress unusedStructMember
+    ShootingDirection previous_shooting_direction;  // cppcheck-suppress unusedStructMember
     std::unique_ptr<Weapon> weapon;               // cppcheck-suppress unusedStructMember
+	std::vector<SoundEventType> player_sounds; // cppcheck-suppress unusedStructMember
+    bool is_stay_down;  // cppcheck-suppress unusedStructMember
 
 public:
     Player(int id, int initial_x, int initial_y);
@@ -43,7 +46,7 @@ public:
 
     void get_data(int& id, int& x, int& y, TypeWeapon& weapon, bool& helmet_equipped,
                   bool& chest_armor_equipped, TypeMoveAction& move_action,
-                  std::vector<SoundEventType>& sounds, bool &is_alive, bool &aim_up,TypeDoingAction& doing);
+                  TypeDoingAction &doing_action, bool &is_alive, bool &aim_up);
 
     void still();
     void add_speed(int speed_x, int speed_y);
@@ -59,7 +62,7 @@ public:
     void stay_down_end();
     void jump_start();
     void jump_end();
-
+    void get_sounds(std::vector<SoundEventType>& sounds);
     void update_shooting_direction();
     Tuple get_map_position();
     Tuple get_dimension();

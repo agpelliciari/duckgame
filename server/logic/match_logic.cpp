@@ -33,10 +33,10 @@ MatchLogic::MatchLogic(): colition_map(800, 640) {
         this->add_player_speed(index, 0, 0);
     };*/
     this->command_map[PlayerActionType::STAY_DOWN_START] = [this](int index) {
-        this->add_player_speed(index, 0, 0);
+        this->player_stay_down_start(index);
     };
     this->command_map[PlayerActionType::STAY_DOWN_END] = [this](int index) {
-        this->add_player_speed(index, 0, 0);
+        this->player_stay_down_end(index);
     };
 
     this->command_map[PlayerActionType::FLAPPING_END] = [this](int index) {
@@ -222,14 +222,15 @@ void MatchLogic::update_colition_map() {
     // }
 }*/
 
-void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos, std::vector<DynamicObjDTO>& objects, std::vector<SoundEventType>& sounds) {
+void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos,
+                          std::vector<DynamicObjDTO>& objects, std::vector<SoundEventType>& sounds) {
     for (Player &player: players) {
 
         PlayerDTO dto;
         
         player.get_data(dto.id, dto.pos.x, dto.pos.y, dto.weapon, dto.helmet, dto.chest_armor,
-                        dto.move_action, sounds, dto.is_alive, dto.aiming_up, dto.doing_action);
-
+                        dto.move_action, dto.doing_action, dto.is_alive, dto.aiming_up);
+        player.get_sounds(sounds);
         dtos.push_back(dto);
     }
 

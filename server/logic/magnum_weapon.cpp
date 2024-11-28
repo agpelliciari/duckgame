@@ -11,7 +11,7 @@ void MagnumWeapon::get_weapon(TypeWeapon& type){
     type = TypeWeapon::MAGNUM;
 }
 
-void MagnumWeapon::shoot(ShootingDirection direction,
+bool MagnumWeapon::shoot(ShootingDirection direction,
                                std::vector <PhysicalBullet> &bullets, Tuple bullet_position, PhysicalPlayer &player){
 
     if (ammo > 0){
@@ -34,7 +34,9 @@ void MagnumWeapon::shoot(ShootingDirection direction,
             bullets.back().add_speed(-dispersion_index, dispersion_index);
         }
         ammo --;
+        return true;
     }
+    return false;
 }
 
 void MagnumWeapon::get_type(TypeDynamicObject &type){

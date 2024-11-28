@@ -24,6 +24,11 @@ void ActionCommand::execute() {
     if (action.type == PlayerActionType::MOVE_RIGHT_END){
         std::cout<< "MOVE_RIGHT_END" <<std::endl;
     }
-
+    if (action.type == PlayerActionType::STAY_DOWN_START){
+        std::cout<< "STAY_DOWN_START" <<std::endl;
+    }
+    if (action.type == PlayerActionType::STAY_DOWN_END){
+        std::cout<< "STAY_DOWN_END" <<std::endl;
+    }
     match_logic->execute_move_command(action.type, action.playerind);
 }

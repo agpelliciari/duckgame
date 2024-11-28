@@ -15,7 +15,7 @@ class Weapon {
 public:
     virtual void get_weapon(TypeWeapon& type) = 0;
     virtual void get_type(TypeDynamicObject &type) = 0;
-    virtual void shoot(ShootingDirection direction,
+    virtual bool shoot(ShootingDirection direction,
                        std::vector <PhysicalBullet> &bullets, Tuple bullet_position, PhysicalPlayer &player) = 0;
     virtual ~Weapon() = default;
 };
