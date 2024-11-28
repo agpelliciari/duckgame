@@ -4,7 +4,7 @@
 #include <iostream>
 
 SniperWeapon::SniperWeapon(): ammo(3), charging_time(2),
-        init_charging_time(0), final_charging_time(0),charged(true){};
+        init_charging_time(0), final_charging_time(0),charged(false){};
 
 void SniperWeapon::get_type(TypeDynamicObject &type){
     type = TypeDynamicObject::PEW_PEW_LASER;
@@ -28,26 +28,27 @@ void SniperWeapon::shoot_sniper(ShootingDirection direction,
 bool SniperWeapon::shoot(ShootingDirection direction,
                          std::vector<PhysicalBullet> &bullets,
                          Tuple bullet_position, PhysicalPlayer &player) {
+
     if (ammo <= 0) {
         return false;
     }
 
     std::time_t current_time = std::time(nullptr);
 
-    if (charged) {
-        this->shoot_sniper(direction, bullets, bullet_position);
+
+    if (init_charging_time == 0) {
         init_charging_time = current_time;
         std::cout << "CARGANDO ARMA" << std::endl;
-        return true;
-    } else {
-        if (current_time - init_charging_time >= charging_time) {
-            charged = true;
-            init_charging_time = 0;
-            return this->shoot(direction, bullets, bullet_position, player);
-        }
+        return false;
+    }
+    if (current_time - init_charging_time >= charging_time) {
+       init_charging_time = 0;
+       this->shoot_sniper(direction, bullets, bullet_position);
+       return true;
     }
     return false;
 }
+
 
 
 int SniperWeapon::get_ammo(){
