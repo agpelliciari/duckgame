@@ -43,3 +43,6 @@ void MagnumWeapon::get_type(TypeDynamicObject &type){
     type = TypeDynamicObject::MAGNUM;
 }
 
+int MagnumWeapon::get_ammo(){
+    return ammo;
+}
