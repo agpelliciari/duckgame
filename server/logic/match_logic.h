@@ -2,7 +2,6 @@
 #include <list>
 #include <map>
 #include <vector>
-
 #include "common/dtosplayer.h"
 #include "common/dtosmap.h"
 #include "common/dtosgame.h"

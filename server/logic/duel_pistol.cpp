@@ -38,3 +38,7 @@ bool DuelPistol::shoot(ShootingDirection direction,
 void DuelPistol::get_type(TypeDynamicObject &type){
     type = TypeDynamicObject::PISTOLA_DE_DUELOS;
 }
+
+int DuelPistol::get_ammo(){
+    return ammo;
+}

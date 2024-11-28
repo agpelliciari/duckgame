@@ -229,7 +229,7 @@ void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos,
         PlayerDTO dto;
         
         player.get_data(dto.id, dto.pos.x, dto.pos.y, dto.weapon, dto.helmet, dto.chest_armor,
-                        dto.move_action, dto.doing_action, dto.is_alive, dto.aiming_up);
+                        dto.move_action, dto.doing_action, dto.is_alive, dto.aiming_up, dto.hp, dto.munition);
         player.get_sounds(sounds);
         dtos.push_back(dto);
     }

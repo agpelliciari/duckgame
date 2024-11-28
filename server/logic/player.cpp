@@ -19,7 +19,7 @@ Player::Player(int id_, int initial_x, int initial_y):
 void Player::get_data(int& id, int& x, int& y, TypeWeapon& weapon_,
                       bool& helmet_equipped, bool& chest_armor_equipped,
                       TypeMoveAction& move_action_, TypeDoingAction &doing_action_,
-                      bool &is_alive_, bool &aim_up_) {
+                      bool &is_alive_, bool &aim_up_, int &life_points_, int &ammo_) {
     id = this->id;
     this->object.get_real_position(x, y);
 
@@ -41,6 +41,12 @@ void Player::get_data(int& id, int& x, int& y, TypeWeapon& weapon_,
     this->doing_action = TypeDoingAction::NONE;
     is_alive_ = this->is_alive;
     aim_up_ = this->aim_up;
+    life_points_ = this->life_points;
+    if (weapon != nullptr){
+        ammo_ = weapon->get_ammo();
+    } else {
+        ammo_ = 0;
+    }
     //this->doing_action.clear();
 
 }

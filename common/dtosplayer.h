@@ -89,8 +89,8 @@ struct PlayerDTO {
     bool chest_armor;
     bool aiming_up;
 
-    uint8_t hp;
-    uint8_t munition;
+    int hp;
+    int munition;
 
     PlayerDTO(int id_, bool alive, int x, int y, TypeWeapon w, bool h, bool armor,
               TypeMoveAction action):

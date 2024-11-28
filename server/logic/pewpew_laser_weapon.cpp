@@ -43,3 +43,7 @@ bool PewPewLaserWeapon::shoot(ShootingDirection direction,
 void PewPewLaserWeapon::get_type(TypeDynamicObject &type){
     type = TypeDynamicObject::PEW_PEW_LASER;
 }
+
+int PewPewLaserWeapon::get_ammo(){
+    return ammo;
+}
