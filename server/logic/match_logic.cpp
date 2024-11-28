@@ -11,14 +11,16 @@ MatchLogic::MatchLogic(const Configuration& _configs): colition_map(100, 100), c
         this->add_player_speed(index, -configs.player_speed, 0);
     };
     this->command_map[PlayerActionType::MOVE_LEFT_END] = [this](int index) {
-        this->still_player(index);
+        this->add_player_speed(index, configs.player_speed, 0);
+        //this->still_player(index);
     };
 
     this->command_map[PlayerActionType::MOVE_RIGHT] = [this](int index) {
         this->add_player_speed(index, configs.player_speed, 0);
     };
     this->command_map[PlayerActionType::MOVE_RIGHT_END] = [this](int index) {
-        this->still_player(index);
+        this->add_player_speed(index, -configs.player_speed, 0);
+        //this->still_player(index);
     };
 
     this->command_map[PlayerActionType::JUMP] = [this](int index) {

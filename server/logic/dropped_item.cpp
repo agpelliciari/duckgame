@@ -20,8 +20,8 @@ bool DroppedItem::is_alive(){
 }
 
 bool DroppedItem::is_on_range(int player_position_x, int player_position_y){
-    return (player_position_x >= position.x && player_position_x <= position.x + dimension.x &&
-                player_position_y >= position.y && player_position_y <= position.x + dimension.y);
+    return (player_position_x >= position.x-24 && player_position_x <= position.x + dimension.x+24 &&
+                player_position_y >= position.y-24 && player_position_y <= position.y + dimension.y+24);
 }
 
 std::unique_ptr<Weapon> DroppedItem::get_weapon(){
