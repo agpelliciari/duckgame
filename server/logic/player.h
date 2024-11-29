@@ -22,6 +22,7 @@
 #include "ak47_weapon.h"
 #include "bullet.h"
 #include "server/core/configuration.h"
+#include "laser_rifle_weapon.h"
 
 
 class Player {

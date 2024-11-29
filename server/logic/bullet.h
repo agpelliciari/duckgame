@@ -16,9 +16,11 @@ class Bullet {
         Tuple speed;
         PhysicalBullet physical_bullet;
         TypeDynamicObject type;
+        bool bounce;
 
     public:
         Bullet(int init_coord_x, int init_coord_y, int range, TypeDynamicObject type, int id_player);
+    Bullet(int init_coord_x, int init_coord_y, int range, TypeDynamicObject type, int id_player, bool bounce);
         void move(const MatchMap& colition_map);
         void get_data(bool &impacted, CollisionTypeMap &type, int &id);
         void get_map_info(int &pos_x, int &pos_y, TypeDynamicObject &type);
