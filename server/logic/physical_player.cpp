@@ -46,7 +46,7 @@ void PhysicalPlayer::update_action(TypeMoveAction& move_action) {
 }
 
 void PhysicalPlayer::react_to_sides_collision(Collision collision){
-        //speed.x = 0;
+        speed.x = 0;
 }
 
 void PhysicalPlayer::react_to_down_collision(Collision collision){

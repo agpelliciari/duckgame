@@ -16,6 +16,7 @@
 #include "physical_bullet.h"
 #include "dropped_item.h"
 #include "server/core/configuration.h"
+#include "bullet.h"
 
 #ifndef MATCH_LOGIC_H
 #define MATCH_LOGIC_H
@@ -31,7 +32,7 @@ private:
     //std::vector<int> id_alive_players;    // cppcheck-suppress unusedStructMember
     std::vector<Box> boxes;       // cppcheck-suppress unusedStructMember
     std::vector<SpawnPlace> spawn_places;     // cppcheck-suppress unusedStructMember
-    std::vector<PhysicalBullet> bullets; // cppcheck-suppress unusedStructMember
+    std::vector<Bullet> bullets; // cppcheck-suppress unusedStructMember
     std::vector<MapPoint> blocks;  // cppcheck-suppress unusedStructMember
     std::vector<MapPoint> spawn_points; // cppcheck-suppress unusedStructMember
     std::vector<DroppedItem> dropped_items; // cppcheck-suppress unusedStructMember
@@ -57,7 +58,7 @@ public:
     void add_items(const std::vector<struct MapPoint>& items);
     void add_blocks(const std::vector<struct MapPoint>& blocks);
     void add_spawn_points(const std::vector<struct MapPoint>& spawn_points);
-    void add_bullet(PhysicalBullet bullet);
+    void add_bullet(Bullet bullet);
     void update_bullets();
     void player_shoot(int index);
     void player_shoot_end(int index);

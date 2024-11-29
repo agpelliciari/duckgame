@@ -20,6 +20,7 @@
 #include "dropped_item.h"
 #include "shotgun_weapon.h"
 #include "ak47_weapon.h"
+#include "bullet.h"
 #include "server/core/configuration.h"
 
 
@@ -54,9 +55,9 @@ public:
 
     void still();
     void add_speed(int speed_x, int speed_y);
-    void update(const MatchMap& colition_map, std::vector <PhysicalBullet> &bullets);
+    void update(const MatchMap& colition_map, std::vector <Bullet> &bullets);
     void stop_moving_x();
-    void shoot(std::vector <PhysicalBullet> &bullets);
+    void shoot(std::vector <Bullet> &bullets);
     bool has_equipment();
     void pick_up_item(std::vector<SpawnPlace> &spawn_places, std::vector<DroppedItem> &dropped_items);
     void drop_item(std::vector<DroppedItem> &dropped_items);

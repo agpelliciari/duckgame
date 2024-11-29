@@ -23,6 +23,7 @@ target_sources(taller_server_logic
             ak47_weapon.cpp
             shotgun_weapon.cpp
             sniper_weapon.cpp
+            bullet.cpp
 
     PUBLIC
     # .h files
@@ -49,4 +50,5 @@ target_sources(taller_server_logic
             ak47_weapon.h
             shotgun_weapon.h
             sniper_weapon.h
+            bullet.h
     )

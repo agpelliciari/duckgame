@@ -2,18 +2,18 @@
 
 #include "cowboy_pistol_weapon.h"
 
-CowboyPistolWeapon::CowboyPistolWeapon(): ammo(6){}
+CowboyPistolWeapon::CowboyPistolWeapon(): ammo(6), bullet_range(20){}
 
 void CowboyPistolWeapon::get_weapon(TypeWeapon& type){
     type = TypeWeapon::PISTOLA_COWBOY;
 }
 
 bool CowboyPistolWeapon::shoot(ShootingDirection direction,
-                               std::vector <PhysicalBullet> &bullets,
-                               Tuple bullet_position, PhysicalPlayer &player, bool &trigger){
+                               std::vector <Bullet> &bullets,
+                               Tuple bullet_position, PhysicalPlayer &player, bool &trigger, int id_player){
     trigger = false;
     if (ammo > 0){
-        bullets.push_back(PhysicalBullet(bullet_position.x, bullet_position.y));
+        bullets.push_back(Bullet(bullet_position.x, bullet_position.y, bullet_range, TypeDynamicObject::PROJECTILE, id_player));
         if (direction == ShootingDirection::UP){
             bullets.back().shoot_up();
         } else if (direction == ShootingDirection::LEFT){

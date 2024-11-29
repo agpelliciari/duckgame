@@ -11,16 +11,16 @@ MatchLogic::MatchLogic(const Configuration& _configs): colition_map(100, 100), c
         this->add_player_speed(index, -configs.player_speed, 0);
     };
     this->command_map[PlayerActionType::MOVE_LEFT_END] = [this](int index) {
-        this->add_player_speed(index, configs.player_speed, 0);
-        //this->still_player(index);
+        //this->add_player_speed(index, configs.player_speed, 0);
+        this->still_player(index);
     };
 
     this->command_map[PlayerActionType::MOVE_RIGHT] = [this](int index) {
         this->add_player_speed(index, configs.player_speed, 0);
     };
     this->command_map[PlayerActionType::MOVE_RIGHT_END] = [this](int index) {
-        this->add_player_speed(index, -configs.player_speed, 0);
-        //this->still_player(index);
+        //this->add_player_speed(index, -configs.player_speed, 0);
+        this->still_player(index);
     };
 
     this->command_map[PlayerActionType::JUMP] = [this](int index) {
@@ -266,7 +266,7 @@ void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos,
         }
     }
 
-    for (PhysicalBullet bullet: bullets) {
+    for (Bullet bullet: bullets) {
         DynamicObjDTO dto = {0, 0, TypeDynamicObject::PROJECTILE};
         bullet.get_map_info(dto.pos.x, dto.pos.y, dto.type);
         std::cout << "BULLET x: " << dto.pos.x << " y: " << dto.pos.y << std::endl;
@@ -325,7 +325,7 @@ void MatchLogic::add_item_spawns(const std::vector<struct MapPoint>& items_spawn
     }
 }
 
-void MatchLogic::add_bullet(PhysicalBullet bullet){
+void MatchLogic::add_bullet(Bullet bullet){
     this->bullets.push_back(bullet);
 }
 

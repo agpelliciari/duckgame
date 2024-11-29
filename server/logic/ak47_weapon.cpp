@@ -1,12 +1,12 @@
 
 #include "ak47_weapon.h"
 
-AK47Weapon::AK47Weapon(): ammo(30), reload_time(15), dispersion_index(0) {}
+AK47Weapon::AK47Weapon(): ammo(30), reload_time(15), dispersion_index(0), bullet_range(13) {}
 
 
 bool AK47Weapon::shoot(ShootingDirection direction,
-                               std::vector <PhysicalBullet> &bullets, Tuple bullet_position,
-                       PhysicalPlayer &player, bool &trigger){
+                               std::vector <Bullet> &bullets, Tuple bullet_position,
+                       PhysicalPlayer &player, bool &trigger, int id_player){
     if (ammo > 0){
         if (reload_time > 0){
             reload_time--;
@@ -15,7 +15,7 @@ bool AK47Weapon::shoot(ShootingDirection direction,
             int sign;
             dispersion_index%2 == 0 ? sign = 1 : sign = -1;
 
-            bullets.push_back(PhysicalBullet(bullet_position.x, bullet_position.y));
+            bullets.push_back(Bullet(bullet_position.x, bullet_position.y, bullet_range, TypeDynamicObject::PROJECTILE, id_player));
             if (direction == ShootingDirection::UP){
                 player.add_speed(0, -10);
                 bullets.back().shoot_up();

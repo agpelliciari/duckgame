@@ -3,17 +3,17 @@
 
 PhysicalBullet::PhysicalBullet(int init_coord_x, int init_coord_y):
         PhysicalObject(init_coord_x, init_coord_y, 5, 5),
-        impacted(false), impacted_collision{0, CollisionTypeMap::NONE},
-        type(TypeDynamicObject::PROJECTILE){
+        impacted(false), impacted_collision{0, CollisionTypeMap::NONE}/*,
+        type(TypeDynamicObject::PROJECTILE)*/{
         acceleration.y = 0;
         }
 
-PhysicalBullet::PhysicalBullet(int init_coord_x, int init_coord_y, TypeDynamicObject type_):
+/*PhysicalBullet::PhysicalBullet(int init_coord_x, int init_coord_y, TypeDynamicObject type_):
         PhysicalObject(init_coord_x, init_coord_y, 5, 5),
         impacted(false), impacted_collision{0, CollisionTypeMap::NONE},
         type(type_){
         acceleration.y = 0;
-        }
+        }*/
 
 void PhysicalBullet::shoot_up(){
         this->add_speed(0, 5);
@@ -52,8 +52,12 @@ void PhysicalBullet::get_data(bool &impacted_, CollisionTypeMap &type_, int &id_
     id_ = impacted_collision.id;
 }
 
-void PhysicalBullet::get_map_info(int &pos_x, int &pos_y, TypeDynamicObject &type_){
+void PhysicalBullet::get_map_info(int &pos_x, int &pos_y){
     pos_x = this->get_position().x;
     pos_y = this->get_position().y;
-    type_ = type;
+}
+
+void PhysicalBullet::reset_data(){
+    impacted = false;
+    impacted_collision = {0, CollisionTypeMap::NONE};
 }

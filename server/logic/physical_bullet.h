@@ -17,10 +17,10 @@ class PhysicalBullet: public PhysicalObject{
 
         //este atributo no deberia ser parte del cuerpo fisico, pero
         //lo pongo aca de forma provisoria
-        TypeDynamicObject type;
+        //TypeDynamicObject type;
 
     public:
-        PhysicalBullet(int init_coord_x, int init_coord_y, TypeDynamicObject type);
+        //PhysicalBullet(int init_coord_x, int init_coord_y, TypeDynamicObject type);
         PhysicalBullet(int init_coord_x, int init_coord_y);
 
         void react_to_sides_collision(Collision collision) override;
@@ -33,7 +33,8 @@ class PhysicalBullet: public PhysicalObject{
         void shoot_up();
 
         void get_data(bool &impacted, CollisionTypeMap &type, int &id);
-        void get_map_info(int &pos_x, int &pos_y, TypeDynamicObject &type);
+        void get_map_info(int &pos_x, int &pos_y);
+        void reset_data();
 
 };
 
