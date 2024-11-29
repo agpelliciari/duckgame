@@ -13,6 +13,7 @@
 #include "sniper_weapon.h"
 #include "shotgun_weapon.h"
 
+
 class DroppedItem {
 
     private:

@@ -52,6 +52,10 @@ MatchLogic::MatchLogic(const Configuration& _configs): colition_map(100, 100), c
         this->player_shoot(index);
     };
 
+    this->command_map[PlayerActionType::SHOOT_END] = [this](int index) {
+        this->player_shoot_end(index);
+    };
+
     this->command_map[PlayerActionType::PICK_UP_DROP_ITEM] = [this](int index) {
         this->player_toggle_pick_up_drop_item(index);
     };
@@ -89,7 +93,16 @@ void MatchLogic::add_player_speed(int id, int speed_x, int speed_y) {
 void MatchLogic::player_shoot(int id) {
     for (Player& player: players) {
         if (player.same_id(id)) {
-            player.shoot(this->bullets);
+            player.shoot_start();
+            return;
+        }
+    }
+}
+
+void MatchLogic::player_shoot_end(int id) {
+    for (Player& player: players) {
+        if (player.same_id(id)) {
+            player.shoot_end();
             return;
         }
     }
@@ -173,7 +186,7 @@ void MatchLogic::still_player(int id) {
 void MatchLogic::update_players(std::vector<int> &id_alive_players) {
     id_alive_players.clear();
     for (Player& player: players) {
-        player.update(colition_map);
+        player.update(colition_map, bullets);
         if (player.is_still_alive()){
             id_alive_players.push_back(player.get_id());
         }

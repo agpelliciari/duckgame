@@ -9,6 +9,7 @@
 #include "duel_pistol.h"
 #include "sniper_weapon.h"
 #include "shotgun_weapon.h"
+#include "ak47_weapon.h"
 
 #ifndef SPAWN_PLACE_H
 #define SPAWN_PLACE_H

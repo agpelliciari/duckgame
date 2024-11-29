@@ -12,8 +12,8 @@ void DuelPistol::get_weapon(TypeWeapon& type){
 }
 
 bool DuelPistol::shoot(ShootingDirection direction,
-                               std::vector <PhysicalBullet> &bullets, Tuple bullet_position, PhysicalPlayer &player){
-
+                               std::vector <PhysicalBullet> &bullets, Tuple bullet_position, PhysicalPlayer &player, bool &trigger){
+    trigger = false;
     if (ammo > 0){
         std::srand(std::time(nullptr));
         int dispersion_index = -3 + std::rand() % 7;

@@ -10,7 +10,8 @@ void CowboyPistolWeapon::get_weapon(TypeWeapon& type){
 
 bool CowboyPistolWeapon::shoot(ShootingDirection direction,
                                std::vector <PhysicalBullet> &bullets,
-                               Tuple bullet_position, PhysicalPlayer &player){
+                               Tuple bullet_position, PhysicalPlayer &player, bool &trigger){
+    trigger = false;
     if (ammo > 0){
         bullets.push_back(PhysicalBullet(bullet_position.x, bullet_position.y));
         if (direction == ShootingDirection::UP){

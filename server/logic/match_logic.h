@@ -60,6 +60,7 @@ public:
     void add_bullet(PhysicalBullet bullet);
     void update_bullets();
     void player_shoot(int index);
+    void player_shoot_end(int index);
     void player_aim_up_start(int index);
     void player_aim_up_end(int index);
     void player_stay_down_start(int index);

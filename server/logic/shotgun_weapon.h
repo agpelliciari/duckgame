@@ -25,7 +25,7 @@ public:
     void get_weapon(TypeWeapon& type) override;
     void get_type(TypeDynamicObject &type) override;
     bool shoot(ShootingDirection direction,
-               std::vector<PhysicalBullet> &bullets, Tuple bullet_position, PhysicalPlayer &player) override;
+               std::vector<PhysicalBullet> &bullets, Tuple bullet_position, PhysicalPlayer &player, bool &trigger) override;
     void shoot_shotgun(ShootingDirection direction,
                        std::vector <PhysicalBullet> &bullets,
                        Tuple bullet_position);
