@@ -19,6 +19,7 @@
 #include "duel_pistol.h"
 #include "dropped_item.h"
 #include "shotgun_weapon.h"
+#include "ak47_weapon.h"
 #include "server/core/configuration.h"
 
 
@@ -39,6 +40,7 @@ private:
     std::unique_ptr<Weapon> weapon;               // cppcheck-suppress unusedStructMember
 	std::vector<SoundEventType> player_sounds; // cppcheck-suppress unusedStructMember
     bool is_stay_down;  // cppcheck-suppress unusedStructMember
+    bool trigger; // cppcheck-suppress unusedStructMember
 
 public:
     Player(int id, int initial_x, int initial_y,const Configuration& configs);
@@ -52,7 +54,7 @@ public:
 
     void still();
     void add_speed(int speed_x, int speed_y);
-    void update(const MatchMap& colition_map);
+    void update(const MatchMap& colition_map, std::vector <PhysicalBullet> &bullets);
     void stop_moving_x();
     void shoot(std::vector <PhysicalBullet> &bullets);
     void pick_up_item(std::vector<SpawnPlace> &spawn_places, std::vector<DroppedItem> &dropped_items);
@@ -66,6 +68,8 @@ public:
     void jump_end();
     void get_sounds(std::vector<SoundEventType>& sounds);
     void update_shooting_direction();
+    void shoot_start();
+    void shoot_end();
     Tuple get_map_position();
     Tuple get_dimension();
 };

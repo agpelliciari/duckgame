@@ -9,8 +9,8 @@ void PewPewLaserWeapon::get_weapon(TypeWeapon& type){
 }
 
 bool PewPewLaserWeapon::shoot(ShootingDirection direction,
-                               std::vector <PhysicalBullet> &bullets, Tuple bullet_position, PhysicalPlayer &player){
-
+                               std::vector <PhysicalBullet> &bullets, Tuple bullet_position, PhysicalPlayer &player, bool &trigger){
+    trigger = false;
     if (ammo > 0){
         bullets.push_back(PhysicalBullet(bullet_position.x, bullet_position.y, TypeDynamicObject::LASER));
         bullets.push_back(PhysicalBullet(bullet_position.x, bullet_position.y, TypeDynamicObject::LASER));

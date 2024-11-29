@@ -14,7 +14,7 @@ Player::Player(int id_, int initial_x, int initial_y, const Configuration& confi
         life_points(configs.player_health),
         shooting_direction(ShootingDirection::NONE),
         previous_shooting_direction(shooting_direction),
-        weapon(nullptr), is_stay_down(false) {}
+        weapon(nullptr), is_stay_down(false), trigger(false) {}
 
 void Player::get_data(int& id, int& x, int& y, TypeWeapon& weapon_,
                       bool& helmet_equipped, bool& chest_armor_equipped,
@@ -59,7 +59,7 @@ void Player::still() {
 
 int Player::get_id() { return id; }
 
-void Player::update(const MatchMap& colition_map) {
+void Player::update(const MatchMap& colition_map, std::vector <PhysicalBullet> &bullets) {
 
     if (is_alive){
         if(object.is_out_of_map()){
@@ -70,7 +70,10 @@ void Player::update(const MatchMap& colition_map) {
             } else {
                 object.move(colition_map);
             	object.update_action(move_action);
-            	this->update_shooting_direction();
+                if (trigger){
+                    this->update_shooting_direction();
+                    this->shoot(bullets);
+                }
             }
         }
     } else {
@@ -78,6 +81,8 @@ void Player::update(const MatchMap& colition_map) {
     }
 
 }
+
+
 
 void Player::update_shooting_direction(){
 
@@ -156,6 +161,7 @@ void Player::take_damage(){
 }
 
 void Player::shoot(std::vector <PhysicalBullet> &bullets){
+
     if (weapon != nullptr){
         Tuple bullet_position = this->get_map_position();
         Tuple player_dimension = this->get_dimension();
@@ -172,7 +178,7 @@ void Player::shoot(std::vector <PhysicalBullet> &bullets){
             bullet_position.x += player_dimension.x + 5;
             bullet_position.y += player_dimension.y / 2;
         }
-        if (weapon->shoot(this->shooting_direction, bullets, bullet_position, this->object)){
+        if (weapon->shoot(this->shooting_direction, bullets, bullet_position, this->object, trigger)){
             if (aim_up){
                 doing_action=TypeDoingAction::SHOOTING_UP;
             } else {
@@ -182,6 +188,14 @@ void Player::shoot(std::vector <PhysicalBullet> &bullets){
         }
 
     }
+}
+
+void Player::shoot_start(){
+    trigger = true;
+}
+
+void Player::shoot_end(){
+    trigger = false;
 }
 
 void Player::stay_down_start(){
