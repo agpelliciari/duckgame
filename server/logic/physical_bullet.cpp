@@ -3,7 +3,9 @@
 
 PhysicalBullet::PhysicalBullet(int init_coord_x, int init_coord_y):
         PhysicalObject(init_coord_x, init_coord_y, 5, 5),
-        impacted(false), impacted_collision{0, CollisionTypeMap::NONE}/*,
+        impacted(false), impacted_collision{0, CollisionTypeMap::NONE},
+        impacted_up_or_down(false), impacted_sides(false)
+         /*,
         type(TypeDynamicObject::PROJECTILE)*/{
         acceleration.y = 0;
         }
@@ -30,15 +32,18 @@ void PhysicalBullet::shoot_right(){
 void PhysicalBullet::react_to_sides_collision(Collision collision) {
         impacted = true;
         impacted_collision = collision;
+        impacted_sides = true;
 }
 void PhysicalBullet::react_to_down_collision(Collision collision) {
         impacted = true;
         impacted_collision = collision;
+        impacted_up_or_down = true;
 }
 
 void PhysicalBullet::react_to_up_collision(Collision collision) {
         impacted = true;
         impacted_collision = collision;
+        impacted_up_or_down = true;
 }
 
 void PhysicalBullet::react_to_out_of_map(){
@@ -60,4 +65,13 @@ void PhysicalBullet::get_map_info(int &pos_x, int &pos_y){
 void PhysicalBullet::reset_data(){
     impacted = false;
     impacted_collision = {0, CollisionTypeMap::NONE};
+}
+
+void PhysicalBullet::bounce(){
+    if (impacted_sides) {
+        speed.x = -speed.x;
+    }
+    if (impacted_up_or_down) {
+        speed.y = -speed.y;
+    }
 }

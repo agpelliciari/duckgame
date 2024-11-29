@@ -20,7 +20,7 @@ void SpawnPlace::spawn_item() {
     }
     std::srand(std::time(nullptr));
     //int random_weapon = 0 + std::rand() % 4;
-    int random_weapon = 5;
+    int random_weapon = 7;
     switch (random_weapon){
         case 0:
             possible_weapon = std::make_unique<CowboyPistolWeapon>();
@@ -42,17 +42,22 @@ void SpawnPlace::spawn_item() {
             possible_weapon = std::make_unique<SniperWeapon>();
             std::cout<<"spawn sniper weapon"<<std::endl;
             spawned = true;
-        break;
+            break;
         case 5:
             possible_weapon = std::make_unique<ShotgunWeapon>();
             std::cout<<"spawn shotgun weapon"<<std::endl;
             spawned = true;
-        break;
+            break;
         case 6:
             possible_weapon = std::make_unique<AK47Weapon>();
             std::cout<<"spawn ak-47 weapon"<<std::endl;
             spawned = true;
-        break;
+            break;
+        case 7:
+            possible_weapon = std::make_unique<LaserRifleWeapon>();
+            std::cout<<"spawn Laser rifle weapon"<<std::endl;
+            spawned = true;
+            break;
         default:
             possible_weapon = std::make_unique<CowboyPistolWeapon>();
             spawned = true;

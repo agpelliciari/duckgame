@@ -21,7 +21,8 @@ class CowboyPistolWeapon: public Weapon{
         void get_weapon(TypeWeapon& type) override;
         void get_type(TypeDynamicObject &type) override;
         bool shoot(ShootingDirection direction,
-                   std::vector<Bullet> &bullets, Tuple bullet_position, PhysicalPlayer &player, bool &trigger, int id_player) override;
+                   std::vector<Bullet> &bullets, Tuple bullet_position, PhysicalPlayer &player,
+                   bool &trigger, int id_player) override;
         int get_ammo() override;
 };
 

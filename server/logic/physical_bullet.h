@@ -15,6 +15,9 @@ class PhysicalBullet: public PhysicalObject{
         bool impacted;
         Collision impacted_collision;
 
+        bool impacted_up_or_down;
+        bool impacted_sides;
+
         //este atributo no deberia ser parte del cuerpo fisico, pero
         //lo pongo aca de forma provisoria
         //TypeDynamicObject type;
@@ -35,6 +38,8 @@ class PhysicalBullet: public PhysicalObject{
         void get_data(bool &impacted, CollisionTypeMap &type, int &id);
         void get_map_info(int &pos_x, int &pos_y);
         void reset_data();
+
+        void bounce();
 
 };
 
