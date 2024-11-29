@@ -205,6 +205,10 @@ void Player::stay_down_end(){
     object.stay_down_end();
 }
 
+bool Player::has_equipment() {
+    return (weapon != nullptr);
+}
+
 void Player::pick_up_item(std::vector<SpawnPlace> &spawn_places, std::vector<DroppedItem> &dropped_items){
 
     if (weapon != nullptr){

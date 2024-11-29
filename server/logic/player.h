@@ -55,6 +55,7 @@ public:
     void update(const MatchMap& colition_map);
     void stop_moving_x();
     void shoot(std::vector <PhysicalBullet> &bullets);
+    bool has_equipment();
     void pick_up_item(std::vector<SpawnPlace> &spawn_places, std::vector<DroppedItem> &dropped_items);
     void drop_item(std::vector<DroppedItem> &dropped_items);
     void take_damage();
