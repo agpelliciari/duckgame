@@ -20,7 +20,7 @@ void SpawnPlace::spawn_item() {
     }
     std::srand(std::time(nullptr));
     //int random_weapon = 0 + std::rand() % 4;
-    int random_weapon = 6;
+    int random_weapon = 5;
     switch (random_weapon){
         case 0:
             possible_weapon = std::make_unique<CowboyPistolWeapon>();

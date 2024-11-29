@@ -59,7 +59,7 @@ void Player::still() {
 
 int Player::get_id() { return id; }
 
-void Player::update(const MatchMap& colition_map, std::vector <PhysicalBullet> &bullets) {
+void Player::update(const MatchMap& colition_map, std::vector <Bullet> &bullets) {
 
     if (is_alive){
         if(object.is_out_of_map()){
@@ -160,7 +160,7 @@ void Player::take_damage(){
     }
 }
 
-void Player::shoot(std::vector <PhysicalBullet> &bullets){
+void Player::shoot(std::vector <Bullet> &bullets){
 
     if (weapon != nullptr){
         Tuple bullet_position = this->get_map_position();
@@ -178,7 +178,7 @@ void Player::shoot(std::vector <PhysicalBullet> &bullets){
             bullet_position.x += player_dimension.x + 5;
             bullet_position.y += player_dimension.y / 2;
         }
-        if (weapon->shoot(this->shooting_direction, bullets, bullet_position, this->object, trigger)){
+        if (weapon->shoot(this->shooting_direction, bullets, bullet_position, this->object, trigger, id)){
             if (aim_up){
                 doing_action=TypeDoingAction::SHOOTING_UP;
             } else {

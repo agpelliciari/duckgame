@@ -5,19 +5,19 @@
 #include <cstdlib>
 #include <ctime>
 
-DuelPistol::DuelPistol():ammo(1){}
+DuelPistol::DuelPistol():ammo(1), bullet_range(5){}
 
 void DuelPistol::get_weapon(TypeWeapon& type){
     type = TypeWeapon::MAGNUM;
 }
 
 bool DuelPistol::shoot(ShootingDirection direction,
-                               std::vector <PhysicalBullet> &bullets, Tuple bullet_position, PhysicalPlayer &player, bool &trigger){
+                               std::vector <Bullet> &bullets, Tuple bullet_position, PhysicalPlayer &player, bool &trigger, int id_player){
     trigger = false;
     if (ammo > 0){
         std::srand(std::time(nullptr));
         int dispersion_index = -3 + std::rand() % 7;
-        bullets.push_back(PhysicalBullet(bullet_position.x, bullet_position.y));
+        bullets.push_back(Bullet(bullet_position.x, bullet_position.y, bullet_range, TypeDynamicObject::PROJECTILE, id_player));
         if (direction == ShootingDirection::UP){
             bullets.back().shoot_up();
             bullets.back().add_speed(dispersion_index, -dispersion_index);

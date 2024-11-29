@@ -2,19 +2,19 @@
 
 #include "pewpew_laser_weapon.h"
 
-PewPewLaserWeapon::PewPewLaserWeapon(): ammo(12){}
+PewPewLaserWeapon::PewPewLaserWeapon(): ammo(12), bullet_range(35){}
 
 void PewPewLaserWeapon::get_weapon(TypeWeapon& type){
     type = TypeWeapon::PEW_PEW_LASER;
 }
 
 bool PewPewLaserWeapon::shoot(ShootingDirection direction,
-                               std::vector <PhysicalBullet> &bullets, Tuple bullet_position, PhysicalPlayer &player, bool &trigger){
+                               std::vector <Bullet> &bullets, Tuple bullet_position, PhysicalPlayer &player, bool &trigger, int id_player){
     trigger = false;
     if (ammo > 0){
-        bullets.push_back(PhysicalBullet(bullet_position.x, bullet_position.y, TypeDynamicObject::LASER));
-        bullets.push_back(PhysicalBullet(bullet_position.x, bullet_position.y, TypeDynamicObject::LASER));
-        bullets.push_back(PhysicalBullet(bullet_position.x, bullet_position.y, TypeDynamicObject::LASER));
+        bullets.push_back(Bullet(bullet_position.x, bullet_position.y, bullet_range,TypeDynamicObject::LASER, id_player));
+        bullets.push_back(Bullet(bullet_position.x, bullet_position.y, bullet_range,TypeDynamicObject::LASER, id_player));
+        bullets.push_back(Bullet(bullet_position.x, bullet_position.y, bullet_range,TypeDynamicObject::LASER, id_player));
         if (direction == ShootingDirection::UP){
             bullets[bullets.size() - 1].shoot_up();
             bullets[bullets.size() - 2].shoot_up();

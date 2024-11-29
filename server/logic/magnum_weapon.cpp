@@ -5,19 +5,19 @@
 
 #include "magnum_weapon.h"
 
-MagnumWeapon::MagnumWeapon(): ammo(6){}
+MagnumWeapon::MagnumWeapon(): ammo(6), bullet_range(20){}
 
 void MagnumWeapon::get_weapon(TypeWeapon& type){
     type = TypeWeapon::MAGNUM;
 }
 
 bool MagnumWeapon::shoot(ShootingDirection direction,
-                               std::vector <PhysicalBullet> &bullets, Tuple bullet_position, PhysicalPlayer &player, bool &trigger){
+                               std::vector <Bullet> &bullets, Tuple bullet_position, PhysicalPlayer &player, bool &trigger, int id_player){
     trigger = false;
     if (ammo > 0){
         std::srand(std::time(nullptr));
         int dispersion_index = -2 + std::rand() % 5;
-        bullets.push_back(PhysicalBullet(bullet_position.x, bullet_position.y));
+        bullets.push_back(Bullet(bullet_position.x, bullet_position.y, bullet_range, TypeDynamicObject::PROJECTILE, id_player));
         if (direction == ShootingDirection::UP){
             player.add_speed(0, -20);
             bullets.back().shoot_up();

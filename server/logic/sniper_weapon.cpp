@@ -4,16 +4,16 @@
 #include <iostream>
 
 SniperWeapon::SniperWeapon(): ammo(2), charging_time(2),
-        init_charging_time(0), final_charging_time(0),charged(false){};
+        init_charging_time(0), final_charging_time(0),charged(false), bullet_range(64){};
 
 void SniperWeapon::get_type(TypeDynamicObject &type){
     type = TypeDynamicObject::SNIPER;
 }
 
 void SniperWeapon::shoot_sniper(ShootingDirection direction,
-                                std::vector <PhysicalBullet> &bullets,
-                               Tuple bullet_position){
-    bullets.push_back(PhysicalBullet(bullet_position.x, bullet_position.y));
+                                std::vector<Bullet> &bullets,
+                               Tuple bullet_position, int id_player){
+    bullets.push_back(Bullet(bullet_position.x, bullet_position.y, bullet_range, TypeDynamicObject::PROJECTILE, id_player));
 
     if (direction == ShootingDirection::UP){
         bullets.back().shoot_up();
@@ -28,8 +28,8 @@ void SniperWeapon::shoot_sniper(ShootingDirection direction,
 }
 
 bool SniperWeapon::shoot(ShootingDirection direction,
-                         std::vector<PhysicalBullet> &bullets,
-                         Tuple bullet_position, PhysicalPlayer &player, bool &trigger) {
+                         std::vector<Bullet> &bullets,
+                         Tuple bullet_position, PhysicalPlayer &player, bool &trigger, int id_player) {
     trigger = false;
     if (ammo <= 0) {
         return false;
@@ -45,7 +45,7 @@ bool SniperWeapon::shoot(ShootingDirection direction,
     }
     if (current_time - init_charging_time >= charging_time) {
        init_charging_time = 0;
-       this->shoot_sniper(direction, bullets, bullet_position);
+       this->shoot_sniper(direction, bullets, bullet_position, id_player);
        return true;
     }
     return false;
