@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="/res/duckGameTitle.png" alt="Logo del Juego" width="250" />
+    <img src="/res/readme/duckGameTitle.png" alt="Logo del Juego" width="250" />
 </p>
 
 Repositorio para el Trabajo Práctico grupal de la materia "Taller de Programacion", Cátedra Veiga, 2do Cuatrimestre 2024.
@@ -15,16 +15,12 @@ Repositorio para el Trabajo Práctico grupal de la materia "Taller de Programaci
 | **Sebastian Mauricio Vintoñuke** |         106063          | svintonuke@fi.uba.ar         | <img align="center" src="https://github.com/SebastianVintonuke.png" height=32 width=32 /> [SebastianVintonuke](https://github.com/SebastianVintonuke)                            |
 | **Agustin Pelliciari**           |         108172          | apelliciari@fi.uba.ar  | <img align="center" src="https://github.com/agpelliciari.png" height=32 width=32 /> [agpelliciari](https://github.com/agpelliciari)                                              |
 
-<hr width="100%" align="left" />
-
 <hr/>
 
-## Compilacion y buildeo
+## Compilacion y Buildeo
 ```sh
 ./build_game.sh
 ```
-
-<hr width="100%" align="left" />
 
 <hr/>
 
@@ -59,7 +55,7 @@ Tests:
 
 | Control                   | Action                           |
 | ------------------------- | -------------------------------- |
-| `M`                       | Mute                             |
+| `M`                       | Mute Music                       |
 
 | Player 1    | Player2     | Action                           |
 | ----------- | ----------- | -------------------------------- |
@@ -68,8 +64,8 @@ Tests:
 | `W`         | `↑`         | Jump                             |
 | `S`	      | `↓`         | Ragdoll                          |
 | `E`	      | `O`         | Aim Up                           |
-| `C`         | `L`         | Grab Weapon / Object / Player    |
-| `V`         | `P`         | Fire Weapon / Put on Armour, Hat |
+| `C`         | `L`         | Grab Weapon / Put on Armour, Hat |
+| `V`         | `P`         | Fire Weapon                      |
 
 ### Editor Controls
 
@@ -84,6 +80,26 @@ Tests:
 
 <hr>
 
+## Weapons
+
+- Granada
+- Banana
+- Pew-Pew Laser
+    ![Alt Text](/res/readme/gifs/pewpew.gif)
+- Laser Rifle
+- AK47
+- Pistola de Duelos
+- Pistola Cowboy
+    ![Alt Text](/res/readme/gifs/cowboy.gif)
+- Magnum
+- Escopeta
+    ![Alt Text](/res/readme/gifs/shotgun.gif)
+- Sniper
+    ![Alt Text](/res/readme/gifs/sniper.gif)
+- Armaduras y Cascos
+
+<hr>
+
 ## Creditos
 
 Los siguientes archivos:
@@ -93,11 +109,11 @@ Los siguientes archivos:
 - resolvererror.cpp y resolvererror.h
 - liberror.cpp y liberror.h
 
-fueron tomados del repositorio [hands-on-sockets](https://github.com/eldipa/hands-on-sockets-in-cpp) con licencia: **GPL v2**
+Fueron tomados del repositorio [hands-on-sockets](https://github.com/eldipa/hands-on-sockets-in-cpp) con licencia: **GPL v2**
 
 Los siguientes archivos:
 
 - thread.h
 - queue.h
 
-fueron tomados del repositorio [hands-on-threads](https://github.com/eldipa/hands-on-threads) con licencia: **GPL v2**
+Fueron tomados del repositorio [hands-on-threads](https://github.com/eldipa/hands-on-threads) con licencia: **GPL v2**
