@@ -21,7 +21,7 @@ void SoundContainer::addSound(SoundEventType soundType) {
         case PLAYER_DAMAGED:
             MatchSounds.push_back(SoundType::QUACK);
             break;
-        case GUN_SHOT:
+        case DUEL_PISTOL_SHOT:
             MatchSounds.push_back(SoundType::SHOT);
             break;
         case PLAYER_PICKUP:

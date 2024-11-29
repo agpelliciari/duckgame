@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="/res/duckGameTitle.png" alt="Logo del Juego" width="250" />
+    <img src="/res/readme/duckGameTitle.png" alt="Logo del Juego" width="250" />
 </p>
 
 Repositorio para el Trabajo Práctico grupal de la materia "Taller de Programacion", Cátedra Veiga, 2do Cuatrimestre 2024.
@@ -15,16 +15,12 @@ Repositorio para el Trabajo Práctico grupal de la materia "Taller de Programaci
 | **Sebastian Mauricio Vintoñuke** |         106063          | svintonuke@fi.uba.ar         | <img align="center" src="https://github.com/SebastianVintonuke.png" height=32 width=32 /> [SebastianVintonuke](https://github.com/SebastianVintonuke)                            |
 | **Agustin Pelliciari**           |         108172          | apelliciari@fi.uba.ar  | <img align="center" src="https://github.com/agpelliciari.png" height=32 width=32 /> [agpelliciari](https://github.com/agpelliciari)                                              |
 
-<hr width="100%" align="left" />
-
 <hr/>
 
-## Compilacion y buildeo
+## Compilacion y Buildeo
 ```sh
 ./build_game.sh
 ```
-
-<hr width="100%" align="left" />
 
 <hr/>
 
@@ -53,35 +49,56 @@ Tests:
 ./taller_tests
 ```
 
-<hr width="100%" align="left" />
-
 <hr/>
 
-## Comandos
-- Jugador 1:
-  - `→` : Moverse a la derecha
-  - `←` : Moverse a la izquierda
-  - `↑` : Apuntar hacia arriba
-  - `↓` : Agacharse
-  - `Espacio` : Saltar
-  - `P` : Disparar
-  - `O` : Agarrar un objeto (arma/casco/armadura)
-  - `L` : Soltar un objeto
-  - `M` : Apagar musica
+### In-Game Controls
 
-- Jugador 2 (en caso de seleccionar duos):
-  - `D` : Moverse a la derecha
-  - `A` : Moverse a la izquierda
-  - `E` : Apuntar hacia arriba
-  - `S` : Agacharse
-  - `W` : Saltar
-  - `G` : Disparar
-  - `T` : Agarrar un objeto (arma/casco/armadura)
-  - `F` : Soltar un objeto
+| Control                   | Action                           |
+| ------------------------- | -------------------------------- |
+| `M`                       | Mute Music                       |
 
-<hr width="100%" align="left" />
+| Player 1    | Player2     | Action                           |
+| ----------- | ----------- | -------------------------------- |
+| `A`         | `→`         | Go Left                          |
+| `D`         | `←`         | Go Right                         |
+| `W`         | `↑`         | Jump                             |
+| `S`	      | `↓`         | Ragdoll                          |
+| `E`	      | `O`         | Aim Up                           |
+| `C`         | `L`         | Grab Weapon / Put on Armour, Hat |
+| `V`         | `P`         | Fire Weapon                      |
 
-<hr/>
+### Editor Controls
+
+| Control                     | Action       |
+| --------------------------- | ------------ |
+| `Left Mouse Click`          | Add Block    |
+| `Right Mouse Click`         | Remove Block |
+| `Scroll`                    | Change Block |
+| `Ctrl + Scroll Up`          | Zoom In      |
+| `Ctrl + Scroll Down`        | Zoom Out     |
+| `Middle Mouse Click + Drag` | Drag the Map |
+
+<hr>
+
+## Weapons
+
+- Granada
+- Banana
+- Pew-Pew Laser
+    ![Alt Text](/res/readme/gifs/pewpew.gif)
+- Laser Rifle
+- AK47
+- Pistola de Duelos
+- Pistola Cowboy
+    ![Alt Text](/res/readme/gifs/cowboy.gif)
+- Magnum
+- Escopeta
+    ![Alt Text](/res/readme/gifs/shotgun.gif)
+- Sniper
+    ![Alt Text](/res/readme/gifs/sniper.gif)
+- Armaduras y Cascos
+
+<hr>
 
 ## Creditos
 
@@ -92,11 +109,11 @@ Los siguientes archivos:
 - resolvererror.cpp y resolvererror.h
 - liberror.cpp y liberror.h
 
-fueron tomados del repositorio [hands-on-sockets](https://github.com/eldipa/hands-on-sockets-in-cpp) con licencia: **GPL v2**
+Fueron tomados del repositorio [hands-on-sockets](https://github.com/eldipa/hands-on-sockets-in-cpp) con licencia: **GPL v2**
 
 Los siguientes archivos:
 
 - thread.h
 - queue.h
 
-fueron tomados del repositorio [hands-on-threads](https://github.com/eldipa/hands-on-threads) con licencia: **GPL v2**
+Fueron tomados del repositorio [hands-on-threads](https://github.com/eldipa/hands-on-threads) con licencia: **GPL v2**

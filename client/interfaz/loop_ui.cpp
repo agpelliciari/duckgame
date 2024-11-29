@@ -26,11 +26,27 @@ void UILoop::exec() {
 
         while (isRunning_) {
             eventHandler.handle(isRunning_);
+            
+            if(!isRunning_){
+                if(lastStatsUpdate.isRunning()){
+                     lastStatsUpdate.state = CANCELADA;
+                     isRunning_ = true; // Mostra pantalla final
+                     matchDtoQueue.disconnect();// cierra queues
+                }
+                break;// Importante ! se cierran las queues de matchDtoQueue.
+            }
 
             update();
 
             clock.tickNoRest();
         }
+        
+        while(isRunning_){
+            eventHandler.handle(isRunning_);
+            drawer.drawLeaderboard(lastStatsUpdate);
+            clock.tickNoRest();
+        }
+        
     } catch (const std::exception& e) {
         std::cerr << "Exception caught in UILoop" << e.what() << std::endl;
         isRunning_ = false;

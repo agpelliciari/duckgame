@@ -22,18 +22,26 @@ enum PlayerActionType : uint8_t {
     STAY_DOWN_END = 9,
     AIM_UP_START = 10,
     AIM_UP_END = 11,
-    SHOOT = 12,
+    SHOOT_START = 12,
     SHOOT_END = 13,
-    PICK_UP_ITEM = 14,
-    DROP_ITEM = 15,
+    PICK_UP_DROP_ITEM = 14,
     
+    FORCE_CANCEL_MATCH = 19,
     TOGGLE_DBG_MODE = 20,
     EQUIP_ARMOR = 21,
     EQUIP_HELMET = 22,
-    EQUIP_AK47 = 23,
-    EQUIP_MAGNUM = 24,
-    EQUIP_ESCOPETA = 25,
-    EQUIP_DUEL = 26,
+    EQUIP_GRENADE = 23,
+    EQUIP_BANANA = 24,
+    EQUIP_PEWPEW = 25,
+    EQUIP_LASER = 26, 
+    EQUIP_AK47 = 27, 
+    EQUIP_DUEL_PISTOL = 28, 
+    EQUIP_COWBOY = 29, 
+    EQUIP_MAGNUM = 30,
+    EQUIP_SHOTGUN = 31, 
+    EQUIP_SNIPER = 32, 
+    RELOAD = 33,
+    
 };
 
 struct PlayerActionDTO {
@@ -81,7 +89,8 @@ enum class TypeDoingAction : uint8_t {
     SHOOTING,
     SHOOTING_UP,
     DAMAGED,
-    PICK_UP
+    PICK_UP,
+    RELOADING,
 };  // Capaz podria estar aca el flapping?
 
 struct PlayerDTO {

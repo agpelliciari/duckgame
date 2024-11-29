@@ -11,30 +11,30 @@ void EventHandler::setAction(PlayerActionDTO& action, PlayerActionType actionTyp
 
 void EventHandler::handleKeyDown(SDL_Keycode key, PlayerActionDTO& action) {
     switch (key) {
-        case SDLK_RIGHT:
-            setAction(action, MOVE_RIGHT, MAIN_PLAYER);
-            break;
-        case SDLK_LEFT:
+        case SDLK_a:
             setAction(action, MOVE_LEFT, MAIN_PLAYER);
             break;
-        case SDLK_DOWN:
-            setAction(action, STAY_DOWN_START, MAIN_PLAYER);
+        case SDLK_d:
+            setAction(action, MOVE_RIGHT, MAIN_PLAYER);
             break;
-        case SDLK_SPACE:
+        case SDLK_w:
             setAction(action, JUMP, MAIN_PLAYER);
             break;
-        case SDLK_UP:
+        case SDLK_s:
+            setAction(action, STAY_DOWN_START, MAIN_PLAYER);
+            break;
+        case SDLK_e:
             setAction(action, AIM_UP_START, MAIN_PLAYER);
             break;
-        case SDLK_p:
-            setAction(action, SHOOT, MAIN_PLAYER);
+        case SDLK_c:
+            setAction(action, PICK_UP_DROP_ITEM, MAIN_PLAYER);
             break;
-        case SDLK_o:
-            setAction(action, PICK_UP_ITEM, MAIN_PLAYER);
+        case SDLK_v:
+            setAction(action, SHOOT_START, MAIN_PLAYER);
             break;
-        case SDLK_l:
-            setAction(action, DROP_ITEM, MAIN_PLAYER);
-            break;
+
+
+
         case SDLK_m:
             soundManager.stopBackgroundMusic();
             break;
@@ -42,29 +42,26 @@ void EventHandler::handleKeyDown(SDL_Keycode key, PlayerActionDTO& action) {
 
     if (dualPlay) {
         switch (key) {
-            case SDLK_d:
-                setAction(action, MOVE_RIGHT, SECOND_PLAYER);
-                break;
-            case SDLK_a:
+            case SDLK_LEFT:
                 setAction(action, MOVE_LEFT, SECOND_PLAYER);
                 break;
-            case SDLK_s:
-                setAction(action, STAY_DOWN_START, SECOND_PLAYER);
+            case SDLK_RIGHT:
+                setAction(action, MOVE_RIGHT, SECOND_PLAYER);
                 break;
-            case SDLK_w:
+            case SDLK_UP:
                 setAction(action, JUMP, SECOND_PLAYER);
                 break;
-            case SDLK_e:
+            case SDLK_DOWN:
+                setAction(action, STAY_DOWN_START, SECOND_PLAYER);
+                break;
+            case SDLK_o:
                 setAction(action, AIM_UP_START, SECOND_PLAYER);
                 break;
-            case SDLK_g:
-                setAction(action, SHOOT, SECOND_PLAYER);
+            case SDLK_l:
+                setAction(action, PICK_UP_DROP_ITEM, SECOND_PLAYER);
                 break;
-            case SDLK_t:
-                setAction(action, PICK_UP_ITEM, SECOND_PLAYER);
-                break;
-            case SDLK_f:
-                setAction(action, DROP_ITEM, SECOND_PLAYER);
+            case SDLK_p:
+                setAction(action, SHOOT_START, SECOND_PLAYER);
                 break;
         }
     }
@@ -72,40 +69,45 @@ void EventHandler::handleKeyDown(SDL_Keycode key, PlayerActionDTO& action) {
 
 void EventHandler::handleKeyUp(SDL_Keycode key, PlayerActionDTO& action) {
     switch (key) {
-        case SDLK_RIGHT:
-            setAction(action, MOVE_RIGHT_END, MAIN_PLAYER);
-            break;
-        case SDLK_LEFT:
+        case SDLK_a:
             setAction(action, MOVE_LEFT_END, MAIN_PLAYER);
             break;
-        case SDLK_DOWN:
-            setAction(action, STAY_DOWN_END, MAIN_PLAYER);
+        case SDLK_d:
+            setAction(action, MOVE_RIGHT_END, MAIN_PLAYER);
             break;
-        case SDLK_SPACE:
+        case SDLK_w:
             setAction(action, FLAPPING_END, MAIN_PLAYER);
             break;
-        case SDLK_UP:
+        case SDLK_s:
+            setAction(action, STAY_DOWN_END, MAIN_PLAYER);
+            break;
+        case SDLK_e:
             setAction(action, AIM_UP_END, MAIN_PLAYER);
+            break;
+        case SDLK_v:
+            setAction(action, SHOOT_END, MAIN_PLAYER);
             break;
     }
 
     if (dualPlay) {
         switch (key) {
-            case SDLK_d:
-                setAction(action, MOVE_RIGHT_END, SECOND_PLAYER);
-                break;
-            case SDLK_a:
+            case SDLK_LEFT:
                 setAction(action, MOVE_LEFT_END, SECOND_PLAYER);
                 break;
-            case SDLK_s:
-                setAction(action, STAY_DOWN_END, SECOND_PLAYER);
+            case SDLK_RIGHT:
+                setAction(action, MOVE_RIGHT_END, SECOND_PLAYER);
                 break;
-            case SDLK_w:
+            case SDLK_UP:
                 setAction(action, FLAPPING_END, SECOND_PLAYER);
                 break;
-            case SDLK_e:
+            case SDLK_DOWN:
+                setAction(action, STAY_DOWN_END, SECOND_PLAYER);
+                break;
+            case SDLK_o:
                 setAction(action, AIM_UP_END, SECOND_PLAYER);
                 break;
+            case SDLK_p:
+                setAction(action, SHOOT_END, SECOND_PLAYER);
         }
     }
 }

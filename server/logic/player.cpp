@@ -70,8 +70,8 @@ void Player::update(const MatchMap& colition_map, std::vector <PhysicalBullet> &
             } else {
                 object.move(colition_map);
             	object.update_action(move_action);
+                this->update_shooting_direction();
                 if (trigger){
-                    this->update_shooting_direction();
                     this->shoot(bullets);
                 }
             }
@@ -184,7 +184,7 @@ void Player::shoot(std::vector <PhysicalBullet> &bullets){
             } else {
                 doing_action=TypeDoingAction::SHOOTING;
             }
-            player_sounds.push_back(SoundEventType::GUN_SHOT);
+            player_sounds.push_back(SoundEventType::DUEL_PISTOL_SHOT);
         }
 
     }
@@ -217,6 +217,10 @@ void Player::stay_down_end(){
     is_stay_down = false;
     move_action = TypeMoveAction::NONE;
     object.stay_down_end();
+}
+
+bool Player::has_equipment() {
+    return (weapon != nullptr);
 }
 
 void Player::pick_up_item(std::vector<SpawnPlace> &spawn_places, std::vector<DroppedItem> &dropped_items){
