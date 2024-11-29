@@ -18,7 +18,7 @@ public:
     bool try_update(MatchDto& last_update);
     bool update_stats(MatchStatsInfo& last_update);
     bool isclosed();
-    void disconnect();
+    void disconnect() override;
 
     ~SimpleEventListener();
 };
