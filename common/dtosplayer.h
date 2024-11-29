@@ -22,10 +22,9 @@ enum PlayerActionType : uint8_t {
     STAY_DOWN_END = 9,
     AIM_UP_START = 10,
     AIM_UP_END = 11,
-    SHOOT = 12,
+    SHOOT_START = 12,
     SHOOT_END = 13,
-    PICK_UP_ITEM = 14,
-    DROP_ITEM = 15,
+    PICK_UP_DROP_ITEM = 14,
     
     TOGGLE_DBG_MODE = 20,
     EQUIP_ARMOR = 21,

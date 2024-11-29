@@ -53,35 +53,36 @@ Tests:
 ./taller_tests
 ```
 
-<hr width="100%" align="left" />
-
 <hr/>
 
-## Comandos
-- Jugador 1:
-  - `→` : Moverse a la derecha
-  - `←` : Moverse a la izquierda
-  - `↑` : Apuntar hacia arriba
-  - `↓` : Agacharse
-  - `Espacio` : Saltar
-  - `P` : Disparar
-  - `O` : Agarrar un objeto (arma/casco/armadura)
-  - `L` : Soltar un objeto
-  - `M` : Apagar musica
+### In-Game Controls
 
-- Jugador 2 (en caso de seleccionar duos):
-  - `D` : Moverse a la derecha
-  - `A` : Moverse a la izquierda
-  - `E` : Apuntar hacia arriba
-  - `S` : Agacharse
-  - `W` : Saltar
-  - `G` : Disparar
-  - `T` : Agarrar un objeto (arma/casco/armadura)
-  - `F` : Soltar un objeto
+| Control                   | Action                           |
+| ------------------------- | -------------------------------- |
+| `M`                       | Mute                             |
 
-<hr width="100%" align="left" />
+| Player 1    | Player2     | Action                           |
+| ----------- | ----------- | -------------------------------- |
+| `A`         | `→`         | Go Left                          |
+| `D`         | `←`         | Go Right                         |
+| `W`         | `↑`         | Jump                             |
+| `S`	      | `↓`         | Ragdoll                          |
+| `E`	      | `O`         | Aim Up                           |
+| `C`         | `L`         | Grab Weapon / Object / Player    |
+| `V`         | `P`         | Fire Weapon / Put on Armour, Hat |
 
-<hr/>
+### Editor Controls
+
+| Control                     | Action       |
+| --------------------------- | ------------ |
+| `Left Mouse Click`          | Add Block    |
+| `Right Mouse Click`         | Remove Block |
+| `Scroll`                    | Change Block |
+| `Ctrl + Scroll Up`          | Zoom In      |
+| `Ctrl + Scroll Down`        | Zoom Out     |
+| `Middle Mouse Click + Drag` | Drag the Map |
+
+<hr>
 
 ## Creditos
 

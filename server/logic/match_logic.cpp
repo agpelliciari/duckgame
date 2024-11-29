@@ -48,17 +48,12 @@ MatchLogic::MatchLogic(const Configuration& _configs): colition_map(100, 100), c
     this->command_map[PlayerActionType::AIM_UP_END] = [this](int index) {
         this->player_aim_up_end(index);
     };
-    this->command_map[PlayerActionType::SHOOT] = [this](int index) {
+    this->command_map[PlayerActionType::SHOOT_START] = [this](int index) {
         this->player_shoot(index);
     };
 
-    this->command_map[PlayerActionType::PICK_UP_ITEM] = [this](int index) {
-
-        this->player_pick_up_item(index);
-    };
-    this->command_map[PlayerActionType::DROP_ITEM] = [this](int index) {
-
-        this->player_drop_item(index);
+    this->command_map[PlayerActionType::PICK_UP_DROP_ITEM] = [this](int index) {
+        this->player_toggle_pick_up_drop_item(index);
     };
     // this->command_map[3] = [this](int index) { this->add_player_speed(index, 0, 0); };
 
@@ -118,18 +113,14 @@ void MatchLogic::player_jump_end(int id) {
     }
 }
 
-void MatchLogic::player_pick_up_item(int id) {
+void MatchLogic::player_toggle_pick_up_drop_item(int id) {
     for (Player& player: players) {
         if (player.same_id(id)) {
-            player.pick_up_item(this->spawn_places, this->dropped_items);
-        }
-    }
-}
-
-void MatchLogic::player_drop_item(int id) {
-    for (Player& player: players) {
-        if (player.same_id(id)) {
-            player.drop_item(this->dropped_items);
+            if (player.has_equipment()) {
+                player.drop_item(this->dropped_items);
+            } else {
+                player.pick_up_item(this->spawn_places, this->dropped_items);
+            }
         }
     }
 }
