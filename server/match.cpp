@@ -10,7 +10,11 @@
 //#include <thread>
 #include "common/clock.h"
 
-Match::Match(lobbyID _id, const int max_players): id(_id), players(max_players), looper(), connectedplayers(0), map() {}
+Match::Match(lobbyID _id, const int max_players, const Configuration& configs,MapLoader& _maps): 
+        id(_id),
+        players(max_players),
+        looper(configs),
+        connectedplayers(0),maps(_maps), reset_round(&Match::resetFixedMap), map() {}
 
 
 // Protected// friend accessed methods
@@ -62,6 +66,7 @@ void Match::hostLobbyLeft(ControlledPlayer& host) {
 
 
 void Match::loadMap(MapDeserializer& deserial){
+
     deserial.loadMapInfo(map);
 
     // Carga info para el server
@@ -76,7 +81,29 @@ void Match::loadMap(MapDeserializer& deserial){
     }
 }
 
-void Match::init(MapLoader& maps, const char* mapname) {
+void Match::resetFixedMap(){
+    std::cout << "Map is not random at refresh !\n";
+        
+    looper.reset_objects(objects);
+    looper.reset_players(players);
+}
+
+void Match::resetRandomMap(){
+    
+    maps.removeLoader(map.map_id);
+    
+    map = MapInfo(); // Resetea    
+    loadMap(maps.getRandomMap());
+    
+    std::cout << "-->Map is random at refresh !\n";
+    looper.reset_map(objects);
+    looper.reset_players(players);
+    
+    map.is_random = true;
+}
+
+
+void Match::init(const char* mapname) {
     if (is_alive()) {
         throw GameError(LOBBY_ALREADY_STARTED, "Tried to start a match already started!!\n");
     }
@@ -85,14 +112,27 @@ void Match::init(MapLoader& maps, const char* mapname) {
     }
     std::cout << "INIT MATCH AFTER with count "<< players.playercount()<<" ?\n";
     
-    loadMap(maps.getLoader(mapname));
+    if(strlen(mapname) == 0) {// Hint para seleccionar random
+        reset_round = &Match::resetRandomMap;
+        loadMap(maps.getRandomMap());
+        map.is_random = true;
+    } else{
+        reset_round = &Match::resetFixedMap;
+        loadMap(maps.getLoader(mapname));
+        map.is_random = false;        
+    }
+    
     // Notify/start players. Ya podrian enviar la info del mapa.
     looper.add_objects(objects);
     looper.start_players(players, stats);
 
     
     this->stats.state = STARTED_ROUND;
-    players.finishLobbyMode();
+    this->stats.numronda++;
+    //for(int i = 1; i < players.playercount(); i++){
+    //     this->stats.stats.emplace_back(i,0);
+    //}
+    players.finishLobbyMode(this->stats);
 
     start();
     // match_start.notify_all();
@@ -157,11 +197,12 @@ void Match::run() {
     
     while (_keep_running && handlePostRound()) {
         //looper.start_players(players, stats);
-        // re envia info del mapa?
-        looper.reset_objects(objects);
-        looper.reset_players(players);
-                
-        players.finishWaitMode(); 
+        
+        (this->*reset_round)();
+        
+        this->stats.state = STARTED_ROUND;
+        this->stats.numronda++;
+        players.finishWaitMode(this->stats);
         
         looper.playRound(players, this->stats);
     }
@@ -189,7 +230,7 @@ void Match::putPlayers(std::vector<player_id>& out) const {
 }
 
 
-void Match::finish(MapLoader& maps) {
+void Match::finish() {
     maps.removeLoader(map.map_id);
 
     if (_keep_running) {

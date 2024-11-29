@@ -82,6 +82,8 @@ void ClientProtocol::recvmapdata(struct MapData& data) {  //, const int unit) {
     // Populate textures to load.
     int count_textures = protocol.recvuint();
     data.textures.reserve(count_textures);
+    data.textures.clear();
+    
     while (count_textures > 0) {
         data.textures.push_back(protocol.recvmsgstr());
         count_textures--;
@@ -92,7 +94,8 @@ void ClientProtocol::recvmapdata(struct MapData& data) {  //, const int unit) {
     int count_decorations = protocol.recvuint();
 
     data.objects.reserve(count_blocks + count_decorations);
-
+    data.objects.clear();
+    
     while (count_blocks > 0) {
         coordinate_t _x = protocol.recvuint();
         coordinate_t _y = protocol.recvuint();
@@ -154,19 +157,25 @@ void ClientProtocol::recvplayer(PlayerDTO& player){
 
     player.weapon = (TypeWeapon)protocol.recvbyte();
     player.move_action = (TypeMoveAction)protocol.recvbyte();
-    
-    int size_actions = protocol.recvbyte();
-    player.doing_actions.reserve(size_actions);
-    
-    while(size_actions > 0){
-         player.doing_actions.push_back((TypeDoingAction)protocol.recvbyte());
-         size_actions--;
-    }        
 
-    player.is_alive = protocol.recvbyte();
-    player.helmet = protocol.recvbyte();
-    player.chest_armor = protocol.recvbyte();
-    player.aiming_up = protocol.recvbyte();
+    player.doing_action = (TypeDoingAction)protocol.recvbyte();
+    
+    player.hp = protocol.recvbyte();
+    player.munition = protocol.recvbyte();
+
+    uint8_t packed = protocol.recvbyte();
+
+    player.chest_armor = (bool)(packed & 1);
+    packed = packed>>1;
+    
+    player.helmet = (bool)(packed & 1);
+    packed = packed>>1;
+    
+    player.is_alive = (bool)(packed & 1);
+    packed = packed>>1;
+    
+    player.aiming_up = (bool)(packed & 1);
+    
 }
 void ClientProtocol::recvmatch(MatchDto& outstate) {
     int playercount = (int)protocol.recvbyte();
@@ -194,7 +203,8 @@ void ClientProtocol::recvmatch(MatchDto& outstate) {
     // << std::endl;
     outstate.objects.reserve(objcount);
     outstate.objects.clear();
-
+    
+    // Objs
     while (objcount > 0) {
         DynamicObjDTO obj;
 
@@ -205,6 +215,31 @@ void ClientProtocol::recvmatch(MatchDto& outstate) {
         outstate.objects.push_back(obj);
         objcount--;
     }
+
+    // Game events
+    int eventcount = (int)protocol.recvbyte();
+    outstate.events.reserve(eventcount);
+    outstate.events.clear();
+
+    while (eventcount > 0) {
+        coordinate_t x = protocol.recvuint();
+        coordinate_t y = protocol.recvuint();
+        GameEventType type = (GameEventType)protocol.recvbyte();
+        outstate.events.emplace_back(x,y, type);
+        eventcount--;
+    }
+
+    // Sounds
+    eventcount = (int)protocol.recvbyte();
+    outstate.sounds.reserve(eventcount);
+    outstate.sounds.clear();
+
+    while (eventcount > 0) {
+        outstate.sounds.push_back((SoundEventType)protocol.recvbyte());
+        eventcount--;
+    }
+
+
 }
 
 bool ClientProtocol::recvstate(MatchStatsInfo& outstats, MatchDto& outstate) {
@@ -216,6 +251,11 @@ bool ClientProtocol::recvstate(MatchStatsInfo& outstats, MatchDto& outstate) {
     }
     
     outstats.state = (MatchStateType) code;
+    
+    if(outstats.state == MatchStateType::LOADING){
+        return false; // Esta recargando el mapa! 
+    }
+    
     recvstats(outstats);
     return false;
 }

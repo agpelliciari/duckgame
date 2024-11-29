@@ -87,6 +87,9 @@ void EventHandler::handleKeyUp(SDL_Keycode key, PlayerActionDTO& action) {
         case SDLK_UP:
             setAction(action, AIM_UP_END, MAIN_PLAYER);
             break;
+        case SDLK_p:
+            setAction(action, SHOOT_END, MAIN_PLAYER);
+            break;
     }
 
     if (dualPlay) {
@@ -105,6 +108,9 @@ void EventHandler::handleKeyUp(SDL_Keycode key, PlayerActionDTO& action) {
                 break;
             case SDLK_e:
                 setAction(action, AIM_UP_END, SECOND_PLAYER);
+                break;
+            case SDLK_g:
+                setAction(action, SHOOT_END, SECOND_PLAYER);
                 break;
         }
     }

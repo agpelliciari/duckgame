@@ -30,6 +30,7 @@ public:
     uint8_t assertJoinLobbySingle(uint8_t id_lobby, uint8_t count);
     uint8_t assertJoinLobbyDual(uint8_t id_lobby, uint8_t count, uint8_t* second);
 
+    void assertRecvState(MatchStatsInfo& stats, MatchDto& state);
 
     void assertLobbyStarted(uint8_t count);
     void assertLobbyInfoJoined(uint8_t id);

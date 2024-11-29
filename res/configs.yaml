@@ -1,0 +1,29 @@
+base_dmg: 1
+base_munition: 1          
+gravity: 5
+
+explosion_radius: 1  
+
+magnum_dmg: 2    
+magnum_munition: 1   
+
+armor_health:  5  
+helmet_health: 10    
+
+
+duck_speed: 3
+duck_health: 1    
+duck_jump_force: 35     
+duck_flap_force: 20
+duck_max_flaps : 5
+
+item_respawn_time: 2
+box_health: 2
+
+fps: 60
+rounds_per_set: 5  
+wins_needed: 10 
+
+## Todavia no tomados en cuenta.
+
+duck_hitbox_size: 2 

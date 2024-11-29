@@ -19,7 +19,14 @@ void LobbyActionSender::run() {
             protocol.sendlobbyaction(action);
 
             if (action.type == PLAYER_READY) {
-                protocol.sendmapname(actions.getMapName());
+                std::string random(actions.randomMapLabel());
+                std::string name(actions.getMapName());
+                
+                if (random == name){
+                    name = ""; // Empty map para el server es el random.
+                }
+            
+                protocol.sendmapname(name);
                 break;
             }
         }

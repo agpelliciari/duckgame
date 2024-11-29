@@ -3,7 +3,7 @@
 #include "./mockobserver.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include "server/logic_server/match_state.h"
+#include "server/core/match_state.h"
 #include "common/dtosmap.h"
 
 
@@ -21,10 +21,10 @@ static void buildMapSimple(struct ObjectsInfo& info){
         info.blocks.emplace_back(x, 10); // x, y.
     }
 
-    info.player_spawns.emplace_back(1,1);
-    info.player_spawns.emplace_back(1,11);
-    info.player_spawns.emplace_back(19,1);
-    info.player_spawns.emplace_back(19,11);
+    info.player_spawns.emplace_back(5,1);
+    info.player_spawns.emplace_back(5,11);
+    info.player_spawns.emplace_back(15,1);
+    info.player_spawns.emplace_back(15,11);
     
 }
 
@@ -38,8 +38,11 @@ TEST(IntegrationLogicTest, SendReceiveFirstState3players) {
     
 
     MockObserver observer(state, 3);
+    
+    
+    Configuration config;
+    MatchState match(config);
 
-    MatchState match;
     
     match.add_objects(objs);
     match.start_players(observer,stats);
@@ -58,8 +61,10 @@ TEST(IntegrationLogicTest, SendMoveOnlyPlayer3Right) {
     MatchStatsInfo stats;
 
     MockObserver observer(state, 3);
+    
+    Configuration config;
+    MatchState match(config);
 
-    MatchState match;
 
     match.add_objects(objs);
     match.start_players(observer,stats);
@@ -90,7 +95,9 @@ TEST(IntegrationLogicTest, SendMoveOnlyPlayer3Left) {
 
     MockObserver observer(state, 3);
 
-    MatchState match;
+    Configuration config;
+    MatchState match(config);
+
 
     match.add_objects(objs);
     match.start_players(observer,stats);
@@ -122,7 +129,9 @@ TEST(IntegrationLogicTest, SendMoveOnlyPlayer3AirRight) {
 
     MockObserver observer(state, 3);
 
-    MatchState match;
+    Configuration config;
+    MatchState match(config);
+
 
     match.add_objects(objs);
     match.start_players(observer,stats);
@@ -157,7 +166,9 @@ TEST(IntegrationLogicTest, SendMoveOnlyPlayer3AirLeft) {
 
     MockObserver observer(state, 3);
 
-    MatchState match;
+    Configuration config;
+    MatchState match(config);
+
 
     match.add_objects(objs);
     match.start_players(observer,stats);
@@ -192,7 +203,9 @@ TEST(IntegrationLogicTest, SendMoveOnlyPlayer3Jumps) {
 
     MockObserver observer(state, 3);
 
-    MatchState match;
+    Configuration config;
+    MatchState match(config);
+
     
     match.add_objects(objs);
     match.start_players(observer,stats);

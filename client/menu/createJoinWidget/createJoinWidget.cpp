@@ -6,6 +6,12 @@ CreateJoinWidget::CreateJoinWidget(const CreateJoinHandler& handler, QWidget* pa
         QWidget(parent), ui(new Ui::CreateJoinWidget), handler(handler) {
     ui->setupUi(this);
 
+    QPixmap pixMapTitle;
+    if (pixMapTitle.load("./res/ui/duckGameTitle.png")) {
+        ui->Title->setPixmap(pixMapTitle.scaled(this->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        ui->Title->setAlignment(Qt::AlignCenter);
+    }
+
     connect(ui->createGameButton, &QPushButton::clicked, this,
             &CreateJoinWidget::onClickCreateGame);
     connect(ui->joinGameButton, &QPushButton::clicked, this, &CreateJoinWidget::onClickJoinGame);

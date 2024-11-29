@@ -61,7 +61,7 @@ public:
     
     const MatchStatsInfo& getStats();
     // Abre la queue de matchdto, cierra le de lobby info. Indicando fase de juego.
-    bool setgamemode();
+    bool setgamemode(const MatchStatsInfo& match_stats);
     
     void waitgamemode();
     void waitlobbymode();

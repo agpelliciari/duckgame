@@ -9,6 +9,7 @@
 
 #include "./match.h"
 #include "serial/map_loader.h"
+#include "server/core/configuration.h"
 
 // Contenedor/monitor de los players activos en el match.
 class LobbyContainer {
@@ -18,6 +19,7 @@ public:
 private:
     lobbyID lastLobbyId;  // cppcheck-suppress unusedStructMember
     MapLoader maps;
+    Configuration config;
     lobby_container lobbies;  // cppcheck-suppress unusedStructMember
     std::mutex mtx;
 
@@ -26,7 +28,7 @@ private:
 public:
     // Default constructor
     LobbyContainer();
-    LobbyContainer(const char* maps_root);
+    LobbyContainer(const char* maps_root,const char* configs);
     
     // No copy nor mov.
     LobbyContainer(const LobbyContainer&) = delete;

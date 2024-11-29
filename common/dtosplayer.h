@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <vector>
 #include "./dtosobject.h"
+#include "./gameevents.h"
 
 typedef unsigned int player_id;
 
@@ -22,20 +23,29 @@ enum PlayerActionType : uint8_t {
     AIM_UP_START = 10,
     AIM_UP_END = 11,
     SHOOT = 12,
-    PICK_UP_ITEM = 13,
-    DROP_ITEM = 14
+    SHOOT_END = 13,
+    PICK_UP_ITEM = 14,
+    DROP_ITEM = 15,
+    
+    TOGGLE_DBG_MODE = 20,
+    EQUIP_ARMOR = 21,
+    EQUIP_HELMET = 22,
+    EQUIP_AK47 = 23,
+    EQUIP_MAGNUM = 24,
+    EQUIP_ESCOPETA = 25,
+    EQUIP_DUEL = 26,
 };
 
 struct PlayerActionDTO {
     PlayerActionType type;
     uint8_t playerind;
-    uint8_t specific_info;
+    //uint8_t specific_info;
 
     PlayerActionDTO(const PlayerActionType& _type, uint8_t _playerind):
-            type(_type), playerind(_playerind), specific_info(0) {}
-    PlayerActionDTO(const PlayerActionType& _type, uint8_t _playerind, uint8_t _info):
-            type(_type), playerind(_playerind), specific_info(_info) {}
-    PlayerActionDTO(): type(NONE), playerind(0), specific_info(0) {}
+            type(_type), playerind(_playerind){}//, specific_info(0) {}
+    //PlayerActionDTO(const PlayerActionType& _type, uint8_t _playerind, uint8_t _info):
+    //        type(_type), playerind(_playerind){}//, specific_info(_info) {}
+    PlayerActionDTO(): type(NONE), playerind(0){}//, specific_info(0) {}
 } __attribute__((packed));
 
 
@@ -78,13 +88,18 @@ struct PlayerDTO {
     int id;
     struct MapPoint pos;
     bool is_alive;
+    
     TypeWeapon weapon;
+    
     TypeMoveAction move_action;
-    std::vector<TypeDoingAction> doing_actions;
+    TypeDoingAction doing_action;
 
     bool helmet;
     bool chest_armor;
     bool aiming_up;
+
+    int hp;
+    int munition;
 
     PlayerDTO(int id_, bool alive, int x, int y, TypeWeapon w, bool h, bool armor,
               TypeMoveAction action):
@@ -93,10 +108,13 @@ struct PlayerDTO {
             is_alive(alive),
             weapon(w),
             move_action(action),
-            doing_actions(),
+            doing_action(TypeDoingAction::NONE),
             helmet(h),
             chest_armor(armor),
-            aiming_up(false) {}
+            aiming_up(false),
+            hp(0),
+            munition(0)
+            {}
 
     PlayerDTO(int id_, bool alive, int x, int y, TypeMoveAction state):
             id(id_),
@@ -104,10 +122,13 @@ struct PlayerDTO {
             is_alive(alive),
             weapon(TypeWeapon::NONE),
             move_action(state),
-            doing_actions(),
+            doing_action(TypeDoingAction::NONE),
             helmet(false),
             chest_armor(false),
-            aiming_up(false) {}
+            aiming_up(false),
+            hp(alive?1:0),
+            munition(0)
+            {}
     PlayerDTO(): PlayerDTO(0, false, 0, 0, TypeMoveAction::NONE) {}
 };
 

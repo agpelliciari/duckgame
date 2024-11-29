@@ -19,8 +19,11 @@ UILoop::UILoop(ActionListener& dtoSender, SimpleEventListener& _events,
 void UILoop::exec() {
     try {
         soundManager.playBackgroundMusic();
-        Clock clock(16);  // 16ms == 60fps
+
+        Clock clock(MS_PER_FRAME);
+
         clock.resetnext();
+
         while (isRunning_) {
             eventHandler.handle(isRunning_);
 
@@ -37,50 +40,68 @@ void UILoop::exec() {
     }
 }
 
-void UILoop::update() {
-
+void UILoop::updateMatchStats() {
     MatchStatsInfo stats;
     while (isRunning_ && matchDtoQueue.update_stats(stats)) {
         lastStatsUpdate = stats;
     }
-    
-    if (lastStatsUpdate.state == TERMINADA ||
-        lastStatsUpdate.state == CANCELADA) {  // stats.state == PAUSADA? mostrar info, o round end.
-        //isRunning_ = false;
-        drawer.drawLeaderboard(lastStatsUpdate);
-        return;
-    } else if (lastStatsUpdate.state == PAUSADA) {
-        drawer.drawLeaderboard(lastStatsUpdate);
-        return;
-    } else if (lastStatsUpdate.state == ROUND_END) {
-        drawer.drawWinner(lastStatsUpdate, lastUpdate);
-        return;
-    } else if(lastStatsUpdate.state == STARTED_ROUND){
-        #ifdef LOG_DBG // Serviria para filtrar logs.
-        std::cout << "RESETED AT INIT ROUND\n";
-        #endif
-        std::cout << "ronda: " << lastStatsUpdate.numronda << std::endl;  // numero de ronda no se actualiza
-        
-        drawer.resetIndicatorFlag();
-        
-        //  Asi ya recibe matchdtos..
-        lastStatsUpdate.state = INICIADA; 
-        return;
-    } 
+}
 
-
+void UILoop::updateMatchDto() {
     MatchDto matchUpdate;
-
     while (isRunning_ && matchDtoQueue.try_update(matchUpdate)) {
         lastUpdate = matchUpdate;
+
+        animation.update(lastUpdate);
+        
+        for (const SoundEventType& soundType: lastUpdate.sounds) {
+            soundManager.addMatchSound(soundType);
+        }
+    }
+}
+
+bool UILoop::updateMatchState() {
+    if ((lastStatsUpdate.state == TERMINADA) || (lastStatsUpdate.state == CANCELADA)) {
+        drawer.drawLeaderboard(lastStatsUpdate);
+        return UPDATED;
+
+    } else if (lastStatsUpdate.state == PAUSADA) {
+        drawer.drawLeaderboard(lastStatsUpdate);
+        return UPDATED;
+
+    } else if (lastStatsUpdate.state == ROUND_END) {
+        if (soundManager.isRoundEndSoundAvailable()) {
+            soundManager.playSound(SoundType::ROUND_END);
+            soundManager.setRoundEndSoundAvailability(false);
+        }
+        drawer.drawWinner(lastStatsUpdate, lastUpdate);
+        return UPDATED;
+
+    } else if(lastStatsUpdate.state == STARTED_ROUND){       
+        drawer.resetIndicatorFlag();
+        soundManager.setRoundEndSoundAvailability(true);
+        lastStatsUpdate.state = INICIADA;
+        return UPDATED;
     }
 
-    animation.updateFrame();
+    return NOT_UPDATED;
+}
 
-    animation.updateSprite(lastUpdate);
+void UILoop::update() {
+
+    updateMatchStats();
+    
+    if (updateMatchState()) {
+        return;
+    }
+
+    updateMatchDto();
+
+    soundManager.playSounds();
 
     camera.update(lastUpdate);
-    drawer.draw(lastUpdate);
+
+    drawer.draw(lastUpdate, lastStatsUpdate);
 }
 
 UILoop::~UILoop() = default;

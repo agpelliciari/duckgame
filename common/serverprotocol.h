@@ -15,6 +15,9 @@
 
 // Extension del protocolo base a usar.
 class ServerProtocol: public Protocol {
+private:
+    void sendplayer(Protocol& protocol, const PlayerDTO& player);
+
 public:
     // El default a partir de la abstraccion de socket..
     explicit ServerProtocol(Messenger& messenger);
@@ -56,9 +59,9 @@ public:
     void sendstate(const MatchDto& state);
     void sendstats(const MatchStatsInfo& state);
     
-    void sendplayer(const PlayerDTO& player);
-
-    void sendmapinfo(const MapInfo& map);
+    void sendmapinfo(const MapInfo& map); // For first time!
+    void resendmapinfo(const MapInfo& map); // If resend is needed!
+    
     void sendmaplist(const std::vector<std::string>& maps);
 
     // metodos generales para is active.

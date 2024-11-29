@@ -163,9 +163,9 @@ void PlayerContainer::cancelByError(LobbyErrorType cancelError) {
 
 
 
-void PlayerContainer::finishLobbyMode() {
+void PlayerContainer::finishLobbyMode(const MatchStatsInfo& match_stats) {
     for (auto player = players.begin(); player != players.end();) {
-          if(player->setgamemode()){
+          if(player->setgamemode(match_stats)){
               ++player;
           } else{
               std::cerr << "container should remove " << player->toString() << " at finish lobby mode from match" << std::endl;
@@ -173,9 +173,9 @@ void PlayerContainer::finishLobbyMode() {
           }
     }
 }
-void PlayerContainer::finishWaitMode() {
+void PlayerContainer::finishWaitMode(const MatchStatsInfo& match_stats) {
     for (auto player = players.begin(); player != players.end();) {
-          if(player->setgamemode()){
+          if(player->setgamemode(match_stats)){
               ++player;
           } else{
               std::cerr << "container should remove " << player->toString() << " at finish waitmode from match" << std::endl;
@@ -233,6 +233,9 @@ void PlayerContainer::notifyInfo(const lobby_info& info) {
 std::vector<player_id> PlayerContainer::updateState(MatchDto& matchdto) {
     std::vector<player_id> disconnected;
     //int ind = 0;
+    
+    //matchdto.events.emplace_back(1,2, BOX_DESTROYED);
+    //matchdto.events.emplace_back(2,4, NO_EVENT);
     
     //for (PlayerDTO& player: matchdto.players){
     //     player.id =++ind;

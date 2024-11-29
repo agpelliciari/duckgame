@@ -8,7 +8,7 @@
 
 #include "./controlledplayer.h"
 #include "common/dtosgame.h"
-#include "server/logic_server/matchobserver.h"
+#include "server/core/matchobserver.h"
 
 // Contenedor/monitor de los players activos en el match.
 typedef std::list<ControlledPlayer> player_container;
@@ -44,8 +44,8 @@ public:
     bool remove(const ControlId& player);
     ControlledPlayer& get(const ControlId& id);
 
-    void finishLobbyMode();
-    void finishWaitMode();
+    void finishLobbyMode(const MatchStatsInfo& match_stats);
+    void finishWaitMode(const MatchStatsInfo& match_stats);
     void finishGameMode(const MatchStatsInfo& match_stats);
 
     void hostLobbyLeft(const ControlId& player);

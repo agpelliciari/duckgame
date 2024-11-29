@@ -8,6 +8,7 @@
 
 #include "./dtosobject.h"
 #include "./dtosplayer.h"
+#include "./gameevents.h"
 
 
 enum ProjectileType : uint8_t {
@@ -43,6 +44,9 @@ public:
     // match_info_dto info;
     std::vector<PlayerDTO> players;      // cppcheck-suppress unusedStructMember
     std::vector<DynamicObjDTO> objects;  // cppcheck-suppress unusedStructMember
+    
+    std::vector<SoundEventType> sounds;  // cppcheck-suppress unusedStructMember
+    std::vector<GameEvent> events;       // cppcheck-suppress unusedStructMember
 
     MatchDto() {}
     // explicit MatchDto(MatchStateType _estado, uint8_t _numronda): info({_estado, _numronda}) {}

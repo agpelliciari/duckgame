@@ -7,6 +7,13 @@ SimpleEventListener::SimpleEventListener() {}
 void SimpleEventListener::matchUpdated(const MatchDto& state) {
     updates.push(state);
     /*
+    int count = 0;
+    for (const GameEvent& event: state.events) {
+        std::cerr << "-->ev "<< count<<" " << (int)event.type << " at " << event.pos.x << "," << event.pos.y
+                  << std::endl;
+        count++;
+    }
+    
     for (const PlayerDTO& player: state.players) {
         std::cerr << "-->ply " << (int)player.id << " at " << player.pos.x << "," << player.pos.y
                   << std::endl;
