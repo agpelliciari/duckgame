@@ -27,6 +27,7 @@ enum PlayerActionType : uint8_t {
     PICK_UP_ITEM = 14,
     DROP_ITEM = 15,
     
+    FORCE_CANCEL_MATCH = 19,
     TOGGLE_DBG_MODE = 20,
     EQUIP_ARMOR = 21,
     EQUIP_HELMET = 22,

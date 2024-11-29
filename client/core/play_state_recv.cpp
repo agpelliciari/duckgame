@@ -42,9 +42,13 @@ void PlayStateRecv::run() {
                      error) {  // No deberia pasara realmente, antes pasaria en el controller.
         
         if(stats.isRunning()){
-            std::cerr << "canceling.. play state receiver error, was server disconnected?" << std::endl;
-            stats.state = CANCELADA;
-            listener.statsUpdated(stats);
+            if(protocol.isopen()){
+                std::cerr << "canceling.. play state receiver error, was server disconnected?" << std::endl;
+                stats.state = CANCELADA;
+                listener.statsUpdated(stats);
+            } else{
+                std::cerr << "-->closed play receiver??" << std::endl;        
+            }
         }
         
         
