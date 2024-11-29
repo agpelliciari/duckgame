@@ -272,7 +272,13 @@ void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos,
 }
 
 void MatchLogic::execute_move_command(int action_type, int index) {
-    this->command_map[action_type](index);
+    auto search = command_map.find(action_type);
+
+    if (search == command_map.end()) {
+        std::cerr << "No se reconocio la accion " << action_type<< std::endl;
+        return;
+    }
+    search->second(index);
 }
 
 void MatchLogic::add_boxes(const std::vector<struct MapPoint>& boxes){
