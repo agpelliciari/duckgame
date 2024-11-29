@@ -20,9 +20,9 @@ duck_max_flaps : 5
 item_respawn_time: 2
 box_health: 2
 
-fps: 60
-rounds_per_set: 5  
-wins_needed: 10 
+fps: 30
+rounds_per_set: 2
+wins_needed: 6 
 
 ## Todavia no tomados en cuenta.
 

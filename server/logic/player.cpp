@@ -178,7 +178,7 @@ void Player::shoot(std::vector <PhysicalBullet> &bullets){
             } else {
                 doing_action=TypeDoingAction::SHOOTING;
             }
-            player_sounds.push_back(SoundEventType::GUN_SHOT);
+            player_sounds.push_back(SoundEventType::DUEL_PISTOL_SHOT);
         }
 
     }

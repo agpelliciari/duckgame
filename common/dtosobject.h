@@ -17,6 +17,7 @@ enum class TypeDynamicObject : uint8_t {
     NONE,
     BOX,
     PROJECTILE,
+    GRENADE_PROJECTILE,
     LASER,
     BURST,
 
