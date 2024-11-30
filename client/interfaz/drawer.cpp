@@ -81,11 +81,11 @@ void Drawer::drawPlayerInfo(const PlayerDTO& player, const std::string color) {
             const auto& [textureType, width, height] = weaponTexture->second;
 
             int x, y;
-            if (player.weapon == TypeWeapon::PISTOLA_COWBOY) {
-                x = 59;
-                y = 7;
-            } else if (player.weapon == TypeWeapon::SNIPER) {
+            if (player.weapon == TypeWeapon::PISTOLA_COWBOY || player.weapon == TypeWeapon::SNIPER) {
                 x = 60;
+                y = 7;
+            } else if (player.weapon == TypeWeapon::GRANADA) {
+                x = 65;
                 y = 7;
             } else {
                 x = 54;
@@ -180,17 +180,17 @@ void Drawer::drawArmor(const PlayerDTO& player, SDL_RendererFlip flip) {
 }
 
 void Drawer::getWeaponParameters(const PlayerDTO& player, SDL_RendererFlip flip, int& x, int& y, double& angle, int& sizeAdjustment) {
-    if (player.weapon == TypeWeapon::PISTOLA_COWBOY) {
+    if (player.weapon == TypeWeapon::PISTOLA_COWBOY || player.weapon == TypeWeapon::GRANADA) {
         if (player.aiming_up) {
             angle = getTextureFlipValue(flip, 90.0, -90.0);
-            x = camera.getScreenX(player.pos.x + getTextureFlipValue(flip, 20, 14) - 8);
+            x = camera.getScreenX(player.pos.x + getTextureFlipValue(flip, 21, 14) - 8);
             y = camera.getScreenY(player.pos.y + getTextureFlipValue(flip, -12, 6));
         } else {
             angle = 0.0;
             x = camera.getScreenX(player.pos.x + getTextureFlipValue(flip, 1, 14) - 8);
             y = camera.getScreenY(player.pos.y + 2);
         }
-        sizeAdjustment = 4;  // cambiar por 6 en caso de que se vea mal
+        sizeAdjustment = 2;
     } else if (player.weapon == TypeWeapon::SNIPER) {
         if (player.aiming_up) {
             angle = getTextureFlipValue(flip, 90.0, -90.0);
@@ -373,6 +373,13 @@ void Drawer::drawDynamicObject(const DynamicObjDTO& object) {
         case TypeDynamicObject::ARMOR:
             renderer.Copy(
                     textures.getTexture("/armors/chestPlatePickup.png"), SDL2pp::Rect(0, 0, 16, 16),
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y),
+                                 camera.getScaledSize(16), camera.getScaledSize(16)));
+            break;
+
+        case TypeDynamicObject::GRENADE_PROJECTILE:
+            renderer.Copy(
+                    textures.getTexture("/weapons/grenadePin.png"), SDL2pp::Rect(0, 0, 16, 16),
                     SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y),
                                  camera.getScaledSize(16), camera.getScaledSize(16)));
             break;
