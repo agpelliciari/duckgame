@@ -141,10 +141,12 @@ void Player::take_damage(){
     if (is_alive) {
         if (helmet){
             helmet = false;
+            player_sounds.push_back(SoundEventType::PLAYER_BROKEN_HELMET);
             return;
         }
         if (chest_armor){
             chest_armor = false;
+            player_sounds.push_back(SoundEventType::PLAYER_BROKEN_ARMOR);
             return;
         }
 
@@ -178,7 +180,7 @@ void Player::shoot(std::vector <Bullet> &bullets){
             bullet_position.x += player_dimension.x + 5;
             bullet_position.y += player_dimension.y / 2;
         }
-        if (weapon->shoot(this->shooting_direction, bullets, bullet_position, this->object, trigger, id)){
+        if (weapon->shoot(this->shooting_direction, bullets, bullet_position, this->object, trigger, id, player_sounds)){
             if (aim_up){
                 doing_action=TypeDoingAction::SHOOTING_UP;
             } else {
@@ -196,6 +198,16 @@ void Player::shoot_start(){
 
 void Player::shoot_end(){
     trigger = false;
+}
+
+void Player::equip_helmet(){
+    player_sounds.push_back(SoundEventType::PLAYER_EQUIP_HELMET);
+    helmet = true;
+}
+
+void Player::equip_chest_armor(){
+    player_sounds.push_back(SoundEventType::PLAYER_EQUIP_ARMOR);
+    chest_armor = true;
 }
 
 void Player::stay_down_start(){
@@ -234,9 +246,19 @@ void Player::pick_up_item(std::vector<SpawnPlace> &spawn_places, std::vector<Dro
     for (SpawnPlace &spawn_place : spawn_places) {
         if (spawn_place.is_on_range(player_position.x + player_dimension.x / 2,
                                     player_position.y + player_dimension.y / 2)) {
-            weapon = spawn_place.get_weapon();
-            doing_action = TypeDoingAction::PICK_UP;
-            player_sounds.push_back(SoundEventType::PLAYER_PICKUP);
+            bool helmet_ = helmet;
+            bool chest_armor_ = chest_armor;
+
+            weapon = spawn_place.get_weapon(helmet_, chest_armor_);
+            if (helmet_ != helmet){
+                this->equip_helmet();
+            } else if (chest_armor_ != chest_armor){
+                this->equip_chest_armor();
+            } else if (weapon != nullptr){
+                doing_action = TypeDoingAction::PICK_UP;
+                player_sounds.push_back(SoundEventType::PLAYER_PICKUP);
+            }
+
             return;
         }
     }
@@ -276,5 +298,7 @@ void Player::get_sounds(std::vector<SoundEventType>& sounds){
     }
     player_sounds.clear();
 }
+
+
 
 //Tuple Player::get_position() { return object.get_real_position(); }

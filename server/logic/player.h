@@ -23,6 +23,7 @@
 #include "bullet.h"
 #include "server/core/configuration.h"
 #include "laser_rifle_weapon.h"
+#include "common/gameevents.h"
 
 
 class Player {
@@ -73,6 +74,8 @@ public:
     void update_shooting_direction();
     void shoot_start();
     void shoot_end();
+    void equip_chest_armor();
+    void equip_helmet();
     Tuple get_map_position();
     Tuple get_dimension();
 };

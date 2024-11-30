@@ -10,9 +10,8 @@ void SniperWeapon::get_type(TypeDynamicObject &type){
     type = TypeDynamicObject::SNIPER;
 }
 
-void SniperWeapon::shoot_sniper(ShootingDirection direction,
-                                std::vector<Bullet> &bullets,
-                               Tuple bullet_position, int id_player){
+void SniperWeapon::shoot_sniper(ShootingDirection direction, std::vector<Bullet> &bullets,
+                               Tuple bullet_position, int id_player, std::vector<SoundEventType> &player_sounds){
     bullets.push_back(Bullet(bullet_position.x, bullet_position.y, bullet_range, TypeDynamicObject::PROJECTILE, id_player));
 
     if (direction == ShootingDirection::UP){
@@ -22,14 +21,13 @@ void SniperWeapon::shoot_sniper(ShootingDirection direction,
     } else if (direction == ShootingDirection::RIGHT){
         bullets.back().shoot_right();
     }
-
+    player_sounds.push_back(SoundEventType::SNIPER_SHOT);
     ammo --;
     charged = false;
 }
 
-bool SniperWeapon::shoot(ShootingDirection direction,
-                         std::vector<Bullet> &bullets,
-                         Tuple bullet_position, PhysicalPlayer &player, bool &trigger, int id_player) {
+bool SniperWeapon::shoot(ShootingDirection direction, std::vector<Bullet> &bullets, Tuple bullet_position,
+                         PhysicalPlayer &player, bool &trigger, int id_player, std::vector<SoundEventType> &player_sounds) {
     trigger = false;
     if (ammo <= 0) {
         return false;
@@ -40,12 +38,12 @@ bool SniperWeapon::shoot(ShootingDirection direction,
 
     if (init_charging_time == 0) {
         init_charging_time = current_time;
-        std::cout << "CARGANDO ARMA" << std::endl;
+        player_sounds.push_back(SoundEventType::PLAYER_RELOADING);
         return false;
     }
     if (current_time - init_charging_time >= charging_time) {
        init_charging_time = 0;
-       this->shoot_sniper(direction, bullets, bullet_position, id_player);
+       this->shoot_sniper(direction, bullets, bullet_position, id_player, player_sounds);
        return true;
     }
     return false;

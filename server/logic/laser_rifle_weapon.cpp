@@ -18,9 +18,8 @@ int LaserRifleWeapon::get_ammo(){
 }
 
 
-bool LaserRifleWeapon::shoot(ShootingDirection direction,
-                               std::vector <Bullet> &bullets, Tuple bullet_position,
-                       PhysicalPlayer &player, bool &trigger, int id_player){
+bool LaserRifleWeapon::shoot(ShootingDirection direction, std::vector <Bullet> &bullets, Tuple bullet_position,
+                       PhysicalPlayer &player, bool &trigger, int id_player, std::vector<SoundEventType> &player_sounds){
     if (ammo > 0){
         if (reload_time > 0){
             reload_time--;
@@ -46,6 +45,7 @@ bool LaserRifleWeapon::shoot(ShootingDirection direction,
                 bullets.back().shoot_right();
                 bullets.back().add_speed(0, -dispersion_factor);
             }
+            player_sounds.push_back(SoundEventType::LASER_SHOT);
             ammo --;
             reload_time = 15;
             last_shoot_time = current_time;

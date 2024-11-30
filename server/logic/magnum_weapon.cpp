@@ -11,8 +11,8 @@ void MagnumWeapon::get_weapon(TypeWeapon& type){
     type = TypeWeapon::MAGNUM;
 }
 
-bool MagnumWeapon::shoot(ShootingDirection direction,
-                               std::vector <Bullet> &bullets, Tuple bullet_position, PhysicalPlayer &player, bool &trigger, int id_player){
+bool MagnumWeapon::shoot(ShootingDirection direction, std::vector <Bullet> &bullets, Tuple bullet_position,
+                         PhysicalPlayer &player, bool &trigger, int id_player, std::vector<SoundEventType> &player_sounds){
     trigger = false;
     if (ammo > 0){
         std::srand(std::time(nullptr));
@@ -35,6 +35,7 @@ bool MagnumWeapon::shoot(ShootingDirection direction,
         }
         ammo --;
         return true;
+        player_sounds.push_back(SoundEventType::MAGNUM_SHOT);
     }
     return false;
 }

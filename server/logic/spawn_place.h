@@ -19,6 +19,8 @@ class SpawnPlace {
 
     private:
         std::unique_ptr<Weapon> possible_weapon;
+        bool possible_helmet;
+        bool possible_armor;
         TypeDynamicObject item;
         Tuple spawn_point;
         Tuple dimension;
@@ -26,10 +28,11 @@ class SpawnPlace {
         int time_respawn;
         float time_sleep;
         int timer;
+        int seed;
 
     public:
         SpawnPlace (int position_x, int position_y, int range_x, int range_y,
-                   int time_respawn, float time_sleep);
+                   int time_respawn, float time_sleep, int seed);
 
 
         Tuple get_spawn_point();
@@ -39,7 +42,7 @@ class SpawnPlace {
         void spawn_item();
         void pass_time();
         void take_item(TypeDynamicObject &item);
-        std::unique_ptr<Weapon> get_weapon();
+        std::unique_ptr<Weapon> get_weapon(bool &helmet, bool &armor);
         void get_data(int &position_x_, int &position_y_, TypeDynamicObject &object_);
         TypeDynamicObject get_item();
 };

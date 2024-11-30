@@ -8,9 +8,8 @@ void CowboyPistolWeapon::get_weapon(TypeWeapon& type){
     type = TypeWeapon::PISTOLA_COWBOY;
 }
 
-bool CowboyPistolWeapon::shoot(ShootingDirection direction,
-                               std::vector <Bullet> &bullets,
-                               Tuple bullet_position, PhysicalPlayer &player, bool &trigger, int id_player){
+bool CowboyPistolWeapon::shoot(ShootingDirection direction, std::vector <Bullet> &bullets,
+                               Tuple bullet_position, PhysicalPlayer &player, bool &trigger, int id_player, std::vector<SoundEventType> &player_sounds){
     trigger = false;
     if (ammo > 0){
         bullets.push_back(Bullet(bullet_position.x, bullet_position.y, bullet_range, TypeDynamicObject::PROJECTILE, id_player));
@@ -21,6 +20,7 @@ bool CowboyPistolWeapon::shoot(ShootingDirection direction,
         } else if (direction == ShootingDirection::RIGHT){
             bullets.back().shoot_right();
         }
+        player_sounds.push_back(SoundEventType::COWBOY_SHOT);
         ammo --;
         return true;
 

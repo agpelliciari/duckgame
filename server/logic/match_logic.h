@@ -36,6 +36,7 @@ private:
     std::vector<MapPoint> blocks;  // cppcheck-suppress unusedStructMember
     std::vector<MapPoint> spawn_points; // cppcheck-suppress unusedStructMember
     std::vector<DroppedItem> dropped_items; // cppcheck-suppress unusedStructMember
+    //std::vector<SoundEventType> sounds; // cppcheck-suppress unusedStructMember
 
     // std::vector<std::vector<bool>> colition_map; // cppcheck-suppress unusedStructMember
 

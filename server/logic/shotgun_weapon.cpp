@@ -12,7 +12,7 @@ void ShotgunWeapon::get_type(TypeDynamicObject &type){
 
 void ShotgunWeapon::shoot_shotgun(ShootingDirection direction,
                                 std::vector <Bullet> &bullets,
-                               Tuple bullet_position, int id_player){
+                               Tuple bullet_position, int id_player, std::vector<SoundEventType> &player_sounds){
     for (int i = 0; i < 6; i++){
         int sign;
         i%2 == 0 ? sign = 1 : sign = -1;
@@ -29,12 +29,12 @@ void ShotgunWeapon::shoot_shotgun(ShootingDirection direction,
             bullets.back().add_speed(-dispersion_index/2, dispersion_index);
         }
     }
+    player_sounds.push_back(SoundEventType::SHOTGUN_SHOT);
     ammo --;
 }
 
-bool ShotgunWeapon::shoot(ShootingDirection direction,
-                         std::vector<Bullet> &bullets,
-                         Tuple bullet_position, PhysicalPlayer &player, bool &trigger, int id_player) {
+bool ShotgunWeapon::shoot(ShootingDirection direction, std::vector<Bullet> &bullets, Tuple bullet_position,
+                          PhysicalPlayer &player, bool &trigger, int id_player, std::vector<SoundEventType> &player_sounds) {
     trigger = false;
     if (ammo <= 0) {
         return false;
@@ -45,12 +45,12 @@ bool ShotgunWeapon::shoot(ShootingDirection direction,
 
     if (init_charging_time == 0) {
         init_charging_time = current_time;
-        std::cout << "CARGANDO ARMA" << std::endl;
+        player_sounds.push_back(SoundEventType::PLAYER_RELOADING);
         return false;
     }
     if (current_time - init_charging_time >= charging_time) {
         init_charging_time = 0;
-        this->shoot_shotgun(direction, bullets, bullet_position, id_player);
+        this->shoot_shotgun(direction, bullets, bullet_position, id_player, player_sounds);
         return true;
     }
     return false;
