@@ -62,7 +62,7 @@ class Player {
         void stop_moving_x();
         void shoot(std::vector <Bullet> &bullets, std::vector<Grenade> &grenades);
         bool has_equipment();
-        void pick_up_item(std::vector<SpawnPlace> &spawn_places, std::vector<DroppedItem> &dropped_items);
+        bool pick_up_item(std::vector<SpawnPlace> &spawn_places, std::vector<DroppedItem> &dropped_items);
         void drop_item(std::vector<DroppedItem> &dropped_items);
         void take_damage();
         void aim_up_start();

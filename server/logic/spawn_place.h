@@ -16,6 +16,13 @@
 #ifndef SPAWN_PLACE_H
 #define SPAWN_PLACE_H
 
+enum SpawnActionType{
+    NO_ACTION,
+    PICKUP_WEAPON,
+    PICKUP_HELMET,
+    PICKUP_ARMOR
+};
+
 class SpawnPlace {
 
     private:
@@ -42,8 +49,12 @@ class SpawnPlace {
         bool is_spawned();
         void spawn_item();
         void pass_time();
+        
         void take_item(TypeDynamicObject &item);
-        std::unique_ptr<Weapon> get_weapon(bool &helmet, bool &armor);
+        
+        SpawnActionType get_action();
+        void get_item(std::unique_ptr<Weapon>& weapon);
+        
         void get_data(int &position_x_, int &position_y_, TypeDynamicObject &object_);
         TypeDynamicObject get_item();
 };

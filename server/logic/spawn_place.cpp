@@ -21,8 +21,9 @@ void SpawnPlace::spawn_item() {
     }
     auto start_time = std::chrono::high_resolution_clock::now();
     //std::srand(std::time(nullptr) + seed);
-    //int random_weapon = std::rand() % 11;
-    int random_weapon = 10;
+    int random_weapon = std::rand() % 11;
+    //int random_weapon = 10;
+    
     switch (random_weapon){
         case 0:
             possible_weapon = std::make_unique<CowboyPistolWeapon>();
@@ -79,27 +80,44 @@ void SpawnPlace::spawn_item() {
     }
 }
 
-std::unique_ptr<Weapon> SpawnPlace::get_weapon(bool &helmet, bool &armor){
+
+SpawnActionType SpawnPlace::get_action(){
+    if(spawned){
+        if (possible_helmet) {
+            return SpawnActionType::PICKUP_HELMET;
+        }
+        
+        if (possible_armor) {
+            return SpawnActionType::PICKUP_ARMOR;
+        }
+        
+        return SpawnActionType::PICKUP_WEAPON;
+    }
+    
+    return SpawnActionType::NO_ACTION;
+}
+
+void SpawnPlace::get_item(std::unique_ptr<Weapon>& weapon){
     if (spawned){
         spawned = false;
         timer = 200;
-        if (possible_helmet && helmet == false) {
-            helmet = true;
+        if (possible_helmet) {
             possible_helmet = false;
-            return nullptr;
+            return;
         }
-        if (possible_armor && armor == false) {
-            armor = true;
+        if (possible_armor) {
             possible_armor = false;
-            return nullptr;
+            return;
         }
+        
         if (possible_weapon != nullptr) {
-            auto weapon = std::move(possible_weapon);
+            weapon = std::move(possible_weapon);
             possible_weapon = nullptr;
-            return weapon;
+            return;
         }
     }
-    return nullptr;
+    
+    return;
 }
 
 Tuple SpawnPlace::get_spawn_point() {

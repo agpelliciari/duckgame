@@ -129,11 +129,15 @@ void MatchLogic::player_jump_end(int id) {
 void MatchLogic::player_toggle_pick_up_drop_item(int id) {
     for (Player& player: players) {
         if (player.same_id(id)) {
+            
+            if(player.pick_up_item(this->spawn_places, this->dropped_items)){
+                return;
+            }
+            
             if (player.has_equipment()) {
                 player.drop_item(this->dropped_items);
-            } else {
-                player.pick_up_item(this->spawn_places, this->dropped_items);
             }
+            return;
         }
     }
 }

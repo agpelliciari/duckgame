@@ -235,32 +235,52 @@ bool Player::has_equipment() {
     return (weapon != nullptr);
 }
 
-void Player::pick_up_item(std::vector<SpawnPlace> &spawn_places, std::vector<DroppedItem> &dropped_items){
-
-    if (weapon != nullptr){
-        return;
-    }
+bool Player::pick_up_item(std::vector<SpawnPlace> &spawn_places, std::vector<DroppedItem> &dropped_items){
     Tuple player_position = this->get_map_position();
     Tuple player_dimension = this->get_dimension();
 
     for (SpawnPlace &spawn_place : spawn_places) {
         if (spawn_place.is_on_range(player_position.x + player_dimension.x / 2,
                                     player_position.y + player_dimension.y / 2)) {
-            bool helmet_ = helmet;
-            bool chest_armor_ = chest_armor;
-
-            weapon = spawn_place.get_weapon(helmet_, chest_armor_);
-            if (helmet_ != helmet){
+            SpawnActionType action = spawn_place.get_action();
+                        
+            if(action == SpawnActionType::NO_ACTION){
+                continue;
+            }
+            
+            if(action == SpawnActionType::PICKUP_HELMET){
+                if(helmet){
+                    continue;
+                }
                 this->equip_helmet();
-            } else if (chest_armor_ != chest_armor){
-                this->equip_chest_armor();
-            } else if (weapon != nullptr){
+                spawn_place.get_item(weapon);
+                std::cout << "---> PICKUP HELMET?!"<<std::endl;
+                return true;
+            }
+            
+            if(action == SpawnActionType::PICKUP_ARMOR){
+                if(chest_armor){
+                    continue;
+                }
+                this->equip_chest_armor();  
+                spawn_place.get_item(weapon);
+                std::cout << "---> PICKUP ARMOR?!"<<std::endl;
+                
+                return true;
+            }
+            
+            if (weapon == nullptr){
+                spawn_place.get_item(weapon);
                 doing_action = TypeDoingAction::PICK_UP;
                 player_sounds.push_back(SoundEventType::PLAYER_PICKUP);
+                std::cout << "---> PICKUP WEAPON?!"<<std::endl;
+                return true;
             }
-
-            return;
         }
+    }
+    
+    if(weapon != nullptr){
+         return false;
     }
 
     for (DroppedItem &dropped_item : dropped_items) {
@@ -269,9 +289,11 @@ void Player::pick_up_item(std::vector<SpawnPlace> &spawn_places, std::vector<Dro
             weapon = dropped_item.get_weapon();
             doing_action = TypeDoingAction::PICK_UP;
             player_sounds.push_back(SoundEventType::PLAYER_PICKUP);
-            return;
+            return true;
         }
     }
+    
+    return false;
 }
 
 void Player::drop_item(std::vector<DroppedItem> &dropped_items){
