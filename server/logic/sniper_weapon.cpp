@@ -10,6 +10,11 @@ void SniperWeapon::get_type(TypeDynamicObject &type){
     type = TypeDynamicObject::SNIPER;
 }
 
+SoundEventType SniperWeapon::shoot_sound() const{
+    return SNIPER_SHOT;
+}
+
+
 void SniperWeapon::shoot_sniper(ShootingDirection direction, std::vector<Bullet> &bullets,
                                Tuple bullet_position, int id_player, std::vector<SoundEventType> &player_sounds){
     bullets.push_back(Bullet(bullet_position.x, bullet_position.y, bullet_range, TypeDynamicObject::PROJECTILE, id_player));

@@ -8,6 +8,11 @@ void PewPewLaserWeapon::get_weapon(TypeWeapon& type){
     type = TypeWeapon::PEW_PEW_LASER;
 }
 
+SoundEventType PewPewLaserWeapon::shoot_sound() const{
+    return PEWPEW_SHOT;
+}
+
+
 bool PewPewLaserWeapon::shoot(ShootingDirection direction, std::vector <Bullet> &bullets, Tuple bullet_position,
                               PhysicalPlayer &player, bool &trigger, int id_player, std::vector<SoundEventType> &player_sounds, std::vector<Grenade> &grenades){
     trigger = false;

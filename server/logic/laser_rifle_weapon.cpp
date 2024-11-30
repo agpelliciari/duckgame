@@ -9,6 +9,11 @@ void LaserRifleWeapon::get_type(TypeDynamicObject &type){
     type = TypeDynamicObject::LASER_RIFLE;
 }
 
+
+SoundEventType LaserRifleWeapon::shoot_sound() const{
+    return LASER_SHOT ;
+}
+
 void LaserRifleWeapon::get_weapon(TypeWeapon& type) {
     type = TypeWeapon::LASER_RIFLE;
 }

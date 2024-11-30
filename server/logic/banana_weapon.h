@@ -18,6 +18,8 @@ class BananaWeapon : public Weapon{
 
     public:
         BananaWeapon();
+        
+        SoundEventType shoot_sound() const override;                
         void get_weapon(TypeWeapon& type) override;
         void get_type(TypeDynamicObject &type) override;
         bool shoot(ShootingDirection direction, std::vector<Bullet> &bullets,

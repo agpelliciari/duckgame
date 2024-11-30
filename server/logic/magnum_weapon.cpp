@@ -11,6 +11,11 @@ void MagnumWeapon::get_weapon(TypeWeapon& type){
     type = TypeWeapon::MAGNUM;
 }
 
+SoundEventType MagnumWeapon::shoot_sound() const{
+    return MAGNUM_SHOT ;
+}
+
+
 bool MagnumWeapon::shoot(ShootingDirection direction, std::vector <Bullet> &bullets, Tuple bullet_position,
                          PhysicalPlayer &player, bool &trigger, int id_player, std::vector<SoundEventType> &player_sounds, std::vector<Grenade> &grenades){
     trigger = false;

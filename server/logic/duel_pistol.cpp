@@ -11,6 +11,12 @@ void DuelPistol::get_weapon(TypeWeapon& type){
     type = TypeWeapon::MAGNUM;
 }
 
+SoundEventType DuelPistol::shoot_sound() const{
+    return DUEL_PISTOL_SHOT;
+}
+
+
+
 bool DuelPistol::shoot(ShootingDirection direction, std::vector <Bullet> &bullets, Tuple bullet_position,
                        PhysicalPlayer &player, bool &trigger, int id_player, std::vector<SoundEventType> &player_sounds, std::vector<Grenade> &grenades){
     trigger = false;

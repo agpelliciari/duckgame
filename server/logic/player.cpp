@@ -187,7 +187,12 @@ void Player::shoot(std::vector <Bullet> &bullets, std::vector<Grenade> &grenades
             } else {
                 doing_action=TypeDoingAction::SHOOTING;
             }
-            player_sounds.push_back(SoundEventType::DUEL_PISTOL_SHOT);
+            
+            player_sounds.push_back(weapon->shoot_sound());
+            
+            if(weapon->get_ammo() == 0){
+                weapon.reset(); // Reset ! a que se quedo sin balas!
+            }
         }
 
     }

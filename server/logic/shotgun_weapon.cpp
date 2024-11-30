@@ -9,6 +9,10 @@ ShotgunWeapon::ShotgunWeapon(): ammo(3), charging_time(2),
 void ShotgunWeapon::get_type(TypeDynamicObject &type){
     type = TypeDynamicObject::ESCOPETA;
 }
+SoundEventType ShotgunWeapon::shoot_sound() const{
+    return SHOTGUN_SHOT;
+}
+
 
 void ShotgunWeapon::shoot_shotgun(ShootingDirection direction,
                                 std::vector <Bullet> &bullets,

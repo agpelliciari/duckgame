@@ -19,6 +19,9 @@ class GrenadeWeapon : public Weapon{
         GrenadeWeapon();
         void get_weapon(TypeWeapon& type) override;
         void get_type(TypeDynamicObject &type) override;
+        
+        SoundEventType shoot_sound() const override;
+
         bool shoot(ShootingDirection direction,
                    std::vector<Bullet> &bullets, Tuple bullet_position, PhysicalPlayer &player,
                    bool &trigger, int id_player, std::vector<SoundEventType> &player_sounds, std::vector<Grenade> &grenades) override;

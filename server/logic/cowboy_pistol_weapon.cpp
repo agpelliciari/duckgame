@@ -8,6 +8,11 @@ void CowboyPistolWeapon::get_weapon(TypeWeapon& type){
     type = TypeWeapon::PISTOLA_COWBOY;
 }
 
+SoundEventType CowboyPistolWeapon::shoot_sound() const{
+    return COWBOY_SHOT;
+}
+
+
 bool CowboyPistolWeapon::shoot(ShootingDirection direction, std::vector <Bullet> &bullets,
                                Tuple bullet_position, PhysicalPlayer &player, bool &trigger, int id_player, std::vector<SoundEventType> &player_sounds, std::vector<Grenade> &grenades){
     trigger = false;

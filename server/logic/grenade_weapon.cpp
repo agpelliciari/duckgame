@@ -7,6 +7,10 @@ void GrenadeWeapon::get_weapon(TypeWeapon& type){
     type = TypeWeapon::GRANADA;
 }
 
+SoundEventType GrenadeWeapon::shoot_sound() const{
+    return GRENADE_THROW;
+}
+
 void GrenadeWeapon::get_type(TypeDynamicObject &type){
     type = TypeDynamicObject::GRANADA;
 }
