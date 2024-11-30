@@ -20,8 +20,9 @@ void SpawnPlace::spawn_item() {
         return;
     }
     auto start_time = std::chrono::high_resolution_clock::now();
-    std::srand(std::time(nullptr) + seed);
-    int random_weapon = std::rand() % 10;
+    //std::srand(std::time(nullptr) + seed);
+    //int random_weapon = std::rand() % 11;
+    int random_weapon = 10;
     switch (random_weapon){
         case 0:
             possible_weapon = std::make_unique<CowboyPistolWeapon>();
@@ -55,6 +56,7 @@ void SpawnPlace::spawn_item() {
             possible_weapon = std::make_unique<LaserRifleWeapon>();
             spawned = true;
             break;
+
         case 8:
             possible_helmet = true;
             std::cout<<"HELMET SPAWNED"<<std::endl;
@@ -65,6 +67,11 @@ void SpawnPlace::spawn_item() {
             std::cout<<"CHEST ARMOR SPAWNED"<<std::endl;
             spawned = true;
             break;
+        case 10:
+            possible_weapon = std::make_unique<GrenadeWeapon>();
+            spawned = true;
+            break;
+
         default:
             possible_weapon = std::make_unique<CowboyPistolWeapon>();
             spawned = true;

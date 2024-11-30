@@ -34,7 +34,7 @@ void ShotgunWeapon::shoot_shotgun(ShootingDirection direction,
 }
 
 bool ShotgunWeapon::shoot(ShootingDirection direction, std::vector<Bullet> &bullets, Tuple bullet_position,
-                          PhysicalPlayer &player, bool &trigger, int id_player, std::vector<SoundEventType> &player_sounds) {
+                          PhysicalPlayer &player, bool &trigger, int id_player, std::vector<SoundEventType> &player_sounds, std::vector<Grenade> &grenades) {
     trigger = false;
     if (ammo <= 0) {
         return false;

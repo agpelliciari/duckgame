@@ -21,6 +21,7 @@
 #include "shotgun_weapon.h"
 #include "ak47_weapon.h"
 #include "laser_rifle_weapon.h"
+#include "grenade_weapon.h"
 
 class Box {
 

@@ -17,6 +17,7 @@
 #include "dropped_item.h"
 #include "server/core/configuration.h"
 #include "bullet.h"
+#include "grenade.h"
 
 #ifndef MATCH_LOGIC_H
 #define MATCH_LOGIC_H
@@ -37,7 +38,7 @@ private:
     std::vector<MapPoint> spawn_points; // cppcheck-suppress unusedStructMember
     std::vector<DroppedItem> dropped_items; // cppcheck-suppress unusedStructMember
     //std::vector<SoundEventType> sounds; // cppcheck-suppress unusedStructMember
-
+    std::vector<Grenade> grenades;  // cppcheck-suppress unusedStructMember
     // std::vector<std::vector<bool>> colition_map; // cppcheck-suppress unusedStructMember
 
 
@@ -77,7 +78,7 @@ public:
     void update_dropped_items();
     void update_spawn_places();
     void update_spawn_points();
-    
+    void update_grenades();
     void resize_map(const int width, const int height);
     void reset_map();
 

@@ -12,7 +12,7 @@ void DuelPistol::get_weapon(TypeWeapon& type){
 }
 
 bool DuelPistol::shoot(ShootingDirection direction, std::vector <Bullet> &bullets, Tuple bullet_position,
-                       PhysicalPlayer &player, bool &trigger, int id_player, std::vector<SoundEventType> &player_sounds){
+                       PhysicalPlayer &player, bool &trigger, int id_player, std::vector<SoundEventType> &player_sounds, std::vector<Grenade> &grenades){
     trigger = false;
     if (ammo > 0){
         std::srand(std::time(nullptr));

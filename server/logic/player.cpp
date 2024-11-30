@@ -59,7 +59,7 @@ void Player::still() {
 
 int Player::get_id() { return id; }
 
-void Player::update(const MatchMap& colition_map, std::vector <Bullet> &bullets) {
+void Player::update(const MatchMap& colition_map, std::vector <Bullet> &bullets, std::vector<Grenade> &grenades) {
 
     if (is_alive){
         if(object.is_out_of_map()){
@@ -72,7 +72,7 @@ void Player::update(const MatchMap& colition_map, std::vector <Bullet> &bullets)
             	object.update_action(move_action);
                 this->update_shooting_direction();
                 if (trigger){
-                    this->shoot(bullets);
+                    this->shoot(bullets, grenades);
                 }
             }
         }
@@ -162,7 +162,7 @@ void Player::take_damage(){
     }
 }
 
-void Player::shoot(std::vector <Bullet> &bullets){
+void Player::shoot(std::vector <Bullet> &bullets, std::vector<Grenade> &grenades){
 
     if (weapon != nullptr){
         Tuple bullet_position = this->get_map_position();
@@ -180,7 +180,7 @@ void Player::shoot(std::vector <Bullet> &bullets){
             bullet_position.x += player_dimension.x + 5;
             bullet_position.y += player_dimension.y / 2;
         }
-        if (weapon->shoot(this->shooting_direction, bullets, bullet_position, this->object, trigger, id, player_sounds)){
+        if (weapon->shoot(this->shooting_direction, bullets, bullet_position, this->object, trigger, id, player_sounds, grenades)){
             if (aim_up){
                 doing_action=TypeDoingAction::SHOOTING_UP;
             } else {

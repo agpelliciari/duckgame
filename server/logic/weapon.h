@@ -11,6 +11,7 @@
 #include "physical_bullet.h"
 #include "physical_player.h"
 #include "common/gameevents.h"
+#include "grenade.h"
 
 class Weapon {
 
@@ -20,7 +21,7 @@ public:
     virtual bool shoot(ShootingDirection direction,
                        std::vector <Bullet> &bullets, Tuple bullet_position,
                        PhysicalPlayer &player, bool &trigger, int id_player,
-                       std::vector<SoundEventType> &player_sounds) = 0;
+                       std::vector<SoundEventType> &player_sounds, std::vector<Grenade> &grenades) = 0;
     virtual int get_ammo() = 0;
     virtual ~Weapon() = default;
 };

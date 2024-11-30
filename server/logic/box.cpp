@@ -27,7 +27,7 @@ void Box::take_damage(){
 
 std::unique_ptr<Weapon> Box::get_item() {
     std::srand(std::time(nullptr));
-    int random_weapon = std::rand() % 8;
+    int random_weapon = std::rand() % 9;
     switch (random_weapon){
         case 0:
             return std::make_unique<CowboyPistolWeapon>();
@@ -52,6 +52,9 @@ std::unique_ptr<Weapon> Box::get_item() {
         break;
         case 7:
             return std::make_unique<LaserRifleWeapon>();
+        break;
+        case 8:
+            return std::make_unique<GrenadeWeapon>();
         break;
         default:
             return std::make_unique<CowboyPistolWeapon>();

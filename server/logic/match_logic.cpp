@@ -186,7 +186,7 @@ void MatchLogic::still_player(int id) {
 void MatchLogic::update_players(std::vector<int> &id_alive_players) {
     id_alive_players.clear();
     for (Player& player: players) {
-        player.update(colition_map, bullets);
+        player.update(colition_map, bullets, grenades);
         if (player.is_still_alive()){
             id_alive_players.push_back(player.get_id());
         }
@@ -250,6 +250,8 @@ void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos,
         }
     }
 
+
+
     for (SpawnPlace &spawn_place: spawn_places) {
         if (spawn_place.is_spawned()){
             DynamicObjDTO dto = {0, 0, TypeDynamicObject::NONE};
@@ -269,7 +271,12 @@ void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos,
     for (Bullet bullet: bullets) {
         DynamicObjDTO dto = {0, 0, TypeDynamicObject::PROJECTILE};
         bullet.get_map_info(dto.pos.x, dto.pos.y, dto.type);
-        std::cout << "BULLET x: " << dto.pos.x << " y: " << dto.pos.y << std::endl;
+        objects.push_back(dto);
+    }
+
+    for (Grenade grenade: grenades) {
+        DynamicObjDTO dto = {0, 0, TypeDynamicObject::PROJECTILE};
+        grenade.get_map_info(dto.pos.x, dto.pos.y, dto.type);
         objects.push_back(dto);
     }
 
@@ -380,6 +387,17 @@ void MatchLogic::update_bullets(){
     }
 }
 
+void MatchLogic::update_grenades(){
+    for (auto it = grenades.begin(); it!=grenades.end();) {
+        if (it->exploded(bullets) || it->out_of_map()){
+            it = grenades.erase(it);
+        } else {
+            it->move(colition_map);
+            it ++;
+        }
+    }
+}
+
 void MatchLogic::update_dropped_items(){
     for (auto it = dropped_items.begin(); it!=dropped_items.end();) {
         if (!it->is_alive()){
@@ -388,7 +406,6 @@ void MatchLogic::update_dropped_items(){
         } else {
             it ++;
         }
-
     }
 }
 
@@ -413,6 +430,7 @@ void MatchLogic::clear_objects(){
     boxes.clear();
     //spawn_places.clear();
     dropped_items.clear();
+    grenades.clear();
     bullets.clear();
 }
 
@@ -428,6 +446,7 @@ void MatchLogic::reset_map(){
     boxes.clear();
     blocks.clear();
     bullets.clear();
+    grenades.clear();
     
     colition_map.clear_map();
 }
