@@ -73,7 +73,7 @@ void Drawer::drawPlayerInfo(const PlayerDTO& player, const std::string color) {
     }
     
     renderer.Copy(textures.getTexture("/ui/hp.png"), SDL2pp::Rect(0, 0, health, 16),
-                        SDL2pp::Rect(40 + 115 * (player.id - 1), 5, health, 20));
+                        SDL2pp::Rect(35 + 115 * (player.id - 1), 5, health, 20));
 
     if (player.weapon != TypeWeapon::NONE) {
         auto weaponTexture = weaponTextures.find(player.weapon);
@@ -141,10 +141,15 @@ void Drawer::getArmorParameters(const PlayerDTO& player, SDL_RendererFlip flip, 
         helmetArmorX = camera.getScreenX(player.pos.x + getTextureFlipValue(flip, 34, -19));
         helmetArmorY = camera.getScreenY(player.pos.y + getTextureFlipValue(flip, -1, 27));
     } else {
+        if (player.move_action == TypeMoveAction::FLAP_LEFT || player.move_action == TypeMoveAction::FLAP_RIGHT || player.move_action == TypeMoveAction::FLAP_NEUTRAL) {
+            helmetArmorY = camera.getScreenY(player.pos.y - 16);
+            chestArmorY = camera.getScreenY(player.pos.y - 3);
+        } else {
+            chestArmorY = camera.getScreenY(player.pos.y - 7);
+            helmetArmorY = camera.getScreenY(player.pos.y - 20);
+        }
         chestArmorX = camera.getScreenX(player.pos.x + getTextureFlipValue(flip, -7, -6));
-        chestArmorY = camera.getScreenY(player.pos.y - 7);
         helmetArmorX = camera.getScreenX(player.pos.x + getTextureFlipValue(flip, -3, -9));
-        helmetArmorY = camera.getScreenY(player.pos.y - 20);
     }
 }
 
