@@ -32,7 +32,15 @@ void EventHandler::handleKeyDown(SDL_Keycode key, PlayerActionDTO& action) {
         case SDLK_v:
             setAction(action, SHOOT_START, MAIN_PLAYER);
             break;
-
+        case SDLK_F1:
+            setAction(action, CHEAT_1, MAIN_PLAYER);
+            break;
+        case SDLK_F2:
+            setAction(action, CHEAT_2, MAIN_PLAYER);
+            break;
+        case SDLK_F3:
+            setAction(action, CHEAT_3, MAIN_PLAYER);
+            break;
 
 
         case SDLK_m:
