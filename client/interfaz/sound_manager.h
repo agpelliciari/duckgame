@@ -23,6 +23,8 @@ public:
 
     void addMatchSound(SoundEventType soundType);
 
+    void addGameSound(GameEventType gameSoundType);
+
     void playSounds();
 
     void playSound(SoundType sound);

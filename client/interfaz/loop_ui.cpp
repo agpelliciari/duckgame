@@ -69,6 +69,10 @@ void UILoop::updateMatchDto() {
         lastUpdate = matchUpdate;
 
         animation.update(lastUpdate);
+
+        for (const GameEvent& gameSound: lastUpdate.events) {
+            soundManager.addGameSound(gameSound.type);
+        }
         
         for (const SoundEventType& soundType: lastUpdate.sounds) {
             soundManager.addMatchSound(soundType);

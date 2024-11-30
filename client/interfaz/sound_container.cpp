@@ -12,6 +12,8 @@ SoundContainer::SoundContainer(): backgroundMusic(DATA_PATH "/music/DuckGame-cha
     sounds.emplace(SoundType::MAGNUM, SDL2pp::Chunk(DATA_PATH "/sounds/magnum.wav"));
     sounds.emplace(SoundType::SHOTGUN, SDL2pp::Chunk(DATA_PATH "/sounds/shotgun.wav"));
     sounds.emplace(SoundType::SNIPER, SDL2pp::Chunk(DATA_PATH "/sounds/sniper.wav"));
+    sounds.emplace(SoundType::GRENADE_EXPLOSION, SDL2pp::Chunk(DATA_PATH "/sounds/explode.wav"));
+    sounds.emplace(SoundType::BOX_EXPLOSION, SDL2pp::Chunk(DATA_PATH "/sounds/crateDestroy.wav"));
 }
 
 SDL2pp::Music& SoundContainer::getBackgroundMusic() { return backgroundMusic; }
@@ -64,6 +66,22 @@ void SoundContainer::addSound(SoundEventType soundType) {
         default:
             break;
     } 
+}
+
+void SoundContainer::addSound(GameEventType gameSoundType) {
+    switch (gameSoundType) {
+        case BOMB_EXPLOSION:    
+        case GRENADE_EXPLOSION:
+            MatchSounds.push_back(SoundType::GRENADE_EXPLOSION);
+            break;
+        case BOX_DESTROYED:
+            MatchSounds.push_back(SoundType::BOX_EXPLOSION);
+            break;
+        case BANANA_EXPLOSION:
+        case NO_EVENT:
+        default:
+            break;
+    }
 }
 
 std::vector<SoundType>& SoundContainer::getMatchSounds() { return MatchSounds; }

@@ -22,6 +22,8 @@ enum class SoundType {
     SHOTGUN,
     PISTOL,
     SNIPER,
+    BOX_EXPLOSION,
+    GRENADE_EXPLOSION,
     NONE
 };
 
@@ -41,6 +43,8 @@ public:
     SDL2pp::Chunk& getSound(SoundType type);
 
     void addSound(SoundEventType soundType);
+
+    void addSound(GameEventType gameSoundType);
 
     std::vector<SoundType>& getMatchSounds();
 

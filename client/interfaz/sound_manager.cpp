@@ -12,6 +12,8 @@ void SoundManager::stopBackgroundMusic() { mixer.HaltMusic(); }
 
 void SoundManager::addMatchSound(SoundEventType soundType) { sounds.addSound(soundType); }
 
+void SoundManager::addGameSound(GameEventType gameSoundType) { sounds.addSound(gameSoundType); }
+
 void SoundManager::playSounds() {
     int soundsPlayed = 0;
     for (SoundType sound: sounds.getMatchSounds()) {
