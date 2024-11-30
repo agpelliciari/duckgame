@@ -10,7 +10,20 @@
 #include "common/gameevents.h"
 
 
-enum class SoundType { JUMP, SHOT, QUACK, LASER, PICK_UP, ROUND_END };
+enum class SoundType {
+    JUMP,
+    SHOT,
+    QUACK,
+    PEW_PEW_LASER,
+    PICK_UP,
+    ROUND_END,
+    LASER_RIFLE,
+    MAGNUM,
+    SHOTGUN,
+    PISTOL,
+    SNIPER,
+    NONE
+};
 
 class SoundContainer {
 private:
