@@ -50,7 +50,7 @@ void Animation::update(const MatchDto& matchDto) {
 
 void Animation::updateDoingActionAnimation(AnimationBuilder& builder, const PlayerDTO& player, const TypeDoingAction& action) {
     if (action == TypeDoingAction::SHOOTING || action == TypeDoingAction::SHOOTING_UP) {
-        if (player.weapon == TypeWeapon::PEW_PEW_LASER) {
+        if (player.weapon == TypeWeapon::PEW_PEW_LASER || player.weapon == TypeWeapon::LASER_RIFLE) {
             builder.addExplosion("/weapons/laserFlare.png", 16, 0.3f, 2);
         } else {
             builder.addExplosion("/weapons/smallFlare.png", 11, 0.3f, 1);
