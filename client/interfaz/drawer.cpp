@@ -49,11 +49,11 @@ void Drawer::drawPlayer(const PlayerDTO& player) {
                              camera.getScaledSize(SPRITE_SIZE), camera.getScaledSize(SPRITE_SIZE)),
                 0.0, SDL2pp::Point(0, 0), flip);
 
+        drawArmor(player, flip);
+
         if (player.weapon != TypeWeapon::NONE) {
             drawWeapon(player, flip);
         }
-
-        drawArmor(player, flip);
 
         if (player.is_alive) {
             drawPlayerInfo(player, playerTexture);
@@ -133,18 +133,34 @@ void Drawer::drawIndicator(const PlayerDTO& player, bool isMainPlayer) {
                                camera.getScaledSize(INDICATOR_HEIGHT_RESIZED)));
 }
 
+void Drawer::getArmorParameters(const PlayerDTO& player, SDL_RendererFlip flip, int& chestArmorX, int& chestArmorY, int& helmetArmorX, int& helmetArmorY, float& angle) {
+    if (player.move_action == TypeMoveAction::STAY_DOWN) {
+        angle = getTextureFlipValue(flip, 90.0, -90.0);
+        chestArmorX = camera.getScreenX(player.pos.x + getTextureFlipValue(flip, 21, -5));
+        chestArmorY = camera.getScreenY(player.pos.y + getTextureFlipValue(flip, -4, 24));
+        helmetArmorX = camera.getScreenX(player.pos.x + getTextureFlipValue(flip, 34, -19));
+        helmetArmorY = camera.getScreenY(player.pos.y + getTextureFlipValue(flip, -1, 27));
+    } else {
+        chestArmorX = camera.getScreenX(player.pos.x + getTextureFlipValue(flip, -7, -6));
+        chestArmorY = camera.getScreenY(player.pos.y - 7);
+        helmetArmorX = camera.getScreenX(player.pos.x + getTextureFlipValue(flip, -3, -9));
+        helmetArmorY = camera.getScreenY(player.pos.y - 20);
+    }
+}
+
 void Drawer::drawArmor(const PlayerDTO& player, SDL_RendererFlip flip) {
+    int chestArmorX, chestArmorY, helmetArmorX, helmetArmorY;
+    float angle = 0.0;
+    
+    getArmorParameters(player, flip, chestArmorX, chestArmorY, helmetArmorX, helmetArmorY, angle);
 
     if (player.helmet) {
         renderer.Copy(
                 textures.getTexture("/armors/helmet.png"),
                 SDL2pp::Rect(0, 0, SPRITE_SIZE, SPRITE_SIZE),
-                SDL2pp::Rect(
-                        camera.getScreenX(player.pos.x + getTextureFlipValue(flip, HELMET_FLIP_X,
-                                                                             HELMET_UNFLIP_X)),
-                        camera.getScreenY(player.pos.y + Y_PHYSICAL_OFFSET_PLAYER - 10),
-                        camera.getScaledSize(SPRITE_SIZE), camera.getScaledSize(SPRITE_SIZE)),
-                0.0, SDL2pp::Point(0, 0), flip);
+                SDL2pp::Rect(helmetArmorX, helmetArmorY,
+                        camera.getScaledSize(SPRITE_SIZE -3), camera.getScaledSize(SPRITE_SIZE-3)),
+                angle, SDL2pp::Point(0, 0), flip);
     }
 
 
@@ -152,10 +168,9 @@ void Drawer::drawArmor(const PlayerDTO& player, SDL_RendererFlip flip) {
         renderer.Copy(
                 textures.getTexture("/armors/chestPlateAnim.png"),
                 SDL2pp::Rect(0, 0, SPRITE_SIZE, SPRITE_SIZE),
-                SDL2pp::Rect(camera.getScreenX(player.pos.x),
-                             camera.getScreenY(player.pos.y + Y_PHYSICAL_OFFSET_PLAYER + 3),
-                             camera.getScaledSize(SPRITE_SIZE), camera.getScaledSize(SPRITE_SIZE)),
-                0.0, SDL2pp::Point(0, 0), flip);
+                SDL2pp::Rect(chestArmorX, chestArmorY,
+                             camera.getScaledSize(SPRITE_SIZE-3), camera.getScaledSize(SPRITE_SIZE-3)),
+                angle, SDL2pp::Point(0, 0), flip);
     }
 }
 

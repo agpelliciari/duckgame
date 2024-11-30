@@ -93,6 +93,8 @@ private:
 
     int getTextureFlipValue(SDL_RendererFlip flip, int flipValue, int unflipValue);
 
+    void getArmorParameters(const PlayerDTO& player, SDL_RendererFlip flip, int& chestArmorX, int& chestArmorY, int& helmetArmorX, int& helmetArmorY, float& angle);
+
     void drawArmor(const PlayerDTO& player, SDL_RendererFlip flip);
 
     void drawBackground();
