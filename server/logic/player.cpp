@@ -178,7 +178,7 @@ void Player::shoot(std::vector <Bullet> &bullets){
             bullet_position.x += player_dimension.x + 5;
             bullet_position.y += player_dimension.y / 2;
         }
-        if (weapon->shoot(this->shooting_direction, bullets, bullet_position, this->object, trigger, id)){
+        if (weapon->shoot(this->shooting_direction, bullets, bullet_position, this->object, trigger, id, player_sounds)){
             if (aim_up){
                 doing_action=TypeDoingAction::SHOOTING_UP;
             } else {
@@ -276,5 +276,7 @@ void Player::get_sounds(std::vector<SoundEventType>& sounds){
     }
     player_sounds.clear();
 }
+
+
 
 //Tuple Player::get_position() { return object.get_real_position(); }

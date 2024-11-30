@@ -11,8 +11,8 @@ void DuelPistol::get_weapon(TypeWeapon& type){
     type = TypeWeapon::MAGNUM;
 }
 
-bool DuelPistol::shoot(ShootingDirection direction,
-                               std::vector <Bullet> &bullets, Tuple bullet_position, PhysicalPlayer &player, bool &trigger, int id_player){
+bool DuelPistol::shoot(ShootingDirection direction, std::vector <Bullet> &bullets, Tuple bullet_position,
+                       PhysicalPlayer &player, bool &trigger, int id_player, std::vector<SoundEventType> &player_sounds){
     trigger = false;
     if (ammo > 0){
         std::srand(std::time(nullptr));
@@ -28,6 +28,7 @@ bool DuelPistol::shoot(ShootingDirection direction,
             bullets.back().shoot_right();
             bullets.back().add_speed(-dispersion_index, dispersion_index);
         }
+        player_sounds.push_back(SoundEventType::DUEL_PISTOL_SHOT);
         ammo --;
         return true;
     }

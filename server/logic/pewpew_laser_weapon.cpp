@@ -8,8 +8,8 @@ void PewPewLaserWeapon::get_weapon(TypeWeapon& type){
     type = TypeWeapon::PEW_PEW_LASER;
 }
 
-bool PewPewLaserWeapon::shoot(ShootingDirection direction,
-                               std::vector <Bullet> &bullets, Tuple bullet_position, PhysicalPlayer &player, bool &trigger, int id_player){
+bool PewPewLaserWeapon::shoot(ShootingDirection direction, std::vector <Bullet> &bullets, Tuple bullet_position,
+                              PhysicalPlayer &player, bool &trigger, int id_player, std::vector<SoundEventType> &player_sounds){
     trigger = false;
     if (ammo > 0){
         bullets.push_back(Bullet(bullet_position.x, bullet_position.y, bullet_range,TypeDynamicObject::LASER, id_player));
@@ -34,6 +34,7 @@ bool PewPewLaserWeapon::shoot(ShootingDirection direction,
             bullets[bullets.size() - 1].add_speed(0, 3);
             bullets[bullets.size() - 2].add_speed(0, -3);
         }
+        player_sounds.push_back(SoundEventType::PEWPEW_SHOT);
         ammo --;
         return true;
     }

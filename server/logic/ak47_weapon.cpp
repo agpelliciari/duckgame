@@ -4,9 +4,8 @@
 AK47Weapon::AK47Weapon(): ammo(30), reload_time(15), dispersion_index(0), bullet_range(13) {}
 
 
-bool AK47Weapon::shoot(ShootingDirection direction,
-                               std::vector <Bullet> &bullets, Tuple bullet_position,
-                       PhysicalPlayer &player, bool &trigger, int id_player){
+bool AK47Weapon::shoot(ShootingDirection direction, std::vector <Bullet> &bullets, Tuple bullet_position,
+                       PhysicalPlayer &player, bool &trigger, int id_player, std::vector<SoundEventType> &player_sounds){
     if (ammo > 0){
         if (reload_time > 0){
             reload_time--;
@@ -36,6 +35,7 @@ bool AK47Weapon::shoot(ShootingDirection direction,
             } else {
                 dispersion_index = 0;
             }
+            player_sounds.push_back(SoundEventType::AK47_SHOT);
             ammo --;
             reload_time = 15;
             return true;

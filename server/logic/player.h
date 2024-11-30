@@ -23,6 +23,7 @@
 #include "bullet.h"
 #include "server/core/configuration.h"
 #include "laser_rifle_weapon.h"
+#include "common/gameevents.h"
 
 
 class Player {

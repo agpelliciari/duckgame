@@ -10,6 +10,7 @@
 #include "tuple.h"
 #include "physical_bullet.h"
 #include "physical_player.h"
+#include "common/gameevents.h"
 
 class Weapon {
 
@@ -18,7 +19,8 @@ public:
     virtual void get_type(TypeDynamicObject &type) = 0;
     virtual bool shoot(ShootingDirection direction,
                        std::vector <Bullet> &bullets, Tuple bullet_position,
-                       PhysicalPlayer &player, bool &trigger, int id_player) = 0;
+                       PhysicalPlayer &player, bool &trigger, int id_player,
+                       std::vector<SoundEventType> &player_sounds) = 0;
     virtual int get_ammo() = 0;
     virtual ~Weapon() = default;
 };
