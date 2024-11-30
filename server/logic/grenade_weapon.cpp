@@ -21,7 +21,7 @@ bool GrenadeWeapon::shoot(ShootingDirection direction,
 
     trigger = false;
     if (ammo > 0){
-        grenades.push_back(Grenade(bullet_position.x, bullet_position.y, TypeDynamicObject::GRENADE_PROJECTILE, id_player, std::time(nullptr)));
+        grenades.push_back(Grenade(bullet_position.x, bullet_position.y, TypeDynamicObject::GRANADA, id_player, std::time(nullptr)));
         if (direction == ShootingDirection::UP){
             grenades.back().shoot_up();
         } else if (direction == ShootingDirection::LEFT){
