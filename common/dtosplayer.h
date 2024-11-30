@@ -25,6 +25,10 @@ enum PlayerActionType : uint8_t {
     SHOOT_START = 12,
     SHOOT_END = 13,
     PICK_UP_DROP_ITEM = 14,
+
+    CHEAT_1 = 15,
+    CHEAT_2 = 16,
+    CHEAT_3 = 17,
     
     FORCE_CANCEL_MATCH = 19,
     TOGGLE_DBG_MODE = 20,
