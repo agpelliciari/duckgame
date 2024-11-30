@@ -341,16 +341,21 @@ void MatchLogic::damage_player(int id) {
     }
 }
 
+
+
 void MatchLogic::damage_box(int id) {
-    for (Box& box: boxes) {
-        if (box.same_id(id)) {
-            box.take_damage();
-            if (box.destroyed()){
-                Tuple position = box.get_spawn_point();
-                //this->spawn_places.push_back(SpawnPlace(position.x, position.y, 10, 10, 5, 0.025));
-                //spawn_places.back().spawn_item();
+    for (auto it = boxes.begin(); it!=boxes.end();) {
+        if (it->same_id(id)) {
+            it->take_damage();
+            if (it->destroyed()){
+                Tuple position = it->get_spawn_point();
+                //TODO: agregar sonido de caja
+                dropped_items.push_back(DroppedItem(std::move(it->get_item()), position.x, position.y, 16, 16));
+                it = boxes.erase(it);
+                return;
             }
         }
+        it ++;
     }
 }
 
@@ -369,7 +374,6 @@ void MatchLogic::update_bullets(){
             std::cout << "ERASING BULLET !!\n";
             bullet = bullets.erase(bullet);
         } else {
-            std::cout << "MOVING BULLET !!\n";
             bullet->move(colition_map);
             ++bullet;
         }

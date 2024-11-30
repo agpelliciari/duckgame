@@ -9,8 +9,18 @@
 #include "common/dtosmap.h"
 #include "common/dtosgame.h"
 #include "common/dtosobject.h"
+#include "weapon.h"
+#include <memory>
 #include <cstdlib>
 #include <ctime>
+#include "cowboy_pistol_weapon.h"
+#include "magnum_weapon.h"
+#include "pewpew_laser_weapon.h"
+#include "duel_pistol.h"
+#include "sniper_weapon.h"
+#include "shotgun_weapon.h"
+#include "ak47_weapon.h"
+#include "laser_rifle_weapon.h"
 
 class Box {
 
@@ -32,7 +42,7 @@ class Box {
         bool destroyed();
         void take_damage();
         bool same_id(int id);
-        TypeDynamicObject get_item();
+        std::unique_ptr<Weapon> get_item();
 
 
 };
