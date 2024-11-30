@@ -294,9 +294,11 @@ void MatchLogic::add_boxes(const std::vector<struct MapPoint>& boxes){
 }
 
 void MatchLogic::add_items(const std::vector<struct MapPoint>& items){
+    int id =0;
     for (const struct MapPoint& item: items) {
-        this->spawn_places.push_back(SpawnPlace(item.x, item.y, 16, 16, 5, 0.025));
+        this->spawn_places.push_back(SpawnPlace(item.x, item.y, 16, 16, 5, 0.025, id));
         spawn_places.back().spawn_item();
+        id++;
     }
 }
 
@@ -318,10 +320,11 @@ void MatchLogic::add_spawn_points(const std::vector<struct MapPoint>& spawn_poin
 }
 
 void MatchLogic::add_item_spawns(const std::vector<struct MapPoint>& items_spawns){
-
+    int id = 0;
     for (const struct MapPoint& spawn: items_spawns) {
-        this->spawn_places.push_back(SpawnPlace(spawn.x * 16, spawn.y *16, 16, 5, 10, 1000/30));
+        this->spawn_places.push_back(SpawnPlace(spawn.x * 16, spawn.y *16, 16, 5, 10, 1000/30, id));
         spawn_places.back().spawn_item();
+        id ++;
     }
 }
 
