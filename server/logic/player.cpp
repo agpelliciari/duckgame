@@ -67,6 +67,7 @@ void Player::update(const MatchMap& colition_map, std::vector <Bullet> &bullets,
         } else {
             if (is_stay_down){
                 move_action = TypeMoveAction::STAY_DOWN;
+                object.move(colition_map);
             } else {
                 object.move(colition_map);
             	object.update_action(move_action);
