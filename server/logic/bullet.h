@@ -5,6 +5,7 @@
 #include "physical_object.h"
 #include "physical_bullet.h"
 #include "common/dtosobject.h"
+#include "physical_grenade.h"
 #include "match_map.h"
 #include "tuple.h"
 
@@ -20,7 +21,7 @@ class Bullet {
 
     public:
         Bullet(int init_coord_x, int init_coord_y, int range, TypeDynamicObject type, int id_player);
-    Bullet(int init_coord_x, int init_coord_y, int range, TypeDynamicObject type, int id_player, bool bounce);
+        Bullet(int init_coord_x, int init_coord_y, int range, TypeDynamicObject type, int id_player, bool bounce);
         void move(const MatchMap& colition_map);
         void get_data(bool &impacted, CollisionTypeMap &type, int &id);
         void get_map_info(int &pos_x, int &pos_y, TypeDynamicObject &type);
@@ -28,7 +29,6 @@ class Bullet {
         void shoot_left();
         void shoot_up();
         void add_speed(int speed_x, int speed_y);
-
 };
 
 

@@ -11,6 +11,7 @@
 #include "shotgun_weapon.h"
 #include "ak47_weapon.h"
 #include "laser_rifle_weapon.h"
+#include "grenade_weapon.h"
 
 #ifndef SPAWN_PLACE_H
 #define SPAWN_PLACE_H

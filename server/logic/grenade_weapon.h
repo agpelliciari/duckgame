@@ -1,7 +1,6 @@
 
-
-#ifndef SHOTGUN_WEAPON_H
-#define SHOTGUN_WEAPON_H
+#ifndef GRENADE_WEAPON_H
+#define GRENADE_WEAPON_H
 
 #include "weapon.h"
 #include "common/dtosplayer.h"
@@ -12,18 +11,12 @@
 #include "common/gameevents.h"
 #include "grenade.h"
 
-class ShotgunWeapon : public Weapon{
+class GrenadeWeapon : public Weapon{
 
     private:
         int ammo;
-        int charging_time;
-        int init_charging_time;
-        int final_charging_time;
-        bool charged;
-        int bullet_range;
-
     public:
-        ShotgunWeapon();
+        GrenadeWeapon();
         void get_weapon(TypeWeapon& type) override;
         void get_type(TypeDynamicObject &type) override;
         bool shoot(ShootingDirection direction,
@@ -36,4 +29,6 @@ class ShotgunWeapon : public Weapon{
 
 };
 
-#endif //SHOTGUN_WEAPON_H
+
+
+#endif //GRENADE_WEAPON_H

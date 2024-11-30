@@ -24,6 +24,9 @@ target_sources(taller_server_logic
             shotgun_weapon.cpp
             sniper_weapon.cpp
             bullet.cpp
+            grenade.cpp
+            grenade_weapon.cpp
+            physical_grenade.cpp
 
     PUBLIC
     # .h files
@@ -51,4 +54,7 @@ target_sources(taller_server_logic
             shotgun_weapon.h
             sniper_weapon.h
             bullet.h
+            grenade.h
+            grenade_weapon.h
+            physical_grenade.h
     )
