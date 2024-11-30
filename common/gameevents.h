@@ -31,6 +31,8 @@ enum SoundEventType : uint8_t {
    PLAYER_RELOADING = 0x07,
    PLAYER_EQUIP_ARMOR = 0x08,
    PLAYER_EQUIP_HELMET = 0x09,
+   PLAYER_BROKEN_ARMOR = 0x10,
+   PLAYER_BROKEN_HELMET = 0x11,
    
 };
 

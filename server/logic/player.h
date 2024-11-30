@@ -74,6 +74,8 @@ public:
     void update_shooting_direction();
     void shoot_start();
     void shoot_end();
+    void equip_chest_armor();
+    void equip_helmet();
     Tuple get_map_position();
     Tuple get_dimension();
 };

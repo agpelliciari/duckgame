@@ -141,10 +141,12 @@ void Player::take_damage(){
     if (is_alive) {
         if (helmet){
             helmet = false;
+            player_sounds.push_back(SoundEventType::PLAYER_BROKEN_HELMET);
             return;
         }
         if (chest_armor){
             chest_armor = false;
+            player_sounds.push_back(SoundEventType::PLAYER_BROKEN_ARMOR);
             return;
         }
 
@@ -196,6 +198,16 @@ void Player::shoot_start(){
 
 void Player::shoot_end(){
     trigger = false;
+}
+
+void Player::equip_helmet(){
+    player_sounds.push_back(SoundEventType::PLAYER_EQUIP_HELMET);
+    helmet = true;
+}
+
+void Player::equip_chest_armor(){
+    player_sounds.push_back(SoundEventType::PLAYER_EQUIP_ARMOR);
+    chest_armor = true;
 }
 
 void Player::stay_down_start(){
