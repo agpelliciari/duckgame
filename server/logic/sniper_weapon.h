@@ -35,6 +35,7 @@ class SniperWeapon : public Weapon{
                            std::vector<Bullet> &bullets,
                            Tuple bullet_position, int id_player, std::vector<SoundEventType> &player_sounds);
         int get_ammo() override;
+        void cheat_ammo() override;
 
 
 };

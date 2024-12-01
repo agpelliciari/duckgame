@@ -59,3 +59,7 @@ bool LaserRifleWeapon::shoot(ShootingDirection direction, std::vector <Bullet> &
     }
     return false;
 }
+
+void LaserRifleWeapon::cheat_ammo(){
+    ammo = 99;
+}

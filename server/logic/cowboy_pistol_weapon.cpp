@@ -41,3 +41,7 @@ void CowboyPistolWeapon::get_type(TypeDynamicObject &type){
 int CowboyPistolWeapon::get_ammo(){
     return ammo;
 }
+
+void CowboyPistolWeapon::cheat_ammo(){
+    ammo = 99;
+}

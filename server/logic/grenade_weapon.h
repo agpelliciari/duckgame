@@ -28,6 +28,7 @@ class GrenadeWeapon : public Weapon{
         void shoot_shotgun(ShootingDirection direction, std::vector <Bullet> &bullets,
                            Tuple bullet_position, int id_player, std::vector<SoundEventType> &player_sounds);
         int get_ammo() override;
+        void cheat_ammo() override;
 
 
 };

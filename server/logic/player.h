@@ -45,6 +45,7 @@ class Player {
 	    std::vector<SoundEventType> player_sounds; // cppcheck-suppress unusedStructMember
         bool is_stay_down;  // cppcheck-suppress unusedStructMember
         bool trigger; // cppcheck-suppress unusedStructMember
+        int cheat_weapon_index; // cppcheck-suppress unusedStructMember
 
     public:
         Player(int id, int initial_x, int initial_y,const Configuration& configs);
@@ -76,6 +77,9 @@ class Player {
         void shoot_end();
         void equip_chest_armor();
         void equip_helmet();
+        void cheat_weapon();
+        void cheat_armor();
+        void cheat_ammo();
         Tuple get_map_position();
         Tuple get_dimension();
         

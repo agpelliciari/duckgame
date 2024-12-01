@@ -53,3 +53,7 @@ void PewPewLaserWeapon::get_type(TypeDynamicObject &type){
 int PewPewLaserWeapon::get_ammo(){
     return ammo;
 }
+
+void PewPewLaserWeapon::cheat_ammo(){
+    ammo = 99;
+}

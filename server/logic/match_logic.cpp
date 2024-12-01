@@ -8,17 +8,19 @@ MatchLogic::MatchLogic(const Configuration& _configs): colition_map(100, 100), c
         this->add_player_speed(index, 0, 0);
     };
     this->command_map[PlayerActionType::MOVE_LEFT] = [this](int index) {
-        this->change_player_dir(index, MOVING_LEFT); // Para que se mueva left         
+        this->add_player_speed(index, -configs.player_speed, 0);
     };
     this->command_map[PlayerActionType::MOVE_LEFT_END] = [this](int index) {
-        this->still_player(index, MOVING_LEFT);
+        //this->add_player_speed(index, configs.player_speed, 0);
+        this->still_player(index);
     };
 
     this->command_map[PlayerActionType::MOVE_RIGHT] = [this](int index) {
-        this->change_player_dir(index, MOVING_RIGHT); // Para que se mueva a la derecha         
+        this->add_player_speed(index, configs.player_speed, 0);
     };
     this->command_map[PlayerActionType::MOVE_RIGHT_END] = [this](int index) {
-        this->still_player(index,MOVING_RIGHT);
+        //this->add_player_speed(index, -configs.player_speed, 0);
+        this->still_player(index);
     };
 
     this->command_map[PlayerActionType::JUMP] = [this](int index) {
@@ -34,6 +36,10 @@ MatchLogic::MatchLogic(const Configuration& _configs): colition_map(100, 100), c
     };
     this->command_map[PlayerActionType::STAY_DOWN_END] = [this](int index) {
         this->player_stay_down_end(index);
+    };
+
+    this->command_map[PlayerActionType::FLAPPING_END] = [this](int index) {
+        //this->add_player_speed(index, 0, 0);
     };
 
     this->command_map[PlayerActionType::AIM_UP_START] = [this](int index) {
@@ -54,6 +60,19 @@ MatchLogic::MatchLogic(const Configuration& _configs): colition_map(100, 100), c
         this->player_toggle_pick_up_drop_item(index);
     };
 
+    this->command_map[PlayerActionType::CHEAT_1] = [this](int index) {
+        this->player_cheat_1();
+    };
+
+    this->command_map[PlayerActionType::CHEAT_2] = [this](int index) {
+        this->player_cheat_2();
+    };
+
+    this->command_map[PlayerActionType::CHEAT_3] = [this](int index) {
+        this->player_cheat_3();
+    };
+    // this->command_map[3] = [this](int index) { this->add_player_speed(index, 0, 0); };
+
 }
 
 
@@ -72,16 +91,6 @@ void MatchLogic::add_player(int id, int spawn_point_index) {
     }
     colition_map.add_collision(players.back().get_map_position(), players.back().get_dimension(),
                                CollisionTypeMap::PLAYER, players.back().get_id());
-}
-
-
-void MatchLogic::change_player_dir(int id, PlayerMovingDir dir){
-    for (Player& player: players) {
-        if (player.same_id(id)) {
-            player.change_move_dir(dir);
-            return;
-        }
-    }      
 }
 
 void MatchLogic::add_player_speed(int id, int speed_x, int speed_y) {
@@ -181,10 +190,9 @@ void MatchLogic::player_stay_down_end(int id) {
     }
 }
 
-void MatchLogic::still_player(int id, PlayerMovingDir dir) {
+void MatchLogic::still_player(int id) {
     for (Player& player: players) {
         if (player.same_id(id)) {
-            player.undo_moving(dir);
             player.still();
             return;
         }
@@ -206,10 +214,11 @@ void MatchLogic::update_colition_map() {
     for (Player& player: players) {
         colition_map.add_collision(player.get_map_position(), player.get_dimension(), CollisionTypeMap::PLAYER, player.get_id());
     }
+    int box_index = 0;
     for (Box& box: boxes) {
         if (box.is_spawned()){
-            
-            colition_map.add_collision(box.get_spawn_point(), box.get_dimension(), CollisionTypeMap::BOX, box.get_id());
+            colition_map.add_collision(box.get_spawn_point(), box.get_dimension(), CollisionTypeMap::BOX, box_index);
+            box_index++;
         }
     }
 
@@ -247,7 +256,7 @@ void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos,
         dtos.push_back(dto);
     }
 
-    for (Box& box: boxes){
+    for (Box box: boxes){
         if (box.is_spawned()){
             DynamicObjDTO dto = {0, 0, TypeDynamicObject::BOX};
             Tuple position = box.get_spawn_point();
@@ -303,7 +312,6 @@ void MatchLogic::add_boxes(const std::vector<struct MapPoint>& boxes){
     int id_box = 0;
     for (const struct MapPoint& box: boxes) {
         this->boxes.push_back(Box(id_box, box.x, box.y));
-        //std::cout << "-->ADDED BOX id: "<< id_box<<std::endl; 
         id_box++;
     }
 }
@@ -361,13 +369,10 @@ void MatchLogic::damage_player(int id) {
 void MatchLogic::damage_box(int id,std::vector<GameEvent>& events) {
     for (auto it = boxes.begin(); it!=boxes.end();) {
         if (it->same_id(id)) {
-            //std::cout << "----BOX TOOK DMG\n";
             it->take_damage();
             if (it->destroyed()){
-                //std::cout << "-----DESTROYED BOX\n";
-            
                 Tuple position = it->get_spawn_point();
-                
+                //TODO: agregar sonido de caja
                 events.emplace_back(position.x, position.y, BOX_DESTROYED);
                 
                 // Si es bomba SERIA EXPLOSION ! o asi
@@ -376,12 +381,9 @@ void MatchLogic::damage_box(int id,std::vector<GameEvent>& events) {
                 it = boxes.erase(it);
                 return;
             }
-            return;
         }
         it ++;
     }
-    std::cout << "NOT FOUND BOX FOR TAKE DMG!!" << id<< "\n";
-    
 }
 
 void MatchLogic::update_bullets(std::vector<GameEvent>& events){
@@ -398,7 +400,7 @@ void MatchLogic::update_bullets(std::vector<GameEvent>& events){
                 
                 
             }
-            //std::cout << "ERASING BULLET !!\n";
+            std::cout << "ERASING BULLET !!\n";
             bullet = bullets.erase(bullet);
         } else {
             bullet->move(colition_map);
@@ -476,6 +478,25 @@ void MatchLogic::reset_map(){
     grenades.clear();
     
     colition_map.clear_map();
+}
+
+
+void MatchLogic::player_cheat_1() {
+    for (Player& player: players) {
+        player.cheat_weapon();
+    }
+}
+
+void MatchLogic::player_cheat_2() {
+    for (Player& player: players) {
+        player.cheat_ammo();
+    }
+}
+
+void MatchLogic::player_cheat_3() {
+    for (Player& player: players) {
+        player.cheat_armor();
+    }
 }
 
 MatchLogic::~MatchLogic() {}

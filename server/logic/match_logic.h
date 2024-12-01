@@ -81,6 +81,9 @@ public:
     void resize_map(const int width, const int height);
     void reset_map();
 
+    void player_cheat_1();
+    void player_cheat_2();
+    void player_cheat_3();
 
     void damage_box(int id,std::vector<GameEvent>& events);
 

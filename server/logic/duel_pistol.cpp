@@ -49,3 +49,7 @@ void DuelPistol::get_type(TypeDynamicObject &type){
 int DuelPistol::get_ammo(){
     return ammo;
 }
+
+void DuelPistol::cheat_ammo(){
+    ammo = 99;
+}

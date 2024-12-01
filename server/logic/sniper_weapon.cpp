@@ -63,3 +63,7 @@ int SniperWeapon::get_ammo(){
 void SniperWeapon::get_weapon(TypeWeapon& type) {
     type = TypeWeapon::SNIPER;
 }
+
+void SniperWeapon::cheat_ammo(){
+    ammo = 99;
+}
