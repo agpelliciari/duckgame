@@ -9,6 +9,7 @@ target_sources(taller_client
     camera.cpp
     sound_manager.cpp
     sound_container.cpp
+    explosion_animation.cpp
     
     PUBLIC
     # .h files
@@ -20,4 +21,6 @@ target_sources(taller_client
     camera.h
     sound_manager.h
     sound_container.h
+    animation_builder.h
+    explosion_animation.h
     )

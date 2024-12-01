@@ -113,6 +113,8 @@ private:
 
     void drawPlayerStats(const MatchStatsInfo& matchStats, double scaleX, double scaleY);
 
+    void drawExplosions();
+
 public:
     Drawer(SDL2pp::Window& window, Animation& animation, const GameContext& gameContext,
            Camera& camera);

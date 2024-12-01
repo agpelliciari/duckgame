@@ -25,33 +25,13 @@
 #define INDICATOR_ANIMATION_FRAMES 5
 #define INDICATOR_ANIMATION_SPEED 150
 
-struct Explosion {
-    std::string texture;  // cppcheck-suppress unusedStructMember
-    int spriteSize;  // cppcheck-suppress unusedStructMember
-    float duration;  // cppcheck-suppress unusedStructMember
-    float animationTime;  // cppcheck-suppress unusedStructMember
-    int totalFrames;  // cppcheck-suppress unusedStructMember
-    int currentFrame;  // cppcheck-suppress unusedStructMember
-
-    Explosion(std::string texture, int size, float duration, int frames)
-        : texture(texture), spriteSize(size), duration(duration), animationTime(0), totalFrames(frames), currentFrame(0) {}
-    
-    void update(float deltaTime) { 
-        animationTime += deltaTime;
-        if (animationTime >= duration) {
-            return;
-        }
-        currentFrame = (animationTime / duration) * totalFrames;
-    }
-
-    bool isFinished() const { return animationTime >= duration; }
-};
+#include "explosion_animation.h"
 
 struct AnimationBuilder {
     int spriteX;  // cppcheck-suppress unusedStructMember
     int spriteY;  // cppcheck-suppress unusedStructMember
     bool facingLeft;  // cppcheck-suppress unusedStructMember
-    std::vector<Explosion> explosions;  // cppcheck-suppress unusedStructMember
+    std::vector<ExplosionAnimation> explosions;  // cppcheck-suppress unusedStructMember
 
     AnimationBuilder() {
         spriteX = STARTING_SPRITE_X;
