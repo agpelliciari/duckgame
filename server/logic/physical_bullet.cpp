@@ -1,6 +1,6 @@
 
 #include "physical_bullet.h"
-
+#include <iostream>
 PhysicalBullet::PhysicalBullet(int init_coord_x, int init_coord_y):
         PhysicalObject(init_coord_x, init_coord_y, 5, 5),
         impacted(false), impacted_collision{0, CollisionTypeMap::NONE},
@@ -30,23 +30,28 @@ void PhysicalBullet::shoot_right(){
 }
 
 void PhysicalBullet::react_to_sides_collision(Collision collision) {
+        std::cout << "BULLET COLLISION side WITH OBJ! type: "<< (int)collision.type<< " id:"<< collision.id<<"\n";
+
         impacted = true;
         impacted_collision = collision;
         impacted_sides = true;
 }
 void PhysicalBullet::react_to_down_collision(Collision collision) {
+        std::cout << "BULLET COLLISION down WITH OBJ! type: "<< (int)collision.type<< " id:"<< collision.id<<"\n";
         impacted = true;
         impacted_collision = collision;
         impacted_up_or_down = true;
 }
 
 void PhysicalBullet::react_to_up_collision(Collision collision) {
+        std::cout << "BULLET COLLISION up WITH OBJ! type: "<< (int)collision.type<< " id:"<< collision.id<<"\n";
         impacted = true;
         impacted_collision = collision;
         impacted_up_or_down = true;
 }
 
 void PhysicalBullet::react_to_out_of_map(){
+        std::cout << "BULLET REACT OUT OF MAP!\n";
         impacted = true;
         impacted_collision = Collision(0, CollisionTypeMap::BLOCK);
 }

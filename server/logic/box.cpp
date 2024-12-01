@@ -1,6 +1,7 @@
 
 #include "box.h"
 #include <ctime>
+//#include <iostream>
 
 Box::Box(int id, int x, int y): id(id), spawn_point{x * 16, y * 16}, dimension{16, 16}, spawned(true), life_points(2) {}
 
@@ -66,6 +67,9 @@ bool Box::destroyed(){
     return life_points <= 0;
 }
 
+int Box::get_id() const {
+   return id;
+}
 bool Box::same_id(int id_) {
     return this->id == id_;
 }

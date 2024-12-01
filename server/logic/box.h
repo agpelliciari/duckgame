@@ -44,6 +44,8 @@ class Box {
         void take_damage();
         bool same_id(int id);
         std::unique_ptr<Weapon> get_item();
+        
+        int get_id() const;
 
 
 };

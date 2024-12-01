@@ -210,11 +210,10 @@ void MatchLogic::update_colition_map() {
     for (Player& player: players) {
         colition_map.add_collision(player.get_map_position(), player.get_dimension(), CollisionTypeMap::PLAYER, player.get_id());
     }
-    int box_index = 0;
     for (Box& box: boxes) {
         if (box.is_spawned()){
-            colition_map.add_collision(box.get_spawn_point(), box.get_dimension(), CollisionTypeMap::BOX, box_index);
-            box_index++;
+            
+            colition_map.add_collision(box.get_spawn_point(), box.get_dimension(), CollisionTypeMap::BOX, box.get_id());
         }
     }
 
@@ -252,7 +251,7 @@ void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos,
         dtos.push_back(dto);
     }
 
-    for (Box box: boxes){
+    for (Box& box: boxes){
         if (box.is_spawned()){
             DynamicObjDTO dto = {0, 0, TypeDynamicObject::BOX};
             Tuple position = box.get_spawn_point();
@@ -308,6 +307,7 @@ void MatchLogic::add_boxes(const std::vector<struct MapPoint>& boxes){
     int id_box = 0;
     for (const struct MapPoint& box: boxes) {
         this->boxes.push_back(Box(id_box, box.x, box.y));
+        //std::cout << "-->ADDED BOX id: "<< id_box<<std::endl; 
         id_box++;
     }
 }
@@ -365,13 +365,13 @@ void MatchLogic::damage_player(int id) {
 void MatchLogic::damage_box(int id,std::vector<GameEvent>& events) {
     for (auto it = boxes.begin(); it!=boxes.end();) {
         if (it->same_id(id)) {
-            std::cout << "BOX TOOK DMG\n";
+            //std::cout << "----BOX TOOK DMG\n";
             it->take_damage();
             if (it->destroyed()){
-                std::cout << "DESTROYED BOX\n";
+                //std::cout << "-----DESTROYED BOX\n";
             
                 Tuple position = it->get_spawn_point();
-                //TODO: agregar sonido de caja
+                
                 events.emplace_back(position.x, position.y, BOX_DESTROYED);
                 
                 // Si es bomba SERIA EXPLOSION ! o asi
@@ -380,10 +380,11 @@ void MatchLogic::damage_box(int id,std::vector<GameEvent>& events) {
                 it = boxes.erase(it);
                 return;
             }
+            return;
         }
         it ++;
     }
-    std::cout << "NOT FOUND BOX FOR TAKE DMG\n";
+    std::cout << "NOT FOUND BOX FOR TAKE DMG!!" << id<< "\n";
     
 }
 
@@ -401,7 +402,7 @@ void MatchLogic::update_bullets(std::vector<GameEvent>& events){
                 
                 
             }
-            std::cout << "ERASING BULLET !!\n";
+            //std::cout << "ERASING BULLET !!\n";
             bullet = bullets.erase(bullet);
         } else {
             bullet->move(colition_map);
