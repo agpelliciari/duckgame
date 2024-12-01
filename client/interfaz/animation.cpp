@@ -74,8 +74,10 @@ void Animation::update(const MatchDto& matchDto) {
 
 void Animation::updateDoingActionAnimation(AnimationBuilder& builder, const PlayerDTO& player, const TypeDoingAction& action) {
     if (action == TypeDoingAction::SHOOTING || action == TypeDoingAction::SHOOTING_UP) {
-        if (player.weapon == TypeWeapon::PEW_PEW_LASER || player.weapon == TypeWeapon::LASER_RIFLE) {
+        if (player.weapon == TypeWeapon::PEW_PEW_LASER) {
             builder.addExplosion("/weapons/laserFlare.png", 16, 0.3f, 2);
+        } else if (player.weapon == TypeWeapon::LASER_RIFLE) {
+            builder.addExplosion("/weapons/plasmaFlare.png", 32, 0.3f, 3);
         } else {
             if (player.weapon != TypeWeapon::GRANADA) {
                 builder.addExplosion("/weapons/smallFlare.png", 11, 0.3f, 1);

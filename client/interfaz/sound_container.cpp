@@ -14,6 +14,10 @@ SoundContainer::SoundContainer(): backgroundMusic(DATA_PATH "/music/DuckGame-cha
     sounds.emplace(SoundType::SNIPER, SDL2pp::Chunk(DATA_PATH "/sounds/sniper.wav"));
     sounds.emplace(SoundType::GRENADE_EXPLOSION, SDL2pp::Chunk(DATA_PATH "/sounds/explode.wav"));
     sounds.emplace(SoundType::BOX_EXPLOSION, SDL2pp::Chunk(DATA_PATH "/sounds/crateDestroy.wav"));
+    sounds.emplace(SoundType::GUN_RELOAD, SDL2pp::Chunk(DATA_PATH "/sounds/reload.wav"));
+    sounds.emplace(SoundType::POWER_UP, SDL2pp::Chunk(DATA_PATH "/sounds/powerUp.wav"));
+    sounds.emplace(SoundType::BROKEN_ARMOR, SDL2pp::Chunk(DATA_PATH "/sounds/brokenArmor.wav"));
+    sounds.emplace(SoundType::FLAP, SDL2pp::Chunk(DATA_PATH "/sounds/flap.wav"));
 }
 
 SDL2pp::Music& SoundContainer::getBackgroundMusic() { return backgroundMusic; }
@@ -32,37 +36,41 @@ void SoundContainer::addSound(SoundEventType soundType) {
             MatchSounds.push_back(SoundType::PICK_UP);
             break;
         case PEWPEW_SHOT:
-            std::cout << "pewpew" << std::endl;
             MatchSounds.push_back(SoundType::PEW_PEW_LASER);
             break;
         case LASER_SHOT:
-            std::cout << "laser" << std::endl;
             MatchSounds.push_back(SoundType::LASER_RIFLE);
             break;
         case SNIPER_SHOT:
-            std::cout << "sniper" << std::endl;
             MatchSounds.push_back(SoundType::SNIPER);
             break;
         case AK47_SHOT:    
         case DUEL_PISTOL_SHOT:
-            std::cout << "snipa/ak/duel" << std::endl;
             MatchSounds.push_back(SoundType::PISTOL);
             break;
         case COWBOY_SHOT:
-            std::cout << "cowboy" << std::endl;
             MatchSounds.push_back(SoundType::SHOT);
             break;
         case MAGNUM_SHOT:
-            std::cout << "magnum" << std::endl;
             MatchSounds.push_back(SoundType::MAGNUM);
             break;
         case SHOTGUN_SHOT:
-            std::cout << "shotgun" << std::endl;
             MatchSounds.push_back(SoundType::SHOTGUN);
             break;
-        case PLAYER_DIED:
+        case PLAYER_EQUIP_ARMOR:
+        case PLAYER_EQUIP_HELMET:
+            MatchSounds.push_back(SoundType::POWER_UP);
+            break;
+        case PLAYER_BROKEN_ARMOR:
+        case PLAYER_BROKEN_HELMET:
+            MatchSounds.push_back(SoundType::BROKEN_ARMOR);
+            break;
+        case PLAYER_RELOADING:
+            MatchSounds.push_back(SoundType::GUN_RELOAD);
+            break;
         case PLAYER_FLAP:
-        case PLAYER_DROP:
+            MatchSounds.push_back(SoundType::FLAP);
+            break;
         default:
             break;
     } 
