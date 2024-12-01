@@ -24,6 +24,9 @@ enum class SoundType {
     SNIPER,
     BOX_EXPLOSION,
     GRENADE_EXPLOSION,
+    GUN_RELOAD,
+    POWER_UP,
+    BROKEN_ARMOR,
     NONE
 };
 
