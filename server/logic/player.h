@@ -81,6 +81,8 @@ class Player {
         
 
         void add_speed(int speed_x, int speed_y);
+        
+        void undo_moving(PlayerMovingDir old_dir);
         void change_move_dir(PlayerMovingDir new_dir);
 
 };

@@ -115,8 +115,14 @@ void Player::update_shooting_direction(){
 void Player::add_speed(int speed_x, int speed_y) {
     this->object.add_speed(speed_x, speed_y);
 }
+
+
 void Player::change_move_dir(PlayerMovingDir new_dir){
     this->object.change_moving(new_dir);
+}
+
+void Player::undo_moving(PlayerMovingDir old_dir){
+    this->object.undo_moving(old_dir);
 }
 
 

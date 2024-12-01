@@ -7,7 +7,7 @@ PhysicalPlayer::PhysicalPlayer(int init_coord_x, int init_coord_y, const Configu
         initial_position{init_coord_x, init_coord_y},
         configs(_configs),
         flap_attemps(configs.player_flaps),
-        moving_dir(NO_MOVE),
+        moving_dir(NOT_SETTED),
         on_air(true), out_of_map(false) {
         
         acceleration.y = -configs.gravity;
@@ -102,7 +102,7 @@ void PhysicalPlayer::jump_end(){
 }
 
 void PhysicalPlayer::check_moving_dir(const MatchMap& colition_map){
-     if(moving_dir != NO_MOVE && speed.x ==0){
+     if((moving_dir == MOVING_LEFT || moving_dir == MOVING_RIGHT) && speed.x ==0){
           //std::cout << "SHOULD CHECK START MOVE FOR DIR "<< moving_dir << std::endl;
           Collision collision(0, CollisionTypeMap::NONE);
           
@@ -114,12 +114,29 @@ void PhysicalPlayer::check_moving_dir(const MatchMap& colition_map){
      }
 }
 
-void PhysicalPlayer::change_moving(PlayerMovingDir new_dir){
-    if(moving_dir == new_dir){
-        std::cerr << "-----> WANTED SET TO SAME DIR AGAIN? NO DEBERIA PASAR!\n";
+void PhysicalPlayer::undo_moving(PlayerMovingDir mov_dir){
+    if(moving_dir == mov_dir){
+        moving_dir = NO_MOVE;
         return;
     }
     
-    moving_dir= (PlayerMovingDir) ((int)new_dir + (int)moving_dir);
-    speed.x = ((int)moving_dir) *  configs.player_speed;    
+    if(moving_dir == NO_MOVE){
+        moving_dir= (PlayerMovingDir) ((int)moving_dir - (int)mov_dir);    
+        speed.x = ((int)moving_dir) *  configs.player_speed;    
+    }
+    
+}
+
+void PhysicalPlayer::change_moving(PlayerMovingDir new_dir){
+    if(moving_dir == new_dir){
+        std::cerr << "-----> WANTED SET TO SAME DIR AGAIN OR OPPOSITE WITH OUT UNDO!? NO DEBERIA PASAR!\n";
+        return;
+    }
+    if((int)moving_dir == -(int)new_dir){
+        moving_dir= NO_MOVE;    
+    } else{
+        moving_dir= new_dir;    
+    }
+    
+    speed.x = moving_dir *  configs.player_speed;    
 }

@@ -16,6 +16,7 @@
 class MatchMap;
 
 enum PlayerMovingDir {
+    NOT_SETTED = -3,
     NO_MOVE = 0,
     MOVING_LEFT = -1,
     MOVING_RIGHT = 1,
@@ -53,6 +54,8 @@ class PhysicalPlayer: public PhysicalObject {
 
 
         void check_moving_dir(const MatchMap& colition_map);
+        
+        void undo_moving(PlayerMovingDir mov_dir);        
         void change_moving(PlayerMovingDir new_dir);
 
         void stop_moving_x();

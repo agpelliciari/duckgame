@@ -8,21 +8,17 @@ MatchLogic::MatchLogic(const Configuration& _configs): colition_map(100, 100), c
         this->add_player_speed(index, 0, 0);
     };
     this->command_map[PlayerActionType::MOVE_LEFT] = [this](int index) {
-        //this->add_player_speed(index, -configs.player_speed, 0);
         this->change_player_dir(index, MOVING_LEFT); // Para que se mueva left         
     };
     this->command_map[PlayerActionType::MOVE_LEFT_END] = [this](int index) {
-        //this->still_player(index);
-        this->change_player_dir(index, MOVING_RIGHT); // Para que deshaga el moving left         
+        this->still_player(index, MOVING_LEFT);
     };
 
     this->command_map[PlayerActionType::MOVE_RIGHT] = [this](int index) {
-        //this->add_player_speed(index, configs.player_speed, 0);
         this->change_player_dir(index, MOVING_RIGHT); // Para que se mueva a la derecha         
     };
     this->command_map[PlayerActionType::MOVE_RIGHT_END] = [this](int index) {
-        //this->still_player(index);
-        this->change_player_dir(index, MOVING_LEFT); // Para que deshaga el move right        
+        this->still_player(index,MOVING_RIGHT);
     };
 
     this->command_map[PlayerActionType::JUMP] = [this](int index) {
@@ -189,9 +185,10 @@ void MatchLogic::player_stay_down_end(int id) {
     }
 }
 
-void MatchLogic::still_player(int id) {
+void MatchLogic::still_player(int id, PlayerMovingDir dir) {
     for (Player& player: players) {
         if (player.same_id(id)) {
+            player.undo_moving(dir);
             player.still();
             return;
         }
@@ -368,8 +365,11 @@ void MatchLogic::damage_player(int id) {
 void MatchLogic::damage_box(int id,std::vector<GameEvent>& events) {
     for (auto it = boxes.begin(); it!=boxes.end();) {
         if (it->same_id(id)) {
+            std::cout << "BOX TOOK DMG\n";
             it->take_damage();
             if (it->destroyed()){
+                std::cout << "DESTROYED BOX\n";
+            
                 Tuple position = it->get_spawn_point();
                 //TODO: agregar sonido de caja
                 events.emplace_back(position.x, position.y, BOX_DESTROYED);
@@ -383,6 +383,8 @@ void MatchLogic::damage_box(int id,std::vector<GameEvent>& events) {
         }
         it ++;
     }
+    std::cout << "NOT FOUND BOX FOR TAKE DMG\n";
+    
 }
 
 void MatchLogic::update_bullets(std::vector<GameEvent>& events){

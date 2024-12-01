@@ -49,7 +49,6 @@ public:
     MatchLogic(const Configuration& _configs);
     void execute_move_command(int action_type, int index);
     void add_player(int id, int spawn_point_index);
-    void still_player(int id);
     void get_dtos(std::vector<PlayerDTO>& dtos, std::vector<DynamicObjDTO>& objects, std::vector<SoundEventType>& sounds);
     //void add_colition(PhysicalObject &object);
     void clear_players();
@@ -63,6 +62,7 @@ public:
     void add_bullet(Bullet bullet);
     
     
+    void still_player(int id, PlayerMovingDir dir);
     void damage_player(int id);
     void add_player_speed(int id, int x, int y);
     void change_player_dir(int id, PlayerMovingDir dir);
