@@ -36,6 +36,7 @@ class PhysicalPlayer: public PhysicalObject {
         
         bool on_air;
         bool out_of_map;
+        bool hold_flap;
 
     public:
         PhysicalPlayer(int init_coord_x, int init_coord_y, const Configuration& _configs);
@@ -48,7 +49,10 @@ class PhysicalPlayer: public PhysicalObject {
         bool is_out_of_map();
         void stay_down_start();
         void stay_down_end();
-        void jump_start();
+        
+        bool jump_start();
+        bool try_flap_start();
+        
         void jump_end();
         void update_action(TypeMoveAction& move_action);
 

@@ -83,22 +83,37 @@ void PhysicalPlayer::stay_down_end(){
     dimension.y += 15;
 }
 
-void PhysicalPlayer::jump_start(){
-    if (on_air) {
-        if (speed.y < 0 && flap_attemps > 0) {
-            this->add_speed(0, configs.player_flap_force);
-            acceleration.y = -3;
-            flap_attemps --;
-        }
-    } else {
-        //std::cout << "JMP FORCE ES " << configs.player_jmp_force<< std::endl;
-        add_speed(0, configs.player_jmp_force);
-        on_air = true;
+bool PhysicalPlayer::try_flap_start(){
+    if (speed.y < 0 && flap_attemps > 0) {
+        this->add_speed(0, configs.player_flap_force);
+        
+        hold_flap = true;
+        acceleration.y = -2;
+        flap_attemps --;
+        return true;
     }
+    
+    return false;
+}
+bool PhysicalPlayer::jump_start(){
+    if (on_air) {
+        return false;
+    }
+    hold_flap = false;
+    
+    //std::cout << "JMP FORCE ES " << configs.player_jmp_force<< std::endl;
+    add_speed(0, configs.player_jmp_force);
+    on_air = true;
+    return true;
 }
 
-void PhysicalPlayer::jump_end(){
-    acceleration.y = -configs.gravity;
+void PhysicalPlayer::jump_end(){ 
+    if(hold_flap){
+        std::cout<< "WAS FLAP END!!!\n";
+        hold_flap = false;
+        acceleration.y = -configs.gravity;
+    }
+    std::cout<< "JUMP END?!!!\n";
 }
 
 void PhysicalPlayer::check_moving_dir(const MatchMap& colition_map){

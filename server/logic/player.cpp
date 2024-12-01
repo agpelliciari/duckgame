@@ -324,8 +324,16 @@ void Player::drop_item(std::vector<DroppedItem> &dropped_items){
 }
 
 void Player::jump_start(){
-    player_sounds.push_back(SoundEventType::PLAYER_JUMPED);
-    object.jump_start();
+    if(object.jump_start()){
+        std::cout<< "WAS JUMP!!!\n";
+        player_sounds.push_back(SoundEventType::PLAYER_JUMPED);
+        return;
+    }
+    
+    if(object.try_flap_start()){
+        std::cout<< "WAS FLAP!!!\n";
+        player_sounds.push_back(SoundEventType::PLAYER_FLAP);    
+    }
 }
 
 void Player::jump_end(){
