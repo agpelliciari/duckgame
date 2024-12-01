@@ -17,6 +17,7 @@ SoundContainer::SoundContainer(): backgroundMusic(DATA_PATH "/music/DuckGame-cha
     sounds.emplace(SoundType::GUN_RELOAD, SDL2pp::Chunk(DATA_PATH "/sounds/reload.wav"));
     sounds.emplace(SoundType::POWER_UP, SDL2pp::Chunk(DATA_PATH "/sounds/powerUp.wav"));
     sounds.emplace(SoundType::BROKEN_ARMOR, SDL2pp::Chunk(DATA_PATH "/sounds/brokenArmor.wav"));
+    sounds.emplace(SoundType::FLAP, SDL2pp::Chunk(DATA_PATH "/sounds/flap.wav"));
 }
 
 SDL2pp::Music& SoundContainer::getBackgroundMusic() { return backgroundMusic; }
@@ -66,6 +67,9 @@ void SoundContainer::addSound(SoundEventType soundType) {
             break;
         case PLAYER_RELOADING:
             MatchSounds.push_back(SoundType::GUN_RELOAD);
+            break;
+        case PLAYER_FLAP:
+            MatchSounds.push_back(SoundType::FLAP);
             break;
         default:
             break;

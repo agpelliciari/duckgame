@@ -27,6 +27,7 @@ enum class SoundType {
     GUN_RELOAD,
     POWER_UP,
     BROKEN_ARMOR,
+    FLAP,
     NONE
 };
 
