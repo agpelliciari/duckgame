@@ -1,6 +1,10 @@
 
 #include "ak47_weapon.h"
 
+
+#define KNOCK_BACK_DURATION 2
+#define KNOCK_BACK_MOMENTUM 10
+
 AK47Weapon::AK47Weapon(): ammo(30), reload_time(15), dispersion_index(0), bullet_range(13) {}
 
 
@@ -24,13 +28,11 @@ bool AK47Weapon::shoot(ShootingDirection direction, std::vector <Bullet> &bullet
                 bullets.back().shoot_up();
                 bullets.back().add_speed(dispersion_index * sign, 0);
             } else if (direction == ShootingDirection::LEFT){
-                player.add_speed(10, 0);
-                player.add_acceleration(-5, 0);
+                player.add_impulse_x(KNOCK_BACK_MOMENTUM, KNOCK_BACK_DURATION); // vel_x, duration
                 bullets.back().shoot_left();
                 bullets.back().add_speed(0, dispersion_index * sign);
             } else if (direction == ShootingDirection::RIGHT){
-                player.add_speed(-10, 0);
-                player.add_acceleration(5, 0);
+                player.add_impulse_x(-KNOCK_BACK_MOMENTUM, KNOCK_BACK_DURATION); // vel_x, duration
                 bullets.back().shoot_right();
                 bullets.back().add_speed(0, dispersion_index * sign);
             }

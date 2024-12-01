@@ -22,6 +22,13 @@ enum PlayerMovingDir {
     MOVING_RIGHT = 1,
 };
 
+struct Impulse{
+    int left_over_vel;
+    int acc;
+    int steps;
+    Impulse(int left_over_vel, int acc, int dur):left_over_vel(left_over_vel),acc(acc),steps(dur) {}
+};
+
 class PhysicalPlayer: public PhysicalObject {
 
     private:
@@ -32,11 +39,15 @@ class PhysicalPlayer: public PhysicalObject {
         Tuple initial_position;
         const Configuration& configs;
         int flap_attemps;
+        int steps_deaccelerate;
         PlayerMovingDir moving_dir;
         
         bool on_air;
         bool out_of_map;
         bool hold_flap;
+        bool stopped_x;
+        
+        std::vector<struct Impulse> impulses;
 
     public:
         PhysicalPlayer(int init_coord_x, int init_coord_y, const Configuration& _configs);
@@ -55,7 +66,9 @@ class PhysicalPlayer: public PhysicalObject {
         
         void jump_end();
         void update_action(TypeMoveAction& move_action);
-
+        
+        
+        void add_impulse_x(int vel_max, int durations);
 
         void check_moving_dir(const MatchMap& colition_map);
         

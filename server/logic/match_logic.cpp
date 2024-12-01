@@ -197,7 +197,6 @@ void MatchLogic::still_player(int id, PlayerMovingDir dir) {
     for (Player& player: players) {
         if (player.same_id(id)) {
             player.undo_moving(dir);
-            player.still();
             return;
         }
     }

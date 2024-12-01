@@ -5,6 +5,9 @@
 
 #include "magnum_weapon.h"
 
+#define KNOCK_BACK_DURATION 4
+#define KNOCK_BACK_MOMENTUM 20
+
 MagnumWeapon::MagnumWeapon(): ammo(6), bullet_range(20){}
 
 void MagnumWeapon::get_weapon(TypeWeapon& type){
@@ -28,13 +31,11 @@ bool MagnumWeapon::shoot(ShootingDirection direction, std::vector <Bullet> &bull
             bullets.back().shoot_up();
             bullets.back().add_speed(dispersion_index, -dispersion_index);
         } else if (direction == ShootingDirection::LEFT){
-            player.add_speed(20, 0);
-            player.add_acceleration(-5, 0);
+            player.add_impulse_x(KNOCK_BACK_MOMENTUM, KNOCK_BACK_DURATION); // vel_x, duration
             bullets.back().shoot_left();
             bullets.back().add_speed(dispersion_index, dispersion_index);
         } else if (direction == ShootingDirection::RIGHT){
-            player.add_speed(-20, 0);
-            player.add_acceleration(5, 0);
+            player.add_impulse_x(-KNOCK_BACK_MOMENTUM, KNOCK_BACK_DURATION); // vel_x, duration
             bullets.back().shoot_right();
             bullets.back().add_speed(-dispersion_index, dispersion_index);
         }

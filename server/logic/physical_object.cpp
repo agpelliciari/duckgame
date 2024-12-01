@@ -67,7 +67,8 @@ bool PhysicalObject::detect_y_collision(const MatchMap& colition_map, const int 
 
 void PhysicalObject::move(const MatchMap& colition_map) {
 
-    speed.x += acceleration.x * time_step;
+    
+    speed.x += (int)(acceleration.x * time_step);
     if (this->speed.x != 0) {
         int sign;
         speed.x > 0 ? sign = 1 : sign = -1;
@@ -83,8 +84,6 @@ void PhysicalObject::move(const MatchMap& colition_map) {
                 position.x += 1 * sign;
             }
         }
-    } else {
-        acceleration.x = 0;
     }
 
     speed.y += acceleration.y * time_step;
