@@ -40,7 +40,7 @@ bool LaserRifleWeapon::shoot(ShootingDirection direction, std::vector <Bullet> &
                 dispersion_factor = 5;
             }
 
-            bullets.push_back(Bullet(bullet_position.x, bullet_position.y, bullet_range, TypeDynamicObject::LASER, id_player, true));
+            bullets.push_back(Bullet(bullet_position.x, bullet_position.y, bullet_range, TypeDynamicObject::LASER_2, id_player, true));
             if (direction == ShootingDirection::UP){
                 bullets.back().shoot_up();
             } else if (direction == ShootingDirection::LEFT){
