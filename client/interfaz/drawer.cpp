@@ -81,9 +81,9 @@ void Drawer::drawPlayerInfo(const PlayerDTO& player, const std::string color) {
             const auto& [textureType, width, height] = weaponTexture->second;
 
             int x, y;
-            if (player.weapon == TypeWeapon::PISTOLA_COWBOY || player.weapon == TypeWeapon::SNIPER) {
+            if (player.weapon == TypeWeapon::PISTOLA_COWBOY || player.weapon == TypeWeapon::SNIPER || player.weapon == TypeWeapon::PISTOLA_DE_DUELOS) {
                 x = 60;
-                y = 7;
+                y = 6;
             } else if (player.weapon == TypeWeapon::GRANADA) {
                 x = 65;
                 y = 7;
@@ -180,17 +180,21 @@ void Drawer::drawArmor(const PlayerDTO& player, SDL_RendererFlip flip) {
 }
 
 void Drawer::getWeaponParameters(const PlayerDTO& player, SDL_RendererFlip flip, int& x, int& y, double& angle, int& sizeAdjustment) {
-    if (player.weapon == TypeWeapon::PISTOLA_COWBOY || player.weapon == TypeWeapon::GRANADA) {
+    if (player.weapon == TypeWeapon::PISTOLA_COWBOY || player.weapon == TypeWeapon::GRANADA || player.weapon == TypeWeapon::PISTOLA_DE_DUELOS) {
         if (player.aiming_up) {
             angle = getTextureFlipValue(flip, 90.0, -90.0);
             x = camera.getScreenX(player.pos.x + getTextureFlipValue(flip, 21, 14) - 8);
             y = camera.getScreenY(player.pos.y + getTextureFlipValue(flip, -12, 6));
         } else {
             angle = 0.0;
-            x = camera.getScreenX(player.pos.x + getTextureFlipValue(flip, 1, 14) - 8);
+            x = camera.getScreenX(player.pos.x + getTextureFlipValue(flip, 4, 14) - 8);
             y = camera.getScreenY(player.pos.y + 2);
         }
-        sizeAdjustment = 3;
+        if (player.weapon == TypeWeapon::PISTOLA_DE_DUELOS) {
+            sizeAdjustment = 7;
+        } else {
+            sizeAdjustment = 4;
+        }
     } else if (player.weapon == TypeWeapon::SNIPER) {
         if (player.aiming_up) {
             angle = getTextureFlipValue(flip, 90.0, -90.0);
@@ -436,9 +440,9 @@ void Drawer::drawDynamicObject(const DynamicObjDTO& object) {
                                  camera.getScaledSize(AK47_SIZE - 6), camera.getScaledSize(AK47_SIZE - 6)));
             break;
 
-        //case TypeDynamicObject::PISTOLA_DE_DUELOS:
-            //renderer.Copy(textures.getTexture("/weapons/pistol.png"), SDL2pp::Rect(0, 0, 18, 18), SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y), camera.getScaledSize(18 - 4), camera.getScaledSize(18 - 4)));
-            //break;
+        case TypeDynamicObject::PISTOLA_DE_DUELOS:
+            renderer.Copy(textures.getTexture("/weapons/pistol.png"), SDL2pp::Rect(0, 0, PISTOL_SIZE, PISTOL_SIZE), SDL2pp::Rect(camera.getScreenX(object.pos.x) + 5, camera.getScreenY(-object.pos.y) + 10, camera.getScaledSize(PISTOL_SIZE - 6), camera.getScaledSize(PISTOL_SIZE - 6)));
+            break;
 
         case TypeDynamicObject::PISTOLA_COWBOY:
             renderer.Copy(
@@ -449,7 +453,6 @@ void Drawer::drawDynamicObject(const DynamicObjDTO& object) {
                                  camera.getScaledSize(COWBOY_GUN_HEIGHT - 3)));
             break;
         
-        case TypeDynamicObject::PISTOLA_DE_DUELOS:
         case TypeDynamicObject::MAGNUM:
             renderer.Copy(
                     textures.getTexture("/weapons/magnum.png"),
@@ -513,7 +516,19 @@ void Drawer::drawStatusBar(const MatchStatsInfo& stats) {
         destRect = SDL2pp::Rect(screenWidth/2 - 180, 10, 390, 12);
 
     } else if (stats.state == PAUSADA) {
-        text += "THERE'S A TIE, 5 MORE ROUNDS TO PLAY";
+        const PlayerStatDto* firstPlayerStats = stats.getPlayerStat(static_cast<int>(stats.champion_player));
+
+        if (firstPlayerStats != nullptr) {
+            if (firstPlayerStats->wins  < context.wins_needed) {
+                int winsNeeded = context.wins_needed - firstPlayerStats->wins;
+                text += "ROUND BREAK - PLAYER " + std::to_string(stats.champion_player) + " NEEDS " + std::to_string(winsNeeded) + " MORE WINS";
+            } else {
+                text += "THERE'S A TIE -  " + std::to_string(context.rounds_per_set) + " MORE ROUNDS TO PLAY";
+            }
+        } else {
+            text += "THERE'S A TIE - " + std::to_string(context.rounds_per_set) + " MORE ROUNDS TO PLAY";
+        }
+
         destRect = SDL2pp::Rect(screenWidth/2 - 180, 10, 390, 12);
 
     } else if (stats.state == ROUND_END) {

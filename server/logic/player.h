@@ -45,7 +45,6 @@ class Player {
         ShootingDirection previous_shooting_direction;  // cppcheck-suppress unusedStructMember
         std::unique_ptr<Weapon> weapon;               // cppcheck-suppress unusedStructMember
 	    std::vector<SoundEventType> player_sounds; // cppcheck-suppress unusedStructMember
-        bool is_stay_down;  // cppcheck-suppress unusedStructMember
         bool trigger; // cppcheck-suppress unusedStructMember
         int cheat_weapon_index; // cppcheck-suppress unusedStructMember
 

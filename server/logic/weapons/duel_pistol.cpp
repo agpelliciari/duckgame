@@ -8,7 +8,7 @@
 DuelPistol::DuelPistol(int base_ammo):ammo(base_ammo), bullet_range(5){}
 
 void DuelPistol::get_weapon(TypeWeapon& type){
-    type = TypeWeapon::MAGNUM;
+    type = TypeWeapon::PISTOLA_DE_DUELOS;
 }
 
 SoundEventType DuelPistol::shoot_sound() const{
