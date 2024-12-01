@@ -17,8 +17,8 @@ item_respawn_time_sec: 5
 box_health: 1
 
 fps: 45
-rounds_per_set: 2
-wins_needed: 6 
+rounds_per_set: 4
+wins_needed: 10
 
 
 ## Todavia no tomados en cuenta.

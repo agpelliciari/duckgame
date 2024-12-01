@@ -19,6 +19,8 @@ public:
     uint8_t second_player;  // cppcheck-suppress unusedStructMember
     int cantidadjugadores;  // cppcheck-suppress unusedStructMember
     
+    int wins_needed;
+    int rounds_per_set;
     
     int countPlayers() const;
     void removePlayer(uint8_t pos);

@@ -67,6 +67,12 @@ uint8_t ClientProtocol::recvIDDualPlayer(uint8_t* player1) {
 void ClientProtocol::sendlobbyaction(const lobby_action& action) { protocol.sendbyte(action.type); }
 void ClientProtocol::sendmapname(const std::string& mapname) { protocol.sendmsg(mapname); }
 
+
+void ClientProtocol::recvwinconfig(int& wins_needed, int& rounds_per_set){
+     wins_needed = (int) protocol.recvbyte();
+     rounds_per_set = (int) protocol.recvbyte();
+}
+
 void ClientProtocol::recvmapdata(struct MapData& data) {  //, const int unit) {
     data.width = protocol.recvuint();
     data.height = protocol.recvuint();

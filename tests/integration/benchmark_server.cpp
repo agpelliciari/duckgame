@@ -72,8 +72,10 @@ TEST_F(BenchmarkServer, SimpleJoinMultiple) {
     MatchStatsInfo stats;
     MatchDto state;
     int count = 120;
+    std::cout << "------------------> BENCHMARK START!\n";
     Clock clock(30);
     clock.resetnow();
+    
     
     while(count > 0){
         host.assertRecvState(stats, state);

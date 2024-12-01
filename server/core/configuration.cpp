@@ -65,11 +65,19 @@ Configuration::Configuration(const char* config): Configuration() {
             reader.readGravity(gravity);
             printf("gravity : %d\n",gravity);
 
-            reader.readRoundsPerSet(rounds_per_set);
-            printf("rounds per set : %u\n",rounds_per_set);
-            
             reader.readWinsNeeded(wins_needed);
             printf("wins needed : %u\n",wins_needed);
+            if(wins_needed> 255){
+                wins_needed  = 255;
+            }
+
+            reader.readRoundsPerSet(rounds_per_set);
+            
+            if(rounds_per_set > wins_needed){
+                rounds_per_set  = wins_needed;
+            }
+            printf("rounds per set : %u\n",rounds_per_set);
+            
             
         } catch(const SerialError& error){
             std::cerr << "Failed read of configurations! " << error.what() << std::endl;

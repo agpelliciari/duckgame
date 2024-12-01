@@ -35,7 +35,8 @@ void GameContext::reset(){
     first_player = 0;
     second_player = 0;
     cantidadjugadores = 0;
-    
+    wins_needed = 10;
+    rounds_per_set = 5;
 }
 
 GameContext::GameContext():
@@ -46,4 +47,6 @@ GameContext::GameContext():
             max_player_count(4),
             first_player(0),
             second_player(0),
-            cantidadjugadores(0){}
+            cantidadjugadores(0),
+            wins_needed(10),
+            rounds_per_set(5){}
