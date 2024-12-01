@@ -37,7 +37,7 @@ void PhysicalPlayer::update_action(TypeMoveAction& move_action) {
     }
     
     int dir_ind = NEUTRAL_IND;
-    if(moving_dir != NOT_SETTED){
+    if(moving_dir != NOT_SETTED && collided_sides == false){
         dir_ind = (int)moving_dir + 1;
         if(dir_ind == NEUTRAL_IND && speed.x != 0){
             dir_ind = last_dir_ind;
@@ -168,6 +168,7 @@ void PhysicalPlayer::jump_end(){
 }
 
 void PhysicalPlayer::add_impulse_x(int vel_max, int duration){
+
     this->speed.x += vel_max;
 
     int acc = -((vel_max/duration));
