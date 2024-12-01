@@ -8,19 +8,17 @@ MatchLogic::MatchLogic(const Configuration& _configs): colition_map(100, 100), c
         this->add_player_speed(index, 0, 0);
     };
     this->command_map[PlayerActionType::MOVE_LEFT] = [this](int index) {
-        this->add_player_speed(index, -configs.player_speed, 0);
+        this->change_player_dir(index, MOVING_LEFT); // Para que se mueva left
     };
     this->command_map[PlayerActionType::MOVE_LEFT_END] = [this](int index) {
-        //this->add_player_speed(index, configs.player_speed, 0);
-        this->still_player(index);
+        this->still_player(index, MOVING_LEFT);
     };
 
     this->command_map[PlayerActionType::MOVE_RIGHT] = [this](int index) {
-        this->add_player_speed(index, configs.player_speed, 0);
+        this->change_player_dir(index, MOVING_RIGHT); // Para que se mueva a la derecha
     };
     this->command_map[PlayerActionType::MOVE_RIGHT_END] = [this](int index) {
-        //this->add_player_speed(index, -configs.player_speed, 0);
-        this->still_player(index);
+        this->still_player(index,MOVING_RIGHT);
     };
 
     this->command_map[PlayerActionType::JUMP] = [this](int index) {
@@ -30,16 +28,12 @@ MatchLogic::MatchLogic(const Configuration& _configs): colition_map(100, 100), c
     this->command_map[PlayerActionType::FLAPPING_END] = [this](int index) {
         this->player_jump_end(index);
     };
-    
+
     this->command_map[PlayerActionType::STAY_DOWN_START] = [this](int index) {
         this->player_stay_down_start(index);
     };
     this->command_map[PlayerActionType::STAY_DOWN_END] = [this](int index) {
         this->player_stay_down_end(index);
-    };
-
-    this->command_map[PlayerActionType::FLAPPING_END] = [this](int index) {
-        //this->add_player_speed(index, 0, 0);
     };
 
     this->command_map[PlayerActionType::AIM_UP_START] = [this](int index) {
@@ -71,7 +65,6 @@ MatchLogic::MatchLogic(const Configuration& _configs): colition_map(100, 100), c
     this->command_map[PlayerActionType::CHEAT_3] = [this](int index) {
         this->player_cheat_3();
     };
-    // this->command_map[3] = [this](int index) { this->add_player_speed(index, 0, 0); };
 
 }
 
@@ -82,7 +75,7 @@ void MatchLogic::add_player(int id, int spawn_point_index) {
     //std::cout << "player SPAWN POINT pos: " << spawn_points[spawn_point_index].x*16
     //<<", "<< spawn_points[spawn_point_index].y*16
     //<< std::endl;
-    
+
     if (spawn_point_index < spawn_points.size()) {
         players.push_back(Player(id, spawn_points[spawn_point_index].x  * 16, spawn_points[spawn_point_index].y  * 16 + 1, configs));
         std::cout << "spawn point x: " << spawn_points[spawn_point_index].x << ", y: " << spawn_points[spawn_point_index].y << std::endl;
@@ -91,6 +84,16 @@ void MatchLogic::add_player(int id, int spawn_point_index) {
     }
     colition_map.add_collision(players.back().get_map_position(), players.back().get_dimension(),
                                CollisionTypeMap::PLAYER, players.back().get_id());
+}
+
+
+void MatchLogic::change_player_dir(int id, PlayerMovingDir dir){
+    for (Player& player: players) {
+        if (player.same_id(id)) {
+            player.change_move_dir(dir);
+            return;
+        }
+    }
 }
 
 void MatchLogic::add_player_speed(int id, int speed_x, int speed_y) {
@@ -141,11 +144,11 @@ void MatchLogic::player_jump_end(int id) {
 void MatchLogic::player_toggle_pick_up_drop_item(int id) {
     for (Player& player: players) {
         if (player.same_id(id)) {
-            
+
             if(player.pick_up_item(this->spawn_places, this->dropped_items)){
                 return;
             }
-            
+
             if (player.has_equipment()) {
                 player.drop_item(this->dropped_items);
             }
@@ -190,9 +193,10 @@ void MatchLogic::player_stay_down_end(int id) {
     }
 }
 
-void MatchLogic::still_player(int id) {
+void MatchLogic::still_player(int id, PlayerMovingDir dir) {
     for (Player& player: players) {
         if (player.same_id(id)) {
+            player.undo_moving(dir);
             player.still();
             return;
         }
@@ -214,11 +218,10 @@ void MatchLogic::update_colition_map() {
     for (Player& player: players) {
         colition_map.add_collision(player.get_map_position(), player.get_dimension(), CollisionTypeMap::PLAYER, player.get_id());
     }
-    int box_index = 0;
     for (Box& box: boxes) {
         if (box.is_spawned()){
-            colition_map.add_collision(box.get_spawn_point(), box.get_dimension(), CollisionTypeMap::BOX, box_index);
-            box_index++;
+
+            colition_map.add_collision(box.get_spawn_point(), box.get_dimension(), CollisionTypeMap::BOX, box.get_id());
         }
     }
 
@@ -249,14 +252,14 @@ void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos,
     for (Player &player: players) {
 
         PlayerDTO dto;
-        
+
         player.get_data(dto.id, dto.pos.x, dto.pos.y, dto.weapon, dto.helmet, dto.chest_armor,
                         dto.move_action, dto.doing_action, dto.is_alive, dto.aiming_up, dto.hp, dto.munition);
         player.get_sounds(sounds);
         dtos.push_back(dto);
     }
 
-    for (Box box: boxes){
+    for (Box& box: boxes){
         if (box.is_spawned()){
             DynamicObjDTO dto = {0, 0, TypeDynamicObject::BOX};
             Tuple position = box.get_spawn_point();
@@ -312,6 +315,7 @@ void MatchLogic::add_boxes(const std::vector<struct MapPoint>& boxes){
     int id_box = 0;
     for (const struct MapPoint& box: boxes) {
         this->boxes.push_back(Box(id_box, box.x, box.y));
+        //std::cout << "-->ADDED BOX id: "<< id_box<<std::endl;
         id_box++;
     }
 }
@@ -369,21 +373,27 @@ void MatchLogic::damage_player(int id) {
 void MatchLogic::damage_box(int id,std::vector<GameEvent>& events) {
     for (auto it = boxes.begin(); it!=boxes.end();) {
         if (it->same_id(id)) {
+            //std::cout << "----BOX TOOK DMG\n";
             it->take_damage();
             if (it->destroyed()){
+                //std::cout << "-----DESTROYED BOX\n";
+
                 Tuple position = it->get_spawn_point();
-                //TODO: agregar sonido de caja
+
                 events.emplace_back(position.x, position.y, BOX_DESTROYED);
-                
+
                 // Si es bomba SERIA EXPLOSION ! o asi
-                
+
                 dropped_items.push_back(DroppedItem(std::move(it->get_item()), position.x, position.y, 16, 16));
                 it = boxes.erase(it);
                 return;
             }
+            return;
         }
         it ++;
     }
+    std::cout << "NOT FOUND BOX FOR TAKE DMG!!" << id<< "\n";
+
 }
 
 void MatchLogic::update_bullets(std::vector<GameEvent>& events){
@@ -397,10 +407,10 @@ void MatchLogic::update_bullets(std::vector<GameEvent>& events){
             }
             if (collision.type == CollisionTypeMap::BOX) {
                 this->damage_box(collision.id,events);
-                
-                
+
+
             }
-            std::cout << "ERASING BULLET !!\n";
+            //std::cout << "ERASING BULLET !!\n";
             bullet = bullets.erase(bullet);
         } else {
             bullet->move(colition_map);
@@ -419,7 +429,7 @@ void MatchLogic::update_grenades(std::vector<GameEvent>& events){
             it = grenades.erase(it);
         } else if (it->out_of_map()){
             it = grenades.erase(it);
-            
+
         } else {
             it->move(colition_map);
             it ++;
@@ -468,7 +478,7 @@ void MatchLogic::resize_map(const int width, const int height){
 }
 
 void MatchLogic::reset_map(){
-    
+
     spawn_places.clear();
     spawn_points.clear();
     dropped_items.clear();
@@ -476,10 +486,9 @@ void MatchLogic::reset_map(){
     blocks.clear();
     bullets.clear();
     grenades.clear();
-    
+
     colition_map.clear_map();
 }
-
 
 void MatchLogic::player_cheat_1() {
     for (Player& player: players) {
