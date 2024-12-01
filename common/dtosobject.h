@@ -25,6 +25,8 @@ enum class TypeDynamicObject : uint8_t {
     HELMET,
     ARMOR,
 
+    THROWN_BANANA,
+
     // Armas?
     GRANADA,
     BANANA,

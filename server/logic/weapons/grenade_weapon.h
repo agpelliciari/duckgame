@@ -10,6 +10,9 @@
 #include "bullet.h"
 #include "common/gameevents.h"
 #include "grenade.h"
+#include <memory>
+#include "throwable.h"
+
 
 class GrenadeWeapon : public Weapon{
 
@@ -22,11 +25,9 @@ class GrenadeWeapon : public Weapon{
         
         SoundEventType shoot_sound() const override;
 
-        bool shoot(ShootingDirection direction,
-                   std::vector<Bullet> &bullets, Tuple bullet_position, PhysicalPlayer &player,
-                   bool &trigger, int id_player, std::vector<SoundEventType> &player_sounds, std::vector<Grenade> &grenades) override;
-        void shoot_shotgun(ShootingDirection direction, std::vector <Bullet> &bullets,
-                           Tuple bullet_position, int id_player, std::vector<SoundEventType> &player_sounds);
+        bool shoot(ShootingDirection direction, std::vector<Bullet> &bullets, Tuple bullet_position,
+                   PhysicalPlayer &player, bool &trigger, int id_player, std::vector<SoundEventType> &player_sounds,
+                   std::vector<std::unique_ptr<Throwable>> &grenades) override;
         int get_ammo() override;
         void cheat_ammo() override;
 

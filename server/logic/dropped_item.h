@@ -12,6 +12,7 @@
 #include "server/logic/weapons/duel_pistol.h"
 #include "server/logic/weapons/sniper_weapon.h"
 #include "server/logic/weapons/shotgun_weapon.h"
+#include "server/logic/weapons/banana_weapon.h"
 
 
 class DroppedItem {

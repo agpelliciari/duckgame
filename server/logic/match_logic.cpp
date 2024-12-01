@@ -205,7 +205,7 @@ void MatchLogic::still_player(int id, PlayerMovingDir dir) {
 void MatchLogic::update_players(std::vector<int> &id_alive_players) {
     id_alive_players.clear();
     for (Player& player: players) {
-        player.update(colition_map, bullets, grenades);
+        player.update(colition_map, bullets, throwables);
         if (player.is_still_alive()){
             id_alive_players.push_back(player.get_id());
         }
@@ -230,6 +230,14 @@ void MatchLogic::update_colition_map() {
         Tuple dimension = {16, 16};
         colition_map.add_collision(position, dimension, CollisionTypeMap::BLOCK, block_index);
         block_index ++;
+    }
+
+    int banana_index = 0;
+    for (MapPoint& banana: bananas){
+        Tuple position = {banana.x, banana.y};
+        Tuple dimension = {10, 5};
+        colition_map.add_collision(position, dimension, CollisionTypeMap::BANANA, banana_index);
+        banana_index ++;
     }
 
 }
@@ -268,8 +276,6 @@ void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos,
         }
     }
 
-
-
     for (SpawnPlace &spawn_place: spawn_places) {
         if (spawn_place.is_spawned()){
             DynamicObjDTO dto = {0, 0, TypeDynamicObject::NONE};
@@ -292,9 +298,14 @@ void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos,
         objects.push_back(dto);
     }
 
-    for (Grenade grenade: grenades) {
+    for (const auto& throwable : throwables) {
         DynamicObjDTO dto = {0, 0, TypeDynamicObject::PROJECTILE};
-        grenade.get_map_info(dto.pos.x, dto.pos.y, dto.type);
+        throwable->get_map_info(dto.pos.x, dto.pos.y, dto.type);
+        objects.push_back(dto);
+    }
+
+    for (MapPoint &banana: bananas) {
+        DynamicObjDTO dto = {banana.x, banana.y, TypeDynamicObject::THROWN_BANANA};
         objects.push_back(dto);
     }
 
@@ -420,22 +431,27 @@ void MatchLogic::update_bullets(std::vector<GameEvent>& events){
 }
 
 void MatchLogic::update_grenades(std::vector<GameEvent>& events){
-    for (auto it = grenades.begin(); it!=grenades.end();) {
-        if (it->exploded(bullets)){
+    for (auto it = throwables.begin(); it!=throwables.end();) {
+        if ((*it)->exploded(bullets, bananas)){
             int x = 0;
             int y = 0;
-            it->get_pos(x,y);
-            events.emplace_back(x,y,GRENADE_EXPLOSION);
-            it = grenades.erase(it);
-        } else if (it->out_of_map()){
-            it = grenades.erase(it);
+            TypeDynamicObject type;
+            (*it)->get_map_info(x,y,type);
+            if (type == TypeDynamicObject::GRANADA) {
+                events.emplace_back(x,y,GRENADE_EXPLOSION);
+            }
+            it = throwables.erase(it);
+        } else if ((*it)->out_of_map()){
+            it = throwables.erase(it);
 
         } else {
-            it->move(colition_map);
+            (*it)->move(colition_map);
             it ++;
         }
     }
 }
+
+
 
 void MatchLogic::update_dropped_items(){
     for (auto it = dropped_items.begin(); it!=dropped_items.end();) {
@@ -467,9 +483,10 @@ void MatchLogic::update_spawn_points(){
 void MatchLogic::clear_objects(){
     //spawn_points.clear();
     boxes.clear();
+    bananas.clear();
     //spawn_places.clear();
     dropped_items.clear();
-    grenades.clear();
+    throwables.clear();
     bullets.clear();
 }
 
@@ -485,8 +502,8 @@ void MatchLogic::reset_map(){
     boxes.clear();
     blocks.clear();
     bullets.clear();
-    grenades.clear();
-
+    bananas.clear();
+    throwables.clear();
     colition_map.clear_map();
 }
 

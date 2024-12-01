@@ -14,7 +14,7 @@ SoundEventType CowboyPistolWeapon::shoot_sound() const{
 
 
 bool CowboyPistolWeapon::shoot(ShootingDirection direction, std::vector <Bullet> &bullets,
-                               Tuple bullet_position, PhysicalPlayer &player, bool &trigger, int id_player, std::vector<SoundEventType> &player_sounds, std::vector<Grenade> &grenades){
+                               Tuple bullet_position, PhysicalPlayer &player, bool &trigger, int id_player, std::vector<SoundEventType> &player_sounds, std::vector<std::unique_ptr<Throwable>> &throwables){
     trigger = false;
     if (ammo > 0){
         bullets.push_back(Bullet(bullet_position.x, bullet_position.y, bullet_range, TypeDynamicObject::PROJECTILE, id_player));

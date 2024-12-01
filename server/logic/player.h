@@ -25,6 +25,8 @@
 #include "server/logic/weapons/laser_rifle_weapon.h"
 #include "common/gameevents.h"
 #include "server/logic/weapons/grenade_weapon.h"
+#include "server/logic/weapons/banana_weapon.h"
+#include "server/logic/weapons/throwable.h"
 
 
 class Player {
@@ -58,9 +60,9 @@ class Player {
                       TypeDoingAction &doing_action, bool &is_alive, bool &aim_up, int &life_points, int &ammo);
 
         void still();
-        void update(const MatchMap& colition_map, std::vector <Bullet> &bullets, std::vector<Grenade> &grenades);
+        void update(const MatchMap& colition_map, std::vector <Bullet> &bullets, std::vector<std::unique_ptr<Throwable>> &throwables);
         void stop_moving_x();
-        void shoot(std::vector <Bullet> &bullets, std::vector<Grenade> &grenades);
+        void shoot(std::vector <Bullet> &bullets, std::vector<std::unique_ptr<Throwable>> &throwables);
         bool has_equipment();
         bool pick_up_item(std::vector<SpawnPlace> &spawn_places, std::vector<DroppedItem> &dropped_items);
         void drop_item(std::vector<DroppedItem> &dropped_items);

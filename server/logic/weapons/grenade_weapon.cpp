@@ -21,17 +21,17 @@ int GrenadeWeapon::get_ammo(){
 
 bool GrenadeWeapon::shoot(ShootingDirection direction,
                    std::vector<Bullet> &bullets, Tuple bullet_position, PhysicalPlayer &player,
-                   bool &trigger, int id_player, std::vector<SoundEventType> &player_sounds, std::vector<Grenade> &grenades){
+                   bool &trigger, int id_player, std::vector<SoundEventType> &player_sounds, std::vector<std::unique_ptr<Throwable>> &grenades){
 
     trigger = false;
     if (ammo > 0){
-        grenades.push_back(Grenade(bullet_position.x, bullet_position.y, TypeDynamicObject::GRANADA, id_player, std::time(nullptr)));
+        grenades.push_back(std::make_unique<Grenade>(bullet_position.x, bullet_position.y, id_player, std::time(nullptr)));
         if (direction == ShootingDirection::UP){
-            grenades.back().shoot_up();
+            grenades.back()->shoot_up();
         } else if (direction == ShootingDirection::LEFT){
-            grenades.back().shoot_left();
+            grenades.back()->shoot_left();
         } else if (direction == ShootingDirection::RIGHT){
-            grenades.back().shoot_right();
+            grenades.back()->shoot_right();
         }
         player_sounds.push_back(SoundEventType::GRENADE_THROW);
         ammo --;

@@ -59,7 +59,7 @@ void Player::still() {
 
 int Player::get_id() { return id; }
 
-void Player::update(const MatchMap& colition_map, std::vector <Bullet> &bullets, std::vector<Grenade> &grenades) {
+void Player::update(const MatchMap& colition_map, std::vector <Bullet> &bullets, std::vector<std::unique_ptr<Throwable>> &throwables) {
 
     if (is_alive){
         if(object.is_out_of_map()){
@@ -75,7 +75,7 @@ void Player::update(const MatchMap& colition_map, std::vector <Bullet> &bullets,
             	object.update_action(move_action);
                 this->update_shooting_direction();
                 if (trigger){
-                    this->shoot(bullets, grenades);
+                    this->shoot(bullets, throwables);
                 }
             }
         }
@@ -176,7 +176,7 @@ void Player::take_damage(int dmg){
     }
 }
 
-void Player::shoot(std::vector <Bullet> &bullets, std::vector<Grenade> &grenades){
+void Player::shoot(std::vector <Bullet> &bullets, std::vector<std::unique_ptr<Throwable>> &throwables){
 
     if (weapon != nullptr){
         Tuple bullet_position = this->get_map_position();
@@ -194,7 +194,8 @@ void Player::shoot(std::vector <Bullet> &bullets, std::vector<Grenade> &grenades
             bullet_position.x += player_dimension.x + 5;
             bullet_position.y += player_dimension.y / 2;
         }
-        if (weapon->shoot(this->shooting_direction, bullets, bullet_position, this->object, trigger, id, player_sounds, grenades)){
+        if (weapon->shoot(this->shooting_direction, bullets, bullet_position,
+                          this->object, trigger, id, player_sounds, throwables)){
             if (aim_up){
                 doing_action=TypeDoingAction::SHOOTING_UP;
             } else {
@@ -350,7 +351,7 @@ void Player::get_sounds(std::vector<SoundEventType>& sounds){
 
 void Player::cheat_weapon(int base_mun){
     cheat_weapon_index ++;
-    if (cheat_weapon_index > 9){
+    if (cheat_weapon_index > 10){
         cheat_weapon_index = 0;
     }
     switch(cheat_weapon_index){
@@ -384,6 +385,9 @@ void Player::cheat_weapon(int base_mun){
         case 9:
             weapon = std::make_unique<GrenadeWeapon>(base_mun);
             break;
+        case 10:
+            weapon = std::make_unique<BananaWeapon>(base_mun);
+        break;
     }
 }
 

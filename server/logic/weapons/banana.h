@@ -1,6 +1,6 @@
 
-#ifndef GRENADE_H
-#define GRENADE_H
+#ifndef BANANA_H
+#define BANANA_H
 
 #include <vector>
 #include "server/logic/physical/physical_grenade.h"
@@ -9,15 +9,15 @@
 #include "server/logic/physical/match_map.h"
 #include "server/logic/physical/tuple.h"
 #include "throwable.h"
+#include <vector>
+#include "server/logic/physical/map_object.h"
+#include "server/logic/physical/tuple.h"
+#include "server/logic/physical/collision.h"
 
-class Grenade : public Throwable{
-
-    private:
-        int detonation_time;
-        int shoot_time;
+class Banana : public Throwable{
 
     public:
-        Grenade(int init_coord_x, int init_coord_y, int id_player, int shoot_time);
+        Banana(int init_coord_x, int init_coord_y, int id_player);
         void shoot_right() override;
         void shoot_left() override;
         void shoot_up() override;
@@ -25,6 +25,4 @@ class Grenade : public Throwable{
 
 };
 
-
-
-#endif //GRENADE_H
+#endif //BANANA_H

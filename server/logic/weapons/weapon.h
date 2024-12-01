@@ -12,6 +12,8 @@
 #include "server/logic/physical/physical_player.h"
 #include "common/gameevents.h"
 #include "grenade.h"
+#include "throwable.h"
+#include <memory>
 
 class Weapon {
 
@@ -21,7 +23,7 @@ public:
     virtual bool shoot(ShootingDirection direction,
                        std::vector <Bullet> &bullets, Tuple bullet_position,
                        PhysicalPlayer &player, bool &trigger, int id_player,
-                       std::vector<SoundEventType> &player_sounds, std::vector<Grenade> &grenades) = 0;
+                       std::vector<SoundEventType> &player_sounds, std::vector<std::unique_ptr<Throwable>> &throwables) = 0;
     virtual int get_ammo() = 0;
     virtual void cheat_ammo() = 0;
     virtual SoundEventType shoot_sound() const = 0;

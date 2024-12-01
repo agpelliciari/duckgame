@@ -24,7 +24,7 @@ int LaserRifleWeapon::get_ammo(){
 
 
 bool LaserRifleWeapon::shoot(ShootingDirection direction, std::vector <Bullet> &bullets, Tuple bullet_position,
-                       PhysicalPlayer &player, bool &trigger, int id_player, std::vector<SoundEventType> &player_sounds, std::vector<Grenade> &grenades){
+                       PhysicalPlayer &player, bool &trigger, int id_player, std::vector<SoundEventType> &player_sounds, std::vector<std::unique_ptr<Throwable>> &throwables){
     if (ammo > 0){
         if (reload_time > 0){
             reload_time--;

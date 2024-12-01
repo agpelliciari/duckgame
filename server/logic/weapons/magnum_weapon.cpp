@@ -20,7 +20,7 @@ SoundEventType MagnumWeapon::shoot_sound() const{
 
 
 bool MagnumWeapon::shoot(ShootingDirection direction, std::vector <Bullet> &bullets, Tuple bullet_position,
-                         PhysicalPlayer &player, bool &trigger, int id_player, std::vector<SoundEventType> &player_sounds, std::vector<Grenade> &grenades){
+                         PhysicalPlayer &player, bool &trigger, int id_player, std::vector<SoundEventType> &player_sounds, std::vector<std::unique_ptr<Throwable>> &throwables){
     trigger = false;
     if (ammo > 0){
         std::srand(std::time(nullptr));

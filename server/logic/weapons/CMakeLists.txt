@@ -13,6 +13,10 @@ target_sources(taller_server_logic
             grenade_weapon.cpp
             bullet.cpp
             grenade.cpp
+            throwable.cpp
+            banana_weapon.cpp
+            banana.cpp
+
     PUBLIC
     # .h files
             weapon.h
@@ -28,7 +32,9 @@ target_sources(taller_server_logic
             bullet.h
             grenade.h
             shooting_direction.h
-            
+            throwable.h
+            banana.h
+            banana_weapon.h
     )
 
 

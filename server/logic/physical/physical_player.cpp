@@ -10,6 +10,9 @@ static TypeMoveAction MOVE_ON_GROUND[3] = {TypeMoveAction::MOVE_LEFT,TypeMoveAct
 #define LEFT_IND 0
 #define RIGHT_IND 2
 
+#define KNOCK_BACK_DURATION 6
+#define KNOCK_BACK_MOMENTUM 10
+
 PhysicalPlayer::PhysicalPlayer(int init_coord_x, int init_coord_y, const Configuration& _configs):
         PhysicalObject(init_coord_x, init_coord_y, PLAYER_WIDTH, PLAYER_HEIGHT),
         initial_position{init_coord_x, init_coord_y},
@@ -56,6 +59,10 @@ void PhysicalPlayer::react_to_sides_collision(Collision collision){
         stopped_x = true;
         impulses.clear();
         acceleration.x = 0;
+
+    if (collision.type == CollisionTypeMap::BANANA){
+        this->add_impulse_x(KNOCK_BACK_MOMENTUM, KNOCK_BACK_DURATION);
+    }
 }
 
 void PhysicalPlayer::react_to_down_collision(Collision collision){
@@ -64,6 +71,10 @@ void PhysicalPlayer::react_to_down_collision(Collision collision){
         flap_attemps = configs.player_flaps;
         hold_flap = false;
         on_air = false;
+
+    if (collision.type == CollisionTypeMap::BANANA){
+        this->add_impulse_x(KNOCK_BACK_MOMENTUM, KNOCK_BACK_DURATION);
+    }
 }
 
 void PhysicalPlayer::react_to_up_collision(Collision collision){
