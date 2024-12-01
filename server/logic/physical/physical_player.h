@@ -39,13 +39,15 @@ class PhysicalPlayer: public PhysicalObject {
         Tuple initial_position;
         const Configuration& configs;
         int flap_attemps;
-        int steps_deaccelerate;
+        int last_dir_ind;
         PlayerMovingDir moving_dir;
         
         bool on_air;
         bool out_of_map;
         bool hold_flap;
-        bool stopped_x;
+        
+        bool is_stay_down;
+        bool collided_sides;
         
         std::vector<struct Impulse> impulses;
 
@@ -58,7 +60,7 @@ class PhysicalPlayer: public PhysicalObject {
         void react_to_up_collision(Collision collision) override;
         void react_to_out_of_map() override;
         bool is_out_of_map();
-        void stay_down_start();
+        bool stay_down_start();
         void stay_down_end();
         
         bool jump_start();

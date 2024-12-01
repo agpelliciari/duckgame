@@ -14,7 +14,7 @@ Player::Player(int id_, int initial_x, int initial_y, const Configuration& confi
         life_points(configs.player_health),
         shooting_direction(ShootingDirection::NONE),
         previous_shooting_direction(shooting_direction),
-        weapon(nullptr), is_stay_down(false), trigger(false), cheat_weapon_index(0) {}
+        weapon(nullptr), trigger(false), cheat_weapon_index(0) {}
 
 void Player::get_data(int& id, int& x, int& y, TypeWeapon& weapon_,
                       bool& helmet_equipped, bool& chest_armor_equipped,
@@ -63,24 +63,29 @@ void Player::update(const MatchMap& colition_map, std::vector <Bullet> &bullets,
 
     if (is_alive){
         if(object.is_out_of_map()){
+            move_action == TypeMoveAction::STAY_DOWN;
             is_alive = false;
-        } else {
-            if (is_stay_down){
-                move_action = TypeMoveAction::STAY_DOWN;
-                object.move(colition_map);
-            } else {
-                object.check_moving_dir(colition_map); // Si esta en vel = 0 pero puede empezar a moverse
-                
-                object.move(colition_map);
-            	object.update_action(move_action);
-                this->update_shooting_direction();
-                if (trigger){
-                    this->shoot(bullets, grenades);
-                }
+            return;
+        }
+        
+        object.update_action(move_action);
+        
+        if (move_action != TypeMoveAction::STAY_DOWN){
+            object.check_moving_dir(colition_map); // Si esta en vel = 0 pero puede empezar a moverse
+            
+            this->update_shooting_direction();
+            if (trigger){
+                this->shoot(bullets, grenades);
             }
         }
+        
+        object.move(colition_map);
+        
+        
     } else {
-        this->stay_down_start();
+        move_action = TypeMoveAction::STAY_DOWN;
+        object.move(colition_map);
+        //this->stay_down_start();
     }
 
 }
@@ -170,6 +175,8 @@ void Player::take_damage(int dmg){
             is_alive = false;
             doing_action=TypeDoingAction::DAMAGED;
             player_sounds.push_back(SoundEventType::PLAYER_DIED);
+            
+            object.stop_moving_x();
         } else {
             player_sounds.push_back(SoundEventType::PLAYER_DAMAGED);
         }
@@ -230,23 +237,13 @@ void Player::equip_chest_armor(){
 }
 
 void Player::stay_down_start(){
-    if(object.isOnAir()){
-       return;
+    if(object.stay_down_start()){
+        move_action = TypeMoveAction::STAY_DOWN;
     }
     
-    is_stay_down = true;
-    
-    move_action = TypeMoveAction::STAY_DOWN;
-    object.stay_down_start();
 }
 
 void Player::stay_down_end(){
-    if(object.isOnAir()){
-       return;
-    }
-    
-    is_stay_down = false;
-    move_action = TypeMoveAction::NONE;
     object.stay_down_end();
 }
 
