@@ -2,11 +2,9 @@
 #ifndef BULLET_H
 #define BULLET_H
 
-#include "physical_object.h"
-#include "physical_bullet.h"
+#include "server/logic/physical/physical_bullet.h"
+#include "server/logic/physical/match_map.h"
 #include "common/dtosobject.h"
-#include "physical_grenade.h"
-#include "match_map.h"
 #include "tuple.h"
 
 class Bullet {
