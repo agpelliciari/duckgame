@@ -2,7 +2,7 @@
 #include "laser_rifle_weapon.h"
 #include <ctime>
 
-LaserRifleWeapon::LaserRifleWeapon(): ammo(10), reload_time(15), bullet_range(30),
+LaserRifleWeapon::LaserRifleWeapon(int base_ammo): ammo(10*base_ammo), reload_time(15), bullet_range(30),
         dispersion_factor(5), last_shoot_time(0){}
 
 void LaserRifleWeapon::get_type(TypeDynamicObject &type){

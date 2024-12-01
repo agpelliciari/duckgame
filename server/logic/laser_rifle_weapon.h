@@ -23,7 +23,7 @@ class LaserRifleWeapon : public Weapon{
         int last_shoot_time;
 
     public:
-        LaserRifleWeapon();
+        LaserRifleWeapon(int base_ammo);
         
         SoundEventType shoot_sound() const override;        
         void get_weapon(TypeWeapon& type) override;

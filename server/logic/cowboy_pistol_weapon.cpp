@@ -2,7 +2,7 @@
 
 #include "cowboy_pistol_weapon.h"
 
-CowboyPistolWeapon::CowboyPistolWeapon(): ammo(6), bullet_range(20){}
+CowboyPistolWeapon::CowboyPistolWeapon(int base_ammo): ammo(6*base_ammo), bullet_range(20){}
 
 void CowboyPistolWeapon::get_weapon(TypeWeapon& type){
     type = TypeWeapon::PISTOLA_COWBOY;

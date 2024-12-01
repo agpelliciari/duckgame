@@ -23,7 +23,7 @@ class ShotgunWeapon : public Weapon{
         int bullet_range;
 
     public:
-        ShotgunWeapon();
+        ShotgunWeapon(int base_ammo);
         
         SoundEventType shoot_sound() const override;                
         void get_weapon(TypeWeapon& type) override;

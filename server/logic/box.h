@@ -36,14 +36,14 @@ class Box {
 
     public:
 
-        Box(int id, int spawn_x, int spawn_y);
+        Box(int id, int hp, int spawn_x, int spawn_y);
         Tuple get_spawn_point();
         Tuple get_dimension();
         bool is_spawned();
         bool destroyed();
         void take_damage();
         bool same_id(int id);
-        std::unique_ptr<Weapon> get_item();
+        std::unique_ptr<Weapon> get_item(const int base_mun);
         
         int get_id() const;
 

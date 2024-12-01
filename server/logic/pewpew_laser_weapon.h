@@ -19,7 +19,7 @@ class PewPewLaserWeapon : public Weapon {
         int bullet_range;
 
     public:
-        PewPewLaserWeapon();
+        PewPewLaserWeapon(int base_ammo);
         SoundEventType shoot_sound() const override;                
         void get_weapon(TypeWeapon& type) override;
         void get_type(TypeDynamicObject &type) override;

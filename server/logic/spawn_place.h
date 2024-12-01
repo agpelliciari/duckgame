@@ -47,8 +47,8 @@ class SpawnPlace {
         Tuple get_dimension();
         bool is_on_range(int player_position_x, int player_position_y);
         bool is_spawned();
-        void spawn_item();
-        void pass_time();
+        void spawn_item(int base_mun);
+        void pass_time(int base_mun);
         
         void take_item(TypeDynamicObject &item);
         

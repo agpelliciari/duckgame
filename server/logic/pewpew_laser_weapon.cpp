@@ -2,7 +2,7 @@
 
 #include "pewpew_laser_weapon.h"
 
-PewPewLaserWeapon::PewPewLaserWeapon(): ammo(12), bullet_range(35){}
+PewPewLaserWeapon::PewPewLaserWeapon(int base_ammo): ammo(12*base_ammo), bullet_range(35){}
 
 void PewPewLaserWeapon::get_weapon(TypeWeapon& type){
     type = TypeWeapon::PEW_PEW_LASER;

@@ -20,7 +20,7 @@ class AK47Weapon: public Weapon {
         int bullet_range;
 
     public:
-        AK47Weapon();
+        AK47Weapon(int _base_ammo);
         
         SoundEventType shoot_sound() const override;                
         void get_weapon(TypeWeapon& type) override;

@@ -3,7 +3,7 @@
 #include <ctime>
 #include <iostream>
 
-ShotgunWeapon::ShotgunWeapon(): ammo(3), charging_time(2),
+ShotgunWeapon::ShotgunWeapon(int base_ammo): ammo(3* base_ammo), charging_time(2),
         init_charging_time(0), final_charging_time(0), charged(false), bullet_range(7){};
 
 void ShotgunWeapon::get_type(TypeDynamicObject &type){

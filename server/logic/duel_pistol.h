@@ -18,7 +18,7 @@ class DuelPistol : public Weapon{
         int bullet_range;
 
     public:
-        DuelPistol();
+        DuelPistol(int base_ammo);
         
         
         SoundEventType shoot_sound() const override;                

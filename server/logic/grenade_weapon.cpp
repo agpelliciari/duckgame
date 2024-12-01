@@ -1,7 +1,7 @@
 #include <ctime>
 #include "grenade_weapon.h"
 
-GrenadeWeapon::GrenadeWeapon():ammo(1){}
+GrenadeWeapon::GrenadeWeapon(int base_ammo):ammo(base_ammo){}
 
 void GrenadeWeapon::get_weapon(TypeWeapon& type){
     type = TypeWeapon::GRANADA;

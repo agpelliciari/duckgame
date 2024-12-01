@@ -3,7 +3,7 @@
 #include <ctime>
 #include <iostream>
 
-SniperWeapon::SniperWeapon(): ammo(2), charging_time(2),
+SniperWeapon::SniperWeapon(int base_ammo): ammo(2 * base_ammo), charging_time(2),
         init_charging_time(0), final_charging_time(0),charged(false), bullet_range(64){};
 
 void SniperWeapon::get_type(TypeDynamicObject &type){

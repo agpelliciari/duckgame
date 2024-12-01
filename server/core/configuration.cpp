@@ -18,11 +18,11 @@ Configuration::Configuration():
     player_jmp_force(40),
     player_flap_force(10),
     player_flaps(9),
+    flap_grav(3),
+    fps(FPS),
     frame_delay(MS_FPS),
     rounds_per_set(5),
     wins_needed(10),
-    magnum_dmg(1),
-    magnum_munition(1),
     armor_health(1),
     box_health(1),
     item_spawn_time(1)
@@ -38,12 +38,13 @@ Configuration::Configuration(const char* config): Configuration() {
             // Dejenme usar printf!!!!
             printf("Base dmg: %u base munition: %u\n",base_dmg, base_munition);
             
-            reader.readMagnumInfo(magnum_dmg, magnum_munition);
-            printf("magnum dmg: %u magnum munition: %u\n",magnum_dmg, magnum_munition);
+            //reader.readMagnumInfo(magnum_dmg, magnum_munition);
+            //printf("magnum dmg: %u magnum munition: %u\n",magnum_dmg, magnum_munition);
 
-            reader.readPlayerInfo(player_health, player_speed,player_jmp_force,player_flap_force,player_flaps);
+            reader.readPlayerInfo(player_health, player_speed,player_jmp_force,
+                                  player_flap_force,player_flaps,flap_grav);
             printf("player hp: %u speed: %u jmp force: %d\n",player_health, player_speed,player_jmp_force);
-            printf("player flap_force: %d flap_count: %u\n",player_flap_force,player_flaps);
+            printf("player flap_force: %d flap_count: %u flap grav: %d\n",player_flap_force,player_flaps,flap_grav);
             
             
             
@@ -59,8 +60,8 @@ Configuration::Configuration(const char* config): Configuration() {
             reader.readItemSpawnTime(item_spawn_time);
             printf("item spawn time: %u\n",item_spawn_time);
 
-            reader.readMSDelay(frame_delay);
-            printf("delay frame: %ums\n",frame_delay);
+            reader.readMSDelay(fps, frame_delay);
+            printf("fps: %d delay frame: %ums\n",fps,frame_delay);
             reader.readGravity(gravity);
             printf("gravity : %d\n",gravity);
 

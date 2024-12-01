@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include <ctime>
 
-DuelPistol::DuelPistol():ammo(1), bullet_range(5){}
+DuelPistol::DuelPistol(int base_ammo):ammo(base_ammo), bullet_range(5){}
 
 void DuelPistol::get_weapon(TypeWeapon& type){
     type = TypeWeapon::MAGNUM;

@@ -102,10 +102,13 @@ void PhysicalPlayer::stay_down_end(){
 
 bool PhysicalPlayer::try_flap_start(){
     if (speed.y < 0 && flap_attemps > 0) {
+        speed.y = 0;
         this->add_speed(0, configs.player_flap_force);
         
         hold_flap = true;
-        acceleration.y = -3;
+        acceleration.y = -configs.flap_grav;
+        
+        std::cout << "AFTER FLAP VEL "<< speed.y << "Acc "<< acceleration.y<<std::endl;
         flap_attemps --;
         return true;
     }
@@ -113,10 +116,9 @@ bool PhysicalPlayer::try_flap_start(){
     return false;
 }
 bool PhysicalPlayer::jump_start(){
-    if (isOnAir()) {
+    if (isOnAir() || hold_flap) {
         return false;
     }
-    hold_flap = false;
     
     //std::cout << "JMP FORCE ES " << configs.player_jmp_force<< std::endl;
     add_speed(0, configs.player_jmp_force);

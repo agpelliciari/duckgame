@@ -16,7 +16,7 @@ class GrenadeWeapon : public Weapon{
     private:
         int ammo;
     public:
-        GrenadeWeapon();
+        GrenadeWeapon(int base_ammo);
         void get_weapon(TypeWeapon& type) override;
         void get_type(TypeDynamicObject &type) override;
         

@@ -19,7 +19,7 @@ class CowboyPistolWeapon: public Weapon{
         int bullet_range;
 
     public:
-        CowboyPistolWeapon();
+        CowboyPistolWeapon(int _base_ammo);
         
         SoundEventType shoot_sound() const override;                
         void get_weapon(TypeWeapon& type) override;

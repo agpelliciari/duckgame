@@ -8,7 +8,7 @@
 #define KNOCK_BACK_DURATION 4
 #define KNOCK_BACK_MOMENTUM 20
 
-MagnumWeapon::MagnumWeapon(): ammo(6), bullet_range(20){}
+MagnumWeapon::MagnumWeapon(int base_ammo): ammo(6*base_ammo), bullet_range(20){}
 
 void MagnumWeapon::get_weapon(TypeWeapon& type){
     type = TypeWeapon::MAGNUM;

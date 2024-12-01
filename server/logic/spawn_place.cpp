@@ -14,7 +14,7 @@ SpawnPlace::SpawnPlace(int position_x_, int position_y_,
 
             }
 
-void SpawnPlace::spawn_item() {
+void SpawnPlace::spawn_item(int base_mun) {
     // TODO refactorizar este switch
     if (spawned) {
         return;
@@ -26,35 +26,35 @@ void SpawnPlace::spawn_item() {
     
     switch (random_weapon){
         case 0:
-            possible_weapon = std::make_unique<CowboyPistolWeapon>();
+            possible_weapon = std::make_unique<CowboyPistolWeapon>(base_mun);
             spawned = true;
             break;
         case 1:
-            possible_weapon = std::make_unique<MagnumWeapon>();
+            possible_weapon = std::make_unique<MagnumWeapon>(base_mun);
             spawned = true;
             break;
         case 2:
-            possible_weapon = std::make_unique<DuelPistol>();
+            possible_weapon = std::make_unique<DuelPistol>(base_mun);
             spawned = true;
             break;
         case 3:
-            possible_weapon = std::make_unique<PewPewLaserWeapon>();
+            possible_weapon = std::make_unique<PewPewLaserWeapon>(base_mun);
             spawned = true;
             break;
         case 4:
-            possible_weapon = std::make_unique<SniperWeapon>();
+            possible_weapon = std::make_unique<SniperWeapon>(base_mun);
             spawned = true;
             break;
         case 5:
-            possible_weapon = std::make_unique<ShotgunWeapon>();
+            possible_weapon = std::make_unique<ShotgunWeapon>(base_mun);
             spawned = true;
             break;
         case 6:
-            possible_weapon = std::make_unique<AK47Weapon>();
+            possible_weapon = std::make_unique<AK47Weapon>(base_mun);
             spawned = true;
             break;
         case 7:
-            possible_weapon = std::make_unique<LaserRifleWeapon>();
+            possible_weapon = std::make_unique<LaserRifleWeapon>(base_mun);
             spawned = true;
             break;
 
@@ -69,12 +69,12 @@ void SpawnPlace::spawn_item() {
             spawned = true;
             break;
         case 10:
-            possible_weapon = std::make_unique<GrenadeWeapon>();
+            possible_weapon = std::make_unique<GrenadeWeapon>(base_mun);
             spawned = true;
             break;
 
         default:
-            possible_weapon = std::make_unique<CowboyPistolWeapon>();
+            possible_weapon = std::make_unique<CowboyPistolWeapon>(base_mun);
             spawned = true;
             break;
     }
@@ -134,12 +134,12 @@ bool SpawnPlace::is_spawned() {
 
 
 
-void SpawnPlace::pass_time(){
+void SpawnPlace::pass_time(int base_mun){
     if (!spawned && time_respawn > 0) {
         timer--;
         //std::cout << "TIMER SPAWNER: "<< timer <<std::endl;
         if (timer <= 0) {
-            this->spawn_item();
+            this->spawn_item(base_mun);
         }
     }
 
@@ -148,7 +148,7 @@ void SpawnPlace::pass_time(){
 void SpawnPlace::take_item(TypeDynamicObject &item_) {
 
     spawned = false;
-    timer = this->time_respawn / this->time_sleep;
+    timer = this->time_respawn * this->time_sleep;
     if (possible_helmet){
         item_ = TypeDynamicObject::HELMET;
 

@@ -150,7 +150,7 @@ bool Player::is_still_alive(){
     return is_alive;
 }
 
-void Player::take_damage(){
+void Player::take_damage(int dmg){
     if (is_alive) {
         if (helmet){
             helmet = false;
@@ -163,9 +163,10 @@ void Player::take_damage(){
             return;
         }
 
-        life_points--;
+        life_points-=dmg;
 
-        if (life_points == 0) {
+        if (life_points <= 0) {
+            life_points = 0;
             is_alive = false;
             doing_action=TypeDoingAction::DAMAGED;
             player_sounds.push_back(SoundEventType::PLAYER_DIED);
@@ -347,7 +348,7 @@ void Player::get_sounds(std::vector<SoundEventType>& sounds){
     player_sounds.clear();
 }
 
-void Player::cheat_weapon(){
+void Player::cheat_weapon(int base_mun){
     cheat_weapon_index ++;
     if (cheat_weapon_index > 9){
         cheat_weapon_index = 0;
@@ -357,31 +358,31 @@ void Player::cheat_weapon(){
             weapon = nullptr;
             break;
         case 1:
-            weapon = std::make_unique<CowboyPistolWeapon>();
+            weapon = std::make_unique<CowboyPistolWeapon>(base_mun);
             break;
         case 2:
-            weapon = std::make_unique<DuelPistol>();
+            weapon = std::make_unique<DuelPistol>(base_mun);
             break;
         case 3:
-            weapon = std::make_unique<MagnumWeapon>();
+            weapon = std::make_unique<MagnumWeapon>(base_mun);
             break;
         case 4:
-            weapon = std::make_unique<ShotgunWeapon>();
+            weapon = std::make_unique<ShotgunWeapon>(base_mun);
             break;
         case 5:
-            weapon = std::make_unique<SniperWeapon>();
+            weapon = std::make_unique<SniperWeapon>(base_mun);
             break;
         case 6:
-            weapon = std::make_unique<AK47Weapon>();
+            weapon = std::make_unique<AK47Weapon>(base_mun);
             break;
         case 7:
-            weapon = std::make_unique<PewPewLaserWeapon>();
+            weapon = std::make_unique<PewPewLaserWeapon>(base_mun);
             break;
         case 8:
-            weapon = std::make_unique<LaserRifleWeapon>();
+            weapon = std::make_unique<LaserRifleWeapon>(base_mun);
             break;
         case 9:
-            weapon = std::make_unique<GrenadeWeapon>();
+            weapon = std::make_unique<GrenadeWeapon>(base_mun);
             break;
     }
 }

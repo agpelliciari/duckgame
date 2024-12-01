@@ -5,7 +5,7 @@
 #define KNOCK_BACK_DURATION 2
 #define KNOCK_BACK_MOMENTUM 10
 
-AK47Weapon::AK47Weapon(): ammo(30), reload_time(15), dispersion_index(0), bullet_range(13) {}
+AK47Weapon::AK47Weapon(int base_ammo): ammo(base_ammo*30), reload_time(15), dispersion_index(0), bullet_range(13) {}
 
 
 SoundEventType AK47Weapon::shoot_sound() const{

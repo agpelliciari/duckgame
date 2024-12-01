@@ -17,7 +17,7 @@ class BananaWeapon : public Weapon{
         int ammo;
 
     public:
-        BananaWeapon();
+        BananaWeapon(int _base_ammo);
         
         SoundEventType shoot_sound() const override;                
         void get_weapon(TypeWeapon& type) override;

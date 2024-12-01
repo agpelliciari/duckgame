@@ -64,7 +64,7 @@ class Player {
         bool has_equipment();
         bool pick_up_item(std::vector<SpawnPlace> &spawn_places, std::vector<DroppedItem> &dropped_items);
         void drop_item(std::vector<DroppedItem> &dropped_items);
-        void take_damage();
+        void take_damage(int dmg);
         void aim_up_start();
         void aim_up_end();
         void stay_down_start();
@@ -77,7 +77,7 @@ class Player {
         void shoot_end();
         void equip_chest_armor();
         void equip_helmet();
-        void cheat_weapon();
+        void cheat_weapon(int base_mun);
         void cheat_armor();
         void cheat_ammo();
         Tuple get_map_position();

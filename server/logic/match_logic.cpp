@@ -313,7 +313,7 @@ void MatchLogic::execute_move_command(int action_type, int index) {
 void MatchLogic::add_boxes(const std::vector<struct MapPoint>& boxes){
     int id_box = 0;
     for (const struct MapPoint& box: boxes) {
-        this->boxes.push_back(Box(id_box, box.x, box.y));
+        this->boxes.push_back(Box(id_box, configs.box_health, box.x, box.y));
         //std::cout << "-->ADDED BOX id: "<< id_box<<std::endl;
         id_box++;
     }
@@ -322,8 +322,8 @@ void MatchLogic::add_boxes(const std::vector<struct MapPoint>& boxes){
 void MatchLogic::add_items(const std::vector<struct MapPoint>& items){
     int id =0;
     for (const struct MapPoint& item: items) {
-        this->spawn_places.push_back(SpawnPlace(item.x, item.y, 16, 16, 5, 0.025, id));
-        spawn_places.back().spawn_item();
+        this->spawn_places.push_back(SpawnPlace(item.x, item.y, 16, 16, configs.item_spawn_time, configs.fps, id));
+        spawn_places.back().spawn_item(configs.base_munition);
         id++;
     }
 }
@@ -348,8 +348,8 @@ void MatchLogic::add_spawn_points(const std::vector<struct MapPoint>& spawn_poin
 void MatchLogic::add_item_spawns(const std::vector<struct MapPoint>& items_spawns){
     int id = 0;
     for (const struct MapPoint& spawn: items_spawns) {
-        this->spawn_places.push_back(SpawnPlace(spawn.x * 16, spawn.y *16, 16, 5, 10, 1000/30, id));
-        spawn_places.back().spawn_item();
+        this->spawn_places.push_back(SpawnPlace(spawn.x * 16, spawn.y *16, 16, 5, configs.item_spawn_time, configs.fps, id));
+        spawn_places.back().spawn_item(configs.base_munition);
         id ++;
     }
 }
@@ -361,7 +361,7 @@ void MatchLogic::add_bullet(Bullet bullet){
 void MatchLogic::damage_player(int id) {
     for (Player& player: players) {
         if (player.same_id(id)) {
-            player.take_damage();
+            player.take_damage(configs.base_dmg);
             return;
         }
     }
@@ -382,8 +382,9 @@ void MatchLogic::damage_box(int id,std::vector<GameEvent>& events) {
                 events.emplace_back(position.x, position.y, BOX_DESTROYED);
 
                 // Si es bomba SERIA EXPLOSION ! o asi
+                
 
-                dropped_items.push_back(DroppedItem(std::move(it->get_item()), position.x, position.y, 16, 16));
+                dropped_items.push_back(DroppedItem(std::move(it->get_item(configs.base_munition)), position.x, position.y, 16, 16));
                 it = boxes.erase(it);
                 return;
             }
@@ -453,13 +454,13 @@ void MatchLogic::clear_players(){
 
 void MatchLogic::update_spawn_places(){
     for (SpawnPlace &spawn: this->spawn_places) {
-        spawn.spawn_item();
+        spawn.spawn_item(configs.base_munition);
     }
 }
 
 void MatchLogic::update_spawn_points(){
     for (SpawnPlace &spawn: this->spawn_places) {
-        spawn.pass_time();
+        spawn.pass_time(configs.base_munition);
     }
 }
 
@@ -491,7 +492,7 @@ void MatchLogic::reset_map(){
 
 void MatchLogic::player_cheat_1() {
     for (Player& player: players) {
-        player.cheat_weapon();
+        player.cheat_weapon(configs.base_munition);
     }
 }
 
