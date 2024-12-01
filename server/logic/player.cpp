@@ -69,6 +69,8 @@ void Player::update(const MatchMap& colition_map, std::vector <Bullet> &bullets,
                 move_action = TypeMoveAction::STAY_DOWN;
                 object.move(colition_map);
             } else {
+                object.check_moving_dir(colition_map); // Si esta en vel = 0 pero puede empezar a moverse
+                
                 object.move(colition_map);
             	object.update_action(move_action);
                 this->update_shooting_direction();
@@ -113,6 +115,10 @@ void Player::update_shooting_direction(){
 void Player::add_speed(int speed_x, int speed_y) {
     this->object.add_speed(speed_x, speed_y);
 }
+void Player::change_move_dir(PlayerMovingDir new_dir){
+    this->object.change_moving(new_dir);
+}
+
 
 Tuple Player::get_map_position(){
     return object.get_position();

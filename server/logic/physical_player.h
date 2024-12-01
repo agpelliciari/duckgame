@@ -15,6 +15,12 @@
 
 class MatchMap;
 
+enum PlayerMovingDir {
+    NO_MOVE = 0,
+    MOVING_LEFT = -1,
+    MOVING_RIGHT = 1,
+};
+
 class PhysicalPlayer: public PhysicalObject {
 
     private:
@@ -25,6 +31,7 @@ class PhysicalPlayer: public PhysicalObject {
         Tuple initial_position;
         const Configuration& configs;
         int flap_attemps;
+        PlayerMovingDir moving_dir;
         
         bool on_air;
         bool out_of_map;
@@ -43,6 +50,11 @@ class PhysicalPlayer: public PhysicalObject {
         void jump_start();
         void jump_end();
         void update_action(TypeMoveAction& move_action);
+
+
+        void check_moving_dir(const MatchMap& colition_map);
+        void change_moving(PlayerMovingDir new_dir);
+
         void stop_moving_x();
 
 };

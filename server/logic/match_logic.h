@@ -49,28 +49,35 @@ public:
     MatchLogic(const Configuration& _configs);
     void execute_move_command(int action_type, int index);
     void add_player(int id, int spawn_point_index);
-    void add_player_speed(int id, int x, int y);
     void still_player(int id);
     void get_dtos(std::vector<PlayerDTO>& dtos, std::vector<DynamicObjDTO>& objects, std::vector<SoundEventType>& sounds);
     //void add_colition(PhysicalObject &object);
+    void clear_players();
+    void clear_objects();
+    
     void add_item_spawns(const std::vector<struct MapPoint>& items_spawns);
     void add_boxes(const std::vector<struct MapPoint>& boxes);
     void add_items(const std::vector<struct MapPoint>& items);
     void add_blocks(const std::vector<struct MapPoint>& blocks);
     void add_spawn_points(const std::vector<struct MapPoint>& spawn_points);
     void add_bullet(Bullet bullet);
+    
+    
+    void damage_player(int id);
+    void add_player_speed(int id, int x, int y);
+    void change_player_dir(int id, PlayerMovingDir dir);
+
     void player_shoot(int index);
     void player_shoot_end(int index);
     void player_aim_up_start(int index);
     void player_aim_up_end(int index);
     void player_stay_down_start(int index);
     void player_stay_down_end(int index);
-    void damage_player(int id);
-    void clear_players();
-    void clear_objects();
     void player_toggle_pick_up_drop_item(int id);
     void player_jump_start(int id);
     void player_jump_end(int id);
+    
+    
     void resize_map(const int width, const int height);
     void reset_map();
 
