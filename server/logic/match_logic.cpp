@@ -59,6 +59,18 @@ MatchLogic::MatchLogic(const Configuration& _configs): colition_map(100, 100), c
     this->command_map[PlayerActionType::PICK_UP_DROP_ITEM] = [this](int index) {
         this->player_toggle_pick_up_drop_item(index);
     };
+
+    this->command_map[PlayerActionType::CHEAT_1] = [this](int index) {
+        this->player_cheat_1();
+    };
+
+    this->command_map[PlayerActionType::CHEAT_2] = [this](int index) {
+        this->player_cheat_2();
+    };
+
+    this->command_map[PlayerActionType::CHEAT_3] = [this](int index) {
+        this->player_cheat_3();
+    };
     // this->command_map[3] = [this](int index) { this->add_player_speed(index, 0, 0); };
 
 }
@@ -466,6 +478,25 @@ void MatchLogic::reset_map(){
     grenades.clear();
     
     colition_map.clear_map();
+}
+
+
+void MatchLogic::player_cheat_1() {
+    for (Player& player: players) {
+        player.cheat_weapon();
+    }
+}
+
+void MatchLogic::player_cheat_2() {
+    for (Player& player: players) {
+        player.cheat_ammo();
+    }
+}
+
+void MatchLogic::player_cheat_3() {
+    for (Player& player: players) {
+        player.cheat_armor();
+    }
 }
 
 MatchLogic::~MatchLogic() {}

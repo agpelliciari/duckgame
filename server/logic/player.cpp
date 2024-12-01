@@ -14,7 +14,7 @@ Player::Player(int id_, int initial_x, int initial_y, const Configuration& confi
         life_points(configs.player_health),
         shooting_direction(ShootingDirection::NONE),
         previous_shooting_direction(shooting_direction),
-        weapon(nullptr), is_stay_down(false), trigger(false) {}
+        weapon(nullptr), is_stay_down(false), trigger(false), cheat_weapon_index(0) {}
 
 void Player::get_data(int& id, int& x, int& y, TypeWeapon& weapon_,
                       bool& helmet_equipped, bool& chest_armor_equipped,
@@ -327,7 +327,44 @@ void Player::get_sounds(std::vector<SoundEventType>& sounds){
     player_sounds.clear();
 }
 
-void Player::cheat_weapon(){}
+void Player::cheat_weapon(){
+    cheat_weapon_index ++;
+    if (cheat_weapon_index > 9){
+        cheat_weapon_index = 0;
+    }
+    switch(cheat_weapon_index){
+        case 0:
+            weapon = nullptr;
+            break;
+        case 1:
+            weapon = std::make_unique<CowboyPistolWeapon>();
+            break;
+        case 2:
+            weapon = std::make_unique<DuelPistol>();
+            break;
+        case 3:
+            weapon = std::make_unique<MagnumWeapon>();
+            break;
+        case 4:
+            weapon = std::make_unique<ShotgunWeapon>();
+            break;
+        case 5:
+            weapon = std::make_unique<SniperWeapon>();
+            break;
+        case 6:
+            weapon = std::make_unique<AK47Weapon>();
+            break;
+        case 7:
+            weapon = std::make_unique<PewPewLaserWeapon>();
+            break;
+        case 8:
+            weapon = std::make_unique<LaserRifleWeapon>();
+            break;
+        case 9:
+            weapon = std::make_unique<GrenadeWeapon>();
+            break;
+    }
+}
 
 void Player::cheat_armor(){
     helmet = true;
@@ -335,7 +372,11 @@ void Player::cheat_armor(){
 }
 
 void Player::cheat_ammo(){
-
+    if (weapon != nullptr){
+        weapon->cheat_ammo();
+    }
 }
+
+
 
 //Tuple Player::get_position() { return object.get_real_position(); }
