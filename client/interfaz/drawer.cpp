@@ -190,7 +190,7 @@ void Drawer::getWeaponParameters(const PlayerDTO& player, SDL_RendererFlip flip,
             x = camera.getScreenX(player.pos.x + getTextureFlipValue(flip, 1, 14) - 8);
             y = camera.getScreenY(player.pos.y + 2);
         }
-        sizeAdjustment = 2;
+        sizeAdjustment = 3;
     } else if (player.weapon == TypeWeapon::SNIPER) {
         if (player.aiming_up) {
             angle = getTextureFlipValue(flip, 90.0, -90.0);
@@ -230,10 +230,10 @@ void Drawer::getShotExplosionParameters(const PlayerDTO& player, SDL_RendererFli
             explosionX = x + getTextureFlipValue(flip, -6, 6);
             explosionY = y + getTextureFlipValue(flip, -25, -45);
         } else {
-            explosionX = x + getTextureFlipValue(flip, -25, 45);
+            explosionX = x + getTextureFlipValue(flip, -15, 50);
             explosionY = y + 8;
         }
-    } else if (player.weapon == TypeWeapon::ESCOPETA) {
+    } else if (player.weapon == TypeWeapon::ESCOPETA || player.weapon == TypeWeapon::AK_47) {
         if (player.aiming_up) {
             explosionX = x + getTextureFlipValue(flip, -12, 14);
             explosionY = y + getTextureFlipValue(flip, -25, -57);
@@ -248,6 +248,14 @@ void Drawer::getShotExplosionParameters(const PlayerDTO& player, SDL_RendererFli
         } else {
             explosionX = x + getTextureFlipValue(flip, -27, 65);
             explosionY = y - 4;
+        }
+    } else if (player.weapon == TypeWeapon::LASER_RIFLE) {
+        if (player.aiming_up) {
+            explosionX = x + getTextureFlipValue(flip, 10, -8);
+            explosionY = y + getTextureFlipValue(flip, -60, -45);
+        } else {
+            explosionX = x + getTextureFlipValue(flip, -55, 45);
+            explosionY = y - 10;
         }
     } else {
         if (player.aiming_up) {
@@ -349,6 +357,13 @@ void Drawer::drawDynamicObject(const DynamicObjDTO& object) {
         case TypeDynamicObject::LASER:
             renderer.Copy(
                     textures.getTexture("/weapons/laserBeam.png"), SDL2pp::Rect(0, 0, 1, 8),
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y + 10),
+                                 camera.getScaledSize(1), camera.getScaledSize(8)));
+            break;
+        
+        case TypeDynamicObject::LASER_2:
+            renderer.Copy(
+                    textures.getTexture("/weapons/yellowLaser.png"), SDL2pp::Rect(0, 0, 1, 5),
                     SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y + 10),
                                  camera.getScaledSize(1), camera.getScaledSize(8)));
             break;
