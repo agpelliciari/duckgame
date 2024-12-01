@@ -354,13 +354,17 @@ void MatchLogic::damage_player(int id) {
 
 
 
-void MatchLogic::damage_box(int id) {
+void MatchLogic::damage_box(int id,std::vector<GameEvent>& events) {
     for (auto it = boxes.begin(); it!=boxes.end();) {
         if (it->same_id(id)) {
             it->take_damage();
             if (it->destroyed()){
                 Tuple position = it->get_spawn_point();
                 //TODO: agregar sonido de caja
+                events.emplace_back(position.x, position.y, BOX_DESTROYED);
+                
+                // Si es bomba SERIA EXPLOSION ! o asi
+                
                 dropped_items.push_back(DroppedItem(std::move(it->get_item()), position.x, position.y, 16, 16));
                 it = boxes.erase(it);
                 return;
@@ -370,7 +374,7 @@ void MatchLogic::damage_box(int id) {
     }
 }
 
-void MatchLogic::update_bullets(){
+void MatchLogic::update_bullets(std::vector<GameEvent>& events){
     for (auto bullet = bullets.begin(); bullet!=bullets.end();) {
         bool impacted = false;
         Collision collision(0, CollisionTypeMap::NONE);
@@ -380,7 +384,9 @@ void MatchLogic::update_bullets(){
                 this->damage_player(collision.id);
             }
             if (collision.type == CollisionTypeMap::BOX) {
-                this->damage_box(collision.id);
+                this->damage_box(collision.id,events);
+                
+                
             }
             std::cout << "ERASING BULLET !!\n";
             bullet = bullets.erase(bullet);
@@ -391,10 +397,17 @@ void MatchLogic::update_bullets(){
     }
 }
 
-void MatchLogic::update_grenades(){
+void MatchLogic::update_grenades(std::vector<GameEvent>& events){
     for (auto it = grenades.begin(); it!=grenades.end();) {
-        if (it->exploded(bullets) || it->out_of_map()){
+        if (it->exploded(bullets)){
+            int x = 0;
+            int y = 0;
+            it->get_pos(x,y);
+            events.emplace_back(x,y,GRENADE_EXPLOSION);
             it = grenades.erase(it);
+        } else if (it->out_of_map()){
+            it = grenades.erase(it);
+            
         } else {
             it->move(colition_map);
             it ++;

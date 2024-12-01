@@ -27,6 +27,7 @@ class Grenade {
         void shoot_up();
         bool exploded(std::vector<Bullet> &bullets);
         void get_map_info(int &pos_x, int &pos_y, TypeDynamicObject &type);
+        void get_pos(int &pos_x, int &pos_y);
         bool out_of_map();
 
 };

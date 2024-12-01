@@ -135,16 +135,18 @@ bool MatchState::only_one_winner(MatchStatsInfo& stats, int &id_champion){
 }
 
 
-void MatchState::step() {
+void MatchState::step() {    
     std::vector<ActionCommand> curr_commands = acciones.pop_commands();
     for (ActionCommand& command: curr_commands) {
         command.execute();
     }
+    
 
     match_logic.update_colition_map();
     match_logic.update_players(this->id_alive_players);
-    match_logic.update_bullets();
-    match_logic.update_grenades();
+    
+    match_logic.update_bullets(state_curr.events);
+    match_logic.update_grenades(state_curr.events);
     match_logic.update_dropped_items();
     match_logic.update_spawn_points();
 }
@@ -167,9 +169,10 @@ void MatchState::execute_commands() {
 void MatchState::stop() { running = false; }
 
 void MatchState::send_results(MatchObserver& observer) {
-    MatchDto dto;
-    match_logic.get_dtos(dto.players, dto.objects, dto.sounds);
-    observer.updateState(dto);
+    match_logic.get_dtos(state_curr.players, state_curr.objects, state_curr.sounds);
+    observer.updateState(state_curr);
+    
+    state_curr = MatchDto(); // Reset.
 }
 
 MatchState::~MatchState() {}

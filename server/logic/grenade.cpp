@@ -50,6 +50,11 @@ void Grenade::get_map_info(int &pos_x, int &pos_y, TypeDynamicObject &type_){
     type_ = this->type;
 }
 
+void Grenade::get_pos(int &pos_x, int &pos_y){
+    physical_grenade.get_map_info(pos_x, pos_y);
+}
+
+
 bool Grenade::out_of_map(){
     return physical_grenade.out_of_map;
 }

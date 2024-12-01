@@ -52,8 +52,6 @@ public:
     void add_player_speed(int id, int x, int y);
     void still_player(int id);
     void get_dtos(std::vector<PlayerDTO>& dtos, std::vector<DynamicObjDTO>& objects, std::vector<SoundEventType>& sounds);
-    void update_players(std::vector<int> &id_alive_players);
-    void update_colition_map();
     //void add_colition(PhysicalObject &object);
     void add_item_spawns(const std::vector<struct MapPoint>& items_spawns);
     void add_boxes(const std::vector<struct MapPoint>& boxes);
@@ -61,7 +59,6 @@ public:
     void add_blocks(const std::vector<struct MapPoint>& blocks);
     void add_spawn_points(const std::vector<struct MapPoint>& spawn_points);
     void add_bullet(Bullet bullet);
-    void update_bullets();
     void player_shoot(int index);
     void player_shoot_end(int index);
     void player_aim_up_start(int index);
@@ -69,18 +66,26 @@ public:
     void player_stay_down_start(int index);
     void player_stay_down_end(int index);
     void damage_player(int id);
-    void damage_box(int id);
     void clear_players();
     void clear_objects();
     void player_toggle_pick_up_drop_item(int id);
     void player_jump_start(int id);
     void player_jump_end(int id);
+    void resize_map(const int width, const int height);
+    void reset_map();
+
+
+    void damage_box(int id,std::vector<GameEvent>& events);
+
+    void update_bullets(std::vector<GameEvent>& events);
+    void update_grenades(std::vector<GameEvent>& events);
+    
     void update_dropped_items();
     void update_spawn_places();
     void update_spawn_points();
-    void update_grenades();
-    void resize_map(const int width, const int height);
-    void reset_map();
+    void update_players(std::vector<int> &id_alive_players);
+    void update_colition_map();
+
 
     ~MatchLogic();
 };
