@@ -4,14 +4,14 @@
 
 #include <vector>
 #include <memory>
-#include "weapon.h"
-#include "tuple.h"
-#include "cowboy_pistol_weapon.h"
-#include "magnum_weapon.h"
-#include "pewpew_laser_weapon.h"
-#include "duel_pistol.h"
-#include "sniper_weapon.h"
-#include "shotgun_weapon.h"
+#include "server/logic/weapons/weapon.h"
+#include "server/logic/physical/tuple.h"
+#include "server/logic/weapons/cowboy_pistol_weapon.h"
+#include "server/logic/weapons/magnum_weapon.h"
+#include "server/logic/weapons/pewpew_laser_weapon.h"
+#include "server/logic/weapons/duel_pistol.h"
+#include "server/logic/weapons/sniper_weapon.h"
+#include "server/logic/weapons/shotgun_weapon.h"
 
 
 class DroppedItem {

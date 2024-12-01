@@ -3,11 +3,11 @@
 #define COWBOY_PISTOL_WEAPON_H
 
 #include "weapon.h"
-#include "tuple.h"
+#include "server/logic/physical/tuple.h"
 #include "common/dtosplayer.h"
-#include "shooting_direction.h"
-#include "physical_bullet.h"
-#include "physical_player.h"
+#include "server/logic/weapons/shooting_direction.h"
+#include "server/logic/physical/physical_bullet.h"
+#include "server/logic/physical/physical_player.h"
 #include "bullet.h"
 #include "common/gameevents.h"
 #include "grenade.h"

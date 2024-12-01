@@ -2,9 +2,9 @@
 #define MATCH_MAP_H
 
 #include <vector>
-#include "map_object.h"
-#include "tuple.h"
-#include "collision.h"
+#include "server/logic/physical/map_object.h"
+#include "server/logic/physical/tuple.h"
+#include "server/logic/physical/collision.h"
 #include "type_collision.h"
 
 class MatchMap {

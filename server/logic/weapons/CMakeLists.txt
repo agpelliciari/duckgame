@@ -27,5 +27,9 @@ target_sources(taller_server_logic
             grenade_weapon.h
             bullet.h
             grenade.h
+            shooting_direction.h
             
     )
+
+
+    

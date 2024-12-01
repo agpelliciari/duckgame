@@ -2,9 +2,9 @@
 #ifndef PHYSICAL_GRENADE_H
 #define PHYSICAL_GRENADE_H
 
-#include "physical_object.h"
+#include "server/logic/physical/physical_object.h"
 #include "common/dtosobject.h"
-#include "collision.h"
+#include "server/logic/physical/collision.h"
 #include "type_collision.h"
 
 class PhysicalGrenade : public PhysicalObject{

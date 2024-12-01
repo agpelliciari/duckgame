@@ -5,7 +5,7 @@
 #include "server/logic/physical/physical_bullet.h"
 #include "server/logic/physical/match_map.h"
 #include "common/dtosobject.h"
-#include "tuple.h"
+#include "server/logic/physical/tuple.h"
 
 class Bullet {
 

@@ -24,6 +24,5 @@ target_sources(taller_server_logic
             armor.h
             command.h
             action_command.h
-            shooting_direction.h
             dropped_item.h
     )

@@ -18,4 +18,5 @@ target_sources(taller_server_logic
             collision.h
             map_object.h
             tuple.h
+            type_collision.h
     )

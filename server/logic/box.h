@@ -4,24 +4,24 @@
 #define BOX_H
 
 #include <vector>
-#include "tuple.h"
+#include "server/logic/physical/tuple.h"
 #include "common/dtosplayer.h"
 #include "common/dtosmap.h"
 #include "common/dtosgame.h"
 #include "common/dtosobject.h"
-#include "weapon.h"
+#include "server/logic/weapons/weapon.h"
 #include <memory>
 #include <cstdlib>
 #include <ctime>
-#include "cowboy_pistol_weapon.h"
-#include "magnum_weapon.h"
-#include "pewpew_laser_weapon.h"
-#include "duel_pistol.h"
-#include "sniper_weapon.h"
-#include "shotgun_weapon.h"
-#include "ak47_weapon.h"
-#include "laser_rifle_weapon.h"
-#include "grenade_weapon.h"
+#include "server/logic/weapons/cowboy_pistol_weapon.h"
+#include "server/logic/weapons/magnum_weapon.h"
+#include "server/logic/weapons/pewpew_laser_weapon.h"
+#include "server/logic/weapons/duel_pistol.h"
+#include "server/logic/weapons/sniper_weapon.h"
+#include "server/logic/weapons/shotgun_weapon.h"
+#include "server/logic/weapons/ak47_weapon.h"
+#include "server/logic/weapons/laser_rifle_weapon.h"
+#include "server/logic/weapons/grenade_weapon.h"
 
 class Box {
 

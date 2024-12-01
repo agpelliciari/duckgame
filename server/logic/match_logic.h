@@ -8,16 +8,16 @@
 #include "common/dtosobject.h"
 #include "spawn_place.h"
 #include "box.h"
-#include "match_map.h"
+#include "server/logic/physical/match_map.h"
 #include "player.h"
-#include "tuple.h"
-#include "collision.h"
-#include "type_collision.h"
-#include "physical_bullet.h"
+#include "server/logic/physical/tuple.h"
+#include "server/logic/physical/collision.h"
+#include "server/logic/physical/type_collision.h"
+#include "server/logic/physical/physical_bullet.h"
 #include "dropped_item.h"
 #include "server/core/configuration.h"
-#include "bullet.h"
-#include "grenade.h"
+#include "server/logic/weapons/bullet.h"
+#include "server/logic/weapons/grenade.h"
 
 #ifndef MATCH_LOGIC_H
 #define MATCH_LOGIC_H

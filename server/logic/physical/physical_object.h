@@ -2,9 +2,9 @@
 #ifndef PHYSICAL_OBJECT_H
 #define PHYSICAL_OBJECT_H
 
-#include "match_map.h"
-#include "tuple.h"
-#include "collision.h"
+#include "server/logic/physical/match_map.h"
+#include "server/logic/physical/tuple.h"
+#include "server/logic/physical/collision.h"
 #include "type_collision.h"
 
 class MatchMap;

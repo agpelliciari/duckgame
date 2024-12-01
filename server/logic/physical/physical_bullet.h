@@ -3,9 +3,9 @@
 #ifndef PHYSICAL_BULLET_H
 #define PHYSICAL_BULLET_H
 
-#include "physical_object.h"
+#include "server/logic/physical/physical_object.h"
 #include "common/dtosobject.h"
-#include "collision.h"
+#include "server/logic/physical/collision.h"
 #include "type_collision.h"
 
 class PhysicalBullet: public PhysicalObject{

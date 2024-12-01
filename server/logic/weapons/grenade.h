@@ -3,11 +3,11 @@
 #define GRENADE_H
 
 #include <vector>
-#include "physical_object.h"
+#include "server/logic/physical/physical_grenade.h"
 #include "common/dtosobject.h"
 #include "bullet.h"
-#include "match_map.h"
-#include "tuple.h"
+#include "server/logic/physical/match_map.h"
+#include "server/logic/physical/tuple.h"
 
 class Grenade {
 

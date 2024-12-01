@@ -2,8 +2,8 @@
 #ifndef MAP_OBJECT_H
 #define MAP_OBJECT_H
 
-#include "tuple.h"
-#include "collision.h"
+#include "server/logic/physical/tuple.h"
+#include "server/logic/physical/collision.h"
 #include "type_collision.h"
 
 struct MapObjectServer {

@@ -3,13 +3,13 @@
 #define PHYSICAL_PLAYER_H
 
 
-#include "physical_object.h"
+#include "server/logic/physical/physical_object.h"
 #include <vector>
 #include "common/dtosplayer.h"
-#include "match_map.h"
-#include "tuple.h"
-#include "shooting_direction.h"
-#include "collision.h"
+#include "server/logic/physical/match_map.h"
+#include "server/logic/physical/tuple.h"
+#include "server/logic/weapons/shooting_direction.h"
+#include "server/logic/physical/collision.h"
 #include "type_collision.h"
 #include "server/core/configuration.h"
 
