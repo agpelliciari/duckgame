@@ -277,15 +277,15 @@ void Drawer::drawWeapon(const PlayerDTO& player, SDL_RendererFlip flip) {
             angle, SDL2pp::Point(0, 0), flip
         );
 
-        for (const auto& explosion : animation.getExplosions(player.id)) {
+        for (const ExplosionAnimation& explosion : animation.getExplosions(player.id)) {
             int explosionX, explosionY;
-            int size = explosion.spriteSize;
+            int size = explosion.getSpriteSize();
             
             getShotExplosionParameters(player, flip, x, y, explosionX, explosionY);
             
             renderer.Copy(
-                textures.getTexture(explosion.texture),
-                SDL2pp::Rect(explosion.currentFrame * size, 0, size, size),
+                textures.getTexture(explosion.getTexture()),
+                SDL2pp::Rect(explosion.getCurrentFrame() * size, 0, size, size),
                 SDL2pp::Rect(explosionX, explosionY, camera.getScaledSize(size), camera.getScaledSize(size)),
                 angle, SDL2pp::Point(0, 0), flip);
         }
@@ -574,6 +574,19 @@ void Drawer::drawPlayerStats(const MatchStatsInfo& matchStats, double scaleX, do
     }
 }
 
+void Drawer::drawExplosions() {
+    for (const BombExplosion& explosion: animation.getBombExplosions()) {
+        int size = explosion.getSpriteSize();
+        MapPoint pos = explosion.getPosition();
+        renderer.Copy(
+                textures.getTexture(explosion.getTexture()),
+                SDL2pp::Rect(explosion.getCurrentFrame() * size, 0, size, size),
+                SDL2pp::Rect(camera.getScreenX(pos.x) - 50 , camera.getScreenY(-pos.y) - 50,
+                             camera.getScaledSize(size),
+                             camera.getScaledSize(size)));
+    }
+}
+
 void Drawer::draw(const MatchDto& matchDto, const MatchStatsInfo& stats) {
     renderer.Clear();
 
@@ -597,6 +610,8 @@ void Drawer::draw(const MatchDto& matchDto, const MatchStatsInfo& stats) {
 
         drawPlayer(player);
     }
+
+    drawExplosions();
 
     // Show rendered frame
     renderer.Present();
