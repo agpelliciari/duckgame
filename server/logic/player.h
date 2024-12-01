@@ -57,7 +57,6 @@ class Player {
                       TypeDoingAction &doing_action, bool &is_alive, bool &aim_up, int &life_points, int &ammo);
 
         void still();
-        void add_speed(int speed_x, int speed_y);
         void update(const MatchMap& colition_map, std::vector <Bullet> &bullets, std::vector<Grenade> &grenades);
         void stop_moving_x();
         void shoot(std::vector <Bullet> &bullets, std::vector<Grenade> &grenades);
@@ -79,6 +78,11 @@ class Player {
         void equip_helmet();
         Tuple get_map_position();
         Tuple get_dimension();
+        
+
+        void add_speed(int speed_x, int speed_y);
+        void change_move_dir(PlayerMovingDir new_dir);
+
 };
 
 

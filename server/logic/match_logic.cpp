@@ -8,19 +8,21 @@ MatchLogic::MatchLogic(const Configuration& _configs): colition_map(100, 100), c
         this->add_player_speed(index, 0, 0);
     };
     this->command_map[PlayerActionType::MOVE_LEFT] = [this](int index) {
-        this->add_player_speed(index, -configs.player_speed, 0);
+        //this->add_player_speed(index, -configs.player_speed, 0);
+        this->change_player_dir(index, MOVING_LEFT); // Para que se mueva left         
     };
     this->command_map[PlayerActionType::MOVE_LEFT_END] = [this](int index) {
-        //this->add_player_speed(index, configs.player_speed, 0);
-        this->still_player(index);
+        //this->still_player(index);
+        this->change_player_dir(index, MOVING_RIGHT); // Para que deshaga el moving left         
     };
 
     this->command_map[PlayerActionType::MOVE_RIGHT] = [this](int index) {
-        this->add_player_speed(index, configs.player_speed, 0);
+        //this->add_player_speed(index, configs.player_speed, 0);
+        this->change_player_dir(index, MOVING_RIGHT); // Para que se mueva a la derecha         
     };
     this->command_map[PlayerActionType::MOVE_RIGHT_END] = [this](int index) {
-        //this->add_player_speed(index, -configs.player_speed, 0);
-        this->still_player(index);
+        //this->still_player(index);
+        this->change_player_dir(index, MOVING_LEFT); // Para que deshaga el move right        
     };
 
     this->command_map[PlayerActionType::JUMP] = [this](int index) {
@@ -59,7 +61,6 @@ MatchLogic::MatchLogic(const Configuration& _configs): colition_map(100, 100), c
     this->command_map[PlayerActionType::PICK_UP_DROP_ITEM] = [this](int index) {
         this->player_toggle_pick_up_drop_item(index);
     };
-    // this->command_map[3] = [this](int index) { this->add_player_speed(index, 0, 0); };
 
 }
 
@@ -79,6 +80,16 @@ void MatchLogic::add_player(int id, int spawn_point_index) {
     }
     colition_map.add_collision(players.back().get_map_position(), players.back().get_dimension(),
                                CollisionTypeMap::PLAYER, players.back().get_id());
+}
+
+
+void MatchLogic::change_player_dir(int id, PlayerMovingDir dir){
+    for (Player& player: players) {
+        if (player.same_id(id)) {
+            player.change_move_dir(dir);
+            return;
+        }
+    }      
 }
 
 void MatchLogic::add_player_speed(int id, int speed_x, int speed_y) {
