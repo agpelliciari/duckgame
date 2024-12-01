@@ -513,7 +513,19 @@ void Drawer::drawStatusBar(const MatchStatsInfo& stats) {
         destRect = SDL2pp::Rect(screenWidth/2 - 180, 10, 390, 12);
 
     } else if (stats.state == PAUSADA) {
-        text += "THERE'S A TIE, 5 MORE ROUNDS TO PLAY";
+        const PlayerStatDto* firstPlayerStats = stats.getPlayerStat(static_cast<int>(stats.champion_player));
+
+        if (firstPlayerStats != nullptr) {
+            if (firstPlayerStats->wins  < context.wins_needed) {
+                int winsNeeded = context.wins_needed - firstPlayerStats->wins;
+                text += "ROUND BREAK - PLAYER " + std::to_string(stats.champion_player) + " NEEDS " + std::to_string(winsNeeded) + " MORE WINS";
+            } else {
+                text += "THERE'S A TIE -  " + std::to_string(context.rounds_per_set) + " MORE ROUNDS TO PLAY";
+            }
+        } else {
+            text += "THERE'S A TIE - " + std::to_string(context.rounds_per_set) + " MORE ROUNDS TO PLAY";
+        }
+
         destRect = SDL2pp::Rect(screenWidth/2 - 180, 10, 390, 12);
 
     } else if (stats.state == ROUND_END) {
