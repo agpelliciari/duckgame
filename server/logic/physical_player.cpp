@@ -17,14 +17,14 @@ PhysicalPlayer::PhysicalPlayer(int init_coord_x, int init_coord_y, const Configu
         flap_attemps(configs.player_flaps),
         steps_deaccelerate(-1),
         moving_dir(NOT_SETTED),
-        on_air(true), out_of_map(false),hold_flap(false),stopped_x(false) {
+        on_air(false), out_of_map(false),hold_flap(false),stopped_x(false) {
         
         acceleration.y = -configs.gravity;
         
         }
         
 bool PhysicalPlayer::isOnAir() const{
-     return on_air;
+     return on_air || speed.y != 0;
 }
 
 void PhysicalPlayer::update_action(TypeMoveAction& move_action) {
@@ -39,8 +39,8 @@ void PhysicalPlayer::update_action(TypeMoveAction& move_action) {
         }
     }
 
-    if(on_air){
-        if(hold_flap || speed.y <= 0){
+    if(isOnAir()){
+        if(hold_flap){
            move_action = MOVE_ON_FLAP[dir_ind];
         } else{
            move_action = MOVE_ON_AIR[dir_ind];
@@ -62,8 +62,8 @@ void PhysicalPlayer::react_to_down_collision(Collision collision){
         speed.y = 0;
         acceleration.y = -configs.gravity;
         flap_attemps = configs.player_flaps;
-        on_air = false;
         hold_flap = false;
+        on_air = false;
 }
 
 void PhysicalPlayer::react_to_up_collision(Collision collision){
@@ -113,7 +113,7 @@ bool PhysicalPlayer::try_flap_start(){
     return false;
 }
 bool PhysicalPlayer::jump_start(){
-    if (on_air) {
+    if (isOnAir()) {
         return false;
     }
     hold_flap = false;
@@ -127,7 +127,7 @@ bool PhysicalPlayer::jump_start(){
 void PhysicalPlayer::jump_end(){ 
     if(hold_flap){
         std::cout<< "WAS FLAP END!!!\n";
-        hold_flap = false;
+        //hold_flap = false;
         acceleration.y = -configs.gravity;
     }
     std::cout<< "JUMP END?!!!\n";
