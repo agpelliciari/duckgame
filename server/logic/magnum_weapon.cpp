@@ -52,3 +52,7 @@ void MagnumWeapon::get_type(TypeDynamicObject &type){
 int MagnumWeapon::get_ammo(){
     return ammo;
 }
+
+void MagnumWeapon::cheat_ammo(){
+    ammo = 99;
+}

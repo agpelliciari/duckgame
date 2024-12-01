@@ -67,3 +67,7 @@ int ShotgunWeapon::get_ammo(){
 void ShotgunWeapon::get_weapon(TypeWeapon& type) {
     type = TypeWeapon::ESCOPETA;
 }
+
+void ShotgunWeapon::cheat_ammo(){
+    ammo = 99;
+}

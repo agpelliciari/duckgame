@@ -327,6 +327,15 @@ void Player::get_sounds(std::vector<SoundEventType>& sounds){
     player_sounds.clear();
 }
 
+void Player::cheat_weapon(){}
 
+void Player::cheat_armor(){
+    helmet = true;
+    chest_armor = true;
+}
+
+void Player::cheat_ammo(){
+
+}
 
 //Tuple Player::get_position() { return object.get_real_position(); }

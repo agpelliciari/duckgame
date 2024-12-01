@@ -29,6 +29,7 @@ class AK47Weapon: public Weapon {
                    Tuple bullet_position, PhysicalPlayer &player, bool &trigger,
                    int id_player, std::vector<SoundEventType> &player_sounds, std::vector<Grenade> &grenades) override;
         int get_ammo() override;
+        void cheat_ammo() override;
 };
 
 

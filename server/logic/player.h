@@ -77,6 +77,9 @@ class Player {
         void shoot_end();
         void equip_chest_armor();
         void equip_helmet();
+        void cheat_weapon();
+        void cheat_armor();
+        void cheat_ammo();
         Tuple get_map_position();
         Tuple get_dimension();
 };

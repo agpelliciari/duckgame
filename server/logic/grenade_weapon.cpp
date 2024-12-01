@@ -43,3 +43,7 @@ bool GrenadeWeapon::shoot(ShootingDirection direction,
     return false;
 
 }
+
+void GrenadeWeapon::cheat_ammo(){
+    ammo = 99;
+}

@@ -60,4 +60,8 @@ int AK47Weapon::get_ammo(){
     return ammo;
 }
 
+void AK47Weapon::cheat_ammo(){
+    ammo = 99;
+}
+
 
