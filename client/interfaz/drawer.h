@@ -19,17 +19,8 @@
 #define INITIAL_SCREEN_WIDTH 640
 #define INITIAL_SCREEN_HEIGHT 480
 
-#define X_PHYSICAL_OFFSET_PLAYER 8
-#define Y_PHYSICAL_OFFSET_PLAYER 1
-
 #define BLOCK_WIDTH 16
 #define BLOCK_HEIGHT 16
-
-#define INDICATOR_WIDTH 18.2f
-#define INDICATOR_WIDTH_RESIZED 14
-#define INDICATOR_HEIGHT_RESIZED 30
-#define INDICATOR_HEIGHT 33.5f
-#define INDICATOR_MAX_TIME 5
 
 #define IS_MAIN_PLAYER true
 #define IS_SECONDARY_PLAYER false
@@ -53,14 +44,6 @@ private:
     const GameContext& context;
 
     PlayerDrawer playerDrawer;
-
-    std::chrono::time_point<std::chrono::steady_clock> startTime;
-
-    bool showIndicators;  // cppcheck-suppress unusedStructMember
-
-    void updateIndicatorFlag();
-
-    void drawIndicator(const PlayerDTO& player, bool isMainPlayer);
 
     void drawBackground();
 

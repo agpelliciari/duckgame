@@ -7,7 +7,9 @@ PlayerDrawer::PlayerDrawer(SDL2pp::Font& font, SDL2pp::Renderer& renderer, Textu
         animation(animation),
         camera(camera),
         weaponDrawer(font, renderer, textures, animation, camera),
-        armorDrawer(renderer, textures, camera) {
+        armorDrawer(renderer, textures, camera),
+        startTime(std::chrono::steady_clock::now()),
+        showIndicators(true) {
             duckTextures = {{1, "/duck_sprites/duck_white.png"},
                             {2, "/duck_sprites/duck_yellow.png"},
                             {3, "/duck_sprites/duck_grey.png"},
@@ -92,6 +94,40 @@ void PlayerDrawer::drawStats(const PlayerStatDto& playerStat, double scaleX, dou
     }
 
     y += rowSpacing;
+}
+
+void PlayerDrawer::drawIndicator(const PlayerDTO& player, bool isMainPlayer) {
+    SDL2pp::Rect indicatorType;
+
+    float spriteX = animation.getIndicatorSprite(INDICATOR_WIDTH);
+
+    if (isMainPlayer) {
+        indicatorType = SDL2pp::Rect(spriteX, 0, INDICATOR_WIDTH, INDICATOR_HEIGHT);
+    } else {
+        indicatorType = SDL2pp::Rect(spriteX, INDICATOR_HEIGHT, INDICATOR_WIDTH, INDICATOR_HEIGHT);
+    }
+
+    renderer.Copy(textures.getTexture("/duck_sprites/playerIndicator.png"), indicatorType,
+                  SDL2pp::Rect(camera.getScreenX(player.pos.x - X_PHYSICAL_OFFSET_PLAYER + 9),
+                               camera.getScreenY(player.pos.y + Y_PHYSICAL_OFFSET_PLAYER - 40),
+                               camera.getScaledSize(INDICATOR_WIDTH_RESIZED),
+                               camera.getScaledSize(INDICATOR_HEIGHT_RESIZED)));
+}
+
+void PlayerDrawer::updateIndicatorFlag() {
+    auto currentTime = std::chrono::steady_clock::now();
+    auto elapsedTime =
+            std::chrono::duration_cast<std::chrono::seconds>(currentTime - startTime).count();
+    showIndicators = elapsedTime < INDICATOR_MAX_TIME;
+}
+
+void PlayerDrawer::resetIndicatorFlag() {
+    startTime = std::chrono::steady_clock::now();
+    showIndicators = true;
+}
+
+bool PlayerDrawer::getIndicatorFlag() {
+    return showIndicators;
 }
 
 PlayerDrawer::~PlayerDrawer() = default;

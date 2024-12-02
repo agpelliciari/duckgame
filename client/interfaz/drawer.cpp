@@ -9,27 +9,7 @@ Drawer::Drawer(SDL2pp::Window& window, Animation& animation, const GameContext& 
         animation(animation),
         camera(camera),
         context(gameContext),
-        playerDrawer(font, renderer, textures, animation, camera),
-        startTime(std::chrono::steady_clock::now()),
-        showIndicators(true) {}
-
-void Drawer::drawIndicator(const PlayerDTO& player, bool isMainPlayer) {
-    SDL2pp::Rect indicatorType;
-
-    float spriteX = animation.getIndicatorSprite(INDICATOR_WIDTH);
-
-    if (isMainPlayer) {
-        indicatorType = SDL2pp::Rect(spriteX, 0, INDICATOR_WIDTH, INDICATOR_HEIGHT);
-    } else {
-        indicatorType = SDL2pp::Rect(spriteX, INDICATOR_HEIGHT, INDICATOR_WIDTH, INDICATOR_HEIGHT);
-    }
-
-    renderer.Copy(textures.getTexture("/duck_sprites/playerIndicator.png"), indicatorType,
-                  SDL2pp::Rect(camera.getScreenX(player.pos.x - X_PHYSICAL_OFFSET_PLAYER + 9),
-                               camera.getScreenY(player.pos.y + Y_PHYSICAL_OFFSET_PLAYER - 40),
-                               camera.getScaledSize(INDICATOR_WIDTH_RESIZED),
-                               camera.getScaledSize(INDICATOR_HEIGHT_RESIZED)));
-}
+        playerDrawer(font, renderer, textures, animation, camera) {}
 
 void Drawer::drawBackground() {
     const float PARALLAX_OFFSET_FACTOR = 0.5f;
@@ -217,16 +197,8 @@ void Drawer::drawDynamicObject(const DynamicObjDTO& object) {
     }
 }
 
-void Drawer::updateIndicatorFlag() {
-    auto currentTime = std::chrono::steady_clock::now();
-    auto elapsedTime =
-            std::chrono::duration_cast<std::chrono::seconds>(currentTime - startTime).count();
-    showIndicators = elapsedTime < INDICATOR_MAX_TIME;
-}
-
 void Drawer::resetIndicatorFlag() {
-    startTime = std::chrono::steady_clock::now();
-    showIndicators = true;
+    playerDrawer.resetIndicatorFlag();
 }
 
 void Drawer::drawStatusBar(const MatchStatsInfo& stats) {
@@ -329,17 +301,17 @@ void Drawer::draw(const MatchDto& matchDto, const MatchStatsInfo& stats) {
 
     drawObjects(matchDto);
 
-    updateIndicatorFlag();
+    playerDrawer.updateIndicatorFlag();
 
     drawStatusBar(stats);
 
     for (const PlayerDTO& player: matchDto.players) {
 
-        if (showIndicators) {
+        if (playerDrawer.getIndicatorFlag()) {
             if (player.id == context.first_player) {
-                drawIndicator(player, IS_MAIN_PLAYER);
+                playerDrawer.drawIndicator(player, IS_MAIN_PLAYER);
             } else if ((context.dualplay) && (player.id == context.second_player)) {
-                drawIndicator(player, IS_SECONDARY_PLAYER);
+                playerDrawer.drawIndicator(player, IS_SECONDARY_PLAYER);
             }
         }
 
