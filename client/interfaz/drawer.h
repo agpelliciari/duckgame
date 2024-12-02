@@ -14,13 +14,11 @@
 #include "animation.h"
 #include "camera.h"
 #include "drawerUtils/player_drawer.h"
+#include "drawerUtils/background_drawer.h"
 #include "texture_container.h"
 
 #define INITIAL_SCREEN_WIDTH 640
 #define INITIAL_SCREEN_HEIGHT 480
-
-#define BLOCK_WIDTH 16
-#define BLOCK_HEIGHT 16
 
 #define IS_MAIN_PLAYER true
 #define IS_SECONDARY_PLAYER false
@@ -37,21 +35,13 @@ private:
 
     TextureContainer textures;
 
-    Animation& animation;
-
     Camera& camera;
 
     const GameContext& context;
 
     PlayerDrawer playerDrawer;
 
-    void drawBackground();
-
-    void drawObjects(const MatchDto& matchDto);
-
-    void drawMapObject(const MapObject& object);
-
-    void drawDynamicObject(const DynamicObjDTO& object);
+    BackgroundDrawer backgroundDrawer;
 
     void drawStatusBar(const MatchStatsInfo& stats);
 
@@ -60,8 +50,6 @@ private:
     void drawTrophy(double scaleX, double scaleY);
 
     void drawPlayerStats(const MatchStatsInfo& matchStats, double scaleX, double scaleY);
-
-    void drawExplosions();
 
 public:
     Drawer(SDL2pp::Window& window, Animation& animation, const GameContext& gameContext,

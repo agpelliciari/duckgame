@@ -13,7 +13,9 @@ target_sources(taller_client
     drawerUtils/armor_drawer.cpp
     drawerUtils/player_drawer.cpp
     drawerUtils/weapon_drawer.cpp
-    
+    drawerUtils/background_drawer.cpp
+    drawerUtils/object_drawer.cpp
+
     PUBLIC
     # .h files
     animation.h
@@ -31,4 +33,6 @@ target_sources(taller_client
     drawerUtils/weapon_drawer.h
     drawerUtils/weapon_builder.h
     drawerUtils/equipment_drawer.h
+    drawerUtils/background_drawer.h
+    drawerUtils/object_drawer.h
     )
