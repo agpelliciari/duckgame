@@ -25,7 +25,7 @@ PhysicalPlayer::PhysicalPlayer(int init_coord_x, int init_coord_y, const Configu
         collided_sides(false) {
         
         acceleration.y = -configs.gravity;
-        
+        time_step = 1;
         }
         
 bool PhysicalPlayer::isOnAir() const{
@@ -73,11 +73,13 @@ void PhysicalPlayer::react_to_sides_collision(Collision collision){
 }
 
 void PhysicalPlayer::react_to_down_collision(Collision collision){
+    if(speed.y != 0){
         speed.y = 0;
         acceleration.y = -configs.gravity;
         flap_attemps = configs.player_flaps;
         hold_flap = false;
         on_air = false;
+    }
 
     if (collision.type == CollisionTypeMap::BANANA){
         this->add_impulse_x(KNOCK_BACK_MOMENTUM, KNOCK_BACK_DURATION);

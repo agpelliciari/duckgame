@@ -1,6 +1,6 @@
 base_dmg: 2
 base_munition: 1          
-gravity: 5
+gravity: 2
 
 explosion_radius: 1   
 
@@ -8,9 +8,9 @@ explosion_radius: 1
 
 duck_speed: 3
 duck_health: 3
-duck_jump_force: 35     
-duck_flap_force: 15
-duck_flap_gravity: 3
+duck_jump_force: 25     
+duck_flap_force: 9
+duck_flap_gravity: 1
 duck_max_flaps : 5
 
 item_respawn_time_sec: 5
