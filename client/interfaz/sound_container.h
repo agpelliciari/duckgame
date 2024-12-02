@@ -28,6 +28,7 @@ enum class SoundType {
     POWER_UP,
     BROKEN_ARMOR,
     FLAP,
+    BANANA_SLIP,
     NONE
 };
 

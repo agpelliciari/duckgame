@@ -18,6 +18,7 @@ SoundContainer::SoundContainer(): backgroundMusic(DATA_PATH "/music/DuckGame-cha
     sounds.emplace(SoundType::POWER_UP, SDL2pp::Chunk(DATA_PATH "/sounds/powerUp.wav"));
     sounds.emplace(SoundType::BROKEN_ARMOR, SDL2pp::Chunk(DATA_PATH "/sounds/brokenArmor.wav"));
     sounds.emplace(SoundType::FLAP, SDL2pp::Chunk(DATA_PATH "/sounds/flap.wav"));
+    sounds.emplace(SoundType::BANANA_SLIP, SDL2pp::Chunk(DATA_PATH "/sounds/slip.wav"));
 }
 
 SDL2pp::Music& SoundContainer::getBackgroundMusic() { return backgroundMusic; }
@@ -71,6 +72,9 @@ void SoundContainer::addSound(SoundEventType soundType) {
         case PLAYER_FLAP:
             MatchSounds.push_back(SoundType::FLAP);
             break;
+        /*case PLAYER_SLIP:
+            MatchSounds.push_back(SoundType::BANANA_SLIP);
+            break;*/
         default:
             break;
     } 
