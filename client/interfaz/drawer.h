@@ -13,6 +13,7 @@
 
 #include "animation.h"
 #include "camera.h"
+#include "drawerUtils/player_drawer.h"
 #include "texture_container.h"
 
 #define INITIAL_SCREEN_WIDTH 640
@@ -24,29 +25,11 @@
 #define BLOCK_WIDTH 16
 #define BLOCK_HEIGHT 16
 
-#define COWBOY_GUN_WIDTH 22
-#define COWBOY_GUN_HEIGHT 11
-#define PEW_PEW_LASER_SIZE 32
-#define MAGNUM_SIZE 32
-#define PISTOL_SIZE 18
-#define GRENADE_SIZE 16
-#define BANANA_SIZE 16
-#define SHOTGUN_SIZE 32
-#define SNIPER_WIDTH 33
-#define SNIPER_HEIGHT 9
-#define AK47_SIZE 32
-#define LASER_RIFLE_SIZE 32
-
 #define INDICATOR_WIDTH 18.2f
 #define INDICATOR_WIDTH_RESIZED 14
 #define INDICATOR_HEIGHT_RESIZED 30
 #define INDICATOR_HEIGHT 33.5f
 #define INDICATOR_MAX_TIME 5
-
-#define GUN_FLIP_X 1
-#define GUN_UNFLIP_X 14
-#define HELMET_FLIP_X 3
-#define HELMET_UNFLIP_X -3
 
 #define IS_MAIN_PLAYER true
 #define IS_SECONDARY_PLAYER false
@@ -69,33 +52,15 @@ private:
 
     const GameContext& context;
 
+    PlayerDrawer playerDrawer;
+
     std::chrono::time_point<std::chrono::steady_clock> startTime;
 
     bool showIndicators;  // cppcheck-suppress unusedStructMember
 
-    std::unordered_map<TypeWeapon, std::tuple<std::string, int, int>> weaponTextures;
-
-    std::unordered_map<int, std::string> duckTextures;
-
     void updateIndicatorFlag();
 
-    void drawPlayer(const PlayerDTO& player);
-
-    void drawPlayerInfo(const PlayerDTO& player, const std::string color);
-
     void drawIndicator(const PlayerDTO& player, bool isMainPlayer);
-    
-    void getWeaponParameters(const PlayerDTO& player, SDL_RendererFlip flip, int& x, int& y, double& angle, int& sizeAdjustment);
-
-    void getShotExplosionParameters(const PlayerDTO& player, SDL_RendererFlip flip, int x, int y, int& explosionX, int& explosionY);
-
-    void drawWeapon(const PlayerDTO& player, SDL_RendererFlip flip);
-
-    int getTextureFlipValue(SDL_RendererFlip flip, int flipValue, int unflipValue);
-
-    void getArmorParameters(const PlayerDTO& player, SDL_RendererFlip flip, int& chestArmorX, int& chestArmorY, int& helmetArmorX, int& helmetArmorY, float& angle);
-
-    void drawArmor(const PlayerDTO& player, SDL_RendererFlip flip);
 
     void drawBackground();
 
