@@ -72,9 +72,6 @@ void SoundContainer::addSound(SoundEventType soundType) {
         case PLAYER_FLAP:
             MatchSounds.push_back(SoundType::FLAP);
             break;
-        /*case PLAYER_SLIP:
-            MatchSounds.push_back(SoundType::BANANA_SLIP);
-            break;*/
         default:
             break;
     } 
@@ -90,6 +87,8 @@ void SoundContainer::addSound(GameEventType gameSoundType) {
             MatchSounds.push_back(SoundType::BOX_EXPLOSION);
             break;
         case BANANA_EXPLOSION:
+            MatchSounds.push_back(SoundType::BANANA_SLIP);
+            break;
         case NO_EVENT:
         default:
             break;
