@@ -65,9 +65,27 @@ bool MatchMap::check_collision_area( CollisionTypeMap target_type, const int x, 
         && in_range(y,y_end, object.map_point.y, object.dimension.y)) {
             id = object.collision.id;
             return true;
-        }        
+        }
+        
     }
     
+    return false;
+}
+
+bool MatchMap::check_collision_area_all(const int x, const int y
+    , const int w, const int h, Collision &out) const {
+    
+    int x_end = x+w;
+    int y_end = y+h;
+        
+    for (auto& object: objects) {
+        if (in_range(x,x_end, object.map_point.x, object.dimension.x)
+        && in_range(y,y_end, object.map_point.y, object.dimension.y)) {
+            out = object.collision;
+            return true;
+        }
+        
+    }
     return false;
 }
 

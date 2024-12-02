@@ -37,6 +37,10 @@ public:
     bool check_collision_area( CollisionTypeMap target_type, const int x, const int y
     , const int w, const int h, int &id) const;
 
+    bool check_collision_area_all(const int x, const int y
+    , const int w, const int h, Collision &out) const;
+
+
     bool check_horizontal_collision(const int x, const int y) const;
     bool check_vertical_collision(const int x, const int y) const;
 };

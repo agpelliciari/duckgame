@@ -2,15 +2,18 @@
 
 #include "physical_grenade.h"
 #include <iostream>
+#define WIDTH_GRENADE 5
+#define WIDTH_BANANA 10
 
 PhysicalGrenade::PhysicalGrenade(int init_coord_x, int init_coord_y):
-        PhysicalObject(init_coord_x, init_coord_y, 5, 5), jitter_on_ground(true), impacted(false), out_of_map(false){
+        PhysicalObject(init_coord_x, init_coord_y, WIDTH_GRENADE, 5), jitter_on_ground(true), impacted(false), out_of_map(false){
         acceleration.y = -3;
   
     }
 
 PhysicalGrenade::PhysicalGrenade(int init_coord_x, int init_coord_y, bool jitter_on_ground):
-        PhysicalObject(init_coord_x, init_coord_y, 5, 5), jitter_on_ground(jitter_on_ground), impacted(false), out_of_map(false){
+        PhysicalObject(init_coord_x, init_coord_y, jitter_on_ground?WIDTH_GRENADE:WIDTH_BANANA
+        , 5), jitter_on_ground(jitter_on_ground), impacted(false), out_of_map(false){
         acceleration.y = -3;
 }
 
@@ -20,12 +23,19 @@ bool PhysicalGrenade::impacted_player(const MatchMap& colition_map,int& id) cons
 }
 
 void PhysicalGrenade::react_to_sides_collision(Collision collision) {
-        if (speed.x == 0){
-                return;
-        } else {
+        //if(impacted && CollisionTypeMap::PLAYER != collision.type){
+        //    std::cout << "IMPACTED BANANA SIDE? PLAYER AT " << position.x << ", " << position.y << std::endl;
+        //    return;
+        //}
+
+
+        if (speed.x != 0){
             //hago que rebote si choca una pared
-                speed.x = -speed.x / 2;
+            speed.x = -speed.x / 2;
         }
+
+        
+        
 }
 
 void PhysicalGrenade::react_to_out_of_map() {
@@ -37,18 +47,27 @@ void PhysicalGrenade::react_to_down_collision(Collision collision) {
         this->impact_with_up_or_down_collision();
         return;
     } 
-    if(impacted){
-        return;
-    }
-    impacted = true;
-    speed.x = 0;
-    speed.y = 0;
     
-    std::cout << "IMPACTED BANANA? AT " << position.x << ", " << position.y << std::endl;
+    if(CollisionTypeMap::PLAYER != collision.type){
+        if(impacted){
+           return;
+        }
+        speed.x = 0;
+        speed.y = 0;
+        impacted = true;
+        std::cout << "IMPACTED BANANA? AT " << position.x << ", " << position.y << std::endl;
+    //}  else if (impacted){
+    //    std::cout << "IMPACTED BANANA? PLAYER AT " << position.x << ", " << position.y << std::endl;
+    }
 
 }
 
 void PhysicalGrenade::react_to_up_collision(Collision collision) {
+        //if(impacted && CollisionTypeMap::PLAYER != collision.type){
+        //    std::cout << "IMPACTED BANANA UP? PLAYER AT " << position.x << ", " << position.y << std::endl;
+        //    return;
+        //}
+
         this->impact_with_up_or_down_collision();
 }
 

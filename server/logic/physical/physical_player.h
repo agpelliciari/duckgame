@@ -72,13 +72,18 @@ class PhysicalPlayer: public PhysicalObject {
         
         void add_impulse_x(int vel_max, int durations);
 
-        void check_moving_dir(const MatchMap& colition_map);
         
         void undo_moving(PlayerMovingDir mov_dir);        
         void change_moving(PlayerMovingDir new_dir);
 
         void stop_moving_x();
         void slip_impulse(int x_item);
+
+
+        void check_side_collision_end(const MatchMap& colition_map);
+        void check_move_impulses(const MatchMap& colition_map);
+
+        void check_moving_dir(const MatchMap& colition_map);
 
 };
 

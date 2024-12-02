@@ -25,7 +25,6 @@ PhysicalPlayer::PhysicalPlayer(int init_coord_x, int init_coord_y, const Configu
         collided_sides(false) {
         
         acceleration.y = -configs.gravity;
-        time_step = 1;
         }
         
 bool PhysicalPlayer::isOnAir() const{
@@ -62,9 +61,17 @@ void PhysicalPlayer::update_action(TypeMoveAction& move_action) {
 }
 
 void PhysicalPlayer::react_to_sides_collision(Collision collision){
-
+    if(collided_sides){
+        return; // Si ya se marco como que colisiono. No lo hagas devuelta.
+    }
+    std::cout << "---COLLIDED ON SIDE STOP!!!!\n";
     stop_moving_x();
-
+    
+    if(is_stay_down){
+       std::cout << "---WAS DOWN SO NO MORE?\n";
+       is_stay_down = false;
+    }
+    
     collided_sides = true;
 }
 
@@ -177,61 +184,76 @@ void PhysicalPlayer::jump_end(){
 }
 
 void PhysicalPlayer::add_impulse_x(int vel_max, int duration){
-
-    this->speed.x += vel_max;
-
+    
+    
     int acc = -((vel_max/duration));
+    acc = (float)(acc)*time_step; // Ajusta al time set.
     
-    this->acceleration.x += acc;
+    if(acc == 0){ // duration > vel_max
     
-    int real_acc = (float)(acc)*time_step;
-    duration = -vel_max/real_acc; // puede haber redondeo!
+         int sign = vel_max < 0 ? -1: 1;
+         acc = sign; // Lo mas lento posible desacelera.
+         duration = sign*vel_max;// quita el signo.
+    } else{
+         duration = -vel_max/acc; // puede haber redondeo!    
+    }
     
-    int left = vel_max + real_acc*duration;
+    int left = vel_max + acc*duration;
+    //std::cout << "ADD IMPULSE MAX "<< vel_max << " dur time step : "<< duration<< "then r acc:"<<acc << " left:" << left <<std::endl;
     
-    std::cout << "ADD IMPULSE MAX "<< vel_max << " dur time step : "<< duration<< "then r acc:"<<real_acc << " left:" << left <<std::endl;
-    
-    std::cout << "acc full " << acc<< "and " <<acceleration.x<<std::endl;
-
-    
-    
+    speed.x += vel_max;
     struct Impulse& impulse = impulses.emplace_back(left,acc, duration);
+
 
 }
 
 
-void PhysicalPlayer::check_moving_dir(const MatchMap& colition_map){
+void PhysicalPlayer::check_side_collision_end(const MatchMap& colition_map){
+    if(collided_sides == false || (moving_dir != MOVING_LEFT && moving_dir != MOVING_RIGHT)){
+         return;
+    }
+    
+    Collision collision(0, CollisionTypeMap::NONE);
+    if(detect_x_collision(colition_map, (int)moving_dir, collision)){
+         return;
+    }
+    
+    collided_sides = false;
+    speed.x = ((int)moving_dir) *  configs.player_speed;
+}
 
-     if(collided_sides){
-          if(is_stay_down || (moving_dir != MOVING_LEFT && moving_dir != MOVING_RIGHT)){
-               return;
-          }
-          //std::cout << "SHOULD CHECK START MOVE FOR DIR "<< moving_dir << std::endl;
-          Collision collision(0, CollisionTypeMap::NONE);
-          if(detect_x_collision(colition_map, (int)moving_dir, collision)){
-               return;
-          }
-          
-          collided_sides = false;
-          speed.x = ((int)moving_dir) *  configs.player_speed;
-          return;
-     }
-     
+void PhysicalPlayer::check_move_impulses(const MatchMap& colition_map){
      auto itImpulse = impulses.begin();
      
      while(itImpulse != impulses.end()){
           itImpulse->steps--;
-          std::cout <<" NOW STEPS "<< itImpulse->steps << "vel x:"<< speed.x << "acc "<< acceleration.x <<std::endl;
+          //std::cout <<" NOW STEPS "<< itImpulse->steps << "vel x:"<< speed.x << "acc "<< acceleration.x <<std::endl;
+          speed.x+= itImpulse->acc;
+          
           if(itImpulse->steps <= 0){
               speed.x-= itImpulse->left_over_vel;
-              acceleration.x-= itImpulse->acc;
-              std::cout <<" FINAL? vel "<< speed.x << " acc "<<  itImpulse->acc << "end "<< acceleration.x<<std::endl;
+              //std::cout <<" FINAL? vel "<< speed.x << " acc "<<  itImpulse->acc << "end "<< acceleration.x<<std::endl;
               itImpulse = impulses.erase(itImpulse);
               continue;
           }
+          
      
           ++itImpulse;
      }
+}
+
+void PhysicalPlayer::check_moving_dir(const MatchMap& colition_map){
+
+     check_move_impulses(colition_map);
+     
+     if(is_stay_down){
+          move(colition_map);
+          return;
+     }
+     
+     check_side_collision_end(colition_map);
+     
+     move(colition_map);
 }
 
 void PhysicalPlayer::undo_moving(PlayerMovingDir mov_dir){
@@ -273,19 +295,14 @@ void PhysicalPlayer::change_moving(PlayerMovingDir new_dir){
 }
 
 void PhysicalPlayer::slip_impulse(int x_item){
-    
-    //int center_x = position.x + dimension.x/2;
-    if(!is_stay_down){
-        dimension.y -= 15;
-        is_stay_down = true;
-    }
+    std::cout << "ADD IMPULSE TO DUCK?! item x: "<<x_item <<" not used! \n";
     
     if(last_dir_ind == RIGHT_IND){
-        speed.x = -4;
-        //this->add_impulse_x(-KNOCK_BACK_MOMENTUM, KNOCK_BACK_DURATION);
+        //speed.x = -4;
+        this->add_impulse_x(-KNOCK_BACK_MOMENTUM, KNOCK_BACK_DURATION);
     } else{
-        speed.x = 4;
-        //this->add_impulse_x(KNOCK_BACK_MOMENTUM, KNOCK_BACK_DURATION);    
+        //speed.x = 4;
+        this->add_impulse_x(KNOCK_BACK_MOMENTUM, KNOCK_BACK_DURATION);    
     }
 }
 

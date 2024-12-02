@@ -51,7 +51,7 @@ bool PhysicalObject::detect_y_collision(const MatchMap& colition_map, const int 
         colition_map.out_of_map_y(position.y + dimension.y + diff)) {
         return true;
     }
-
+    
     for (int x = 0; x <= dimension.x && (position.x + x) < colition_map.getWidth(); x++) {
         if (colition_map.check_collision(position.x + x, position.y + diff, collision.type, collision.id) && diff <= 0) {
             return true;

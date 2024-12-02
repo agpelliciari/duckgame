@@ -70,16 +70,15 @@ void Player::update(const MatchMap& colition_map, std::vector <Bullet> &bullets,
         
         object.update_action(move_action);
         
-        if (move_action != TypeMoveAction::STAY_DOWN){
-            object.check_moving_dir(colition_map); // Si esta en vel = 0 pero puede empezar a moverse
-            
+        if (move_action != TypeMoveAction::STAY_DOWN){            
             this->update_shooting_direction();
             if (trigger){
                     this->shoot(bullets, throwables);
             }
         }
         
-        object.move(colition_map);
+        object.check_moving_dir(colition_map); // Si esta en vel = 0 pero puede empezar a moverse
+        //object.move(colition_map);
         
         
     } else {
