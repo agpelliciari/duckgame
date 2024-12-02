@@ -10,6 +10,8 @@
 #include "server/logic/physical/physical_player.h"
 #include "bullet.h"
 #include "common/gameevents.h"
+#include "banana.h"
+#include <memory>
 
 class BananaWeapon : public Weapon{
 
@@ -22,10 +24,11 @@ class BananaWeapon : public Weapon{
         SoundEventType shoot_sound() const override;                
         void get_weapon(TypeWeapon& type) override;
         void get_type(TypeDynamicObject &type) override;
-        bool shoot(ShootingDirection direction, std::vector<Bullet> &bullets,
-                   Tuple bullet_position, PhysicalPlayer &player, bool &trigger,
-                   int id_player, std::vector<SoundEventType> &player_sounds) override;
+        bool shoot(ShootingDirection direction, std::vector<Bullet> &bullets, Tuple bullet_position,
+                       PhysicalPlayer &player, bool &trigger, int id_player, std::vector<SoundEventType> &player_sounds,
+                       std::vector<std::unique_ptr<Throwable>> &bananas) override;
         int get_ammo() override;
+        void cheat_ammo() override;
 
 };
 

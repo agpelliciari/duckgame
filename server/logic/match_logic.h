@@ -18,6 +18,8 @@
 #include "server/core/configuration.h"
 #include "server/logic/weapons/bullet.h"
 #include "server/logic/weapons/grenade.h"
+#include <memory>
+#include "server/logic/weapons/throwable.h"
 
 #ifndef MATCH_LOGIC_H
 #define MATCH_LOGIC_H
@@ -37,8 +39,9 @@ private:
     std::vector<MapPoint> blocks;  // cppcheck-suppress unusedStructMember
     std::vector<MapPoint> spawn_points; // cppcheck-suppress unusedStructMember
     std::vector<DroppedItem> dropped_items; // cppcheck-suppress unusedStructMember
+    std::vector<MapPoint> bananas;  // cppcheck-suppress unusedStructMember
     //std::vector<SoundEventType> sounds; // cppcheck-suppress unusedStructMember
-    std::vector<Grenade> grenades;  // cppcheck-suppress unusedStructMember
+    std::vector<std::unique_ptr<Throwable>> throwables;  // cppcheck-suppress unusedStructMember
     // std::vector<std::vector<bool>> colition_map; // cppcheck-suppress unusedStructMember
 
 

@@ -21,7 +21,7 @@ void SpawnPlace::spawn_item(int base_mun) {
     }
     auto start_time = std::chrono::high_resolution_clock::now();
     //std::srand(std::time(nullptr) + seed);
-    int random_weapon = std::rand() % 11;
+    int random_weapon = std::rand() % 12;
     //int random_weapon = 10;
     
     switch (random_weapon){
@@ -70,6 +70,10 @@ void SpawnPlace::spawn_item(int base_mun) {
             break;
         case 10:
             possible_weapon = std::make_unique<GrenadeWeapon>(base_mun);
+            spawned = true;
+            break;
+        case 11:
+            possible_weapon = std::make_unique<BananaWeapon>(base_mun);
             spawned = true;
             break;
 

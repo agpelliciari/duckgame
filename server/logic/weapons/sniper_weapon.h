@@ -10,7 +10,8 @@
 #include "server/logic/physical/physical_player.h"
 #include "bullet.h"
 #include "common/gameevents.h"
-#include "grenade.h"
+#include "throwable.h"
+#include <memory>
 
 class SniperWeapon : public Weapon{
 
@@ -30,7 +31,7 @@ class SniperWeapon : public Weapon{
         void get_type(TypeDynamicObject &type) override;
         bool shoot(ShootingDirection direction, std::vector<Bullet> &bullets, Tuple bullet_position,
                    PhysicalPlayer &player, bool &trigger, int id_player, std::vector<SoundEventType> &player_sounds,
-                   std::vector<Grenade> &grenades) override;
+                   std::vector<std::unique_ptr<Throwable>> &throwables) override;
         void shoot_sniper(ShootingDirection direction,
                            std::vector<Bullet> &bullets,
                            Tuple bullet_position, int id_player, std::vector<SoundEventType> &player_sounds);

@@ -6,7 +6,8 @@ enum class CollisionTypeMap : int {
     NONE,
     BLOCK,
     PLAYER,
-    BOX
+    BOX,
+    BANANA
 };
 
 

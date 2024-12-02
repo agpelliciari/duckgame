@@ -12,6 +12,7 @@
 #include "server/logic/weapons/ak47_weapon.h"
 #include "server/logic/weapons/laser_rifle_weapon.h"
 #include "server/logic/weapons/grenade_weapon.h"
+#include "server/logic/weapons/banana_weapon.h"
 
 #ifndef SPAWN_PLACE_H
 #define SPAWN_PLACE_H

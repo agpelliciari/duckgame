@@ -10,6 +10,9 @@ static TypeMoveAction MOVE_ON_GROUND[3] = {TypeMoveAction::MOVE_LEFT,TypeMoveAct
 #define LEFT_IND 0
 #define RIGHT_IND 2
 
+#define KNOCK_BACK_DURATION 6
+#define KNOCK_BACK_MOMENTUM 10
+
 PhysicalPlayer::PhysicalPlayer(int init_coord_x, int init_coord_y, const Configuration& _configs):
         PhysicalObject(init_coord_x, init_coord_y, PLAYER_WIDTH, PLAYER_HEIGHT),
         initial_position{init_coord_x, init_coord_y},
@@ -22,7 +25,7 @@ PhysicalPlayer::PhysicalPlayer(int init_coord_x, int init_coord_y, const Configu
         collided_sides(false) {
         
         acceleration.y = -configs.gravity;
-        
+        time_step = 1;
         }
         
 bool PhysicalPlayer::isOnAir() const{
@@ -37,7 +40,7 @@ void PhysicalPlayer::update_action(TypeMoveAction& move_action) {
     }
     
     int dir_ind = NEUTRAL_IND;
-    if(moving_dir != NOT_SETTED){
+    if(moving_dir != NOT_SETTED && collided_sides == false){
         dir_ind = (int)moving_dir + 1;
         if(dir_ind == NEUTRAL_IND && speed.x != 0){
             dir_ind = last_dir_ind;
@@ -59,16 +62,28 @@ void PhysicalPlayer::update_action(TypeMoveAction& move_action) {
 }
 
 void PhysicalPlayer::react_to_sides_collision(Collision collision){
+
     stop_moving_x();
+    if (collision.type == CollisionTypeMap::BANANA){
+        this->add_impulse_x(KNOCK_BACK_MOMENTUM, KNOCK_BACK_DURATION);
+        return;
+    }
+    
     collided_sides = true;
 }
 
 void PhysicalPlayer::react_to_down_collision(Collision collision){
+    if(speed.y != 0){
         speed.y = 0;
         acceleration.y = -configs.gravity;
         flap_attemps = configs.player_flaps;
         hold_flap = false;
         on_air = false;
+    }
+
+    if (collision.type == CollisionTypeMap::BANANA){
+        this->add_impulse_x(KNOCK_BACK_MOMENTUM, KNOCK_BACK_DURATION);
+    }
 }
 
 void PhysicalPlayer::react_to_up_collision(Collision collision){
@@ -168,6 +183,7 @@ void PhysicalPlayer::jump_end(){
 }
 
 void PhysicalPlayer::add_impulse_x(int vel_max, int duration){
+
     this->speed.x += vel_max;
 
     int acc = -((vel_max/duration));

@@ -4,9 +4,15 @@
 
 PhysicalGrenade::PhysicalGrenade(int init_coord_x, int init_coord_y):
         PhysicalObject(init_coord_x, init_coord_y, 5, 5),
-        impacted(false), impacted_collision{0, CollisionTypeMap::NONE}, out_of_map(false){
+        impacted(false), is_banana(false), impacted_collision{0, CollisionTypeMap::NONE}, out_of_map(false){
         acceleration.y = -3;
         }
+
+PhysicalGrenade::PhysicalGrenade(int init_coord_x, int init_coord_y, bool banana):
+        PhysicalObject(init_coord_x, init_coord_y, 5, 5),
+        impacted(false), is_banana(banana), impacted_collision{0, CollisionTypeMap::NONE}, out_of_map(false){
+        acceleration.y = -3;
+}
 
 void PhysicalGrenade::react_to_sides_collision(Collision collision) {
         if (speed.x == 0){
@@ -22,7 +28,12 @@ void PhysicalGrenade::react_to_out_of_map() {
 }
 
 void PhysicalGrenade::react_to_down_collision(Collision collision) {
+    if (is_banana) {
+        impacted = true;
+    } else {
         this->impact_with_up_or_down_collision();
+    }
+
 }
 
 void PhysicalGrenade::react_to_up_collision(Collision collision) {
@@ -65,3 +76,6 @@ bool PhysicalGrenade::is_out_of_map(){
     return out_of_map;
 }
 
+bool PhysicalGrenade::get_impacted(){
+    return impacted;
+}

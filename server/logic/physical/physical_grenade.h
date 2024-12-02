@@ -11,11 +11,13 @@ class PhysicalGrenade : public PhysicalObject{
 
     private:
         bool impacted;
+        bool is_banana;
         Collision impacted_collision;
 
 
     public:
         PhysicalGrenade(int init_x, int init_y);
+        PhysicalGrenade(int init_x, int init_y, bool is_banana);
 
         void react_to_sides_collision(Collision collision) override;
         void react_to_down_collision(Collision collision) override;
@@ -31,6 +33,7 @@ class PhysicalGrenade : public PhysicalObject{
         void get_map_info(int &pos_x, int &pos_y);
         bool is_out_of_map();
         bool out_of_map;
+        bool get_impacted();
 };
 
 
