@@ -9,111 +9,9 @@ Drawer::Drawer(SDL2pp::Window& window, Animation& animation, const GameContext& 
         animation(animation),
         camera(camera),
         context(gameContext),
+        playerDrawer(font, renderer, textures, animation, camera),
         startTime(std::chrono::steady_clock::now()),
-        showIndicators(true) {
-
-    duckTextures = {{1, "/duck_sprites/duck_white.png"},
-                    {2, "/duck_sprites/duck_yellow.png"},
-                    {3, "/duck_sprites/duck_grey.png"},
-                    {4, "/duck_sprites/duck_orange.png"}};
-                    
-    weaponTextures = {{TypeWeapon::PISTOLA_COWBOY,
-                       {"/weapons/cowboyPistol.png", COWBOY_GUN_WIDTH, COWBOY_GUN_HEIGHT}},
-                      {TypeWeapon::PEW_PEW_LASER,
-                       {"/weapons/pewpewLaser.png", PEW_PEW_LASER_SIZE, PEW_PEW_LASER_SIZE}},
-                      {TypeWeapon::MAGNUM, {"/weapons/magnum.png", MAGNUM_SIZE, MAGNUM_SIZE}},
-                      {TypeWeapon::PISTOLA_DE_DUELOS, {"/weapons/pistol.png", PISTOL_SIZE, PISTOL_SIZE}},
-                      {TypeWeapon::ESCOPETA, {"/weapons/shotgun.png", SHOTGUN_SIZE, SHOTGUN_SIZE}},
-                      {TypeWeapon::SNIPER, {"/weapons/sniper.png", SNIPER_WIDTH, SNIPER_HEIGHT}},
-                      {TypeWeapon::AK_47, {"/weapons/ak47.png", AK47_SIZE, AK47_SIZE}},
-                      {TypeWeapon::LASER_RIFLE, {"/weapons/laserRifle.png", LASER_RIFLE_SIZE, LASER_RIFLE_SIZE}},
-                      {TypeWeapon::GRANADA, {"/weapons/grenade.png", GRENADE_SIZE, GRENADE_SIZE}},
-                      {TypeWeapon::BANANA, {"/weapons/banana.png", BANANA_SIZE, BANANA_SIZE}}};
-}
-
-void Drawer::drawPlayer(const PlayerDTO& player) {
-    const std::string playerTexture;
-    auto mappedTexture = duckTextures.find(player.id);
-    if (mappedTexture != duckTextures.end()) {
-        const auto& playerTexture = mappedTexture->second;
-
-        SDL_RendererFlip flip =
-                animation.isFacingLeft(player.id) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-
-        renderer.Copy(
-                textures.getTexture(playerTexture),
-                SDL2pp::Rect(animation.getSpriteX(player.id), animation.getSpriteY(player.id),
-                             SPRITE_SIZE, SPRITE_SIZE),
-                SDL2pp::Rect(camera.getScreenX(player.pos.x - X_PHYSICAL_OFFSET_PLAYER),
-                             camera.getScreenY(player.pos.y + Y_PHYSICAL_OFFSET_PLAYER - 16),
-                             camera.getScaledSize(SPRITE_SIZE), camera.getScaledSize(SPRITE_SIZE)),
-                0.0, SDL2pp::Point(0, 0), flip);
-
-        drawArmor(player, flip);
-
-        if (player.weapon != TypeWeapon::NONE) {
-            drawWeapon(player, flip);
-        }
-
-        if (player.is_alive) {
-            drawPlayerInfo(player, playerTexture);
-        }
-    }
-}
-
-void Drawer::drawPlayerInfo(const PlayerDTO& player, const std::string color) {
-    renderer.Copy(textures.getTexture(color), SDL2pp::Rect(1, 10, 32, 10),
-                  SDL2pp::Rect(12 + 115 * (player.id - 1), 8, 32, 14));
-    
-    int health;
-    if (player.hp > 3) {
-        health = 16;
-    } else {
-        health = (5 * player.hp) + 1;
-    }
-    
-    renderer.Copy(textures.getTexture("/ui/hp.png"), SDL2pp::Rect(0, 0, health, 16),
-                        SDL2pp::Rect(35 + 115 * (player.id - 1), 5, health, 20));
-
-    if (player.weapon != TypeWeapon::NONE) {
-        auto weaponTexture = weaponTextures.find(player.weapon);
-        if (weaponTexture != weaponTextures.end()) {
-            const auto& [textureType, width, height] = weaponTexture->second;
-
-            int x, y;
-            if (player.weapon == TypeWeapon::PISTOLA_COWBOY || player.weapon == TypeWeapon::SNIPER || player.weapon == TypeWeapon::PISTOLA_DE_DUELOS) {
-                x = 60;
-                y = 6;
-            } else if (player.weapon == TypeWeapon::GRANADA) {
-                x = 65;
-                y = 7;
-            } else {
-                x = 54;
-                y = -3;
-            }
-
-            renderer.Copy(textures.getTexture(textureType), SDL2pp::Rect(0, 0, width, height),
-                          SDL2pp::Rect(x + 115 * (player.id - 1), y, width, height));
-            
-            std::string text = std::to_string(player.munition);
-            SDL2pp::Texture text_sprite(renderer, font.RenderText_Blended(text, SDL_Color{255, 255, 255, 255}));
-
-            renderer.Copy(text_sprite, SDL2pp::NullOpt,
-                        SDL2pp::Rect(x + 45 + 115 * (player.id - 1), 9, 12, 12));
-        }
-    }
-
-    if (player.helmet) {
-        renderer.Copy(textures.getTexture("/armors/helmet.png"), SDL2pp::Rect(0, 0, 32, 32),
-                      SDL2pp::Rect(8 + 115 * (player.id - 1), -9, 32, 32));
-    }
-
-    if (player.chest_armor) {
-        renderer.Copy(textures.getTexture("/armors/chestPlateAnim.png"),
-                      SDL2pp::Rect(0, 0, 32, 16),
-                      SDL2pp::Rect(10 + 115 * (player.id - 1), -6, 32, 32));
-    }
-}
+        showIndicators(true) {}
 
 void Drawer::drawIndicator(const PlayerDTO& player, bool isMainPlayer) {
     SDL2pp::Rect indicatorType;
@@ -131,181 +29,6 @@ void Drawer::drawIndicator(const PlayerDTO& player, bool isMainPlayer) {
                                camera.getScreenY(player.pos.y + Y_PHYSICAL_OFFSET_PLAYER - 40),
                                camera.getScaledSize(INDICATOR_WIDTH_RESIZED),
                                camera.getScaledSize(INDICATOR_HEIGHT_RESIZED)));
-}
-
-void Drawer::getArmorParameters(const PlayerDTO& player, SDL_RendererFlip flip, int& chestArmorX, int& chestArmorY, int& helmetArmorX, int& helmetArmorY, float& angle) {
-    if (player.move_action == TypeMoveAction::STAY_DOWN) {
-        angle = getTextureFlipValue(flip, 90.0, -90.0);
-        chestArmorX = camera.getScreenX(player.pos.x + getTextureFlipValue(flip, 21, -5));
-        chestArmorY = camera.getScreenY(player.pos.y + getTextureFlipValue(flip, -4, 24));
-        helmetArmorX = camera.getScreenX(player.pos.x + getTextureFlipValue(flip, 34, -19));
-        helmetArmorY = camera.getScreenY(player.pos.y + getTextureFlipValue(flip, -1, 27));
-    } else {
-        if (player.move_action == TypeMoveAction::FLAP_LEFT || player.move_action == TypeMoveAction::FLAP_RIGHT || player.move_action == TypeMoveAction::FLAP_NEUTRAL) {
-            helmetArmorY = camera.getScreenY(player.pos.y - 16);
-            chestArmorY = camera.getScreenY(player.pos.y - 3);
-        } else {
-            chestArmorY = camera.getScreenY(player.pos.y - 7);
-            helmetArmorY = camera.getScreenY(player.pos.y - 20);
-        }
-        chestArmorX = camera.getScreenX(player.pos.x + getTextureFlipValue(flip, -7, -6));
-        helmetArmorX = camera.getScreenX(player.pos.x + getTextureFlipValue(flip, -3, -9));
-    }
-}
-
-void Drawer::drawArmor(const PlayerDTO& player, SDL_RendererFlip flip) {
-    int chestArmorX, chestArmorY, helmetArmorX, helmetArmorY;
-    float angle = 0.0;
-    
-    getArmorParameters(player, flip, chestArmorX, chestArmorY, helmetArmorX, helmetArmorY, angle);
-
-    if (player.helmet) {
-        renderer.Copy(
-                textures.getTexture("/armors/helmet.png"),
-                SDL2pp::Rect(0, 0, SPRITE_SIZE, SPRITE_SIZE),
-                SDL2pp::Rect(helmetArmorX, helmetArmorY,
-                        camera.getScaledSize(SPRITE_SIZE -3), camera.getScaledSize(SPRITE_SIZE-3)),
-                angle, SDL2pp::Point(0, 0), flip);
-    }
-
-
-    if (player.chest_armor) {
-        renderer.Copy(
-                textures.getTexture("/armors/chestPlateAnim.png"),
-                SDL2pp::Rect(0, 0, SPRITE_SIZE, SPRITE_SIZE),
-                SDL2pp::Rect(chestArmorX, chestArmorY,
-                             camera.getScaledSize(SPRITE_SIZE-3), camera.getScaledSize(SPRITE_SIZE-3)),
-                angle, SDL2pp::Point(0, 0), flip);
-    }
-}
-
-void Drawer::getWeaponParameters(const PlayerDTO& player, SDL_RendererFlip flip, int& x, int& y, double& angle, int& sizeAdjustment) {
-    if (player.weapon == TypeWeapon::PISTOLA_COWBOY || player.weapon == TypeWeapon::GRANADA || player.weapon == TypeWeapon::PISTOLA_DE_DUELOS) {
-        if (player.aiming_up) {
-            angle = getTextureFlipValue(flip, 90.0, -90.0);
-            x = camera.getScreenX(player.pos.x + getTextureFlipValue(flip, 21, 14) - 8);
-            y = camera.getScreenY(player.pos.y + getTextureFlipValue(flip, -12, 6));
-        } else {
-            angle = 0.0;
-            x = camera.getScreenX(player.pos.x + getTextureFlipValue(flip, 4, 14) - 8);
-            y = camera.getScreenY(player.pos.y + 2);
-        }
-        if (player.weapon == TypeWeapon::PISTOLA_DE_DUELOS) {
-            sizeAdjustment = 7;
-        } else {
-            sizeAdjustment = 4;
-        }
-    } else if (player.weapon == TypeWeapon::SNIPER) {
-        if (player.aiming_up) {
-            angle = getTextureFlipValue(flip, 90.0, -90.0);
-            x = camera.getScreenX(player.pos.x + getTextureFlipValue(flip, 20, 14) - 8);
-            y = camera.getScreenY(player.pos.y + getTextureFlipValue(flip, -24, 6));
-        } else {
-            angle = 0.0;
-            x = camera.getScreenX(player.pos.x + getTextureFlipValue(flip, -10, 8) - 8);
-            y = camera.getScreenY(player.pos.y + 2);
-        }
-        sizeAdjustment = 0;
-    } else {
-        if (player.aiming_up) {
-            angle = getTextureFlipValue(flip, 90.0, -90.0);
-            x = camera.getScreenX(player.pos.x + getTextureFlipValue(flip, 28, 2) - 8);
-            y = camera.getScreenY(player.pos.y + getTextureFlipValue(flip, -15, 10));
-        } else {
-            angle = 0.0;
-            x = camera.getScreenX(player.pos.x - 8 + getTextureFlipValue(flip, -3, 9));
-            y = camera.getScreenY(player.pos.y - 6);
-        }
-        sizeAdjustment = 6;
-    }
-}
-
-void Drawer::getShotExplosionParameters(const PlayerDTO& player, SDL_RendererFlip flip, int x, int y, int& explosionX, int& explosionY) {
-    if (player.weapon == TypeWeapon::PISTOLA_COWBOY) {
-        if (player.aiming_up) {
-            explosionX = x + getTextureFlipValue(flip, 8, -8);
-            explosionY = y + getTextureFlipValue(flip, -20, -30);
-        } else {
-            explosionX = x + getTextureFlipValue(flip, -20, 30);
-            explosionY = y - 8;
-        }
-    } else if (player.weapon == TypeWeapon::PEW_PEW_LASER) {
-        if (player.aiming_up) {
-            explosionX = x + getTextureFlipValue(flip, -6, 6);
-            explosionY = y + getTextureFlipValue(flip, -25, -45);
-        } else {
-            explosionX = x + getTextureFlipValue(flip, -15, 50);
-            explosionY = y + 8;
-        }
-    } else if (player.weapon == TypeWeapon::ESCOPETA || player.weapon == TypeWeapon::AK_47) {
-        if (player.aiming_up) {
-            explosionX = x + getTextureFlipValue(flip, -12, 14);
-            explosionY = y + getTextureFlipValue(flip, -25, -57);
-        } else {
-            explosionX = x + getTextureFlipValue(flip, -25, 56);
-            explosionY = y + 12;
-        }
-    } else if (player.weapon == TypeWeapon::SNIPER) {
-        if (player.aiming_up) {
-            explosionX = x + getTextureFlipValue(flip, 3, -4);
-            explosionY = y + getTextureFlipValue(flip, -25, -68);
-        } else {
-            explosionX = x + getTextureFlipValue(flip, -27, 65);
-            explosionY = y - 4;
-        }
-    } else if (player.weapon == TypeWeapon::LASER_RIFLE) {
-        if (player.aiming_up) {
-            explosionX = x + getTextureFlipValue(flip, 10, -8);
-            explosionY = y + getTextureFlipValue(flip, -60, -45);
-        } else {
-            explosionX = x + getTextureFlipValue(flip, -55, 45);
-            explosionY = y - 10;
-        }
-    } else {
-        if (player.aiming_up) {
-            explosionX = x + getTextureFlipValue(flip, -8, 8);
-            explosionY = y + getTextureFlipValue(flip, -15, -42);
-        } else {
-            explosionX = x + getTextureFlipValue(flip, -12, 43);
-            explosionY = y + 8;
-        }
-    }
-}
-
-void Drawer::drawWeapon(const PlayerDTO& player, SDL_RendererFlip flip) {
-    auto weaponTexture = weaponTextures.find(player.weapon);
-    if (weaponTexture != weaponTextures.end()) {
-        const auto& [textureType, width, height] = weaponTexture->second;
-
-        int x, y, sizeAdjustment;
-        double angle;
-
-        getWeaponParameters(player, flip, x, y, angle, sizeAdjustment);
-
-        renderer.Copy(
-            textures.getTexture(textureType), 
-            SDL2pp::Rect(0, 0, width, height),
-            SDL2pp::Rect(x, y, camera.getScaledSize(width - sizeAdjustment), camera.getScaledSize(height - sizeAdjustment)),
-            angle, SDL2pp::Point(0, 0), flip
-        );
-
-        for (const ExplosionAnimation& explosion : animation.getExplosions(player.id)) {
-            int explosionX, explosionY;
-            int size = explosion.getSpriteSize();
-            
-            getShotExplosionParameters(player, flip, x, y, explosionX, explosionY);
-            
-            renderer.Copy(
-                textures.getTexture(explosion.getTexture()),
-                SDL2pp::Rect(explosion.getCurrentFrame() * size, 0, size, size),
-                SDL2pp::Rect(explosionX, explosionY, camera.getScaledSize(size), camera.getScaledSize(size)),
-                angle, SDL2pp::Point(0, 0), flip);
-        }
-    }
-}
-
-int Drawer::getTextureFlipValue(SDL_RendererFlip flip, int flipValue, int unflipValue) {
-    return flip == SDL_FLIP_HORIZONTAL ? flipValue : unflipValue;
 }
 
 void Drawer::drawBackground() {
@@ -413,6 +136,13 @@ void Drawer::drawDynamicObject(const DynamicObjDTO& object) {
         case TypeDynamicObject::BANANA:
             renderer.Copy(
                     textures.getTexture("/weapons/banana.png"), SDL2pp::Rect(0, 0, BANANA_SIZE, BANANA_SIZE),
+                    SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y),
+                                 camera.getScaledSize(BANANA_SIZE), camera.getScaledSize(BANANA_SIZE)));
+            break;
+        
+        case TypeDynamicObject::THROWN_BANANA:
+            renderer.Copy(
+                    textures.getTexture("/weapons/banana.png"), SDL2pp::Rect(0, 16, BANANA_SIZE, BANANA_SIZE),
                     SDL2pp::Rect(camera.getScreenX(object.pos.x), camera.getScreenY(-object.pos.y),
                                  camera.getScaledSize(BANANA_SIZE), camera.getScaledSize(BANANA_SIZE)));
             break;
@@ -575,32 +305,7 @@ void Drawer::drawPlayerStats(const MatchStatsInfo& matchStats, double scaleX, do
     int y = static_cast<int>(125 * scaleY);
     int rowSpacing = static_cast<int>(50 * scaleY);
     for (const PlayerStatDto& playerStat : sortedStats) {
-        auto mappedTexture = duckTextures.find(static_cast<int>(playerStat.id));
-        if (mappedTexture != duckTextures.end()) {
-            const auto& playerTexture = mappedTexture->second;
-
-            int playerSpriteX = static_cast<int>(165 * scaleX);
-            int playerSpriteSizeWidth = static_cast<int>(64 * scaleX);
-            int playerSpriteSizeHeight = static_cast<int>(64 * scaleY);
-
-            renderer.Copy(
-                textures.getTexture(playerTexture),
-                SDL2pp::Rect(1, 10, SPRITE_SIZE, SPRITE_SIZE),
-                SDL2pp::Rect(playerSpriteX, y, playerSpriteSizeWidth, playerSpriteSizeHeight)
-            );
-
-            int winsX = static_cast<int>(250 * scaleX);
-            int winsSizeWidth = static_cast<int>(20 * scaleX);
-            int winsSizeHeight = static_cast<int>(20 * scaleY);
-
-            std::string text = std::to_string(static_cast<int>(playerStat.wins));
-
-            SDL2pp::Texture text_sprite(renderer, font.RenderText_Blended(text, SDL_Color{255, 255, 255, 255}));
-
-		    renderer.Copy(text_sprite, SDL2pp::NullOpt, SDL2pp::Rect(winsX, y + 15, winsSizeWidth, winsSizeHeight));
-        }
-
-        y += rowSpacing;
+        playerDrawer.drawStats(playerStat, scaleX, scaleY, y, rowSpacing);        
     }
 }
 
@@ -638,7 +343,7 @@ void Drawer::draw(const MatchDto& matchDto, const MatchStatsInfo& stats) {
             }
         }
 
-        drawPlayer(player);
+        playerDrawer.draw(player);
     }
 
     drawExplosions();
@@ -682,7 +387,7 @@ void Drawer::drawWinner(const MatchStatsInfo& matchStats, const MatchDto& matchD
 
     const PlayerDTO* winner = matchDto.getPlayer((int)matchStats.champion_player);
 
-    drawPlayer(*winner);
+    playerDrawer.draw(*winner);
 
     int playerX = camera.getScreenX(winner->pos.x);
     int playerY = camera.getScreenY(winner->pos.y);
