@@ -78,6 +78,7 @@ class PhysicalPlayer: public PhysicalObject {
         void change_moving(PlayerMovingDir new_dir);
 
         void stop_moving_x();
+        void slip_impulse(int x_item);
 
 };
 

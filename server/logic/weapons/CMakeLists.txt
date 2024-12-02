@@ -13,7 +13,6 @@ target_sources(taller_server_logic
             grenade_weapon.cpp
             bullet.cpp
             grenade.cpp
-            throwable.cpp
             banana_weapon.cpp
             banana.cpp
 

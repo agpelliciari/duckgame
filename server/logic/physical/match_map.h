@@ -32,6 +32,11 @@ public:
     bool out_of_map_x(const int x) const;
 
     bool check_collision(const int x, const int y, CollisionTypeMap &type, int &id) const;
+    
+
+    bool check_collision_area( CollisionTypeMap target_type, const int x, const int y
+    , const int w, const int h, int &id) const;
+
     bool check_horizontal_collision(const int x, const int y) const;
     bool check_vertical_collision(const int x, const int y) const;
 };

@@ -1,17 +1,22 @@
 
 
 #include "physical_grenade.h"
+#include <iostream>
 
 PhysicalGrenade::PhysicalGrenade(int init_coord_x, int init_coord_y):
-        PhysicalObject(init_coord_x, init_coord_y, 5, 5),
-        impacted(false), is_banana(false), impacted_collision{0, CollisionTypeMap::NONE}, out_of_map(false){
+        PhysicalObject(init_coord_x, init_coord_y, 5, 5), jitter_on_ground(true), impacted(false), out_of_map(false){
         acceleration.y = -3;
-        }
+  
+    }
 
-PhysicalGrenade::PhysicalGrenade(int init_coord_x, int init_coord_y, bool banana):
-        PhysicalObject(init_coord_x, init_coord_y, 5, 5),
-        impacted(false), is_banana(banana), impacted_collision{0, CollisionTypeMap::NONE}, out_of_map(false){
+PhysicalGrenade::PhysicalGrenade(int init_coord_x, int init_coord_y, bool jitter_on_ground):
+        PhysicalObject(init_coord_x, init_coord_y, 5, 5), jitter_on_ground(jitter_on_ground), impacted(false), out_of_map(false){
         acceleration.y = -3;
+}
+
+bool PhysicalGrenade::impacted_player(const MatchMap& colition_map,int& id) const{
+     return impacted && colition_map.check_collision_area(CollisionTypeMap::PLAYER, position.x,position.y
+    , dimension.x, dimension.y, id);
 }
 
 void PhysicalGrenade::react_to_sides_collision(Collision collision) {
@@ -28,11 +33,18 @@ void PhysicalGrenade::react_to_out_of_map() {
 }
 
 void PhysicalGrenade::react_to_down_collision(Collision collision) {
-    if (is_banana) {
-        impacted = true;
-    } else {
+    if (jitter_on_ground) {
         this->impact_with_up_or_down_collision();
+        return;
+    } 
+    if(impacted){
+        return;
     }
+    impacted = true;
+    speed.x = 0;
+    speed.y = 0;
+    
+    std::cout << "IMPACTED BANANA? AT " << position.x << ", " << position.y << std::endl;
 
 }
 

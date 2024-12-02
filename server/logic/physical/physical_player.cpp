@@ -10,8 +10,8 @@ static TypeMoveAction MOVE_ON_GROUND[3] = {TypeMoveAction::MOVE_LEFT,TypeMoveAct
 #define LEFT_IND 0
 #define RIGHT_IND 2
 
-#define KNOCK_BACK_DURATION 6
-#define KNOCK_BACK_MOMENTUM 10
+#define KNOCK_BACK_DURATION 5
+#define KNOCK_BACK_MOMENTUM 20
 
 PhysicalPlayer::PhysicalPlayer(int init_coord_x, int init_coord_y, const Configuration& _configs):
         PhysicalObject(init_coord_x, init_coord_y, PLAYER_WIDTH, PLAYER_HEIGHT),
@@ -64,11 +64,7 @@ void PhysicalPlayer::update_action(TypeMoveAction& move_action) {
 void PhysicalPlayer::react_to_sides_collision(Collision collision){
 
     stop_moving_x();
-    if (collision.type == CollisionTypeMap::BANANA){
-        this->add_impulse_x(KNOCK_BACK_MOMENTUM, KNOCK_BACK_DURATION);
-        return;
-    }
-    
+
     collided_sides = true;
 }
 
@@ -79,10 +75,6 @@ void PhysicalPlayer::react_to_down_collision(Collision collision){
         flap_attemps = configs.player_flaps;
         hold_flap = false;
         on_air = false;
-    }
-
-    if (collision.type == CollisionTypeMap::BANANA){
-        this->add_impulse_x(KNOCK_BACK_MOMENTUM, KNOCK_BACK_DURATION);
     }
 }
 
@@ -112,6 +104,8 @@ bool PhysicalPlayer::stay_down_start(){
     }
     
     if(is_stay_down){
+        stop_moving_x();
+        is_stay_down = false;
         return true;
     }
 
@@ -263,6 +257,7 @@ void PhysicalPlayer::change_moving(PlayerMovingDir new_dir){
         std::cerr << "-----> WANTED SET TO SAME DIR AGAIN OR OPPOSITE WITH OUT UNDO!? NO DEBERIA PASAR!\n";
         return;
     }
+    //std::cout << "MOVE PLY AT " << position.x << ", " << position.y <<std::endl;
     
     if((int)moving_dir == -(int)new_dir){
         moving_dir= NO_MOVE;    
@@ -276,3 +271,21 @@ void PhysicalPlayer::change_moving(PlayerMovingDir new_dir){
     
     speed.x += (int)new_dir *  configs.player_speed;    
 }
+
+void PhysicalPlayer::slip_impulse(int x_item){
+    
+    //int center_x = position.x + dimension.x/2;
+    if(!is_stay_down){
+        dimension.y -= 15;
+        is_stay_down = true;
+    }
+    
+    if(last_dir_ind == RIGHT_IND){
+        speed.x = -4;
+        //this->add_impulse_x(-KNOCK_BACK_MOMENTUM, KNOCK_BACK_DURATION);
+    } else{
+        speed.x = 4;
+        //this->add_impulse_x(KNOCK_BACK_MOMENTUM, KNOCK_BACK_DURATION);    
+    }
+}
+

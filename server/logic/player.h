@@ -89,6 +89,8 @@ class Player {
         
         void undo_moving(PlayerMovingDir old_dir);
         void change_move_dir(PlayerMovingDir new_dir);
+        
+        void slip_impulse(int x_item);
 
 };
 

@@ -10,14 +10,11 @@
 class PhysicalGrenade : public PhysicalObject{
 
     private:
+        bool jitter_on_ground;
         bool impacted;
-        bool is_banana;
-        Collision impacted_collision;
-
-
     public:
         PhysicalGrenade(int init_x, int init_y);
-        PhysicalGrenade(int init_x, int init_y, bool is_banana);
+        PhysicalGrenade(int init_x, int init_y, bool jitter_on_ground);
 
         void react_to_sides_collision(Collision collision) override;
         void react_to_down_collision(Collision collision) override;
@@ -34,6 +31,7 @@ class PhysicalGrenade : public PhysicalObject{
         bool is_out_of_map();
         bool out_of_map;
         bool get_impacted();
+        bool impacted_player(const MatchMap& colition_map, int& id) const;
 };
 
 

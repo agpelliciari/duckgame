@@ -399,6 +399,10 @@ void Player::cheat_ammo(){
     }
 }
 
+void Player::slip_impulse(int x_item){
+    object.slip_impulse(x_item);
+}
+
 
 
 //Tuple Player::get_position() { return object.get_real_position(); }

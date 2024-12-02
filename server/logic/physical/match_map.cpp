@@ -44,6 +44,36 @@ bool MatchMap::check_collision(const int other_object_x, const int other_object_
     return false;
 }
 
+
+
+
+
+static bool in_range(const int& init, const int& end, const int& pos, const int& size){
+     return (init <= pos && pos <= end) || (init <= pos+size && pos+size <= end)
+         || (pos <= init && pos+size >= end); 
+}
+
+bool MatchMap::check_collision_area( CollisionTypeMap target_type, const int x, const int y
+    , const int w, const int h, int &id) const{
+    
+    int x_end = x+w;
+    int y_end = y+h;
+        
+    for (auto& object: objects) {
+        if (object.collision.type == target_type 
+        && in_range(x,x_end, object.map_point.x, object.dimension.x)
+        && in_range(y,y_end, object.map_point.y, object.dimension.y)) {
+            id = object.collision.id;
+            return true;
+        }        
+    }
+    
+    return false;
+}
+
+
+
+
 void MatchMap::clear_map() { objects.clear(); }
 
 bool MatchMap::check_horizontal_collision(const int x, const int y) const {

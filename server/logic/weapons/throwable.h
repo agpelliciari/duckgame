@@ -3,33 +3,37 @@
 #define THROWABLE_H
 
 #include <vector>
-#include "server/logic/physical/physical_grenade.h"
 #include "common/dtosobject.h"
+#include "common/gameevents.h"
+
 #include "bullet.h"
 #include "server/logic/physical/match_map.h"
 #include "server/logic/physical/tuple.h"
 
 
+enum ThrowableAction{
+    ERASE_SELF,
+    EXPLODE_SELF,
+    SLIP_PLAYER
+};
+
 class Throwable {
-
-    protected:
-        int id_player;
-        bool alive;
-        TypeDynamicObject type;
-        PhysicalGrenade physical_grenade;
-
     public:
-        Throwable(int init_coord_x, int init_coord_y, TypeDynamicObject type, int id_player, bool is_banana);
-        void move(const MatchMap& colition_map);
-
-        void get_map_info(int &pos_x, int &pos_y, TypeDynamicObject &type);
-        void get_pos(int &pos_x, int &pos_y);
-        bool out_of_map();
+        virtual void get_map_info(int &pos_x, int &pos_y, TypeDynamicObject &type) = 0;
+        virtual void get_pos(int &pos_x, int &pos_y) =0;
 
         virtual void shoot_right() = 0;
         virtual void shoot_left() = 0;
         virtual void shoot_up() = 0;
-        virtual bool exploded(std::vector<Bullet> &bullets, std::vector<MapPoint> &other_objects) = 0;
+        
+        // Se mueve y verifica si debe hacer algo.
+        // Retorna true si debe activarse/eliminarse.
+        virtual bool get_action(const MatchMap& colition_map, ThrowableAction& action) = 0;
+        
+        
+        // En absoluto ideal. Pero para no refactorizar de mas....
+        // Retorna el id a un objeto target i.e player para la banana a la que se aplica.
+        virtual int activate(std::vector<Bullet> &bullets, std::vector<GameEvent>& events) = 0;
 
         virtual ~Throwable() = default;
 };

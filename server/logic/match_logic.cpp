@@ -232,6 +232,7 @@ void MatchLogic::update_colition_map() {
         block_index ++;
     }
 
+    /*
     int banana_index = 0;
     for (MapPoint& banana: bananas){
         Tuple position = {banana.x, banana.y};
@@ -239,6 +240,8 @@ void MatchLogic::update_colition_map() {
         colition_map.add_collision(position, dimension, CollisionTypeMap::BANANA, banana_index);
         banana_index ++;
     }
+    
+    */
 
 }
 
@@ -303,11 +306,14 @@ void MatchLogic::get_dtos(std::vector<PlayerDTO>& dtos,
         throwable->get_map_info(dto.pos.x, dto.pos.y, dto.type);
         objects.push_back(dto);
     }
-
+    
+    /* // Las bananas estan como throwables!
     for (MapPoint &banana: bananas) {
         DynamicObjDTO dto = {banana.x, banana.y, TypeDynamicObject::THROWN_BANANA};
         objects.push_back(dto);
     }
+    
+    */
 
 }
 
@@ -430,24 +436,49 @@ void MatchLogic::update_bullets(std::vector<GameEvent>& events){
     }
 }
 
+
+bool MatchLogic::player_slip(int id, int x_item){
+    for (Player& player: players) {
+        if (player.same_id(id)) {
+                        
+            std::cout << "FOUND PLAYER WHO TOUCHED BANANA AT x:"<< x_item<<" \n";
+            player.slip_impulse(x_item);
+            return true;
+        }
+    }
+    return false;
+}
+
 void MatchLogic::update_grenades(std::vector<GameEvent>& events){
     for (auto it = throwables.begin(); it!=throwables.end();) {
-        if ((*it)->exploded(bullets, bananas)){
-            int x = 0;
-            int y = 0;
-            TypeDynamicObject type;
-            (*it)->get_map_info(x,y,type);
-            if (type == TypeDynamicObject::GRANADA) {
-                events.emplace_back(x,y,GRENADE_EXPLOSION);
+    
+        ThrowableAction action;
+        if((*it)->get_action(colition_map, action)){
+            std::cout << "ACTION FOR THROWABLE?! " << (int)action << std::endl;
+            
+            if(action == ERASE_SELF){
+               it = throwables.erase(it);
+               continue;  
             }
+            
+            int id = (*it)->activate(bullets, events);
+            
+            if(action == ThrowableAction::SLIP_PLAYER){
+                int x;
+                int y;
+                (*it)->get_pos(x,y);
+                if(player_slip(id, x)){
+                    it = throwables.erase(it);
+                    continue;
+                }
+                it ++;
+                continue;
+            }
+            
             it = throwables.erase(it);
-        } else if ((*it)->out_of_map()){
-            it = throwables.erase(it);
-
-        } else {
-            (*it)->move(colition_map);
-            it ++;
+            continue;
         }
+        it ++;
     }
 }
 
@@ -483,7 +514,7 @@ void MatchLogic::update_spawn_points(){
 void MatchLogic::clear_objects(){
     //spawn_points.clear();
     boxes.clear();
-    bananas.clear();
+    //bananas.clear();
     //spawn_places.clear();
     dropped_items.clear();
     throwables.clear();
@@ -502,7 +533,7 @@ void MatchLogic::reset_map(){
     boxes.clear();
     blocks.clear();
     bullets.clear();
-    bananas.clear();
+    //bananas.clear();
     throwables.clear();
     colition_map.clear_map();
 }

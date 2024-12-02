@@ -39,7 +39,8 @@ private:
     std::vector<MapPoint> blocks;  // cppcheck-suppress unusedStructMember
     std::vector<MapPoint> spawn_points; // cppcheck-suppress unusedStructMember
     std::vector<DroppedItem> dropped_items; // cppcheck-suppress unusedStructMember
-    std::vector<MapPoint> bananas;  // cppcheck-suppress unusedStructMember
+    
+    //std::vector<MapPoint> bananas;  // cppcheck-suppress unusedStructMember
     //std::vector<SoundEventType> sounds; // cppcheck-suppress unusedStructMember
     std::vector<std::unique_ptr<Throwable>> throwables;  // cppcheck-suppress unusedStructMember
     // std::vector<std::vector<bool>> colition_map; // cppcheck-suppress unusedStructMember
@@ -79,7 +80,9 @@ public:
     void player_toggle_pick_up_drop_item(int id);
     void player_jump_start(int id);
     void player_jump_end(int id);
-    
+
+    bool player_slip(int id, int x_item);
+
     
     void resize_map(const int width, const int height);
     void reset_map();
