@@ -9,7 +9,7 @@ target_sources(taller_client
     camera.cpp
     sound_manager.cpp
     sound_container.cpp
-    explosion_animation.cpp
+    animationUtils/explosion_animation.cpp
     drawerUtils/armor_drawer.cpp
     drawerUtils/player_drawer.cpp
     drawerUtils/weapon_drawer.cpp
@@ -24,8 +24,8 @@ target_sources(taller_client
     camera.h
     sound_manager.h
     sound_container.h
-    animation_builder.h
-    explosion_animation.h
+    animationUtils/animation_builder.h
+    animationUtils/explosion_animation.h
     drawerUtils/armor_drawer.h
     drawerUtils/player_drawer.h
     drawerUtils/weapon_drawer.h

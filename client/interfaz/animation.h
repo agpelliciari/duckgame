@@ -10,7 +10,7 @@
 #include "client/gamecontext.h"
 #include "common/dtosgame.h"
 
-#include "animation_builder.h"
+#include "animationUtils/animation_builder.h"
 #include "sound_manager.h"
 
 class Animation {
