@@ -67,12 +67,9 @@ void PhysicalPlayer::react_to_sides_collision(Collision collision){
     std::cout << "---COLLIDED ON SIDE STOP!!!!\n";
     stop_moving_x();
     
-    if(is_stay_down){
-       std::cout << "---WAS DOWN SO NO MORE?\n";
-       is_stay_down = false;
-    }
-    
     collided_sides = true;
+    
+    stay_down_end(); // Chequea si podes terminar el stay down
 }
 
 void PhysicalPlayer::react_to_down_collision(Collision collision){
@@ -112,7 +109,7 @@ bool PhysicalPlayer::stay_down_start(){
     
     if(is_stay_down){
         stop_moving_x();
-        is_stay_down = false;
+        stay_down_end();
         return true;
     }
 
@@ -133,7 +130,7 @@ void PhysicalPlayer::stay_down_end(){
            acceleration.y = -configs.flap_grav;
        }
        
-       if(moving_dir != NOT_SETTED){
+       if(moving_dir != NOT_SETTED && collided_sides == false){
            speed.x += (int)moving_dir *  configs.player_speed;    
        }
        //moving_dir = NOT_SETTED; // Reset
@@ -296,6 +293,13 @@ void PhysicalPlayer::change_moving(PlayerMovingDir new_dir){
 
 void PhysicalPlayer::slip_impulse(int x_item){
     std::cout << "ADD IMPULSE TO DUCK?! item x: "<<x_item <<" not used! \n";
+    
+    if(is_stay_down == false){
+        dimension.y -= 15;
+        
+        is_stay_down = true;    
+        stop_moving_x();    
+    }
     
     if(last_dir_ind == RIGHT_IND){
         //speed.x = -4;
