@@ -122,11 +122,15 @@ void Player::add_speed(int speed_x, int speed_y) {
 
 
 void Player::change_move_dir(PlayerMovingDir new_dir){
-    this->object.change_moving(new_dir);
+    if(is_alive){
+        this->object.change_moving(new_dir);
+    }
 }
 
 void Player::undo_moving(PlayerMovingDir old_dir){
-    this->object.undo_moving(old_dir);
+    if(is_alive){
+        this->object.undo_moving(old_dir);
+    }
 }
 
 
@@ -143,11 +147,15 @@ void Player::stop_moving_x(){
 }
 
 void Player::aim_up_start(){
-    aim_up = true;
+    if(is_alive){
+        aim_up = true;
+    }
 }
 void Player::aim_up_end(){
-    shooting_direction = previous_shooting_direction;
-    aim_up = false;
+    if(is_alive){
+        shooting_direction = previous_shooting_direction;
+        aim_up = false;
+    }
 }
 
 bool Player::is_still_alive(){
@@ -183,7 +191,6 @@ void Player::take_damage(int dmg){
 }
 
 void Player::shoot(std::vector <Bullet> &bullets, std::vector<std::unique_ptr<Throwable>> &throwables){
-
     if (weapon != nullptr){
         Tuple bullet_position = this->get_map_position();
         Tuple player_dimension = this->get_dimension();
@@ -244,7 +251,10 @@ void Player::stay_down_start(){
 }
 
 void Player::stay_down_end(){
-    object.stay_down_end();
+    if(is_alive){
+        object.stay_down_end();
+    }
+    
 }
 
 bool Player::has_equipment() {
@@ -252,6 +262,10 @@ bool Player::has_equipment() {
 }
 
 bool Player::pick_up_item(std::vector<SpawnPlace> &spawn_places, std::vector<DroppedItem> &dropped_items){
+    if(!is_alive){
+        return false;
+    }
+    
     Tuple player_position = this->get_map_position();
     Tuple player_dimension = this->get_dimension();
 
@@ -313,6 +327,10 @@ bool Player::pick_up_item(std::vector<SpawnPlace> &spawn_places, std::vector<Dro
 }
 
 void Player::drop_item(std::vector<DroppedItem> &dropped_items){
+    if(!is_alive){
+        return;
+    }
+
     if (weapon != nullptr){
         dropped_items.push_back(DroppedItem(std::move(weapon), this->get_map_position().x, this->get_map_position().y, 16, 16));
         player_sounds.push_back(SoundEventType::PLAYER_DROP);
@@ -322,6 +340,11 @@ void Player::drop_item(std::vector<DroppedItem> &dropped_items){
 }
 
 void Player::jump_start(){
+    if(!is_alive){
+        return;
+    }
+
+
     if(object.jump_start()){
         std::cout<< "WAS JUMP!!!\n";
         player_sounds.push_back(SoundEventType::PLAYER_JUMPED);
@@ -335,6 +358,10 @@ void Player::jump_start(){
 }
 
 void Player::jump_end(){
+    if(!is_alive){
+        return;
+    }
+    
     object.jump_end();
 }
 
@@ -346,6 +373,10 @@ void Player::get_sounds(std::vector<SoundEventType>& sounds){
 }
 
 void Player::cheat_weapon(int base_mun){
+    if(!is_alive){
+        return;
+    }
+
     cheat_weapon_index ++;
     if (cheat_weapon_index > 10){
         cheat_weapon_index = 0;
@@ -388,11 +419,18 @@ void Player::cheat_weapon(int base_mun){
 }
 
 void Player::cheat_armor(){
+    if(!is_alive){
+        return;
+    }
+
     helmet = true;
     chest_armor = true;
 }
 
 void Player::cheat_ammo(){
+    if(!is_alive){
+        return;
+    }
     if (weapon != nullptr){
         weapon->cheat_ammo();
     }
