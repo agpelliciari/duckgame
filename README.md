@@ -17,46 +17,179 @@ Repositorio para el Trabajo Práctico grupal de la materia "Taller de Programaci
 
 <hr/>
 
-## Manual de Usuario
+# Manual de Usuario
 
-### Compilacion y Buildeo
-A partir del siguiente comando se compilara el juego e instalaran las dependencias necesarias para su ejecucion
+## Índice de Contenidos
+
+- [Manual de Usuario](#manual-de-usuario)
+  - [Índice de Contenidos](#índice-de-contenidos)
+  - [Requisitos del Sistema](#requisitos-del-sistema)
+  - [Instalacion Automatizada](#instalacion-automatizada)
+    - [Pasos para instalar el juego correctamente](#pasos-para-instalar-el-juego-correctamente)
+  - [Ejecucion del juego](#ejecucion-del-juego)
+    - [1. Levantar el servidor del juego](#1-levantar-el-servidor-del-juego)
+    - [2. Conectar un cliente](#2-conectar-un-cliente)
+  - [Editor de Mapas](#editor-de-mapas)
+    - [Como crear un nuevo mapa](#como-crear-un-nuevo-mapa)
+    - [Controles del Editor](#controles-del-editor)
+  - [Tests Automatizados](#tests-automatizados)
+    - [Comandos para ejecutar los tests](#comandos-para-ejecutar-los-tests)
+      - [1. Protocolo](#1-protocolo)
+      - [2. Integracion](#2-integracion)
+      - [3. Logica del juego](#3-logica-del-juego)
+  - [In-Game](#in-game)
+    - [Controles](#controles)
+    - [Equipamento](#equipamento)
+      - [Pew-Pew Laser](#pew-pew-laser)
+      - [Pistola Cowboy](#pistola-cowboy)
+      - [Escopeta](#escopeta)
+      - [Sniper](#sniper)
+  - [Creditos](#creditos)
+
+## Requisitos del Sistema
+
+**Sistema operativo necesario:**  
+
+- Ubuntu 24.02  
+
+**Dependencias necesarias:**  
+
+- SDL2: v0.18.1  
+  
+- SDL Mixer: v2.6.3  
+
+- SDL TTF: v2.20.2  
+
+- SDL Image: v2.6.3  
+
+- Qt: Qt 5.15.10  
+
+Para instalar las dependencias necesarias, ejecuta el siguiente comando:
 
 ```sh
 ./build_game.sh
 ```
-Las **dependencias** necesarias son las siguientes:
-- SDL2 / SDL2pp (v0.18.1)
-- SDL Mixer (v2.6.3) / TTF (v2.20.2) / Image (v2.6.3)
-- Qt
 
-**Sistema operativo** necesario para ejecutar el juego:
-- Ubuntu 24.02
-### Ejecucion del juego
+## Instalacion Automatizada
 
-Para iniciar una partida se debera levantar un **servidor** del juego, esto es posible con el siguiente comando:
+Para simplificar la instalación, detallamos una serie de pasos que debera seguir para poder ejecutar el juego.
+
+### Pasos para instalar el juego correctamente
+
+1. Clonar el repositorio del proyecto:
+
+```sh
+git clone https://github.com/MarceloAgustinOrigoniGuillaume/duckgame.git
+cd duckgame
+```
+
+2. Ejecutar el script de instalacion proporcionado en [Requisitos del sistema](#requisitos-del-sistema). Este script se encargara de:
+   - Instalar las dependencias necesarias.
+   - Configurar los archivos requeridos.
+   - Compilar el juego.
+  
+3. Una vez completado, el juego estara listo para usarse.
+
+## Ejecucion del juego
+
+### 1. Levantar el servidor del juego
+
+Ejecuta el siguiente comando para iniciar el servidor:
+
 ```sh
 ./taller_server 2048
 ```
-Luego, en una nueva terminal, sera necesario conectarse a este servidor mediante un **cliente**, por esta razon se debe ejecutar la siguiente linea:
+
+### 2. Conectar un cliente
+
+Abre una nueva terminal y ejecuta el siguiente comando:
+
 ```sh
 ./taller_client
 ```
-Para crear y cargar un mapa personalizado utilizando elementos del juego debera ejecutar el siguiente comando:
+
+## Editor de Mapas
+
+El editor te permite crear y modificar mapas personalizados
+
+### Como crear un nuevo mapa
+
+1. Ejecutar el editor con el comando:
 
 ```sh
 ./taller_editor
 ```
-Tambien tendra la posibilidad de modificar un mapa previamente creado y cargado a traves del comando anterior.
 
+2. Utilize los controles especificados dentro de [Controles del editor](#controles-del-editor) para construir su mapa.
 
-Para validar distintas funcionalidades del juego tendra tests automatizados que se ejecutaran luego de la siguiente linea:
+3. Para guardar su mapa personalizado seleccione el boton `Save` .
+
+**Para poder utilizar en el juego los mapas personalizados los debera guardar en la carpeta `/res/maps/`**
+
+4. Para cargar un mapa ya creado seleccione el boton `Load` . 
+
+### Controles del Editor
+
+| Control                     | Action       |
+| --------------------------- | ------------ |
+| `Left Mouse Click`          | Add Block    |
+| `Right Mouse Click`         | Remove Block |
+| `Scroll`                    | Change Block |
+| `Ctrl + Scroll Up`          | Zoom In      |
+| `Ctrl + Scroll Down`        | Zoom Out     |
+| `Middle Mouse Click + Drag` | Drag the Map |
+
+## Tests Automatizados
+
+El proyecto incluye un conjunto de pruebas automatizadas que validan diferentes aspectos del sistema, desde la lógica interna hasta la interacción con sockets y threads. A continuación, se describen los comandos disponibles y sus funciones:
+
+### Comandos para ejecutar los tests
+
+#### 1. Protocolo
+
+Se testea el protocolo utilizando mocks de sockets y sin threads. Esto garantiza que los mensajes sean correctamente enviados y recibidos bajo condiciones controladas.
 
 ```sh
-./taller_tests
+./tester_protocol
 ```
 
-### Controles In-Game
+**Que valida:**
+
+- Envío y recepción de datos a través del protocolo.
+
+- Comportamiento esperado en condiciones de red simuladas.
+
+#### 2. Integracion
+
+Ejecuta pruebas de integración que incluyen el lobby, el servidor con sockets reales, y realiza benchmarks básicos para evaluar el rendimiento.
+
+```sh
+./tester_integration
+```
+
+**Que valida:**
+
+- Interacción entre diferentes componentes del sistema.
+
+- Correcto manejo de conexiones y comunicaciones reales (sockets y threads).
+
+#### 3. Logica del juego
+
+Prueba la lógica del juego aislada de los threads, asegurándose de que las operaciones internas se realicen correctamente y que los DTOs (Data Transfer Objects) se generen y envíen adecuadamente.
+
+```sh
+./tester_logic
+```
+
+**Que valida:**
+
+- Reglas de la lógica del juego.
+
+- Generación y procesamiento de datos enviados entre cliente y servidor.
+
+## In-Game
+
+### Controles
 
 | Control                   | Action                           |
 | ------------------------- | -------------------------------- |
@@ -72,35 +205,38 @@ Para validar distintas funcionalidades del juego tendra tests automatizados que 
 | `C`         | `L`         | Grab Weapon / Put on Armour, Hat |
 | `V`         | `P`         | Fire Weapon                      |
 
-### Controles del Editor
+### Equipamento
 
-| Control                     | Action       |
-| --------------------------- | ------------ |
-| `Left Mouse Click`          | Add Block    |
-| `Right Mouse Click`         | Remove Block |
-| `Scroll`                    | Change Block |
-| `Ctrl + Scroll Up`          | Zoom In      |
-| `Ctrl + Scroll Down`        | Zoom Out     |
-| `Middle Mouse Click + Drag` | Drag the Map |
+| <center>Nombre</center>                | <center>Imagen</center>                               | <center>Descripción</center>                                          | <center>Capturas in game</center> |
+| ----------------------------------- | ------------------------------------ | -------------------------------------------------- | ------------------------------- |
+| <center>Granada</center>            | <center>![Granada](/res/readme/weapons/grenade.png)</center> | <center>Una granada estándar con daño en área.</center> | <center> </center> |
+| <center>Banana</center>             | <center>![Banana](/res/readme/weapons/banana.png)</center>  | <center>Provocara un resbalon al que la pise.</center>    | <center> </center> |
+| <center>Pew-Pew Laser</center>      | <center>![Pew Pew Laser](/res/weapons/pewpewLaser.png)</center> | <center>Laser semi-automatico de gran alcance</center> | <center>[Pew Pew Laser In Game](#pew-pew-laser)</center> |
+| <center>Laser Rifle</center>        | <center>![Laser Rifle](/res/weapons/laserRifle.png)</center> | <center>Un láser rápido con capacidad de disparo continuo.</center>     | <center> </center> |
+| <center>AK47</center>               | <center>![AK47](/res/weapons/ak47.png)</center> | <center>Rifle automático con alto daño por segundo.</center>        | <center> </center> |
+| <center>Pistola de Duelos</center>  | <center>![Duelos](/res/readme/weapons/pistol.png)</center> | <center>Ideal para enfrentamientos uno a uno.</center>              | <center> </center> |
+| <center>Pistola Cowboy</center>     | <center>![Cowboy](/res/weapons/cowboyPistol.png)</center> | <center>Rápida y precisa, con estilo del viejo oeste.</center>      | <center>[Cowboy In Game](#pistola-cowboy)</center> |
+| <center>Magnum</center>             | <center>![Magnum](/res/weapons/magnum.png)</center> | <center>Revolver poderoso con gran daño.</center>                  | <center> </center> |
+| <center>Escopeta</center>           | <center>![Escopeta](/res/weapons/shotgun.png)</center> | <center>Daño devastador a corta distancia.</center>                | <center>[Escopeta In Game](#escopeta)</center> |
+| <center>Sniper</center>             | <center>![Sniper](/res/weapons/sniper.png)</center> | <center>Arma de largo alcance muy poderosa.</center> | <center>[Sniper In Game](#sniper)</center> |
+| <center>Armadura de cuerpo</center>    | <center>![Armadura](/res/armors/chestPlatePickup.png)</center> | <center>Absorbe balas/lasers sin producirle daño al que lo lleve.</center> | <center> </center> |
+| <center>Armadura de cabeza</center>        | <center>![Casco](/res/armors/helmetPickup.png)</center> | <center>Absorbe balas/lasers sin producirle daño al que lo lleve.</center> | <center> </center> |
 
+#### Pew-Pew Laser
+  
+![Alt Text](/res/readme/gifs/pewpew.gif){ width=550px }
 
-### Armas
+#### Pistola Cowboy
+  
+![Alt Text](/res/readme/gifs/cowboy.gif){ width=550px }
+  
+#### Escopeta
 
-- Granada
-- Banana
-- Pew-Pew Laser
-    ![Alt Text](/res/readme/gifs/pewpew.gif)
-- Laser Rifle
-- AK47
-- Pistola de Duelos
-- Pistola Cowboy
-    ![Alt Text](/res/readme/gifs/cowboy.gif)
-- Magnum
-- Escopeta
-    ![Alt Text](/res/readme/gifs/shotgun.gif)
-- Sniper
-    ![Alt Text](/res/readme/gifs/sniper.gif)
-- Armaduras y Cascos
+![Alt Text](/res/readme/gifs/shotgun.gif){ width=550px }
+
+#### Sniper
+  
+![Alt Text](/res/readme/gifs/sniper.gif){ width=550px }
 
 <hr>
 
