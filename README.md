@@ -205,6 +205,13 @@ Prueba la lógica del juego aislada de los threads, asegurándose de que las ope
 | `C`         | `L`         | Grab Weapon / Put on Armour, Hat |
 | `V`         | `P`         | Fire Weapon                      |
 
+| Comando | Cheat |
+| ------- | ----- |
+| `F1`    | Equipar un arma |
+| `F2`    | Municion maxima |
+| `F3`    | Armadura maxima |
+
+
 ### Equipamento
 
 | <center>Nombre</center>                | <center>Imagen</center>                               | <center>Descripción</center>                                                                                                            | <center>Capturas in game</center> |
