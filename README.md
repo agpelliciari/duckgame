@@ -210,7 +210,7 @@ Prueba la lógica del juego aislada de los threads, asegurándose de que las ope
 | <center>Nombre</center>                | <center>Imagen</center>                               | <center>Descripción</center>                                          | <center>Capturas in game</center> |
 | ----------------------------------- | ------------------------------------ | -------------------------------------------------- | ------------------------------- |
 | <center>Granada</center>            | <center>![Granada](/res/readme/weapons/grenade.png)</center> | <center>Una granada estándar con daño en área.</center> | <center> </center> |
-| <center>Banana</center>             | <center>![Banana](/res/readme/weapons/banana.png)</center>  | <center>Provocara un resbalon al que la pise.</center>    | <center> </center> |
+| <center>Banana</center>             | <center>![Banana](/res/readme/weapons/banana.png)</center>  | <center>Provocara un resbalon al que la pise. Para levantarse debera presionar la tecla corresponidente a la accion "Ragdoll".</center>    | <center> </center> |
 | <center>Pew-Pew Laser</center>      | <center>![Pew Pew Laser](/res/weapons/pewpewLaser.png)</center> | <center>Laser semi-automatico de gran alcance</center> | <center>[Pew Pew Laser In Game](#pew-pew-laser)</center> |
 | <center>Laser Rifle</center>        | <center>![Laser Rifle](/res/weapons/laserRifle.png)</center> | <center>Un láser rápido con capacidad de disparo continuo.</center>     | <center> </center> |
 | <center>AK47</center>               | <center>![AK47](/res/weapons/ak47.png)</center> | <center>Rifle automático con alto daño por segundo.</center>        | <center> </center> |
@@ -224,19 +224,19 @@ Prueba la lógica del juego aislada de los threads, asegurándose de que las ope
 
 #### Pew-Pew Laser
   
-![Alt Text](/res/readme/gifs/pewpew.gif){ width=550px }
+![Alt Text](/res/readme/gifs/pewpew.gif)
 
 #### Pistola Cowboy
   
-![Alt Text](/res/readme/gifs/cowboy.gif){ width=550px }
+![Alt Text](/res/readme/gifs/cowboy.gif)
   
 #### Escopeta
 
-![Alt Text](/res/readme/gifs/shotgun.gif){ width=550px }
+![Alt Text](/res/readme/gifs/shotgun.gif)
 
 #### Sniper
   
-![Alt Text](/res/readme/gifs/sniper.gif){ width=550px }
+![Alt Text](/res/readme/gifs/sniper.gif)
 
 <hr>
 
