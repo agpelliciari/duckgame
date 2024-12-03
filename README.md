@@ -17,41 +17,46 @@ Repositorio para el Trabajo Práctico grupal de la materia "Taller de Programaci
 
 <hr/>
 
-## Compilacion y Buildeo
+## Manual de Usuario
+
+### Compilacion y Buildeo
+A partir del siguiente comando se compilara el juego e instalaran las dependencias necesarias para su ejecucion
+
 ```sh
 ./build_game.sh
 ```
+Las **dependencias** necesarias son las siguientes:
+- SDL2 / SDL2pp (v0.18.1)
+- SDL Mixer (v2.6.3) / TTF (v2.20.2) / Image (v2.6.3)
+- Qt
 
-<hr/>
+**Sistema operativo** necesario para ejecutar el juego:
+- Ubuntu 24.02
+### Ejecucion del juego
 
-## Ejecucion del juego
-
-Servidor:
-
+Para iniciar una partida se debera levantar un **servidor** del juego, esto es posible con el siguiente comando:
 ```sh
 ./taller_server 2048
 ```
-
-Cliente:
-
+Luego, en una nueva terminal, sera necesario conectarse a este servidor mediante un **cliente**, por esta razon se debe ejecutar la siguiente linea:
 ```sh
 ./taller_client
 ```
-
-Editor de mapas:
+Para crear y cargar un mapa personalizado utilizando elementos del juego debera ejecutar el siguiente comando:
 
 ```sh
 ./taller_editor
 ```
-Tests:
+Tambien tendra la posibilidad de modificar un mapa previamente creado y cargado a traves del comando anterior.
+
+
+Para validar distintas funcionalidades del juego tendra tests automatizados que se ejecutaran luego de la siguiente linea:
 
 ```sh
 ./taller_tests
 ```
 
-<hr/>
-
-### In-Game Controls
+### Controles In-Game
 
 | Control                   | Action                           |
 | ------------------------- | -------------------------------- |
@@ -67,7 +72,7 @@ Tests:
 | `C`         | `L`         | Grab Weapon / Put on Armour, Hat |
 | `V`         | `P`         | Fire Weapon                      |
 
-### Editor Controls
+### Controles del Editor
 
 | Control                     | Action       |
 | --------------------------- | ------------ |
@@ -78,9 +83,8 @@ Tests:
 | `Ctrl + Scroll Down`        | Zoom Out     |
 | `Middle Mouse Click + Drag` | Drag the Map |
 
-<hr>
 
-## Weapons
+### Armas
 
 - Granada
 - Banana
