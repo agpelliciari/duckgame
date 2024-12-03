@@ -57,17 +57,23 @@ bool Grenade::get_action(const MatchMap& colition_map, ThrowableAction& action){
 
 // En absoluto ideal. Pero para no refactorizar de mas....
 // Retorna el id a un objeto target i.e player para la banana a la que se aplica.
-int Grenade::activate(std::vector<Bullet> &bullets, std::vector<GameEvent>& events){
-    int j = 1;
+int Grenade::activate(std::vector<Bullet> &bullets, std::vector<GameEvent>& events) {
+    int j = 0;
     Tuple position = physical_grenade.get_position();
-    
-    for (int i = 0; i <= 6 ; i++){
-        (i<3)? j ++ : j --;
-        bullets.push_back(Bullet(position.x, position.y, 4, TypeDynamicObject::GRENADE_PROJECTILE, id_player));
+
+    for (int i = 0; i < 6; i++) {
+        (i < 3) ? j++ : j--;
+        bullets.push_back(Bullet(position.x, position.y, 4, TypeDynamicObject::GRENADE_PROJECTILE,0));
         bullets.back().add_speed(-3 + i, j);
     }
-    
-    events.emplace_back(position.x, position.y,GameEventType::GRENADE_EXPLOSION);
-    
+    j = -1;
+    for (int i = 0; i < 6; i++) {
+        (i < 3) ? j-- : j++;
+        bullets.push_back(Bullet(position.x, position.y, 4, TypeDynamicObject::GRENADE_PROJECTILE, 0));
+        bullets.back().add_speed(-3 + i, j);
+    }
+
+    events.emplace_back(position.x, position.y, GameEventType::GRENADE_EXPLOSION);
+
     return -1;
 }
