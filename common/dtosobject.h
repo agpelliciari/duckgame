@@ -17,11 +17,15 @@ enum class TypeDynamicObject : uint8_t {
     NONE,
     BOX,
     PROJECTILE,
+    GRENADE_PROJECTILE,
     LASER,
+    LASER_2,
     BURST,
 
     HELMET,
     ARMOR,
+
+    THROWN_BANANA,
 
     // Armas?
     GRANADA,

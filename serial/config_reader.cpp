@@ -62,20 +62,21 @@ const char* ConfigReader::PLAYER_HEALTH = "duck_health";
 const char* ConfigReader::PLAYER_JMP_FORCE = "duck_jump_force";     
 const char* ConfigReader::PLAYER_FLAP_FORCE = "duck_flap_force";     
 const char* ConfigReader::PLAYER_FLAPS = "duck_max_flaps";     
+const char* ConfigReader::PLAYER_FLAP_GRAVITY = "duck_flap_gravity";     
+
 
 
 const char* ConfigReader::FPS = "fps";               
 const char* ConfigReader::ROUNDS_PER_SET = "rounds_per_set";    
 const char* ConfigReader::WINS_NEEDED = "wins_needed";      
 
-const char* ConfigReader::MAGNUM_DMG = "magnum_dmg";        
-const char* ConfigReader::MAGNUM_MUNITION = "magnum_munition";   
-
 const char* ConfigReader::ARMOR_HEALTH = "armor_health";       
 const char* ConfigReader::HELMET_HEALTH= "helmet_health";      
 
-const char* ConfigReader::ITEM_SPAWN_TIME= "item_respawn_time";      
-const char* ConfigReader::BOX_HEALTH= "box_health";      
+const char* ConfigReader::ITEM_SPAWN_TIME= "item_respawn_time_sec";      
+const char* ConfigReader::BOX_HEALTH= "box_health";  
+
+
 
 void ConfigReader::readGravity(short& out){ readShort(root[ConfigReader::BASE_GRAVITY], out); }
 void ConfigReader::readExpRadius(uint16_t& out){ readU16(root[ConfigReader::EXPLOSION_RADIUS], out); }
@@ -89,18 +90,17 @@ void ConfigReader::readBaseDmgMunition(uint16_t& dmg_base,uint16_t& base_munitio
     readU16(root[ConfigReader::DMG_BASE], dmg_base);
     readU16(root[ConfigReader::MUNITION_BASE], base_munition);
 }
-void ConfigReader::readMagnumInfo(uint16_t& dmg_magnum,uint16_t& munition_magnum){
-    readU16(root[ConfigReader::MAGNUM_DMG], dmg_magnum);
-    readU16(root[ConfigReader::MAGNUM_MUNITION], munition_magnum);
-}
 
-void ConfigReader::readPlayerInfo(uint16_t& health,uint16_t& speed,short& jmp_force,
-                                  short& flap_force,uint16_t& flaps){
-    readU16(root[ConfigReader::PLAYER_HEALTH], health);
-    readU16(root[ConfigReader::PLAYER_SPEED], speed);
+void ConfigReader::readPlayerInfo(uint16_t& health,short& speed,short& jmp_force,
+                                  short& flap_force,uint16_t& flaps,short& flap_grav){
+    readShort(root[ConfigReader::PLAYER_SPEED], speed);
     readShort(root[ConfigReader::PLAYER_JMP_FORCE], jmp_force);
     readShort(root[ConfigReader::PLAYER_FLAP_FORCE], flap_force);
+    readShort(root[ConfigReader::PLAYER_FLAP_GRAVITY], flap_grav);
+    
+    readU16(root[ConfigReader::PLAYER_HEALTH], health);
     readU16(root[ConfigReader::PLAYER_FLAPS], flaps);
+    
     
 }
 
@@ -109,14 +109,17 @@ void ConfigReader::readDefenseInfo(uint16_t& armor_health,uint16_t& helmet_healt
     readU16(root[ConfigReader::HELMET_HEALTH], helmet_health);
 }
 
-void ConfigReader::readMSDelay(uint16_t& delay){
+void ConfigReader::readMSDelay(int& fps, uint16_t& delay){
     config_item_t vl = root[ConfigReader::FPS];
     if(checkInvalid(vl)){
         return;
     }
     
-    uint16_t fps;
     vl >> fps;
+    if(fps <= 0){
+        fps = 60;
+    }
+    
     
     delay = 1000/fps;
     

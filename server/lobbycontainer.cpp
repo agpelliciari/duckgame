@@ -70,6 +70,13 @@ void LobbyContainer::startLobby(Match& lobby, const char* mapname) {
     // return findLobby(id).start();
 }
 
+int LobbyContainer::getWinsNeeded() const{
+    return config.wins_needed;
+}
+int LobbyContainer::getRoundsPerSet() const{
+    return config.rounds_per_set;
+}
+
 
 ControlledPlayer& LobbyContainer::getPlayerOn(Match& lobby,  const ControlId& id) {
     std::unique_lock<std::mutex> lck(mtx);  // No other actions on container.

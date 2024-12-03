@@ -80,6 +80,10 @@ void TesterClient::assertLobbyStarted(uint8_t count) {
     // Chequea map info
     struct MapData map;
     client.recvmapdata(map);
+
+    int wins;
+    int rounds_per_set;
+    client.recvwinconfig(wins,rounds_per_set);
     
     
     // Y tambien chequea el stats info para el primero

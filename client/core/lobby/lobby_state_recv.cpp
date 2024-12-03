@@ -51,6 +51,10 @@ void LobbyStateRecv::setInitedMatch(){//int totalplayers) {
 
     // Receive map data.
     protocol.recvmapdata(context.map);  //, MAP_BLOCK_UNIT);
+    protocol.recvwinconfig(context.wins_needed,context.rounds_per_set); 
+    
+    std::cout << "GOT WINS NEED " <<context.wins_needed << " ROUNDS " << context.rounds_per_set<< std::endl;
+    
 
     context.started = true;
     //context.cantidadjugadores = totalplayers;

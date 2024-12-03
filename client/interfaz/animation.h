@@ -10,15 +10,15 @@
 #include "client/gamecontext.h"
 #include "common/dtosgame.h"
 
-#include "animation_dtos.h"
+#include "animationUtils/animation_builder.h"
 #include "sound_manager.h"
 
 class Animation {
 private:
     std::unordered_map<int, AnimationBuilder>
             animationBuilders;  // cppcheck-suppress unusedStructMember
-
-    SoundManager& soundManager;
+    
+    std::vector<BombExplosion> explosions;
 
     unsigned int frameTicks;  // cppcheck-suppress unusedStructMember
 
@@ -42,8 +42,12 @@ private:
 
     void updateExplosionsVector(AnimationBuilder& builder, float deltaTime);
 
+    void updateGameEvents(const MatchDto& matchDto);
+
+    void updateBombExplosions(float deltaTime);
+
 public:
-    Animation(const GameContext& context, SoundManager& soundManager);
+    Animation(const GameContext& context);
 
     // Set sprite coordinates based on the character's state
     void update(const MatchDto& matchDto);
@@ -54,7 +58,9 @@ public:
 
     int getSpriteY(int playerId);
 
-    std::vector<Explosion>& getExplosions(int playerId);
+    std::vector<ExplosionAnimation>& getExplosions(int playerId);
+
+    std::vector<BombExplosion> getBombExplosions();
 
     float getIndicatorSprite(float width);
 

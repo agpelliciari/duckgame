@@ -1,7 +1,7 @@
 #include "animation.h"
 
-Animation::Animation(const GameContext& context, SoundManager& soundManager):
-        animationBuilders(), soundManager(soundManager), frameTicks(0), lastUpdateTicks(0) {
+Animation::Animation(const GameContext& context):
+        animationBuilders(), frameTicks(0), lastUpdateTicks(0) {
     for (int i = 1; i <= static_cast<int>(context.cantidadjugadores); i++) {
         animationBuilders.emplace(i, AnimationBuilder());
     }
@@ -20,19 +20,43 @@ float Animation::updateDeltaTime() {
 }
 
 void Animation::updateExplosionsVector(AnimationBuilder& builder, float deltaTime) {
-    for (Explosion& explosion: builder.explosions) {
+    for (ExplosionAnimation& explosion: builder.explosions) {
         explosion.update(deltaTime);
     }
 
     builder.explosions.erase(
-        std::remove_if(builder.explosions.begin(), builder.explosions.end(), [](const Explosion& explosion) { return explosion.isFinished(); }),
+        std::remove_if(builder.explosions.begin(), builder.explosions.end(), [](const ExplosionAnimation& explosion) { return explosion.isFinished(); }),
         builder.explosions.end()
+    );
+}
+
+void Animation::updateGameEvents(const MatchDto& matchDto) {
+    for (const GameEvent& event: matchDto.events) {
+        if ((event.type == GameEventType::BOMB_EXPLOSION) || (event.type == GameEventType::GRENADE_EXPLOSION)) {
+            std::cout << " guardando Explosion at " << event.pos.x << ", " << event.pos.y << std::endl;
+            explosions.emplace_back(event.pos, "/weapons/explode.png", 64, 0.5f, 4);
+
+        } //else if (event.type == GameEventType::BOX_DESTROYED) {}
+    }
+}
+
+void Animation::updateBombExplosions(float deltaTime) {
+    for (BombExplosion& explosion: explosions) {
+        explosion.update(deltaTime);
+    }
+
+    explosions.erase(
+        std::remove_if(explosions.begin(), explosions.end(), [](const BombExplosion& explosion) { return explosion.isFinished(); }),
+        explosions.end()
     );
 }
 
 void Animation::update(const MatchDto& matchDto) {
     updateFrame();
     float deltaTime = updateDeltaTime();
+
+    updateGameEvents(matchDto);
+    updateBombExplosions(deltaTime);
 
     for (const PlayerDTO& player: matchDto.players) {
         AnimationBuilder* builder = getAnimationBuilder(player.id);
@@ -52,8 +76,12 @@ void Animation::updateDoingActionAnimation(AnimationBuilder& builder, const Play
     if (action == TypeDoingAction::SHOOTING || action == TypeDoingAction::SHOOTING_UP) {
         if (player.weapon == TypeWeapon::PEW_PEW_LASER) {
             builder.addExplosion("/weapons/laserFlare.png", 16, 0.3f, 2);
+        } else if (player.weapon == TypeWeapon::LASER_RIFLE) {
+            builder.addExplosion("/weapons/plasmaFlare.png", 32, 0.3f, 3);
         } else {
-            builder.addExplosion("/weapons/smallFlare.png", 11, 0.3f, 1);
+            if (player.weapon != TypeWeapon::GRANADA) {
+                builder.addExplosion("/weapons/smallFlare.png", 11, 0.3f, 1);
+            }
         }
     }
 }
@@ -154,15 +182,17 @@ int Animation::getSpriteY(int playerId) {
     return 0;
 }
 
-std::vector<Explosion>& Animation::getExplosions(int playerId) {
+std::vector<ExplosionAnimation>& Animation::getExplosions(int playerId) {
     AnimationBuilder* builder = getAnimationBuilder(playerId);
     if (builder) {
         return builder->explosions;
     }
 
-    static std::vector<Explosion> noExplosions;
+    static std::vector<ExplosionAnimation> noExplosions;
     return noExplosions;
 }
+
+std::vector<BombExplosion> Animation::getBombExplosions() { return explosions; }
 
 float Animation::getIndicatorSprite(float width) {
     return width * ((frameTicks / INDICATOR_ANIMATION_SPEED) % INDICATOR_ANIMATION_FRAMES);

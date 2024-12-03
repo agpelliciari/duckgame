@@ -47,6 +47,8 @@ bool ControlNotifier::runLobby() {
                 
                 protocol.notifyinfo(LobbyResponseType::STARTED_LOBBY, match.playercount());
                 protocol.sendmapinfo(match.getMap());
+                
+                protocol.sendwinconfig(lobbies.getWinsNeeded(), lobbies.getRoundsPerSet());
                 return true;
             }
             std::cout << "----Notifier lobby recv cancel match?\n";

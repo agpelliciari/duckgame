@@ -55,6 +55,8 @@ public:
     // Game protocol
     PlayerActionDTO recvaction();
 
+    void sendwinconfig(const int wins_needed,const int rounds_per_set);
+
     void sendstate(const MatchDto&& state);
     void sendstate(const MatchDto& state);
     void sendstats(const MatchStatsInfo& state);

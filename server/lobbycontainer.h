@@ -38,6 +38,9 @@ public:
 
     const std::vector<std::string>& registeredMaps() const;
     
+    int getWinsNeeded() const;
+    int getRoundsPerSet() const;
+    
     // Acciones para create vs join lobby. Encapsuladas en un metodo
     // con el join de players para hacerlo thread safe.
     Match& newLobby(ControlId& out);

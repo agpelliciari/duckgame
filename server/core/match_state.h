@@ -27,6 +27,7 @@ private:
     int max_rounds; // cppcheck-suppress unusedStructMember
     
     const Configuration& configs;
+    MatchDto state_curr;
 
 public:
     MatchState(const Configuration& _configs);

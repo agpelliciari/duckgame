@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "common/core/liberror.h"
+#include "common/queue.h"
 
 PlayStateRecv::PlayStateRecv(ClientProtocol& _protocol, EventListener& _listener,
                              GameContext& _context):
@@ -42,12 +43,17 @@ void PlayStateRecv::run() {
                      error) {  // No deberia pasara realmente, antes pasaria en el controller.
         
         if(stats.isRunning()){
-            std::cerr << "canceling.. play state receiver error, was server disconnected?" << std::endl;
-            stats.state = CANCELADA;
-            listener.statsUpdated(stats);
+            if(protocol.isopen()){
+                std::cerr << "canceling.. play state receiver error, was server disconnected?" << std::endl;
+                stats.state = CANCELADA;
+                listener.statsUpdated(stats);
+            } else{
+                std::cerr << "-->closed play receiver??" << std::endl;        
+            }
         }
-        
-        
+    } catch (const ClosedQueue& err) {
+        std::cerr << "Game force close!" << std::endl;
+        protocol.close();  // Si no esta cerrado
     }
 }
 

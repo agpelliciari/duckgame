@@ -89,6 +89,8 @@ public:
 
     void recvplayers(std::vector<int>& players);  //, const int unit);
 
+    void recvwinconfig(int& wins_needed, int& rounds_per_set);
+    
     void recvmapdata(struct MapData& data);  //, const int unit);
 
     bool isopen();

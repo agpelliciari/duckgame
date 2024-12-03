@@ -1,15 +1,9 @@
 
 #include "box.h"
+#include <ctime>
+//#include <iostream>
 
-Box::Box(int id, int x, int y): id(id), spawn_point{x * 16, y * 16}, dimension{16, 16}, spawned(true), life_points(2) {
-    possible_rewards = {
-        //TypeDynamicObject::HELMET,
-        //TypeDynamicObject::ARMOR,
-        //TypeDynamicObject::MAGNUM,
-        TypeDynamicObject::PISTOLA_COWBOY,
-        //TypeDynamicObject::PEW_PEW_LASER
-    };
-}
+Box::Box(int id, int hp, int x, int y): id(id), spawn_point{x * 16, y * 16}, dimension{16, 16}, spawned(true), life_points(hp) {}
 
 Tuple Box::get_spawn_point() {
     return spawn_point;
@@ -32,16 +26,55 @@ void Box::take_damage(){
     }
 }
 
-TypeDynamicObject Box::get_item() {
+std::unique_ptr<Weapon> Box::get_item(const int base_mun) {
     std::srand(std::time(nullptr));
-    int reward_index = 0 + std::rand() % possible_rewards.size();
-    return possible_rewards[reward_index];
+    int random_weapon = std::rand() % 15;
+    //int random_weapon = 13;
+    switch (random_weapon){
+        case 0:
+            return std::make_unique<CowboyPistolWeapon>(base_mun);
+        break;
+        case 1:
+            return std::make_unique<MagnumWeapon>(base_mun);
+        break;
+        case 2:
+            return std::make_unique<DuelPistol>(base_mun);
+        break;
+        case 3:
+            return std::make_unique<PewPewLaserWeapon>(base_mun);
+        break;
+        case 4:
+            return std::make_unique<SniperWeapon>(base_mun);
+        break;
+        case 5:
+            return std::make_unique<ShotgunWeapon>(base_mun);
+        break;
+        case 6:
+            return std::make_unique<AK47Weapon>(base_mun);
+        break;
+        case 7:
+            return std::make_unique<LaserRifleWeapon>(base_mun);
+        break;
+        case 8:
+            return std::make_unique<GrenadeWeapon>(base_mun);
+        break;
+        case 9:
+            return std::make_unique<CowboyPistolWeapon>(base_mun);
+        break;
+        default:
+            // Bomb explosion!
+            return nullptr;
+        break;
+    }
 }
 
 bool Box::destroyed(){
     return life_points <= 0;
 }
 
+int Box::get_id() const {
+   return id;
+}
 bool Box::same_id(int id_) {
     return this->id == id_;
 }

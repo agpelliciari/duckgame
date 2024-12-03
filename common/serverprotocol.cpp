@@ -139,6 +139,11 @@ void ServerProtocol::sendstate(const MatchDto& state) {
 
 }
 
+void ServerProtocol::sendwinconfig(const int wins_needed,const int rounds_per_set){
+    uint8_t info[2] = {(uint8_t)wins_needed,(uint8_t) rounds_per_set};
+    this->sendbytes(&info[0],2);
+}
+
 // Para mayor flexibilidad.. por ahora.
 void ServerProtocol::sendplayer(Protocol& protocol, const PlayerDTO& player) {
 

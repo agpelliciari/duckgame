@@ -42,15 +42,15 @@ public:
     static const char* PLAYER_JMP_FORCE;     // cppcheck-suppress unusedStructMember
     static const char* PLAYER_FLAP_FORCE;     // cppcheck-suppress unusedStructMember
     static const char* PLAYER_FLAPS;     // cppcheck-suppress unusedStructMember
-    
-    static const char* MAGNUM_DMG;        // cppcheck-suppress unusedStructMember
-    static const char* MAGNUM_MUNITION;   // cppcheck-suppress unusedStructMember
-    
+    static const char* PLAYER_FLAP_GRAVITY;     // cppcheck-suppress unusedStructMember
+        
     static const char* ARMOR_HEALTH;      // cppcheck-suppress unusedStructMember
     static const char* HELMET_HEALTH;      // cppcheck-suppress unusedStructMember
     
     static const char* ITEM_SPAWN_TIME;      // cppcheck-suppress unusedStructMember
     static const char* BOX_HEALTH;      // cppcheck-suppress unusedStructMember
+    
+    
     
 protected:
     //size_t root_id;
@@ -73,14 +73,15 @@ public:
 
     // Loadings de datos en si.
     void readBaseDmgMunition(uint16_t& dmg_base,uint16_t& munition_info);
-    void readMagnumInfo(uint16_t& dmg_magnum,uint16_t& munition_magnum);
     
-    void readPlayerInfo(uint16_t& health,uint16_t& speed,short& jmp_force,short& flap_force,uint16_t& flaps);
+    void readPlayerInfo(uint16_t& health,short& speed,
+                        short& jmp_force,short& flap_force,
+                        uint16_t& flaps,short& flap_grav);
     void readDefenseInfo(uint16_t& armor_health,uint16_t& helmet_health);
     
     void readGravity(short& out);
     void readExpRadius(uint16_t& out);
-    void readMSDelay(uint16_t& delay);
+    void readMSDelay(int& fps, uint16_t& delay);
     void readRoundsPerSet(uint16_t& out);
     void readWinsNeeded(uint16_t& out);    
     void readItemSpawnTime(uint16_t& out);    

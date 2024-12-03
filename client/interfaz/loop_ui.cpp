@@ -8,7 +8,7 @@ UILoop::UILoop(ActionListener& dtoSender, SimpleEventListener& _events,
         window("DuckGame", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, INITIAL_SCREEN_WIDTH,
                INITIAL_SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE),
         soundManager(),
-        animation(gameContext, soundManager),
+        animation(gameContext),
         camera(window),
         drawer(window, animation, gameContext, camera),
         eventHandler(dtoSender, gameContext, soundManager),
@@ -26,11 +26,27 @@ void UILoop::exec() {
 
         while (isRunning_) {
             eventHandler.handle(isRunning_);
+            
+            if(!isRunning_){
+                if(lastStatsUpdate.isRunning()){
+                     lastStatsUpdate.state = CANCELADA;
+                     isRunning_ = true; // Mostra pantalla final
+                     matchDtoQueue.disconnect();// cierra queues
+                }
+                break;// Importante ! se cierran las queues de matchDtoQueue.
+            }
 
             update();
 
             clock.tickNoRest();
         }
+        
+        while(isRunning_){
+            eventHandler.handle(isRunning_);
+            drawer.drawLeaderboard(lastStatsUpdate);
+            clock.tickNoRest();
+        }
+        
     } catch (const std::exception& e) {
         std::cerr << "Exception caught in UILoop" << e.what() << std::endl;
         isRunning_ = false;
@@ -53,6 +69,10 @@ void UILoop::updateMatchDto() {
         lastUpdate = matchUpdate;
 
         animation.update(lastUpdate);
+
+        for (const GameEvent& gameSound: lastUpdate.events) {
+            soundManager.addGameSound(gameSound.type);
+        }
         
         for (const SoundEventType& soundType: lastUpdate.sounds) {
             soundManager.addMatchSound(soundType);
