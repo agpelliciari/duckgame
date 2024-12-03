@@ -20,7 +20,7 @@ Repositorio para el Trabajo Práctico grupal de la materia "Taller de Programaci
 # Manual de Usuario
 
 ## Índice de Contenidos
-
+- [Documentacion](#documentacion)
 - [Manual de Usuario](#manual-de-usuario)
   - [Índice de Contenidos](#índice-de-contenidos)
   - [Requisitos del Sistema](#requisitos-del-sistema)
@@ -45,6 +45,12 @@ Repositorio para el Trabajo Práctico grupal de la materia "Taller de Programaci
       - [Escopeta](#escopeta)
       - [Sniper](#sniper)
   - [Creditos](#creditos)
+
+
+## Documentacion
+Se presenta la documentacion tecnica en [documentaction tecnica](https://docs.google.com/document/d/1JJLf8TWHzUukz7nbrmltii9fVfl5Ozk68WqVoWqjx5g/edit?usp=drive_link)
+
+Y el manual de proyecto en [manual de proyecto](https://docs.google.com/document/d/10mXeRBieJ2phFf8xG0d6X91-pcMRkr7dYVQ20KFLL1k/edit?usp=drive_link)
 
 ## Requisitos del Sistema
 
