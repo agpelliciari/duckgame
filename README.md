@@ -207,20 +207,20 @@ Prueba la lógica del juego aislada de los threads, asegurándose de que las ope
 
 ### Equipamento
 
-| <center>Nombre</center>                | <center>Imagen</center>                               | <center>Descripción</center>                                          | <center>Capturas in game</center> |
-| ----------------------------------- | ------------------------------------ | -------------------------------------------------- | ------------------------------- |
-| <center>Granada</center>            | <center>![Granada](/res/readme/weapons/grenade.png)</center> | <center>Una granada estándar con daño en área.</center> | <center> </center> |
-| <center>Banana</center>             | <center>![Banana](/res/readme/weapons/banana.png)</center>  | <center>Provocara un resbalon al que la pise. Para levantarse debera presionar la tecla corresponidente a la accion "Ragdoll".</center>    | <center> </center> |
-| <center>Pew-Pew Laser</center>      | <center>![Pew Pew Laser](/res/weapons/pewpewLaser.png)</center> | <center>Laser semi-automatico de gran alcance</center> | <center>[Pew Pew Laser In Game](#pew-pew-laser)</center> |
-| <center>Laser Rifle</center>        | <center>![Laser Rifle](/res/weapons/laserRifle.png)</center> | <center>Un láser rápido con capacidad de disparo continuo.</center>     | <center> </center> |
-| <center>AK47</center>               | <center>![AK47](/res/weapons/ak47.png)</center> | <center>Rifle automático con alto daño por segundo.</center>        | <center> </center> |
-| <center>Pistola de Duelos</center>  | <center>![Duelos](/res/readme/weapons/pistol.png)</center> | <center>Ideal para enfrentamientos uno a uno.</center>              | <center> </center> |
-| <center>Pistola Cowboy</center>     | <center>![Cowboy](/res/weapons/cowboyPistol.png)</center> | <center>Rápida y precisa, con estilo del viejo oeste.</center>      | <center>[Cowboy In Game](#pistola-cowboy)</center> |
-| <center>Magnum</center>             | <center>![Magnum](/res/weapons/magnum.png)</center> | <center>Revolver poderoso con gran daño.</center>                  | <center> </center> |
-| <center>Escopeta</center>           | <center>![Escopeta](/res/weapons/shotgun.png)</center> | <center>Daño devastador a corta distancia.</center>                | <center>[Escopeta In Game](#escopeta)</center> |
-| <center>Sniper</center>             | <center>![Sniper](/res/weapons/sniper.png)</center> | <center>Arma de largo alcance muy poderosa.</center> | <center>[Sniper In Game](#sniper)</center> |
-| <center>Armadura de cuerpo</center>    | <center>![Armadura](/res/armors/chestPlatePickup.png)</center> | <center>Absorbe balas/lasers sin producirle daño al que lo lleve.</center> | <center> </center> |
-| <center>Armadura de cabeza</center>        | <center>![Casco](/res/armors/helmetPickup.png)</center> | <center>Absorbe balas/lasers sin producirle daño al que lo lleve.</center> | <center> </center> |
+| <center>Nombre</center>                | <center>Imagen</center>                               | <center>Descripción</center>                                                                                                            | <center>Capturas in game</center> |
+| ----------------------------------- | ------------------------------------ |-----------------------------------------------------------------------------------------------------------------------------------------| ------------------------------- |
+| <center>Granada</center>            | <center>![Granada](/res/readme/weapons/grenade.png)</center> | <center>Una granada estándar con daño mortifero en área.</center>                                                                       | <center> </center> |
+| <center>Banana</center>             | <center>![Banana](/res/readme/weapons/banana.png)</center>  | <center>Provocara un resbalon al que la pise. Para levantarse debera presionar la tecla corresponidente a la accion "Ragdoll".</center> | <center> </center> |
+| <center>Pew-Pew Laser</center>      | <center>![Pew Pew Laser](/res/weapons/pewpewLaser.png)</center> | <center>Laser semi-automatico de gran alcance</center>                                                                                  | <center>[Pew Pew Laser In Game](#pew-pew-laser)</center> |
+| <center>Laser Rifle</center>        | <center>![Laser Rifle](/res/weapons/laserRifle.png)</center> | <center>Un láser rápido con capacidad de disparo continuo, sus balas pueden rebotar en paredes.</center>                                | <center> </center> |
+| <center>AK47</center>               | <center>![AK47](/res/weapons/ak47.png)</center> | <center>Rifle automático con alto daño por segundo.</center>                                                                            | <center> </center> |
+| <center>Pistola de Duelos</center>  | <center>![Duelos](/res/readme/weapons/pistol.png)</center> | <center>Ideal para enfrentamientos uno a uno.</center>                                                                                  | <center> </center> |
+| <center>Pistola Cowboy</center>     | <center>![Cowboy](/res/weapons/cowboyPistol.png)</center> | <center>Rápida y precisa, con estilo del viejo oeste.</center>                                                                          | <center>[Cowboy In Game](#pistola-cowboy)</center> |
+| <center>Magnum</center>             | <center>![Magnum](/res/weapons/magnum.png)</center> | <center>Revolver poderoso con gran daño.</center>                                                                                       | <center> </center> |
+| <center>Escopeta</center>           | <center>![Escopeta](/res/weapons/shotgun.png)</center> | <center>Daño devastador a corta distancia.</center>                                                                                     | <center>[Escopeta In Game](#escopeta)</center> |
+| <center>Sniper</center>             | <center>![Sniper](/res/weapons/sniper.png)</center> | <center>Arma de largo alcance muy poderosa.</center>                                                                                    | <center>[Sniper In Game](#sniper)</center> |
+| <center>Armadura de cuerpo</center>    | <center>![Armadura](/res/armors/chestPlatePickup.png)</center> | <center>Absorbe balas/lasers sin producirle daño al que lo lleve.</center>                                                              | <center> </center> |
+| <center>Armadura de cabeza</center>        | <center>![Casco](/res/armors/helmetPickup.png)</center> | <center>Absorbe balas/lasers sin producirle daño al que lo lleve.</center>                                                              | <center> </center> |
 
 #### Pew-Pew Laser
   
