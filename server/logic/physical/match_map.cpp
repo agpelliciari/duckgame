@@ -53,7 +53,7 @@ static bool in_range(const int& init, const int& end, const int& pos, const int&
          || (pos <= init && pos+size >= end); 
 }
 
-bool MatchMap::check_collision_area( CollisionTypeMap target_type, const int x, const int y
+bool MatchMap::filter_collision_area(CollisionTypeMap target_type, const int x, const int y
     , const int w, const int h, int &id) const{
     
     int x_end = x+w;
@@ -72,7 +72,41 @@ bool MatchMap::check_collision_area( CollisionTypeMap target_type, const int x, 
     return false;
 }
 
-bool MatchMap::check_collision_area_all(const int x, const int y
+
+void MatchMap::filter_collisions_area_all(CollisionTypeMap target_type, const int x, const int y
+    , const int w, const int h, std::vector<Collision> &out) const {
+    int x_end = x+w;
+    int y_end = y+h;
+        
+    for (auto& object: objects) {
+        if (object.collision.type == target_type 
+        && in_range(x,x_end, object.map_point.x, object.dimension.x)
+        && in_range(y,y_end, object.map_point.y, object.dimension.y)) {
+            out.push_back(object.collision);
+        }
+    }
+    
+}
+
+
+
+
+
+void MatchMap::check_collisions_area_all(const int x, const int y
+    , const int w, const int h, std::vector<Collision> &out) const {
+    int x_end = x+w;
+    int y_end = y+h;
+        
+    for (auto& object: objects) {
+        if (in_range(x,x_end, object.map_point.x, object.dimension.x)
+        && in_range(y,y_end, object.map_point.y, object.dimension.y)) {
+            out.push_back(object.collision);
+        }
+    }
+    
+}
+
+bool MatchMap::check_collision_area(const int x, const int y
     , const int w, const int h, Collision &out) const {
     
     int x_end = x+w;

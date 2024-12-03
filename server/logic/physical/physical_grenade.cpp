@@ -18,7 +18,7 @@ PhysicalGrenade::PhysicalGrenade(int init_coord_x, int init_coord_y, bool jitter
 }
 
 bool PhysicalGrenade::impacted_player(const MatchMap& colition_map,int& id) const{
-     return impacted && colition_map.check_collision_area(CollisionTypeMap::PLAYER, position.x,position.y
+     return impacted && colition_map.filter_collision_area(CollisionTypeMap::PLAYER, position.x,position.y
     , dimension.x, dimension.y, id);
 }
 

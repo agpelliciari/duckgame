@@ -396,12 +396,36 @@ void MatchLogic::damage_box(int id,std::vector<GameEvent>& events) {
 
                 Tuple position = it->get_spawn_point();
 
-                events.emplace_back(position.x, position.y, BOX_DESTROYED);
 
                 // Si es bomba SERIA EXPLOSION ! o asi
+                auto weapon(it->get_item(configs.base_munition));
                 
+                if(weapon == nullptr){
+                    events.emplace_back(position.x, position.y, BOX_DESTROYED);
+                    events.emplace_back(position.x, position.y, BOMB_EXPLOSION);
+                    
+                    
+                    // Mas que radious square radious!
+                    std::vector<Collision> dmg_players;
+                    
+                    int x_init = position.x-configs.explosion_radius;
+                    int y_init = position.y-configs.explosion_radius;
+                    
+                    
+                    colition_map.filter_collisions_area_all(CollisionTypeMap::PLAYER, x_init,y_init
+    , 2*configs.explosion_radius, 2*configs.explosion_radius, dmg_players);
+                    
+                    for(Collision& hitted_player: dmg_players){
+                         std::cout << "---> BOMB HITTED PLAYER " << hitted_player.id << std::endl;
+                         damage_player(hitted_player.id);
+                    }
+                    
+                    it = boxes.erase(it);
+                    return;
+                }
 
-                dropped_items.push_back(DroppedItem(std::move(it->get_item(configs.base_munition)), position.x, position.y, 16, 16));
+                events.emplace_back(position.x, position.y, BOX_DESTROYED);
+                dropped_items.push_back(DroppedItem(std::move(weapon), position.x, position.y, 16, 16));
                 it = boxes.erase(it);
                 return;
             }

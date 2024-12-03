@@ -2,7 +2,7 @@ base_dmg: 2
 base_munition: 1          
 gravity: 5
 
-explosion_radius: 1   
+explosion_radius: 32 # aprox 2 bloques.. 16 es el size de un bloque.  
 
 
 

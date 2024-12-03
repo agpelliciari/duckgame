@@ -28,7 +28,8 @@ void Box::take_damage(){
 
 std::unique_ptr<Weapon> Box::get_item(const int base_mun) {
     std::srand(std::time(nullptr));
-    int random_weapon = std::rand() % 9;
+    int random_weapon = std::rand() % 15;
+    //int random_weapon = 13;
     switch (random_weapon){
         case 0:
             return std::make_unique<CowboyPistolWeapon>(base_mun);
@@ -57,8 +58,12 @@ std::unique_ptr<Weapon> Box::get_item(const int base_mun) {
         case 8:
             return std::make_unique<GrenadeWeapon>(base_mun);
         break;
-        default:
+        case 9:
             return std::make_unique<CowboyPistolWeapon>(base_mun);
+        break;
+        default:
+            // Bomb explosion!
+            return nullptr;
         break;
     }
 }
