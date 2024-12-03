@@ -205,22 +205,24 @@ Prueba la lógica del juego aislada de los threads, asegurándose de que las ope
 | `C`         | `L`         | Grab Weapon / Put on Armour, Hat |
 | `V`         | `P`         | Fire Weapon                      |
 
-| Comando | Cheat |
-| ------- | ----- |
-| `F1`    | Equipar un arma |
-| `F2`    | Municion maxima |
-| `F3`    | Armadura maxima |
+### Cajas
+
+Las cajas se destruyen al recibir daño. Al romperse, pueden contener ítems en su interior o infligir daño en área.
+
+![Alt Text](/res/readme/gifs/box-arma.gif)
+
+![Alt Text](/res/readme/gifs/box-explosion.gif)
 
 
 ### Equipamento
 
 | <center>Nombre</center>| <center>Imagen</center> | <center>Descripción</center> | <center>Capturas</center> |
 | ----------------------- | ----------------------- | ---------------------------- | --------------------------------- |
-| <center>Granada</center> | <center>![Granada](/res/readme/weapons/grenade.png)</center> | <center>Una granada estándar con daño mortifero en área.</center> | <center>[Granada In Game](#granada)</center> |
+| <center>Granada</center> | <center>![Granada](/res/readme/weapons/grenade.png)</center> | <center>Una granada estándar con daño en área.</center> | <center>[Granada In Game](#granada)</center> |
 | <center>Banana</center> | <center>![Banana](/res/readme/weapons/banana.png)</center> | <center>Provocara un resbalon al que la pise. Para levantarse debera presionar la tecla corresponidente a la accion "Ragdoll".</center> | <center>[Banana In Game](#banana)</center> |
 | <center>Pew-Pew Laser</center> | <center>![Pew Pew Laser](/res/weapons/pewpewLaser.png)</center> | <center>Laser semi-automatico de gran alcance</center> | <center>[Pew Pew Laser In Game](#pew-pew-laser)</center> |
 | <center>Laser Rifle</center> | <center>![Laser Rifle](/res/weapons/laserRifle.png)</center> | <center>Un láser rápido con capacidad de disparo continuo, sus balas pueden rebotar en paredes.</center> | <center>[Laser Rifle In Game](#laser-rifle)</center> |
-| <center>AK47</center> | <center>![AK47](/res/weapons/ak47.png)</center> | <center>Rifle automático con alto daño por segundo.</center> | <center>[AK47 In Game](#ak47)</center> |
+| <center>AK47</center> | <center>![AK47](/res/weapons/ak47.png)</center> | <center>Rifle automático con alto daño por segundo pero mucho retroceso.</center> | <center>[AK47 In Game](#ak47)</center> |
 | <center>Pistola de Duelos</center> | <center>![Duelos](/res/readme/weapons/pistol.png)</center> | <center>Ideal para enfrentamientos uno a uno.</center> | <center>[Pistola de Duelos In Game](#pistola-de-duelos)</center> |
 | <center>Pistola Cowboy</center> | <center>![Cowboy](/res/weapons/cowboyPistol.png)</center> | <center>Rápida y precisa, con estilo del viejo oeste.</center> | <center>[Cowboy In Game](#pistola-cowboy)</center> |
 | <center>Magnum</center> | <center>![Magnum](/res/weapons/magnum.png)</center> | <center>Revolver poderoso con gran daño.</center> | <center>[Magnum In Game](#magnum)</center> |
