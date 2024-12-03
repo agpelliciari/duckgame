@@ -6,7 +6,7 @@ Repositorio para el Trabajo Práctico grupal de la materia "Taller de Programaci
 
 <hr/>
 
-## Integrantes
+# Integrantes
 
 | <center>Alumno</center>          | <center>Padrón</center> | <center>Mail</center>  | <center>GitHub</center>                                                                                                                                                          |
 | :------------------------------- | :---------------------: | :--------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -17,9 +17,20 @@ Repositorio para el Trabajo Práctico grupal de la materia "Taller de Programaci
 
 <hr/>
 
+# Documentacion
+
+- [Manual de Usuario](#manual-de-usuario)
+
+- [Documentacion Tecnica](https://docs.google.com/document/d/1JJLf8TWHzUukz7nbrmltii9fVfl5Ozk68WqVoWqjx5g/edit?usp=drive_link)
+
+- [Manual de Proyecto](https://docs.google.com/document/d/10mXeRBieJ2phFf8xG0d6X91-pcMRkr7dYVQ20KFLL1k/edit?usp=drive_link)
+
+<hr/>
+
 # Manual de Usuario
 
 ## Índice de Contenidos
+- [Integrantes](#integrantes)
 - [Documentacion](#documentacion)
 - [Manual de Usuario](#manual-de-usuario)
   - [Índice de Contenidos](#índice-de-contenidos)
@@ -39,18 +50,22 @@ Repositorio para el Trabajo Práctico grupal de la materia "Taller de Programaci
       - [3. Logica del juego](#3-logica-del-juego)
   - [In-Game](#in-game)
     - [Controles](#controles)
+    - [Cajas](#cajas)
     - [Equipamento](#equipamento)
+      - [Granada](#granada)
+      - [Banana](#banana)
       - [Pew-Pew Laser](#pew-pew-laser)
+      - [Laser Rifle](#laser-rifle)
+      - [AK47](#ak47)
+      - [Pistola de Duelos](#pistola-de-duelos)
       - [Pistola Cowboy](#pistola-cowboy)
+      - [Magnum](#magnum)
       - [Escopeta](#escopeta)
       - [Sniper](#sniper)
-  - [Creditos](#creditos)
+      - [Armadura](#armadura)
+      - [Casco](#casco)
+- [Creditos](#creditos)
 
-
-## Documentacion
-Se presenta la documentacion tecnica en [documentaction tecnica](https://docs.google.com/document/d/1JJLf8TWHzUukz7nbrmltii9fVfl5Ozk68WqVoWqjx5g/edit?usp=drive_link)
-
-Y el manual de proyecto en [manual de proyecto](https://docs.google.com/document/d/10mXeRBieJ2phFf8xG0d6X91-pcMRkr7dYVQ20KFLL1k/edit?usp=drive_link)
 
 ## Requisitos del Sistema
 
@@ -293,7 +308,7 @@ Las cajas se destruyen al recibir daño. Al romperse, pueden contener ítems en 
 
 <hr>
 
-## Creditos
+# Creditos
 
 Los siguientes archivos:
 
