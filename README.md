@@ -30,10 +30,7 @@ Repositorio para el Trabajo Práctico grupal de la materia "Taller de Programaci
 # Manual de Usuario
 
 ## Índice de Contenidos
-- [Integrantes](#integrantes)
-- [Documentacion](#documentacion)
 - [Manual de Usuario](#manual-de-usuario)
-  - [Índice de Contenidos](#índice-de-contenidos)
   - [Requisitos del Sistema](#requisitos-del-sistema)
   - [Instalacion Automatizada](#instalacion-automatizada)
     - [Pasos para instalar el juego correctamente](#pasos-para-instalar-el-juego-correctamente)
